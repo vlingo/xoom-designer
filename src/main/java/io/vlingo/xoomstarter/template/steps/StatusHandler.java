@@ -42,7 +42,6 @@ public class StatusHandler {
                 status -> status == 0,
                 context -> {
                     System.out.println(String.format(SUCCESS_MESSAGE, context.propertyOf(TARGET_FOLDER)));
-                    System.exit(0);
                 });
     }
 

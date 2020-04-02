@@ -13,11 +13,15 @@ public class TemplateGenerator {
     );
 
     public static void start(final TemplateGenerationContext context) {
-        STEPS.forEach(step ->{
-            if(step.shouldProcess()) {
-                step.process(context);
-            }
-        });
+        try {
+            STEPS.forEach(step -> {
+                if (step.shouldProcess()) {
+                    step.process(context);
+                }
+            });
+        } catch (final TemplateGenerationException exception) {
+            exception.printStackTrace();
+        }
     }
 
 }

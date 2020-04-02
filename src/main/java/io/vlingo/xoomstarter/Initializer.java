@@ -9,6 +9,7 @@ public class Initializer {
 
     public static void main(final String[] args) {
         TemplateGenerator.start(new TemplateGenerationContext());
+        System.exit(0);
     }
 
 }
