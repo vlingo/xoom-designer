@@ -14,7 +14,7 @@ public class CommandExecutorStepTest {
 
     private TemplateGenerationContext context;
 
-    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "bash -c cd E:\\projects && " +
+    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "sh -c cd E:\\projects && " +
             "mvn archetype:generate -B " +
             "-DarchetypeGroupId=org.apache.maven.archetypes " +
             "-DarchetypeArtifactId=maven-archetype-quickstart " +
