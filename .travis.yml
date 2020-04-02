@@ -1,9 +1,9 @@
 language: java
 jdk:
-  - openjdk11
+- openjdk11
 dist: trusty
 script:
-  - mvn install -PTravisCI
+- mvn install -PTravisCI
 notifications:
   slack:
     secure: BGwqFgjVEoE0+chnTh8e3gGoWBVD5ezGB+IvMWpomgucKuGPfQnwj5ydVX9KoSIPOYbne4lsKdrb9PD7ycbl0ek+4s9mvtFplWBzVfRqcRCc03WMASyN/6DcQGFsMKlpUOgRLhMxX1vlijEqiEWb59z/7V7NuI3JrapHkQoDrmwkJ3jn/V13fih5n0+yh/p8V8fVsXNPbX8GFpJ/9ulawOUaCHSGVspttHB0J9nKAiHgp37wWTiM109+sItqsB5L1eo+TreiFH6L6Pq1maWbLNchXK4a6C2LyQEX8QoL4m1CNNwGm9eyh+Y8v26Po7mDM5KwuyMgm3VDkXKABIL/kXMbCjHMSNZHyjfVJkseHUqslEJbKwHm991kJdzmuGE71v5xswPS8Q9Rbq8jkbfxYPgOk0R7VirPqqwsMsCo7Lk0NdSs4ixLeOGhzVxzWgtBHovNpGJt8OmHDliRbF5eDjoFvJp3ciTCT0oAbn7UUkmDsV9E2rGKgsilnUDtnnMqx+sdTjFWc/17r/es5fwhZ/NzsAk6vf2XmczcE1hWaegF34ztxnpIsNTavHgcSnRVlO9ewB670DaJqfVsHXprpIqmJIL1Er5ZhiibB85rqRItYy3KAgJ+qVQGFJdOFY2VpCNjY5FR4UIw9ZMNQj45Dcp0P36xItHFQhIDNwFW31k=
