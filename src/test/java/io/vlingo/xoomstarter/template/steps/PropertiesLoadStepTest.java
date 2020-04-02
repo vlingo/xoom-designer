@@ -20,7 +20,7 @@ public class PropertiesLoadStepTest {
         Assert.assertEquals("xoom-starter-tests", context.propertyOf(ARTIFACT_ID));
         Assert.assertEquals("io.vlingo.starterexample", context.propertyOf(PACKAGE));
         Assert.assertEquals("k8s", context.propertyOf(DEPLOYMENT));
-        Assert.assertEquals("D:\\temp", context.propertyOf(TARGET_FOLDER));
+        Assert.assertNotNull(context.propertyOf(TARGET_FOLDER));
     }
 
     @Before

@@ -14,8 +14,7 @@ public class CommandExecutorStepTest {
 
     private TemplateGenerationContext context;
 
-    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "sh -c cd E:\\projects && " +
-            "mvn archetype:generate -B " +
+    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "cd E:\\projects && mvn archetype:generate -B " +
             "-DarchetypeGroupId=org.apache.maven.archetypes " +
             "-DarchetypeArtifactId=maven-archetype-quickstart " +
             "-DarchetypeVersion=1.1 " +
@@ -37,15 +36,17 @@ public class CommandExecutorStepTest {
     @Test
     public void testDefaultCommandPreparation () {
         final CommandExecutorStep step = new DefaultCommandExecutorStep();
-        final String command = step.prepareCommand(context);
-        Assert.assertEquals(EXPECTED_COMMAND_ON_OTHER_OS, command);
+        final String[] commands = step.prepareCommands(context);
+        Assert.assertEquals("sh", commands[0]);
+        Assert.assertEquals("-c", commands[1]);
+        Assert.assertEquals(EXPECTED_COMMAND_ON_OTHER_OS, commands[2]);
     }
 
     @Test
     public void testWindowsCommandPreparation () {
         final CommandExecutorStep step = new WindowsCommandExecutorStep();
-        final String command = step.prepareCommand(context);
-        Assert.assertEquals(EXPECTED_COMMAND_ON_WINDOWS, command);
+        final String[] command = step.prepareCommands(context);
+        Assert.assertEquals(EXPECTED_COMMAND_ON_WINDOWS, command[0]);
     }
 
     @Before

@@ -1,13 +1,20 @@
 package io.vlingo.xoomstarter.template.steps;
 
+import io.vlingo.xoomstarter.template.TemplateGenerationContext;
+
+import static io.vlingo.xoomstarter.template.steps.PropertiesKeys.TARGET_FOLDER;
+
 public class WindowsCommandExecutorStep extends CommandExecutorStep {
 
     private static final String SUPPORTED_OPERATING_SYSTEM = "Windows";
     private static final String COMMAND_PATTERN = "cmd.exe /c cd %s && %s";
 
     @Override
-    protected String commandPattern() {
-        return COMMAND_PATTERN;
+    protected String[] prepareCommands(final TemplateGenerationContext context) {
+        final String targetFolder = context.propertyOf(TARGET_FOLDER);
+        final String archetypeCommand = prepareArchetypeCommand(context);
+        final String commands = String.format(COMMAND_PATTERN, targetFolder, archetypeCommand);
+        return new String[]{commands};
     }
 
     @Override

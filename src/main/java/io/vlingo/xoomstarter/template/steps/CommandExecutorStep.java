@@ -21,19 +21,15 @@ public abstract class CommandExecutorStep implements TemplateGenerationStep {
 
     public void process(final TemplateGenerationContext context) {
         try {
-            final String command = prepareCommand(context);
-            final Process process = Runtime.getRuntime().exec(command);
+            final String[] commands = prepareCommands(context);
+            final Process process = Runtime.getRuntime().exec(commands);
             context.followProcess(process);
         } catch (final IOException e) {
             throw new TemplateGenerationException(e);
         }
     }
 
-    protected String prepareCommand(final TemplateGenerationContext context) {
-        final String targetFolder = context.propertyOf(TARGET_FOLDER);
-        final String archetypeCommand = prepareArchetypeCommand(context);
-        return String.format(commandPattern(), targetFolder, archetypeCommand);
-    }
+    protected abstract String[] prepareCommands(final TemplateGenerationContext context);
 
     protected String prepareArchetypeCommand(final TemplateGenerationContext context) {
         return String.format(ARCHETYPE_COMMAND_PATTERN,
@@ -46,7 +42,5 @@ public abstract class CommandExecutorStep implements TemplateGenerationStep {
                 context.propertyOf(PACKAGE)
         );
     }
-
-    protected abstract String commandPattern();
 
 }
