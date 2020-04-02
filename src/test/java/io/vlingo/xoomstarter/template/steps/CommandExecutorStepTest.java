@@ -14,7 +14,8 @@ public class CommandExecutorStepTest {
 
     private TemplateGenerationContext context;
 
-    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "cd E:\\projects && mvn archetype:generate -B " +
+    private static final String EXPECTED_COMMAND_ON_OTHER_OS = "cd E:\\projects && " +
+            "mvn archetype:generate -B " +
             "-DarchetypeGroupId=org.apache.maven.archetypes " +
             "-DarchetypeArtifactId=maven-archetype-quickstart " +
             "-DarchetypeVersion=1.1 " +
@@ -23,7 +24,7 @@ public class CommandExecutorStepTest {
             "-Dversion=1.0 " +
             "-Dpackage=io.vlingo.starterexample";
 
-    private static final String EXPECTED_COMMAND_ON_WINDOWS = "cmd.exe /c cd E:\\projects && " +
+    private static final String EXPECTED_COMMAND_ON_WINDOWS = "cd E:\\projects && " +
             "mvn archetype:generate -B " +
             "-DarchetypeGroupId=org.apache.maven.archetypes " +
             "-DarchetypeArtifactId=maven-archetype-quickstart " +
@@ -45,8 +46,10 @@ public class CommandExecutorStepTest {
     @Test
     public void testWindowsCommandPreparation () {
         final CommandExecutorStep step = new WindowsCommandExecutorStep();
-        final String[] command = step.prepareCommands(context);
-        Assert.assertEquals(EXPECTED_COMMAND_ON_WINDOWS, command[0]);
+        final String[] commands = step.prepareCommands(context);
+        Assert.assertEquals("cmd.exe", commands[0]);
+        Assert.assertEquals("/c", commands[1]);
+        Assert.assertEquals(EXPECTED_COMMAND_ON_WINDOWS, commands[2]);
     }
 
     @Before
