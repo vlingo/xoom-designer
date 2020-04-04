@@ -1,23 +1,16 @@
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.archetype.Archetype;
+import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
 import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.template.TemplateGenerationException;
 
 import java.io.IOException;
+import java.util.Properties;
 
-import static io.vlingo.xoom.starter.template.steps.PropertiesKeys.*;
+public class CommandExecutorStep implements TemplateGenerationStep {
 
-public abstract class CommandExecutorStep implements TemplateGenerationStep {
-
-    private static final String ARCHETYPE_COMMAND_PATTERN =
-            "mvn archetype:generate -B " +
-            "-DarchetypeGroupId=%s " +
-            "-DarchetypeArtifactId=%s " +
-            "-DarchetypeVersion=%s " +
-            "-DgroupId=%s " +
-            "-DartifactId=%s " +
-            "-Dversion=%s " +
-            "-Dpackage=%s";
+    private static final String ARCHETYPE_COMMANDS_PATTERN = "cd %s && mvn clean install && cd %s && mvn archetype:generate -B %s";
 
     public void process(final TemplateGenerationContext context) {
         try {
@@ -29,18 +22,19 @@ public abstract class CommandExecutorStep implements TemplateGenerationStep {
         }
     }
 
-    protected abstract String[] prepareCommands(final TemplateGenerationContext context);
+    protected String[] prepareCommands(final TemplateGenerationContext context) {
+        return new String[]{
+                Terminal.active().initializationCommand(),
+                Terminal.active().parameter(),
+                archetypeCommands(context)};
+    }
 
-    protected String prepareArchetypeCommand(final TemplateGenerationContext context) {
-        return String.format(ARCHETYPE_COMMAND_PATTERN,
-                context.archetype().groupId(),
-                context.archetype().artifactId(),
-                context.archetype().version(),
-                context.propertyOf(GROUP_ID),
-                context.propertyOf(ARTIFACT_ID),
-                context.propertyOf(VERSION),
-                context.propertyOf(PACKAGE)
-        );
+    private String archetypeCommands(final TemplateGenerationContext context) {
+        final Properties properties = context.properties();
+        final Archetype archetype = Archetype.support(properties);
+        final String targetFolder = context.propertyOf(ArchetypeProperties.TARGET_FOLDER);
+        return String.format(ARCHETYPE_COMMANDS_PATTERN, archetype.folder(),
+                targetFolder, archetype.fillMavenOptions(properties));
     }
 
 }

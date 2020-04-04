@@ -1,5 +1,6 @@
 package io.vlingo.xoom.starter.template.steps;
 
+import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
 import io.vlingo.xoom.starter.template.TemplateGenerationContext;
 
@@ -39,7 +40,7 @@ public class StatusHandler {
         return new StatusHandler(
                 status -> status == 0,
                 context -> {
-                    System.out.println(String.format(SUCCESS_MESSAGE, context.propertyOf(PropertiesKeys.TARGET_FOLDER)));
+                    System.out.println(String.format(SUCCESS_MESSAGE, context.propertyOf(ArchetypeProperties.TARGET_FOLDER)));
                 });
     }
 

@@ -6,8 +6,4 @@ public interface TemplateGenerationStep {
 
     void process(final TemplateGenerationContext context);
 
-    default boolean shouldProcess() {
-        return true;
-    }
-
 }

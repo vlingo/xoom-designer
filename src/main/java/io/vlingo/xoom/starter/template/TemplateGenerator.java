@@ -8,16 +8,14 @@ import java.util.List;
 public class TemplateGenerator {
 
     private static final List<TemplateGenerationStep> STEPS = Arrays.asList(
-            new PropertiesLoadStep(), new ArchetypeResolverStep(), new DefaultCommandExecutorStep(),
-            new WindowsCommandExecutorStep(), new GenerationLogStep(), new StatusHandlingStep()
+            new PropertiesLoadStep(), new CommandExecutorStep(),
+            new GenerationLogStep(), new StatusHandlingStep()
     );
 
     public static void start(final TemplateGenerationContext context) {
         try {
             STEPS.forEach(step -> {
-                if (step.shouldProcess()) {
-                    step.process(context);
-                }
+                step.process(context);
             });
         } catch (final TemplateGenerationException exception) {
             exception.printStackTrace();

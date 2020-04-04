@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.template;
 
-import io.vlingo.xoom.starter.template.steps.PropertiesKeys;
+import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
 
 import java.util.Properties;
 
@@ -8,14 +8,9 @@ public class TemplateGenerationContext {
 
     private Process process;
     private Properties properties;
-    private Archetype archetype;
 
     public void followProcess(final Process process) {
         this.process = process;
-    }
-
-    public void selectArchetype(final Archetype archetype) {
-        this.archetype = archetype;
     }
 
     public void onProperties(final Properties properties) {
@@ -30,11 +25,7 @@ public class TemplateGenerationContext {
         return properties;
     }
 
-    public Archetype archetype() {
-        return archetype;
-    }
-
-    public String propertyOf(final PropertiesKeys key) {
+    public String propertyOf(final ArchetypeProperties key) {
         return properties != null ? properties.getProperty(key.literal()) : "";
     }
 }
