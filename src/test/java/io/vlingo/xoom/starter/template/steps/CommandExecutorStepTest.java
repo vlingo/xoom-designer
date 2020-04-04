@@ -6,7 +6,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Properties;
+
+import static java.io.File.separator;
 
 public class CommandExecutorStepTest {
 
@@ -15,7 +18,8 @@ public class CommandExecutorStepTest {
 
     private static final String EXPECTED_BASIC_ARCHETYPE_COMMAND =
             "cd "+ System.getProperty("user.dir") +
-            "\\resources\\archetypes\\basic-archetype && " +
+            separator + "resources" + separator + "archetypes" +
+            separator + "basic-archetype && " +
             "mvn clean install && cd E:\\projects && " +
             "mvn archetype:generate -B -DarchetypeGroupId=io.vlingo " +
             "-DarchetypeArtifactId=vlingo-xoom-basic-archetype " +
@@ -25,7 +29,8 @@ public class CommandExecutorStepTest {
 
     private static final String EXPECTED_K8S_ARCHETYPE_COMMAND =
             "cd "+ System.getProperty("user.dir") +
-            "\\resources\\archetypes\\kubernetes-archetype && " +
+            separator + "resources" + separator + "archetypes" +
+            separator + "kubernetes-archetype && " +
             "mvn clean install && cd E:\\projects && " +
             "mvn archetype:generate -B -DarchetypeGroupId=io.vlingo " +
             "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
