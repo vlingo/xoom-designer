@@ -4,18 +4,17 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static java.io.File.separator;
 
 public class ResourceTest {
 
+    private final static String ROOT_FOLDER = separator + "starter" + separator;
+
     @Test
     public void testPathUpdate() {
-        final String root = separator + "starter" + separator;
-        Resource.rootIn(root);
-        Assert.assertEquals(root + "vlingo-xoom-starter.properties", Resource.PROPERTIES_FILE.path());
-        Assert.assertEquals(root + "resources" + separator + "archetypes", Resource.ARCHETYPES_FOLDER.path());
+        Resource.rootIn(ROOT_FOLDER);
+        Assert.assertEquals(ROOT_FOLDER + "vlingo-xoom-starter.properties", Resource.PROPERTIES_FILE.path());
+        Assert.assertEquals(ROOT_FOLDER + "resources" + separator + "archetypes", Resource.ARCHETYPES_FOLDER.path());
     }
 
     @Test(expected = InvalidResourcesPathException.class)
