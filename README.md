@@ -35,6 +35,13 @@ Install `vlingo-xoom-starter` by downloading the compressed file via `curl`:
 
 > ZIP
 
+```
+    curl https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter.zip -output starter.zip
+```
 
 > TAR.GZ
 
+
+```
+    curl https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter.tar.gz -output starter.tar.gz
+```
