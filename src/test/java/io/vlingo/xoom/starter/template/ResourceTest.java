@@ -1,6 +1,7 @@
 package io.vlingo.xoom.starter.template;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -20,6 +21,11 @@ public class ResourceTest {
     @Test(expected = InvalidResourcesPathException.class)
     public void testNullPathUpdate() {
         Resource.rootIn(null);
+    }
+
+    @Before
+    public void setUp() {
+        Resource.clear();
     }
 
 }
