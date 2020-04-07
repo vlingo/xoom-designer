@@ -17,6 +17,15 @@
     <exec.mainClass>io.vlingo.xoom.starter.Initializer</exec.mainClass>
   </properties>
 
+  <developers>
+    <developer>
+      <name>Danilo Ambrosio</name>
+      <email>danilo.ambrosio@gmail.com</email>
+      <organization>Kalele</organization>
+      <organizationUrl>http://kalele.io</organizationUrl>
+    </developer>
+  </developers>
+
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>

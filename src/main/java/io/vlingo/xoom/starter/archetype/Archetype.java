@@ -1,6 +1,15 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.starter.archetype;
 
-import java.io.File;
+import io.vlingo.xoom.starter.template.Resource;
+
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +17,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.archetype.ArchetypeProperties.*;
-import static java.io.File.separator;
 
 public enum Archetype {
 
@@ -28,9 +36,6 @@ public enum Archetype {
     private final String version;
     private final ArchetypePropertiesValidator validator;
     private final List<ArchetypeProperties> requiredProperties = new ArrayList<>();
-
-    private static final String ROOT_FOLDER_KEY = "user.dir";
-    private static final String ARCHETYPE_FOLDER_PATTERN= "%s%sresources%sarchetypes%s%s";
 
     Archetype(final String label,
               final String artifactId,
@@ -52,23 +57,22 @@ public enum Archetype {
                 .findFirst().orElseThrow(ArchetypeNotFoundException::new);
     }
 
-    private boolean isSupported(final Properties properties) {
-        return validator.validate(properties, requiredProperties);
-    }
-
     public String fillMavenOptions(final Properties properties) {
         return ArchetypeMavenOptionsBuilder.instance().build(this, properties);
     }
 
     public String folder() {
-        return String.format(ARCHETYPE_FOLDER_PATTERN, System.getProperty(ROOT_FOLDER_KEY),
-                separator, separator, separator, label);
+        return Paths.get(Resource.ARCHETYPES_FOLDER.path(), label).toString();
     }
 
     public List<ArchetypeProperties> supportedMavenProperties() {
         return this.requiredProperties.stream()
                 .filter(properties -> properties.isSupportedByMaven())
                 .collect(Collectors.toList());
+    }
+
+    private boolean isSupported(final Properties properties) {
+        return validator.validate(properties, requiredProperties);
     }
 
     String artifactId() {
