@@ -1,9 +1,17 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.starter.template.steps;
 
 import io.vlingo.xoom.starter.archetype.Archetype;
 import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
 import io.vlingo.xoom.starter.template.TemplateGenerationContext;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.template.Terminal;
 
 import java.io.IOException;
 import java.util.Properties;

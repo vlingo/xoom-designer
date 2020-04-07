@@ -5,12 +5,12 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.template.steps;
+package io.vlingo.xoom.starter.template;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+public class InvalidResourcesPathException extends TemplateGenerationException {
 
-public interface TemplateGenerationStep {
-
-    void process(final TemplateGenerationContext context);
+    public InvalidResourcesPathException() {
+        super("Please check if the starter path has been set in the environment variables");
+    }
 
 }

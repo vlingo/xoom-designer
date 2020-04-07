@@ -1,14 +1,25 @@
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.starter.template.steps;
 
 import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
+import io.vlingo.xoom.starter.template.Resource;
 import io.vlingo.xoom.starter.template.TemplateGenerationContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+
 public class PropertiesLoadStepTest {
 
     private TemplateGenerationContext context;
+    private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
     @Test
     public void testPropertiesLoad(){
@@ -25,6 +36,8 @@ public class PropertiesLoadStepTest {
     @Before
     public void setUp() {
         this.context = new TemplateGenerationContext();
+        Resource.clear();
+        Resource.rootIn(ROOT_FOLDER);
     }
 
 }

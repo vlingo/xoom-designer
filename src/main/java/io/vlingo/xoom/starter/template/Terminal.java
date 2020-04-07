@@ -1,4 +1,11 @@
-package io.vlingo.xoom.starter.template.steps;
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
+package io.vlingo.xoom.starter.template;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -12,6 +19,7 @@ public enum Terminal {
 
     private final String parameter;
     private final Predicate<String> activationCondition;
+
     Terminal(final String initializationCommand, final String parameter, final Predicate<String> activationCondition) {
         this.initializationCommand = initializationCommand;
         this.parameter = parameter;

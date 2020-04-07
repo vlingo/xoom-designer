@@ -7,18 +7,17 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.template.Resource;
 import io.vlingo.xoom.starter.template.TemplateGenerationContext;
 
-public class StatusHandlingStep implements TemplateGenerationStep {
+public class ResourcesLocationStep implements TemplateGenerationStep {
+
+    private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_STARTER_HOME";
 
     @Override
     public void process(final TemplateGenerationContext context) {
-        try {
-            final Integer status = context.process().waitFor();
-            StatusHandler.forStatus(status).handle(context);
-        } catch (InterruptedException e) {
-            throw new TemplateGenerationException(e);
+        if(!Resource.hasAllPaths()) {
+            Resource.rootIn(System.getenv(HOME_ENVIRONMENT_VARIABLE));
         }
     }
 
