@@ -30,7 +30,7 @@ The structure is represented below:
                 
 ```
 
-## Instalation
+## Installation
 Install `vlingo-xoom-starter` by downloading the compressed file via `curl`:
 
 > ZIP
