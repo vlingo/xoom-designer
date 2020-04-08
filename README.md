@@ -27,7 +27,6 @@ The structure is represented below:
     |                       └──  BootstrapTest.java
     └── pom.xml                
 ```
-<p align="right"><sub>*Currently, Maven is the only build tool supported.</sub></p>. 
 
 ## Requirements
 * Java 7+
@@ -125,4 +124,6 @@ The log will print the progress and, when the generation is successfully complet
 ```
     vlingo/xoom template has been successfully generated under [targer-folder].
 ```
+##
+<p align="right"><sub>*Currently, Maven is the only build tool supported.</sub></p>. 
 
