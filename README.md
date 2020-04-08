@@ -127,8 +127,3 @@ The log will print the progress and, when the generation is successfully complet
     vlingo/xoom template has been successfully generated under [targer-folder].
 ```
 
-## Supported Build Tool
-
-The current `vlingo-xoom-starter` version only supports Maven.
-
-
