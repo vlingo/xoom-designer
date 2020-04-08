@@ -13,7 +13,6 @@ The quick starter project generator for the vlingo/xoom quick start components
 The structure is represented below: 
 
 ```
-
     ├── src
     |   ├── main
     |   |     ├── java 
@@ -26,9 +25,10 @@ The structure is represented below:
     |         └── java 
     |              └──[custom-package]
     |                       └──  BootstrapTest.java
-    └── pom.xml
-                
+    └── pom.xml                
 ```
+<p align="right"><sub>*Currently, Maven is the only build tool supported.</sub></p>. 
+
 ## Requirements
 * Java 7+
 * Maven 3.x.x
@@ -98,7 +98,6 @@ Extract the file content into any folder and customize the `vlingo/xoom` project
         </tr>
     </tbody>
 </table>
-<p align="right"><sub>*Currently, Maven is the only build tool supported.</sub></p>. 
 
 The following snippet shows a `vlingo-xoom-starter.properties` example:
 
