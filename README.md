@@ -40,7 +40,7 @@ Download the `vlingo-xoom-starter` compressed file via `curl`:
 * For `zip` file: `curl https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter.zip -output starter.zip`
 * For `tar.gz` file: `curl https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter.tar.gz -output starter.tar.gz`
 
-Extract the file content into any location and customize the `vlingo/xoom` project generation by editing `vlingo-xoom-starter.properties` under the root folder. The available parameters are described below:
+Extract the file content into any folder and customize the `vlingo/xoom` project generation by editing `vlingo-xoom-starter.properties` under the root folder. The available parameters are described below:
 
 <table>
     <thead>
