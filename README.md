@@ -52,17 +52,17 @@ Extract the file content into any folder and customize the `vlingo/xoom` project
     <tbody>
         <tr>
             <td align="center">version</td>
-            <td align="left">Maven project initial version.*</td>
+            <td align="left">Maven project initial version.</td>
             <td align="center">Yes</td>
         </tr>
         <tr>
             <td align="center">group.id</td>
-            <td align="left">Maven artifact group id.*</td>
+            <td align="left">Maven artifact group id.</td>
             <td align="center">Yes</td>
         </tr>
         <tr>
             <td align="center">artifact.id</td>
-            <td align="left">Maven artifact id.*</td>
+            <td align="left">Maven artifact id.</td>
             <td align="center">Yes</td>
         </tr>
         <tr>
