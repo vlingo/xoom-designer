@@ -8,7 +8,7 @@ The quick starter project generator for the vlingo/xoom quick start components
 * `vlingo-xoom` initializer class
 * Default test class
 * Micronaut and Logback configuration files
-* Maven build configuration (pom.xml)
+* Maven¹ build configuration (pom.xml)
 
 The structure is represented below: 
 
@@ -125,5 +125,5 @@ The log will print the progress and, when the generation is successfully complet
     vlingo/xoom template has been successfully generated under [targer-folder].
 ```
 ##
-<p align="right"><sub>*Currently, Maven is the only build tool supported.</sub></p>. 
+<p align="right"><sub>1 - Currently, Maven is the only build tool supported.</sub></p>. 
 
