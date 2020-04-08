@@ -88,12 +88,12 @@ Extract the file content into any folder and customize the `vlingo/xoom` project
         </tr>
         <tr>
             <td align="center">k8s.image</td>
-            <td align="left">The application Docker image on Kubernetes</td>
+            <td align="left">The application Docker image on Kubernetes.</td>
             <td align="center">Conditional (mandatory when the deployment property is "k8s")</td>
         </tr>
         <tr>
             <td align="center">k8s.pod.name</td>
-            <td align="left">Application POD name on Kubernetes</td>
+            <td align="left">Application POD name on Kubernetes.</td>
             <td align="center">Conditional (mandatory when the deployment property is "k8s")</td>
         </tr>
     </tbody>
