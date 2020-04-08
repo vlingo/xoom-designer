@@ -38,14 +38,54 @@ Download the `vlingo-xoom-starter` compressed file via `curl`:
 
 Extract the file content into any location and configure the `vlingo/xoom` project by editing `vlingo-xoom-starter.properties` under the root folder. The available parameters are described below:
 
-| Parameter                     | Description                                        | Mandatory |
-| :----:                        | :---                                               | :----:    |
-| version                       | Maven project initial version.                     | Yes       |
-| group.id                      | Maven group id.                                    | Yes       |
-| artifact.id                   | Maven artifact id.                                 | Yes       |
-| package                       | Project base package.                              | Yes       |
-| target.folder                 | Absolute path to the generated project folder.     | Yes       |
-| vlingo.xoom.server.version    | The `vlingo-xoom-server` dependency version.       | Yes       |
+<table>
+    <thead>
+        <tr>
+            <th align="center">Parameter</th>
+            <th align="center">Description</th>
+            <th align="center">Mandatory</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center">version</td>
+            <td align="left">Maven project initial version.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">group.id</td>
+            <td align="left">Maven artifact group id.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">artifact.id</td>
+            <td align="left">Maven artifact id.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">package</td>
+            <td align="left">Project base package.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">target.folder</td>
+            <td align="left">Absolute path to the generated project folder.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">vlingo.xoom.server.version</td>
+            <td align="left">The `vlingo-xoom-server` dependency version.</td>
+            <td align="center">Yes</td>
+        </tr>
+        <tr>
+            <td align="center">deployment</td>
+            <td align="left">Enables config generation for a specific deployment environment. Currently, only Kubernetes is supported by setting `k8s` value in this property.</td>
+            <td align="center">No</td>
+        </tr>
+    </tbody>
+</table>
+
+
 
 # Supported Build Tool
 
