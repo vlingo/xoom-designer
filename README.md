@@ -36,8 +36,8 @@ The structure is represented below:
 
 Download the `vlingo-xoom-starter` compressed distribution file via `curl`:
 
-* For `zip` file: `curl https://github.com/vlingo/vlingo-xoom-starter/raw/master/dist/starter.zip --output starter.zip`
-* For `tar.gz` file: `curl https://github.com/vlingo/vlingo-xoom-starter/raw/master/dist/starter.tar.gz --output starter.tar.gz`
+* For `zip` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/raw/master/dist/starter.zip`
+* For `tar.gz` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/raw/master/dist/starter.tar.gz`
 
 Extract the file content into any folder and customize the `vlingo/xoom` project generation by editing `vlingo-xoom-starter.properties` under the root folder. The available parameters are described below:
 
