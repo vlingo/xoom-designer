@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.starter.template;
 
+import com.sun.tools.javac.util.StringUtils;
+
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +26,7 @@ public enum Resource {
     private static final Map<Resource, String> FOLDERS = new HashMap<>();
 
     public static void rootIn(final String rootPath) {
-        if(rootPath == null) {
+        if(rootPath == null || rootPath.trim().length() == 0) {
             throw new InvalidResourcesPathException();
         }
         PROPERTIES_FILE.path(Paths.get(rootPath, PROPERTIES_FILENAME).toString());

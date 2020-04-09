@@ -28,7 +28,7 @@ public class CommandExecutorStepTest {
     private static final String EXPECTED_BASIC_ARCHETYPE_COMMAND =
             "cd " + Paths.get(ROOT_FOLDER, "resources", "archetypes", "basic-archetype").toString() + " && " +
             "mvn clean install && cd E:\\projects && " +
-            "mvn archetype:generate -B -DarchetypeGroupId=io.vlingo " +
+            "mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
             "-DarchetypeArtifactId=vlingo-xoom-basic-archetype " +
             "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
             "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
@@ -37,7 +37,7 @@ public class CommandExecutorStepTest {
     private static final String EXPECTED_K8S_ARCHETYPE_COMMAND =
             "cd " + Paths.get(ROOT_FOLDER, "resources", "archetypes", "kubernetes-archetype").toString() + " && " +
             "mvn clean install && cd E:\\projects && " +
-            "mvn archetype:generate -B -DarchetypeGroupId=io.vlingo " +
+            "mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
             "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
             "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
             "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
