@@ -19,20 +19,20 @@
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/main/java</directory>
       <includes>
-        <include>**/*.java</include>
+        <include>**/Bootstrap.java</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/test/java</directory>
       <includes>
-        <include>**/*.java</include>
+        <include>**/BootstrapTest.java</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
       <directory>src/main/resources</directory>
       <includes>
-        <include>**/*.xml</include>
-        <include>**/*.yml</include>
+        <include>**/application.yml</include>
+        <include>**/logback.xml</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
@@ -45,7 +45,6 @@
       <directory></directory>
       <includes>
         <include>Dockerfile</include>
-        <include>pom.xml</include>
       </includes>
     </fileSet>
   </fileSets>

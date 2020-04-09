@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class CommandExecutorStep implements TemplateGenerationStep {
 
-    private static final String ARCHETYPE_COMMANDS_PATTERN = "cd %s && mvn clean install && cd %s && mvn archetype:generate -B %s";
+    private static final String ARCHETYPE_COMMANDS_PATTERN = "cd %s && mvn clean install && cd %s && mvn archetype:generate -B -DarchetypeCatalog=internal %s";
 
     public void process(final TemplateGenerationContext context) {
         try {
