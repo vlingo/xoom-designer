@@ -23,23 +23,19 @@ public class Bootstrap {
 
     public static Bootstrap instance() {
         if (instance == null) {
-            instance = new Bootstrap(Micronaut.run(Bootstrap.class));
+            instance = new Bootstrap();
         }
         return instance;
     }
 
-    private Bootstrap(final ApplicationContext applicationContext) {
-        this.vlingoServer = applicationContext.getBean(VlingoServer.class);
-
-        this.registerWorld(applicationContext, vlingoServer.getVlingoScene());
+    private Bootstrap() {
+        this.vlingoServer =
+                Micronaut.run(Bootstrap.class)
+                        .getBean(VlingoServer.class);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             stopAndCleanup();
         }));
-    }
-
-    private void registerWorld(final ApplicationContext applicationContext, final VlingoScene scene) {
-        applicationContext.registerSingleton(scene.getWorld());
     }
 
     public void stopAndCleanup() {
