@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.template.archetype;
 
 import java.util.List;
 import java.util.Properties;

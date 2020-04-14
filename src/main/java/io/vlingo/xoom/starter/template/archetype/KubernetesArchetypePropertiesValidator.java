@@ -5,11 +5,11 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.template.archetype;
 
 import java.util.Properties;
 
-import static io.vlingo.xoom.starter.archetype.ArchetypeProperties.DEPLOYMENT;
+import static io.vlingo.xoom.starter.template.archetype.ArchetypeProperties.DEPLOYMENT;
 
 public class KubernetesArchetypePropertiesValidator extends ArchetypePropertiesValidator {
 

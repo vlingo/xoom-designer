@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
-import io.vlingo.xoom.starter.template.Resource;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.template.archetype.ArchetypeProperties;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 
 public class PropertiesLoadStepTest {
 
-    private TemplateGenerationContext context;
+    private TaskExecutionContext context;
     private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
     @Test
@@ -35,9 +35,9 @@ public class PropertiesLoadStepTest {
 
     @Before
     public void setUp() {
-        this.context = new TemplateGenerationContext();
         Resource.clear();
         Resource.rootIn(ROOT_FOLDER);
+        this.context = new TaskExecutionContext();
     }
 
 }

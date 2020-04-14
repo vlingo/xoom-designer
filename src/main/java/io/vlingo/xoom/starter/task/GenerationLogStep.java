@@ -5,9 +5,10 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.template.steps;
+package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,10 +16,10 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 
-public class GenerationLogStep implements TemplateGenerationStep  {
+public class GenerationLogStep implements TaskExecutionStep {
 
     @Override
-    public void process(final TemplateGenerationContext context) {
+    public void process(final TaskExecutionContext context) {
         log(context.process());
     }
 

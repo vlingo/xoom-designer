@@ -7,13 +7,14 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
+import io.vlingo.xoom.starter.task.TaskExecutionStep;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
-public class StatusHandlingStep implements TemplateGenerationStep {
+public class StatusHandlingStep implements TaskExecutionStep {
 
     @Override
-    public void process(final TemplateGenerationContext context) {
+    public void process(final TaskExecutionContext context) {
         try {
             final Integer status = context.process().waitFor();
             StatusHandler.forStatus(status).handle(context);

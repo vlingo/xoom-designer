@@ -5,12 +5,15 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.template.steps;
+package io.vlingo.xoom.starter.template.archetype;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import java.util.Properties;
 
-public interface TemplateGenerationStep {
+public class BasicArchetypePropertiesValidator extends ArchetypePropertiesValidator {
 
-    void process(final TemplateGenerationContext context);
+    @Override
+    protected boolean checkValues(final Properties properties) {
+        return true;
+    }
 
 }
