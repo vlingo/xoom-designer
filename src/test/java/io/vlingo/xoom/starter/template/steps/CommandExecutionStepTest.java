@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
-import io.vlingo.xoom.starter.template.Resource;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.template.archetype.ArchetypeProperties;
+import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.template.Terminal;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,12 +18,12 @@ import org.junit.Test;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-public class CommandExecutorStepTest {
+public class CommandExecutionStepTest {
 
     private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
-    private TemplateGenerationContext context;
-    private CommandExecutorStep commandExecutorStep;
+    private TaskExecutionContext context;
+    private CommandExecutionStep commandExecutionStep;
 
     private static final String EXPECTED_BASIC_ARCHETYPE_COMMAND =
             "cd " + Paths.get(ROOT_FOLDER, "resources", "archetypes", "basic-archetype").toString() + " && " +
@@ -47,7 +47,7 @@ public class CommandExecutorStepTest {
     @Test
     public void testCommandPreparationWithBasicArchetype() {
         this.context.onProperties(loadBasicArchetypeProperties());
-        final String[] commands = commandExecutorStep.prepareCommands(context);
+        final String[] commands = commandExecutionStep.prepareCommands(context);
         Assert.assertEquals(Terminal.active().initializationCommand(), commands[0]);
         Assert.assertEquals(Terminal.active().parameter(), commands[1]);
         Assert.assertEquals(EXPECTED_BASIC_ARCHETYPE_COMMAND, commands[2]);
@@ -67,7 +67,7 @@ public class CommandExecutorStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetype() {
         context.onProperties(loadKubernetesArchetypeProperties());
-        final String[] commands = commandExecutorStep.prepareCommands(context);
+        final String[] commands = commandExecutionStep.prepareCommands(context);
         Assert.assertEquals(Terminal.active().initializationCommand(), commands[0]);
         Assert.assertEquals(Terminal.active().parameter(), commands[1]);
         Assert.assertEquals(EXPECTED_K8S_ARCHETYPE_COMMAND, commands[2]);
@@ -89,10 +89,10 @@ public class CommandExecutorStepTest {
 
     @Before
     public void setUp() {
-        this.context = new TemplateGenerationContext();
-        this.commandExecutorStep = new CommandExecutorStep();
         Resource.clear();
         Resource.rootIn(ROOT_FOLDER);
+        this.commandExecutionStep = new CommandExecutionStep();
+        this.context = new TaskExecutionContext();
     }
 
 }

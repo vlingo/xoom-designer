@@ -5,13 +5,13 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.template;
+package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
+import io.vlingo.xoom.starter.template.archetype.ArchetypeProperties;
 
 import java.util.Properties;
 
-public class TemplateGenerationContext {
+public class TaskExecutionContext {
 
     private Process process;
     private Properties properties;
@@ -35,4 +35,5 @@ public class TemplateGenerationContext {
     public String propertyOf(final ArchetypeProperties key) {
         return properties != null ? properties.getProperty(key.literal()) : "";
     }
+
 }

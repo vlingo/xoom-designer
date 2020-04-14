@@ -7,7 +7,8 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
 
 import java.io.File;
@@ -15,20 +16,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import static io.vlingo.xoom.starter.template.Resource.PROPERTIES_FILE;
+import static io.vlingo.xoom.starter.Resource.STARTER_PROPERTIES_FILE;
 
-public class PropertiesLoadStep implements TemplateGenerationStep {
+public class PropertiesLoadStep implements TaskExecutionStep {
 
 
     @Override
-    public void process(final TemplateGenerationContext context) {
+    public void process(final TaskExecutionContext context) {
         context.onProperties(loadProperties());
     }
 
     private Properties loadProperties() {
         try {
             final Properties properties = new Properties();
-            final File propertiesFile = new File(PROPERTIES_FILE.path());
+            final File propertiesFile = new File(STARTER_PROPERTIES_FILE.path());
             properties.load(new FileInputStream(propertiesFile));
             return properties;
         } catch (final IOException e) {

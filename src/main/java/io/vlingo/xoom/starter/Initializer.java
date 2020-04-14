@@ -7,13 +7,12 @@
 
 package io.vlingo.xoom.starter;
 
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
-import io.vlingo.xoom.starter.template.TemplateGenerator;
+import io.vlingo.xoom.starter.task.TaskExecutor;
 
 public class Initializer {
 
     public static void main(final String[] args) throws InterruptedException {
-        TemplateGenerator.start(new TemplateGenerationContext());
+        TaskExecutor.execute(args);
         System.exit(0);
     }
 

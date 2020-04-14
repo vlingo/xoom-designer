@@ -7,20 +7,23 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.archetype.Archetype;
-import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionStep;
+import io.vlingo.xoom.starter.template.archetype.Archetype;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
 import io.vlingo.xoom.starter.template.Terminal;
 
 import java.io.IOException;
 import java.util.Properties;
 
-public class CommandExecutorStep implements TemplateGenerationStep {
+import static io.vlingo.xoom.starter.template.archetype.ArchetypeProperties.TARGET_FOLDER;
 
-    private static final String ARCHETYPE_COMMANDS_PATTERN = "cd %s && mvn clean install && cd %s && mvn archetype:generate -B -DarchetypeCatalog=internal %s";
+public class CommandExecutionStep implements TaskExecutionStep {
 
-    public void process(final TemplateGenerationContext context) {
+    private static final String ARCHETYPE_COMMANDS_PATTERN = "cd %s && mvn clean install && " +
+            "cd %s && mvn archetype:generate -B -DarchetypeCatalog=internal %s";
+
+    public void process(final TaskExecutionContext context) {
         try {
             final String[] commands = prepareCommands(context);
             final Process process = Runtime.getRuntime().exec(commands);
@@ -30,17 +33,17 @@ public class CommandExecutorStep implements TemplateGenerationStep {
         }
     }
 
-    protected String[] prepareCommands(final TemplateGenerationContext context) {
+    protected String[] prepareCommands(final TaskExecutionContext context) {
         return new String[]{
                 Terminal.active().initializationCommand(),
                 Terminal.active().parameter(),
                 archetypeCommands(context)};
     }
 
-    private String archetypeCommands(final TemplateGenerationContext context) {
+    private String archetypeCommands(final TaskExecutionContext context) {
         final Properties properties = context.properties();
         final Archetype archetype = Archetype.support(properties);
-        final String targetFolder = context.propertyOf(ArchetypeProperties.TARGET_FOLDER);
+        final String targetFolder = context.propertyOf(TARGET_FOLDER);
         return String.format(ARCHETYPE_COMMANDS_PATTERN, archetype.folder(),
                 targetFolder, archetype.fillMavenOptions(properties));
     }

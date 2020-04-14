@@ -1,8 +1,8 @@
 package io.vlingo.xoom.starter.template.steps;
 
+import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.template.InvalidResourcesPathException;
-import io.vlingo.xoom.starter.template.Resource;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +13,14 @@ public class ResourceLocationStepTest {
 
     private static final String ROOT_FOLDER = separator + "starter" + separator;
 
-    private TemplateGenerationContext context;
+    private TaskExecutionContext context;
     private ResourcesLocationStep resourcesLocationStep;
 
     @Test
     public void testResourceLocationStepWithAlreadyExistingPaths() {
         Resource.rootIn(ROOT_FOLDER);
         resourcesLocationStep.process(context);
-        Assert.assertEquals(ROOT_FOLDER + "vlingo-xoom-starter.properties", Resource.PROPERTIES_FILE.path());
+        Assert.assertEquals(ROOT_FOLDER + "vlingo-xoom-starter.properties", Resource.STARTER_PROPERTIES_FILE.path());
         Assert.assertEquals(ROOT_FOLDER + "resources" + separator + "archetypes", Resource.ARCHETYPES_FOLDER.path());
     }
 
@@ -31,9 +31,9 @@ public class ResourceLocationStepTest {
 
     @Before
     public void setUp() {
-        this.context = new TemplateGenerationContext();
-        this.resourcesLocationStep = new ResourcesLocationStep();
         Resource.clear();
+        this.context = new TaskExecutionContext();
+        this.resourcesLocationStep = new ResourcesLocationStep();
     }
 
 }
