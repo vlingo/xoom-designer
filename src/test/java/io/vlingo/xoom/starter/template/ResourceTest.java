@@ -1,5 +1,6 @@
 package io.vlingo.xoom.starter.template;
 
+import io.vlingo.xoom.starter.Resource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,8 @@ public class ResourceTest {
     @Test
     public void testPathUpdate() {
         Resource.rootIn(ROOT_FOLDER);
-        Assert.assertEquals(ROOT_FOLDER + "vlingo-xoom-starter.properties", Resource.PROPERTIES_FILE.path());
+        Assert.assertTrue(Resource.hasAllPaths());
+        Assert.assertEquals(ROOT_FOLDER + "vlingo-xoom-starter.properties", Resource.STARTER_PROPERTIES_FILE.path());
         Assert.assertEquals(ROOT_FOLDER + "resources" + separator + "archetypes", Resource.ARCHETYPES_FOLDER.path());
     }
 

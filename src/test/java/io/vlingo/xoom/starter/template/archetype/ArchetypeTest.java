@@ -5,14 +5,16 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.template.archetype;
 
+import io.vlingo.xoom.starter.template.archetype.Archetype;
+import io.vlingo.xoom.starter.template.archetype.ArchetypeNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Properties;
 
-import static io.vlingo.xoom.starter.archetype.ArchetypeProperties.*;
+import static io.vlingo.xoom.starter.template.archetype.ArchetypeProperties.*;
 
 public class ArchetypeTest {
 

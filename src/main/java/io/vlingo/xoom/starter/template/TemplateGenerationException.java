@@ -7,7 +7,9 @@
 
 package io.vlingo.xoom.starter.template;
 
-public class TemplateGenerationException extends RuntimeException {
+import io.vlingo.xoom.starter.task.TaskExecutionException;
+
+public class TemplateGenerationException extends TaskExecutionException {
 
     public TemplateGenerationException(final Exception exception) {
         super(exception);

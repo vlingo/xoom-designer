@@ -5,9 +5,9 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.template.archetype;
 
-import io.vlingo.xoom.starter.template.Resource;
+import io.vlingo.xoom.starter.Resource;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.starter.archetype.ArchetypeProperties.*;
+import static io.vlingo.xoom.starter.template.archetype.ArchetypeProperties.*;
 
 public enum Archetype {
 

@@ -8,7 +8,7 @@
 package io.vlingo.xoom.starter.template.steps;
 
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,13 +28,13 @@ public class StatusHandlerTest {
     @Test
     public void testSuccessHandler() {
         final StatusHandler statusHandler = StatusHandler.forStatus(0);
-        statusHandler.handle(new TemplateGenerationContext());
+        statusHandler.handle(new TaskExecutionContext());
     }
 
     @Test(expected = TemplateGenerationException.class)
     public void testFailureHandler() {
         final StatusHandler statusHandler = StatusHandler.forStatus(3);
-        statusHandler.handle(new TemplateGenerationContext());
+        statusHandler.handle(new TaskExecutionContext());
     }
 
 }

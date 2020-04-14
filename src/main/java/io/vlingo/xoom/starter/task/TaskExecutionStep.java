@@ -5,15 +5,10 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.task;
 
-import java.util.Properties;
+public interface TaskExecutionStep {
 
-public class BasicArchetypePropertiesValidator extends ArchetypePropertiesValidator {
-
-    @Override
-    protected boolean checkValues(final Properties properties) {
-        return true;
-    }
+    void process(final TaskExecutionContext context);
 
 }

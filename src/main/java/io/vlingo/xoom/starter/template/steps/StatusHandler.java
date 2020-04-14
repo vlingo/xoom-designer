@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.starter.template.steps;
 
-import io.vlingo.xoom.starter.archetype.ArchetypeProperties;
+import io.vlingo.xoom.starter.template.archetype.ArchetypeProperties;
 import io.vlingo.xoom.starter.template.TemplateGenerationException;
-import io.vlingo.xoom.starter.template.TemplateGenerationContext;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,9 +24,9 @@ public class StatusHandler {
             Arrays.asList(StatusHandler.successHandling(), StatusHandler.failureHandling());
 
     private final Predicate<Integer> predicate;
-    private final Consumer<TemplateGenerationContext> handler;
+    private final Consumer<TaskExecutionContext> handler;
 
-    private StatusHandler(Predicate<Integer> predicate, Consumer<TemplateGenerationContext> handler) {
+    private StatusHandler(Predicate<Integer> predicate, Consumer<TaskExecutionContext> handler) {
         this.predicate = predicate;
         this.handler = handler;
     }
@@ -39,7 +39,7 @@ public class StatusHandler {
         return predicate.test(status);
     }
 
-    public void handle(final TemplateGenerationContext context) {
+    public void handle(final TaskExecutionContext context) {
         handler.accept(context);
     }
 

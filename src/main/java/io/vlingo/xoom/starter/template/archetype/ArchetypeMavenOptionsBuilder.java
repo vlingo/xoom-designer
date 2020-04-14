@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 
 
-package io.vlingo.xoom.starter.archetype;
+package io.vlingo.xoom.starter.template.archetype;
 
 import java.util.Properties;
 import java.util.stream.Collectors;
