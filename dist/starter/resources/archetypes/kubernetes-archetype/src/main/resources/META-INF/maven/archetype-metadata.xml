@@ -7,6 +7,9 @@
     <requiredProperty key="vlingoXoomServerVersion">
       <defaultValue>1.2.9</defaultValue>
     </requiredProperty>
+    <requiredProperty key="dockerImage">
+      <defaultValue>vlingo-xoom-application</defaultValue>
+    </requiredProperty>
     <requiredProperty key="k8sImage">
       <defaultValue>vlingo-xoom-application</defaultValue>
     </requiredProperty>
@@ -19,20 +22,20 @@
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/main/java</directory>
       <includes>
-        <include>**/Bootstrap.java</include>
+        <include>**/*.java</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/test/java</directory>
       <includes>
-        <include>**/BootstrapTest.java</include>
+        <include>**/*.java</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
       <directory>src/main/resources</directory>
       <includes>
-        <include>**/application.yml</include>
-        <include>**/logback.xml</include>
+        <include>**/*.yml</include>
+        <include>**/*.xml</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
@@ -44,7 +47,9 @@
     <fileSet filtered="true" encoding="UTF-8">
       <directory></directory>
       <includes>
+        <include>pom.xml</include>
         <include>Dockerfile</include>
+        <include>**/*.properties</include>
       </includes>
     </fileSet>
   </fileSets>

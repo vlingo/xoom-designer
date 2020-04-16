@@ -1,48 +1,63 @@
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.containerization.docker.DockerPackageCommandStep;
+import io.vlingo.xoom.starter.task.docker.steps.DockerPackageCommandResolverStep;
+import io.vlingo.xoom.starter.task.option.Option;
+import io.vlingo.xoom.starter.task.option.OptionValue;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
+import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
 public enum SubTask {
 
     DOCKER_STATUS(Task.DOCKER, "status", null,
-            Option.required("currentDirectory")),
+            Option.required(CURRENT_DIRECTORY)),
 
-    DOCKER_PACKAGE(Task.DOCKER, "package", new DockerPackageCommandStep(),
-            Option.required("currentDirectory"),
-            Option.of("tag", "latest")),
+    DOCKER_PACKAGE(Task.DOCKER, "package",
+            new DockerPackageCommandResolverStep(),
+            Option.required(CURRENT_DIRECTORY),
+            Option.of(TAG, "latest")),
 
     DOCKER_PUSH(Task.DOCKER, "push", null,
-            Option.required("currentDirectory"),
-            Option.of("tag", "latest"));
+            Option.required(CURRENT_DIRECTORY),
+            Option.of(TAG, "latest"));
 
     private final Task parentTask;
     private final String command;
-    private final TaskExecutionStep commandExecutionStep;
+    private final TaskExecutionStep commandResolverStep;
     private final List<Option> options;
 
     SubTask(final Task parentTask,
             final String command,
-            final TaskExecutionStep commandExecutionStep,
+            final TaskExecutionStep commandResolverStep,
             final Option ...options) {
         this.parentTask = parentTask;
         this.command = command;
-        this.commandExecutionStep = commandExecutionStep;
+        this.commandResolverStep = commandResolverStep;
         this.options = Arrays.asList(options);
     }
 
-    public boolean triggeredBy(final String command) {
+    public List<OptionValue> findOptionValues(final List<String> args) {
+        return this.options.stream().map(option -> {
+            final String value = option.findValue(args);
+            return OptionValue.with(option.name(), value);
+        }).collect(Collectors.toList());
+    }
+
+    public TaskExecutionStep commandResolverStep() {
+        return commandResolverStep;
+    }
+
+    protected boolean triggeredBy(final String command) {
         return this.command.trim().equalsIgnoreCase(command);
     }
 
-    public boolean isChildFrom(final Task task) {
+    protected boolean isChildFrom(final Task task) {
         return this.parentTask.equals(task);
-    }
-
-    public TaskExecutionStep commandExecutionStep() {
-        return commandExecutionStep;
     }
 
 }
