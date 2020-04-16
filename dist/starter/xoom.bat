@@ -1,5 +1,7 @@
 @ECHO OFF
-SET CURRENT_DIR=%CD%
-SET VLINGO_STARTER_HOME=%CURRENT_DIR%
-call java -jar bin\vlingo-xoom-starter-dist.jar
-SET VLINGO_STARTER_HOME=
+SET "args="
+:loop
+SET args=%args% %1
+shift
+if not "%~1"=="" goto loop
+call java -jar %VLINGO_XOOM_STARTER_HOME%\bin\vlingo-xoom-starter-dist.jar %args% --currentDirectory %CD%
