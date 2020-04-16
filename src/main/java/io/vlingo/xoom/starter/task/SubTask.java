@@ -8,6 +8,8 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.steps.DockerPackageCommandResolverStep;
+import io.vlingo.xoom.starter.task.docker.steps.DockerPushCommandResolverStep;
+import io.vlingo.xoom.starter.task.docker.steps.DockerStatusCommandResolverStep;
 import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
@@ -21,7 +23,8 @@ import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
 public enum SubTask {
 
-    DOCKER_STATUS(Task.DOCKER, "status", null,
+    DOCKER_STATUS(Task.DOCKER, "status",
+            new DockerStatusCommandResolverStep(),
             Option.required(CURRENT_DIRECTORY)),
 
     DOCKER_PACKAGE(Task.DOCKER, "package",
@@ -29,7 +32,8 @@ public enum SubTask {
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
-    DOCKER_PUSH(Task.DOCKER, "push", null,
+    DOCKER_PUSH(Task.DOCKER, "push",
+            new DockerPushCommandResolverStep(),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest"));
 
