@@ -1,0 +1,47 @@
+package io.vlingo.xoom.starter.task.option;
+
+import java.util.List;
+
+public class Option {
+
+
+    private final OptionName name;
+    private final String defaultValue;
+    private final boolean required;
+
+    public Option(final OptionName name,
+                  final String defaultValue,
+                  final boolean required) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.required = required;
+    }
+
+    public static final Option of(final OptionName name, final String defaultValue) {
+        return new Option(name, defaultValue, false);
+    }
+
+    public static final Option required(final OptionName name) {
+        return new Option(name, null, true);
+    }
+
+    public String findValue(final List<String> args) {
+        final int index = args.indexOf(name.withPreffix());
+        if(index > 0 && index + 1 < args.size()) {
+            return args.get(index+1);
+        }
+        if(isRequired()) {
+            throw new RequiredOptionNotFound(name.literal());
+        }
+        return defaultValue;
+    }
+
+    public OptionName name() {
+        return name;
+    }
+
+    private boolean isRequired() {
+        return required;
+    }
+
+}

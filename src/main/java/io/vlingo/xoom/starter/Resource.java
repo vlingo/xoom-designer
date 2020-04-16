@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter;
 
-import io.vlingo.xoom.starter.template.InvalidResourcesPathException;
+import io.vlingo.xoom.starter.task.template.InvalidResourcesPathException;
 
 import java.nio.file.Paths;
 import java.util.Arrays;

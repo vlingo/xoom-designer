@@ -7,13 +7,23 @@
 
 package io.vlingo.xoom.starter;
 
+import io.vlingo.xoom.starter.task.TaskExecutionException;
 import io.vlingo.xoom.starter.task.TaskExecutor;
+
+import java.util.Arrays;
 
 public class Initializer {
 
     public static void main(final String[] args) throws InterruptedException {
-        TaskExecutor.execute(args);
-        System.exit(0);
+        try {
+            TaskExecutor.execute(Arrays.asList(args));
+        } catch (final TaskExecutionException exception) {
+            System.out.println(exception.getMessage());
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            System.exit(0);
+        }
     }
 
 }
