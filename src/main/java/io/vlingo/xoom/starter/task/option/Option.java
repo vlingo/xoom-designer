@@ -37,7 +37,7 @@ public class Option {
             return args.get(index+1);
         }
         if(isRequired()) {
-            throw new RequiredOptionNotFound(name.literal());
+            throw new RequiredOptionNotFoundException(name.literal());
         }
         return defaultValue;
     }

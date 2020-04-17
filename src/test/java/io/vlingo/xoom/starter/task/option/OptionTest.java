@@ -1,8 +1,5 @@
 package io.vlingo.xoom.starter.task.option;
 
-import io.vlingo.xoom.starter.task.option.Option;
-import io.vlingo.xoom.starter.task.option.OptionName;
-import io.vlingo.xoom.starter.task.option.RequiredOptionNotFound;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +29,7 @@ public class OptionTest {
         Assert.assertEquals("/home/users/projects/starter", option.findValue(args));
     }
 
-    @Test(expected = RequiredOptionNotFound.class)
+    @Test(expected = RequiredOptionNotFoundException.class)
     public void testValueNotFoundConditionOnRequiredOption() {
         final Option option = Option.required(OptionName.CURRENT_DIRECTORY);
         final List<String> args = Arrays.asList("docker", "package", "--tag", "1.0.1", "--user", "danilo");
