@@ -1,0 +1,97 @@
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+.menu-item-icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2px; 
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+}
+
+.sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+    color: #999;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
+
+.nav-link.active i {
+    color: #007bff;
+}
+
+.sidebar-icon {
+    font-family: 'Font Awesome 5 Free' !important;
+    font-style: normal;
+    color: #999;
+}
+
+.bounded-context-icon:before  {
+    content: "\f27a";
+    padding-right: 5px;
+}
+
+.model-icon:before {
+    font-weight: 900;
+    font-size: 15px;
+    content: "\f61f";
+    padding-right: 5px;
+}
+
+.deployment-icon:before {
+    font-weight: 900;
+    font-size: 18px;
+    content: "\f1b3";
+    padding-right: 3px;
+}
+
+.generation-icon:before {
+    font-weight: 900;
+    font-size: 13px;
+    content: "\f085";
+    padding-right: 3px;
+}
+
+.about-icon:before {
+    font-weight: 900;
+    font-size: 15px;
+    content: "\f05a";
+    padding-right: 4px;
+}
