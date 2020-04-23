@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Context</h2>
+</div>
+
+<form [formGroup]="contextForm">
+    <div class="form-group col-md-3">    
+        <label for="groupId">Group Id*:</label>
+        <input type="text" class="form-control starter-field" 
+        id="groupId" formControlName="GroupId" [(ngModel)]="generation.context.groupId"
+        placeholder="Maven project group Id" #GroupId>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="artifactId">Artifact Id*:</label>
+        <input type="text" class="form-control starter-field"
+        id="artifactId" formControlName="ArtifactId" 
+        [(ngModel)]="generation.context.artifactId" placeholder="Maven artifactId Id" 
+        #ArtifactId>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="artifactVersion">Artifact Version*:</label>
+        <input type="text" class="form-control starter-field" 
+        id="artifactVersion" formControlName="ArtifactVersion" 
+        [(ngModel)]="generation.context.artifactVersion" #ArtifactVersion
+        placeholder="Maven artifact version">
+    </div>
+    <div class="form-group col-md-3">
+        <label for="packageName">Base Package Name*:</label>
+        <input type="text" class="form-control starter-field" 
+        id="packageName" formControlName="PackageName" 
+        [(ngModel)]="generation.context.packageName" #PackageName
+        placeholder="com.company.servicecontextname">
+    </div>
+    <div class="form-group col-md-3">
+        <label for="parentDirectory">Parent Directory*:</label>
+        <input type="text" class="form-control starter-field" 
+        id="parentDirectory" [(ngModel)]="generation.context.parentDirectory"
+        formControlName="ParentDirectory"  #parentDirectory
+        placeholder="The parent directory for the new xoom project">
+    </div>
+    <div class="form-group col-md-3">
+        <label for="xoomVersion">vlingo/xoom Version*:</label>
+        <input type="text" class="form-control starter-field" 
+        id="xoomVersion" [(ngModel)]="generation.context.xoomVersion"
+        formControlName="XoomVersion" #XoomVersion
+        placeholder="The vlingo/xoom dependency version">
+    </div>
+</form>

@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Model</h2>
+</div>
+
+<div class="row">
+    <app-table resourceName="Aggregate" class="col-md-3"></app-table>
+    <app-table resourceName="Domain Event" class="col-md-3"></app-table>
+</div>
+
+<div class="card mt-3 storage-options">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class for="storageOptions">Storage*:</label>
+            </div>
+            <div class="col-md-2">
+                <label class for="storageOptions">CQRS:</label>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6 ml-2">
+                <div class="form-check form-check-inline pl-6">
+                    <input class="form-check-input" type="radio" name="storageOptions" id="journal" value="journal" checked="true">
+                    <label class="form-check-label" for="journal">Journal</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="storageOptions" id="objectStore" value="objectStore">
+                    <label class="form-check-label" for="objectStore">Object Store</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="storageOptions" id="stateStore" value="stateStore">
+                    <label class="form-check-label" for="stateStore">State Store</label>
+                </div>
+            </div>
+
+            <div class="col-md-2 ml-2">
+                <div class="form-check form-check-inline pl-6">
+                    <input class="form-check-input" type="checkbox" id="projections">
+                    <label class="form-check-label" for="projections">Projections</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
