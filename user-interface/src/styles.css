@@ -3,3 +3,19 @@
 .content-board {
     padding-top: 48px;
 }
+
+h2 {
+    font-size: 1.5rem !important;
+}
+
+label, input, button {
+    font-size: .75rem !important;
+}
+
+label {
+    font-weight: bold;
+}
+
+.form-check-label {
+    font-weight: normal;
+}

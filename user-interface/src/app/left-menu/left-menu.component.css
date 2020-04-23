@@ -4,12 +4,9 @@
     vertical-align: text-bottom;
 }
 
-.menu-item-icon {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2px; 
-    stroke-linecap: round;
-    stroke-linejoin: round;
+a.disabled {
+    pointer-events: none;
+    cursor: default;
 }
 
 .sidebar {
