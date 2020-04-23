@@ -1,0 +1,20 @@
+<div class="row mb-4">
+    <div class="col-md-12">
+        <button class="btn btn-primary" (click)="addRow()">
+            New {{resourceName}}
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div #table class="card-body">
+        <div *ngIf="!isReady()" class="row">
+            <div class="editable-content col-md-9 text-center" contenteditable="true">
+                    New{{shortResourceName()}}
+            </div>
+            <div class="col-md-1 pt-1">
+                <i class="remove-button"></i>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Deployment</h2>
+</div>
+
+<form>
+    <div class="form-group col-md-2 mb-3">    
+        <label for="clusterNodes">Total Cluster Nodes*:</label>
+        <input type="text" class="form-control starter-field" id="clusterNodes" value="3">
+    </div>
+    <div class="form-group col-md-4 border-top pt-2 mb-1">    
+        <label for="clusterNodes">Deployment type:</label>
+    </div>  
+    <div class="col-md-6 ml-2 mb-2">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="deploymentType" id="docker" value="docker">
+            <label class="form-check-label" for="docker">Docker</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="deploymentType" id="kubernetes" value="kubernetes">
+            <label class="form-check-label" for="kubernetes">Kubernetes</label>
+        </div>
+    </div>
+    <div class="form-group col-md-2 mb-3">    
+        <label for="kubernetesImage">Kubernetes Image:</label>
+        <input type="text" class="form-control starter-field" id="kubernetesImage">
+    </div>
+    <div class="form-group col-md-2 mb-3">    
+        <label for="kubernetesPOD">Kubernetes POD:</label>
+        <input type="text" class="form-control starter-field" id="kubernetesPOD">
+    </div>
+</form>
