@@ -4,6 +4,7 @@
 }
 
 .editable-content {
+    color: black;
     margin: 4px 0 0 23px;
     padding: 0 0 4px 2px;
     font-size: 0.75rem !important;
@@ -11,14 +12,21 @@
     border: 1px solid  rgba(0, 0, 0, .1);
 }
 
+.editable-content:hover {
+    color: #fff;
+    background-color: #337ab7 !important;
+}
+
+.selected {
+    color: #fff;
+    background-color: #337ab7 !important;
+}
+
 .editable-content:focus {
+    color: black;
     text-align: center;
     padding: 0 0 0 0;
     background-color: transparent !important;
-}
-
-.editable-content:focus i {
-    display: none;
 }
 
 .remove-button:before {

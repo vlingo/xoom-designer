@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import * as $ from 'jquery';
 
 @Component({
@@ -6,36 +6,66 @@ import * as $ from 'jquery';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit, AfterViewInit  {
+export class TableComponent implements OnInit  {
   
-  private $originalRow: JQuery<HTMLElement>;
-  
+  private selectedId: Number;
+  @Input() items: Array<any>;
   @Input() resourceName: String;
+  @Input() highlightSelected: Boolean = false;
+  @Input() disableInclusion: Boolean = false; 
+  @Input() itemInclusion = new EventEmitter<any>();
+  @Output() itemSelection = new EventEmitter<Number>();
+  @Output() itemRemoval = new EventEmitter<Number>(); 
+  @Output() itemUpdate = new EventEmitter<Object>(); 
   @ViewChild('table', { read: ElementRef }) table: ElementRef;
   
   ngOnInit(): void {
   }
 
-  ngAfterViewInit(): void {
-    $(this.table.nativeElement).on('click', '.remove-button', this.removeRow);
-    this.$originalRow = $(this.table.nativeElement).find('.row').last();
-    $(this.table.nativeElement).find('.row').detach();
-  }
-
   addRow() {
-    $(this.table.nativeElement).append(this.$originalRow.clone(true));
+    this.itemInclusion.emit({id: Date.now(), name: "New" + this.shortResourceName()});
   }
 
-  removeRow() {
-    $(this).closest(".row").detach();
+  selectItem(selectedId: Number, element: ElementRef) {
+    this.selectedId = selectedId;
+    this.itemSelection.emit(this.selectedId);
+    this.handleSelectionEventStyle(element);
+  }
+
+  handleSelectionEventStyle(element: ElementRef) {
+    if(this.highlightSelected) {
+      $(this.table.nativeElement).find(".editable-content").removeClass("selected");
+      $(element).addClass("selected");
+    }
+  }
+
+  onUpdate(id: Number, element: ElementRef) {
+    const $nameSpan = $(this.table.nativeElement).find('#' + id);
+    const newName = new String($(element).html());
+    this.items.forEach(item => {
+      if(item.id === id) {
+        item.name = newName;
+      }
+    });
+    this.itemUpdate.emit({"id": id, "name": newName});
+  }
+
+  removeItem(id: Number) {
+    const index = this.items.map(item => item.id).indexOf(id);
+    this.items.splice(index, 1);
+    this.itemRemoval.emit(id);
+    if(id === this.selectedId) {
+      this.selectedId = undefined;
+      this.itemSelection.emit(undefined);
+    }
   }
 
   shortResourceName() {
     return this.resourceName.replace(/\s/g, "");
   }
 
-  isReady() {
-    return false;
+  shouldDisableButton() {
+    return this.disableInclusion;
   }
 
   retrieveData() {

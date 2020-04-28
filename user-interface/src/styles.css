@@ -1,6 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
 .content-board {
+    height: 650px;
     padding-top: 48px;
 }
 
@@ -8,7 +7,7 @@ h2 {
     font-size: 1.5rem !important;
 }
 
-label, input, button {
+label, input, button, h5, .multiselect-dropdown {
     font-size: .75rem !important;
 }
 
@@ -19,3 +18,4 @@ label {
 .form-check-label {
     font-weight: normal;
 }
+

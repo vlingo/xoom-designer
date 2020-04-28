@@ -3,6 +3,7 @@ import { StepComponent } from '../step.component';
 import { StepCompletion } from 'src/app/model/step-completion';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { Step } from 'src/app/model/step';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-generation',
@@ -10,12 +11,29 @@ import { Step } from 'src/app/model/step';
   styleUrls: ['./generation.component.css']
 })
 export class GenerationComponent extends StepComponent {
-
-  constructor() {
+  
+  generationForm: FormGroup; 
+  
+  constructor(private formBuilder: FormBuilder) {
     super();
+    this.createForm();
+  }
+  
+  ngOnInit(): void {
+  }
+  
+  createForm() {
+    this.generationForm = this.formBuilder.group({
+      ProjectDirectory: ['', Validators.required]
+    });
   }
 
-  ngOnInit(): void {
+  generate() {
+    this.stepCompletion.emit(new StepCompletion(
+      Step.GENERATION,
+      this.generationForm.valid,
+      NavigationDirection.FINISH
+    ));
   }
 
   next(): void {
@@ -25,7 +43,7 @@ export class GenerationComponent extends StepComponent {
   previous(): void {
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
-      true,
+      this.generationForm.valid,
       NavigationDirection.REWIND
     ));
   }

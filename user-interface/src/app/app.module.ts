@@ -11,6 +11,10 @@ import { ModelComponent } from './steps/model/model.component';
 import { TableComponent } from './steps/model/table/table.component';
 import { DeploymentComponent } from './steps/deployment/deployment.component';
 import { GenerationComponent } from './steps/generation/generation.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ToastrModule } from 'ngx-toastr';
+import { MultipleSelectionComponent } from './multiple-selection/multiple-selection.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +25,17 @@ import { GenerationComponent } from './steps/generation/generation.component';
     ModelComponent,
     TableComponent,
     DeploymentComponent,
-    GenerationComponent
+    GenerationComponent,
+    MultipleSelectionComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastrModule.forRoot(),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
