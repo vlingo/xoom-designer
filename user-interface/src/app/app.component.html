@@ -9,6 +9,6 @@
     <div class="col-md-10 ml-sm-auto mt-3 px-4 border-top">
       <button (click)="previous()" class="btn btn-primary col-md-1 mr-3 mt-3" [disabled]="!hasPrevious()"><< Previous</button>
       <button (click)="next()" class="btn btn-primary col-md-1 mt-3" [disabled]="!hasNext()" *ngIf="!isLastStep()">Next >></button>
-      <button (click)="generate()" class="btn btn-primary col-md-1 mt-3" *ngIf="isLastStep()">Generate</button>
+      <button (click)="generate()" class="btn btn-success col-md-1 mt-3" *ngIf="isLastStep()">Finish</button>
     </div>
 </div>
