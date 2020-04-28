@@ -3,46 +3,64 @@
 </div>
 
 <div class="row">
-    <app-table resourceName="Aggregate" class="col-md-3"></app-table>
-    <app-table resourceName="Domain Event" class="col-md-3"></app-table>
-</div>
+    <app-table #aggregateTable resourceName="Aggregate" [items]="generationSettings.model.aggregates" class="col-md-3" highlightSelected="true"></app-table>
+    <app-table #domainEventTable resourceName="Domain Event" [items]="generationSettings.domainEventsOf(selectedAggregateId)" [disableInclusion]="shouldDisableNewDomainEvents()" class="col-md-3"></app-table>
+    
+    <div class="col-md-4">
+        <div class="card additional-options">
+            <div class="card-body">
 
-<div class="card mt-3 storage-options">
-    <div class="card-body">
+                <div class="form-group col-md-12">
+                    <label class for="restResources">REST Resources:</label>
+                    <app-multiple-selection #multipleSelection [settings]="restResourcesSettings"></app-multiple-selection>
+                </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <label class for="storageOptions">Storage*:</label>
-            </div>
-            <div class="col-md-2">
-                <label class for="storageOptions">CQRS:</label>
+                <div class="form-group col-md-12">
+                    <label class for="storageOptions">Storage*:</label>
+                    <div class="form-check ml-2">
+                        <input type="radio" 
+                            class="form-check-input" 
+                            name="storageOptions" 
+                            id="journal" 
+                            value="JOURNAL" 
+                            (change)="onStorageTypeSelection('JOURNAL')"
+                            [checked]="generationSettings.model.storageType === 'JOURNAL'">
+                        <label class="form-check-label" for="journal">Journal</label>
+                    </div>
+                    <div class="form-check ml-2">
+                        <input id="objectStore" 
+                                type="radio" 
+                                class="form-check-input" 
+                                name="storageOptions" 
+                                value="OBJECT_STORE" 
+                                (change)="onStorageTypeSelection('OBJECT_STORE')"
+                                [checked]="generationSettings.model.storageType === 'OBJECT_STORE'">
+                        <label class="form-check-label" for="objectStore">Object Store</label>
+                    </div>
+                    <div class="form-check ml-2">
+                        <input id="stateStore"
+                                type="radio"
+                                class="form-check-input" 
+                                name="storageOptions" 
+                                value="STATE_STORE" 
+                                (change)="onStorageTypeSelection('STATE_STORE')"
+                                [checked]="generationSettings.model.storageType === 'STATE_STORE'">
+                        <label class="form-check-label" for="stateStore">State Store</label>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-12">
+                    <label class for="storageOptions">CQRS:</label>
+                    <div class="form-check ml-2">
+                        <input id="projections" 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                value="true" 
+                                [(ngModel)]="generationSettings.model.useCQRS">
+                        <label class="form-check-label" for="projections">Projections</label>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="row">
-
-            <div class="col-md-6 ml-2">
-                <div class="form-check form-check-inline pl-6">
-                    <input class="form-check-input" type="radio" name="storageOptions" id="journal" value="journal" checked="true">
-                    <label class="form-check-label" for="journal">Journal</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="storageOptions" id="objectStore" value="objectStore">
-                    <label class="form-check-label" for="objectStore">Object Store</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="storageOptions" id="stateStore" value="stateStore">
-                    <label class="form-check-label" for="stateStore">State Store</label>
-                </div>
-            </div>
-
-            <div class="col-md-2 ml-2">
-                <div class="form-check form-check-inline pl-6">
-                    <input class="form-check-input" type="checkbox" id="projections">
-                    <label class="form-check-label" for="projections">Projections</label>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>

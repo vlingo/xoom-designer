@@ -9,12 +9,21 @@ export class StepCompletion {
         public navigationDirection: NavigationDirection) {
     }
     
-    public isDirectionForward() : boolean {
-       return this.navigationDirection == NavigationDirection.FORWARD; 
-    }
-
     public nextStep() : Step {
         let followingStepIndex = this.isDirectionForward() ? this.step + 1 : this.step - 1; 
         return Step[Step[followingStepIndex]];
     }
+
+    public requiresNavigation(): boolean {
+        return this.navigationDirection != NavigationDirection.FINISH;
+    }
+
+    public isGenerationRequested(): boolean {
+        return this.navigationDirection === NavigationDirection.FINISH;
+    }
+        
+    private isDirectionForward() : boolean {
+        return this.navigationDirection === NavigationDirection.FORWARD; 
+    }
+
 }

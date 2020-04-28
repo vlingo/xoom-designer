@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StepCompletion } from '../../model/step-completion';
-import { ContextModel } from '../../model/context.model';
 import { Step } from '../../model/step';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { StepComponent } from '../step.component';
@@ -29,14 +28,13 @@ export class ContextComponent extends StepComponent implements OnInit {
       ArtifactId: ['', Validators.required],
       ArtifactVersion: ['', Validators.required],
       PackageName: ['', Validators.required],
-      ParentDirectory: ['', Validators.required],
       XoomVersion: ['', Validators.required]
     });
   }
   
   next() {
     this.stepCompletion.emit(new StepCompletion(
-        Step.CONTEXT, this.isCompleted(), NavigationDirection.FORWARD
+        Step.CONTEXT, this.contextForm.valid, NavigationDirection.FORWARD
     ));
   }
 
@@ -54,10 +52,6 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   canFinish(): Boolean {
     return true;
-  }
-
-  private isCompleted() {
-    return this.contextForm.valid;
   }
 
 }

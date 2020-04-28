@@ -1,20 +1,20 @@
 import { StepCompletion } from '../model/step-completion'
 import { Output, OnInit, EventEmitter, Input } from '@angular/core';
-import { GenerationSettingsModel } from '../model/generation-settings.model';
+import { GenerationSettings } from '../model/generation-settings';
 
 export abstract class StepComponent implements OnInit {
     
-    @Input() generation: GenerationSettingsModel;
+    @Input() generationSettings: GenerationSettings;
     @Output() stepCompletion = new EventEmitter<StepCompletion>();
     
-    abstract ngOnInit();
+    abstract ngOnInit(): void;
     abstract next(): void;
     abstract previous(): void;
     abstract hasNext() : Boolean;
     abstract hasPrevious() : Boolean;
 
     public generate() {
-        throw new Error("This operation is not supported by default");
+        throw new Error("Generation is not supported by default");
     }
 
     public isLastStep() :  Boolean {

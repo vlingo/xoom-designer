@@ -1,4 +1,5 @@
 export enum NavigationDirection {
     FORWARD,
-    REWIND
+    REWIND,
+    FINISH
 }
