@@ -86,9 +86,3 @@ a.disabled {
     padding-right: 3px;
 }
 
-.about-icon:before {
-    font-weight: 900;
-    font-size: 15px;
-    content: "\f05a";
-    padding-right: 4px;
-}
