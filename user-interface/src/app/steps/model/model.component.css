@@ -1,3 +1,11 @@
 .additional-options {
     margin-top: 56px;
 }
+
+.additional-options .col-md-12 {
+    padding-right: 0px;
+}
+
+.model-settings .card-body {
+    min-height: 468px !important;
+}
