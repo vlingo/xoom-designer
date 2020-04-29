@@ -15,19 +15,37 @@ public class GeneratorsTest {
   public void testCommandModelStateStoreProviderGenerator() throws Exception {
     final CommandModelStateStoreProviderGenerator generator = new CommandModelStateStoreProviderGenerator();
 
-    generator.inputOfPackageName("com.beyondbusiness.auth.infra.persistence");
+    generator.inputOfPackageName("com.beyond5.auth.infra.persistence");
 
-    generator.inputOf(new ImportHolder("com.beyondbusiness.auth.model.ProfileState"));
-    generator.inputOf(new ImportHolder("com.beyondbusiness.auth.model.TenantState"));
-    generator.inputOf(new ImportHolder("com.beyondbusiness.auth.model.UserState"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.ProfileState"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.TenantState"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.UserState"));
 
     // TODO: Needs ActorInstantiator
-    generator.inputOfStateStoreClassName("JDBCStateStoreActor");
+    generator.inputOfStateStoreClassName("io.vlingo.symbio.store.journal.jdbc.JDBCStateStoreActor");
 
     generator.inputOf(new StateAdapterHolder("TenantState"));
     generator.inputOf(new StateAdapterHolder("UserState"));
     generator.inputOf(new StateAdapterHolder("ProfileState"));
 
-    generator.generate();
+    generator.generate("CommandModelStateStoreProvider");
+  }
+
+  @Test
+  public void testStateAdapterGenerator() throws Exception {
+    final StateAdapterGenerator profileStateGenerator = new StateAdapterGenerator("ProfileState");
+    profileStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    profileStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.ProfileState"));
+    profileStateGenerator.generate("StateAdapter");
+
+    final StateAdapterGenerator tenantStateGenerator = new StateAdapterGenerator("TenantState");
+    tenantStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    tenantStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.TenantState"));
+    tenantStateGenerator.generate("StateAdapter");
+
+    final StateAdapterGenerator userStateGenerator = new StateAdapterGenerator("UserState");
+    userStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    userStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.UserState"));
+    userStateGenerator.generate("StateAdapter");
   }
 }
