@@ -29,6 +29,10 @@ export class GenerationSettings {
         })
     }
 
+    public aggregateOfId(aggregateId: Number) {
+        return this.model.aggregateOfId(aggregateId);
+    }
+  
     public addDomainEvent(selectedAggregateId: Number, domainEvent: DomainEvent) {
         this.domainEventsOf(selectedAggregateId).push(domainEvent);
     }

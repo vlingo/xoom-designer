@@ -67,24 +67,5 @@ export class TableComponent implements OnInit  {
   shouldDisableButton() {
     return this.disableInclusion;
   }
-
-  retrieveData() {
-    const data = [];
-    const headers = [];
-    const $rows = $(this.table.nativeElement).find('tr:not(:hidden)');
-
-    $rows.each(function () {
-      const h = {};
-      const $td = $(this).find('td');
-
-      headers.forEach((header, i) => {
-        h[header] = $td.eq(i).text();
-      });
-
-      data.push(h);
-    });
-
-    return data;
-  }
-
+  
 }

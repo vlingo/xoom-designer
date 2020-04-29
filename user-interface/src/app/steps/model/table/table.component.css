@@ -13,8 +13,7 @@
 }
 
 .editable-content:hover {
-    color: #fff;
-    background-color: #337ab7 !important;
+    box-shadow: 1px 1px;
 }
 
 .selected {

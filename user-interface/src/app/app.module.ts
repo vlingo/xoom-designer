@@ -15,6 +15,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { MultipleSelectionComponent } from './multiple-selection/multiple-selection.component';
+import { StepTitleComponent } from './steps/step-title/step-title.component';
+import { AboutComponent } from './about/about.component';
+import { SettingsComponent } from './settings/settings.component';
+import { RoutingHistoryService } from './routing/routing-history.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,10 @@ import { MultipleSelectionComponent } from './multiple-selection/multiple-select
     TableComponent,
     DeploymentComponent,
     GenerationComponent,
-    MultipleSelectionComponent
+    MultipleSelectionComponent,
+    StepTitleComponent,
+    AboutComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

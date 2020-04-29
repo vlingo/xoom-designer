@@ -23,7 +23,8 @@ export class MultipleSelectionComponent implements OnInit {
   }
 
   public add(item: any) {
-    this.dropdown._data.push(item);
+    const newOption = this.convertToOption(item);
+    this.dropdown._data.push(newOption);
   }
 
   public update(item: any) {
@@ -36,6 +37,8 @@ export class MultipleSelectionComponent implements OnInit {
   }
 
   public remove(itemId: any) {
+    const option = {id: itemId, text: ""};
+    this.dropdown.removeSelected(option);
     const index = this.dropdown._data.map(option => option.id).indexOf(itemId);
     this.dropdown._data.splice(index, 1);
   }

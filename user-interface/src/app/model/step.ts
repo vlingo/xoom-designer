@@ -6,10 +6,10 @@ export enum Step {
 }
 
 export const StepPath = new Map<number, string>([
-    [Step.CONTEXT, '/context'],
-    [Step.MODEL, '/model'],
-    [Step.DEPLOYMENT, '/deployment'],
-    [Step.GENERATION, '/generation']
+    [Step.CONTEXT, '/settings/context'],
+    [Step.MODEL, '/settings/model'],
+    [Step.DEPLOYMENT, '/settings/deployment'],
+    [Step.GENERATION, '/settings/generation']
 ]);
 
 export const StepName = new Map<number, string>([

@@ -53,8 +53,8 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
       this.selectedAggregateId = aggregateId;
     });
     
-    this.aggregateTable.itemRemoval.subscribe(item => {
-      this.multipleSelection.remove(item.id);
+    this.aggregateTable.itemRemoval.subscribe(id => {
+      this.multipleSelection.remove(id);
     });
 
     this.domainEventTable.itemInclusion.subscribe(item => {
