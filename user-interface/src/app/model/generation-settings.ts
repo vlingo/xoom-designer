@@ -6,7 +6,6 @@ import { Aggregate } from './aggregate';
 
 export class GenerationSettings {
 
-
     public context: ContextSettings;
     public model: ModelSettings;
     public deployment: DeploymentSettings;
@@ -30,7 +29,7 @@ export class GenerationSettings {
     }
 
     public aggregateOfId(aggregateId: Number) {
-        return this.model.aggregateOfId(aggregateId);
+        return this.model.aggregateOf(aggregateId);
     }
   
     public addDomainEvent(selectedAggregateId: Number, domainEvent: DomainEvent) {
