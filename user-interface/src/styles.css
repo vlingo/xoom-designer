@@ -7,15 +7,37 @@ h2 {
     font-size: 1.5rem !important;
 }
 
-label, input, button, h5, .multiselect-dropdown {
-    font-size: .75rem !important;
-}
-
 label {
     font-weight: bold;
+}
+
+label, input, button, h5, select, .multiselect-dropdown {
+    font-size: .75rem !important;
 }
 
 .form-check-label {
     font-weight: normal;
 }
 
+.model-settings .card-body {
+    min-height: 468px !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+    padding: .475rem .475rem .475rem .975rem !important;
+}
+
+.multiselect-dropdown .dropdown-btn .dropdown-down {
+    border-top: 6px solid #495057 !important;
+    border-left: 3px solid transparent !important;
+    border-right: 3px solid transparent !important;
+}
+
+.multiselect-dropdown .dropdown-btn .dropdown-up {
+    border-bottom: 0 !important;
+    border-top: 6px solid #495057 !important;
+    border-left: 3px solid transparent !important;
+    border-right: 3px solid transparent !important;
+}

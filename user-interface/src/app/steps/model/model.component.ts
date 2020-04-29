@@ -19,7 +19,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   public selectedAggregateId: Number;
   public restResourcesSettings: IDropdownSettings;
-  
+
   @ViewChild('aggregateTable') aggregateTable: TableComponent;
   @ViewChild('domainEventTable') domainEventTable: TableComponent;
   @ViewChild('multipleSelection') multipleSelection: MultipleSelectionComponent;
@@ -100,6 +100,25 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     return false;
   }
 
+  storageOptions() {
+    return [
+      {id: "Journal", value: "JOURNAL"},
+      {id: "ObjectStore", value: "OBJECT_STORE"},
+      {id: "StateStore", value: "STATE_STORE"}
+    ];
+  }
+
+  databaseVendors() {
+    return [
+      {name: "Not applicable", value: "NONE"},
+      {name: "Postgres", value: "POSTGRES"},
+      {name: "HSQLDB", value: "HSQLDB"},
+      {name: "MariaDB", value: "MARIADB"},
+      {name: "MySQL", value: "MYSQL"},
+      {name: "YugaByte", value: "YUGABYTE"}
+    ];
+  }
+
   private setupRestResources() {
     this.restResourcesSettings = {
       singleSelection: false,
@@ -107,7 +126,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
       textField: 'name',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3
+      itemsShowLimit: 2
     };
   }
 

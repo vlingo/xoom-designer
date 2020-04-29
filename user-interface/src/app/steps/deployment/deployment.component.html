@@ -10,7 +10,16 @@
                 [(ngModel)]="generationSettings.deployment.clusterNodes">
     </div>
 
-    <div class="form-group col-md-4 border-top pt-2 mb-1">    
+    <div class="form-row">
+        <div class="col-md-1">
+            <label for="useGrid">Enable Grid:</label>
+        </div>
+        <div class="col-md-1 pt-1">
+            <input type="checkbox" class="form-check-input" disabled>
+        </div>
+    </div>
+
+    <div class="form-group col-md-4 pt-2 mb-1">    
         <label for="clusterNodes">Deployment type:</label>
     </div>  
     <div class="col-md-6 ml-2 mb-2">

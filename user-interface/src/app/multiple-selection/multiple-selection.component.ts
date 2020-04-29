@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { IDropdownSettings, MultiSelectComponent} from 'ng-multiselect-dropdown';
 
 @Component({
@@ -6,15 +6,20 @@ import { IDropdownSettings, MultiSelectComponent} from 'ng-multiselect-dropdown'
   templateUrl: './multiple-selection.component.html',
   styleUrls: ['./multiple-selection.component.css']
 })
-export class MultipleSelectionComponent implements OnInit {
+export class MultipleSelectionComponent implements OnInit, AfterViewInit {
 
   @Input("settings") settings: IDropdownSettings;
   @ViewChild('dropdown') dropdown: MultiSelectComponent;
+  @ViewChild('dropdownElement', { read: ElementRef }) dropdownElement: ElementRef;
   @Output("selectedItems") selectedItems = new EventEmitter<Array<any>>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit(): void {
+    this.adjustSelectionButtonStyle();
   }
 
   public init(items: Array<any>, selectedItems: Array<any>) {
@@ -66,5 +71,9 @@ export class MultipleSelectionComponent implements OnInit {
 
   private convertToOption(item: any) {
     return {id: item[this.settings.idField], text: item[this.settings.textField]}; 
+  }
+
+  private adjustSelectionButtonStyle() {
+    $(this.dropdownElement.nativeElement).find(".dropdown-down").parent().removeAttr("style").css("float","right");
   }
 }

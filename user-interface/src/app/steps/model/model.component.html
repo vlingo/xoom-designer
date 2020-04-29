@@ -1,10 +1,10 @@
 <app-step-title title="Model"></app-step-title>
 
-<div class="row">
+<div class="row model-settings">
     <app-table #aggregateTable resourceName="Aggregate" [items]="generationSettings.model.aggregates" class="col-md-3" highlightSelected="true"></app-table>
     <app-table #domainEventTable resourceName="Domain Event" [items]="generationSettings.domainEventsOf(selectedAggregateId)" [disableInclusion]="shouldDisableNewDomainEvents()" class="col-md-3"></app-table>
     
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card additional-options">
             <div class="card-body">
 
@@ -15,35 +15,15 @@
 
                 <div class="form-group col-md-12">
                     <label class for="storageOptions">Storage*:</label>
-                    <div class="form-check ml-2">
+                    <div *ngFor="let option of storageOptions();" class="form-check ml-2">
                         <input type="radio" 
                             class="form-check-input" 
                             name="storageOptions" 
-                            id="journal" 
-                            value="JOURNAL" 
-                            (change)="onStorageTypeSelection('JOURNAL')"
-                            [checked]="generationSettings.model.storageType === 'JOURNAL'">
-                        <label class="form-check-label" for="journal">Journal</label>
-                    </div>
-                    <div class="form-check ml-2">
-                        <input id="objectStore" 
-                                type="radio" 
-                                class="form-check-input" 
-                                name="storageOptions" 
-                                value="OBJECT_STORE" 
-                                (change)="onStorageTypeSelection('OBJECT_STORE')"
-                                [checked]="generationSettings.model.storageType === 'OBJECT_STORE'">
-                        <label class="form-check-label" for="objectStore">Object Store</label>
-                    </div>
-                    <div class="form-check ml-2">
-                        <input id="stateStore"
-                                type="radio"
-                                class="form-check-input" 
-                                name="storageOptions" 
-                                value="STATE_STORE" 
-                                (change)="onStorageTypeSelection('STATE_STORE')"
-                                [checked]="generationSettings.model.storageType === 'STATE_STORE'">
-                        <label class="form-check-label" for="stateStore">State Store</label>
+                            id="option.id" 
+                            value="option.value" 
+                            (change)="onStorageTypeSelection(option.value)"
+                            [checked]="generationSettings.model.storageType === option.value">
+                        <label class="form-check-label" for="option.id">{{option.id}}</label>
                     </div>
                 </div>
                 
@@ -54,10 +34,25 @@
                                 type="checkbox" 
                                 class="form-check-input" 
                                 value="true" 
-                                [(ngModel)]="generationSettings.model.useCQRS">
+                                [(ngModel)]="generationSettings.model.useProjections">
                         <label class="form-check-label" for="projections">Projections</label>
                     </div>
                 </div>
+
+                <div class="form-group col-md-12">
+                    <label class for="commandModelDatabase">Command Model Database:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.commandModelDatabase">
+                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class for="queryModelDatabase">Query Model Database:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.queryModelDatabase">
+                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                    </select>
+                </div>
+
             </div>
         </div>
     </div>
