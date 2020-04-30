@@ -1,9 +1,8 @@
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +31,9 @@ public class SubTaskTest {
                     return optionValue.hasName(CURRENT_DIRECTORY);
                 }).findFirst();
 
-        Assert.assertEquals(2, optionValues.size());
-        Assert.assertEquals("1.0.0", tag.get().value());
-        Assert.assertEquals("/home/starter-project", currentDirectory.get().value());
+        Assertions.assertEquals(2, optionValues.size());
+        Assertions.assertEquals("1.0.0", tag.get().value());
+        Assertions.assertEquals("/home/starter-project", currentDirectory.get().value());
     }
 
 }

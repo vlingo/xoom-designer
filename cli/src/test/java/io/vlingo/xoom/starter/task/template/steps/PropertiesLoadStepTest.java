@@ -8,12 +8,11 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.Resource;
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.Property;
-import io.vlingo.xoom.starter.task.template.steps.PropertiesLoadStep;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
@@ -25,16 +24,16 @@ public class PropertiesLoadStepTest {
     @Test
     public void testPropertiesLoad(){
         new PropertiesLoadStep().process(context);
-        Assert.assertNotNull(context.properties());
-        Assert.assertEquals("1.0", context.propertyOf(Property.VERSION));
-        Assert.assertEquals("com.company", context.propertyOf(Property.GROUP_ID));
-        Assert.assertEquals("xoom-application", context.propertyOf(Property.ARTIFACT_ID));
-        Assert.assertEquals("com.company.business", context.propertyOf(Property.PACKAGE));
-        Assert.assertEquals("k8s", context.propertyOf(Property.DEPLOYMENT));
-        Assert.assertNotNull(context.propertyOf(Property.TARGET_FOLDER));
+        Assertions.assertNotNull(context.properties());
+        Assertions.assertEquals("1.0", context.propertyOf(Property.VERSION));
+        Assertions.assertEquals("com.company", context.propertyOf(Property.GROUP_ID));
+        Assertions.assertEquals("xoom-application", context.propertyOf(Property.ARTIFACT_ID));
+        Assertions.assertEquals("com.company.business", context.propertyOf(Property.PACKAGE));
+        Assertions.assertEquals("k8s", context.propertyOf(Property.DEPLOYMENT));
+        Assertions.assertNotNull(context.propertyOf(Property.TARGET_FOLDER));
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Resource.clear();
         Resource.rootIn(ROOT_FOLDER);

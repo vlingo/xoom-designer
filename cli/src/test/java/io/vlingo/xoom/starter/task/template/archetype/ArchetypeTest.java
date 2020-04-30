@@ -7,10 +7,8 @@
 
 package io.vlingo.xoom.starter.task.template.archetype;
 
-import io.vlingo.xoom.starter.task.template.archetype.Archetype;
-import io.vlingo.xoom.starter.task.template.archetype.ArchetypeNotFoundException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
@@ -21,27 +19,31 @@ public class ArchetypeTest {
     @Test
     public void testBasicArchetypeRetrieval() {
         final Properties properties = loadBasicArchetypeProperties();
-        Assert.assertEquals(Archetype.BASIC, Archetype.support(properties));
+        Assertions.assertEquals(Archetype.BASIC, Archetype.support(properties));
     }
 
     @Test
     public void testKubernetesArchetypeRetrieval() {
         final Properties properties = loadKubernetesArchetypeProperties();
-        Assert.assertEquals(Archetype.KUBERNETES, Archetype.support(properties));
+        Assertions.assertEquals(Archetype.KUBERNETES, Archetype.support(properties));
     }
 
-    @Test(expected = ArchetypeNotFoundException.class)
+    @Test
     public void testBasicArchetypeRetrievalFailure() {
         final Properties properties = loadBasicArchetypeProperties();
         properties.remove(XOOM_SERVER_VERSION.literal());
-        Archetype.support(properties);
+        Assertions.assertThrows(ArchetypeNotFoundException.class, () -> {
+            Archetype.support(properties);
+        });
     }
 
-    @Test(expected = ArchetypeNotFoundException.class)
+    @Test
     public void testKubernetesArchetypeRetrievalFailure() {
         final Properties properties = loadKubernetesArchetypeProperties();
         properties.remove(KUBERNETES_IMAGE.literal());
-        Archetype.support(properties);
+        Assertions.assertThrows(ArchetypeNotFoundException.class, () -> {
+            Archetype.support(properties);
+        });
     }
 
     private Properties loadBasicArchetypeProperties() {

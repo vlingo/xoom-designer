@@ -2,12 +2,10 @@ package io.vlingo.xoom.starter.task.docker.steps;
 
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.TaskExecutionException;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
-import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -29,11 +27,11 @@ public class DockerSettingsLoadStepTest {
 
         new DockerSettingsLoadStep().process(context);
 
-        Assert.assertEquals("xoom-app", context.propertyOf(Property.DOCKER_IMAGE));
-        Assert.assertEquals("vlingo/xoom-app", context.propertyOf(Property.DOCKER_REPOSITORY));
+        Assertions.assertEquals("xoom-app", context.propertyOf(Property.DOCKER_IMAGE));
+        Assertions.assertEquals("vlingo/xoom-app", context.propertyOf(Property.DOCKER_REPOSITORY));
     }
 
-    @Test(expected = DockerCommandException.class)
+    @Test
     public void testMissingDockerSettings() {
         final String propertiesAbsolutePath =
                 Paths.get(System.getProperty("user.dir")).toString();
@@ -44,6 +42,8 @@ public class DockerSettingsLoadStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withOptions(Arrays.asList(currentDirectory));
 
-        new DockerSettingsLoadStep().process(context);
+        Assertions.assertThrows(DockerCommandException.class, () -> {
+            new DockerSettingsLoadStep().process(context);
+        });
     }
 }

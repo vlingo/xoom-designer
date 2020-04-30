@@ -4,10 +4,9 @@ import io.vlingo.xoom.starter.Resource;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.template.Terminal;
-import io.vlingo.xoom.starter.task.template.steps.ArchetypeCommandResolverStep;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -43,9 +42,9 @@ public class ArchetypeCommandResolverStepTest {
         this.context.onProperties(loadBasicArchetypeProperties());
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
-        Assert.assertEquals(Terminal.active().initializationCommand(), commands[0]);
-        Assert.assertEquals(Terminal.active().parameter(), commands[1]);
-        Assert.assertEquals(EXPECTED_BASIC_ARCHETYPE_COMMAND, commands[2]);
+        Assertions.assertEquals(Terminal.active().initializationCommand(), commands[0]);
+        Assertions.assertEquals(Terminal.active().parameter(), commands[1]);
+        Assertions.assertEquals(EXPECTED_BASIC_ARCHETYPE_COMMAND, commands[2]);
     }
 
     private Properties loadBasicArchetypeProperties() {
@@ -64,9 +63,9 @@ public class ArchetypeCommandResolverStepTest {
         context.onProperties(loadKubernetesArchetypeProperties());
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
-        Assert.assertEquals(Terminal.active().initializationCommand(), commands[0]);
-        Assert.assertEquals(Terminal.active().parameter(), commands[1]);
-        Assert.assertEquals(EXPECTED_K8S_ARCHETYPE_COMMAND, commands[2]);
+        Assertions.assertEquals(Terminal.active().initializationCommand(), commands[0]);
+        Assertions.assertEquals(Terminal.active().parameter(), commands[1]);
+        Assertions.assertEquals(EXPECTED_K8S_ARCHETYPE_COMMAND, commands[2]);
     }
 
     private Properties loadKubernetesArchetypeProperties() {
@@ -84,7 +83,7 @@ public class ArchetypeCommandResolverStepTest {
         return properties;
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         Resource.clear();
         Resource.rootIn(ROOT_FOLDER);
