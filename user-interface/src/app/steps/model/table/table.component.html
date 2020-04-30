@@ -1,0 +1,20 @@
+<div class="row mb-4">
+    <div class="col-md-12">
+        <button class="btn btn-primary" (click)="addRow()" [disabled]="shouldDisableButton()">
+            New {{resourceName}}
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div #table class="card-body">
+        <div *ngFor="let item of items;" class="row">
+            <div #refEl class="editable-content col-md-9 text-center" contenteditable="true" (click)="selectItem(item.id, refEl)" (blur)="onUpdate(item.id, refEl)">
+                {{item.name}}
+            </div>
+            <div class="col-md-1 pt-1">
+                <i class="remove-button" (click)="removeItem(item.id)"></i>
+            </div>
+        </div>
+    </div>
+</div>

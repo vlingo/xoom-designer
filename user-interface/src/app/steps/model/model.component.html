@@ -1,0 +1,59 @@
+<app-step-title title="Model"></app-step-title>
+
+<div class="row model-settings">
+    <app-table #aggregateTable resourceName="Aggregate" [items]="generationSettings.model.aggregates" class="col-md-3" highlightSelected="true"></app-table>
+    <app-table #domainEventTable resourceName="Domain Event" [items]="generationSettings.domainEventsOf(selectedAggregateId)" [disableInclusion]="shouldDisableNewDomainEvents()" class="col-md-3"></app-table>
+    
+    <div class="col-md-3">
+        <div class="card additional-options">
+            <div class="card-body">
+
+                <div class="form-group col-md-12">
+                    <label class for="restResources">REST Resources:</label>
+                    <app-multiple-selection #multipleSelection [settings]="restResourcesSettings"></app-multiple-selection>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class for="storageOptions">Storage*:</label>
+                    <div *ngFor="let option of storageOptions();" class="form-check ml-2">
+                        <input type="radio" 
+                            class="form-check-input" 
+                            name="storageOptions" 
+                            id="option.id" 
+                            value="option.value" 
+                            (change)="onStorageTypeSelection(option.value)"
+                            [checked]="generationSettings.model.storageType === option.value">
+                        <label class="form-check-label" for="option.id">{{option.id}}</label>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-12">
+                    <label class for="storageOptions">CQRS:</label>
+                    <div class="form-check ml-2">
+                        <input id="projections" 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                value="true" 
+                                [(ngModel)]="generationSettings.model.useProjections">
+                        <label class="form-check-label" for="projections">Projections</label>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class for="commandModelDatabase">Command Model Database:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.commandModelDatabase">
+                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label class for="queryModelDatabase">Query Model Database:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.queryModelDatabase">
+                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
