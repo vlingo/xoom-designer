@@ -1,0 +1,11 @@
+<app-step-title title="Generation"></app-step-title>
+
+<form [formGroup]="generationForm">
+    <div class="form-group col-md-3">
+        <label for="projectDirectory">Where do you want to generate the project?</label>
+        <input type="text" class="form-control starter-field" 
+        id="projectDirectory" [(ngModel)]="generationSettings.projectDirectory"
+        formControlName="ProjectDirectory"
+        placeholder="Absolute path for the new xoom project">
+    </div>
+</form>

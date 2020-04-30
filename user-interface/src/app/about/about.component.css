@@ -1,0 +1,10 @@
+.about-content {
+    margin-top: 90px;
+}
+
+.about-img {
+    object-fit: cover;
+    object-position: 0 -26%;
+    width: 390px;
+    height: 272px;
+}
