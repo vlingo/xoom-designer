@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.codegen;
 
-import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Locale;
@@ -26,12 +26,14 @@ public abstract class BaseGenerator {
     this.input = new HashMap<>();
   }
 
-  public void generate(final String templateName) throws Exception {
+  public String generate(final String templateName) throws Exception {
     final Template template = configuration.getTemplate("codegen/" + templateName + ".ftl");
 
-    final Writer consoleWriter = new OutputStreamWriter(System.out);
+    final Writer consoleWriter = new StringWriter();
 
     template.process(input, consoleWriter);
+
+    return consoleWriter.toString();
   }
 
   public void inputOfPackageName(final String packageName) {
