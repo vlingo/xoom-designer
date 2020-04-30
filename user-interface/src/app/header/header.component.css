@@ -1,0 +1,22 @@
+.logo {
+    margin-right: 5px;
+    max-height: 20px;
+}
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.about-icon:before {
+    font-family: 'Font Awesome 5 Free' !important;
+    font-style: normal;
+    color: #999;
+    font-weight: 900;
+    font-size: 20px;
+    content: "\f05a";
+    padding-right: 4px;
+}
