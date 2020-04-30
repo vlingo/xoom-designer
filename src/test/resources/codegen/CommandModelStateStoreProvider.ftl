@@ -48,18 +48,18 @@ public class CommandModelStateStoreProvider {
 
     final Protocols.Two<StateStore, DispatcherControl> storeWithControl = Protocols.two(storeProtocols);
 
-    instance = new CommandModelStoreProvider(registry, storeWithControl._1, storeWithControl._2);
+<#list stateAdapters as stateAdapter>
+    registry.register(new Info(storeWithControl._1, ${stateAdapter.stateClass}.class, ${stateAdapter.stateClass}.class.getSimpleName()));
+</#list>
+
+    instance = new CommandModelStoreProvider(storeWithControl._1, storeWithControl._2);
 
     return instance;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private CommandModelStateStoreProvider(final StatefulTypeRegistry registry, final StateStore store, final DispatcherControl dispatcherControl) {
+  private CommandModelStateStoreProvider(final StateStore store, final DispatcherControl dispatcherControl) {
     this.store = store;
     this.dispatcherControl = dispatcherControl;
-
-<#list stateAdapters as stateAdapter>
-    registry.register(new Info(store, ${stateAdapter.stateClass}.class, ${stateAdapter.stateClass}.class.getSimpleName()));
-</#list>
   }
 }
