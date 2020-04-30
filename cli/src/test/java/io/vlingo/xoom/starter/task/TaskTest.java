@@ -1,7 +1,7 @@
 package io.vlingo.xoom.starter.task;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.starter.task.SubTask.*;
 import static io.vlingo.xoom.starter.task.Task.DOCKER;
@@ -11,28 +11,32 @@ public class TaskTest {
 
     @Test
     public void testDockerTaskRetrievalByCommand() {
-        Assert.assertEquals(DOCKER, Task.trigger("dOckEr"));
+        Assertions.assertEquals(DOCKER, Task.trigger("dOckEr"));
     }
 
     @Test
     public void testTemplateGenerationTaskRetrievalByCommand() {
-        Assert.assertEquals(TEMPLATE_GENERATION, Task.trigger("gen"));
+        Assertions.assertEquals(TEMPLATE_GENERATION, Task.trigger("gen"));
     }
 
-    @Test(expected = UnknownCommandException.class)
+    @Test
     public void testTaskRetrievalByUnknownCommand() {
-        Task.trigger("start");
+        Assertions.assertThrows(UnknownCommandException.class, () -> {
+            Task.trigger("start");
+        });
     }
 
     @Test
     public void testDockerSubTaskRetrieval() {
-        Assert.assertEquals(DOCKER_PUSH, Task.trigger("docker").subTaskOf("push"));
-        Assert.assertEquals(DOCKER_PACKAGE, Task.trigger("docker").subTaskOf("package"));
-        Assert.assertEquals(DOCKER_STATUS, Task.trigger("docker").subTaskOf("status"));
+        Assertions.assertEquals(DOCKER_PUSH, Task.trigger("docker").subTaskOf("push"));
+        Assertions.assertEquals(DOCKER_PACKAGE, Task.trigger("docker").subTaskOf("package"));
+        Assertions.assertEquals(DOCKER_STATUS, Task.trigger("docker").subTaskOf("status"));
     }
 
-    @Test(expected = UnknownCommandException.class)
+    @Test
     public void testUnknownSubTaskRetrieval() {
-        Task.trigger("docker").subTaskOf("reset");
+        Assertions.assertThrows(UnknownCommandException.class, () -> {
+            Task.trigger("docker").subTaskOf("reset");
+        });
     }
 }

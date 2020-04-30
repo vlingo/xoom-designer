@@ -1,14 +1,17 @@
 package io.vlingo.xoom.starter.task;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 public class TaskExecutorTest {
 
-    @Test(expected=CommandNotFoundException.class)
+    @Test
     public void testExecutionWithInvalidArgs() {
-        TaskExecutor.execute(Collections.emptyList());
+        Assertions.assertThrows(CommandNotFoundException.class,() -> {
+            TaskExecutor.execute(Collections.emptyList());
+        });
     }
 
 }
