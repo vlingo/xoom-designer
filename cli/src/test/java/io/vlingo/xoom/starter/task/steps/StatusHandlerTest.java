@@ -7,23 +7,22 @@
 
 package io.vlingo.xoom.starter.task.steps;
 
-import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.StatusHandler;
-import org.junit.Assert;
-import org.junit.Test;
+import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StatusHandlerTest {
 
     @Test
     public void testStatusHandlerRetrieval() {
-        Assert.assertNotNull(StatusHandler.forStatus(-1));
-        Assert.assertNotNull(StatusHandler.forStatus(0));
-        Assert.assertNotNull(StatusHandler.forStatus(1));
-        Assert.assertNotNull(StatusHandler.forStatus(2));
-        Assert.assertNotNull(StatusHandler.forStatus(3));
-        Assert.assertNotNull(StatusHandler.forStatus(4));
-        Assert.assertNotNull(StatusHandler.forStatus(5));
+        Assertions.assertNotNull(StatusHandler.forStatus(-1));
+        Assertions.assertNotNull(StatusHandler.forStatus(0));
+        Assertions.assertNotNull(StatusHandler.forStatus(1));
+        Assertions.assertNotNull(StatusHandler.forStatus(2));
+        Assertions.assertNotNull(StatusHandler.forStatus(3));
+        Assertions.assertNotNull(StatusHandler.forStatus(4));
+        Assertions.assertNotNull(StatusHandler.forStatus(5));
     }
 
     @Test
@@ -32,10 +31,12 @@ public class StatusHandlerTest {
         statusHandler.handle(TaskExecutionContext.withoutOptions());
     }
 
-    @Test(expected = TemplateGenerationException.class)
+    @Test
     public void testFailureHandler() {
         final StatusHandler statusHandler = StatusHandler.forStatus(3);
-        statusHandler.handle(TaskExecutionContext.withoutOptions());
+        Assertions.assertThrows(TemplateGenerationException.class, () -> {
+            statusHandler.handle(TaskExecutionContext.withoutOptions());
+        });
     }
 
 }

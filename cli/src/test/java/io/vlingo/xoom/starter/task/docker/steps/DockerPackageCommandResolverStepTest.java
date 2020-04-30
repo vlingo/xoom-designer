@@ -5,8 +5,8 @@ import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.template.Terminal;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -35,12 +35,12 @@ public class DockerPackageCommandResolverStepTest {
 
         new DockerPackageCommandResolverStep().process(context);
 
-        Assert.assertEquals(Terminal.active().initializationCommand(), context.commands()[0]);
-        Assert.assertEquals(Terminal.active().parameter(), context.commands()[1]);
-        Assert.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
+        Assertions.assertEquals(Terminal.active().initializationCommand(), context.commands()[0]);
+        Assertions.assertEquals(Terminal.active().parameter(), context.commands()[1]);
+        Assertions.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
     }
 
-    @Test(expected = DockerCommandException.class)
+    @Test
     public void testDockerPackageCommandResolutionWithoutImage() {
         final OptionValue tag =
                 OptionValue.with(OptionName.TAG, "latest");
@@ -53,7 +53,9 @@ public class DockerPackageCommandResolverStepTest {
 
         context.onProperties(new Properties());
 
-        new DockerPackageCommandResolverStep().process(context);
+        Assertions.assertThrows(DockerCommandException.class, () ->{
+            new DockerPackageCommandResolverStep().process(context);
+        });
     }
 
 }
