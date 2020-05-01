@@ -1,3 +1,6 @@
 micronaut:
   application:
     name: xoom-starter
+  server:
+    cors:
+      enabled: false

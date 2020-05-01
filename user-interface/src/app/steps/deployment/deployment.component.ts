@@ -77,7 +77,7 @@ export class DeploymentComponent extends StepComponent {
   }
 
   isKubernetesSelected() : Boolean {
-    return this.generationSettings.deployment.type === "KUBERNETES";
+    return this.generationSettings.deployment.type === "K8S";
   }
 
   private move(navigationDirection: NavigationDirection) {

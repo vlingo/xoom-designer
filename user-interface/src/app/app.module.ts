@@ -18,7 +18,7 @@ import { MultipleSelectionComponent } from './multiple-selection/multiple-select
 import { StepTitleComponent } from './steps/step-title/step-title.component';
 import { AboutComponent } from './about/about.component';
 import { SettingsComponent } from './settings/settings.component';
-import { RoutingHistoryService } from './routing/routing-history.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { RoutingHistoryService } from './routing/routing-history.service';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),

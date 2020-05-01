@@ -10,14 +10,28 @@ package io.vlingo.xoom.starter.task;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
 
 public class TaskExecutionContext {
 
     private Process process;
     private String[] commands;
     private Properties properties;
+    private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
+
+    public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
+        return new TaskExecutionContext(optionValues);
+    }
+
+    public static TaskExecutionContext withArgs(final List<String> args) {
+        final TaskExecutionContext context = new TaskExecutionContext();
+        context.addArgs(args);
+        return context;
+    }
 
     private TaskExecutionContext() {
         this(Collections.emptyList());
@@ -25,10 +39,6 @@ public class TaskExecutionContext {
 
     private TaskExecutionContext(final List<OptionValue> optionValues) {
         this.optionValues.addAll(optionValues);
-    }
-
-    public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
-        return new TaskExecutionContext(optionValues);
     }
 
     public static TaskExecutionContext withoutOptions() {
@@ -47,6 +57,10 @@ public class TaskExecutionContext {
         this.commands = commands;
     }
 
+    public void addArgs(final List<String> args) {
+        this.args.addAll(args);
+    }
+
     public Process process() {
         return process;
     }
@@ -55,8 +69,8 @@ public class TaskExecutionContext {
         return properties;
     }
 
-    public String propertyOf(final Property key) {
-        return properties != null ? properties.getProperty(key.literal()) : "";
+    public String propertyOf(final Property property) {
+        return properties != null ? properties.getProperty(property.literal()) : "";
     }
 
     public String optionValueOf(final OptionName optionName) {
@@ -67,5 +81,9 @@ public class TaskExecutionContext {
 
     public String[] commands() {
         return commands;
+    }
+
+    public List<String> args() {
+        return args;
     }
 }

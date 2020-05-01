@@ -14,9 +14,10 @@ public class TaskExecutor {
     private static boolean AUTOMATIC_EXIT = false;
     private static final int MAIN_COMMAND_INDEX = 0;
 
-    public static void execute(final List<String> args) {
+    public static String execute(final List<String> args) {
         validateArgs(args);
         Task.trigger(args.get(MAIN_COMMAND_INDEX)).run(args);
+        return "";
     }
 
     private static void validateArgs(final List<String> args){
