@@ -24,7 +24,7 @@ public class TemplateGenerationManager implements TaskManager {
 
     @Override
     public void run(final List<String> args) {
-        processSteps(TaskExecutionContext.withoutOptions());
+        processSteps(TaskExecutionContext.withArgs(args));
     }
 
     private void processSteps(final TaskExecutionContext context) {

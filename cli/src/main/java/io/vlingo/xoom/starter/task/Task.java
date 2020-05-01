@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
 import io.vlingo.xoom.starter.task.gui.GraphicalUserInterfaceCommandManager;
+import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.template.TemplateGenerationManager;
 
 import java.util.Arrays;
@@ -23,10 +24,12 @@ public enum Task {
 
     private final String command;
     private final TaskManager manager;
+    private final List<Option> options;
 
-    Task(final String command, final TaskManager manager) {
+    Task(final String command, final TaskManager manager, final Option... options) {
         this.command = command;
         this.manager = manager;
+        this.options = Arrays.asList(options);
     }
 
     public static Task trigger(final String command) {
@@ -37,6 +40,10 @@ public enum Task {
 
     public void run(final List<String> args) {
         this.manager.run(args);
+    }
+
+    public String command() {
+        return command;
     }
 
     private boolean triggeredBy(final String command) {

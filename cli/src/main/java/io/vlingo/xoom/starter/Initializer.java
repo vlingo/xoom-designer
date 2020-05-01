@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class Initializer {
 
-    public static void main(final String[] args) throws InterruptedException {
+    public static void main(final String[] args) {
         try {
             TaskExecutor.execute(Arrays.asList(args));
         } catch (final TaskExecutionException exception) {

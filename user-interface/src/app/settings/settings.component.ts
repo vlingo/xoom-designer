@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { StepCompletion } from '../model/step-completion';
 import { RoutingHistoryService } from '../routing/routing-history.service';
+import { GenerationSettingsService } from '../service/generation-settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,6 +21,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(private router: Router, 
               private routingHistoryService: RoutingHistoryService, 
+              private service: GenerationSettingsService,
               private toastrService: ToastrService) {
     if(routingHistoryService.isFirstAccess()) {
       this.router.navigate(['/settings/context']);
@@ -55,6 +57,10 @@ export class SettingsComponent implements OnInit {
 
     if(invalidSteps.length != 0) {
       this.toastrService.warning("Please inform the required settings in the following step(s): " + invalidSteps.join(", "));
+    } else {
+      this.service.generate(this.generationSettings).subscribe(data => {
+        console.log(data);
+      });
     }
   }
 
