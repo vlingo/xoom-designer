@@ -42,8 +42,8 @@ public class ArchetypeCommandResolverStepTest {
         this.context.onProperties(loadBasicArchetypeProperties());
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.active().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.active().parameter(), commands[1]);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
         Assertions.assertEquals(EXPECTED_BASIC_ARCHETYPE_COMMAND, commands[2]);
     }
 
@@ -63,8 +63,8 @@ public class ArchetypeCommandResolverStepTest {
         context.onProperties(loadKubernetesArchetypeProperties());
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.active().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.active().parameter(), commands[1]);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
         Assertions.assertEquals(EXPECTED_K8S_ARCHETYPE_COMMAND, commands[2]);
     }
 

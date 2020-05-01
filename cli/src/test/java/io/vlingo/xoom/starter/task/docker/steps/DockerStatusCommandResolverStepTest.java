@@ -2,14 +2,11 @@ package io.vlingo.xoom.starter.task.docker.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
-import io.vlingo.xoom.starter.task.option.OptionName;
-import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-import java.util.Arrays;
 import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
@@ -30,8 +27,8 @@ public class DockerStatusCommandResolverStepTest {
 
         new DockerStatusCommandResolverStep().process(context);
 
-        Assertions.assertEquals(Terminal.active().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.active().parameter(), context.commands()[1]);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
         Assertions.assertEquals(EXPECT_COMMAND, context.commands()[2]);
     }
 
