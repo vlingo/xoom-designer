@@ -13,7 +13,8 @@ import java.util.function.Predicate;
 public enum Terminal {
 
     WINDOWS("cmd.exe", "/c", osName -> osName.contains("Windows")),
-    UNIX_BASED("sh", "-c", osName -> !osName.contains("Windows"));
+    MAC_OS("sh", "-c", osName -> !osName.contains("MacOS")),
+    LINUX("sh", "-c", osName -> osName.contains("Linux"));
 
     private final String initializationCommand;
 
@@ -26,9 +27,9 @@ public enum Terminal {
         this.activationCondition = activationCondition;
     }
 
-    public static Terminal active() {
+    public static Terminal supported() {
         return Arrays.asList(Terminal.values()).stream()
-                .filter(terminal -> terminal.isActive())
+                .filter(terminal -> terminal.isSupported())
                 .findFirst().get();
     }
 
@@ -40,7 +41,7 @@ public enum Terminal {
         return parameter;
     }
 
-    private boolean isActive() {
+    private boolean isSupported() {
         return activationCondition.test(System.getProperty("os.name"));
     }
 

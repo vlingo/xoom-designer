@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.starter.task.SubTask.*;
-import static io.vlingo.xoom.starter.task.Task.DOCKER;
-import static io.vlingo.xoom.starter.task.Task.TEMPLATE_GENERATION;
+import static io.vlingo.xoom.starter.task.Task.*;
 
 public class TaskTest {
 
@@ -17,6 +16,7 @@ public class TaskTest {
     @Test
     public void testTemplateGenerationTaskRetrievalByCommand() {
         Assertions.assertEquals(TEMPLATE_GENERATION, Task.trigger("gen"));
+        Assertions.assertEquals(GRAPHICAL_USER_INTERFACE, Task.trigger("gui"));
     }
 
     @Test

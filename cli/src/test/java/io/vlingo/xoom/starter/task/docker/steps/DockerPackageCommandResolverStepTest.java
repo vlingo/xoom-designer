@@ -35,8 +35,8 @@ public class DockerPackageCommandResolverStepTest {
 
         new DockerPackageCommandResolverStep().process(context);
 
-        Assertions.assertEquals(Terminal.active().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.active().parameter(), context.commands()[1]);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
         Assertions.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
     }
 
