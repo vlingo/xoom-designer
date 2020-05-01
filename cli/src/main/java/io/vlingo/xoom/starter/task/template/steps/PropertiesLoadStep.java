@@ -7,26 +7,51 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.ArgumentNotFoundException;
+import io.vlingo.xoom.starter.ArgumentRetriever;
+import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.template.Agent;
 import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
 
 import static io.vlingo.xoom.starter.Resource.STARTER_PROPERTIES_FILE;
 
 public class PropertiesLoadStep implements TaskExecutionStep {
 
-
     @Override
     public void process(final TaskExecutionContext context) {
-        context.onProperties(loadProperties());
+        context.onProperties(loadProperties(context));
     }
 
-    private Properties loadProperties() {
+    private Properties loadProperties(final TaskExecutionContext context) {
+        if (Agent.findAgent(context.args()).isTerminal()) {
+            return loadFromFile();
+        }
+        return loadFromArgs(context);
+    }
+
+    private Properties loadFromArgs(final TaskExecutionContext context) {
+        final Properties properties = new Properties();
+        Arrays.asList(Property.values()).forEach(property -> {
+            try {
+                final String key = property.literal();
+                final String value = ArgumentRetriever.retrieve(key, context.args());
+                properties.put(property.literal(), value);
+            } catch(final ArgumentNotFoundException exception) {
+                System.out.println(exception.getMessage());
+            }
+        });
+        return properties;
+    }
+
+    private Properties loadFromFile() {
         try {
             final Properties properties = new Properties();
             final File propertiesFile = new File(STARTER_PROPERTIES_FILE.path());
@@ -36,6 +61,5 @@ public class PropertiesLoadStep implements TaskExecutionStep {
             throw new TemplateGenerationException(e);
         }
     }
-
 
 }

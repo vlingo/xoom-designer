@@ -22,7 +22,8 @@ public enum Property {
     DOCKER_IMAGE("docker.image"),
     DOCKER_REPOSITORY("docker.repository", false),
     KUBERNETES_IMAGE("k8s.image"),
-    KUBERNETES_POD_NAME("k8s.pod.name");
+    KUBERNETES_POD_NAME("k8s.pod.name"),
+    CLUSTER_NODES("cluster.nodes");
 
     private final String key;
     private final boolean supportedByMaven;

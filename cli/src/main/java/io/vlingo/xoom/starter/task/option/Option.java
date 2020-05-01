@@ -7,6 +7,9 @@
 
 package io.vlingo.xoom.starter.task.option;
 
+import io.vlingo.xoom.starter.ArgumentNotFoundException;
+import io.vlingo.xoom.starter.ArgumentRetriever;
+
 import java.util.List;
 
 public class Option {
@@ -32,14 +35,14 @@ public class Option {
     }
 
     public String findValue(final List<String> args) {
-        final int index = args.indexOf(name.withPreffix());
-        if(index > 0 && index + 1 < args.size()) {
-            return args.get(index+1);
+        try {
+            return ArgumentRetriever.retrieve(name.withPreffix(), args);
+        } catch(final ArgumentNotFoundException exception) {
+            if(isRequired()) {
+                throw new RequiredOptionNotFoundException(name.literal());
+            }
+            return defaultValue;
         }
-        if(isRequired()) {
-            throw new RequiredOptionNotFoundException(name.literal());
-        }
-        return defaultValue;
     }
 
     public OptionName name() {
