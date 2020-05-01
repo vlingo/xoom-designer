@@ -15,8 +15,8 @@ public abstract class CommandResolverStep implements TaskExecutionStep {
     @Override
     public void process(final TaskExecutionContext context) {
         context.withCommands(new String[]{
-                Terminal.active().initializationCommand(),
-                Terminal.active().parameter(),
+                Terminal.supported().initializationCommand(),
+                Terminal.supported().parameter(),
                 formatCommands(context)});
     }
 

@@ -22,7 +22,9 @@ public class Initializer {
         } catch (final Exception exception) {
             exception.printStackTrace();
         } finally {
-            System.exit(0);
+            if(TaskExecutor.shouldExit()) {
+                System.exit(0);
+            }
         }
     }
 
