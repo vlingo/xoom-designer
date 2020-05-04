@@ -1,10 +1,12 @@
-package io.vlingo.xoom.starter.task.gui;
+package io.vlingo.xoom.starter.task.gui.steps;
 
+import io.vlingo.xoom.starter.ApplicationConfiguration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 
 public class BrowserLaunchCommandResolverStepTest {
 
@@ -13,6 +15,9 @@ public class BrowserLaunchCommandResolverStepTest {
     @Test
     public void testBrowserLaunchCommandResolution() {
         final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
+        context.onConfiguration(new HashMap<String, String>(){{
+            put(ApplicationConfiguration.USER_INTERFACE.key(), EXPECTED_URL);
+        }});
         new BrowserLaunchCommandResolverStep().process(context);
         final String[] commands = context.commands();
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);

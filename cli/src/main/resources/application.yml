@@ -1,6 +1,5 @@
 micronaut:
   application:
-    name: xoom-starter
-  server:
-    cors:
-      enabled: false
+  name: xoom-starter
+
+ui: http://localhost:8080/xoom-starter
