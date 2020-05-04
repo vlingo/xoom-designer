@@ -1,4 +1,4 @@
-package io.vlingo.xoom.starter.task.gui;
+package io.vlingo.xoom.starter.task.gui.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskExecutor;

@@ -8,9 +8,10 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
-import io.vlingo.xoom.starter.task.gui.GraphicalUserInterfaceCommandManager;
+import io.vlingo.xoom.starter.task.gui.GraphicalUserInterfaceManager;
 import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.template.TemplateGenerationManager;
+import io.vlingo.xoom.starter.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,8 @@ public enum Task {
 
     TEMPLATE_GENERATION("gen", new TemplateGenerationManager()),
     DOCKER("docker", new DockerCommandManager()),
-    GRAPHICAL_USER_INTERFACE("gui", new GraphicalUserInterfaceCommandManager());
+    GRAPHICAL_USER_INTERFACE("gui", new GraphicalUserInterfaceManager()),
+    VERSION("-version", new VersionDisplayManager());
 
     private final String command;
     private final TaskManager manager;
