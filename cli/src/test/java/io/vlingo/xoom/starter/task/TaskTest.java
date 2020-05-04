@@ -9,14 +9,11 @@ import static io.vlingo.xoom.starter.task.Task.*;
 public class TaskTest {
 
     @Test
-    public void testDockerTaskRetrievalByCommand() {
-        Assertions.assertEquals(DOCKER, Task.trigger("dOckEr"));
-    }
-
-    @Test
-    public void testTemplateGenerationTaskRetrievalByCommand() {
+    public void testTaskRetrievalByCommand() {
         Assertions.assertEquals(TEMPLATE_GENERATION, Task.trigger("gen"));
         Assertions.assertEquals(GRAPHICAL_USER_INTERFACE, Task.trigger("gui"));
+        Assertions.assertEquals(DOCKER, Task.trigger("dOckEr"));
+        Assertions.assertEquals(VERSION, Task.trigger("-version"));
     }
 
     @Test

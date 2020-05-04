@@ -7,13 +7,11 @@
 
 package io.vlingo.xoom.starter.task;
 
+import io.vlingo.xoom.starter.ApplicationConfiguration;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class TaskExecutionContext {
 
@@ -22,6 +20,7 @@ public class TaskExecutionContext {
     private Properties properties;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
+    private final Map<String, String> configuration = new HashMap<>();
 
     public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
         return new TaskExecutionContext(optionValues);
@@ -49,6 +48,10 @@ public class TaskExecutionContext {
         this.process = process;
     }
 
+    public void onConfiguration(final Map<String, String> configurations) {
+        this.configuration.putAll(configurations);
+    }
+
     public void onProperties(final Properties properties) {
         this.properties = properties;
     }
@@ -67,6 +70,10 @@ public class TaskExecutionContext {
 
     public Properties properties() {
         return properties;
+    }
+
+    public String configurationOf(final ApplicationConfiguration configuration) {
+        return this.configuration.get(configuration.key());
     }
 
     public String propertyOf(final Property property) {
