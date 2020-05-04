@@ -18,7 +18,9 @@ import { MultipleSelectionComponent } from './multiple-selection/multiple-select
 import { StepTitleComponent } from './steps/step-title/step-title.component';
 import { AboutComponent } from './about/about.component';
 import { SettingsComponent } from './settings/settings.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpRequestHandler } from './interceptor/http-request-handler';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { HttpClientModule } from '@angular/common/http';
     MultipleSelectionComponent,
     StepTitleComponent,
     AboutComponent,
-    SettingsComponent
+    SettingsComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,11 @@ import { HttpClientModule } from '@angular/common/http';
     ToastrModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot()
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpRequestHandler,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
