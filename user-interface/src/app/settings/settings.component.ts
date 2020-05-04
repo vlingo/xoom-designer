@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { StepCompletion } from '../model/step-completion';
 import { RoutingHistoryService } from '../routing/routing-history.service';
 import { GenerationSettingsService } from '../service/generation-settings.service';
+import { LoaderService } from '../service/loader.service';
+import { LoaderState } from '../loader/loader-state';
 
 @Component({
   selector: 'app-settings',
@@ -15,17 +17,27 @@ import { GenerationSettingsService } from '../service/generation-settings.servic
 })
 export class SettingsComponent implements OnInit {
 
-  activeComponent: StepComponent;
+  activeStep: StepComponent;
+  finishLabel: String = "Finish";
+  ongoingRequest: boolean = false;
   generationSettings: GenerationSettings;
   stepStatus = new Map<Step, Boolean>();
 
   constructor(private router: Router, 
               private routingHistoryService: RoutingHistoryService, 
               private service: GenerationSettingsService,
+              private loaderService: LoaderService,
               private toastrService: ToastrService) {
+    
     if(routingHistoryService.isFirstAccess()) {
       this.router.navigate(['/settings/context']);
     }
+    
+    this.loaderService.loaderState
+    .subscribe((state: LoaderState) => {
+      this.ongoingRequest = state.show;
+    });
+    
     this.generationSettings = new GenerationSettings();
   }
 
@@ -42,11 +54,13 @@ export class SettingsComponent implements OnInit {
     } 
 
     if(stepCompletion.isGenerationRequested()) {
-      this.validateAndSubmit();
+      if(this.validate()) {
+        this.submit();
+      }
     }
   }
 
-  validateAndSubmit() {
+  private validate() {
     let invalidSteps = new Array<String>();
     
     this.stepStatus.forEach((value: Boolean, key: Step) => {
@@ -57,52 +71,59 @@ export class SettingsComponent implements OnInit {
 
     if(invalidSteps.length != 0) {
       this.toastrService.warning("Please inform the required settings in the following step(s): " + invalidSteps.join(", "));
-    } else {
-      this.service.generate(this.generationSettings).subscribe(data => {
-        console.log(data);
-      });
-    }
+      return false;
+    } 
+
+    return true;
+  }
+
+  private submit() {
+    this.service.generate(this.generationSettings).subscribe(data => {
+      this.toastrService.success("Project has been successfully generated.");
+    });
   }
 
   onComponentActivated(componentReference: StepComponent) {
-    this.activeComponent = componentReference;
-    this.activeComponent.generationSettings = this.generationSettings; 
-    this.activeComponent.stepCompletion.subscribe((stepCompletion: StepCompletion) => {
+    this.activeStep = componentReference;
+    this.activeStep.generationSettings = this.generationSettings; 
+    this.activeStep.stepCompletion.subscribe((stepCompletion: StepCompletion) => {
       this.handleStepCompletion(stepCompletion);
     })
   }
 
   next() {
-    this.activeComponent.next();
+    this.activeStep.next();
   }
 
   previous() {
-    this.activeComponent.previous();
+    this.activeStep.previous();
   }
 
   generate() {
-    this.activeComponent.generate();
+    this.activeStep.generate();
   }
 
-  hasNext() {
-    if(this.activeComponent == undefined) {
-      return false;
-    }
-    return this.activeComponent.hasNext();
+  updateFinisthLabel() {
+    return this.ongoingRequest ? "Processing..." : "Finish";
   }
 
-  hasPrevious() {
-    if(this.activeComponent == undefined) {
-      return false;
-    }  
-    return this.activeComponent.hasPrevious();
+  enableNextButton() {
+    return !this.ongoingRequest && this.activeStep.hasNext();
   }
+
+  enablePreviousButton() {
+    return !this.ongoingRequest && this.activeStep.hasPrevious();
+  }
+
+  enableGenerateButton() {
+    return !this.ongoingRequest && this.activeStep.isLastStep();
+  } 
 
   isLastStep() {
-    if(this.activeComponent == undefined) {
-      return false;
-    }
-    return this.activeComponent.isLastStep();
+    return this.activeStep.isLastStep();
   }
 
+  hasActiveStep() {
+    return this.activeStep != undefined;
+  }
 }
