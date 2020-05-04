@@ -42,6 +42,14 @@ export class ContextComponent extends StepComponent implements OnInit {
     throw new Error("Operation not supported.");
   }
 
+  xoomVersions() : Array<String> {
+    return [
+      "1.3.0",
+      "1.2.20",
+      "1.2.19"
+    ];
+  }
+
   hasNext(): Boolean {
     return true;
   }

@@ -31,8 +31,8 @@
     </div>
     <div class="form-group col-md-3">
         <label for="xoomVersion">vlingo/xoom Version*:</label>
-        <input type="text" class="form-control starter-field" 
-        id="xoomVersion" [(ngModel)]="generationSettings.context.xoomVersion"
-        formControlName="XoomVersion" placeholder="The vlingo/xoom dependency version">
+        <select id="xoomVersion" formControlName="XoomVersion" class="form-control starter-field" [(ngModel)]="generationSettings.context.xoomVersion">
+            <option *ngFor="let version of xoomVersions();" [ngValue]="version">{{version}}</option>
+        </select>
     </div>
 </form>
