@@ -5,6 +5,8 @@ import io.vlingo.xoom.starter.task.template.Agent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.vlingo.xoom.starter.task.Property.*;
@@ -13,8 +15,23 @@ public class GenerationSettingsDataTest {
 
     @Test
     public void testArgumentsConversion() {
+        final List<AggregateData> aggregates = Arrays.asList(
+                new AggregateData("Order",
+                        Arrays.asList(new DomainEventData("OrderCreated"),
+                                new DomainEventData("OrderCancelled"))),
+
+                new AggregateData("Product",
+                        Arrays.asList(new DomainEventData("ProductSoldOut")))
+        );
+
+        final List<AggregateData> restResources = Arrays.asList(
+                new AggregateData("Order", Collections.emptyList()),
+                new AggregateData("Product", Collections.emptyList())
+        );
+
         final ModelSettingsData model =
-                new ModelSettingsData("STATE_STORE", true, "Postgres", "MariaDB");
+                new ModelSettingsData("STATE_STORE", true, "Postgres", "MariaDB",
+                        aggregates, restResources);
 
         final DeploymentSettingsData deployment =
                 new DeploymentSettingsData(3, "k8s", "xoom-app",
@@ -41,19 +58,31 @@ public class GenerationSettingsDataTest {
         Assertions.assertEquals("com.company.business", args.get(8));
         Assertions.assertEquals(XOOM_SERVER_VERSION.literal(), args.get(9));
         Assertions.assertEquals("1.3.0", args.get(10));
-        Assertions.assertEquals(CLUSTER_NODES.literal(), args.get(11));
-        Assertions.assertEquals("3", args.get(12));
-        Assertions.assertEquals(DEPLOYMENT.literal(), args.get(13));
-        Assertions.assertEquals("k8s", args.get(14));
-        Assertions.assertEquals(DOCKER_IMAGE.literal(), args.get(15));
-        Assertions.assertEquals("xoom-app", args.get(16));
-        Assertions.assertEquals(KUBERNETES_IMAGE.literal(), args.get(17));
-        Assertions.assertEquals("dambrosio/xoom-app", args.get(18));
-        Assertions.assertEquals(KUBERNETES_POD_NAME.literal(), args.get(19));
-        Assertions.assertEquals("xoom-app-pod", args.get(20));
-        Assertions.assertEquals(TARGET_FOLDER.literal(), args.get(21));
-        Assertions.assertEquals("/home/projects/xoom-app", args.get(22));
-        Assertions.assertEquals(Agent.argumentKey(), args.get(23));
-        Assertions.assertEquals(Agent.WEB.name(), args.get(24));
+        Assertions.assertEquals(STORAGE_TYPE.literal(), args.get(11));
+        Assertions.assertEquals("STATE_STORE", args.get(12));
+        Assertions.assertEquals(PROJECTIONS.literal(), args.get(13));
+        Assertions.assertEquals("true", args.get(14));
+        Assertions.assertEquals(AGGREGATES.literal(), args.get(15));
+        Assertions.assertEquals("Order;OrderCreated;OrderCancelled|Product;ProductSoldOut", args.get(16));
+        Assertions.assertEquals(REST_RESOURCES.literal(), args.get(17));
+        Assertions.assertEquals("Order;Product", args.get(18));
+        Assertions.assertEquals(COMMAND_MODEL_DATABASE.literal(), args.get(19));
+        Assertions.assertEquals("Postgres", args.get(20));
+        Assertions.assertEquals(QUERY_MODEL_DATABASE.literal(), args.get(21));
+        Assertions.assertEquals("MariaDB", args.get(22));
+        Assertions.assertEquals(CLUSTER_NODES.literal(), args.get(23));
+        Assertions.assertEquals("3", args.get(24));
+        Assertions.assertEquals(DEPLOYMENT.literal(), args.get(25));
+        Assertions.assertEquals("k8s", args.get(26));
+        Assertions.assertEquals(DOCKER_IMAGE.literal(), args.get(27));
+        Assertions.assertEquals("xoom-app", args.get(28));
+        Assertions.assertEquals(KUBERNETES_IMAGE.literal(), args.get(29));
+        Assertions.assertEquals("dambrosio/xoom-app", args.get(30));
+        Assertions.assertEquals(KUBERNETES_POD_NAME.literal(), args.get(31));
+        Assertions.assertEquals("xoom-app-pod", args.get(32));
+        Assertions.assertEquals(TARGET_FOLDER.literal(), args.get(33));
+        Assertions.assertEquals("/home/projects/xoom-app", args.get(34));
+        Assertions.assertEquals(Agent.argumentKey(), args.get(35));
+        Assertions.assertEquals(Agent.WEB.name(), args.get(36));
     }
 }

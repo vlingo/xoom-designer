@@ -12,9 +12,7 @@ import io.vlingo.xoom.starter.task.steps.LoggingStep;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.starter.task.TaskManager;
-import io.vlingo.xoom.starter.task.template.steps.ArchetypeCommandResolverStep;
-import io.vlingo.xoom.starter.task.template.steps.PropertiesLoadStep;
-import io.vlingo.xoom.starter.task.template.steps.ResourcesLocationStep;
+import io.vlingo.xoom.starter.task.template.steps.*;
 import io.vlingo.xoom.starter.task.steps.StatusHandlingStep;
 
 import java.util.Arrays;
@@ -36,7 +34,8 @@ public class TemplateGenerationManager implements TaskManager {
     private static final List<TaskExecutionStep> STEPS = Arrays.asList(
             new ResourcesLocationStep(), new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
-            new LoggingStep(), new StatusHandlingStep()
+            new LoggingStep(), new StatusHandlingStep(), new ModelClassesGenerationStep(),
+            new RestResourceGenerationStep(), new OutputResourceCreationStep()
     );
 
 }

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.codegen;
 
+import io.vlingo.xoom.starter.task.template.StorageType;
 import org.junit.jupiter.api.Test;
 
 public class GeneratorsTest {
@@ -74,50 +75,36 @@ public class GeneratorsTest {
 
   @Test
   public void testBeanState() throws Exception {
-    final StateGenerator valueStateGenerator = new StateGenerator("ProfileState");
-    valueStateGenerator.inputOfPackageName("com.beyond5.auth.model.profile");
-    System.out.println(valueStateGenerator.generate("BeanState"));
+    System.out.println(StateCodeGenerator.instance().generate("ProfileState", "com.beyond5.auth.model.profile", StorageType.OBJECT_STORE));
   }
 
   @Test
   public void testValueState() throws Exception {
-    final StateGenerator valueStateGenerator = new StateGenerator("UserState");
-    valueStateGenerator.inputOfPackageName("com.beyond5.auth.model.user");
-    System.out.println(valueStateGenerator.generate("ValueState"));
+    System.out.println(StateCodeGenerator.instance().generate("ValueState", "com.beyond5.auth.model.user", StorageType.JOURNAL));
   }
 
   @Test
   public void testDomainEvent() throws Exception {
-    final DomainEventGenerator domainEventGenerator = new DomainEventGenerator("TenantRegistered");
-    domainEventGenerator.inputOfPackageName("com.beyond5.auth.model.tenant");
-    System.out.println(domainEventGenerator.generate("DomainEvent"));
+    System.out.println(DomainEventCodeGenerator.instance().generate("TenantRegistered", "com.beyond5.auth.model.tenant"));
   }
 
   @Test
   public void testPlaceholderDefinedEvent() throws Exception {
-    final DomainEventGenerator domainEventGenerator = new PlaceholderDefinedEventGenerator("Tenant");
-    domainEventGenerator.inputOfPackageName("com.beyond5.auth.model.tenant");
-    System.out.println(domainEventGenerator.generate("PlaceholderDefinedEvent"));
+    System.out.println(DomainEventCodeGenerator.instance().generate("PlaceholderDefinedEvent", "com.beyond5.auth.model.tenant"));
   }
 
   @Test
   public void testEventSourcedAggregate() throws Exception {
-    final AggregateGenerator aggregateGenerator = new AggregateGenerator("Tenant", "TenantState");
-    aggregateGenerator.inputOfPackageName("com.beyond5.auth.model.tenant");
-    System.out.println(aggregateGenerator.generate("EventSourcedEntity"));
+    System.out.println(AggregateCodeGenerator.instance().generate("Tenant", "com.beyond5.auth.model.tenant", "TenantState", StorageType.JOURNAL));
   }
 
   @Test
   public void testObjectAggregate() throws Exception {
-    final AggregateGenerator aggregateGenerator = new AggregateGenerator("Profile", "ProfileState");
-    aggregateGenerator.inputOfPackageName("com.beyond5.auth.model.profile");
-    System.out.println(aggregateGenerator.generate("ObjectEntity"));
+    System.out.println(AggregateCodeGenerator.instance().generate("Profile", "com.beyond5.auth.model.profile", "ProfileState", StorageType.OBJECT_STORE));
   }
 
   @Test
   public void testStatefulAggregate() throws Exception {
-    final AggregateGenerator aggregateGenerator = new AggregateGenerator("User", "UserState");
-    aggregateGenerator.inputOfPackageName("com.beyond5.auth.model.user");
-    System.out.println(aggregateGenerator.generate("StatefulEntity"));
+    System.out.println(AggregateCodeGenerator.instance().generate("User", "com.beyond5.auth.model.user", "UserState", StorageType.STATE_STORE));
   }
 }

@@ -22,7 +22,8 @@ import static io.vlingo.http.resource.ResourceBuilder.post;
 public class GenerationSettingsResource implements Endpoint {
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-        return response(Ok, Completes.withSuccess(settings.toArguments()).andThen(args -> TaskExecutor.execute(args)));
+        return response(Ok, Completes.withSuccess(settings.toArguments())
+                .andThenConsume(args -> TaskExecutor.execute(args)));
     }
 
     @Override

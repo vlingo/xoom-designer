@@ -15,9 +15,11 @@ public class BrowserLaunchCommandResolverStepTest {
     @Test
     public void testBrowserLaunchCommandResolution() {
         final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
+
         context.onConfiguration(new HashMap<String, String>(){{
-            put(ApplicationConfiguration.USER_INTERFACE.key(), EXPECTED_URL);
+            put(ApplicationConfiguration.USER_INTERFACE_CONFIG_KEY, EXPECTED_URL);
         }});
+
         new BrowserLaunchCommandResolverStep().process(context);
         final String[] commands = context.commands();
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);

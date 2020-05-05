@@ -7,6 +7,9 @@
 
 package io.vlingo.xoom.starter.task.template.archetype;
 
+import io.vlingo.xoom.starter.task.Property;
+
+import java.util.List;
 import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.DEPLOYMENT;
@@ -15,13 +18,13 @@ public class KubernetesArchetypePropertiesValidator extends ArchetypePropertiesV
 
     private static final String EXPECTED_DEPLOYMENT_VALUE = "K8S";
 
+    public boolean validate(final Properties properties, final List<Property> requiredProperties) {
+        return true;
+    }
+
     @Override
     protected boolean checkValues(final Properties properties) {
-        if(!properties.containsKey(DEPLOYMENT.literal())) {
-            return false;
-        }
-        final String deployment = properties.get(DEPLOYMENT.literal()).toString().trim();
-        return deployment.equalsIgnoreCase(EXPECTED_DEPLOYMENT_VALUE);
+        return true;
     }
 
 }

@@ -21,7 +21,6 @@ public enum Resource {
 
     private static final String ARCHETYPES_SUB_FOLDER = "archetypes";
     private static final String ARCHETYPES_PARENT_FOLDER = "resources";
-    private static final String STARTER_PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
 
     private static final Map<Resource, String> FOLDERS = new HashMap<>();
 
@@ -29,7 +28,7 @@ public enum Resource {
         if(rootPath == null || rootPath.trim().length() == 0) {
             throw new InvalidResourcesPathException();
         }
-        STARTER_PROPERTIES_FILE.path(Paths.get(rootPath, STARTER_PROPERTIES_FILENAME).toString());
+        STARTER_PROPERTIES_FILE.path(Paths.get(rootPath, ApplicationConfiguration.PROPERTIES_FILENAME).toString());
         ARCHETYPES_FOLDER.path(Paths.get(rootPath, ARCHETYPES_PARENT_FOLDER, ARCHETYPES_SUB_FOLDER).toString());
     }
 
