@@ -7,11 +7,15 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.ApplicationConfiguration;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.*;
+
+import static io.vlingo.xoom.starter.task.Property.ARTIFACT_ID;
+import static io.vlingo.xoom.starter.task.Property.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
@@ -21,6 +25,7 @@ public class TaskExecutionContext {
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
+    private final List<OutputResource> outputResources = new ArrayList<>();
 
     public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
         return new TaskExecutionContext(optionValues);
@@ -48,6 +53,10 @@ public class TaskExecutionContext {
         this.process = process;
     }
 
+    public void addOutputResource(final File file, final String content) {
+        this.outputResources.add(OutputResource.of(file, content));
+    }
+
     public void onConfiguration(final Map<String, String> configurations) {
         this.configuration.putAll(configurations);
     }
@@ -72,8 +81,8 @@ public class TaskExecutionContext {
         return properties;
     }
 
-    public String configurationOf(final ApplicationConfiguration configuration) {
-        return this.configuration.get(configuration.key());
+    public String configurationOf(final String key) {
+        return this.configuration.get(key);
     }
 
     public String propertyOf(final Property property) {
@@ -93,4 +102,13 @@ public class TaskExecutionContext {
     public List<String> args() {
         return args;
     }
+
+    public List<OutputResource> outputResources() {
+        return outputResources;
+    }
+
+    public String projectPath() {
+        return Paths.get(propertyOf(TARGET_FOLDER), propertyOf(ARTIFACT_ID)).toString();
+    }
+
 }

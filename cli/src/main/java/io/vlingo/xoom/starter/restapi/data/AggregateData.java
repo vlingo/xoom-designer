@@ -9,14 +9,19 @@ package io.vlingo.xoom.starter.restapi.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AggregateData {
 
     public final String name;
-    public final List<DomainEventData> domainEvents = new ArrayList<>();
+    public final List<DomainEventData> events = new ArrayList<>();
 
-    public AggregateData(final String name) {
+    public AggregateData(final String name, final List<DomainEventData> events) {
         this.name = name;
+        this.events.addAll(events);
     }
 
+    public String flatEvents() {
+        return events.stream().map(event -> event.name).collect(Collectors.joining(";"));
+    }
 }

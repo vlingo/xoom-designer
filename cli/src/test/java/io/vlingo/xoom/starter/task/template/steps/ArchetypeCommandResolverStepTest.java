@@ -18,15 +18,6 @@ public class ArchetypeCommandResolverStepTest {
     private TaskExecutionContext context;
     private ArchetypeCommandResolverStep archetypeCommandResolverStep;
 
-    private static final String EXPECTED_BASIC_ARCHETYPE_COMMAND =
-            "cd " + Paths.get(ROOT_FOLDER, "resources", "archetypes", "basic-archetype").toString() + " && " +
-                    "mvn clean install && cd E:\\projects && " +
-                    "mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
-                    "-DarchetypeArtifactId=vlingo-xoom-basic-archetype " +
-                    "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
-                    "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
-                    "-DvlingoXoomServerVersion=1.2.9 ";
-
     private static final String EXPECTED_K8S_ARCHETYPE_COMMAND =
             "cd " + Paths.get(ROOT_FOLDER, "resources", "archetypes", "kubernetes-archetype").toString() + " && " +
                     "mvn clean install && cd E:\\projects && " +
@@ -36,27 +27,6 @@ public class ArchetypeCommandResolverStepTest {
                     "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
                     "-DvlingoXoomServerVersion=1.2.9 -DdockerImage=starter-example-image " +
                     "-Dk8sPodName=starter-example-pod -Dk8sImage=starter-example-image ";
-
-    @Test
-    public void testCommandPreparationWithBasicArchetype() {
-        this.context.onProperties(loadBasicArchetypeProperties());
-        archetypeCommandResolverStep.process(context);
-        final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
-        Assertions.assertEquals(EXPECTED_BASIC_ARCHETYPE_COMMAND, commands[2]);
-    }
-
-    private Properties loadBasicArchetypeProperties() {
-        final Properties properties = new Properties();
-        properties.put(Property.VERSION.literal(), "1.0");
-        properties.put(Property.GROUP_ID.literal(), "io.vlingo");
-        properties.put(Property.ARTIFACT_ID.literal(), "starter-example");
-        properties.put(Property.PACKAGE.literal(), "io.vlingo.starterexample");
-        properties.put(Property.XOOM_SERVER_VERSION.literal(), "1.2.9");
-        properties.put(Property.TARGET_FOLDER.literal(), "E:\\projects");
-        return properties;
-    }
 
     @Test
     public void testCommandPreparationWithKubernetesArchetype() {
