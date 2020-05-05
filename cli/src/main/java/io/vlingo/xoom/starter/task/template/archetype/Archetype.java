@@ -21,20 +21,10 @@ import static io.vlingo.xoom.starter.task.Property.*;
 
 public enum Archetype {
 
-    BASIC("basic-archetype","vlingo-xoom-basic-archetype",
-            "io.vlingo", "1.0", new BasicArchetypePropertiesValidator(),
-            VERSION, GROUP_ID, ARTIFACT_ID, PACKAGE, TARGET_FOLDER,
-            XOOM_SERVER_VERSION),
-
     KUBERNETES("kubernetes-archetype", "vlingo-xoom-kubernetes-archetype",
             "io.vlingo", "1.0", new KubernetesArchetypePropertiesValidator(),
             VERSION, GROUP_ID, ARTIFACT_ID, PACKAGE, TARGET_FOLDER, XOOM_SERVER_VERSION,
-            DOCKER_IMAGE, DEPLOYMENT, KUBERNETES_POD_NAME, KUBERNETES_IMAGE),
-
-    CLUSTERED_KUBERNETES("kubernetes-archetype", "vlingo-xoom-kubernetes-archetype",
-                       "io.vlingo", "1.0", new KubernetesArchetypePropertiesValidator(),
-                        VERSION, GROUP_ID, ARTIFACT_ID, PACKAGE, TARGET_FOLDER, XOOM_SERVER_VERSION,
-                        DOCKER_IMAGE, DEPLOYMENT, KUBERNETES_POD_NAME, KUBERNETES_IMAGE, CLUSTER_NODES);
+            DOCKER_IMAGE, DEPLOYMENT, KUBERNETES_POD_NAME, KUBERNETES_IMAGE);
 
     private final String label;
     private final String artifactId;

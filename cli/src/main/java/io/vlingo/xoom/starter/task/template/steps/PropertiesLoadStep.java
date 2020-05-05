@@ -45,7 +45,10 @@ public class PropertiesLoadStep implements TaskExecutionStep {
                 final String value = ArgumentRetriever.retrieve(key, context.args());
                 properties.put(property.literal(), value);
             } catch(final ArgumentNotFoundException exception) {
-                System.out.println(exception.getMessage());
+                if(!property.isOptional()) {
+                    throw exception;
+                }
+                properties.put(property.literal(),  property.defaultValue());
             }
         });
         return properties;

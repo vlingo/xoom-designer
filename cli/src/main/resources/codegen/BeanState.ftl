@@ -26,12 +26,17 @@ public final class ${stateClass} extends StateObject {
     return placeholderValue;
   }
 
-  public void setPlaceholderValue(final String value) {
-    this.placeholderValue = value;
+  public ${stateClass} withPlaceholderValue(final String value) {
+    return new ${stateClass}(id, value);
   }
 
   ${stateClass}(final long persistenceId, final long version, final String id, final String value) {
     super(persistenceId, version);
+    this.id = id;
+    this.placeholderValue = value;
+  }
+
+  ${stateClass}(final String id, final String value) {
     this.id = id;
     this.placeholderValue = value;
   }

@@ -17,33 +17,9 @@ import static io.vlingo.xoom.starter.task.Property.*;
 public class ArchetypeTest {
 
     @Test
-    public void testBasicArchetypeRetrieval() {
-        final Properties properties = loadBasicArchetypeProperties();
-        Assertions.assertEquals(Archetype.BASIC, Archetype.support(properties));
-    }
-
-    @Test
     public void testKubernetesArchetypeRetrieval() {
         final Properties properties = loadKubernetesArchetypeProperties();
         Assertions.assertEquals(Archetype.KUBERNETES, Archetype.support(properties));
-    }
-
-    @Test
-    public void testBasicArchetypeRetrievalFailure() {
-        final Properties properties = loadBasicArchetypeProperties();
-        properties.remove(XOOM_SERVER_VERSION.literal());
-        Assertions.assertThrows(ArchetypeNotFoundException.class, () -> {
-            Archetype.support(properties);
-        });
-    }
-
-    @Test
-    public void testKubernetesArchetypeRetrievalFailure() {
-        final Properties properties = loadKubernetesArchetypeProperties();
-        properties.remove(KUBERNETES_IMAGE.literal());
-        Assertions.assertThrows(ArchetypeNotFoundException.class, () -> {
-            Archetype.support(properties);
-        });
     }
 
     private Properties loadBasicArchetypeProperties() {
