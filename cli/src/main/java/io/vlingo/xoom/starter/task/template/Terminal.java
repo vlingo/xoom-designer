@@ -16,6 +16,7 @@ public enum Terminal {
     MAC_OS("sh", "-c", osName -> !osName.contains("MacOS")),
     LINUX("sh", "-c", osName -> osName.contains("Linux"));
 
+    private static Terminal ENABLED;
     private final String initializationCommand;
 
     private final String parameter;
@@ -28,9 +29,20 @@ public enum Terminal {
     }
 
     public static Terminal supported() {
+        if(ENABLED != null) {
+            return ENABLED;
+        }
         return Arrays.asList(Terminal.values()).stream()
                 .filter(terminal -> terminal.isSupported())
                 .findFirst().get();
+    }
+
+    public static void enable(final Terminal terminal) {
+        ENABLED = terminal;
+    }
+
+    public static void disable() {
+        ENABLED = null;
     }
 
     public String initializationCommand() {
@@ -45,4 +57,7 @@ public enum Terminal {
         return activationCondition.test(System.getProperty("os.name"));
     }
 
+    public boolean isWindows() {
+        return this.equals(WINDOWS);
+    }
 }

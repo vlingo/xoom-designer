@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { StepCompletion } from 'src/app/model/step-completion';
 import { Step } from 'src/app/model/step';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
@@ -76,7 +76,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     this.move(NavigationDirection.REWIND);
   }
   
-  onStorageTypeSelection(storageType: String) {
+  onStorageTypeSelection(storageType) {
     this.generationSettings.model.storageType = storageType;
   }
   
@@ -102,9 +102,9 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   storageOptions() {
     return [
-      {id: "Journal", value: "JOURNAL"},
-      {id: "ObjectStore", value: "OBJECT_STORE"},
-      {id: "StateStore", value: "STATE_STORE"}
+      {name: "Journal", value: "JOURNAL"},
+      {name: "Object Store", value: "OBJECT_STORE"},
+      {name: "State Store", value: "STATE_STORE"}
     ];
   }
 

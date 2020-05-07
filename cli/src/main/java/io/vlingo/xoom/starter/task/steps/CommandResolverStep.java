@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.task.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.template.Terminal;
 
+
 public abstract class CommandResolverStep implements TaskExecutionStep {
 
     @Override
@@ -21,4 +22,12 @@ public abstract class CommandResolverStep implements TaskExecutionStep {
     }
 
     protected abstract String formatCommands(final TaskExecutionContext context);
+
+    protected String resolveDirectoryChangeCommand(final String targetFolder) {
+        if(Terminal.supported().isWindows()) {
+            final String drive = targetFolder.substring(0, 2);
+            return drive + " && cd " + targetFolder;
+        }
+        return "cd " + targetFolder;
+    }
 }

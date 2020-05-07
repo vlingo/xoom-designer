@@ -11,12 +11,11 @@ public final class ${aggregateProtocolName}Entity extends EventSourced implement
 
   public ${aggregateProtocolName}Entity() {
     super(); // uses GridAddress id as unique identity
-
-    this.state = ${stateClass}.identifiedBy(id);
+    this.state = ${stateClass}.identifiedBy(streamName);
   }
 
   public Completes<${stateClass}> definePlaceholder(final String value) {
-    return apply(state.withPlaceholderValue(value), new ${aggregateProtocolName}PlaceholderDefined(state.id, value), () -> state);
+    return apply(new ${placeholderDefinedEvent}(state.id, value), () -> state);
   }
 
   //=====================================
@@ -24,10 +23,10 @@ public final class ${aggregateProtocolName}Entity extends EventSourced implement
   //=====================================
 
   static {
-    EventSourced.registerConsumer(${aggregateProtocolName}Entity.class, ${aggregateProtocolName}PlaceholderDefined.class, ${aggregateProtocolName}Entity::apply${aggregateProtocolName}PlaceholderDefined);
+    EventSourced.registerConsumer(${aggregateProtocolName}Entity.class, ${placeholderDefinedEvent}.class, ${aggregateProtocolName}Entity::apply${placeholderDefinedEvent});
   }
 
-  private void apply${aggregateProtocolName}PlaceholderDefined(final ${aggregateProtocolName}PlaceholderDefined e) {
+  private void apply${placeholderDefinedEvent}(final ${placeholderDefinedEvent} e) {
     state = state.withPlaceholderValue(e.placeholderValue);
   }
 }

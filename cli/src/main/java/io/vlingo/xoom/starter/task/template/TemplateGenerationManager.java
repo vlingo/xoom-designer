@@ -34,7 +34,7 @@ public class TemplateGenerationManager implements TaskManager {
     private static final List<TaskExecutionStep> STEPS = Arrays.asList(
             new ResourcesLocationStep(), new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
-            new LoggingStep(), new StatusHandlingStep(), new ModelClassesGenerationStep(),
+            new LoggingStep(), new StatusHandlingStep(), new ModelCodeGenerationStep(),
             new RestResourceGenerationStep(), new OutputResourceCreationStep()
     );
 

@@ -5,10 +5,10 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.codegen;
+package io.vlingo.xoom.starter.codegeneration;
 
 import io.vlingo.xoom.starter.ApplicationConfiguration;
-import io.vlingo.xoom.starter.task.template.StorageType;
+import io.vlingo.xoom.starter.task.template.steps.AggregateGenerationData;
 
 public class AggregateCodeGenerator extends BaseGenerator {
 
@@ -17,14 +17,12 @@ public class AggregateCodeGenerator extends BaseGenerator {
     private AggregateCodeGenerator() {
     }
 
-    public String generate(final String aggregateName,
-                           final String packageName,
-                           final String stateClass,
-                           final StorageType storageType) {
-        input.put("aggregateProtocolName", aggregateName);
-        input.put("stateClass", stateClass);
-        input.put("packageName", packageName);
-        return generate(ApplicationConfiguration.AGGREGATE_TEMPLATES.get(storageType));
+    public String generate(final AggregateGenerationData aggregateGenerationData) {
+        input.put("aggregateProtocolName", aggregateGenerationData.name);
+        input.put("packageName", aggregateGenerationData.packageName);
+        input.put("stateClass", aggregateGenerationData.stateName());
+        input.put("placeholderDefinedEvent", aggregateGenerationData.placeholderEventName());
+        return generate(ApplicationConfiguration.AGGREGATE_TEMPLATES.get(aggregateGenerationData.storageType));
     }
 
     public static AggregateCodeGenerator instance() {

@@ -1,4 +1,4 @@
-package io.vlingo.xoom.starter.codegen;
+package io.vlingo.xoom.starter.codegeneration;
 
 public class AggregateProtocolCodeGenerator extends BaseGenerator {
 

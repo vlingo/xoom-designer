@@ -19,11 +19,11 @@
                         <input type="radio" 
                             class="form-check-input" 
                             name="storageOptions" 
-                            id="option.id" 
+                            id="option.value" 
                             value="option.value" 
-                            (change)="onStorageTypeSelection(option.value)"
+                            (click)="onStorageTypeSelection(option.value)"
                             [checked]="generationSettings.model.storageType === option.value">
-                        <label class="form-check-label" for="option.id">{{option.id}}</label>
+                        <label class="form-check-label" for="option.value">{{option.name}}</label>
                     </div>
                 </div>
                 

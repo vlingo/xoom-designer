@@ -18,7 +18,7 @@ public final class ${aggregateProtocolName}Entity extends StatefulEntity<${state
   }
 
   public Completes<${stateClass}> definePlaceholder(final String value) {
-    return apply(state.withPlaceholderValue(value), new ${aggregateProtocolName}PlaceholderDefinedEvent(state.id, value), () -> state);
+    return apply(state.withPlaceholderValue(value), new ${placeholderDefinedEvent}(state.id, value), () -> state);
   }
 
   //=====================================
