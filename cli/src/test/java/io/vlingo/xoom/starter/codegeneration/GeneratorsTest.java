@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.codegen;
+package io.vlingo.xoom.starter.codegeneration;
 
 import io.vlingo.xoom.starter.task.template.StorageType;
 import org.junit.jupiter.api.Test;
@@ -93,18 +93,4 @@ public class GeneratorsTest {
     System.out.println(DomainEventCodeGenerator.instance().generate("PlaceholderDefinedEvent", "com.beyond5.auth.model.tenant"));
   }
 
-  @Test
-  public void testEventSourcedAggregate() throws Exception {
-    System.out.println(AggregateCodeGenerator.instance().generate("Tenant", "com.beyond5.auth.model.tenant", "TenantState", StorageType.JOURNAL));
-  }
-
-  @Test
-  public void testObjectAggregate() throws Exception {
-    System.out.println(AggregateCodeGenerator.instance().generate("Profile", "com.beyond5.auth.model.profile", "ProfileState", StorageType.OBJECT_STORE));
-  }
-
-  @Test
-  public void testStatefulAggregate() throws Exception {
-    System.out.println(AggregateCodeGenerator.instance().generate("User", "com.beyond5.auth.model.user", "UserState", StorageType.STATE_STORE));
-  }
 }

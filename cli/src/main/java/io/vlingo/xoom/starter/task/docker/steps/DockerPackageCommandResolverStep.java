@@ -17,19 +17,20 @@ import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
 public class DockerPackageCommandResolverStep extends CommandResolverStep {
 
-    private static final String COMMAND_PATTERN = "cd %s && mvn clean package && docker build ./ -t %s:%s";
+    private static final String COMMAND_PATTERN = "%s && mvn clean package && docker build ./ -t %s:%s";
 
     @Override
     protected String formatCommands(final TaskExecutionContext context) {
         final String tag = context.optionValueOf(TAG);
         final String image = context.propertyOf(DOCKER_IMAGE);
-        final String projectDirectory = context.optionValueOf(CURRENT_DIRECTORY);
+        final String projectDirectoryCommand =
+                resolveDirectoryChangeCommand(context.optionValueOf(CURRENT_DIRECTORY));
 
         if(image == null) {
             throw new DockerCommandException("Please set the docker.image property in vlingo-xoom.properties");
         }
 
-        return String.format(COMMAND_PATTERN, projectDirectory, image, tag);
+        return String.format(COMMAND_PATTERN, projectDirectoryCommand, image, tag);
     }
 
 }

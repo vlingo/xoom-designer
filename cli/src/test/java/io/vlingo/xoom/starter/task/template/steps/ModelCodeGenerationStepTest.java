@@ -8,13 +8,13 @@ import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.*;
 
-public class ModelClassesGenerationStepTest {
+public class ModelCodeGenerationStepTest {
 
     @Test
     public void testModelClassesGeneration() {
         final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
         context.onProperties(loadProperties());
-        new ModelClassesGenerationStep().process(context);
+        new ModelCodeGenerationStep().process(context);
         Assertions.assertEquals(11, context.outputResources().size());
     }
 
