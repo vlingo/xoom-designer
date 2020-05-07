@@ -19,6 +19,8 @@ public class DockerPackageCommandResolverStepTest {
 
     @Test
     public void testDockerPackageCommandResolution() {
+        Terminal.enable(Terminal.MAC_OS);
+
         final OptionValue tag =
                 OptionValue.with(OptionName.TAG, "latest");
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Aggregate {
+public class AggregateGenerationData {
 
     private final static String PACKAGE_PATTERN = "%s.%s.%s";
     private final static String PARENT_PACKAGE_NAME = "model";
@@ -17,12 +17,12 @@ public class Aggregate {
     public final String packageName;
     public final StorageType storageType;
     private final String absolutePath;
-    public final List<DomainEvent> events = new ArrayList<>();
+    public final List<DomainEventGenerationData> events = new ArrayList<>();
 
-    public Aggregate(final String[] dataBlocks,
-                     final String basePackage,
-                     final StorageType storageType,
-                     final String projectPath) {
+    public AggregateGenerationData(final String[] dataBlocks,
+                                   final String basePackage,
+                                   final StorageType storageType,
+                                   final String projectPath) {
         this.name = dataBlocks[0].trim();
         this.packageName = resolvePackage(basePackage);
         this.absolutePath = resolveAbsolutePath(basePackage, projectPath);
@@ -37,7 +37,7 @@ public class Aggregate {
     private void loadEvents(final String[] dataBlocks) {
         if(dataBlocks.length > 1) {
             Arrays.asList(dataBlocks).stream().skip(1).forEach(eventName -> {
-                this.events.add(new DomainEvent(eventName, packageName, absolutePath));
+                this.events.add(new DomainEventGenerationData(eventName, packageName, absolutePath));
             });
         }
     }
@@ -52,8 +52,8 @@ public class Aggregate {
                 PARENT_PACKAGE_NAME, name.toLowerCase()).toString();
     }
 
-    public boolean dependsOnPlaceholderEvent() {
-        return this.storageType.equals(StorageType.STATE_STORE);
+    public String placeholderEventName() {
+        return name + "PlaceholderDefined";
     }
 
     public File protocolFile() {
@@ -74,10 +74,6 @@ public class Aggregate {
 
     private File retrieveFile(final String fileName) {
         return new File(Paths.get(absolutePath, fileName + ".java").toString());
-    }
-
-    public String placeholderEventName() {
-        return name + "PlaceholderDefinedEvent";
     }
 
 }

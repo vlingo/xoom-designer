@@ -7,7 +7,7 @@ import io.vlingo.xoom.starter.task.template.Terminal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.vlingo.xoom.starter.codegen.CodeTemplate.*;
+import static io.vlingo.xoom.starter.codegeneration.CodeTemplate.*;
 
 public class ApplicationConfiguration {
 
@@ -25,21 +25,21 @@ public class ApplicationConfiguration {
 
     public static final Map<StorageType, String> STATE_TEMPLATES =
             Maps.immutableEnumMap(
-                    new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, PLAIN_STATE.filename);
-                        put(StorageType.STATE_STORE, STATE_OBJECT.filename);
-                        put(StorageType.JOURNAL, PLAIN_STATE.filename);
-                    }}
+                new HashMap<StorageType, String>(){{
+                    put(StorageType.OBJECT_STORE, STATE_OBJECT.filename);
+                    put(StorageType.STATE_STORE, STATE_OBJECT.filename);
+                    put(StorageType.JOURNAL, PLAIN_STATE.filename);
+                }}
             );
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
             Maps.immutableEnumMap(
-                    new HashMap<Terminal, String>() {{
-                        put(Terminal.WINDOWS, "start ");
-                        put(Terminal.MAC_OS, "open ");
-                        put(Terminal.LINUX, "xdg-open ");
-                    }}
-                );
+                new HashMap<Terminal, String>() {{
+                    put(Terminal.WINDOWS, "start ");
+                    put(Terminal.MAC_OS, "open ");
+                    put(Terminal.LINUX, "xdg-open ");
+                }}
+            );
 
 
 }

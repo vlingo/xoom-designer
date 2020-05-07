@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.codegen.RestResourceCodeGenerator;
+import io.vlingo.xoom.starter.codegeneration.RestResourceCodeGenerator;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;

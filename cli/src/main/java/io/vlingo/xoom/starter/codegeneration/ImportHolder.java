@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.codegen;
+package io.vlingo.xoom.starter.codegeneration;
 
 public class ImportHolder {
   private final String fullyQualifiedClassName;

@@ -7,7 +7,7 @@ import io.vlingo.xoom.starter.task.template.StorageType;
 
 import java.util.List;
 
-public class ModelClassesGenerationStep implements TaskExecutionStep {
+public class ModelCodeGenerationStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
@@ -16,13 +16,13 @@ public class ModelClassesGenerationStep implements TaskExecutionStep {
         final String aggregatesData = context.propertyOf(Property.AGGREGATES);
         final StorageType storageType = StorageType.of(context.propertyOf(Property.STORAGE_TYPE));
 
-        final List<Aggregate> aggregates =
-                AggregateParser.parse(packageName, targetDirectory,
+        final List<AggregateGenerationData> aggregates =
+                AggregateGenerationDataFactory.build(packageName, targetDirectory,
                         aggregatesData, storageType);
 
-        aggregates.forEach(aggregate -> {
+        aggregates.forEach(generationData -> {
             ModelCodeGeneration.all().forEach(generator -> {
-                generator.generate(context, aggregate);
+                generator.generate(context, generationData);
             });
         });
     }
