@@ -9,13 +9,13 @@ package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
+import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static io.vlingo.xoom.starter.task.Property.ARTIFACT_ID;
-import static io.vlingo.xoom.starter.task.Property.TARGET_FOLDER;
+import static io.vlingo.xoom.starter.task.Property.*;
 
 public class TaskExecutionContext {
 
@@ -93,6 +93,10 @@ public class TaskExecutionContext {
         return optionValues.stream()
                 .filter(optionValue -> optionValue.hasName(optionName))
                 .map(optionValue -> optionValue.value()).findFirst().get();
+    }
+
+    public DeploymentType deploymentType() {
+        return DeploymentType.valueOf(propertyOf(DEPLOYMENT));
     }
 
     public String[] commands() {

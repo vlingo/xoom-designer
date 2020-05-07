@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.gui.steps;
 
-import io.vlingo.xoom.starter.ApplicationConfiguration;
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +17,7 @@ public class BrowserLaunchCommandResolverStepTest {
         final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
 
         context.onConfiguration(new HashMap<String, String>(){{
-            put(ApplicationConfiguration.USER_INTERFACE_CONFIG_KEY, EXPECTED_URL);
+            put(Configuration.USER_INTERFACE_CONFIG_KEY, EXPECTED_URL);
         }});
 
         new BrowserLaunchCommandResolverStep().process(context);

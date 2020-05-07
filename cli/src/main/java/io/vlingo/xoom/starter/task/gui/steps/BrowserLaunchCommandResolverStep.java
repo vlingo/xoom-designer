@@ -11,8 +11,8 @@ import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 import io.vlingo.xoom.starter.task.template.Terminal;
 
-import static io.vlingo.xoom.starter.ApplicationConfiguration.BROWSER_LAUNCH_COMMAND;
-import static io.vlingo.xoom.starter.ApplicationConfiguration.USER_INTERFACE_CONFIG_KEY;
+import static io.vlingo.xoom.starter.Configuration.BROWSER_LAUNCH_COMMAND;
+import static io.vlingo.xoom.starter.Configuration.USER_INTERFACE_CONFIG_KEY;
 
 public class BrowserLaunchCommandResolverStep extends CommandResolverStep {
 

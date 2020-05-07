@@ -28,7 +28,7 @@ public enum Resource {
         if(rootPath == null || rootPath.trim().length() == 0) {
             throw new InvalidResourcesPathException();
         }
-        STARTER_PROPERTIES_FILE.path(Paths.get(rootPath, ApplicationConfiguration.PROPERTIES_FILENAME).toString());
+        STARTER_PROPERTIES_FILE.path(Paths.get(rootPath, Configuration.PROPERTIES_FILENAME).toString());
         ARCHETYPES_FOLDER.path(Paths.get(rootPath, ARCHETYPES_PARENT_FOLDER, ARCHETYPES_SUB_FOLDER).toString());
     }
 

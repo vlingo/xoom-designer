@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-import io.vlingo.xoom.starter.ApplicationConfiguration;
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.template.steps.AggregateGenerationData;
 
 public class AggregateCodeGenerator extends BaseGenerator {
@@ -22,7 +22,7 @@ public class AggregateCodeGenerator extends BaseGenerator {
         input.put("packageName", aggregateGenerationData.packageName);
         input.put("stateClass", aggregateGenerationData.stateName());
         input.put("placeholderDefinedEvent", aggregateGenerationData.placeholderEventName());
-        return generate(ApplicationConfiguration.AGGREGATE_TEMPLATES.get(aggregateGenerationData.storageType));
+        return generate(Configuration.AGGREGATE_TEMPLATES.get(aggregateGenerationData.storageType));
     }
 
     public static AggregateCodeGenerator instance() {

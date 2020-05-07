@@ -1,18 +1,23 @@
 package io.vlingo.xoom.starter;
 
 import com.google.common.collect.Maps;
+import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
+import io.vlingo.xoom.starter.task.gui.steps.GraphicalUserInterfaceBootstrapStep;
+import io.vlingo.xoom.starter.task.steps.*;
 import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.template.steps.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.vlingo.xoom.starter.codegeneration.CodeTemplate.*;
 
-public class ApplicationConfiguration {
+public class Configuration {
 
     public static final String USER_INTERFACE_CONFIG_KEY = "ui";
-    public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
 
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
             Maps.immutableEnumMap(
@@ -41,5 +46,19 @@ public class ApplicationConfiguration {
                 }}
             );
 
+    public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
+            new ResourcesLocationStep(), new PropertiesLoadStep(),
+            new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
+            new LoggingStep(), new StatusHandlingStep(), new ModelCodeGenerationStep(),
+            new RestResourceGenerationStep(), new OutputResourceCreationStep(),
+            new ContentPurgerStep()
+    );
 
+    public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
+            new GraphicalUserInterfaceBootstrapStep(), new ApplicationConfigLoaderStep(),
+            new BrowserLaunchCommandResolverStep(), new CommandExecutionStep(),
+            new LoggingStep(), new StatusHandlingStep()
+    );
+
+    public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
 }
