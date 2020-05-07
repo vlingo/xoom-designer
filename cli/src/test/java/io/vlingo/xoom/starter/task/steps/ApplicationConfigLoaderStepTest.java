@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.steps;
 
-import io.vlingo.xoom.starter.ApplicationConfiguration;
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class ApplicationConfigLoaderStepTest {
 
         new ApplicationConfigLoaderStep().process(context);
 
-        Assertions.assertEquals(EXPECTED_URL, context.configurationOf(ApplicationConfiguration.USER_INTERFACE_CONFIG_KEY));
+        Assertions.assertEquals(EXPECTED_URL, context.configurationOf(Configuration.USER_INTERFACE_CONFIG_KEY));
     }
 
 }

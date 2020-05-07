@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.codegeneration;
 
 import io.vlingo.xoom.starter.task.template.StorageType;
 
-import static io.vlingo.xoom.starter.ApplicationConfiguration.STATE_TEMPLATES;
+import static io.vlingo.xoom.starter.Configuration.STATE_TEMPLATES;
 
 public class StateCodeGenerator extends BaseGenerator {
 
