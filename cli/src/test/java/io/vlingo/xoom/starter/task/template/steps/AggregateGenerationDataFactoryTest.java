@@ -1,6 +1,5 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,12 +8,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.StorageType.JOURNAL;
-import static io.vlingo.xoom.starter.task.template.Terminal.WINDOWS;
 
 public class AggregateGenerationDataFactoryTest {
 
     private static final String PROJECT_PATH =
-            Terminal.supported().equals(WINDOWS) ?
+            Terminal.supported().isWindows() ?
                     Paths.get("D:\\projects", "xoom-app").toString() :
                     Paths.get("home", "xoom-app").toString();
 

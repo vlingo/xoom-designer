@@ -5,6 +5,7 @@ import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.template.Terminal;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -60,4 +61,8 @@ public class DockerPackageCommandResolverStepTest {
         });
     }
 
+    @AfterEach
+    public void clear() {
+        Terminal.disable();
+    }
 }
