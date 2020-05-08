@@ -15,7 +15,31 @@ public class ModelCodeGenerationStepTest {
         final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
         context.onProperties(loadProperties());
         new ModelCodeGenerationStep().process(context);
+
         Assertions.assertEquals(11, context.outputResources().size());
+        Assertions.assertEquals("OrderEntity.java", context.outputResources().get(0).file.getName());
+        Assertions.assertEquals("Order.java", context.outputResources().get(1).file.getName());
+        Assertions.assertEquals("OrderState.java", context.outputResources().get(2).file.getName());
+        Assertions.assertEquals("OrderCreated.java", context.outputResources().get(3).file.getName());
+        Assertions.assertEquals("OrderCancelled.java", context.outputResources().get(4).file.getName());
+        Assertions.assertEquals("OrderPlaceholderDefined.java", context.outputResources().get(5).file.getName());
+        Assertions.assertEquals("ProductEntity.java", context.outputResources().get(6).file.getName());
+        Assertions.assertEquals("Product.java", context.outputResources().get(7).file.getName());
+        Assertions.assertEquals("ProductState.java", context.outputResources().get(8).file.getName());
+        Assertions.assertEquals("ProductSoldOut.java", context.outputResources().get(9).file.getName());
+        Assertions.assertEquals("ProductPlaceholderDefined.java", context.outputResources().get(10).file.getName());
+
+        Assertions.assertTrue(context.outputResources().get(0).content.contains("class OrderEntity extends StatefulEntity"));
+        Assertions.assertTrue(context.outputResources().get(1).content.contains("interface Order "));
+        Assertions.assertTrue(context.outputResources().get(2).content.contains("class OrderState extends StateObject"));
+        Assertions.assertTrue(context.outputResources().get(3).content.contains("class OrderCreated extends DomainEvent"));
+        Assertions.assertTrue(context.outputResources().get(4).content.contains("class OrderCancelled extends DomainEvent"));
+        Assertions.assertTrue(context.outputResources().get(5).content.contains("class OrderPlaceholderDefined extends DomainEvent"));
+        Assertions.assertTrue(context.outputResources().get(6).content.contains("class ProductEntity extends StatefulEntity"));
+        Assertions.assertTrue(context.outputResources().get(7).content.contains("interface Product "));
+        Assertions.assertTrue(context.outputResources().get(8).content.contains("class ProductState extends StateObject"));
+        Assertions.assertTrue(context.outputResources().get(9).content.contains("class ProductSoldOut extends DomainEvent"));
+        Assertions.assertTrue(context.outputResources().get(10).content.contains("class ProductPlaceholderDefined extends DomainEvent"));
     }
 
     private Properties loadProperties() {
