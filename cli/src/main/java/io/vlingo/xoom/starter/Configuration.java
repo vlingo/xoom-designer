@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.vlingo.xoom.starter.codegeneration.CodeTemplate.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateFile.*;
 
 public class Configuration {
 
@@ -49,7 +49,7 @@ public class Configuration {
     public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
             new ResourcesLocationStep(), new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
-            new LoggingStep(), new StatusHandlingStep(), new ModelCodeGenerationStep(),
+            new LoggingStep(), new StatusHandlingStep(), new ModelGenerationStep(),
             new RestResourceGenerationStep(), new OutputResourceCreationStep(),
             new ContentPurgerStep()
     );

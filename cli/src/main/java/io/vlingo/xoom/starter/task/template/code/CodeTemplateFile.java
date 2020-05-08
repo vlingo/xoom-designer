@@ -1,6 +1,13 @@
-package io.vlingo.xoom.starter.codegeneration;
+// Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
 
-public enum CodeTemplate {
+package io.vlingo.xoom.starter.task.template.code;
+
+public enum CodeTemplateFile {
 
     AGGREGATE_PROTOCOL("AggregateProtocol"),
     OBJECT_ENTITY("ObjectEntity"),
@@ -14,7 +21,7 @@ public enum CodeTemplate {
 
     public final String filename;
 
-    CodeTemplate(final String filename) {
+    CodeTemplateFile(final String filename) {
         this.filename = filename;
     }
 
