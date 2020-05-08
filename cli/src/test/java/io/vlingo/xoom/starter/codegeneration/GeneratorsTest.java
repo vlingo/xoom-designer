@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-import io.vlingo.xoom.starter.task.template.StorageType;
 import org.junit.jupiter.api.Test;
 
 public class GeneratorsTest {
@@ -71,26 +70,6 @@ public class GeneratorsTest {
 //    userStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
 //    userStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserState"));
 //    System.out.println(userStateGenerator.generate("StateAdapter"));
-  }
-
-  @Test
-  public void testBeanState() throws Exception {
-    System.out.println(StateCodeGenerator.instance().generate("ProfileState", "com.beyond5.auth.model.profile", StorageType.OBJECT_STORE));
-  }
-
-  @Test
-  public void testValueState() throws Exception {
-    System.out.println(StateCodeGenerator.instance().generate("ValueState", "com.beyond5.auth.model.user", StorageType.JOURNAL));
-  }
-
-  @Test
-  public void testDomainEvent() throws Exception {
-    System.out.println(DomainEventCodeGenerator.instance().generate("TenantRegistered", "com.beyond5.auth.model.tenant"));
-  }
-
-  @Test
-  public void testPlaceholderDefinedEvent() throws Exception {
-    System.out.println(DomainEventCodeGenerator.instance().generate("PlaceholderDefinedEvent", "com.beyond5.auth.model.tenant"));
   }
 
 }
