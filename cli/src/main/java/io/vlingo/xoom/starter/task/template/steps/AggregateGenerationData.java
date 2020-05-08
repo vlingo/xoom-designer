@@ -54,7 +54,7 @@ public class AggregateGenerationData {
     }
 
     private String resolveAbsolutePath(final String basePackage, final String projectPath) {
-        final String basePackagePath = basePackage.replaceAll("\\.", "\\\\");
+        final String basePackagePath = basePackage.replaceAll("\\.", "\\" + File.separator);
         return Paths.get(projectPath, "src", "main", "java", basePackagePath,
                 PARENT_PACKAGE_NAME, name.toLowerCase()).toString();
     }
