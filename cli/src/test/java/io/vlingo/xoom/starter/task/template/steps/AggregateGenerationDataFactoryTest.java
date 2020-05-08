@@ -14,7 +14,7 @@ public class AggregateGenerationDataFactoryTest {
     private static final String PROJECT_PATH =
             Terminal.supported().isWindows() ?
                     Paths.get("D:\\projects", "xoom-app").toString() :
-                    Paths.get("home", "xoom-app").toString();
+                    Paths.get("/home", "xoom-app").toString();
 
     private static  final String MODEL_PACKAGE_PATH =
             Paths.get(PROJECT_PATH, "src", "main", "java", "io", "vlingo", "xoomapp", "model").toString();
