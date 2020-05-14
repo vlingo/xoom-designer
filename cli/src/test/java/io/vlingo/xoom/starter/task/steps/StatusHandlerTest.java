@@ -7,10 +7,13 @@
 
 package io.vlingo.xoom.starter.task.steps;
 
+import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Properties;
 
 public class StatusHandlerTest {
 
@@ -27,8 +30,9 @@ public class StatusHandlerTest {
 
     @Test
     public void testSuccessHandler() {
-        final StatusHandler statusHandler = StatusHandler.forStatus(0);
-        statusHandler.handle(TaskExecutionContext.withoutOptions());
+        final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
+        context.onProperties(loadProperties());
+        StatusHandler.forStatus(0).handle(context);
     }
 
     @Test
@@ -39,4 +43,9 @@ public class StatusHandlerTest {
         });
     }
 
+    private Properties loadProperties() {
+        final Properties properties = new Properties();
+        properties.put(Property.TARGET_FOLDER, "/home");
+        return properties;
+    }
 }

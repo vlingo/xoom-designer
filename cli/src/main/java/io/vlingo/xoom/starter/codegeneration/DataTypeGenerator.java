@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-public class DataTypeGenerator extends ImportsGenerator {
+public class DataTypeGenerator {
   public DataTypeGenerator(final String type) {
     super();
 
-    input.put("type", type);
+//    input.put("type", type);
   }
 }

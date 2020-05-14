@@ -1,4 +1,4 @@
-package io.vlingo.xoom.starter.task.template.code;
+package io.vlingo.xoom.starter.task.template.code.model;
 
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +10,7 @@ import java.util.List;
 import static io.vlingo.xoom.starter.task.template.StorageType.JOURNAL;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 
-public class AggregateTemplateDataFactoryTest {
+public class ModelTemplateDataFactoryTest {
 
     private static final String PROJECT_PATH =
             Terminal.supported().isWindows() ?
@@ -26,14 +26,14 @@ public class AggregateTemplateDataFactoryTest {
         final String aggregatesData =
                 "Author;AuthorAccepted;AuthorRegistered|Book;BookPurchased;BookPublished";
 
-        final List<AggregateTemplateData> templateData =
-                AggregateTemplateDataFactory.build(basePackage, PROJECT_PATH, aggregatesData, JOURNAL);
+        final List<ModelTemplateData> templateData =
+                ModelTemplateDataFactory.build(basePackage, PROJECT_PATH, aggregatesData, JOURNAL);
 
         final String authorPackagePath = Paths.get(MODEL_PACKAGE_PATH, "author").toString();
         final String bookPackagePath = Paths.get(MODEL_PACKAGE_PATH, "book").toString();
 
-        final AggregateTemplateData author = templateData.get(0);
-        final AggregateTemplateData book = templateData.get(1);
+        final ModelTemplateData author = templateData.get(0);
+        final ModelTemplateData book = templateData.get(1);
 
         Assertions.assertEquals(2, templateData.size());
         Assertions.assertEquals(2, author.events.size());

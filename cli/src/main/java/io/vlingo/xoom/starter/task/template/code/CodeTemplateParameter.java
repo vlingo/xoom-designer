@@ -13,13 +13,25 @@ public enum CodeTemplateParameter {
     AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
     AGGREGATE_NAME("aggregateName"),
     DOMAIN_EVENT_NAME("domainEventName"),
+    AGGREGATE_STATE_QUALIFIED_NAME("stateQualifiedName"),
     PLACEHOLDER_DEFINED_EVENT_NAME("placeholderDefinedEvent"),
+    IMPORTS("imports"),
+    STATE_ADAPTERS("stateAdapters"),
+    STORE_PROVIDER_NAME("storeProviderName"),
+    STORE_CLASS_NAME("storeClassName"),
     STATE_NAME("stateClass"),
-    STORAGE_TYPE("storageType");
+    STORAGE_TYPE("storageType"),
+    MODEL_CLASSIFICATION("modelClassification"),
+    REGISTRY_CLASS_NAME("registryClassName"),
+    REGISTRY_QUALIFIED_CLASS_NAME("registryQualifiedClassName"),
+    STORE_PROVIDERS("storeProviders"),
+    CONNECTION_URL("connectionUrl"),
+    DRIVER_CLASS("driverClass");
 
     public final String token;
 
     CodeTemplateParameter(String token) {
         this.token = token;
     }
+
 }

@@ -14,23 +14,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.starter.task.Property.*;
+
 public class ModelSettingsData {
 
     public final String storageType;
+    public final boolean useCQRS;
     public final boolean useProjections;
+    public final String database;
     public final String commandModelDatabase;
     public final String queryModelDatabase;
     public final List<AggregateData> aggregates = new ArrayList<>();
     public final List<AggregateData> restResources = new ArrayList<>();
 
     public ModelSettingsData(final String storageType,
+                             final boolean useCQRS,
                              final boolean useProjections,
+                             final String database,
                              final String commandModelDatabase,
                              final String queryModelDatabase,
                              final List<AggregateData> aggregates,
                              final List<AggregateData> restResources) {
         this.storageType = storageType;
+        this.useCQRS = useCQRS;
         this.useProjections = useProjections;
+        this.database = database;
         this.commandModelDatabase = commandModelDatabase;
         this.queryModelDatabase = queryModelDatabase;
         this.aggregates.addAll(aggregates);
@@ -39,12 +47,14 @@ public class ModelSettingsData {
 
     List<String> toArguments() {
         return Arrays.asList(
-                Property.STORAGE_TYPE.literal(), storageType,
-                Property.PROJECTIONS.literal(), String.valueOf(useProjections),
-                Property.AGGREGATES.literal(), flatAggregates(),
-                Property.REST_RESOURCES.literal(), flatRestResources(),
-                Property.COMMAND_MODEL_DATABASE.literal(), commandModelDatabase,
-                Property.QUERY_MODEL_DATABASE.literal(), queryModelDatabase
+                STORAGE_TYPE.literal(), storageType,
+                AGGREGATES.literal(), flatAggregates(),
+                REST_RESOURCES.literal(), flatRestResources(),
+                CQRS.literal(), String.valueOf(useCQRS),
+                PROJECTIONS.literal(), String.valueOf(useProjections),
+                DATABASE.literal(), database,
+                COMMAND_MODEL_DATABASE.literal(), commandModelDatabase,
+                QUERY_MODEL_DATABASE.literal(), queryModelDatabase
         );
     }
 
