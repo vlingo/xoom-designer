@@ -157,4 +157,14 @@ public class GeneratorsTest {
     System.out.println(DomainEventCodeGenerator.instance().generate("PlaceholderDefinedEvent", "com.beyond5.auth.model.tenant"));
   }
 
+  @Test
+  public void testValueData() {
+    final DataTypeGenerator profileGenerator = new DataTypeGenerator("Profile");
+    profileGenerator.inputOfPackageName("com.beyond5.auth.resource.data");
+    profileGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileState"));
+    System.out.println(profileGenerator.generate("ValueData"));
+
+//    System.out.println(new DataTypeGenerator("Tenant").generate("ValueData"));
+//    System.out.println(new DataTypeGenerator("User").generate("ValueData"));
+  }
 }
