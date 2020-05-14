@@ -17,6 +17,27 @@ import io.vlingo.xoom.starter.task.template.StorageType;
 public class GeneratorsTest {
 
   @Test
+  public void testBootstrap() {
+    final BootstrapGenerator generator = new BootstrapGenerator("com.beyond5.auth");
+
+    generator.inputOfPackageName("com.beyond5.auth");
+
+    generator.inputOf(new ImportHolder("com.beyond5.auth.resource.ProfileResource"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.resource.TenantResource"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.resource.UserResource"));
+
+    generator.inputOfCommandModelJournalProvider(true);
+    generator.inputOfCommandModelStateStoreProvider(false);
+    generator.inputOfProjectionDispatcherProvider(true);
+
+    generator.inputOfResource("ProfileResource");
+    generator.inputOfResource("TenantResource");
+    generator.inputOfResource("UserResource");
+
+    System.out.println(generator.generate("Bootstrap"));
+  }
+
+  @Test
   public void testCommandModelJournalProvider() {
     final JournalProviderGenerator generator = new JournalProviderGenerator();
 
