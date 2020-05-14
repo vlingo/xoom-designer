@@ -1,7 +1,7 @@
 package ${packageName};
 
 <#list imports as import>
-import ${import.fullyQualifiedClassName};
+import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.common.serialization.JsonSerialization;

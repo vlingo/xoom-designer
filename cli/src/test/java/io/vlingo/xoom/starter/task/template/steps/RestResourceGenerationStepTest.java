@@ -23,13 +23,13 @@ public class RestResourceGenerationStepTest {
         context.onProperties(loadProperties());
         new RestResourceGenerationStep().process(context);
 
-        Assertions.assertEquals(2, context.outputResources().size());
-        Assertions.assertEquals("OrderResource.java", context.outputResources().get(0).file.getName());
-        Assertions.assertEquals("ProductResource.java", context.outputResources().get(1).file.getName());
-        Assertions.assertTrue(context.outputResources().get(0).content.contains("class OrderResource"));
-        Assertions.assertTrue(context.outputResources().get(0).content.contains("package com.company.context.logistics.resource;"));
-        Assertions.assertTrue(context.outputResources().get(1).content.contains("class ProductResource"));
-        Assertions.assertTrue(context.outputResources().get(1).content.contains("package com.company.context.logistics.resource;"));
+        Assertions.assertEquals(2, context.contents().size());
+        Assertions.assertEquals("OrderResource.java", context.contents().get(0).file.getName());
+        Assertions.assertEquals("ProductResource.java", context.contents().get(1).file.getName());
+        Assertions.assertTrue(context.contents().get(0).text.contains("class OrderResource"));
+        Assertions.assertTrue(context.contents().get(0).text.contains("package com.company.context.logistics.resource;"));
+        Assertions.assertTrue(context.contents().get(1).text.contains("class ProductResource"));
+        Assertions.assertTrue(context.contents().get(1).text.contains("package com.company.context.logistics.resource;"));
     }
 
     private Properties loadProperties() {

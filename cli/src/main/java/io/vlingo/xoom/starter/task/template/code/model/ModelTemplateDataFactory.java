@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.template.code;
+package io.vlingo.xoom.starter.task.template.code.model;
 
 import io.vlingo.xoom.starter.task.template.StorageType;
 
@@ -13,19 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AggregateTemplateDataFactory {
+public class ModelTemplateDataFactory {
 
     private static final String EVENTS_SEPARATOR = ";";
     private static final String AGGREGATE_SEPARATOR = "\\|";
 
-    public static List<AggregateTemplateData> build(final String basePackage,
-                                                    final String projectPath,
-                                                    final String aggregatesData,
-                                                    final StorageType storageType) {
+    public static List<ModelTemplateData> build(final String basePackage,
+                                                final String projectPath,
+                                                final String aggregatesData,
+                                                final StorageType storageType) {
 
         return Arrays.asList(aggregatesData.split(AGGREGATE_SEPARATOR))
                 .stream().map(aggregateData -> {
-                    return new AggregateTemplateData(aggregateData.split(EVENTS_SEPARATOR),
+                    return new ModelTemplateData(aggregateData.split(EVENTS_SEPARATOR),
                             basePackage, storageType, projectPath);
                 }).collect(Collectors.toList());
     }

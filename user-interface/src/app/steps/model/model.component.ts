@@ -76,8 +76,14 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     this.move(NavigationDirection.REWIND);
   }
   
-  onStorageTypeSelection(storageType) {
-    this.generationSettings.model.storageType = storageType;
+  onStorageTypeSelection(selectedValue) {
+    if(selectedValue.endsWith("JOURNAL")) {
+      this.generationSettings.model.useCQRS = true;
+    }
+  }
+
+  onCQRSClick($event) {
+    this.generationSettings.model.useCQRS = $event.target.checked;
   }
   
   move(navigationDirection: NavigationDirection) {
@@ -102,21 +108,20 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   storageOptions() {
     return [
-      {name: "Journal", value: "JOURNAL"},
+      {name: "State Store", value: "STATE_STORE"},
       {name: "Object Store", value: "OBJECT_STORE"},
-      {name: "State Store", value: "STATE_STORE"}
+      {name: "Journal", value: "JOURNAL"}
     ];
   }
 
   databaseVendors() {
     return [
-      {name: "Not applicable", value: "NONE"},
-      {name: "Postgres", value: "POSTGRES"},
-      {name: "HSQLDB", value: "HSQLDB"},
-      {name: "MariaDB", value: "MARIADB"},
-      {name: "MySQL", value: "MYSQL"},
-      {name: "YugaByte", value: "YUGABYTE"}
+      {name: "In Memory", value: "IN_MEMORY"}
     ];
+  }
+
+  useCQRS() {
+    return this.generationSettings.model.useCQRS;
   }
 
   private setupRestResources() {

@@ -3,7 +3,7 @@ package ${packageName};
 import java.util.Arrays;
 
 <#list imports as import>
-import ${import.fullyQualifiedClassName};
+import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.actors.Stage;
@@ -15,12 +15,10 @@ import io.vlingo.symbio.store.dispatch.Dispatchable;
 import io.vlingo.symbio.store.dispatch.Dispatcher;
 import io.vlingo.symbio.store.dispatch.DispatcherControl;
 import io.vlingo.symbio.store.state.StateStore;
-import ${stateStoreClassName};
 
 public class QueryModelStateStoreProvider {
   private static QueryModelStateStoreProvider instance;
 
-  public final Queries queries;
   public final StateStore store;
 
   public static QueryModelStateStoreProvider instance() {
@@ -45,22 +43,19 @@ public class QueryModelStateStoreProvider {
       public void dispatch(Dispatchable d) { }
     };
 
-    final StateStore store = stage.actorFor(StateStore.class, ${stateStoreClassName}.class, Arrays.asList(noop));
-
-    final Queries queries = stage.actorFor(Queries.class, QueriesActor.class, store);
+    final StateStore store = stage.actorFor(StateStore.class, ${storeClassName}.class, Arrays.asList(noop));
 
 <#list stateAdapters as stateAdapter>
     registry.register(new Info(store, ${stateAdapter.stateClass}.class, ${stateAdapter.stateClass}.class.getSimpleName()));
 </#list>
 
-    instance = new QueryModelStateStoreProvider(store, queries);
+    instance = new QueryModelStateStoreProvider(store);
 
     return instance;
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private QueryModelStateStoreProvider(final StateStore store, final Queries queries) {
+  private QueryModelStateStoreProvider(final StateStore store) {
     this.store = store;
-    this.queries = queries;
   }
 }

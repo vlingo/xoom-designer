@@ -10,10 +10,10 @@ package io.vlingo.xoom.starter.task.template.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.starter.task.template.StorageType;
-import io.vlingo.xoom.starter.task.template.code.AggregateTemplateData;
-import io.vlingo.xoom.starter.task.template.code.AggregateTemplateDataFactory;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
+import io.vlingo.xoom.starter.task.template.code.model.ModelTemplateData;
+import io.vlingo.xoom.starter.task.template.code.model.ModelTemplateDataFactory;
 
 import java.util.List;
 
@@ -28,26 +28,32 @@ public class ModelGenerationStep implements TaskExecutionStep {
         final String aggregatesData = context.propertyOf(AGGREGATES);
         final StorageType storageType = StorageType.of(context.propertyOf(STORAGE_TYPE));
 
-        final List<AggregateTemplateData> templateData =
-                AggregateTemplateDataFactory.build(packageName, projectPath,
+        final List<ModelTemplateData> templateData =
+                ModelTemplateDataFactory.build(packageName, projectPath,
                         aggregatesData, storageType);
 
         templateData.forEach(data -> processTemplateData(context, data));
     }
 
     private void processTemplateData(final TaskExecutionContext context,
-                                     final AggregateTemplateData templateData) {
+                                     final ModelTemplateData templateData) {
         templateData.files.forEach((standard, files) -> {
             files.forEach(file -> {
                 final CodeTemplateParameters parameters =
-                        standard.enrich(templateData.parameters, file);
+                        standard.enrich(templateData.templateParameters(), file);
 
                 final String code =
-                        CodeTemplateProcessor.instance().process(standard, parameters);
+                        CodeTemplateProcessor.instance()
+                                .process(standard, parameters);
 
-                context.addOutputResource(file, code);
+                context.addContent(standard, file, code);
             });
         });
+    }
+
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.hasProperty(AGGREGATES);
     }
 
 }
