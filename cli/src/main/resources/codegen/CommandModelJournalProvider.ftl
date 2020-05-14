@@ -5,6 +5,8 @@ import ${import.fullyQualifiedClassName};
 </#list>
 
 import io.vlingo.actors.World;
+import io.vlingo.lattice.model.sourcing.SourcedTypeRegistry;
+import io.vlingo.lattice.model.sourcing.SourcedTypeRegistry.Info;
 import io.vlingo.symbio.BaseEntry.TextEntry;
 import io.vlingo.symbio.DefaultTextEntryAdapter;
 import io.vlingo.symbio.EntryAdapterProvider;
@@ -22,7 +24,7 @@ public class CommandModelJournalProvider {
   }
 
   @SuppressWarnings({ "unchecked", "unused" })
-  public static void initialize(final World world, final SchemataConfig config, final Dispatcher dispatcher) throws Exception {
+  public static void initialize(final World world, final SourcedTypeRegistry registry, final Dispatcher dispatcher) throws Exception {
     final EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(world);
 <#list entryAdapters as entryAdapter>
     entryAdapterProvider.registerAdapter(${entryAdapter.sourceClass}.class, new ${entryAdapter.entryAdapterClass}());
@@ -30,6 +32,10 @@ public class CommandModelJournalProvider {
 
     final Journal<String> journal = world.actorFor(Journal.class, ${journalStoreClassName}.class, dispatcher);
     
+<#list entryAdapters as entryAdapter>
+    registry.register(new Info(journal, ${entryAdapter.sourceClass}.class, ${entryAdapter.sourceClass}.class.getSimpleName()));
+</#list>
+
     instance = new CommandModelJournalProvider(journal);
   }
 
