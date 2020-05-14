@@ -9,7 +9,7 @@ import io.vlingo.symbio.Metadata;
 import io.vlingo.symbio.State.TextState;
 import io.vlingo.symbio.StateAdapter;
 
-public class ${stateClass}Adapter implements StateAdapter<${stateClass},TextState> {
+public final class ${stateClass}Adapter implements StateAdapter<${stateClass},TextState> {
 
   @Override
   public int typeVersion() {
