@@ -7,6 +7,9 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import io.vlingo.xoom.starter.task.template.StorageType;
@@ -109,6 +112,29 @@ public class GeneratorsTest {
     userStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
     userStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserState"));
     System.out.println(userStateGenerator.generate("StateAdapter"));
+  }
+
+  @Test
+  public void testProjectionDispatcherProviderGenerator() {
+    final List<ProjectToDescriptionHolder> holders =
+            Arrays.asList(
+                    new ProjectToDescriptionHolder("Profile", Arrays.asList("ProfileDefined")),
+                    new ProjectToDescriptionHolder("Tenant", Arrays.asList("TenantDefined", "TenantActivated", "TenantDeactivated")),
+                    new ProjectToDescriptionHolder("User", Arrays.asList("UserDefined", "UserPasswordChanged"))
+                    );
+
+    final ProjectionDispatcherProviderGenerator generator = new ProjectionDispatcherProviderGenerator(holders);
+
+    generator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileDefined"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantDefined"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantActivated"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantDeactivated"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserDefined"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserPasswordChanged"));
+
+    System.out.println(generator.generate("ProjectionDispatcherProvider"));
   }
 
   @Test
