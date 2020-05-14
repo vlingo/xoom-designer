@@ -41,7 +41,7 @@ export class TableComponent implements OnInit  {
 
   onUpdate(id: Number, element: ElementRef) {
     const $nameSpan = $(this.table.nativeElement).find('#' + id);
-    const newName = new String($(element).html());
+    const newName = new String($(element).html()).trim();
     this.items.forEach(item => {
       if(item.id === id) {
         item.name = newName;

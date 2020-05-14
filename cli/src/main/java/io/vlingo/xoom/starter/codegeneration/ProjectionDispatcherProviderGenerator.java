@@ -10,7 +10,7 @@ package io.vlingo.xoom.starter.codegeneration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectionDispatcherProviderGenerator extends ImportsGenerator {
+public class ProjectionDispatcherProviderGenerator {
 
   public ProjectionDispatcherProviderGenerator(final List<ProjectToDescriptionHolder> projectToDescriptionHolders) {
     final List<String> projectToDescriptions = new ArrayList<>();
@@ -24,6 +24,6 @@ public class ProjectionDispatcherProviderGenerator extends ImportsGenerator {
       projectToDescriptions.add(builder.toString());
     }
 
-    this.input.put("projectToDescriptions", projectToDescriptions);
+//    this.input.put("projectToDescriptions", projectToDescriptions);
   }
 }

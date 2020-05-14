@@ -6,6 +6,14 @@
     padding-right: 0px;
 }
 
+.additional-options .form-group {
+    margin-bottom: .6rem;
+}
+
 .model-settings .card-body {
     min-height: 468px !important;
+}
+
+.cqrs-label {
+    margin-left: 15px;
 }

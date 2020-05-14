@@ -27,7 +27,9 @@ public enum Property {
     AGGREGATES("aggregates", true, false),
     DOMAIN_EVENTS("events", true, false),
     STORAGE_TYPE("storage.type", true, false),
+    CQRS("cqrs", true, false),
     PROJECTIONS("projections", true, false),
+    DATABASE("database", true, false),
     COMMAND_MODEL_DATABASE("command.model.database", true, false),
     QUERY_MODEL_DATABASE("query.model.database", true, false),
     CLUSTER_NODES("cluster.nodes");

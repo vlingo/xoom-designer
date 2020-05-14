@@ -4,13 +4,12 @@ import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
-import io.vlingo.xoom.starter.task.template.code.RestResourceTemplateData;
-import io.vlingo.xoom.starter.task.template.code.RestResourceTemplateDataFactory;
+import io.vlingo.xoom.starter.task.template.code.resource.RestResourceTemplateData;
+import io.vlingo.xoom.starter.task.template.code.resource.RestResourceTemplateDataFactory;
 
 import java.util.List;
 
-import static io.vlingo.xoom.starter.task.Property.PACKAGE;
-import static io.vlingo.xoom.starter.task.Property.REST_RESOURCES;
+import static io.vlingo.xoom.starter.task.Property.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class RestResourceGenerationStep implements TaskExecutionStep {
@@ -25,10 +24,15 @@ public class RestResourceGenerationStep implements TaskExecutionStep {
                 RestResourceTemplateDataFactory.build(basePackage, projectPath, restResourcesData);
 
         templateData.forEach(restResourceData -> {
-            final CodeTemplateParameters parameters = restResourceData.parameters;
+            final CodeTemplateParameters parameters = restResourceData.templateParameters();
             final String code = CodeTemplateProcessor.instance().process(REST_RESOURCE, parameters);
-            context.addOutputResource(restResourceData.file(), code);
+            context.addContent(REST_RESOURCE, restResourceData.file(), code);
         });
+    }
+
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.hasProperty(AGGREGATES);
     }
 
 }

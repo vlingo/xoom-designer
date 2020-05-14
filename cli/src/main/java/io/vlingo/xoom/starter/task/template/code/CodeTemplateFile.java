@@ -16,7 +16,16 @@ public enum CodeTemplateFile {
     STATE_OBJECT("BeanState"),
     PLAIN_STATE("ValueState"),
     DOMAIN_EVENT("DomainEvent"),
+    STATE_STORE_PROVIDER("StateStoreProvider"),
+    OBJECT_STORE_PROVIDER("ObjectStoreProvider"),
+    JOURNAL_PROVIDER("JournalProvider"),
+    QUERY_MODEL_STATE_STORE_PROVIDER("QueryModelStateStoreProvider"),
+    QUERY_MODEL_OBJECT_STORE_PROVIDER("QueryModelObjectStoreProvider"),
+    QUERY_MODEL_JOURNAL_PROVIDER("QueryModelJournalProvider"),
+    STORE_PROVIDER_CONFIGURATION("StoreProviderConfiguration"),
+    STORAGE_CONFIGURATION("StorageConfiguration"),
     PLACEHOLDER_DOMAIN_EVENT("PlaceholderDefinedEvent"),
+    STATE_ADAPTER("StateAdapter"),
     REST_RESOURCE("RestResource");
 
     public final String filename;
