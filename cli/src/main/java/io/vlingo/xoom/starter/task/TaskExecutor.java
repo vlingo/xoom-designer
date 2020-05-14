@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TaskExecutor {
 
-    private static boolean AUTOMATIC_EXIT = false;
+    private static boolean AUTOMATIC_EXIT = true;
     private static final int MAIN_COMMAND_INDEX = 0;
 
     public static void execute(final List<String> args) {
