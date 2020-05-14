@@ -7,10 +7,30 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-import io.vlingo.xoom.starter.task.template.StorageType;
 import org.junit.jupiter.api.Test;
 
+import io.vlingo.xoom.starter.task.template.StorageType;
+
 public class GeneratorsTest {
+
+  @Test
+  public void testCommandModelJournalProvider() {
+    final JournalProviderGenerator generator = new JournalProviderGenerator();
+
+    generator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileDefined"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantDefined"));
+    generator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserDefined"));
+
+    generator.inputOfJournalStoreClassName("io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor");
+
+    generator.inputOf(new EntryAdapterHolder("ProfileDefined"));
+    generator.inputOf(new EntryAdapterHolder("TenantDefined"));
+    generator.inputOf(new EntryAdapterHolder("UserDefined"));
+
+    System.out.println(generator.generate("CommandModelJournalProvider"));
+  }
 
   @Test
   public void testCommandModelStateStoreProviderGenerator() throws Exception {
@@ -56,21 +76,39 @@ public class GeneratorsTest {
   }
 
   @Test
+  public void testEntryAdapterGenerator() throws Exception {
+    final EntryAdapterGenerator profileEntryGenerator = new EntryAdapterGenerator("ProfileDefined");
+    profileEntryGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    profileEntryGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileDefined"));
+    System.out.println(profileEntryGenerator.generate("EntryAdapter"));
+
+    final EntryAdapterGenerator tenantEntryGenerator = new EntryAdapterGenerator("TenantDefined");
+    tenantEntryGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    tenantEntryGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantDefined"));
+    System.out.println(tenantEntryGenerator.generate("EntryAdapter"));
+
+    final EntryAdapterGenerator userEntryGenerator = new EntryAdapterGenerator("UserDefined");
+    userEntryGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    userEntryGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserDefined"));
+    System.out.println(userEntryGenerator.generate("EntryAdapter"));
+  }
+
+  @Test
   public void testStateAdapterGenerator() throws Exception {
-//    final StateAdapterGenerator profileStateGenerator = new StateAdapterGenerator("ProfileState");
-//    profileStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
-//    profileStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileState"));
-//    System.out.println(profileStateGenerator.generate("StateAdapter"));
-//
-//    final StateAdapterGenerator tenantStateGenerator = new StateAdapterGenerator("TenantState");
-//    tenantStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
-//    tenantStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantState"));
-//    System.out.println(tenantStateGenerator.generate("StateAdapter"));
-//
-//    final StateAdapterGenerator userStateGenerator = new StateAdapterGenerator("UserState");
-//    userStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
-//    userStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserState"));
-//    System.out.println(userStateGenerator.generate("StateAdapter"));
+    final StateAdapterGenerator profileStateGenerator = new StateAdapterGenerator("ProfileState");
+    profileStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    profileStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileState"));
+    System.out.println(profileStateGenerator.generate("StateAdapter"));
+
+    final StateAdapterGenerator tenantStateGenerator = new StateAdapterGenerator("TenantState");
+    tenantStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    tenantStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.tenant.TenantState"));
+    System.out.println(tenantStateGenerator.generate("StateAdapter"));
+
+    final StateAdapterGenerator userStateGenerator = new StateAdapterGenerator("UserState");
+    userStateGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    userStateGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserState"));
+    System.out.println(userStateGenerator.generate("StateAdapter"));
   }
 
   @Test
