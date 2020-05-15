@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class ArchetypeMavenOptionsBuilder {
 
+    private static final String DEFAULT_VALUE="not-informed";
     private static final String MAVEN_OPTION_PATTERN = "-D%s=%s ";
     private static ArchetypeMavenOptionsBuilder instance;
 
@@ -37,7 +38,8 @@ public class ArchetypeMavenOptionsBuilder {
 
     private String buildArchetypeOptions(final Properties properties, final Archetype archetype) {
         return archetype.supportedMavenProperties().stream().map(archetypeProperties -> {
-            final String optionValue = properties.get(archetypeProperties.literal()).toString();
+            final String key = archetypeProperties.literal();
+            final String optionValue = properties.getOrDefault(archetypeProperties.literal(), DEFAULT_VALUE).toString();
             return String.format(MAVEN_OPTION_PATTERN, archetypeProperties.toMavenFormat(), optionValue);
         }).collect(Collectors.joining());
     }
