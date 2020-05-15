@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-public class EntryAdapterGenerator extends ImportsGenerator {
+public class EntryAdapterGenerator  {
   public EntryAdapterGenerator(final String sourceClass) {
     super();
 
-    input.put("sourceClass", sourceClass);
+//    input.put("sourceClass", sourceClass);
   }
 }

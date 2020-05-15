@@ -3,7 +3,7 @@ package io.vlingo.xoom.starter.codegeneration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BootstrapGenerator extends ImportsGenerator {
+public class BootstrapGenerator {
   private final List<String> resourcesDeclarations;
   private final List<String> resourcesRoutes;
 
@@ -11,21 +11,21 @@ public class BootstrapGenerator extends ImportsGenerator {
     this.resourcesDeclarations = new ArrayList<>();
     this.resourcesRoutes = new ArrayList<>();
 
-    input.put("appName", appName);
-    input.put("resourcesDeclarations", resourcesDeclarations);
-    input.put("resourcesRoutes", resourcesRoutes);
+//    input.put("appName", appName);
+//    input.put("resourcesDeclarations", resourcesDeclarations);
+//    input.put("resourcesRoutes", resourcesRoutes);
   }
 
   public void inputOfCommandModelJournalProvider(final boolean commandModelJournalProvider) {
-    input.put("commandModelJournalProvider", commandModelJournalProvider);
+//    input.put("commandModelJournalProvider", commandModelJournalProvider);
   }
 
   public void inputOfCommandModelStateStoreProvider(final boolean commandModelStateStoreProvider) {
-    input.put("commandModelStateStoreProvider", commandModelStateStoreProvider);
+//    input.put("commandModelStateStoreProvider", commandModelStateStoreProvider);
   }
 
   public void inputOfProjectionDispatcherProvider(final boolean projectionDispatcherProvider) {
-    input.put("projectionDispatcherProvider", projectionDispatcherProvider);
+//    input.put("projectionDispatcherProvider", projectionDispatcherProvider);
   }
 
   public void inputOfResource(final String resourceType) {

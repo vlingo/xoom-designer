@@ -1,47 +1,38 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.codegeneration.RestResourceCodeGenerator;
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
+import io.vlingo.xoom.starter.task.template.code.resource.RestResourceTemplateData;
+import io.vlingo.xoom.starter.task.template.code.resource.RestResourceTemplateDataFactory;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.List;
+
+import static io.vlingo.xoom.starter.task.Property.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class RestResourceGenerationStep implements TaskExecutionStep {
-
-    private final static String PACKAGE_PATTERN = "%s.%s";
-    private final static String PARENT_PACKAGE_NAME = "resource";
-    private static final String REST_RESOURCES_SEPARATOR = ";";
 
     @Override
     public void process(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
-        final String restResourcesData = context.propertyOf(Property.REST_RESOURCES);
-        final String packageName = resolvePackage(context.propertyOf(Property.PACKAGE));
-        final String absolutePath = resolveAbsolutePath(packageName, projectPath);
+        final String basePackage = context.propertyOf(PACKAGE);
+        final String restResourcesData = context.propertyOf(REST_RESOURCES);
 
-        Arrays.asList(restResourcesData.split(REST_RESOURCES_SEPARATOR))
-                .stream().map(restResourceData -> restResourceData.trim())
-                .forEach(restResourceData -> {
-                    final String className = restResourceData + "Resource.java";
-                    final String fullPath = Paths.get(absolutePath, className).toString();
-                    final String restResourceCode =
-                            RestResourceCodeGenerator.instance().generate(restResourceData,
-                                    packageName);
+        final List<RestResourceTemplateData> templateData =
+                RestResourceTemplateDataFactory.build(basePackage, projectPath, restResourcesData);
 
-                    context.addOutputResource(new File(fullPath), restResourceCode);
-                });
+        templateData.forEach(restResourceData -> {
+            final CodeTemplateParameters parameters = restResourceData.templateParameters();
+            final String code = CodeTemplateProcessor.instance().process(REST_RESOURCE, parameters);
+            context.addContent(REST_RESOURCE, restResourceData.file(), code);
+        });
     }
 
-    private String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
-    }
-
-    private String resolveAbsolutePath(final String basePackage, final String projectPath) {
-        final String basePackagePath = basePackage.replaceAll("\\.", "\\\\");
-        return Paths.get(projectPath, "src", "main", "java", basePackagePath).toString();
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.hasProperty(AGGREGATES);
     }
 
 }

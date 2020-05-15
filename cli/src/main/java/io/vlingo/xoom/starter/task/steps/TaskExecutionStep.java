@@ -13,4 +13,8 @@ public interface TaskExecutionStep {
 
     void process(final TaskExecutionContext context);
 
+    default boolean shouldProcess(final TaskExecutionContext context) {
+        return true;
+    }
+
 }
