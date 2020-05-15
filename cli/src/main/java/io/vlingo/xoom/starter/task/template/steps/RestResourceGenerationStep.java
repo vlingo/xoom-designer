@@ -32,7 +32,7 @@ public class RestResourceGenerationStep implements TaskExecutionStep {
 
     @Override
     public boolean shouldProcess(final TaskExecutionContext context) {
-        return context.hasProperty(AGGREGATES);
+        return context.hasProperty(REST_RESOURCES);
     }
 
 }

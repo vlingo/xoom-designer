@@ -48,7 +48,6 @@ public class PropertiesLoadStep implements TaskExecutionStep {
                 if(!property.isOptional()) {
                     throw exception;
                 }
-                properties.put(property.literal(),  property.defaultValue());
             }
         });
         return properties;
