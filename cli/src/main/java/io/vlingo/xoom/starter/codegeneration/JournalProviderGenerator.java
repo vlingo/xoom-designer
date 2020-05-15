@@ -10,14 +10,14 @@ package io.vlingo.xoom.starter.codegeneration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JournalProviderGenerator extends ImportsGenerator {
+public class JournalProviderGenerator  {
   protected final List<EntryAdapterHolder> entryAdaptersHolder;
 
   public JournalProviderGenerator() {
     super();
 
     this.entryAdaptersHolder = new ArrayList<>();
-    input.put("entryAdapters", entryAdaptersHolder);
+//    input.put("entryAdapters", entryAdaptersHolder);
   }
 
   public void inputOf(final EntryAdapterHolder entryAdapterHolder) {
@@ -25,6 +25,6 @@ public class JournalProviderGenerator extends ImportsGenerator {
   }
 
   public void inputOfJournalStoreClassName(final String journalStoreClassName) {
-    input.put("journalStoreClassName", journalStoreClassName);
+//    input.put("journalStoreClassName", journalStoreClassName);
   }
 }

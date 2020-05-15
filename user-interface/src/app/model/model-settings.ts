@@ -6,12 +6,17 @@ export class ModelSettings {
     public aggregates = new Array<Aggregate>();
     public restResources = new Array<Aggregate>();
     public storageType: String;
+    public useCQRS: Boolean;
     public useProjections: Boolean;
+    public database: String;
     public commandModelDatabase: String;
     public queryModelDatabase: String;
 
     constructor() {
-        this.storageType = "OBJECT_STORE";
+        this.storageType = "STATE_STORE";
+        this.database = "IN_MEMORY";
+        this.commandModelDatabase ="IN_MEMORY";
+        this.queryModelDatabase = "IN_MEMORY";
     }
 
     public domainEventsOf(aggregateId: Number) : Array<DomainEvent> {

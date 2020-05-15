@@ -3,10 +3,8 @@
 #set( $symbol_escape = '\' )
 package ${package};
 
-import io.micronaut.context.ApplicationContext;
 import io.micronaut.runtime.Micronaut;
 import io.vlingo.xoom.VlingoServer;
-import io.vlingo.xoom.server.VlingoScene;
 
 public class Bootstrap {
 

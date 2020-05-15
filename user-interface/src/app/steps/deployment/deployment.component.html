@@ -1,7 +1,7 @@
 <app-step-title title="Deployment"></app-step-title>
 
 <form [formGroup]="deploymentForm">
-    <div class="form-group col-md-2 mb-3">    
+    <div class="form-group col-md-2 mb-3 d-none">    
         <label for="clusterNodes">Total Cluster Nodes*:</label>
         <input id="clusterNodes" 
                 type="text" 
@@ -10,7 +10,7 @@
                 [(ngModel)]="generationSettings.deployment.clusterNodes">
     </div>
 
-    <div class="form-row">
+    <div class="form-row d-none">
         <div class="col-md-1">
             <label for="useGrid">Enable Grid:</label>
         </div>
