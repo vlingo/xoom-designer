@@ -11,6 +11,10 @@ public class ${type}Data {
   public final String id;
   public final String placeholderValue;
 
+  public static ${type}Data empty() {
+    return new ${type}Data("", "");
+  }
+
   public static ${type}Data from(final ${type}State state) {
     return new ${type}Data(state.id, state.placeholderValue);
   }
