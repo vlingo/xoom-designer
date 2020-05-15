@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.starter.codegeneration;
 
-public class ProjectionGenerator extends ImportsGenerator {
+public class ProjectionGenerator {
   public ProjectionGenerator(final String entityType) {
-    input.put("entityType", entityType);
+    //input.put("entityType", entityType);
   }
 }

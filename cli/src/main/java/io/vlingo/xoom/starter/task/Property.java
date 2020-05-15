@@ -38,7 +38,7 @@ public enum Property {
     private final boolean optional;
     private final boolean supportedByMaven;
 
-    public static final String DEFAULT_VALUE = "not-informed";
+    public static final String DEFAULT_VALUE = "";
 
     Property(final String key) {
         this(key, true);
@@ -64,10 +64,6 @@ public enum Property {
 
     public boolean isOptional() {
         return optional;
-    }
-
-    public String defaultValue() {
-        return DEFAULT_VALUE;
     }
 
     public String toMavenFormat() {
