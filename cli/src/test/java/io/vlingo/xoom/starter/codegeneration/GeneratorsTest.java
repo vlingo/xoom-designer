@@ -159,6 +159,25 @@ public class GeneratorsTest {
   }
 
   @Test
+  public void testEventBasedProjectionGenerator() {
+    final ProjectionGenerator projectionGenerator = new ProjectionGenerator("User");
+    projectionGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    projectionGenerator.inputOf(new ImportHolder("com.beyond5.auth.resource.data.UserData"));
+    projectionGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserDefined"));
+    projectionGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.user.UserPasswordChanged"));
+    System.out.println(projectionGenerator.generate("EventBasedProjection"));
+  }
+
+  @Test
+  public void testOperationProjectionGenerator() {
+    final ProjectionGenerator projectionGenerator = new ProjectionGenerator("Profile");
+    projectionGenerator.inputOfPackageName("com.beyond5.auth.infra.persistence");
+    projectionGenerator.inputOf(new ImportHolder("com.beyond5.auth.resource.data.ProfileData"));
+    projectionGenerator.inputOf(new ImportHolder("com.beyond5.auth.model.profile.ProfileState"));
+    System.out.println(projectionGenerator.generate("OperationBasedProjection"));
+  }
+
+  @Test
   public void testBeanState() throws Exception {
     System.out.println(StateCodeGenerator.instance().generate("ProfileState", "com.beyond5.auth.model.profile", StorageType.OBJECT_STORE));
   }
