@@ -21,9 +21,9 @@ public class TemplateGenerationManager implements TaskManager {
     }
 
     private void processSteps(final TaskExecutionContext context) {
-        Configuration.TEMPLATE_GENERATION_STEPS.forEach(step -> {
-            step.process(context);
-        });
+        Configuration.TEMPLATE_GENERATION_STEPS.stream()
+                .filter(step -> step.shouldProcess(context))
+                .forEach(step -> step.process(context));
     }
 
 }

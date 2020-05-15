@@ -13,45 +13,59 @@
                     <app-multiple-selection #multipleSelection [settings]="restResourcesSettings"></app-multiple-selection>
                 </div>
 
-                <div class="form-group col-md-12">
-                    <label class for="storageOptions">Storage*:</label>
-                    <div *ngFor="let option of storageOptions();" class="form-check ml-2">
-                        <input type="radio" 
-                            class="form-check-input" 
-                            name="storageOptions" 
-                            id="option.value" 
-                            value="option.value" 
-                            (click)="onStorageTypeSelection(option.value)"
-                            [checked]="generationSettings.model.storageType === option.value">
-                        <label class="form-check-label" for="option.value">{{option.name}}</label>
-                    </div>
+                <div class="form-group col-md-12" >
+                    <label class for="storageOptions">Storage:</label>
+                    <select #storageOption class="form-control" [(ngModel)]="generationSettings.model.database" (change)="onStorageTypeSelection(storageOption.value)">
+                        <option *ngFor="let option of storageOptions();" [ngValue]="option.value">{{option.name}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-12" >
+                    <label class for="commandModelDatabase">Database:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.database" [disabled]="generationSettings.model.useCQRS">
+                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                    </select>
                 </div>
                 
-                <div class="form-group col-md-12">
-                    <label class for="storageOptions">CQRS:</label>
-                    <div class="form-check ml-2">
-                        <input id="projections" 
-                                type="checkbox" 
-                                class="form-check-input" 
-                                value="true" 
-                                [(ngModel)]="generationSettings.model.useProjections">
-                        <label class="form-check-label" for="projections">Projections</label>
+                <div class="form-row">
+                    <div class="col-md-5 cqrs-label">
+                        <label for="useGrid">Enable CQRS:</label>
+                    </div>
+                    <div class="col-md-1 pt-1 ml-1">
+                        <input type="checkbox" 
+                        class="form-check-input" 
+                        (click)="onCQRSClick($event)"
+                        [checked]="generationSettings.model.useCQRS">
                     </div>
                 </div>
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-12" *ngIf="generationSettings.model.useCQRS">
                     <label class for="commandModelDatabase">Command Model Database:</label>
                     <select class="form-control" [(ngModel)]="generationSettings.model.commandModelDatabase">
                         <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
                     </select>
                 </div>
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-12" *ngIf="generationSettings.model.useCQRS">
                     <label class for="queryModelDatabase">Query Model Database:</label>
                     <select class="form-control" [(ngModel)]="generationSettings.model.queryModelDatabase">
                         <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
                     </select>
                 </div>
+
+                <div class="form-row d-none" *ngIf="generationSettings.model.useCQRS">
+                    <div class="col-md-6 cqrs-label">
+                        <label class for="storageOptions">Include Projections:</label>
+                    </div>        
+                    <div class="col-md-1 pt-1 ml-3">
+                        <input id="projections" 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                value="true" 
+                                [(ngModel)]="generationSettings.model.useProjections">
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

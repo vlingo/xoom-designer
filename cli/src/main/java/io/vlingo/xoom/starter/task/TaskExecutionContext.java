@@ -14,6 +14,7 @@ import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 
 import static io.vlingo.xoom.starter.task.Property.*;
 
@@ -25,7 +26,7 @@ public class TaskExecutionContext {
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
-    private final List<OutputResource> outputResources = new ArrayList<>();
+    private final List<Content> contents = new ArrayList<>();
 
     public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
         return new TaskExecutionContext(optionValues);
@@ -53,8 +54,8 @@ public class TaskExecutionContext {
         this.process = process;
     }
 
-    public void addOutputResource(final File file, final String content) {
-        this.outputResources.add(OutputResource.of(file, content));
+    public void addContent(final Object subject, final File file, final String text) {
+        this.contents.add(Content.with(subject, file, text));
     }
 
     public void onConfiguration(final Map<String, String> configurations) {
@@ -85,8 +86,13 @@ public class TaskExecutionContext {
         return this.configuration.get(key);
     }
 
-    public String propertyOf(final Property property) {
-        return properties != null ? properties.getProperty(property.literal()) : "";
+    public <T> T propertyOf(final Property property) {
+        return (T) propertyOf(property, value -> value);
+    }
+
+    public <T> T propertyOf(final Property property, final Function<String, T> mapper) {
+        final String value = properties.getProperty(property.literal());
+        return (T) mapper.apply(value);
     }
 
     public String optionValueOf(final OptionName optionName) {
@@ -107,12 +113,18 @@ public class TaskExecutionContext {
         return args;
     }
 
-    public List<OutputResource> outputResources() {
-        return outputResources;
+    public List<Content> contents() {
+        return contents;
     }
 
     public String projectPath() {
-        return Paths.get(propertyOf(TARGET_FOLDER), propertyOf(ARTIFACT_ID)).toString();
+        final String artifactId = propertyOf(ARTIFACT_ID);
+        final String targetFolder = propertyOf(TARGET_FOLDER);
+        return Paths.get(targetFolder, artifactId).toString();
+    }
+
+    public boolean hasProperty(final Property property) {
+        return this.propertyOf(property) != null && !this.<String>propertyOf(property).trim().isEmpty();
     }
 
 }
