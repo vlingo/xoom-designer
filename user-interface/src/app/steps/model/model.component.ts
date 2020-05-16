@@ -120,6 +120,14 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     ];
   }
 
+  projectionOptions() {
+    return [
+      {name: "Not Applicable", value: "NOT_APPLICABLE"},
+      {name: "Event Based", value: "EVENT_BASED"},
+      {name: "Operation Based", value: "OPERATION_BASED"}
+    ];
+  }
+
   useCQRS() {
     return this.generationSettings.model.useCQRS;
   }

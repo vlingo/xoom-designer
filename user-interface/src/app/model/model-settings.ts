@@ -7,7 +7,7 @@ export class ModelSettings {
     public restResources = new Array<Aggregate>();
     public storageType: String;
     public useCQRS: Boolean;
-    public useProjections: Boolean;
+    public projections: String;
     public database: String;
     public commandModelDatabase: String;
     public queryModelDatabase: String;
@@ -17,6 +17,7 @@ export class ModelSettings {
         this.database = "IN_MEMORY";
         this.commandModelDatabase ="IN_MEMORY";
         this.queryModelDatabase = "IN_MEMORY";
+        this.projections = "NOT_APPLICABLE";
     }
 
     public domainEventsOf(aggregateId: Number) : Array<DomainEvent> {

@@ -29,17 +29,15 @@ import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 import static io.vlingo.xoom.starter.task.template.code.infrastructure.ModelClassification.*;
 
-public class InfrastructureTemplateDataTest {
+public class InfrastructureTemplateDataFactoryTest {
 
     @Test
     public void testInfraTemplateDataOnStatefulSingleModel() {
-        final InfrastructureTemplateData templateData =
-                InfrastructureTemplateData.with("io.vlingo.xoomapp", PROJECT_PATH, false,
+        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+                InfrastructureTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, false,
                         StorageType.STATE_STORE, DatabaseType.IN_MEMORY, contents());
 
         //General Assertions
-
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData = templateData.collectAll();
 
         Assertions.assertEquals(3, allTemplatesData.size());
         Assertions.assertEquals(2, allTemplatesData.get(STATE_ADAPTER).size());
@@ -100,13 +98,11 @@ public class InfrastructureTemplateDataTest {
 
     @Test
     public void testInfraTemplateDataOnStatefulCQRSModel() {
-        final InfrastructureTemplateData templateData =
-                InfrastructureTemplateData.with("io.vlingo.xoomapp", PROJECT_PATH, true,
+        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+                InfrastructureTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, true,
                         StorageType.STATE_STORE, DatabaseType.IN_MEMORY, contents());
 
         //General Assertions
-
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData = templateData.collectAll();
 
         Assertions.assertEquals(3, allTemplatesData.size());
         Assertions.assertEquals(2, allTemplatesData.get(STATE_ADAPTER).size());

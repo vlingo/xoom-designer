@@ -39,17 +39,17 @@ public class InfrastructureGenerationStepTest {
         new InfrastructureGenerationStep().process(context);
 
         Assertions.assertEquals(9, context.contents().size());
-        Assertions.assertEquals("StoreProviderConfiguration.java", context.contents().get(4).file.getName());
-        Assertions.assertEquals("AuthorStateAdapter.java", context.contents().get(5).file.getName());
-        Assertions.assertEquals("BookStateAdapter.java", context.contents().get(6).file.getName());
-        Assertions.assertEquals("CommandModelStateStoreProvider.java", context.contents().get(7).file.getName());
-        Assertions.assertEquals("QueryModelStateStoreProvider.java", context.contents().get(8).file.getName());
+        Assertions.assertEquals("AuthorStateAdapter.java", context.contents().get(4).file.getName());
+        Assertions.assertEquals("BookStateAdapter.java", context.contents().get(5).file.getName());
+        Assertions.assertEquals("CommandModelStateStoreProvider.java", context.contents().get(6).file.getName());
+        Assertions.assertEquals("QueryModelStateStoreProvider.java", context.contents().get(7).file.getName());
+        Assertions.assertEquals("StoreProviderConfiguration.java", context.contents().get(8).file.getName());
 
-        Assertions.assertTrue(context.contents().get(4).text.contains("class StoreProviderConfiguration"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
-        Assertions.assertTrue(context.contents().get(6).text.contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
-        Assertions.assertTrue(context.contents().get(7).text.contains("class CommandModelStateStoreProvider"));
-        Assertions.assertTrue(context.contents().get(8).text.contains("class QueryModelStateStoreProvider"));
+        Assertions.assertTrue(context.contents().get(4).text.contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
+        Assertions.assertTrue(context.contents().get(6).text.contains("class CommandModelStateStoreProvider"));
+        Assertions.assertTrue(context.contents().get(7).text.contains("class QueryModelStateStoreProvider"));
+        Assertions.assertTrue(context.contents().get(8).text.contains("class StoreProviderConfiguration"));
     }
 
     private void loadProperties(final TaskExecutionContext context) {
@@ -93,7 +93,5 @@ public class InfrastructureGenerationStepTest {
                     "public class Book { \\n" +
                     "... \\n" +
                     "}";
-
-
 
 }

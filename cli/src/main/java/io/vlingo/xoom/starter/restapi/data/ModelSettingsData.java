@@ -20,7 +20,7 @@ public class ModelSettingsData {
 
     public final String storageType;
     public final boolean useCQRS;
-    public final boolean useProjections;
+    public final String projections;
     public final String database;
     public final String commandModelDatabase;
     public final String queryModelDatabase;
@@ -29,7 +29,7 @@ public class ModelSettingsData {
 
     public ModelSettingsData(final String storageType,
                              final boolean useCQRS,
-                             final boolean useProjections,
+                             final String projections,
                              final String database,
                              final String commandModelDatabase,
                              final String queryModelDatabase,
@@ -37,7 +37,7 @@ public class ModelSettingsData {
                              final List<AggregateData> restResources) {
         this.storageType = storageType;
         this.useCQRS = useCQRS;
-        this.useProjections = useProjections;
+        this.projections = projections;
         this.database = database;
         this.commandModelDatabase = commandModelDatabase;
         this.queryModelDatabase = queryModelDatabase;
@@ -51,7 +51,7 @@ public class ModelSettingsData {
                 AGGREGATES.literal(), flatAggregates(),
                 REST_RESOURCES.literal(), flatRestResources(),
                 CQRS.literal(), String.valueOf(useCQRS),
-                PROJECTIONS.literal(), String.valueOf(useProjections),
+                PROJECTIONS.literal(), projections,
                 DATABASE.literal(), database,
                 COMMAND_MODEL_DATABASE.literal(), commandModelDatabase,
                 QUERY_MODEL_DATABASE.literal(), queryModelDatabase

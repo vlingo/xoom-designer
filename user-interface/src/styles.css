@@ -21,6 +21,7 @@ label, input, button, h5, select, .multiselect-dropdown {
 
 .model-settings .card-body {
     min-height: 468px !important;
+    padding: 0 1.25rem 0 1.25rem;
 }
 
 .multiselect-dropdown .dropdown-btn {

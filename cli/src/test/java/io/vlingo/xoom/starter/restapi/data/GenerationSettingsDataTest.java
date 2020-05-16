@@ -30,7 +30,7 @@ public class GenerationSettingsDataTest {
         );
 
         final ModelSettingsData model =
-                new ModelSettingsData("STATE_STORE", true, true, "None",
+                new ModelSettingsData("STATE_STORE", true, "NOT_APPLICABLE", "None",
                         "MariaDB", "Postgres", aggregates, restResources);
 
         final DeploymentSettingsData deployment =
@@ -67,7 +67,7 @@ public class GenerationSettingsDataTest {
         Assertions.assertEquals(CQRS.literal(), args.get(17));
         Assertions.assertEquals("true", args.get(18));
         Assertions.assertEquals(PROJECTIONS.literal(), args.get(19));
-        Assertions.assertEquals("true", args.get(20));
+        Assertions.assertEquals("NOT_APPLICABLE", args.get(20));
         Assertions.assertEquals(DATABASE.literal(), args.get(21));
         Assertions.assertEquals("None", args.get(22));
         Assertions.assertEquals(COMMAND_MODEL_DATABASE.literal(), args.get(23));

@@ -7,7 +7,6 @@
     <div class="col-md-3">
         <div class="card additional-options">
             <div class="card-body">
-
                 <div class="form-group col-md-12">
                     <label class for="restResources">REST Resources:</label>
                     <app-multiple-selection #multipleSelection [settings]="restResourcesSettings"></app-multiple-selection>
@@ -52,20 +51,13 @@
                         <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
                     </select>
                 </div>
-
-                <div class="form-row d-none" *ngIf="generationSettings.model.useCQRS">
-                    <div class="col-md-6 cqrs-label">
-                        <label class for="storageOptions">Include Projections:</label>
-                    </div>        
-                    <div class="col-md-1 pt-1 ml-3">
-                        <input id="projections" 
-                                type="checkbox" 
-                                class="form-check-input" 
-                                value="true" 
-                                [(ngModel)]="generationSettings.model.useProjections">
-                    </div>
+                
+                <div class="form-group col-md-12" *ngIf="generationSettings.model.useCQRS">
+                    <label class for="projection">Projections:</label>
+                    <select class="form-control" [(ngModel)]="generationSettings.model.projections">
+                        <option *ngFor="let option of projectionOptions();" [ngValue]="option.value">{{option.name}}</option>
+                    </select>
                 </div>
-
             </div>
         </div>
     </div>

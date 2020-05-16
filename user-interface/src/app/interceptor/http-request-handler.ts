@@ -39,7 +39,6 @@ export class HttpRequestHandler implements HttpInterceptor {
         this.hideLoader();
         console.log(error);
         this.toastrService.error("The requested operation failed. Please contact the support here: https://github.com/vlingo/vlingo-xoom-starter/issues");
-        
     }
 
     private showLoader(): void {
