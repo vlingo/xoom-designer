@@ -16,7 +16,7 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
-import io.vlingo.xoom.starter.task.template.code.infrastructure.InfrastructureTemplateData;
+import io.vlingo.xoom.starter.task.template.code.infrastructure.InfrastructureTemplateDataFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -32,8 +32,8 @@ public class InfrastructureGenerationStep implements TaskExecutionStep {
         final DatabaseType databaseType = context.propertyOf(Property.DATABASE, DatabaseType::valueOf);
 
         final Map<CodeTemplateStandard, List<TemplateData>> infraTemplatesData =
-                InfrastructureTemplateData.with(basePackage, projectPath, enableCQRS,
-                        storageType, databaseType, context.contents()).collectAll();
+                InfrastructureTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
+                        storageType, databaseType, context.contents());
 
         infraTemplatesData.forEach(((standard, templatesData) -> {
             templatesData.forEach(templateData -> {
