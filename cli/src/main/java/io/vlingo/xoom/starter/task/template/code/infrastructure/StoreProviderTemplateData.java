@@ -14,9 +14,12 @@ import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
+import static io.vlingo.xoom.starter.task.template.code.infrastructure.ModelClassification.*;
 
 public class StoreProviderTemplateData extends TemplateData {
 
@@ -26,18 +29,36 @@ public class StoreProviderTemplateData extends TemplateData {
     public final String providerName;
     public final CodeTemplateParameters templateParameters;
 
-    public StoreProviderTemplateData(final String packageName,
-                                     final String absolutePath,
-                                     final StorageType storageType,
-                                     final DatabaseType databaseType,
-                                     final ModelClassification modelClassification,
-                                     final List<ImportParameter> importParameters,
-                                     final List<TemplateData> stateAdaptersTemplateData) {
+    public static List<TemplateData> from(final String projectPath,
+                                          final String infrastructurePackage,
+                                          final boolean supportCQRS,
+                                          final StorageType storageType,
+                                          final DatabaseType databaseType,
+                                          final List<ImportParameter> importParameters,
+                                          final List<TemplateData> stateAdaptersTemplateData) {
+        final List<ModelClassification> modelClassifications =
+                supportCQRS ? Arrays.asList(COMMAND, QUERY) : Arrays.asList(SINGLE);
+
+        return modelClassifications.stream()
+                .map(classification -> new StoreProviderTemplateData(
+                        projectPath, infrastructurePackage, storageType,
+                        databaseType, classification,
+                        importParameters, stateAdaptersTemplateData
+                )).collect(Collectors.toList());
+    }
+
+    private StoreProviderTemplateData(final String projectPath,
+                                      final String infrastructurePackage,
+                                      final StorageType storageType,
+                                      final DatabaseType databaseType,
+                                      final ModelClassification modelClassification,
+                                      final List<ImportParameter> importParameters,
+                                      final List<TemplateData> stateAdaptersTemplateData) {
         this.providerName = resolveStoreProviderName(storageType, modelClassification);
-        this.file = buildFile(absolutePath);
+        this.file = buildFile(projectPath, infrastructurePackage);
         this.templateParameters =
-                loadParameters(packageName, storageType, databaseType, modelClassification,
-                        importParameters, stateAdaptersTemplateData);
+                loadParameters(infrastructurePackage, storageType, databaseType,
+                        modelClassification, importParameters, stateAdaptersTemplateData);
     }
 
     private CodeTemplateParameters loadParameters(final String packageName,
@@ -70,7 +91,8 @@ public class StoreProviderTemplateData extends TemplateData {
         return modelClassification.title + storageType.title + PROVIDER_NAME_SUFFIX;
     }
 
-    private File buildFile(final String absolutePath) {
+    private File buildFile(final String projectPath, final String infrastructurePackage) {
+        final String absolutePath = resolveAbsolutePath(infrastructurePackage, projectPath);
         return new File(Paths.get(absolutePath, providerName + ".java").toString());
     }
 
