@@ -5,10 +5,11 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.template.code.infrastructure;
+package io.vlingo.xoom.starter.task.template.storage;
 
 import io.vlingo.xoom.starter.DatabaseType;
 import io.vlingo.xoom.starter.task.template.StorageType;
+import io.vlingo.xoom.starter.task.template.code.storage.StoreInformation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

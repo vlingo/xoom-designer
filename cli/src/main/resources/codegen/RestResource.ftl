@@ -7,11 +7,11 @@ import io.vlingo.xoom.resource.annotations.Resource;
 import io.vlingo.xoom.server.VlingoScene;
 
 @Resource
-public class ${aggregateName}Resource implements Endpoint {
+public class ${resourceName} implements Endpoint {
 
     private final World world;
 
-    public ${aggregateName}Resource(final VlingoScene vlingoScene) {
+    public ${resourceName}(final VlingoScene vlingoScene) {
         this.world = vlingoScene.getWorld();
     }
 

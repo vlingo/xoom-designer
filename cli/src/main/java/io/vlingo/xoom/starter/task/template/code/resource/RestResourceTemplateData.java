@@ -10,10 +10,9 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.nio.file.Paths;
 
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.AGGREGATE_NAME;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class RestResourceTemplateData extends TemplateData {
 
@@ -39,16 +38,19 @@ public class RestResourceTemplateData extends TemplateData {
         return parameters;
     }
 
-    public File file() {
-        return new File(Paths.get(absolutePath, aggregateName + "Resource.java").toString());
-    }
-
     private CodeTemplateParameters loadParameters() {
-        return CodeTemplateParameters.with(AGGREGATE_NAME, aggregateName).and(PACKAGE_NAME, packageName);
+        return CodeTemplateParameters
+                .with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
+                .and(AGGREGATE_NAME, aggregateName)
+                .and(PACKAGE_NAME, packageName);
     }
 
     private String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
+    }
+
+    public File file() {
+        return buildFile(REST_RESOURCE, absolutePath, aggregateName);
     }
 
 }
