@@ -7,27 +7,27 @@ import ${import.fullyQualifiedClassName};
 import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 
-public class ${entityType}ProjectionActor extends StateStoreProjectionActor<${entityType}Data> {
+public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private String becauseOf;
 
-  public ${entityType}ProjectionActor() {
+  public ${projectionName}() {
     super(QueryModelStateStoreProvider.instance().store);
   }
 
   @Override
-  protected ${entityType}Data currentDataFor(Projectable projectable) {
+  protected ${dataName} currentDataFor(Projectable projectable) {
     becauseOf = projectable.becauseOf()[0];
 
     // TODO: set state and current
-    final ${entityType}State state = projectable.object();
-    final ${entityType}Data current = ${entityType}Data.from(state);
+    final ${stateName} state = projectable.object();
+    final ${dataName} current = ${dataName}.from(state);
 
     return current;
   }
 
   @Override
-  protected ${entityType}Data merge(${entityType}Data previousData, int previousVersion, ${entityType}Data currentData, int currentVersion) {
-    ${entityType}Data merged;
+  protected ${dataName} merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion) {
+    ${dataName} merged;
 
     switch (becauseOf) {
     case "CreationCase1":   // TODO: replace with operation text

@@ -8,6 +8,8 @@
 package io.vlingo.xoom.starter.task.template.code;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ImportParameter {
 
@@ -15,6 +17,10 @@ public class ImportParameter {
 
     public ImportParameter(final String qualifiedClassName) {
         this.qualifiedClassName = qualifiedClassName;
+    }
+
+    public static List<ImportParameter> of(final String ...qualifiedClassNames) {
+        return Stream.of(qualifiedClassNames).map(ImportParameter::new).collect(Collectors.toList());
     }
 
     public static ImportParameter findImportParameter(final String className, final List<ImportParameter> importParameters) {

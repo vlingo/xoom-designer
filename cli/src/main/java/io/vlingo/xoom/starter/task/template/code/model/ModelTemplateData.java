@@ -13,7 +13,6 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
@@ -70,40 +69,29 @@ public class ModelTemplateData extends TemplateData {
         return CodeTemplateParameters.with(AGGREGATE_PROTOCOL_NAME, name)
                 .and(STORAGE_TYPE, storageType)
                 .and(PACKAGE_NAME, packageName)
-                .and(STATE_NAME, stateName())
-                .and(PLACEHOLDER_DEFINED_EVENT_NAME, placeholderEventName());
+                .and(ENTITY_NAME, AGGREGATE.resolveClassname(name))
+                .and(STATE_NAME, STATE.resolveClassname(name))
+                .and(DOMAIN_EVENT_NAME, PLACEHOLDER_DOMAIN_EVENT.resolveClassname(name));
     }
 
     private String resolvePackage(final String basePackage) {
         return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME, name).toLowerCase();
     }
 
-    private String stateName() {
-        return name + "State";
-    }
-
-    private String placeholderEventName() {
-        return name + "PlaceholderDefined";
-    }
-
     private File protocolFile() {
-        return buildFile(name);
+        return buildFile(AGGREGATE_PROTOCOL, absolutePath, name);
     }
 
     private File aggregateFile() {
-        return buildFile(name + "Entity");
+        return buildFile(AGGREGATE, absolutePath, name);
     }
 
     private File stateFile() {
-        return buildFile(name + "State");
+        return buildFile(STATE, absolutePath, name);
     }
 
     private File placeholderEventFile() {
-        return buildFile(placeholderEventName());
-    }
-
-    private File buildFile(final String fileName) {
-        return new File(Paths.get(absolutePath, fileName + ".java").toString());
+        return buildFile(PLACEHOLDER_DOMAIN_EVENT, absolutePath, name);
     }
 
     @Override

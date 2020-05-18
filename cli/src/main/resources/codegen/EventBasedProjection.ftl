@@ -13,20 +13,19 @@ import io.vlingo.lattice.model.projection.Projectable;
 import io.vlingo.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.symbio.Entry;
 
-public class ${entityType}ProjectionActor extends StateStoreProjectionActor<${entityType}Data> {
-  private static final ${entityType}Data Empty = ${entityType}Data.empty();
+public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
+  private static final ${dataName} Empty = ${dataName}.empty();
 
   private String dataId;
   private final List<IdentifiedDomainEvent> events;
 
-  public ${entityType}ProjectionActor() {
+  public ${projectionName}() {
     super(QueryModelStateStoreProvider.instance().store);
-
     this.events = new ArrayList<>(2);
   }
 
   @Override
-  protected ${entityType}Data currentDataFor(final Projectable projectable) {
+  protected ${dataName} currentDataFor(final Projectable projectable) {
     return Empty;
   }
 
@@ -37,10 +36,10 @@ public class ${entityType}ProjectionActor extends StateStoreProjectionActor<${en
   }
 
   @Override
-  protected ${entityType}Data merge(
-      final ${entityType}Data previousData,
+  protected ${dataName} merge(
+      final ${dataName} previousData,
       final int previousVersion,
-      final ${entityType}Data currentData,
+      final ${dataName} currentData,
       final int currentVersion) {
 
     if (previousVersion == currentVersion) {

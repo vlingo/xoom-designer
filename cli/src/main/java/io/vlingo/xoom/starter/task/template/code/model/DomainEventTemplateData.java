@@ -8,6 +8,7 @@
 package io.vlingo.xoom.starter.task.template.code.model;
 
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class DomainEventTemplateData extends TemplateData {
     }
 
     public File file() {
-        return new File(Paths.get(absolutePath, name + ".java").toString());
+        return buildFile(CodeTemplateStandard.DOMAIN_EVENT, absolutePath, name);
     }
 
 }

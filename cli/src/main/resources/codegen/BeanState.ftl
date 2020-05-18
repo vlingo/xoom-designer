@@ -2,12 +2,12 @@ package ${packageName};
 
 import io.vlingo.symbio.store.object.StateObject;
 
-public final class ${stateClass} extends StateObject {
+public final class ${stateName} extends StateObject {
   public final String id;
   private String placeholderValue;
 
-  public static ${stateClass} identifiedBy(final String id) {
-    return new ${stateClass}(id);
+  public static ${stateName} identifiedBy(final String id) {
+    return new ${stateName}(id);
   }
 
   public boolean doesNotExist() {
@@ -26,26 +26,26 @@ public final class ${stateClass} extends StateObject {
     return placeholderValue;
   }
 
-  public ${stateClass} withPlaceholderValue(final String value) {
-    return new ${stateClass}(id, value);
+  public ${stateName} withPlaceholderValue(final String value) {
+    return new ${stateName}(id, value);
   }
 
-  ${stateClass}(final long persistenceId, final long version, final String id, final String value) {
+  ${stateName}(final long persistenceId, final long version, final String id, final String value) {
     super(persistenceId, version);
     this.id = id;
     this.placeholderValue = value;
   }
 
-  ${stateClass}(final String id, final String value) {
+  ${stateName}(final String id, final String value) {
     this.id = id;
     this.placeholderValue = value;
   }
 
-  private ${stateClass}(final String id) {
+  private ${stateName}(final String id) {
     this(Unidentified, 0, id, null);
   }
 
-  private ${stateClass}() {
+  private ${stateName}() {
     this(Unidentified, 0, null, null);
   }
 }

@@ -16,12 +16,12 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
-import io.vlingo.xoom.starter.task.template.code.infrastructure.InfrastructureTemplateDataFactory;
+import io.vlingo.xoom.starter.task.template.code.storage.StorageTemplateDataFactory;
 
 import java.util.List;
 import java.util.Map;
 
-public class InfrastructureGenerationStep implements TaskExecutionStep {
+public class StorageGenerationStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
@@ -31,11 +31,11 @@ public class InfrastructureGenerationStep implements TaskExecutionStep {
         final StorageType storageType = context.propertyOf(Property.STORAGE_TYPE, StorageType::of);
         final DatabaseType databaseType = context.propertyOf(Property.DATABASE, DatabaseType::valueOf);
 
-        final Map<CodeTemplateStandard, List<TemplateData>> infraTemplatesData =
-                InfrastructureTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
+        final Map<CodeTemplateStandard, List<TemplateData>> storageTemplatesData =
+                StorageTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
                         storageType, databaseType, context.contents());
 
-        infraTemplatesData.forEach(((standard, templatesData) -> {
+        storageTemplatesData.forEach(((standard, templatesData) -> {
             templatesData.forEach(templateData -> {
                 final CodeTemplateParameters parameters = templateData.templateParameters();
                 final String code = CodeTemplateProcessor.instance().process(standard, parameters);

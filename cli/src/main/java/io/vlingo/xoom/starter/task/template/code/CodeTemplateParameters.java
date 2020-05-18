@@ -26,7 +26,7 @@ public class CodeTemplateParameters {
         return this;
     }
 
-    public <T> T from(final CodeTemplateParameter parameter) {
+    public <T> T find(final CodeTemplateParameter parameter) {
         return (T) this.parameters.get(parameter.token);
     }
 
