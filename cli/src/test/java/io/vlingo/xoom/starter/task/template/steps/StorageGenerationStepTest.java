@@ -17,10 +17,9 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.AGGREGATE;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 
-public class InfrastructureGenerationStepTest {
+public class StorageGenerationStepTest {
 
     private static final String HOME_DIRECTORY = Terminal.supported().isWindows() ? "D:\\projects" : "/home";
     private static final String PROJECT_PATH = Paths.get(HOME_DIRECTORY, "xoom-app").toString();
@@ -29,14 +28,14 @@ public class InfrastructureGenerationStepTest {
                     "io", "vlingo", "xoomapp", "model").toString();
 
     @Test
-    public void testInfrastructureGeneration() {
+    public void testStorageGeneration() {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
         loadProperties(context);
         loadContents(context);
 
-        new InfrastructureGenerationStep().process(context);
+        new StorageGenerationStep().process(context);
 
         Assertions.assertEquals(9, context.contents().size());
         Assertions.assertEquals("AuthorStateAdapter.java", context.contents().get(4).file.getName());
@@ -66,8 +65,8 @@ public class InfrastructureGenerationStepTest {
     private void loadContents(final TaskExecutionContext context) {
         context.addContent(STATE, new File(Paths.get(MODEL_PACKAGE_PATH, "author", "AuthorState.java").toString()), BOOK_STATE_CONTENT_TEXT);
         context.addContent(STATE, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "BookState.java").toString()), BOOK_STATE_CONTENT_TEXT);
-        context.addContent(AGGREGATE, new File(Paths.get(MODEL_PACKAGE_PATH, "author", "AuthorEntity.java").toString()), AUTHOR_CONTENT_TEXT);
-        context.addContent(AGGREGATE, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "BookEntity.java").toString()), BOOK_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "author", "Author.java").toString()), AUTHOR_CONTENT_TEXT);
+        context.addContent(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "Book.java").toString()), BOOK_CONTENT_TEXT);
     }
 
     private static final String AUTHOR_STATE_CONTENT_TEXT =
@@ -84,13 +83,13 @@ public class InfrastructureGenerationStepTest {
 
     private static final String AUTHOR_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model; \\n" +
-                    "public class Author { \\n" +
+                    "public interface Author { \\n" +
                     "... \\n" +
                     "}";
 
     private static final String BOOK_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model; \\n" +
-                    "public class Book { \\n" +
+                    "public interface Book { \\n" +
                     "... \\n" +
                     "}";
 

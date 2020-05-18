@@ -108,15 +108,20 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   storageOptions() {
     return [
-      {name: "State Store", value: "STATE_STORE"},
-      {name: "Object Store", value: "OBJECT_STORE"},
-      {name: "Journal", value: "JOURNAL"}
+      {name: "State Store", value: "STATE_STORE"}
+      // {name: "Object Store", value: "OBJECT_STORE"},
+      // {name: "Journal", value: "JOURNAL"}
     ];
   }
 
   databaseVendors() {
     return [
       {name: "In Memory", value: "IN_MEMORY"}
+      // {name: "Postgres", value: "POSTGRES"},
+      // {name: "HSQLDB", value: "HSQLDB"},
+      // {name: "MariaDB", value: "MARIADB"},
+      // {name: "MySQL", value: "MYSQL"},
+      // {name: "YugaByte", value: "YUGABYTE"}
     ];
   }
 

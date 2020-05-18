@@ -6,18 +6,18 @@ import java.util.List;
 import io.vlingo.common.Completes;
 import io.vlingo.lattice.model.object.ObjectEntity;
 
-public final class ${aggregateProtocolName}Entity extends ObjectEntity<${stateClass}> implements ${aggregateProtocolName} {
-  private ${stateClass} state;
+public final class ${entityName} extends ObjectEntity<${stateName}> implements ${aggregateProtocolName} {
+  private ${stateName} state;
 
-  public ${aggregateProtocolName}Entity() {
+  public ${entityName}() {
     super(); // uses GridAddress id as unique identity
 
-    this.state = ${stateClass}.identifiedBy(id);
+    this.state = ${stateName}.identifiedBy(id);
   }
 
-  public Completes<${stateClass}> definePlaceholder(final String value) {
+  public Completes<${stateName}> definePlaceholder(final String value) {
     state.withPlaceholderValue(value);
-    return apply(state, new ${placeholderDefinedEvent}(state.id, value), () -> state);
+    return apply(state, new ${domainEventName}(state.id, value), () -> state);
   }
 
   //=====================================
@@ -25,17 +25,17 @@ public final class ${aggregateProtocolName}Entity extends ObjectEntity<${stateCl
   //=====================================
 
   @Override
-  protected ${stateClass} stateObject() {
+  protected ${stateName} stateObject() {
     return state;
   }
 
   @Override
-  protected void stateObject(final ${stateClass} stateObject) {
+  protected void stateObject(final ${stateName} stateObject) {
     this.state = stateObject;
   }
 
   @Override
-  protected Class<${stateClass}> stateObjectType() {
-    return ${stateClass}.class;
+  protected Class<${stateName}> stateObjectType() {
+    return ${stateName}.class;
   }
 }

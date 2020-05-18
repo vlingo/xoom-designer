@@ -4,34 +4,32 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.starter.task.template.code.infrastructure;
+package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 
 public class StoreProviderConfigurationTemplateData extends TemplateData {
 
-    private final static String STORE_PROVIDER_CONFIGURATION_NAME = "StoreProviderConfiguration";
-
     private final String absolutePath;
     private final CodeTemplateParameters parameters;
 
     public static StoreProviderConfigurationTemplateData from(final String projectPath,
-                                                              final String infrastructurePackage,
+                                                              final String persistencePackage,
                                                               final StorageType storageType,
                                                               final List<TemplateData> storeProvidersTemplateData) {
         final List<StoreProviderParameter> providerParameters =
                 StoreProviderParameter.from(storeProvidersTemplateData);
 
         return new StoreProviderConfigurationTemplateData(projectPath,
-                infrastructurePackage, storageType, providerParameters);
+                persistencePackage, storageType, providerParameters);
     }
 
     private StoreProviderConfigurationTemplateData(final String projectPath,
@@ -54,7 +52,7 @@ public class StoreProviderConfigurationTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return new File(Paths.get(absolutePath, STORE_PROVIDER_CONFIGURATION_NAME + ".java").toString());
+        return buildFile(CodeTemplateStandard.STORE_PROVIDER_CONFIGURATION, parameters, absolutePath);
     }
 
 }

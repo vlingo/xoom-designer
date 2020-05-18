@@ -9,27 +9,27 @@ import io.vlingo.symbio.BaseEntry.TextEntry;
 import io.vlingo.symbio.EntryAdapter;
 import io.vlingo.symbio.Metadata;
 
-public final class ${sourceClass}Adapter implements EntryAdapter<${sourceClass},TextEntry> {
+public final class ${adapterName} implements EntryAdapter<${stateName},TextEntry> {
   @Override
-  public ${sourceClass} fromEntry(final TextEntry entry) {
+  public ${stateName} fromEntry(final TextEntry entry) {
     return JsonSerialization.deserialized(entry.entryData(), entry.typed());
   }
 
   @Override
-  public TextEntry toEntry(final ${sourceClass} source, final Metadata metadata) {
+  public TextEntry toEntry(final ${stateName} source, final Metadata metadata) {
     final String serialization = JsonSerialization.serialized(source);
-    return new TextEntry(${sourceClass}.class, 1, serialization, metadata);
+    return new TextEntry(${stateName}.class, 1, serialization, metadata);
   }
 
   @Override
-  public TextEntry toEntry(final ${sourceClass} source, final String id, final Metadata metadata) {
+  public TextEntry toEntry(final ${stateName} source, final String id, final Metadata metadata) {
     final String serialization = JsonSerialization.serialized(source);
-    return new TextEntry(id, ${sourceClass}.class, 1, serialization, metadata);
+    return new TextEntry(id, ${stateName}.class, 1, serialization, metadata);
   }
 
   @Override
-  public TextEntry toEntry(final ${sourceClass} source, final int version, final String id, final Metadata metadata) {
+  public TextEntry toEntry(final ${stateName} source, final int version, final String id, final Metadata metadata) {
     final String serialization = JsonSerialization.serialized(source);
-    return new TextEntry(id, ${sourceClass}.class, 1, serialization, version, metadata);
+    return new TextEntry(id, ${stateName}.class, 1, serialization, version, metadata);
   }
 }

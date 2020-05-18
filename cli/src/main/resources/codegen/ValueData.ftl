@@ -2,47 +2,44 @@ package ${packageName};
 
 import java.util.ArrayList;
 import java.util.List;
+import ${stateFullyQualifiedClassName};
 
-<#list imports as import>
-import ${import.fullyQualifiedClassName};
-</#list>
-
-public class ${type}Data {
+public class ${dataName} {
   public final String id;
   public final String placeholderValue;
 
-  public static ${type}Data empty() {
-    return new ${type}Data("", "");
+  public static ${dataName} empty() {
+    return new ${dataName}("", "");
   }
 
-  public static ${type}Data from(final ${type}State state) {
-    return new ${type}Data(state.id, state.placeholderValue);
+  public static ${dataName} from(final ${stateClass} state) {
+    return new ${dataName}(state.id, state.placeholderValue);
   }
 
-  public static List<${type}Data> from(final List<${type}State> states) {
-    final List<${type}Data> data = new ArrayList<>(states.size());
+  public static List<${dataName}> from(final List<${stateClass}> states) {
+    final List<${dataName}> data = new ArrayList<>(states.size());
 
-    for (final ${type}State state : states) {
-      data.add(${type}Data.from(state));
+    for (final ${stateClass} state : states) {
+      data.add(${dataName}.from(state));
     }
 
     return data;
   }
 
-  public static ${type}Data from(final String id, final String placeholderValue) {
-    return new ${type}Data(id, placeholderValue);
+  public static ${dataName} from(final String id, final String placeholderValue) {
+    return new ${dataName}(id, placeholderValue);
   }
 
-  public static ${type}Data just(final String placeholderValue) {
-    return new ${type}Data("", placeholderValue);
+  public static ${dataName} just(final String placeholderValue) {
+    return new ${dataName}("", placeholderValue);
   }
 
   @Override
   public String toString() {
-    return "${type}Data [id=" + id + " placeholderValue=" + placeholderValue + "]";
+    return "${dataName} [id=" + id + " placeholderValue=" + placeholderValue + "]";
   }
 
-  private ${type}Data(final String id, final String placeholderValue) {
+  private ${dataName}(final String id, final String placeholderValue) {
     this.id = id;
     this.placeholderValue = placeholderValue;
   }

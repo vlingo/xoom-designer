@@ -8,17 +8,17 @@ import io.vlingo.common.Tuple3;
 import io.vlingo.lattice.model.stateful.StatefulEntity;
 import io.vlingo.symbio.Source;
 
-public final class ${aggregateProtocolName}Entity extends StatefulEntity<${stateClass}> implements ${aggregateProtocolName} {
-  private ${stateClass} state;
+public final class ${entityName} extends StatefulEntity<${stateName}> implements ${aggregateProtocolName} {
+  private ${stateName} state;
 
-  public ${aggregateProtocolName}Entity() {
+  public ${entityName}() {
     super(); // uses GridAddress id as unique identity
 
-    this.state = ${stateClass}.identifiedBy(id);
+    this.state = ${stateName}.identifiedBy(id);
   }
 
-  public Completes<${stateClass}> definePlaceholder(final String value) {
-    return apply(state.withPlaceholderValue(value), new ${placeholderDefinedEvent}(state.id, value), () -> state);
+  public Completes<${stateName}> definePlaceholder(final String value) {
+    return apply(state.withPlaceholderValue(value), new ${domainEventName}(state.id, value), () -> state);
   }
 
   //=====================================
@@ -26,17 +26,17 @@ public final class ${aggregateProtocolName}Entity extends StatefulEntity<${state
   //=====================================
 
   @Override
-  protected void state(final ${stateClass} state) {
+  protected void state(final ${stateName} state) {
     this.state = state;
   }
 
   @Override
-  protected Class<${stateClass}> stateType() {
-    return ${stateClass}.class;
+  protected Class<${stateName}> stateType() {
+    return ${stateName}.class;
   }
 
   @Override
-  protected <C> Tuple3<${stateClass},List<Source<C>>,String> whenNewState() {
+  protected <C> Tuple3<${stateName},List<Source<C>>,String> whenNewState() {
     if (state.isIdentifiedOnly()) {
       return null;
     }

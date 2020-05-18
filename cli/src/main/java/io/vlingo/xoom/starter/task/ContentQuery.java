@@ -30,6 +30,12 @@ public class ContentQuery {
                 }).collect(Collectors.toList());
     }
 
+    public static String findFullyQualifiedClassNames(final Object subject, final String className, final List<Content> contents) {
+        return findFullyQualifiedClassNames(subject, contents).stream()
+                .filter(qualifiedClassName -> qualifiedClassName.contains("."+className +"."))
+                .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
+
     private static String retrieveFilename(final File file) {
         return FilenameUtils.removeExtension(file.getName());
     }

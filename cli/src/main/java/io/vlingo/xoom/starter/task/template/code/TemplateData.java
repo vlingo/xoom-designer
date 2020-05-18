@@ -11,8 +11,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class TemplateData {
 
@@ -28,4 +26,26 @@ public abstract class TemplateData {
         return Paths.get(projectPath, relativePath).toString();
     }
 
+    protected File buildFile(final CodeTemplateStandard standard,
+                             final String absolutePath,
+                             final String partialName) {
+        return this.buildFile(standard, null, absolutePath, partialName);
+    }
+
+    protected File buildFile(final CodeTemplateStandard standard,
+                             final CodeTemplateParameters parameters,
+                             final String absolutePath,
+                             final String partialName) {
+        return buildFile(absolutePath, standard.resolveFilename(partialName, parameters));
+    }
+
+    protected File buildFile(final CodeTemplateStandard standard,
+                             final CodeTemplateParameters parameters,
+                             final String absolutePath) {
+        return buildFile(absolutePath, standard.resolveFilename(parameters));
+    }
+
+    private File buildFile(final String absolutePath, final String filename) {
+        return new File(Paths.get(absolutePath, filename).toString());
+    }
 }

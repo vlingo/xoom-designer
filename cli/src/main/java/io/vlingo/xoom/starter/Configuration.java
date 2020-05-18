@@ -5,9 +5,10 @@ import freemarker.template.TemplateExceptionHandler;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.GraphicalUserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.steps.*;
+import io.vlingo.xoom.starter.task.template.ProjectionType;
 import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.Terminal;
-import io.vlingo.xoom.starter.task.template.code.infrastructure.ModelClassification;
+import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
 import io.vlingo.xoom.starter.task.template.steps.*;
 
 import java.util.*;
@@ -45,6 +46,14 @@ public class Configuration {
                     put(StorageType.STATE_STORE, STATE_ADAPTER.filename);
                     put(StorageType.JOURNAL, "");
                 }}
+            );
+
+    public static final Map<ProjectionType, String> PROJECTION_TEMPLATES =
+            Maps.immutableEnumMap(
+                    new HashMap<ProjectionType, String>(){{
+                        put(ProjectionType.EVENT_BASED, EVENT_BASED_PROJECTION.filename);
+                        put(ProjectionType.OPERATION_BASED, OPERATION_BASED_PROJECTION.filename);
+                    }}
             );
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
@@ -86,7 +95,7 @@ public class Configuration {
             new ResourcesLocationStep(), new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
             new LoggingStep(), new StatusHandlingStep(), new ModelGenerationStep(),
-            new InfrastructureGenerationStep(), new RestResourceGenerationStep(),
+            new StorageGenerationStep(), new RestResourceGenerationStep(),
             new ContentCreationStep(), new ContentPurgerStep()
     );
 
