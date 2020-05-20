@@ -42,16 +42,16 @@ public enum CodeTemplateStandard {
     PROJECTION(parameters -> PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
             (name, parameters) -> name + "ProjectionActor"),
 
+    PROJECTION_DISPATCHER_PROVIDER(parameters -> CodeTemplateFile.PROJECTION_DISPATCHER_PROVIDER.filename,
+            (name, parameters) -> "ProjectionDispatcherProvider"),
+
     STORE_PROVIDER(parameters -> {
         return storeProviderTemplatesFrom(parameters.find(MODEL_CLASSIFICATION))
                 .get(parameters.find(STORAGE_TYPE));
     }, (name, parameters) -> {
         final StorageType storageType = parameters.find(STORAGE_TYPE);
         final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
-        final String resolvedName =
-                modelClassification.isSingle() ? storageType.title :
-                        modelClassification.title + storageType.title;
-        return resolvedName + "Provider";
+        return storageType.resolveProviderNameFrom(modelClassification);
     });
 
     private static final String FILE_EXTENSION = ".java";

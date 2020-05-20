@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 <#list imports as import>
-import ${import.fullyQualifiedClassName};
+import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.lattice.model.DomainEvent;

@@ -2,7 +2,7 @@ package ${packageName};
 
 import java.util.ArrayList;
 import java.util.List;
-import ${stateFullyQualifiedClassName};
+import ${stateQualifiedClassName};
 
 public class ${dataName} {
   public final String id;
@@ -12,14 +12,14 @@ public class ${dataName} {
     return new ${dataName}("", "");
   }
 
-  public static ${dataName} from(final ${stateClass} state) {
+  public static ${dataName} from(final ${stateName} state) {
     return new ${dataName}(state.id, state.placeholderValue);
   }
 
-  public static List<${dataName}> from(final List<${stateClass}> states) {
+  public static List<${dataName}> from(final List<${stateName}> states) {
     final List<${dataName}> data = new ArrayList<>(states.size());
 
-    for (final ${stateClass} state : states) {
+    for (final ${stateName} state : states) {
       data.add(${dataName}.from(state));
     }
 

@@ -32,7 +32,7 @@ public class ProjectionDispatcherProvider {
     final List<ProjectToDescription> descriptions =
             Arrays.asList(
 <#list projectToDescriptions as projectToDescription>
-                    ${projectToDescription}
+                    ${projectToDescription.initializationCommand}
 </#list>
                     );
 

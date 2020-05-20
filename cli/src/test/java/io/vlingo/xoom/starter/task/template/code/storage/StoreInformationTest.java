@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.template.storage;
+package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.DatabaseType;
 import io.vlingo.xoom.starter.task.template.StorageType;

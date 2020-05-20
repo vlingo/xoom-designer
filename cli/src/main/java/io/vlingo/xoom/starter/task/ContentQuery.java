@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.task;
 
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -15,10 +16,18 @@ import java.util.stream.Collectors;
 
 public class ContentQuery {
 
+    public static String findClassName(final Object subject, final List<Content> contents) {
+        return findClassNames(subject, contents).stream().findFirst().get();
+    }
+
     public static List<String> findClassNames(final Object subject, final List<Content> contents) {
         return contents.stream().filter(content -> content.isAbout(subject))
                 .map(content -> retrieveFilename(content.file))
                 .collect(Collectors.toList());
+    }
+
+    public static String findFullyQualifiedClassName(final CodeTemplateStandard standard, final List<Content> contents) {
+        return findFullyQualifiedClassNames(standard, contents).stream().findFirst().get();
     }
 
     public static List<String> findFullyQualifiedClassNames(final Object subject, final List<Content> contents) {
@@ -30,9 +39,9 @@ public class ContentQuery {
                 }).collect(Collectors.toList());
     }
 
-    public static String findFullyQualifiedClassNames(final Object subject, final String className, final List<Content> contents) {
+    public static String findFullyQualifiedClassName(final Object subject, final String className, final List<Content> contents) {
         return findFullyQualifiedClassNames(subject, contents).stream()
-                .filter(qualifiedClassName -> qualifiedClassName.contains("."+className +"."))
+                .filter(qualifiedClassName -> qualifiedClassName.endsWith("." + className))
                 .findFirst().orElseThrow(IllegalArgumentException::new);
     }
 
@@ -45,5 +54,4 @@ public class ContentQuery {
         final int packageEndIndex = text.indexOf(";");
         return text.substring(packageStartIndex + 8, packageEndIndex);
     }
-
 }
