@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar $VLINGO_XOOM_STARTER_HOME/bin/vlingo-xoom-starter-dist.jar $@ --currentDirectory ${PWD}
