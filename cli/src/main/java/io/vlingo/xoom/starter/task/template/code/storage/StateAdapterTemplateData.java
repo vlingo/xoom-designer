@@ -15,7 +15,6 @@ import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +30,11 @@ public class StateAdapterTemplateData extends TemplateData {
     public static List<TemplateData> from(final String projectPath,
                                           final String persistencePackage,
                                           final StorageType storageType,
-                                          final List<Content> contents,
-                                          final List<ImportParameter> importParameters) {
+                                          final List<Content> contents) {
         return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents)
                 .stream().map(protocolName -> {
                     return new StateAdapterTemplateData(projectPath, protocolName,
-                            persistencePackage, storageType,  importParameters);
+                        persistencePackage, storageType, contents);
         }).collect(Collectors.toList());
     }
 
@@ -44,23 +42,23 @@ public class StateAdapterTemplateData extends TemplateData {
                                     final String protocolName,
                                     final String persistencePackage,
                                     final StorageType storageType,
-                                    final List<ImportParameter> importParameters) {
+                                    final List<Content> contents) {
         this.protocolName = protocolName;
         this.absolutePath = resolveAbsolutePath(persistencePackage, projectPath);
         this.templateParameters =
-                loadParameters(persistencePackage, storageType, importParameters);
+                loadParameters(persistencePackage, storageType, contents);
     }
 
     private CodeTemplateParameters loadParameters(final String packageName,
                                                   final StorageType storageType,
-                                                  final List<ImportParameter> importParameters) {
+                                                  final List<Content> contents) {
         final String stateClassName = STATE.resolveClassname(protocolName);
 
-        final ImportParameter stateClassImport =
-                ImportParameter.findImportParameter(stateClassName, importParameters);
+        final String stateQualifiedClassName =
+                ContentQuery.findFullyQualifiedClassName(STATE, stateClassName, contents);
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(IMPORTS, Arrays.asList(stateClassImport))
+                .and(IMPORTS, ImportParameter.of(stateQualifiedClassName))
                 .and(STATE_NAME, stateClassName)
                 .and(STATE_ADAPTER_NAME, STATE_ADAPTER.resolveClassname(protocolName))
                 .and(STORAGE_TYPE, storageType);

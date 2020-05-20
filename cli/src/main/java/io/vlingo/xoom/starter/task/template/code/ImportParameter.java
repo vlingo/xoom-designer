@@ -20,7 +20,15 @@ public class ImportParameter {
     }
 
     public static List<ImportParameter> of(final String ...qualifiedClassNames) {
-        return Stream.of(qualifiedClassNames).map(ImportParameter::new).collect(Collectors.toList());
+        return of(Stream.of(qualifiedClassNames));
+    }
+
+    public static List<ImportParameter> of(final List<String> stateQualifiedNames) {
+        return of(stateQualifiedNames.stream());
+    }
+
+    public static List<ImportParameter> of(final Stream<String> stateQualifiedNames) {
+        return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toList());
     }
 
     public static ImportParameter findImportParameter(final String className, final List<ImportParameter> importParameters) {

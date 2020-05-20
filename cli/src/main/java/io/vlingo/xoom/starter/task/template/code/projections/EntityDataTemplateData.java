@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.starter.task.template.code.projections;
 
+import io.vlingo.xoom.starter.task.Content;
+import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.ENTITY_DATA;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
 
 public class EntityDataTemplateData extends TemplateData {
 
@@ -27,37 +28,44 @@ public class EntityDataTemplateData extends TemplateData {
     private final String absolutePath;
     private final CodeTemplateParameters templateParameters;
 
-    public EntityDataTemplateData from(final String basePackage,
-                                       final String projectPath,
-                                       final String protocolName,
-                                       final String stateName,
-                                       final List<ImportParameter> importParameters) {
+    public static EntityDataTemplateData from(final String basePackage,
+                                              final String projectPath,
+                                              final String protocolName,
+                                              final List<Content> contents) {
         return new EntityDataTemplateData(basePackage, projectPath,
-                protocolName, stateName, importParameters);
+                protocolName, contents);
     }
 
 
     private EntityDataTemplateData(final String basePackage,
-                                  final String projectPath,
-                                  final String protocolName,
-                                  final String stateName,
-                                  final List<ImportParameter> importParameters) {
+                                   final String projectPath,
+                                   final String protocolName,
+                                   final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
         this.protocolName = protocolName;
         this.absolutePath = resolveAbsolutePath(packageName, projectPath);
-        this.templateParameters = loadParameters(packageName, protocolName, stateName, importParameters);
+        this.templateParameters = loadParameters(packageName, protocolName, contents);
     }
 
     private CodeTemplateParameters loadParameters(final String packageName,
-                                                  final String aggregateProtocolName,
-                                                  final String aggregateStateName,
-                                                  final List<ImportParameter> importParameters) {
-        final ImportParameter importParameter =
-                ImportParameter.findImportParameter(aggregateStateName, importParameters);
+                                                  final String protocolName,
+                                                  final List<Content> contents) {
+        final String stateName =
+                STATE.resolveClassname(protocolName);
+
+        final String stateQualifiedClassName =
+                ContentQuery.findFullyQualifiedClassName(STATE, stateName, contents);
+
+        final String dataName =
+                ENTITY_DATA.resolveClassname(protocolName);
+
+        final String entityDataQualifiedClassName = packageName.concat(".").concat(dataName);
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName)
-                            .and(ENTITY_NAME, aggregateProtocolName)
-                            .and(STATE_QUALIFIED_CLASS_NAME, importParameter.qualifiedClassName);
+                            .and(ENTITY_DATA_NAME, dataName)
+                            .and(STATE_NAME, stateName)
+                            .and(ENTITY_DATA_QUALIFIED_CLASS_NAME, entityDataQualifiedClassName)
+                            .and(STATE_QUALIFIED_CLASS_NAME, stateQualifiedClassName);
     }
 
     private String resolvePackage(final String basePackage) {

@@ -7,18 +7,17 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.Resource;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 public class ResourcesLocationStep implements TaskExecutionStep {
-
-    private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
 
     @Override
     public void process(final TaskExecutionContext context) {
         if(!Resource.hasAllPaths()) {
-            Resource.rootIn(System.getenv(HOME_ENVIRONMENT_VARIABLE));
+            Resource.rootIn(System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE));
         }
     }
 

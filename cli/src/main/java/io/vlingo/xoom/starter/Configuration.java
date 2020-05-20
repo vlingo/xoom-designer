@@ -20,6 +20,7 @@ public class Configuration {
 
     public static final String USER_INTERFACE_CONFIG_KEY = "ui";
     public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
+    public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
 
     public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
             Maps.immutableEnumMap(
@@ -65,7 +66,6 @@ public class Configuration {
                 }}
             );
 
-
     private static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
             Maps.immutableEnumMap(
                     new HashMap<StorageType, String>(){{
@@ -84,6 +84,7 @@ public class Configuration {
                     }}
             );
 
+
     public static Map<StorageType, String> storeProviderTemplatesFrom(final ModelClassification modelClassification) {
         if(modelClassification.isQueryModel()) {
             return QUERY_MODEL_STORE_TEMPLATES;
@@ -95,7 +96,7 @@ public class Configuration {
             new ResourcesLocationStep(), new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
             new LoggingStep(), new StatusHandlingStep(), new ModelGenerationStep(),
-            new StorageGenerationStep(), new RestResourceGenerationStep(),
+            new StorageGenerationStep(), new ProjectionGenerationStep(), new RestResourceGenerationStep(),
             new ContentCreationStep(), new ContentPurgerStep()
     );
 

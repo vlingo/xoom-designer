@@ -8,6 +8,22 @@
 package io.vlingo.xoom.starter.task.template;
 
 public enum ProjectionType {
-    EVENT_BASED,
-    OPERATION_BASED
+
+    NONE("None"),
+    EVENT_BASED("Event"),
+    OPERATION_BASED("Operation");
+
+    public final String sourceName;
+
+    ProjectionType(final String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public boolean isEventBased() {
+        return equals(EVENT_BASED);
+    }
+
+    public boolean isProjectionEnabled() {
+        return !equals(NONE);
+    }
 }

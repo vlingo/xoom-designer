@@ -9,16 +9,14 @@ package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.DatabaseType;
 import io.vlingo.xoom.starter.task.Content;
-import io.vlingo.xoom.starter.task.ContentQuery;
+import io.vlingo.xoom.starter.task.template.ProjectionType;
 import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 import static java.util.Arrays.asList;
@@ -32,37 +30,32 @@ public class StorageTemplateDataFactory {
     public static Map<CodeTemplateStandard, List<TemplateData>> build(final String basePackage,
                                                                       final String projectPath,
                                                                       final boolean supportCQRS,
+                                                                      final List<Content> contents,
                                                                       final StorageType storageType,
                                                                       final DatabaseType databaseType,
-                                                                      final List<Content> contents) {
-        final String persistencePackage = resolvePackage(basePackage);
-        final List<ImportParameter> importParameters = buildImports(contents);
+                                                                      final ProjectionType projectionType) {
+        final String persistencePackage =
+                resolvePackage(basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
 
         final List<TemplateData> stateAdapters =
                 StateAdapterTemplateData.from(projectPath, persistencePackage,
-                         storageType, contents, importParameters);
+                        storageType, contents);
 
         final List<TemplateData> storeProviders =
                 StoreProviderTemplateData.from(projectPath, persistencePackage,
-                        supportCQRS, storageType, databaseType, importParameters,
-                        stateAdapters);
+                        supportCQRS, storageType, databaseType, projectionType,
+                        stateAdapters, contents);
 
         final TemplateData storeProviderConfiguration =
                 StoreProviderConfigurationTemplateData.from(projectPath,
-                        persistencePackage, storageType, storeProviders);
+                        persistencePackage, storageType, projectionType,
+                        storeProviders, contents);
 
         return collect(stateAdapters, storeProviders, storeProviderConfiguration);
     }
 
-    private static String resolvePackage(final String basePackage) {
-        return String.format(PACKAGE_PATTERN, basePackage,
-                PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME).toLowerCase();
-    }
-
-    private static List<ImportParameter> buildImports(final List<Content> contents) {
-        return ContentQuery.findFullyQualifiedClassNames(STATE, contents)
-                .stream().map(qualifiedClassName -> new ImportParameter(qualifiedClassName))
-                .collect(Collectors.toList());
+    private static String resolvePackage(final String... additionalPackages) {
+        return String.format(PACKAGE_PATTERN, additionalPackages).toLowerCase();
     }
 
     private static Map<CodeTemplateStandard, List<TemplateData>> collect(final List<TemplateData> stateAdaptersTemplateData,

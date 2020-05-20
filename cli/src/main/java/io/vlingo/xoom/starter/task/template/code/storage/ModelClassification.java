@@ -19,6 +19,10 @@ public enum ModelClassification {
         this.title = title;
     }
 
+    public boolean isCommandModel() {
+        return equals(COMMAND);
+    }
+
     public boolean isQueryModel() {
         return equals(QUERY);
     }
