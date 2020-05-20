@@ -7,20 +7,25 @@
 
 package io.vlingo.xoom.starter.task.template.code.storage;
 
+import io.vlingo.xoom.starter.task.template.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.STORE_PROVIDER_NAME;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 
 public class StoreProviderParameter {
 
-    public final String name;
+    private final String name;
+    private final boolean useProjections;
 
-    public StoreProviderParameter(final CodeTemplateParameters parameters) {
+    private StoreProviderParameter(final CodeTemplateParameters parameters) {
         this.name = parameters.find(STORE_PROVIDER_NAME);
+        final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+        final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
+        this.useProjections = projectionType.isProjectionEnabled() && modelClassification.isCommandModel();
     }
 
     public static List<StoreProviderParameter> from(final List<TemplateData> templateData) {
@@ -31,6 +36,10 @@ public class StoreProviderParameter {
 
     public String getName() {
         return name;
+    }
+
+    public boolean getUseProjections() {
+        return useProjections;
     }
 
 }

@@ -4,7 +4,6 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-
 package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.DatabaseType;
@@ -17,27 +16,25 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
+import io.vlingo.xoom.starter.task.template.code.projections.ProjectionTemplateDataFactory;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageTemplateDataFactory;
 
 import java.util.List;
 import java.util.Map;
 
-public class StorageGenerationStep implements TaskExecutionStep {
+public class ProjectionGenerationStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(Property.PACKAGE);
-        final Boolean enableCQRS = context.propertyOf(Property.CQRS, Boolean::valueOf);
-        final StorageType storageType = context.propertyOf(Property.STORAGE_TYPE, StorageType::of);
-        final DatabaseType databaseType = context.propertyOf(Property.DATABASE, DatabaseType::valueOf);
         final ProjectionType projectionType = context.propertyOf(Property.PROJECTIONS, ProjectionType::valueOf);
 
-        final Map<CodeTemplateStandard, List<TemplateData>> storageTemplatesData =
-                StorageTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
-                        context.contents(), storageType, databaseType, projectionType);
+        final Map<CodeTemplateStandard, List<TemplateData>> projectionTemplatesData =
+                ProjectionTemplateDataFactory.build(basePackage, projectPath,
+                        projectionType, context.contents());
 
-        storageTemplatesData.forEach(((standard, templatesData) -> {
+        projectionTemplatesData.forEach(((standard, templatesData) -> {
             templatesData.forEach(templateData -> {
                 final CodeTemplateParameters parameters = templateData.templateParameters();
                 final String code = CodeTemplateProcessor.instance().process(standard, parameters);
@@ -46,4 +43,8 @@ public class StorageGenerationStep implements TaskExecutionStep {
         }));
     }
 
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.hasProperty(Property.AGGREGATES);
+    }
 }

@@ -5,10 +5,11 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.template.storage;
+package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.DatabaseType;
 import io.vlingo.xoom.starter.task.Content;
+import io.vlingo.xoom.starter.task.template.ProjectionType;
 import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
@@ -38,7 +39,7 @@ public class StorageTemplateDataFactoryTest {
     public void testInfraTemplateDataOnStatefulSingleModel() {
         final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, false,
-                        StorageType.STATE_STORE, DatabaseType.IN_MEMORY, contents());
+                        contents(), StorageType.STATE_STORE, DatabaseType.IN_MEMORY, ProjectionType.EVENT_BASED);
 
         //General Assertions
 
@@ -103,7 +104,7 @@ public class StorageTemplateDataFactoryTest {
     public void testInfraTemplateDataOnStatefulCQRSModel() {
         final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, true,
-                        StorageType.STATE_STORE, DatabaseType.IN_MEMORY, contents());
+                        contents(), StorageType.STATE_STORE, DatabaseType.IN_MEMORY, ProjectionType.NONE);
 
         //General Assertions
 
@@ -169,9 +170,12 @@ public class StorageTemplateDataFactoryTest {
                   Content.with(STATE, new File(Paths.get(MODEL_PACKAGE_PATH, "author", "AuthorState.java").toString()), AUTHOR_STATE_CONTENT_TEXT),
                   Content.with(STATE, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "BookState.java").toString()), BOOK_STATE_CONTENT_TEXT),
                   Content.with(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "author", "Author.java").toString()), AUTHOR_CONTENT_TEXT),
-                  Content.with(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "Book.java").toString()), BOOK_CONTENT_TEXT)
+                  Content.with(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "Book.java").toString()), BOOK_CONTENT_TEXT),
+                  Content.with(PROJECTION_DISPATCHER_PROVIDER, new File(Paths.get(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java").toString()), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT)
                 );
     }
+
+    private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure.persistence";
 
     private static final String PROJECT_PATH =
             Terminal.supported().isWindows() ?
@@ -210,5 +214,9 @@ public class StorageTemplateDataFactoryTest {
                     "... \\n" +
                     "}";
 
-    private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure.persistence";
+    private static final String PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                    "public class ProjectionDispatcherProvider { \\n" +
+                    "... \\n" +
+                    "}";
 }

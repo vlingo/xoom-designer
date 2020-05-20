@@ -1,5 +1,7 @@
 package io.vlingo.xoom.starter.task.template;
 
+import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
+
 public enum StorageType {
 
     JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry", "io.vlingo.lattice.model.sourcing"),
@@ -27,6 +29,11 @@ public enum StorageType {
 
     public String registryQualifiedClassName() {
         return registryPackage + "." + registryClassName;
+    }
+
+    public String resolveProviderNameFrom(final ModelClassification modelClassification) {
+        final String prefix = modelClassification.isSingle() ? title : modelClassification.title + title;
+        return prefix + "Provider";
     }
 
 }
