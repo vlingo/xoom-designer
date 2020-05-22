@@ -17,7 +17,7 @@ export class ModelSettings {
         this.database = "IN_MEMORY";
         this.commandModelDatabase ="IN_MEMORY";
         this.queryModelDatabase = "IN_MEMORY";
-        this.projections = "NOT_APPLICABLE";
+        this.projections = "NONE";
     }
 
     public domainEventsOf(aggregateId: Number) : Array<DomainEvent> {

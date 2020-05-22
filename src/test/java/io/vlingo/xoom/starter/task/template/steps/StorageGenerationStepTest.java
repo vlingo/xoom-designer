@@ -8,8 +8,9 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.template.ProjectionType;
 import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.template.code.DatabaseType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ public class StorageGenerationStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        loadProperties(context, ProjectionType.NONE);
+        loadProperties(context, DatabaseType.HSQLDB, ProjectionType.NONE);
         loadContents(context);
 
         new StorageGenerationStep().process(context);
@@ -52,7 +53,12 @@ public class StorageGenerationStepTest {
         Assertions.assertTrue(context.contents().get(5).text.contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
         Assertions.assertTrue(context.contents().get(6).text.contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assertions.assertTrue(context.contents().get(7).text.contains("class CommandModelStateStoreProvider"));
+        Assertions.assertTrue(context.contents().get(7).text.contains("import io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor.JDBCStateStoreInstantiator;"));
+        Assertions.assertFalse(context.contents().get(7).text.contains("InMemoryStateStoreActor"));
         Assertions.assertTrue(context.contents().get(8).text.contains("class QueryModelStateStoreProvider"));
+        Assertions.assertTrue(context.contents().get(8).text.contains("HSQLDBConfigurationProvider"));
+        Assertions.assertTrue(context.contents().get(8).text.contains("jdbc:hsqldb:mem:"));
+        Assertions.assertTrue(context.contents().get(8).text.contains("import io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider"));
         Assertions.assertTrue(context.contents().get(9).text.contains("class StoreProviderConfiguration"));
         Assertions.assertFalse(context.contents().get(9).text.contains("ProjectionDispatcherProvider"));
     }
@@ -62,7 +68,7 @@ public class StorageGenerationStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        loadProperties(context, ProjectionType.EVENT_BASED);
+        loadProperties(context, DatabaseType.IN_MEMORY, ProjectionType.EVENT_BASED);
         loadContents(context);
 
         new StorageGenerationStep().process(context);
@@ -83,12 +89,14 @@ public class StorageGenerationStepTest {
         Assertions.assertTrue(context.contents().get(9).text.contains("CommandModelStateStoreProvider.using(world.stage(), registry, ProjectionDispatcherProvider.using(world.stage()).storeDispatcher);"));
     }
 
-    private void loadProperties(final TaskExecutionContext context, final ProjectionType projectionType) {
+    private void loadProperties(final TaskExecutionContext context,
+                                final DatabaseType databaseType,
+                                final ProjectionType projectionType) {
         final Properties properties = new Properties();
         properties.put(PACKAGE.literal(), "io.vlingo");
         properties.put(ARTIFACT_ID.literal(), "xoomapp");
         properties.put(CQRS.literal(), "true");
-        properties.put(DATABASE.literal(), "IN_MEMORY");
+        properties.put(DATABASE.literal(), databaseType.name());
         properties.put(STORAGE_TYPE.literal(), "STATE_STORE");
         properties.put(PROJECTIONS.literal(), projectionType.name());
         properties.put(TARGET_FOLDER.literal(), HOME_DIRECTORY);

@@ -19,7 +19,7 @@ public enum CodeTemplateFile {
     JOURNAL_PROVIDER("JournalProvider"),
     STATE_STORE_PROVIDER("StateStoreProvider"),
     OBJECT_STORE_PROVIDER("ObjectStoreProvider"),
-    QUERY_MODEL_STATE_STORE_PROVIDER("QueryModelStateStoreProvider"),
+    //QUERY_MODEL_STATE_STORE_PROVIDER("QueryModelStateStoreProvider"),
     QUERY_MODEL_OBJECT_STORE_PROVIDER("QueryModelObjectStoreProvider"),
     QUERY_MODEL_JOURNAL_PROVIDER("QueryModelJournalProvider"),
     STORE_PROVIDER_CONFIGURATION("StoreProviderConfiguration"),

@@ -1,7 +1,7 @@
 package io.vlingo.xoom.starter.task.template.code;
 
-import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
+import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
