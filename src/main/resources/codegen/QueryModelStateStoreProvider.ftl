@@ -25,11 +25,24 @@ public class QueryModelStateStoreProvider {
     return instance;
   }
 
-  @SuppressWarnings("rawtypes")
   public static QueryModelStateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry) {
+
+    final Dispatcher noop = new Dispatcher() {
+      public void controlWith(final DispatcherControl control) { }
+      public void dispatch(Dispatchable d) { }
+    };
+
+    using(stage, registry, dispatcher);
+  }
+
+  @SuppressWarnings("rawtypes")
+  public static QueryModelStateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher R) {
     if (instance != null) {
       return instance;
     }
+<#if useJDBC>
+    final ActorInstantiator jdbcInstantiator = setupJDBCInstantiator(stage, dispatcher);
+</#if>
 
     final StateAdapterProvider stateAdapterProvider = new StateAdapterProvider(stage.world());
 <#list stateAdapters as stateAdapter>
@@ -37,11 +50,6 @@ public class QueryModelStateStoreProvider {
 </#list>
 
     new EntryAdapterProvider(stage.world()); // future
-
-    final Dispatcher noop = new Dispatcher() {
-      public void controlWith(final DispatcherControl control) { }
-      public void dispatch(Dispatchable d) { }
-    };
 
     final StateStore store = stage.actorFor(StateStore.class, ${storeClassName}.class, Arrays.asList(noop));
 

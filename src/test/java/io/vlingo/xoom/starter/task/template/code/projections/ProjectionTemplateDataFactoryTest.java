@@ -8,7 +8,7 @@
 package io.vlingo.xoom.starter.task.template.code.projections;
 
 import io.vlingo.xoom.starter.task.Content;
-import io.vlingo.xoom.starter.task.template.ProjectionType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;

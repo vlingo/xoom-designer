@@ -116,18 +116,18 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   databaseVendors() {
     return [
-      {name: "In Memory", value: "IN_MEMORY"}
-      // {name: "Postgres", value: "POSTGRES"},
-      // {name: "HSQLDB", value: "HSQLDB"},
+      {name: "In Memory", value: "IN_MEMORY"},
+      {name: "Postgres", value: "POSTGRES"},
+      {name: "HSQLDB", value: "HSQLDB"},
       // {name: "MariaDB", value: "MARIADB"},
-      // {name: "MySQL", value: "MYSQL"},
-      // {name: "YugaByte", value: "YUGABYTE"}
+      {name: "MySQL", value: "MYSQL"},
+      {name: "YugaByte", value: "YUGABYTE"}
     ];
   }
 
   projectionOptions() {
     return [
-      {name: "Not Applicable", value: "NOT_APPLICABLE"},
+      {name: "Not Applicable", value: "NONE"},
       {name: "Event Based", value: "EVENT_BASED"},
       {name: "Operation Based", value: "OPERATION_BASED"}
     ];

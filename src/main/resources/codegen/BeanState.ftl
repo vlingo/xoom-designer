@@ -4,7 +4,7 @@ import io.vlingo.symbio.store.object.StateObject;
 
 public final class ${stateName} extends StateObject {
   public final String id;
-  private String placeholderValue;
+  public String placeholderValue;
 
   public static ${stateName} identifiedBy(final String id) {
     return new ${stateName}(id);

@@ -7,8 +7,12 @@
 
 package io.vlingo.xoom.starter.task.template.code;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CodeTemplateParameters {
 
@@ -22,12 +26,30 @@ public class CodeTemplateParameters {
     }
 
     public CodeTemplateParameters and(final CodeTemplateParameter parameter, final Object value) {
-        this.parameters.put(parameter.token, value);
+        this.parameters.put(parameter.key, value);
+        return this;
+    }
+
+    public CodeTemplateParameters andResolve(final CodeTemplateParameter parameter, final Function<CodeTemplateParameters, Object> resolver) {
+        this.parameters.put(parameter.key, resolver.apply(this));
+        return this;
+    }
+
+    public CodeTemplateParameters enrich(final Consumer<CodeTemplateParameters> enricher)  {
+        enricher.accept(this);
+        return this;
+    }
+
+    public CodeTemplateParameters addImport(final ImportParameter importParameter) {
+        if(this.<List>find(CodeTemplateParameter.IMPORTS) == null) {
+            this.and(CodeTemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
+        }
+        this.<List>find(CodeTemplateParameter.IMPORTS).add(importParameter);
         return this;
     }
 
     public <T> T find(final CodeTemplateParameter parameter) {
-        return (T) this.parameters.get(parameter.token);
+        return (T) this.parameters.get(parameter.key);
     }
 
     public Map<String, Object> map() {

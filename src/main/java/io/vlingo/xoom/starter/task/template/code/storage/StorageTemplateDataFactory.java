@@ -7,10 +7,9 @@
 
 package io.vlingo.xoom.starter.task.template.code.storage;
 
-import io.vlingo.xoom.starter.DatabaseType;
+import io.vlingo.xoom.starter.task.template.code.DatabaseType;
 import io.vlingo.xoom.starter.task.Content;
-import io.vlingo.xoom.starter.task.template.ProjectionType;
-import io.vlingo.xoom.starter.task.template.StorageType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
