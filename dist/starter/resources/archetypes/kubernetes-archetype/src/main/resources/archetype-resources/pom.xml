@@ -52,6 +52,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>io.vlingo</groupId>
+      <artifactId>vlingo-symbio-jdbc</artifactId>
+      <version>${vlingoXoomServerVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-validation</artifactId>
       <scope>compile</scope>

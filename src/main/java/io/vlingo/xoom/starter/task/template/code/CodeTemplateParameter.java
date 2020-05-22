@@ -18,13 +18,16 @@ public enum CodeTemplateParameter {
     ENTITY_DATA_QUALIFIED_CLASS_NAME("dataQualifiedName"),
     AGGREGATE_STATE_QUALIFIED_NAME("stateQualifiedName"),
     IMPORTS("imports"),
+    CONFIGURABLE("configurable"),
+    DATABASE_TYPE("databaseType"),
     STATE_ADAPTERS("stateAdapters"),
     STORE_PROVIDER_NAME("storeProviderName"),
-    STORE_CLASS_NAME("storeClassName"),
+    STORE_NAME("storeClassName"),
     STATE_NAME("stateName"),
     STATE_ADAPTER_NAME("stateAdapterName"),
     STATE_QUALIFIED_CLASS_NAME("stateQualifiedClassName"),
     STORAGE_TYPE("storageType"),
+    STORAGE_DELEGATE_NAME("storageDelegateName"),
     PROJECTION_NAME("projectionName"),
     PROJECTION_TYPE("projectionType"),
     PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
@@ -33,16 +36,16 @@ public enum CodeTemplateParameter {
     REST_RESOURCE_NAME("resourceName"),
     REGISTRY_CLASS_NAME("registryClassName"),
     REGISTRY_QUALIFIED_CLASS_NAME("registryQualifiedClassName"),
+    CONFIGURATION_PROVIDER_NAME("configurationProviderName"),
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
     PROJECTION_DISPATCHER_PROVIDER__QUALIFIED_CLASS_NAME("projectionDispatcherProviderQualifiedClassName"),
     STORE_PROVIDERS("storeProviders"),
-    CONNECTION_URL("connectionUrl"),
-    DRIVER_CLASS("driverClass");
+    CONNECTION_URL("connectionUrl");
 
-    public final String token;
+    public final String key;
 
-    CodeTemplateParameter(String token) {
-        this.token = token;
+    CodeTemplateParameter(String key) {
+        this.key = key;
     }
 
 }

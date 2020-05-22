@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.task.template.StorageType;
+import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.model.ModelTemplateData;

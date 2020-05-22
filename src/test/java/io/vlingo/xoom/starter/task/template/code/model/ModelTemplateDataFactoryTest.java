@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static io.vlingo.xoom.starter.task.template.StorageType.JOURNAL;
+import static io.vlingo.xoom.starter.task.template.code.storage.StorageType.JOURNAL;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 
 public class ModelTemplateDataFactoryTest {

@@ -9,7 +9,6 @@ package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import io.vlingo.xoom.starter.task.template.StorageType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;

@@ -6,21 +6,21 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.DatabaseType;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.task.template.ProjectionType;
-import io.vlingo.xoom.starter.task.template.StorageType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 import io.vlingo.xoom.starter.task.template.code.projections.ProjectionTemplateDataFactory;
-import io.vlingo.xoom.starter.task.template.code.storage.StorageTemplateDataFactory;
 
 import java.util.List;
 import java.util.Map;
+
+import static io.vlingo.xoom.starter.task.Property.AGGREGATES;
+import static io.vlingo.xoom.starter.task.Property.PROJECTIONS;
 
 public class ProjectionGenerationStep implements TaskExecutionStep {
 
@@ -28,7 +28,7 @@ public class ProjectionGenerationStep implements TaskExecutionStep {
     public void process(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(Property.PACKAGE);
-        final ProjectionType projectionType = context.propertyOf(Property.PROJECTIONS, ProjectionType::valueOf);
+        final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
 
         final Map<CodeTemplateStandard, List<TemplateData>> projectionTemplatesData =
                 ProjectionTemplateDataFactory.build(basePackage, projectPath,
@@ -45,6 +45,11 @@ public class ProjectionGenerationStep implements TaskExecutionStep {
 
     @Override
     public boolean shouldProcess(final TaskExecutionContext context) {
-        return context.hasProperty(Property.AGGREGATES);
+        if(context.hasProperty(AGGREGATES)) {
+            final ProjectionType projectionType =
+                    context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
+            return projectionType.isProjectionEnabled();
+        }
+        return false;
     }
 }

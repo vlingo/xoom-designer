@@ -6,9 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.template.ProjectionType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

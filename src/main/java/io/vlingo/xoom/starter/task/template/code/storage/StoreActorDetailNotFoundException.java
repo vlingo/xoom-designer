@@ -7,13 +7,12 @@
 
 package io.vlingo.xoom.starter.task.template.code.storage;
 
-import io.vlingo.xoom.starter.DatabaseType;
+import io.vlingo.xoom.starter.task.template.code.DatabaseType;
 import io.vlingo.xoom.starter.task.TaskExecutionException;
-import io.vlingo.xoom.starter.task.template.StorageType;
 
-public class StoreInformationNotFoundException extends TaskExecutionException {
+public class StoreActorDetailNotFoundException extends TaskExecutionException {
 
-    public StoreInformationNotFoundException(final DatabaseType databaseType, final StorageType storageType) {
+    public StoreActorDetailNotFoundException(final DatabaseType databaseType, final StorageType storageType) {
         super("Unable to find Store Information for " + databaseType + " supporting " + storageType);
     }
 
