@@ -14,7 +14,7 @@
 
                 <div class="form-group col-md-12" >
                     <label class for="storageOptions">Storage:</label>
-                    <select #storageOption class="form-control" [(ngModel)]="generationSettings.model.database" (change)="onStorageTypeSelection(storageOption.value)">
+                    <select #storageOption class="form-control" [(ngModel)]="generationSettings.model.storageType" (ngModelChange)="onStorageTypeSelection()">
                         <option *ngFor="let option of storageOptions();" [ngValue]="option.value">{{option.name}}</option>
                     </select>
                 </div>
@@ -22,7 +22,7 @@
                 <div class="form-group col-md-12" >
                     <label class for="commandModelDatabase">Database:</label>
                     <select class="form-control" [(ngModel)]="generationSettings.model.database" [disabled]="generationSettings.model.useCQRS">
-                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                        <option *ngFor="let type of databaseTypes" [ngValue]="type.value">{{type.name}}</option>
                     </select>
                 </div>
                 
@@ -41,14 +41,14 @@
                 <div class="form-group col-md-12" *ngIf="generationSettings.model.useCQRS">
                     <label class for="commandModelDatabase">Command Model Database:</label>
                     <select class="form-control" [(ngModel)]="generationSettings.model.commandModelDatabase">
-                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                        <option *ngFor="let type of databaseTypes" [ngValue]="type.value">{{type.name}}</option>
                     </select>
                 </div>
 
                 <div class="form-group col-md-12" *ngIf="generationSettings.model.useCQRS">
                     <label class for="queryModelDatabase">Query Model Database:</label>
                     <select class="form-control" [(ngModel)]="generationSettings.model.queryModelDatabase">
-                        <option *ngFor="let vendor of databaseVendors();" [ngValue]="vendor.value">{{vendor.name}}</option>
+                        <option *ngFor="let type of databaseTypes" [ngValue]="type.value">{{type.name}}</option>
                     </select>
                 </div>
                 
