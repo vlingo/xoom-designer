@@ -19,6 +19,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   public selectedAggregateId: Number;
   public restResourcesSettings: IDropdownSettings;
+  public databaseTypes: Array<any>;
 
   @ViewChild('aggregateTable') aggregateTable: TableComponent;
   @ViewChild('domainEventTable') domainEventTable: TableComponent;
@@ -30,6 +31,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.loadDatabaseTypes();
   }
 
   ngAfterViewInit(): void {
@@ -76,10 +78,11 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     this.move(NavigationDirection.REWIND);
   }
   
-  onStorageTypeSelection(selectedValue) {
-    if(selectedValue.endsWith("JOURNAL")) {
+  onStorageTypeSelection() {
+    if(this.generationSettings.model.storageType === 'JOURNAL') {
       this.generationSettings.model.useCQRS = true;
     }
+    this.loadDatabaseTypes();
   }
 
   onCQRSClick($event) {
@@ -108,21 +111,26 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   storageOptions() {
     return [
-      {name: "State Store", value: "STATE_STORE"}
-      // {name: "Object Store", value: "OBJECT_STORE"},
-      // {name: "Journal", value: "JOURNAL"}
+      {name: "State Store", value: "STATE_STORE"},
+      {name: "Object Store", value: "OBJECT_STORE"},
+      {name: "Journal", value: "JOURNAL"}
     ];
   }
 
-  databaseVendors() {
-    return [
-      {name: "In Memory", value: "IN_MEMORY"},
-      {name: "Postgres", value: "POSTGRES"},
-      {name: "HSQLDB", value: "HSQLDB"},
-      // {name: "MariaDB", value: "MARIADB"},
-      {name: "MySQL", value: "MYSQL"},
-      {name: "YugaByte", value: "YUGABYTE"}
-    ];
+  loadDatabaseTypes() {
+    if(this.generationSettings.model.storageType === "STATE_STORE") {
+      this.databaseTypes = [
+        {name: "In Memory", value: "IN_MEMORY"},
+        {name: "Postgres", value: "POSTGRES"},
+        {name: "HSQLDB", value: "HSQLDB"},
+        {name: "MySQL", value: "MYSQL"},
+        {name: "YugaByte", value: "YUGABYTE"}
+      ];
+    } else {
+      this.databaseTypes = [
+        {name: "In Memory", value: "IN_MEMORY"}
+      ];
+    }
   }
 
   projectionOptions() {
