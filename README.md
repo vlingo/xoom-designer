@@ -56,5 +56,5 @@ Ensure that it's all set by checking the `vlingo-xoom-starter` version:
 
 `vlingo-xoom-starter` provides an user interface for a real quick application generation. Simply, execute `xoom gui` and your preferred browser will be opened with a wizard-fashioned interface. 
 
-![screen-sample-image](https://github.com/vlingo/vlingo-xoom-starter/raw/user-interface/src/assets/img/screen-sample.png)
+![screen-sample-image](https://github.com/vlingo/vlingo-xoom-starter/blob/master/user-interface/src/assets/img/screen-sample.png)
      
