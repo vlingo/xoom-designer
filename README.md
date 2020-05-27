@@ -4,7 +4,7 @@
 The quick starter project generator for the vlingo/xoom quick start components
 
 ## Capabilities
-`vlingo-xoom-starter` provides an interface that enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
+`vlingo-xoom-starter` enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
 * `vlingo-xoom` initializer class
 * Default test class
 * Micronaut and Logback configuration files
