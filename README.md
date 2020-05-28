@@ -78,7 +78,7 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
     <tbody>
         <tr>
             <td align="center">xoom gen</td>
-            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the `vlingo-xoom-starter` folder.</td>
+            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder.</td>
             <td align="center">N/A</td>
         </tr>
         <tr>
