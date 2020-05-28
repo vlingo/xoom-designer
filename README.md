@@ -78,13 +78,13 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
     <tbody>
         <tr>
             <td align="center">xoom gen</td>
-            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a [properties file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties) under the `vlingo-xoom-starter` folder.</td>
+            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the `vlingo-xoom-starter` folder.</td>
             <td align="center">N/A</td>
         </tr>
         <tr>
             <td align="center">xoom docker package</td>
             <td align="left">Builds / update the Docker image from the application current state. Should be executed on the project root folder.</td>
-            <td align="center">*tag*: relate a tag to the current image build. If not informed, the default value is _latest_.</td>
+            <td align="center"><strong>tag</strong>: relate a tag to the current image build. If not informed, the default value is <em>latest</em>.</td>
         </tr>
         <tr>
             <td align="center">xoom docker status</td>
