@@ -87,14 +87,14 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
             <td align="center"><strong>tag</strong>: relate a tag to the current image build. If not informed, the default value is <em>latest</em>. Example: xoom docker package --tag 1.0</td>
         </tr>
         <tr>
-            <td align="center">xoom docker status</td>
-            <td align="left">Shows the container status. Should be executed on the project root folder.</td>
-            <td align="center">N/A</td>
-        </tr>
-        <tr>
             <td align="center">xoom docker push</td>
             <td align="left">Publishes the image into the configured docker repository.</td>
             <td align="center"><strong>tag</strong>: relate the local tag to the remote tag. If not informed, the default value is <em>latest:latest</em>, following the pattern <em>local-tag:remote-tag</em>. Example: xoom docker push --tag 1.0:latest</td>
+        </tr>
+        <tr>
+            <td align="center">xoom docker status</td>
+            <td align="left">Shows the container status. Should be executed on the project root folder.</td>
+            <td align="center">N/A</td>
         </tr>
     </tbody>
 </table>
