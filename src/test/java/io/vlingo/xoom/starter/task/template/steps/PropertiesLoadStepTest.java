@@ -34,7 +34,7 @@ public class PropertiesLoadStepTest {
         Assertions.assertEquals("com.company", context.propertyOf(GROUP_ID));
         Assertions.assertEquals("xoom-application", context.propertyOf(ARTIFACT_ID));
         Assertions.assertEquals("com.company.business", context.propertyOf(PACKAGE));
-        Assertions.assertEquals("k8s", context.propertyOf(DEPLOYMENT));
+        Assertions.assertEquals("DOCKER", context.propertyOf(DEPLOYMENT));
         Assertions.assertNotNull(context.propertyOf(TARGET_FOLDER));
     }
 
