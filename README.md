@@ -3,7 +3,7 @@
 
 The quick starter project generator for the vlingo/xoom quick start components
 
-## Capabilities
+## Introduction
 `vlingo-xoom-starter` enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
 * `vlingo-xoom` initializer class
 * Maven¹ build configuration (pom.xml)
@@ -58,7 +58,7 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ![screen-sample-image](https://github.com/vlingo/vlingo-xoom-starter/blob/master/user-interface/src/assets/img/screen-sample.png)
      
-Filling up every wizard step, you can readily take advantage of several auto-generated resources.
+Filling up every wizard step, you can readily take advantage of several auto-generated resources:
 * A full maven project structure with all required `vlingo` dependencies;
 * Aggregates and Domain Events prepared for reactive `vlingo` storage types;
 * Rest Resources, CQRS Projections, Adapters and Data type;
@@ -67,5 +67,36 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
 
 ## Additional Commands
 
+<table>
+    <thead>
+        <tr>
+            <th align="center">Command</th>
+            <th align="center">Description</th>
+            <th align="center">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="center">xoom gen</td>
+            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a [properties file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties) under the `vlingo-xoom-starter` folder.</td>
+            <td align="center">N/A</td>
+        </tr>
+        <tr>
+            <td align="center">xoom docker package</td>
+            <td align="left">Builds / update the Docker image from the application current state. Should be executed on the project root folder.</td>
+            <td align="center">*tag*: relate a tag to the current image build. If not informed, the default value is _latest_.</td>
+        </tr>
+        <tr>
+            <td align="center">xoom docker status</td>
+            <td align="left">Maven artifact id.</td>
+            <td align="center">N/A</td>
+        </tr>
+        <tr>
+            <td align="center">xoom docker push</td>
+            <td align="left">Project base package.</td>
+            <td align="center">N/A</td>
+        </tr>
+    </tbody>
+</table>
 
 
