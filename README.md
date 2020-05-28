@@ -1,5 +1,5 @@
 # vlingo-xoom-starter
-![Build Status](https://api.travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)
+[![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter)
 
 The quick starter project generator for the vlingo/xoom quick start components
 
