@@ -6,9 +6,8 @@ The quick starter project generator for the vlingo/xoom quick start components
 ## Capabilities
 `vlingo-xoom-starter` enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
 * `vlingo-xoom` initializer class
-* Default test class
-* Micronaut and Logback configuration files
 * Maven¹ build configuration (pom.xml)
+* Default test class
 
 The structure is represented below: 
 
@@ -31,6 +30,7 @@ The structure is represented below:
 ## Requirements
 * Java 7+
 * Maven 3.x.x
+* Docker Desktop 18.x
 
 ## Installation 
 
@@ -45,7 +45,7 @@ Extract the file content, then set an environment variable named `VLINGO_XOOM_ST
  $ ./chmod 755 xoom
 ```
 
-Ensure that it's all set by verifying the `vlingo-xoom-starter` version:
+Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ``` 
  $ ./xoom -version
@@ -64,3 +64,8 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
 * Rest Resources, CQRS Projections, Adapters and Data type;
 * Store Providers supporting State Store and Journal;
 * Containerization files facilitating Docker / Kubernetes deployment; 
+
+## Additional Commands
+
+
+
