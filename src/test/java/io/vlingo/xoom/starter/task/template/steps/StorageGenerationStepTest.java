@@ -90,6 +90,8 @@ public class StorageGenerationStepTest {
         properties.put(ARTIFACT_ID.literal(), "xoomapp");
         properties.put(CQRS.literal(), "true");
         properties.put(DATABASE.literal(), databaseType.name());
+        properties.put(COMMAND_MODEL_DATABASE.literal(), databaseType.name());
+        properties.put(QUERY_MODEL_DATABASE.literal(), databaseType.name());
         properties.put(STORAGE_TYPE.literal(), "STATE_STORE");
         properties.put(PROJECTIONS.literal(), projectionType.name());
         properties.put(TARGET_FOLDER.literal(), HOME_DIRECTORY);
