@@ -1,17 +1,15 @@
 package ${packageName};
 
-import java.io.IOException;
-import java.net.ServerSocket;
-
 <#list imports as import>
-import ${import.fullyQualifiedClassName};
+import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.actors.GridAddressFactory;
 import io.vlingo.actors.Stage;
 import io.vlingo.actors.World;
 import io.vlingo.common.identity.IdentityGeneratorType;
-import io.vlingo.http.resource.Configuration;
+import io.vlingo.http.resource.Configuration.Sizing;
+import io.vlingo.http.resource.Configuration.Timing;
 import io.vlingo.http.resource.Resources;
 import io.vlingo.http.resource.Server;
 
@@ -19,43 +17,39 @@ public class Bootstrap {
   private static Bootstrap instance;
   private static int DefaultPort = 18080;
 
-  private final int port;
   private final Server server;
   private final World world;
 
-  public Bootstrap() throws Exception {
+  public Bootstrap(final int port) throws Exception {
     world = World.startWithDefaults("${appName}");
 
-    world.stageNamed("${appName}", Stage.class, new GridAddressFactory(IdentityGeneratorType.RANDOM));
+    final Stage stage =
+            world.stageNamed("${appName}", Stage.class, new GridAddressFactory(IdentityGeneratorType.RANDOM));
 
-<#if projectionDispatcherProvider??>
-    final ProjectionDispatcherProvider projectionDispatcherProvider =
-            ProjectionDispatcherProvider.using(world.stage());
-</#if>
+    final ${registryClassName} registry = new ${registryClassName}(world);
 
-<#if commandModelJournalProvider??>
-    final SourcedTypeRegistry registry = new SourcedTypeRegistry(world);
-    CommandModelJournalProvider.initialize(world, registry, projectionDispatcherProvider.storeDispatcher);
-<#else>
-    final StatefulTypeRegistry registry = new StatefulTypeRegistry(world);
-    CommandModelStateStoreProvider.initialize(world, registry, projectionDispatcherProvider.storeDispatcher);
-</#if>
+<#list providers as provider>
+    ${provider.initialization}.using(${provider.arguments});
+</#list>
 
-    QueryModelStateStoreProvider.using(world.stage(), registry);
-
-<#if resourcesDeclarations??>
-<#list resourcesDeclarations as resourcesDeclaration>
-    ${resourcesDeclaration}
+<#list restResources as restResource>
+    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}();
 </#list>
 
     Resources allResources = Resources.are(
-<#list resourcesRoutes as resourcesRoute>
-            ${resourcesRoute}
-</#list>
+    <#if restResources?size == 0>
+        //Include Rest Resources routes here
+    </#if>
+    <#list restResources as restResource>
+        <#if restResource.last>
+        ${restResource.objectName}.routes()
+        <#else>
+        ${restResource.objectName}.routes(),
+        </#if>
+    </#list>
     );
-</#if>
 
-    server = Server.startWith(world.stage(), allResources, port, 2);
+    server = Server.startWith(stage, allResources, port, Sizing.define(), Timing.define());
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       if (instance != null) {

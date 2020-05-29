@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.task.template.code;
 
 public enum CodeTemplateFile {
 
+    BOOTSTRAP("Bootstrap"),
     AGGREGATE_PROTOCOL("AggregateProtocol"),
     OBJECT_ENTITY("ObjectEntity"),
     STATEFUL_ENTITY("StatefulEntity"),

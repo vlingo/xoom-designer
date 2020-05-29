@@ -21,6 +21,10 @@ public class CodeTemplateParameters {
     private CodeTemplateParameters() {
     }
 
+    public static CodeTemplateParameters empty() {
+        return new CodeTemplateParameters();
+    }
+
     public static CodeTemplateParameters with(final CodeTemplateParameter parameter, final Object value) {
         return new CodeTemplateParameters().and(parameter, value);
     }

@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +26,10 @@ public class ContentQuery {
                 .collect(Collectors.toList());
     }
 
-    public static String findFullyQualifiedClassName(final CodeTemplateStandard standard, final List<Content> contents) {
-        return findFullyQualifiedClassNames(standard, contents).stream().findFirst().get();
+    public static List<String> findFullyQualifiedClassNames(final List<Content> contents, final Object ...subjects) {
+        return Arrays.asList(subjects).stream()
+                .flatMap(subject -> findFullyQualifiedClassNames(subject, contents).stream())
+                .collect(Collectors.toList());
     }
 
     public static List<String> findFullyQualifiedClassNames(final Object subject, final List<Content> contents) {
