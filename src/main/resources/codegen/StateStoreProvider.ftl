@@ -64,13 +64,13 @@ public class ${storeProviderName} {
     final ActorInstantiator jdbcInstantiator = setupJDBCInstantiator(stage, dispatcher);
     final List<Object> parameters = Definition.parameters(Arrays.asList(jdbcInstantiator));
 <#else>
-    final List<Object> parameters = Definition.parameters(Arrays.asList(dispather));
+    final List<Object> parameters = Definition.parameters(Arrays.asList(dispatcher));
 </#if>
 
     final Protocols storeProtocols =
             stage.actorFor(
                     new Class<?>[] { StateStore.class, DispatcherControl.class },
-                    Definition.has(${storeClassName}.class, Definition.parameters(parameters)));
+                    Definition.has(${storeClassName}.class, parameters));
 
     final Protocols.Two<StateStore, DispatcherControl> storeWithControl = Protocols.two(storeProtocols);
 
