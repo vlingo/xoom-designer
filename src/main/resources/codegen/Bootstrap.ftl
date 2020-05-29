@@ -41,7 +41,7 @@ public class Bootstrap {
     CommandModelStateStoreProvider.initialize(world, registry, projectionDispatcherProvider.storeDispatcher);
 </#if>
 
-    QueryModelStateStoreProvider.using(world.stage(), registry);
+    QueryModelStateStoreProvider.using(world.stage(), registry, projectionDispatcherProvider.instance().storeDispatcher);
 
 <#if resourcesDeclarations??>
 <#list resourcesDeclarations as resourcesDeclaration>
