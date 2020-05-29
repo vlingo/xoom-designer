@@ -27,25 +27,25 @@ public class StorageTypeTest {
                 STATE_STORE.enrichParameters(CodeTemplateParameters.with(DATABASE_TYPE, POSTGRES));
 
         Assertions.assertEquals("PostgresStorageDelegate", postgresParameters.find(STORAGE_DELEGATE_NAME));
-        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.postgres.PostgresStorageDelegate", postgresParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.postgres.PostgresStorageDelegate", postgresParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
 
         final CodeTemplateParameters mySqlParameters =
                 STATE_STORE.enrichParameters(CodeTemplateParameters.with(DATABASE_TYPE, MYSQL));
 
         Assertions.assertEquals("MySQLStorageDelegate", mySqlParameters.find(STORAGE_DELEGATE_NAME));
-        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.mysql.MySQLStorageDelegate", mySqlParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.mysql.MySQLStorageDelegate", mySqlParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
 
         final CodeTemplateParameters hsqldbParameters =
                 STATE_STORE.enrichParameters(CodeTemplateParameters.with(DATABASE_TYPE, HSQLDB));
 
         Assertions.assertEquals("HSQLDBStorageDelegate", hsqldbParameters.find(STORAGE_DELEGATE_NAME));
-        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.hsqldb.HSQLDBStorageDelegate", hsqldbParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.hsqldb.HSQLDBStorageDelegate", hsqldbParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
 
         final CodeTemplateParameters yugaByteParameters =
                 STATE_STORE.enrichParameters(CodeTemplateParameters.with(DATABASE_TYPE, YUGA_BYTE));
 
         Assertions.assertEquals("YugaByteStorageDelegate", yugaByteParameters.find(STORAGE_DELEGATE_NAME));
-        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.yugabyte.YugaByteStorageDelegate", yugaByteParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.yugabyte.YugaByteStorageDelegate", yugaByteParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
     }
 
     @Test

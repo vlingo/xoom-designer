@@ -43,12 +43,11 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assertions.assertEquals(10, context.contents().size());
+        Assertions.assertEquals(9, context.contents().size());
         Assertions.assertEquals("AuthorStateAdapter.java", context.contents().get(5).file.getName());
         Assertions.assertEquals("BookStateAdapter.java", context.contents().get(6).file.getName());
         Assertions.assertEquals("CommandModelStateStoreProvider.java", context.contents().get(7).file.getName());
         Assertions.assertEquals("QueryModelStateStoreProvider.java", context.contents().get(8).file.getName());
-        Assertions.assertEquals("StoreProviderConfiguration.java", context.contents().get(9).file.getName());
 
         Assertions.assertTrue(context.contents().get(5).text.contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
         Assertions.assertTrue(context.contents().get(6).text.contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
@@ -59,8 +58,6 @@ public class StorageGenerationStepTest {
         Assertions.assertTrue(context.contents().get(8).text.contains("HSQLDBConfigurationProvider"));
         Assertions.assertTrue(context.contents().get(8).text.contains("jdbc:hsqldb:mem:"));
         Assertions.assertTrue(context.contents().get(8).text.contains("import io.vlingo.symbio.store.common.jdbc.hsqldb.HSQLDBConfigurationProvider"));
-        Assertions.assertTrue(context.contents().get(9).text.contains("class StoreProviderConfiguration"));
-        Assertions.assertFalse(context.contents().get(9).text.contains("ProjectionDispatcherProvider"));
     }
 
     @Test
@@ -73,20 +70,16 @@ public class StorageGenerationStepTest {
 
         new StorageGenerationStep().process(context);
 
-        Assertions.assertEquals(10, context.contents().size());
+        Assertions.assertEquals(9, context.contents().size());
         Assertions.assertEquals("AuthorStateAdapter.java", context.contents().get(5).file.getName());
         Assertions.assertEquals("BookStateAdapter.java", context.contents().get(6).file.getName());
         Assertions.assertEquals("CommandModelStateStoreProvider.java", context.contents().get(7).file.getName());
         Assertions.assertEquals("QueryModelStateStoreProvider.java", context.contents().get(8).file.getName());
-        Assertions.assertEquals("StoreProviderConfiguration.java", context.contents().get(9).file.getName());
 
         Assertions.assertTrue(context.contents().get(5).text.contains("class AuthorStateAdapter implements StateAdapter<AuthorState,TextState>"));
         Assertions.assertTrue(context.contents().get(6).text.contains("class BookStateAdapter implements StateAdapter<BookState,TextState>"));
         Assertions.assertTrue(context.contents().get(7).text.contains("class CommandModelStateStoreProvider"));
         Assertions.assertTrue(context.contents().get(8).text.contains("class QueryModelStateStoreProvider"));
-        Assertions.assertTrue(context.contents().get(9).text.contains("class StoreProviderConfiguration"));
-        Assertions.assertTrue(context.contents().get(9).text.contains("import io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider;"));
-        Assertions.assertTrue(context.contents().get(9).text.contains("CommandModelStateStoreProvider.using(world.stage(), registry, ProjectionDispatcherProvider.using(world.stage()).storeDispatcher);"));
     }
 
     private void loadProperties(final TaskExecutionContext context,

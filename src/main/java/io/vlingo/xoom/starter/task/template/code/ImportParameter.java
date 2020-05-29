@@ -7,13 +7,14 @@
 
 package io.vlingo.xoom.starter.task.template.code;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ImportParameter {
 
-    public final String qualifiedClassName;
+    private final String qualifiedClassName;
 
     public ImportParameter(final String qualifiedClassName) {
         this.qualifiedClassName = qualifiedClassName;
@@ -23,18 +24,12 @@ public class ImportParameter {
         return of(Stream.of(qualifiedClassNames));
     }
 
-    public static List<ImportParameter> of(final List<String> stateQualifiedNames) {
-        return of(stateQualifiedNames.stream());
+    public static List<ImportParameter> of(final List<String> ...qualifiedNames) {
+        return of(Stream.of(qualifiedNames).flatMap(Collection::stream));
     }
 
     public static List<ImportParameter> of(final Stream<String> stateQualifiedNames) {
         return stateQualifiedNames.map(ImportParameter::new).collect(Collectors.toList());
-    }
-
-    public static ImportParameter findImportParameter(final String className, final List<ImportParameter> importParameters) {
-        return importParameters.stream()
-                .filter(importParameter -> importParameter.qualifiedClassName.endsWith(className))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find import for " + className));
     }
 
     public String getQualifiedClassName() {

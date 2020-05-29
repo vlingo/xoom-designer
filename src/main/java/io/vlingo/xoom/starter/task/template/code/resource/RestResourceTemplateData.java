@@ -41,7 +41,6 @@ public class RestResourceTemplateData extends TemplateData {
     private CodeTemplateParameters loadParameters() {
         return CodeTemplateParameters
                 .with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
-                .and(AGGREGATE_NAME, aggregateName)
                 .and(PACKAGE_NAME, packageName);
     }
 

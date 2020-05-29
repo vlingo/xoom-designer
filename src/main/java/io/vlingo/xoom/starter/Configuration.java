@@ -201,8 +201,8 @@ public class Configuration {
             new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
             new LoggingStep(), new StatusHandlingStep(), new ModelGenerationStep(),
             new ProjectionGenerationStep(), new StorageGenerationStep(),
-            new RestResourceGenerationStep(), new ContentCreationStep(),
-            new ContentPurgerStep()
+            new RestResourceGenerationStep(), new BootstrapGenerationStep(),
+            new ContentCreationStep(), new ContentPurgerStep()
     );
 
     public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(

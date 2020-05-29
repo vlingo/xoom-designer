@@ -34,25 +34,9 @@ public class StorageTemplateDataFactoryTest {
 
         //General Assertions
 
-        Assertions.assertEquals(3, allTemplatesData.size());
+        Assertions.assertEquals(2, allTemplatesData.size());
         Assertions.assertEquals(2, allTemplatesData.get(STATE_ADAPTER).size());
         Assertions.assertEquals(1, allTemplatesData.get(STORE_PROVIDER).size());
-        Assertions.assertEquals(1, allTemplatesData.get(STORE_PROVIDER_CONFIGURATION).size());
-
-        //Assertions for StoreProviderConfiguration
-
-        final TemplateData storeProviderConfigurationTemplateData =
-                allTemplatesData.get(STORE_PROVIDER_CONFIGURATION).get(0);
-
-        final CodeTemplateParameters storeProvideConfigurationParameters =
-                storeProviderConfigurationTemplateData.templateParameters();
-
-        Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, "StoreProviderConfiguration.java").toString(),
-                storeProviderConfigurationTemplateData.file().getAbsolutePath());
-        Assertions.assertEquals(EXPECTED_PACKAGE, storeProvideConfigurationParameters.find(PACKAGE_NAME));
-        Assertions.assertEquals("StatefulTypeRegistry", storeProvideConfigurationParameters.find(REGISTRY_CLASS_NAME));
-        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", storeProvideConfigurationParameters.find(REGISTRY_QUALIFIED_CLASS_NAME));
-        Assertions.assertEquals(1, storeProvideConfigurationParameters.<List>find(STORE_PROVIDERS).size());
 
         //Assertions for StateAdapter
 
@@ -66,7 +50,7 @@ public class StorageTemplateDataFactoryTest {
         Assertions.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(STATE_NAME));
         Assertions.assertEquals(StorageType.STATE_STORE, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
         Assertions.assertEquals(1, stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).size());
-        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, "AuthorStateAdapter.java").toString(), stateAdapterTemplateData.file().getAbsolutePath());
 
         //Assertions for StoreProvider
@@ -81,16 +65,16 @@ public class StorageTemplateDataFactoryTest {
         Assertions.assertEquals("StateStoreProvider", storeProviderParameters.find(STORE_PROVIDER_NAME));
         Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor", storeProviderParameters.find(STORE_NAME));
         Assertions.assertEquals(4, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
-        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
-        Assertions.assertEquals("io.vlingo.xoomapp.model.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).qualifiedClassName);
-        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.postgres.PostgresStorageDelegate", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(2).qualifiedClassName);
-        Assertions.assertEquals("io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(3).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoomapp.model.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.symbio.store.state.jdbc.postgres.PostgresStorageDelegate", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.symbio.store.common.jdbc.postgres.PostgresConfigurationProvider", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
         Assertions.assertEquals("PostgresStorageDelegate", storeProviderParameters.find(STORAGE_DELEGATE_NAME));
         Assertions.assertEquals("PostgresConfigurationProvider", storeProviderParameters.find(CONFIGURATION_PROVIDER_NAME));
-        Assertions.assertEquals("AuthorState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).stateClass);
-        Assertions.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).stateAdapterClass);
-        Assertions.assertEquals("BookState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).stateClass);
-        Assertions.assertEquals("BookStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).stateAdapterClass);
+        Assertions.assertEquals("AuthorState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).getStateClass());
+        Assertions.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).getStateAdapterClass());
+        Assertions.assertEquals("BookState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).getStateClass());
+        Assertions.assertEquals("BookStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).getStateAdapterClass());
         Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, "StateStoreProvider.java").toString(), storeProviderTemplateData.file().getAbsolutePath());
     }
 
@@ -102,25 +86,9 @@ public class StorageTemplateDataFactoryTest {
 
         //General Assertions
 
-        Assertions.assertEquals(3, allTemplatesData.size());
+        Assertions.assertEquals(2, allTemplatesData.size());
         Assertions.assertEquals(2, allTemplatesData.get(STATE_ADAPTER).size());
         Assertions.assertEquals(2, allTemplatesData.get(STORE_PROVIDER).size());
-        Assertions.assertEquals(1, allTemplatesData.get(STORE_PROVIDER_CONFIGURATION).size());
-
-        //Assertions for StoreProviderConfiguration
-
-        final TemplateData storeProviderConfigurationTemplateData =
-                allTemplatesData.get(STORE_PROVIDER_CONFIGURATION).get(0);
-
-        final CodeTemplateParameters storeProvideConfigurationParameters =
-                storeProviderConfigurationTemplateData.templateParameters();
-
-        Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, "StoreProviderConfiguration.java").toString(),
-                storeProviderConfigurationTemplateData.file().getAbsolutePath());
-        Assertions.assertEquals(EXPECTED_PACKAGE, storeProvideConfigurationParameters.find(PACKAGE_NAME));
-        Assertions.assertEquals("StatefulTypeRegistry", storeProvideConfigurationParameters.find(REGISTRY_CLASS_NAME));
-        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", storeProvideConfigurationParameters.find(REGISTRY_QUALIFIED_CLASS_NAME));
-        Assertions.assertEquals(2, storeProvideConfigurationParameters.<List>find(STORE_PROVIDERS).size());
 
         //Assertions for StateAdapter
 
@@ -134,7 +102,7 @@ public class StorageTemplateDataFactoryTest {
         Assertions.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(STATE_NAME));
         Assertions.assertEquals(StorageType.STATE_STORE, stateAdapterConfigurationParameters.find(STORAGE_TYPE));
         Assertions.assertEquals(1, stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).size());
-        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
+        Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", stateAdapterConfigurationParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, "AuthorStateAdapter.java").toString(), stateAdapterTemplateData.file().getAbsolutePath());
 
         //Assertions for StoreProvider
@@ -148,12 +116,12 @@ public class StorageTemplateDataFactoryTest {
             Assertions.assertEquals(modelClassification.title + "StateStoreProvider", storeProviderParameters.find(STORE_PROVIDER_NAME));
             Assertions.assertEquals("io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor", storeProviderParameters.find(STORE_NAME));
             Assertions.assertEquals(2, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
-            Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
-            Assertions.assertEquals("io.vlingo.xoomapp.model.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).qualifiedClassName);
-            Assertions.assertEquals("AuthorState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).stateClass);
-            Assertions.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).stateAdapterClass);
-            Assertions.assertEquals("BookState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).stateClass);
-            Assertions.assertEquals("BookStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).stateAdapterClass);
+            Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+            Assertions.assertEquals("io.vlingo.xoomapp.model.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
+            Assertions.assertEquals("AuthorState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).getStateClass());
+            Assertions.assertEquals("AuthorStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).getStateAdapterClass());
+            Assertions.assertEquals("BookState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).getStateClass());
+            Assertions.assertEquals("BookStateAdapter", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(1).getStateAdapterClass());
             Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, modelClassification.title  + "StateStoreProvider.java").toString(), storeProviderTemplateData.file().getAbsolutePath());
         });
     }

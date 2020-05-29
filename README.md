@@ -5,8 +5,8 @@ The quick starter project generator for the vlingo/xoom quick start components
 
 ## Introduction
 `vlingo-xoom-starter` enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
-* `vlingo-xoom` initializer class
-* Maven¹ build configuration (pom.xml)
+* `vlingo/xoom` initializer class
+* Maven build configuration (pom.xml)
 * Default test class
 
 The structure is represented below: 
