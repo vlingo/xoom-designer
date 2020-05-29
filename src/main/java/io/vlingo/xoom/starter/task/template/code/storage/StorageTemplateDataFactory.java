@@ -31,7 +31,7 @@ public class StorageTemplateDataFactory {
                                                                       final boolean supportCQRS,
                                                                       final List<Content> contents,
                                                                       final StorageType storageType,
-                                                                      final DatabaseType databaseType,
+                                                                      final Map<ModelClassification, DatabaseType> databaseTypes,
                                                                       final ProjectionType projectionType) {
         final String persistencePackage =
                 resolvePackage(basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
@@ -42,7 +42,7 @@ public class StorageTemplateDataFactory {
 
         final List<TemplateData> storeProvidersTemplateData =
                 StoreProviderTemplateData.from(projectPath, persistencePackage,
-                        supportCQRS, storageType, databaseType, projectionType,
+                        supportCQRS, storageType, projectionType, databaseTypes,
                         stateAdaptersTemplateData, contents);
 
         return new LinkedHashMap<CodeTemplateStandard, List<TemplateData>>() {{

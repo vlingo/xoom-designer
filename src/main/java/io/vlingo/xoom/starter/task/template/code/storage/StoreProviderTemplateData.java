@@ -13,6 +13,7 @@ import io.vlingo.xoom.starter.task.template.code.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
@@ -29,8 +30,8 @@ public class StoreProviderTemplateData extends TemplateData {
                                           final String persistencePackage,
                                           final boolean supportCQRS,
                                           final StorageType storageType,
-                                          final DatabaseType databaseType,
                                           final ProjectionType projectionType,
+                                          final Map<ModelClassification, DatabaseType> databaseTypes,
                                           final List<TemplateData> stateAdaptersTemplateData,
                                           final List<Content> contents) {
         final List<ModelClassification> modelClassifications =
@@ -39,8 +40,8 @@ public class StoreProviderTemplateData extends TemplateData {
         return modelClassifications.stream()
                 .map(classification -> new StoreProviderTemplateData(
                         projectPath, persistencePackage, storageType,
-                        databaseType, projectionType, classification,
-                        stateAdaptersTemplateData, contents
+                        databaseTypes.get(classification), projectionType,
+                        classification, stateAdaptersTemplateData, contents
                 )).collect(Collectors.toList());
     }
 

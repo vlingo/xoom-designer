@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -30,7 +31,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulSingleModel() {
         final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, false,
-                        contents(), StorageType.STATE_STORE, DatabaseType.POSTGRES, ProjectionType.EVENT_BASED);
+                        contents(), StorageType.STATE_STORE, databaseTypes(), ProjectionType.EVENT_BASED);
 
         //General Assertions
 
@@ -82,7 +83,7 @@ public class StorageTemplateDataFactoryTest {
     public void testStorageTemplateDataOnStatefulCQRSModel() {
         final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, true,
-                        contents(), StorageType.STATE_STORE, DatabaseType.IN_MEMORY, ProjectionType.NONE);
+                        contents(), StorageType.STATE_STORE, databaseTypes(), ProjectionType.NONE);
 
         //General Assertions
 
@@ -111,11 +112,13 @@ public class StorageTemplateDataFactoryTest {
             final TemplateData storeProviderTemplateData = allTemplatesData.get(STORE_PROVIDER).get(modelClassificationIndex);
             final ModelClassification modelClassification = modelClassificationIndex == 0 ? COMMAND : QUERY;
             final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.templateParameters();
+            final String expectedStateStoreActor = modelClassificationIndex == 0 ? "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor" : "io.vlingo.symbio.store.state.jdbc.InMemoryStateStoreActor";
+            final int expectedImports = modelClassificationIndex == 0 ? 4 : 2;
             Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
             Assertions.assertEquals(modelClassification, storeProviderParameters.find(MODEL_CLASSIFICATION));
             Assertions.assertEquals(modelClassification.title + "StateStoreProvider", storeProviderParameters.find(STORE_PROVIDER_NAME));
-            Assertions.assertEquals("io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor", storeProviderParameters.find(STORE_NAME));
-            Assertions.assertEquals(2, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
+            Assertions.assertEquals(expectedStateStoreActor, storeProviderParameters.find(STORE_NAME));
+            Assertions.assertEquals(expectedImports, storeProviderParameters.<List<ImportParameter>>find(IMPORTS).size());
             Assertions.assertEquals("io.vlingo.xoomapp.model.AuthorState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
             Assertions.assertEquals("io.vlingo.xoomapp.model.BookState", storeProviderParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
             Assertions.assertEquals("AuthorState", storeProviderParameters.<List<StateAdapterParameter>>find(STATE_ADAPTERS).get(0).getStateClass());
@@ -134,6 +137,14 @@ public class StorageTemplateDataFactoryTest {
                   Content.with(AGGREGATE_PROTOCOL, new File(Paths.get(MODEL_PACKAGE_PATH, "book", "Book.java").toString()), BOOK_CONTENT_TEXT),
                   Content.with(PROJECTION_DISPATCHER_PROVIDER, new File(Paths.get(PERSISTENCE_PACKAGE_PATH, "ProjectionDispatcherProvider.java").toString()), PROJECTION_DISPATCHER_PROVIDER_CONTENT_TEXT)
                 );
+    }
+
+    private static final Map<ModelClassification, DatabaseType> databaseTypes() {
+        return new HashMap<ModelClassification, DatabaseType>() {{
+           put(SINGLE, DatabaseType.POSTGRES);
+           put(COMMAND, DatabaseType.HSQLDB);
+           put(QUERY, DatabaseType.IN_MEMORY);
+        }};
     }
 
     private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure.persistence";
