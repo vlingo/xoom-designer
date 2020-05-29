@@ -42,7 +42,7 @@ Download the `vlingo-xoom-starter` compressed distribution file via `curl`:
 Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path for the uncompressed folder. Additionally, on Unix-based operating systems, it is necessary to allow _read_ and _execute_ access on executable script, placed under the root folder, as following:
 
 ``` 
- $ ./chmod 755 xoom
+ $ chmod 755 xoom
 ```
 
 Ensure it's all set by verifying the `vlingo-xoom-starter` version:
