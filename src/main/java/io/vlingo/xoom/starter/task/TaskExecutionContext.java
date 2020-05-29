@@ -7,8 +7,11 @@
 
 package io.vlingo.xoom.starter.task;
 
+import com.google.common.collect.Maps;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
+import io.vlingo.xoom.starter.task.template.code.DatabaseType;
+import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
 import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
 
 import java.io.File;
@@ -115,6 +118,16 @@ public class TaskExecutionContext {
 
     public List<Content> contents() {
         return contents;
+    }
+
+    public Map<ModelClassification, DatabaseType> databases() {
+        return Maps.immutableEnumMap(
+                new HashMap<ModelClassification, DatabaseType>(){{
+                    put(ModelClassification.SINGLE, propertyOf(DATABASE, DatabaseType::valueOf));
+                    put(ModelClassification.COMMAND, propertyOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
+                    put(ModelClassification.QUERY, propertyOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
+                }}
+        );
     }
 
     public String projectPath() {
