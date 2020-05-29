@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.task.template.code;
 public enum CodeTemplateParameter {
 
     PACKAGE_NAME("packageName"),
+    APPLICATION_NAME("appName"),
     AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
     AGGREGATE_NAME("aggregateName"),
     DOMAIN_EVENT_NAME("domainEventName"),
@@ -34,12 +35,13 @@ public enum CodeTemplateParameter {
     USE_PROJECTIONS("useProjections"),
     MODEL_CLASSIFICATION("modelClassification"),
     REST_RESOURCE_NAME("resourceName"),
+    REST_RESOURCES("restResources"),
     REGISTRY_CLASS_NAME("registryClassName"),
     REGISTRY_QUALIFIED_CLASS_NAME("registryQualifiedClassName"),
     CONFIGURATION_PROVIDER_NAME("configurationProviderName"),
     PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
-    PROJECTION_DISPATCHER_PROVIDER__QUALIFIED_CLASS_NAME("projectionDispatcherProviderQualifiedClassName"),
-    STORE_PROVIDERS("storeProviders"),
+    PROJECTION_DISPATCHER_PROVIDER_QUALIFIED_CLASS_NAME("projectionDispatcherProviderQualifiedClassName"),
+    PROVIDERS("providers"),
     CONNECTION_URL("connectionUrl");
 
     public final String key;

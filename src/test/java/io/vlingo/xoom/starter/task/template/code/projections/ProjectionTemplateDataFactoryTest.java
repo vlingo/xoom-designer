@@ -47,8 +47,7 @@ public class ProjectionTemplateDataFactoryTest {
         final TemplateData providerTemplateData = allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).get(0);
         final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.templateParameters();
         Assertions.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assertions.assertEquals(0, providerTemplateDataParameters.<List>find(IMPORTS).size());
-        Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Event name here\", \"Another Event name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Event name here\", \"Another Event name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
         Assertions.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Event name here\", \"Another Event name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
 
         //Assertions for Projections
@@ -66,8 +65,8 @@ public class ProjectionTemplateDataFactoryTest {
             Assertions.assertEquals(expectedName, projectionTemplateDataParameters.find(PROJECTION_NAME));
             Assertions.assertEquals(expectedStateName, projectionTemplateDataParameters.find(STATE_NAME));
             Assertions.assertEquals(expectedEntityDataName, projectionTemplateDataParameters.find(ENTITY_DATA_NAME));
-            Assertions.assertEquals(expectedStateQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(0).qualifiedClassName);
-            Assertions.assertEquals(expectedEntityDataQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(1).qualifiedClassName);
+            Assertions.assertEquals(expectedStateQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+            Assertions.assertEquals(expectedEntityDataQualifiedName, projectionTemplateDataParameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
             Assertions.assertEquals(Paths.get(PERSISTENCE_PACKAGE_PATH, expectedName + ".java").toString(), projectionTemplateData.file().getAbsolutePath());
         });
 
@@ -106,8 +105,7 @@ public class ProjectionTemplateDataFactoryTest {
         final TemplateData providerTemplateData = allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).get(0);
         final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.templateParameters();
         Assertions.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
-        Assertions.assertEquals(0, providerTemplateDataParameters.<List>find(IMPORTS).size());
-        Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
+        Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
         Assertions.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
     }
 

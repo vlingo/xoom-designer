@@ -13,6 +13,9 @@ import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 
 public enum CodeTemplateStandard {
 
+    BOOTSTRAP(parameters -> CodeTemplateFile.BOOTSTRAP.filename,
+            (name, parameters) -> "Bootstrap"),
+
     AGGREGATE_PROTOCOL(parameters -> CodeTemplateFile.AGGREGATE_PROTOCOL.filename),
 
     DOMAIN_EVENT(domainEventNameEnrichener(), parameters -> CodeTemplateFile.DOMAIN_EVENT.filename),
@@ -31,9 +34,6 @@ public enum CodeTemplateStandard {
 
     STATE_ADAPTER(parameters -> STATE_ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
             (name, parameters) -> name + "StateAdapter"),
-
-    STORE_PROVIDER_CONFIGURATION(parameters -> CodeTemplateFile.STORE_PROVIDER_CONFIGURATION.filename,
-            (name, parameters) -> "StoreProviderConfiguration"),
 
     PLACEHOLDER_DOMAIN_EVENT(domainEventNameEnrichener(),
             parameters -> CodeTemplateFile.PLACEHOLDER_DOMAIN_EVENT.filename,
@@ -111,5 +111,9 @@ public enum CodeTemplateStandard {
             final String filename = FilenameUtils.removeExtension(file.getName());
             return parameters.and(DOMAIN_EVENT_NAME, filename) ;
         };
+    }
+
+    public boolean isProjectionDispatcherProvider() {
+        return equals(PROJECTION_DISPATCHER_PROVIDER);
     }
 }

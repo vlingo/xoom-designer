@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 public class StateAdapterParameter {
 
-    public final String stateClass;
-    public final String stateAdapterClass;
+    private final String stateClass;
+    private final String stateAdapterClass;
 
     private StateAdapterParameter(final String stateClass,
                                   final String stateAdapterClass) {

@@ -1,9 +1,5 @@
 package ${packageName};
 
-<#list imports as import>
-import ${import.fullyQualifiedClassName};
-</#list>
-
 import java.util.Arrays;
 import java.util.List;
 

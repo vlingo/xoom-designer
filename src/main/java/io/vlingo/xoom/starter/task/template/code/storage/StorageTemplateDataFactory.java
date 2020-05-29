@@ -36,35 +36,23 @@ public class StorageTemplateDataFactory {
         final String persistencePackage =
                 resolvePackage(basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
 
-        final List<TemplateData> stateAdapters =
+        final List<TemplateData> stateAdaptersTemplateData =
                 StateAdapterTemplateData.from(projectPath, persistencePackage,
                         storageType, contents);
 
-        final List<TemplateData> storeProviders =
+        final List<TemplateData> storeProvidersTemplateData =
                 StoreProviderTemplateData.from(projectPath, persistencePackage,
                         supportCQRS, storageType, databaseType, projectionType,
-                        stateAdapters, contents);
+                        stateAdaptersTemplateData, contents);
 
-        final TemplateData storeProviderConfiguration =
-                StoreProviderConfigurationTemplateData.from(projectPath,
-                        persistencePackage, storageType, projectionType,
-                        storeProviders, contents);
-
-        return collect(stateAdapters, storeProviders, storeProviderConfiguration);
+        return new LinkedHashMap<CodeTemplateStandard, List<TemplateData>>() {{
+            put(STATE_ADAPTER, stateAdaptersTemplateData);
+            put(STORE_PROVIDER, storeProvidersTemplateData);
+        }};
     }
 
     private static String resolvePackage(final String... additionalPackages) {
         return String.format(PACKAGE_PATTERN, additionalPackages).toLowerCase();
-    }
-
-    private static Map<CodeTemplateStandard, List<TemplateData>> collect(final List<TemplateData> stateAdaptersTemplateData,
-                                                                         final List<TemplateData> storeProvidersTemplateData,
-                                                                         final TemplateData storeProviderConfigurationTemplateData) {
-        return new LinkedHashMap<CodeTemplateStandard, List<TemplateData>>() {{
-            put(STATE_ADAPTER, stateAdaptersTemplateData);
-            put(STORE_PROVIDER, storeProvidersTemplateData);
-            put(STORE_PROVIDER_CONFIGURATION, asList(storeProviderConfigurationTemplateData));
-        }};
     }
 
 }

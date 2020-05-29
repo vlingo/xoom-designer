@@ -16,8 +16,6 @@ import static io.vlingo.xoom.starter.task.Property.DEPLOYMENT;
 
 public class KubernetesArchetypePropertiesValidator extends ArchetypePropertiesValidator {
 
-    private static final String EXPECTED_DEPLOYMENT_VALUE = "K8S";
-
     public boolean validate(final Properties properties, final List<Property> requiredProperties) {
         return true;
     }

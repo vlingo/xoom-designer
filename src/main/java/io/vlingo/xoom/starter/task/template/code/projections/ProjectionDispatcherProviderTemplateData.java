@@ -8,26 +8,23 @@ package io.vlingo.xoom.starter.task.template.code.projections;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.PROJECTION_TO_DESCRIPTION;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.AGGREGATE_PROTOCOL;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
     private static final String PACKAGE_PATTERN = "%s.%s.%s";
     private static final String PARENT_PACKAGE_NAME = "infrastructure";
     private static final String PERSISTENCE_PACKAGE_NAME = "persistence";
-    private static final String FIRST_BECAUSE_OF_PLACEHOLDER = "\"%s name here\"";
-    private static final String SECOND_BECAUSE_OF_PLACEHOLDER = "\"Another %s name here\"";
 
     private final String absolutePath;
     private final CodeTemplateParameters templateParameters;
@@ -54,25 +51,10 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                                                   final ProjectionType projectionType,
                                                   final List<String> aggregateProtocols) {
         final List<ProjectToDescriptionParameter> projectToDescriptionParameters =
-                buildProjectToDescriptionParameter(projectionType, aggregateProtocols);
+                ProjectToDescriptionParameter.from(projectionType, aggregateProtocols);
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters)
-                .and(IMPORTS, ImportParameter.of());
-    }
-
-    private List<ProjectToDescriptionParameter> buildProjectToDescriptionParameter(final ProjectionType projectionType,
-                                                                                   final List<String> aggregateProtocols) {
-        return aggregateProtocols.stream().map(protocol -> {
-            final String projectionName =
-                    PROJECTION.resolveClassname(protocol);
-
-            final List<String> becauseOf =
-                    Arrays.asList(String.format(FIRST_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName),
-                            String.format(SECOND_BECAUSE_OF_PLACEHOLDER, projectionType.sourceName));
-
-            return new ProjectToDescriptionParameter(projectionName, becauseOf);
-        }).collect(Collectors.toList());
+                .and(PROJECTION_TO_DESCRIPTION, projectToDescriptionParameters);
     }
 
     private String resolvePackage(final String basePackage) {
