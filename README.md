@@ -1,6 +1,6 @@
 # vlingo-xoom-starter
 
-[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom-starter.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom-starter) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom-starter/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom-starter/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/community/)
+[![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/community/)
 
 The project generator for the VLINGO/XOOM quick start components.
 
@@ -64,7 +64,7 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 Filling up every wizard step, you can readily take advantage of several auto-generated resources:
 * A full maven project structure with all required `vlingo` dependencies;
 * Aggregates and Domain Events prepared for reactive `vlingo` storage types;
-* Rest Resources, CQRS Projections, Adapters and Data type;
+* REST Resources, CQRS Projections, Adapters and Data type;
 * Store Providers supporting State Store and Journal;
 * Containerization files facilitating Docker / Kubernetes deployment; 
 
