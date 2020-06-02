@@ -1,12 +1,15 @@
 # vlingo-xoom-starter
-[![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter)
 
-The quick starter project generator for the vlingo/xoom quick start components
+[![Javadocs](http://javadoc.io/badge/io.vlingo/vlingo-xoom-starter.svg?color=brightgreen)](http://javadoc.io/doc/io.vlingo/vlingo-xoom-starter) [![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter) [ ![Download](https://api.bintray.com/packages/vlingo/vlingo-platform-java/vlingo-xoom-starter/images/download.svg) ](https://bintray.com/vlingo/vlingo-platform-java/vlingo-xoom-starter/_latestVersion) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/community/)
+
+The project generator for the VLINGO/XOOM quick start components.
+
+Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
 ## Introduction
-`vlingo-xoom-starter` enables project structure generation and components initialization for `vlingo/xoom` applications. The primary generation output contains: 
-* `vlingo/xoom` initializer class
-* Maven build configuration (pom.xml)
+`vlingo-xoom-starter` enables project structure generation and components initialization for VLINGO/XOOM services and applications. The primary generation output contains: 
+* `vlingo-xoom` initializer class
+* Maven build configuration: `pom.xml`
 * Default test class
 
 The structure is represented below: 
@@ -28,7 +31,7 @@ The structure is represented below:
 ```
 
 ## Requirements
-* Java 7+
+* Java 8+
 * Maven 3.x.x
 * Docker Desktop 18.x
 
