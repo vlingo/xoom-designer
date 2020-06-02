@@ -5,7 +5,15 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.template.code;
+package io.vlingo.xoom.starter.task.template.code.storage;
+
+import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
+import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
+
+import static io.vlingo.xoom.starter.Configuration.STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 
 public enum DatabaseType {
 
@@ -45,4 +53,32 @@ public enum DatabaseType {
         return configurationProviderQualifiedName.substring(classNameIndex + 1);
     }
 
+    public CodeTemplateParameters addConfigurationParameters(final CodeTemplateParameters parameters) {
+        if(!configurable) {
+            return parameters;
+        }
+
+        final StorageType storageType = parameters.find(STORAGE_TYPE);
+        final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
+
+        if(modelClassification.isQueryModel() || storageType.isStateful()) {
+
+            final String storageDelegateClassName =
+                    Configuration.STORAGE_DELEGATE_CLASS_NAME.get(this);
+
+            final String storageDelegateQualifiedClassName =
+                    String.format(STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN,
+                            label, storageDelegateClassName);
+
+            parameters.and(STORAGE_DELEGATE_NAME, storageDelegateClassName)
+                    .addImport(storageDelegateQualifiedClassName);
+        }
+
+        return parameters.and(CONFIGURATION_PROVIDER_NAME, this.configurationProviderName())
+                .addImport(configurationProviderQualifiedName);
+    }
+
+    public boolean isInMemory() {
+        return equals(IN_MEMORY);
+    }
 }

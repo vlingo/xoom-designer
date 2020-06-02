@@ -23,7 +23,7 @@ public final class ${entityName} extends EventSourced implements ${aggregateProt
   //=====================================
 
   static {
-    EventSourced.registerConsumer(${entityName}.class, ${domainEventName}.class, ${aggregateProtocolName}::apply${domainEventName});
+    EventSourced.registerConsumer(${entityName}.class, ${domainEventName}.class, ${entityName}::apply${domainEventName});
   }
 
   private void apply${domainEventName}(final ${domainEventName} e) {

@@ -79,8 +79,11 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   }
   
   onStorageTypeSelection() {
+    this.generationSettings.model.projections = 'NONE';
     if(this.generationSettings.model.storageType === 'JOURNAL') {
       this.generationSettings.model.useCQRS = true;
+    } else {
+      this.generationSettings.model.useCQRS = false;
     }
     this.loadDatabaseTypes();
   }
@@ -109,31 +112,30 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     return false;
   }
 
-  storageOptions() {
+  storageTypes() {
     return [
       {name: "State Store", value: "STATE_STORE"},
-      {name: "Object Store", value: "OBJECT_STORE"},
       {name: "Journal", value: "JOURNAL"}
     ];
   }
 
   loadDatabaseTypes() {
-    if(this.generationSettings.model.storageType === "STATE_STORE") {
-      this.databaseTypes = [
-        {name: "In Memory", value: "IN_MEMORY"},
-        {name: "Postgres", value: "POSTGRES"},
-        {name: "HSQLDB", value: "HSQLDB"},
-        {name: "MySQL", value: "MYSQL"},
-        {name: "YugaByte", value: "YUGABYTE"}
-      ];
-    } else {
-      this.databaseTypes = [
-        {name: "In Memory", value: "IN_MEMORY"}
-      ];
-    }
+    this.databaseTypes = [
+      {name: "In Memory", value: "IN_MEMORY"},
+      {name: "Postgres", value: "POSTGRES"},
+      {name: "HSQLDB", value: "HSQLDB"},
+      {name: "MySQL", value: "MYSQL"},
+      {name: "YugaByte", value: "YUGABYTE"}
+    ];
   }
 
   projectionOptions() {
+    if(this.generationSettings.model.storageType === 'JOURNAL') {
+      return [
+        {name: "Not Applicable", value: "NONE"},
+        {name: "Event Based", value: "EVENT_BASED"}
+      ];
+    }
     return [
       {name: "Not Applicable", value: "NONE"},
       {name: "Event Based", value: "EVENT_BASED"},
@@ -143,6 +145,10 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   useCQRS() {
     return this.generationSettings.model.useCQRS;
+  }
+
+  shouldDisplayCQRS() {
+    return this.generationSettings.model.storageType === 'STATE_STORE';
   }
 
   private setupRestResources() {
