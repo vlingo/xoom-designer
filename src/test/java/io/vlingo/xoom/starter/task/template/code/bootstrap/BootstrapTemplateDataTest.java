@@ -63,15 +63,18 @@ public class BootstrapTemplateDataTest {
 
         Assertions.assertEquals(3, parameters.<List>find(PROVIDERS).size());
         Assertions.assertEquals("QueryModelStateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
-        Assertions.assertEquals("stage, registry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
+        Assertions.assertEquals("stage, statefulTypeRegistry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
         Assertions.assertEquals("final ProjectionDispatcherProvider projectionDispatcherProvider = ProjectionDispatcherProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(1).getInitialization());
         Assertions.assertEquals("stage", parameters.<List<ProviderParameter>>find(PROVIDERS).get(1).getArguments());
         Assertions.assertEquals("CommandModelStateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(2).getInitialization());
-        Assertions.assertEquals("stage, registry, projectionDispatcherProvider.storeDispatcher", parameters.<List<ProviderParameter>>find(PROVIDERS).get(2).getArguments());
+        Assertions.assertEquals("stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher", parameters.<List<ProviderParameter>>find(PROVIDERS).get(2).getArguments());
+
+        Assertions.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
+        Assertions.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());
+        Assertions.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
 
         Assertions.assertEquals(true, parameters.find(USE_PROJECTIONS));
         Assertions.assertEquals("xoom-app", parameters.find(APPLICATION_NAME));
-        Assertions.assertEquals("StatefulTypeRegistry", parameters.find(REGISTRY_CLASS_NAME));
     }
 
     @Test
@@ -102,11 +105,14 @@ public class BootstrapTemplateDataTest {
 
         Assertions.assertEquals(1, parameters.<List>find(PROVIDERS).size());
         Assertions.assertEquals("StateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
-        Assertions.assertEquals("stage, registry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
+        Assertions.assertEquals("stage, statefulTypeRegistry", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getArguments());
+
+        Assertions.assertEquals(1, parameters.<List>find(TYPE_REGISTRIES).size());
+        Assertions.assertEquals("StatefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getClassName());
+        Assertions.assertEquals("statefulTypeRegistry", parameters.<List<TypeRegistryParameter>>find(TYPE_REGISTRIES).get(0).getObjectName());
 
         Assertions.assertEquals(false, parameters.find(USE_PROJECTIONS));
         Assertions.assertEquals("xoom-app", parameters.find(APPLICATION_NAME));
-        Assertions.assertEquals("StatefulTypeRegistry", parameters.find(REGISTRY_CLASS_NAME));
     }
 
     private static final String EXPECTED_PACKAGE = "io.vlingo.xoomapp.infrastructure";

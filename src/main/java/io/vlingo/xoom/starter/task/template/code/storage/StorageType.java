@@ -1,56 +1,62 @@
 package io.vlingo.xoom.starter.task.template.code.storage;
 
-import io.vlingo.xoom.starter.Configuration;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
-import io.vlingo.xoom.starter.task.template.code.DatabaseType;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.function.Function;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static io.vlingo.xoom.starter.Configuration.STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 
 public enum StorageType {
 
-    JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry", "io.vlingo.lattice.model.sourcing"),
+    JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry",
+            "io.vlingo.lattice.model.sourcing",
+            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor",
+            "io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor",
+            DOMAIN_EVENT, PLACEHOLDER_DOMAIN_EVENT),
 
-    OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry", "io.vlingo.lattice.model.object"),
+    OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
+            "io.vlingo.lattice.model.object",
+            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor",
+            "io.vlingo.symbio.store.object.inmemory.InMemoryObjectStoreActor"),
 
-    STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry", "io.vlingo.lattice.model.stateful", stateStoreParametersEnrichment());
+    STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
+            "io.vlingo.lattice.model.stateful",
+            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor",
+            "io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor",
+            STATE);
 
     private static final String STORE_PROVIDER_NAME_SUFFIX = "Provider";
 
     public final String key;
     public final String title;
-    public final String registryClassName;
-    private final String registryPackage;
-    private final Function<CodeTemplateParameters, CodeTemplateParameters> parametersEnrichener;
+    public final String typeRegistryClassName;
+    private final String typeRegistryPackage;
+    private final String defaultStoreActorQualifiedName;
+    private final String inMemoryStoreActorQualifiedName;
+    public final List<CodeTemplateStandard> adapterSourceClassStandards; //TODO: After ModelTemplateData refactoring, use a single parameter instead of List
 
     StorageType(final String key,
                 final String title,
-                final String registryClassName,
-                final String registryPackage) {
-        this(key, title, registryClassName, registryPackage, parameters -> parameters);
-    }
-
-    StorageType(final String key,
-                final String title,
-                final String registryClassName,
-                final String registryPackage,
-                final Function<CodeTemplateParameters, CodeTemplateParameters> parametersEnrichener) {
+                final String typeRegistryClassName,
+                final String typeRegistryPackage,
+                final String defaultStoreActorQualifiedName,
+                final String inMemoryStoreActorQualifiedName,
+                final CodeTemplateStandard ...adapterSourceClassStandards) {
         this.key = key;
         this.title = title;
-        this.registryClassName = registryClassName;
-        this.registryPackage = registryPackage;
-        this.parametersEnrichener = parametersEnrichener;
+        this.typeRegistryClassName = typeRegistryClassName;
+        this.typeRegistryPackage = typeRegistryPackage;
+        this.defaultStoreActorQualifiedName = defaultStoreActorQualifiedName;
+        this.inMemoryStoreActorQualifiedName = inMemoryStoreActorQualifiedName;
+        this.adapterSourceClassStandards = Arrays.asList(adapterSourceClassStandards);
     }
 
     public static StorageType of(final String storage) {
         return valueOf(storage.toUpperCase());
-    }
-
-    public String registryQualifiedClassName() {
-        return registryPackage + "." + registryClassName;
     }
 
     public String resolveProviderNameFrom(final ModelClassification modelClassification) {
@@ -58,37 +64,46 @@ public enum StorageType {
         return prefix + STORE_PROVIDER_NAME_SUFFIX;
     }
 
-    public CodeTemplateParameters enrichParameters(final CodeTemplateParameters codeTemplateParameters) {
-        return parametersEnrichener.apply(codeTemplateParameters);
+    public String actorFor(final DatabaseType databaseType) {
+        if(databaseType.isInMemory()) {
+            return inMemoryStoreActorQualifiedName;
+        }
+        return defaultStoreActorQualifiedName;
     }
 
-    public static String qualifiedStoreActorNameFor(final DatabaseType databaseType, final StorageType storageType) {
-        return Configuration.STORE_ACTORS.stream()
-                .filter(information -> information.relateTo(databaseType, storageType))
-                .findFirst().orElseThrow(() -> new StoreActorDetailNotFoundException(databaseType, storageType))
-                .storeActorQualifiedName;
+    public List<String> resolveTypeRegistryQualifiedNames(final Boolean useCQRS) {
+        return findRelatedStorageTypes(useCQRS)
+                .map(storageType -> storageType.typeRegistryQualifiedClassName())
+                .collect(Collectors.toList());
     }
 
-    private static Function<CodeTemplateParameters, CodeTemplateParameters> stateStoreParametersEnrichment() {
-        return parameters -> {
-            final DatabaseType databaseType = parameters.find(DATABASE_TYPE);
-
-            if(!databaseType.configurable) {
-                return parameters;
-            }
-
-            final String storageDelegateClassName =
-                    Configuration.STORAGE_DELEGATE_CLASS_NAME.get(databaseType);
-
-            final String storageDelegateQualifiedClassName =
-                    String.format(STORAGE_DELEGATE_QUALIFIED_NAME_PATTERN,
-                            databaseType.label, storageDelegateClassName);
-
-            return parameters.and(STORAGE_DELEGATE_NAME, storageDelegateClassName)
-                    .and(CONFIGURATION_PROVIDER_NAME, databaseType.configurationProviderName())
-                    .addImport(new ImportParameter(storageDelegateQualifiedClassName))
-                    .addImport(new ImportParameter(databaseType.configurationProviderQualifiedName));
-        };
+    public String resolveTypeRegistryObjectName(final ModelClassification modelClassification) {
+        if(!modelClassification.isQueryModel()) {
+            return typeRegistryObjectName();
+        }
+        return STATE_STORE.typeRegistryObjectName();
     }
 
+    public Stream<StorageType> findRelatedStorageTypes(final Boolean useCQRS) {
+        if(!useCQRS || isStateful()) {
+            return Stream.of(this);
+        }
+        return Stream.of(this, STATE_STORE);
+    }
+
+    public Boolean requireAdapters(final ModelClassification modelClassification) {
+        return !modelClassification.isQueryModel() || isStateful();
+    }
+
+    public Boolean isStateful() {
+        return equals(STATE_STORE);
+    }
+
+    public String typeRegistryObjectName() {
+        return StringUtils.uncapitalize(typeRegistryClassName);
+    }
+
+    private String typeRegistryQualifiedClassName() {
+        return typeRegistryPackage + "." + typeRegistryClassName;
+    }
 }

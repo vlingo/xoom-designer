@@ -36,8 +36,8 @@ public class BootstrapGenerationStepTest {
         Assertions.assertEquals(6, context.contents().size());
         Assertions.assertEquals("Bootstrap.java", context.contents().get(5).file.getName());
         Assertions.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, registry, projectionDispatcherProvider.storeDispatcher)"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, registry)"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
         Assertions.assertTrue(context.contents().get(5).text.contains("final AuthorResource authorResource = new AuthorResource();"));
         Assertions.assertTrue(context.contents().get(5).text.contains("final BookResource bookResource = new BookResource();"));
         Assertions.assertTrue(context.contents().get(5).text.contains("authorResource.routes(),"));

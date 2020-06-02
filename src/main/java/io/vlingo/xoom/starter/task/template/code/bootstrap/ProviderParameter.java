@@ -26,8 +26,8 @@ public class ProviderParameter {
     private final String arguments;
 
     private static final String DISPATCHER_PROVIDER_ARG = "stage";
-    private static final String STORE_PROVIDER_ARGS = "stage, registry";
-    private static final String STORE_PROVIDER_ARGS_WITH_PROJECTIONS = STORE_PROVIDER_ARGS + ", projectionDispatcherProvider.storeDispatcher";
+    private static final String STORE_PROVIDER_ARGS_PATTERN = "stage, %s";
+    private static final String STORE_PROVIDER_ARGS_WITH_PROJECTIONS_PATTERN = STORE_PROVIDER_ARGS_PATTERN + ", projectionDispatcherProvider.storeDispatcher";
     private static final String DISPATCHER_PROVIDER_INITIALIZATION_PATTERN = "final %s projectionDispatcherProvider = %s";
 
     public static List<ProviderParameter> from(final StorageType storageType,
@@ -43,7 +43,7 @@ public class ProviderParameter {
             providers.add(new ProviderParameter(STORE_PROVIDER, storageType, SINGLE, useProjections));
         } else {
             providers.add(0, new ProviderParameter(STORE_PROVIDER, storageType, QUERY, useProjections));
-            providers.add(2, new ProviderParameter(STORE_PROVIDER, storageType, COMMAND, useProjections));
+            providers.add(new ProviderParameter(STORE_PROVIDER, storageType, COMMAND, useProjections));
         }
 
         return providers;
@@ -66,19 +66,25 @@ public class ProviderParameter {
             throw new IllegalStateException();
         }
 
+        final String argumentsPattern =
+                resolveArgumentsPattern(modelClassification, useProjections);
+
+        final String typeRegistryObjectName =
+                storageType.resolveTypeRegistryObjectName(modelClassification);
+
         final CodeTemplateParameters parameters =
                 CodeTemplateParameters.with(CodeTemplateParameter.STORAGE_TYPE, storageType)
                         .and(CodeTemplateParameter.MODEL_CLASSIFICATION, modelClassification);
 
         this.initialization = STORE_PROVIDER.resolveClassname(parameters);
-        this.arguments = resolveArguments(modelClassification, useProjections);
+        this.arguments = String.format(argumentsPattern, typeRegistryObjectName);
     }
 
-    private String resolveArguments(final ModelClassification modelClassification, final Boolean useProjections) {
+    private String resolveArgumentsPattern(final ModelClassification modelClassification, final Boolean useProjections) {
         if(modelClassification.isQueryModel() || !useProjections) {
-            return STORE_PROVIDER_ARGS;
+            return STORE_PROVIDER_ARGS_PATTERN;
         }
-        return STORE_PROVIDER_ARGS_WITH_PROJECTIONS;
+        return STORE_PROVIDER_ARGS_WITH_PROJECTIONS_PATTERN;
     }
 
     public String getInitialization() {

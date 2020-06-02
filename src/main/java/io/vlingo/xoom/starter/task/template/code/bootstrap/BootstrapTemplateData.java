@@ -61,10 +61,13 @@ public class BootstrapTemplateData extends TemplateData {
                                                   final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
 
-        final List<ImportParameter> imports = loadImports(storageType, contents);
+        final List<ImportParameter> imports = loadImports(storageType, contents, useCQRS);
 
         final List<RestResourceParameter> restResourceParameters =
                 RestResourceParameter.from(contents);
+
+        final List<TypeRegistryParameter> typeRegistryParameters =
+                TypeRegistryParameter.from(storageType, useCQRS);
 
         final List<ProviderParameter> providerParameters =
                 ProviderParameter.from(storageType, useCQRS, useProjections);
@@ -72,21 +75,25 @@ public class BootstrapTemplateData extends TemplateData {
         return CodeTemplateParameters.with(IMPORTS, imports)
                 .and(PACKAGE_NAME, packageName)
                 .and(APPLICATION_NAME, artifactId)
+                .and(PROVIDERS, providerParameters)
                 .and(USE_PROJECTIONS, useProjections)
                 .and(REST_RESOURCES, restResourceParameters)
-                .and(PROVIDERS, providerParameters)
-                .and(REGISTRY_CLASS_NAME, storageType.registryClassName)
-                .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME, param -> PROJECTION_DISPATCHER_PROVIDER.resolveClassname(param));
+                .and(TYPE_REGISTRIES, typeRegistryParameters)
+                .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME,
+                        param -> PROJECTION_DISPATCHER_PROVIDER.resolveClassname(param));
     }
 
-    private List<ImportParameter> loadImports(final StorageType storageType, final List<Content> contents) {
-        final List<String> fullyQualifiedNames =
+    private List<ImportParameter> loadImports(final StorageType storageType,
+                                              final List<Content> contents,
+                                              final Boolean useCQRS) {
+        final List<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE,
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
 
-        fullyQualifiedNames.add(storageType.registryQualifiedClassName());
+        final List<String> typeRegistriesFullyQualifiedNames =
+                storageType.resolveTypeRegistryQualifiedNames(useCQRS);
 
-        return ImportParameter.of(fullyQualifiedNames);
+        return ImportParameter.of(otherFullyQualifiedNames, typeRegistriesFullyQualifiedNames);
     }
 
     private String resolvePackage(final String basePackage) {

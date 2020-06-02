@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import static io.vlingo.xoom.starter.Configuration.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
+import static io.vlingo.xoom.starter.task.template.code.storage.StorageType.STATE_STORE;
 
 public enum CodeTemplateStandard {
 
@@ -32,8 +33,8 @@ public enum CodeTemplateStandard {
     REST_RESOURCE(parameters -> CodeTemplateFile.REST_RESOURCE.filename,
             (name, parameters) -> name + "Resource"),
 
-    STATE_ADAPTER(parameters -> STATE_ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
-            (name, parameters) -> name + "StateAdapter"),
+    ADAPTER(parameters -> ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
+            (name, parameters) -> name + "Adapter"),
 
     PLACEHOLDER_DOMAIN_EVENT(domainEventNameEnrichener(),
             parameters -> CodeTemplateFile.PLACEHOLDER_DOMAIN_EVENT.filename,
@@ -51,6 +52,9 @@ public enum CodeTemplateStandard {
     }, (name, parameters) -> {
         final StorageType storageType = parameters.find(STORAGE_TYPE);
         final ModelClassification modelClassification = parameters.find(MODEL_CLASSIFICATION);
+        if(modelClassification.isQueryModel()) {
+            return STATE_STORE.resolveProviderNameFrom(modelClassification);
+        }
         return storageType.resolveProviderNameFrom(modelClassification);
     });
 

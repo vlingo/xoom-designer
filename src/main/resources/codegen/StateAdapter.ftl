@@ -9,7 +9,7 @@ import io.vlingo.symbio.Metadata;
 import io.vlingo.symbio.State.TextState;
 import io.vlingo.symbio.StateAdapter;
 
-public final class ${stateAdapterName} implements StateAdapter<${stateName},TextState> {
+public final class ${adapterName} implements StateAdapter<${sourceName},TextState> {
 
   @Override
   public int typeVersion() {
@@ -17,7 +17,7 @@ public final class ${stateAdapterName} implements StateAdapter<${stateName},Text
   }
 
   @Override
-  public ${stateName} fromRawState(final TextState raw) {
+  public ${sourceName} fromRawState(final TextState raw) {
     return JsonSerialization.deserialized(raw.data, raw.typed());
   }
 
@@ -27,8 +27,8 @@ public final class ${stateAdapterName} implements StateAdapter<${stateName},Text
   }
 
   @Override
-  public TextState toRawState(final String id, final ${stateName} state, final int stateVersion, final Metadata metadata) {
+  public TextState toRawState(final String id, final ${sourceName} state, final int stateVersion, final Metadata metadata) {
     final String serialization = JsonSerialization.serialized(state);
-    return new TextState(id, ${stateName}.class, typeVersion(), serialization, stateVersion, metadata);
+    return new TextState(id, ${sourceName}.class, typeVersion(), serialization, stateVersion, metadata);
   }
 }

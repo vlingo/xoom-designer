@@ -81,6 +81,7 @@ public class ProjectionGenerationStepTest {
         final Properties properties = new Properties();
         properties.put(PACKAGE.literal(), "io.vlingo");
         properties.put(ARTIFACT_ID.literal(), "xoomapp");
+        properties.put(STORAGE_TYPE.literal(), "STATE_STORE");
         properties.put(PROJECTIONS.literal(), projections);
         properties.put(TARGET_FOLDER.literal(), HOME_DIRECTORY);
         context.onProperties(properties);
