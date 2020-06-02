@@ -5,12 +5,11 @@ import freemarker.template.TemplateExceptionHandler;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.GraphicalUserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.steps.*;
-import io.vlingo.xoom.starter.task.template.code.DatabaseType;
-import io.vlingo.xoom.starter.task.template.code.ProjectionType;
-import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.template.code.storage.DatabaseType;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
-import io.vlingo.xoom.starter.task.template.code.storage.StoreActorDetail;
+import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 import io.vlingo.xoom.starter.task.template.steps.*;
 
 import java.util.*;
@@ -42,12 +41,12 @@ public class Configuration {
                 }}
             );
 
-    public static final Map<StorageType, String> STATE_ADAPTER_TEMPLATES =
+    public static final Map<StorageType, String> ADAPTER_TEMPLATES =
             Maps.immutableEnumMap(
                 new HashMap<StorageType, String>(){{
                     put(StorageType.OBJECT_STORE, "");
                     put(StorageType.STATE_STORE, STATE_ADAPTER.filename);
-                    put(StorageType.JOURNAL, "");
+                    put(StorageType.JOURNAL, ENTRY_ADAPTER.filename);
                 }}
             );
 
@@ -93,9 +92,9 @@ public class Configuration {
     private static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
             Maps.immutableEnumMap(
                     new HashMap<StorageType, String>(){{
-                        put(StorageType.OBJECT_STORE, QUERY_MODEL_OBJECT_STORE_PROVIDER.filename);
+                        put(StorageType.OBJECT_STORE, STATE_STORE_PROVIDER.filename);
                         put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
-                        put(StorageType.JOURNAL, QUERY_MODEL_JOURNAL_PROVIDER.filename);
+                        put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
                     }}
             );
 
@@ -106,95 +105,6 @@ public class Configuration {
         }
         return COMMAND_MODEL_STORE_TEMPLATES;
     }
-
-    public static final List<StoreActorDetail> STORE_ACTORS =
-            Arrays.asList(
-
-                    //---  IN MEMORY ---//
-
-                    new StoreActorDetail(
-                            DatabaseType.IN_MEMORY,
-                            StorageType.JOURNAL,
-                            "io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.IN_MEMORY,
-                            StorageType.OBJECT_STORE,
-                            "io.vlingo.symbio.store.object.inmemory.InMemoryObjectStoreActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.IN_MEMORY,
-                            StorageType.STATE_STORE,
-                            "io.vlingo.symbio.store.state.inmemory.InMemoryStateStoreActor"),
-
-                    //--- POSTGRES ---//
-
-                    new StoreActorDetail(
-                            DatabaseType.POSTGRES,
-                            StorageType.JOURNAL,
-                            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.POSTGRES,
-                            StorageType.OBJECT_STORE,
-                            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.POSTGRES,
-                            StorageType.STATE_STORE,
-                            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor"),
-
-                    //--- HSQLDB ---//
-
-                    new StoreActorDetail(
-                            DatabaseType.HSQLDB,
-                            StorageType.JOURNAL,
-                            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.HSQLDB,
-                            StorageType.OBJECT_STORE,
-                            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.HSQLDB,
-                            StorageType.STATE_STORE,
-                            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor"),
-
-                    //--- MYSQL ---//
-
-                    new StoreActorDetail(
-                            DatabaseType.MYSQL,
-                            StorageType.JOURNAL,
-                            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.MYSQL,
-                            StorageType.OBJECT_STORE,
-                            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.MYSQL,
-                            StorageType.STATE_STORE,
-                            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor"),
-
-                    //--- YUGA_BYTE ---//
-
-                    new StoreActorDetail(
-                            DatabaseType.YUGA_BYTE,
-                            StorageType.JOURNAL,
-                            "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.YUGA_BYTE,
-                            StorageType.OBJECT_STORE,
-                            "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor"),
-
-                    new StoreActorDetail(
-                            DatabaseType.YUGA_BYTE,
-                            StorageType.STATE_STORE,
-                            "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor")
-        );
 
     public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
             new ResourcesLocationStep(), new PropertiesLoadStep(),

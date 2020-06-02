@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.starter.task.template.code.storage;
 
-import io.vlingo.xoom.starter.task.template.code.DatabaseType;
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
-import static java.util.Arrays.asList;
 
 public class StorageTemplateDataFactory {
 
@@ -37,7 +35,7 @@ public class StorageTemplateDataFactory {
                 resolvePackage(basePackage, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
 
         final List<TemplateData> stateAdaptersTemplateData =
-                StateAdapterTemplateData.from(projectPath, persistencePackage,
+                AdapterTemplateData.from(projectPath, persistencePackage,
                         storageType, contents);
 
         final List<TemplateData> storeProvidersTemplateData =
@@ -46,7 +44,7 @@ public class StorageTemplateDataFactory {
                         stateAdaptersTemplateData, contents);
 
         return new LinkedHashMap<CodeTemplateStandard, List<TemplateData>>() {{
-            put(STATE_ADAPTER, stateAdaptersTemplateData);
+            put(ADAPTER, stateAdaptersTemplateData);
             put(STORE_PROVIDER, storeProvidersTemplateData);
         }};
     }

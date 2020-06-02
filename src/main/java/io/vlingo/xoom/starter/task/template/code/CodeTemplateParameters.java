@@ -44,11 +44,11 @@ public class CodeTemplateParameters {
         return this;
     }
 
-    public CodeTemplateParameters addImport(final ImportParameter importParameter) {
-        if(this.<List>find(CodeTemplateParameter.IMPORTS) == null) {
+    public CodeTemplateParameters addImport(final String qualifiedClassName) {
+        if(this.find(CodeTemplateParameter.IMPORTS) == null) {
             this.and(CodeTemplateParameter.IMPORTS, new ArrayList<ImportParameter>());
         }
-        this.<List>find(CodeTemplateParameter.IMPORTS).add(importParameter);
+        this.<List>find(CodeTemplateParameter.IMPORTS).add(new ImportParameter(qualifiedClassName));
         return this;
     }
 

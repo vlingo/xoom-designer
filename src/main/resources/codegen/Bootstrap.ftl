@@ -26,7 +26,9 @@ public class Bootstrap {
     final Stage stage =
             world.stageNamed("${appName}", Stage.class, new GridAddressFactory(IdentityGeneratorType.RANDOM));
 
-    final ${registryClassName} registry = new ${registryClassName}(world);
+<#list registries as registry>
+    final ${registry.className} ${registry.objectName} = new ${registry.className}(world);
+</#list>
 
 <#list providers as provider>
     ${provider.initialization}.using(${provider.arguments});

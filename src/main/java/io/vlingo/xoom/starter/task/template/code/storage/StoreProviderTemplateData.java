@@ -12,12 +12,12 @@ import io.vlingo.xoom.starter.task.template.code.*;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.starter.task.template.code.storage.ModelClassification.*;
 
@@ -67,24 +67,29 @@ public class StoreProviderTemplateData extends TemplateData {
                                                   final List<TemplateData> stateAdaptersTemplateData,
                                                   final List<Content> contents) {
         final String storeClassName =
-                StorageType.qualifiedStoreActorNameFor(databaseType, storageType);
+                storageType.actorFor(databaseType);
 
-        final List<StateAdapterParameter> stateAdapterParameters =
-                StateAdapterParameter.from(stateAdaptersTemplateData);
+        final List<AdapterParameter> adapterParameters =
+                AdapterParameter.from(stateAdaptersTemplateData);
 
-        final List<String> stateQualifiedNames =
-                ContentQuery.findFullyQualifiedClassNames(STATE, contents);
+        final List<String> sourceClassQualifiedNames =
+                storageType.requireAdapters(modelClassification) ?
+                storageType.adapterSourceClassStandards.stream()
+                        .flatMap(standard ->
+                            ContentQuery.findFullyQualifiedClassNames(standard, contents).stream()
+                        ).collect(Collectors.toList()) :
+                        Collections.emptyList();
 
         return CodeTemplateParameters.with(STORAGE_TYPE, storageType)
                 .and(MODEL_CLASSIFICATION, modelClassification).and(DATABASE_TYPE, databaseType)
-                .and(IMPORTS, ImportParameter.of(stateQualifiedNames)).and(STORE_NAME, storeClassName)
+                .and(IMPORTS, ImportParameter.of(sourceClassQualifiedNames)).and(STORE_NAME, storeClassName)
                 .and(PACKAGE_NAME, packageName).and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
-                .and(STATE_ADAPTERS, stateAdapterParameters).and(PROJECTION_TYPE, projectionType)
-                .and(CONNECTION_URL, databaseType.connectionUrl).and(CONFIGURABLE, databaseType.configurable)
+                .and(ADAPTERS, adapterParameters).and(CONNECTION_URL, databaseType.connectionUrl)
+                .and(CONFIGURABLE, databaseType.configurable).and(PROJECTION_TYPE, projectionType)
                 .andResolve(STORE_PROVIDER_NAME, params -> STORE_PROVIDER.resolveClassname(params))
-                .enrich(params -> storageType.enrichParameters(params));
+                .enrich(params -> databaseType.addConfigurationParameters(params))
+                .and(REQUIRE_ADAPTERS, storageType.requireAdapters(modelClassification));
     }
-
 
     @Override
     public CodeTemplateParameters templateParameters() {

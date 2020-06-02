@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.task.template.code.storage;
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
@@ -18,31 +19,39 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.ADAPTER;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
 
-public class StateAdapterTemplateData extends TemplateData {
+public class AdapterTemplateData extends TemplateData {
 
-    private final String protocolName;
     private final String absolutePath;
+    private final String sourceClassName;
+    private final CodeTemplateStandard sourceClassStandard;
     private final CodeTemplateParameters templateParameters;
 
     public static List<TemplateData> from(final String projectPath,
                                           final String persistencePackage,
                                           final StorageType storageType,
                                           final List<Content> contents) {
-        return ContentQuery.findClassNames(AGGREGATE_PROTOCOL, contents)
-                .stream().map(protocolName -> {
-                    return new StateAdapterTemplateData(projectPath, protocolName,
-                        persistencePackage, storageType, contents);
-        }).collect(Collectors.toList());
+        final List<CodeTemplateStandard> sourceClassStandards =
+                storageType.adapterSourceClassStandards;
+
+        return sourceClassStandards.stream().flatMap(sourceClassStandard ->
+                ContentQuery.findClassNames(sourceClassStandard, contents)
+                    .stream().map(sourceClassName ->
+                        new AdapterTemplateData(projectPath, sourceClassName,
+                                sourceClassStandard, persistencePackage, storageType, contents)
+                    )).collect(Collectors.toList());
     }
 
-    public StateAdapterTemplateData(final String projectPath,
-                                    final String protocolName,
-                                    final String persistencePackage,
-                                    final StorageType storageType,
-                                    final List<Content> contents) {
-        this.protocolName = protocolName;
+    public AdapterTemplateData(final String projectPath,
+                               final String sourceClassName,
+                               final CodeTemplateStandard sourceClassStandard,
+                               final String persistencePackage,
+                               final StorageType storageType,
+                               final List<Content> contents) {
+        this.sourceClassName = sourceClassName;
+        this.sourceClassStandard = sourceClassStandard;
         this.absolutePath = resolveAbsolutePath(persistencePackage, projectPath);
         this.templateParameters =
                 loadParameters(persistencePackage, storageType, contents);
@@ -51,15 +60,13 @@ public class StateAdapterTemplateData extends TemplateData {
     private CodeTemplateParameters loadParameters(final String packageName,
                                                   final StorageType storageType,
                                                   final List<Content> contents) {
-        final String stateClassName = STATE.resolveClassname(protocolName);
-
         final String stateQualifiedClassName =
-                ContentQuery.findFullyQualifiedClassName(STATE, stateClassName, contents);
+                ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName)
                 .and(IMPORTS, ImportParameter.of(stateQualifiedClassName))
-                .and(STATE_NAME, stateClassName)
-                .and(STATE_ADAPTER_NAME, STATE_ADAPTER.resolveClassname(protocolName))
+                .and(SOURCE_NAME, sourceClassName)
+                .and(ADAPTER_NAME, ADAPTER.resolveClassname(sourceClassName))
                 .and(STORAGE_TYPE, storageType);
     }
 
@@ -70,7 +77,7 @@ public class StateAdapterTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return buildFile(STATE_ADAPTER, absolutePath, protocolName);
+        return buildFile(ADAPTER, absolutePath, sourceClassName);
     }
 
 }
