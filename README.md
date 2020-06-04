@@ -74,64 +74,44 @@ See a commented properties file sample above:
 <del>
     <pre class="rich-diff-level-zero">
     <code class="rich-diff-level-one">
-    
     <strong>#Maven artifact version</strong>
     version=1.0
-    
     <strong>#Maven project group id</strong>
     group.id=com.company
-    
     <strong>#Maven artifact version</strong>
     artifact.id=xoom-application
-
     <strong>#Base package name</strong>
     package=com.company.business
-    
     <strong>#Absolute path for the project parent folder</strong>
     target.folder=/home/projects
-    
     <strong>#vlingo xoom version</strong>
     vlingo.xoom.server.version=1.3.0
-    
     <strong>#Deployment Type (NONE, DOCKER, KUBERNETES)</strong>
     deployment=DOCKER
-    
     <strong>#Docker Image name, required if deployment type is KUBERNETES or DOCKER</strong>
     docker.image=xoom-app
-    
     <strong>#Published Docker Image, required if deployment type is KUBERNETES</strong>
     k8s.image=xoom-application
-    
     <strong>#Kubernetes POD name, required if deployment type is KUBERNETES</strong>
     k8s.pod.name=xoom-application
-    
     <strong>#Aggregate names</strong>
     aggregates=AggregateName1;AggregateName2;AggregateName3
-    
     <strong>#Domain Events per Aggregate</strong>
     events=AggregateName1,DomainEvent1,DomainEvent2;AggregateName2,DomainEvent1,DomainEvent2;AggregateName3,DomainEvent1,DomainEvent2
-    
     <strong>#Aggregates exposed as Rest Resources</strong>
     rest.resources=AggregateName1;AggregateName2;AggregateName3
-    
     <strong>#Storage Type (STATE_STORE or JOURNAL)</strong>
     storage.type=STATE_STORE
-    
     <strong>#CQRS (true or false)</strong>
     cqrs=true
-    
     <strong>#Projections Type (NONE, EVENT or OPERATION)</strong>
     projections=EVENT
-    
     <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)<strong>
     database=HSQLDB
-    
     <strong>#Command Model Database, required if CQRS is true or S (see database types above)</strong>
     command.model.database=MYSQL
-    
     <strong>#Query Model Database, required if CQRS is true or  (see database types above)</strong>
     query.model.database=YUGA_BYTE
-
 </code></pre></del>
 
 When Executing `xoom gen`, 
