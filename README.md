@@ -118,7 +118,7 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ## Docker Commands
 
-`vlingo-xoom-starter` provides nice shortcuts for interacting with Docker as follows:
+`vlingo-xoom-starter` provides nice shortcuts for interacting with Docker, from the project root folder, as follows:
 
 <table>
     <thead>
@@ -131,12 +131,12 @@ Executing `xoom gen` causes the application generation based on the settings abo
     <tbody>
         <tr>
             <td align="center">xoom docker status</td>
-            <td align="left">Shows the container status. Should be executed on the project root folder.</td>
+            <td align="left">Shows the container status.</td>
             <td align="center">N/A</td>
         </tr>
         <tr>
             <td align="center">xoom docker package</td>
-            <td align="left">Builds / update the Docker image from the application current state. Should be executed on the project root folder.</td>
+            <td align="left">Builds / update the Docker image from the application current state.</td>
             <td align="center"><strong>tag</strong>: relate a tag to the current image build. If not informed, the default value is <em>latest</em>. Example: xoom docker package --tag 1.0</td>
         </tr>
         <tr>
@@ -146,5 +146,3 @@ Executing `xoom gen` causes the application generation based on the settings abo
         </tr>
     </tbody>
 </table>
-
-
