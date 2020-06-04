@@ -11,7 +11,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private String becauseOf;
 
   public ${projectionName}() {
-    super(QueryModelStateStoreProvider.instance().store);
+    super(${storeProviderName}.instance().store);
   }
 
   @Override

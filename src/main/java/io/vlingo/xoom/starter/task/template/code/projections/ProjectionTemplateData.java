@@ -15,6 +15,8 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
+import static io.vlingo.xoom.starter.task.template.code.storage.ModelClassification.QUERY;
+import static io.vlingo.xoom.starter.task.template.code.storage.StorageType.STATE_STORE;
 
 public class ProjectionTemplateData extends TemplateData {
 
@@ -67,7 +69,9 @@ public class ProjectionTemplateData extends TemplateData {
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
-                .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType);
+                .and(MODEL_CLASSIFICATION, QUERY).and(STORAGE_TYPE, STATE_STORE)
+                .and(ENTITY_DATA_NAME, entityDataName).and(PROJECTION_TYPE, projectionType)
+                .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param));
     }
 
     private List<ImportParameter> resolveImports(final String stateName,

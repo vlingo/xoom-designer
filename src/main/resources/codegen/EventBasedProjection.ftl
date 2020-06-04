@@ -20,7 +20,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private final List<IdentifiedDomainEvent> events;
 
   public ${projectionName}() {
-    super(QueryModelStateStoreProvider.instance().store);
+    super(${storeProviderName}.instance().store);
     this.events = new ArrayList<>(2);
   }
 
