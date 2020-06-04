@@ -118,7 +118,7 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ## Docker Commands
 
-`vlingo-xoom-starter` provides nice shortcuts for interacting with Docker, from the project root folder, as follows:
+`vlingo-xoom-starter` provides cool shortcuts for interacting with Docker, from the project root folder, as follows:
 
 <table>
     <thead>
