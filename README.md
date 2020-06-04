@@ -69,7 +69,7 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
 * Containerization files facilitating Docker / Kubernetes deployment; 
 
 Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder. 
-See a commented properties file sample above:    
+See a commented properties file sample below:    
 
 <pre>
 <code>
@@ -95,7 +95,7 @@ See a commented properties file sample above:
     k8s.pod.name=xoom-application
     <strong>#Aggregate names (separated by semicolon)</strong>
     aggregates=AggregateName1;AggregateName2;AggregateName3
-    <strong>#Domain Events (each events group should be preceded by Aggregate name)</strong>
+    <strong>#Domain Events (each events group should be preceded by Aggregate name and separated by semicolon)</strong>
     events=AggregateName1,DomainEvent1,DomainEvent2;AggregateName2,DomainEvent1,DomainEvent2;AggregateName3,DomainEvent1,DomainEvent2
     <strong>#Aggregate Rest Resources</strong>
     rest.resources=AggregateName1;AggregateName2;AggregateName3
@@ -114,7 +114,7 @@ See a commented properties file sample above:
 </code>
 </pre>
 
-Those settings are read by `vlingo-xoom-starter` executing `xoom gen`. As in user interface
+Executing `xoom gen` causes the application generation based on the settings above, which are the same available on user interface.  
 
 ## Docker Commands
 
