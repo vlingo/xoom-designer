@@ -93,11 +93,11 @@ See a commented properties file sample above:
     k8s.image=xoom-application
     <strong>#Kubernetes POD name, required if deployment type is KUBERNETES</strong>
     k8s.pod.name=xoom-application
-    <strong>#Aggregate names</strong>
+    <strong>#Aggregate names (separated by semicolon)</strong>
     aggregates=AggregateName1;AggregateName2;AggregateName3
-    <strong>#Domain Events per Aggregate</strong>
+    <strong>#Domain Events (each events group should be preceded by Aggregate name)</strong>
     events=AggregateName1,DomainEvent1,DomainEvent2;AggregateName2,DomainEvent1,DomainEvent2;AggregateName3,DomainEvent1,DomainEvent2
-    <strong>#Aggregates exposed as Rest Resources</strong>
+    <strong>#Aggregate Rest Resources</strong>
     rest.resources=AggregateName1;AggregateName2;AggregateName3
     <strong>#Storage Type (STATE_STORE or JOURNAL)</strong>
     storage.type=STATE_STORE
@@ -107,14 +107,14 @@ See a commented properties file sample above:
     projections=EVENT
     <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)</strong>
     database=HSQLDB
-    <strong>#Command Model Database, required if CQRS is true or S (see database types above)</strong>
+    <strong>#Command Model Database, required if CQRS is true or Storage Type is Journal (see database types above)</strong>
     command.model.database=MYSQL
-    <strong>#Query Model Database, required if CQRS is true or  (see database types above)</strong>
+    <strong>#Query Model Database, required if CQRS is true or Storage Type is Journal (see database types above)</strong>
     query.model.database=YUGA_BYTE
 </code>
 </pre>
 
-When Executing `xoom gen`, 
+Those settings are read by `vlingo-xoom-starter` executing `xoom gen`. As in user interface
 
 ## Docker Commands
 
