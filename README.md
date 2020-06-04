@@ -69,11 +69,10 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
 * Containerization files facilitating Docker / Kubernetes deployment; 
 
 Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder. 
-See a commented properties file sample above:
+See a commented properties file sample above:    
 
-<del>
-    <pre class="rich-diff-level-zero">
-    <code class="rich-diff-level-one">
+<pre>
+<code>
     <strong>#Maven artifact version</strong>
     version=1.0
     <strong>#Maven project group id</strong>
@@ -106,13 +105,14 @@ See a commented properties file sample above:
     cqrs=true
     <strong>#Projections Type (NONE, EVENT or OPERATION)</strong>
     projections=EVENT
-    <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)<strong>
+    <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)</strong>
     database=HSQLDB
     <strong>#Command Model Database, required if CQRS is true or S (see database types above)</strong>
     command.model.database=MYSQL
     <strong>#Query Model Database, required if CQRS is true or  (see database types above)</strong>
     query.model.database=YUGA_BYTE
-</code></pre></del>
+</code>
+</pre>
 
 When Executing `xoom gen`, 
 
