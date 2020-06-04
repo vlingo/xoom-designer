@@ -7,6 +7,7 @@
 package io.vlingo.xoom.starter.task.template.code.resource;
 
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public class RestResourceTemplateData extends TemplateData {
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return parameters;
     }
 
@@ -49,7 +50,11 @@ public class RestResourceTemplateData extends TemplateData {
     }
 
     public File file() {
-        return buildFile(REST_RESOURCE, absolutePath, aggregateName);
+        return buildFile(absolutePath, aggregateName);
+    }
+
+    public CodeTemplateStandard standard() {
+        return REST_RESOURCE;
     }
 
 }

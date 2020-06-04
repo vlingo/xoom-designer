@@ -7,7 +7,6 @@
 package io.vlingo.xoom.starter.task.template.code.storage;
 
 import io.vlingo.xoom.starter.task.Content;
-import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.*;
 
 import java.io.File;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.starter.task.ContentQuery.findFullyQualifiedClassNames;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STORE_PROVIDER;
 import static io.vlingo.xoom.starter.task.template.code.storage.ModelClassification.*;
@@ -74,10 +74,7 @@ public class StoreProviderTemplateData extends TemplateData {
 
         final List<String> sourceClassQualifiedNames =
                 storageType.requireAdapters(modelClassification) ?
-                storageType.adapterSourceClassStandards.stream()
-                        .flatMap(standard ->
-                            ContentQuery.findFullyQualifiedClassNames(standard, contents).stream()
-                        ).collect(Collectors.toList()) :
+                        findFullyQualifiedClassNames(storageType.adapterSourceClassStandard, contents) :
                         Collections.emptyList();
 
         return CodeTemplateParameters.with(STORAGE_TYPE, storageType)
@@ -92,13 +89,18 @@ public class StoreProviderTemplateData extends TemplateData {
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return templateParameters;
     }
 
     @Override
     public File file() {
-        return buildFile(STORE_PROVIDER, templateParameters, absolutePath);
+        return buildFile(absolutePath);
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return STORE_PROVIDER;
     }
 
 }

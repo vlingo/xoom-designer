@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.starter.task.template.code.resource;
 
+import io.vlingo.xoom.starter.task.template.code.TemplateData;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -16,9 +18,9 @@ public class RestResourceTemplateDataFactory {
 
     private static final String REST_RESOURCES_SEPARATOR = ";";
 
-    public static List<RestResourceTemplateData> build(final String basePackage,
-                                                       final String projectPath,
-                                                       final String restResourcesData) {
+    public static List<TemplateData> build(final String basePackage,
+                                           final String projectPath,
+                                           final String restResourcesData) {
         final Function<String, RestResourceTemplateData> mapper =
                 aggregateName -> new RestResourceTemplateData(aggregateName, basePackage, projectPath);
 

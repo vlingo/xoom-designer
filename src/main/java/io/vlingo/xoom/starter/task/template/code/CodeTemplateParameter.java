@@ -14,6 +14,7 @@ public enum CodeTemplateParameter {
     AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
     AGGREGATE_NAME("aggregateName"),
     DOMAIN_EVENT_NAME("domainEventName"),
+    PLACEHOLDER_EVENT("placeholderEvent"),
     ENTITY_NAME("entityName"),
     ENTITY_DATA_NAME("dataName"),
     ENTITY_DATA_QUALIFIED_CLASS_NAME("dataQualifiedName"),

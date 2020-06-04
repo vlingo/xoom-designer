@@ -12,27 +12,64 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.DOMAIN_EVENT;
 
 public class DomainEventTemplateData extends TemplateData {
 
-    public final String name;
-    public final String packageName;
-    public final String absolutePath;
+    private static final String PLACEHOLDER_EVENT_NAME_SUFFIX = "PlaceholderDefined";
 
-    public DomainEventTemplateData(final String name, final String packageName, final String absolutePath) {
-        this.name = name;
-        this.packageName = packageName;
-        this.absolutePath = absolutePath;
+    private final String name;
+    private final String absolutePath;
+    private final CodeTemplateParameters parameters;
+
+    public static List<TemplateData> from(final String aggregateProtocolName,
+                                          final String packageName,
+                                          final String projectPath,
+                                          final List<String> eventsNames) {
+        final String defaultPlaceholderEventName =
+                aggregateProtocolName + PLACEHOLDER_EVENT_NAME_SUFFIX;
+
+        final List<TemplateData> eventsTemplateData = new ArrayList<>();
+
+        eventsTemplateData.add(new DomainEventTemplateData(packageName,
+                aggregateProtocolName, projectPath, true));
+
+        eventsTemplateData.addAll(eventsNames.stream().map(eventName ->
+                new DomainEventTemplateData(packageName, eventName,
+                        projectPath, false))
+                .collect(Collectors.toList()));
+
+        return eventsTemplateData;
+    }
+
+    private DomainEventTemplateData(final String packageName,
+                                    final String domainEventName,
+                                    final String projectPath,
+                                    final Boolean placeholder) {
+        this.name = domainEventName;
+        this.absolutePath = resolveAbsolutePath(packageName, projectPath);
+        this.parameters =
+                CodeTemplateParameters.with(PACKAGE_NAME, packageName).and(PLACEHOLDER_EVENT, placeholder)
+                        .andResolve(DOMAIN_EVENT_NAME, param -> DOMAIN_EVENT.resolveClassname(domainEventName, param));
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
-        throw new UnsupportedOperationException("This operation is not supported");
+    public CodeTemplateParameters parameters() {
+        return parameters;
     }
 
     public File file() {
-        return buildFile(CodeTemplateStandard.DOMAIN_EVENT, absolutePath, name);
+        return buildFile(absolutePath, name);
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return DOMAIN_EVENT;
     }
 
 }

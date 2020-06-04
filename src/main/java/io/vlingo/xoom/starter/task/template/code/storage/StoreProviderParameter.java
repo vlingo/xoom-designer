@@ -30,7 +30,7 @@ public class StoreProviderParameter {
 
     public static List<StoreProviderParameter> from(final List<TemplateData> templateData) {
         return templateData.stream()
-                .map(data -> new StoreProviderParameter(data.templateParameters()))
+                .map(data -> new StoreProviderParameter(data.parameters()))
                 .collect(Collectors.toList());
     }
 

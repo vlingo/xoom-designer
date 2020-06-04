@@ -14,7 +14,6 @@ import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
-import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
@@ -32,27 +32,33 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testEventBasedProjectionTemplateDataBuild() {
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+        final List<TemplateData> allTemplatesData =
                 ProjectionTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH,
                         ProjectionType.EVENT_BASED, contents());
 
         //General Assertions
 
-        Assertions.assertEquals(3, allTemplatesData.size());
-        Assertions.assertEquals(1, allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).size());
-        Assertions.assertEquals(2, allTemplatesData.get(PROJECTION).size());
-        Assertions.assertEquals(2, allTemplatesData.get(ENTITY_DATA).size());
+        Assertions.assertEquals(5, allTemplatesData.size());
+        Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).count());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION)).count());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ENTITY_DATA)).count());
 
         //Assertions for ProjectionDispatcherProvider
 
-        final TemplateData providerTemplateData = allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).get(0);
-        final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.templateParameters();
+        final TemplateData providerTemplateData = allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
+        final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
         Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Event name here\", \"Another Event name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
         Assertions.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Event name here\", \"Another Event name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());
 
         //Assertions for Projections
+
+        final List<TemplateData> projectionsTemplatesData =
+                allTemplatesData.stream()
+                        .filter(templateData ->
+                                templateData.standard().equals(PROJECTION))
+                        .collect(Collectors.toList());
 
         IntStream.range(0, 1).forEach(templateIndex -> {
             final String rootName = templateIndex == 0 ? "Author" : "Book";
@@ -61,8 +67,8 @@ public class ProjectionTemplateDataFactoryTest {
             final String expectedEntityDataName = rootName + "Data";
             final String expectedStateQualifiedName = "io.vlingo.xoomapp.model." + expectedStateName;
             final String expectedEntityDataQualifiedName = EXPECTED_INFRA_PACKAGE + "." + expectedEntityDataName;
-            final TemplateData projectionTemplateData = allTemplatesData.get(PROJECTION).get(templateIndex);
-            final CodeTemplateParameters projectionTemplateDataParameters = projectionTemplateData.templateParameters();
+            final TemplateData projectionTemplateData = projectionsTemplatesData.get(templateIndex);
+            final CodeTemplateParameters projectionTemplateDataParameters = projectionTemplateData.parameters();
             Assertions.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, projectionTemplateDataParameters.find(PACKAGE_NAME));
             Assertions.assertEquals(expectedName, projectionTemplateDataParameters.find(PROJECTION_NAME));
             Assertions.assertEquals(expectedStateName, projectionTemplateDataParameters.find(STATE_NAME));
@@ -74,13 +80,19 @@ public class ProjectionTemplateDataFactoryTest {
 
         //Assertions for EntityData
 
+        final List<TemplateData> entitiesTemplatesData =
+                allTemplatesData.stream()
+                        .filter(templateData ->
+                                templateData.standard().equals(ENTITY_DATA))
+                        .collect(Collectors.toList());
+
         IntStream.range(0, 1).forEach(templateIndex -> {
             final String rootName = templateIndex == 0 ? "Author" : "Book";
             final String expectedName = rootName + "Data";
             final String expectedStateQualifiedName = "io.vlingo.xoomapp.model." + rootName + "State";
             final String expectedEntityDataQualifiedName = EXPECTED_INFRA_PACKAGE + "." + expectedName;
-            final TemplateData entityDataTemplateData = allTemplatesData.get(ENTITY_DATA).get(templateIndex);
-            final CodeTemplateParameters entityDataTemplateDataParameters = entityDataTemplateData.templateParameters();
+            final TemplateData entityDataTemplateData = entitiesTemplatesData.get(templateIndex);
+            final CodeTemplateParameters entityDataTemplateDataParameters = entityDataTemplateData.parameters();
             Assertions.assertEquals(EXPECTED_INFRA_PACKAGE, entityDataTemplateDataParameters.find(PACKAGE_NAME));
             Assertions.assertEquals(expectedName, entityDataTemplateDataParameters.find(ENTITY_DATA_NAME));
             Assertions.assertEquals(expectedEntityDataQualifiedName, entityDataTemplateDataParameters.find(ENTITY_DATA_QUALIFIED_CLASS_NAME));
@@ -91,21 +103,21 @@ public class ProjectionTemplateDataFactoryTest {
 
     @Test
     public void testOperationBasedProjectionTemplateDataBuild() {
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+        final List<TemplateData> allTemplatesData =
                 ProjectionTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH,
                         ProjectionType.OPERATION_BASED, contents());
 
         //General Assertions
 
-        Assertions.assertEquals(3, allTemplatesData.size());
-        Assertions.assertEquals(1, allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).size());
-        Assertions.assertEquals(2, allTemplatesData.get(PROJECTION).size());
-        Assertions.assertEquals(2, allTemplatesData.get(ENTITY_DATA).size());
+        Assertions.assertEquals(5, allTemplatesData.size());
+        Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).count());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION)).count());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ENTITY_DATA)).count());
 
         //Assertions for ProjectionDispatcherProvider
 
-        final TemplateData providerTemplateData = allTemplatesData.get(PROJECTION_DISPATCHER_PROVIDER).get(0);
-        final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.templateParameters();
+        final TemplateData providerTemplateData = allTemplatesData.stream().filter(templateData -> templateData.standard().equals(PROJECTION_DISPATCHER_PROVIDER)).findFirst().get();
+        final CodeTemplateParameters providerTemplateDataParameters = providerTemplateData.parameters();
         Assertions.assertEquals(EXPECTED_PERSISTENCE_PACKAGE, providerTemplateDataParameters.find(PACKAGE_NAME));
         Assertions.assertEquals("ProjectToDescription.with(AuthorProjectionActor.class, \"Operation name here\", \"Another Operation name here\"),", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(0).getInitializationCommand());
         Assertions.assertEquals("ProjectToDescription.with(BookProjectionActor.class, \"Operation name here\", \"Another Operation name here\")", providerTemplateDataParameters.<List<ProjectToDescriptionParameter>>find(PROJECTION_TO_DESCRIPTION).get(1).getInitializationCommand());

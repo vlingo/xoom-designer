@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.task.template.code.projections;
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
 import java.io.File;
@@ -75,12 +76,17 @@ public class EntityDataTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return buildFile(ENTITY_DATA, absolutePath, protocolName);
+        return buildFile(absolutePath, protocolName);
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return templateParameters;
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return ENTITY_DATA;
     }
 
 }

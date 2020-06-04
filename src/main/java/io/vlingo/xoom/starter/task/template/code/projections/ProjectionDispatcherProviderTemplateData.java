@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.task.template.code.projections;
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 
@@ -63,12 +64,17 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return buildFile(PROJECTION_DISPATCHER_PROVIDER, templateParameters, absolutePath);
+        return buildFile(absolutePath);
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return templateParameters;
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return PROJECTION_DISPATCHER_PROVIDER;
     }
 
 }
