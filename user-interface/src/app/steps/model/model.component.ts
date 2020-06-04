@@ -125,7 +125,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
       {name: "Postgres", value: "POSTGRES"},
       {name: "HSQLDB", value: "HSQLDB"},
       {name: "MySQL", value: "MYSQL"},
-      {name: "YugaByte", value: "YUGABYTE"}
+      {name: "YugaByte", value: "YUGA_BYTE"}
     ];
   }
 
