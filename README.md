@@ -68,7 +68,55 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
 * Store Providers supporting State Store and Journal;
 * Containerization files facilitating Docker / Kubernetes deployment; 
 
-## Additional Commands
+Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder. 
+See a properties file sample above:
+
+````
+
+#Maven artifact version
+version=1.0
+#Maven project group id
+group.id=com.company
+#Maven artifact version
+artifact.id=xoom-application
+#Base package name
+package=com.company.business
+#Absolute path for the project parent folder
+target.folder=D:\\temp
+#vlingo xoom version
+vlingo.xoom.server.version=1.3.0
+#Deployment Type (NONE, DOCKER, KUBERNETES)
+deployment=DOCKER
+#Docker Image name, required if deployment type is KUBERNETES or DOCKER
+docker.image=xoom-app
+#Published Docker Image, required if deployment type is KUBERNETES
+k8s.image=xoom-application
+#Kubernetes POD name, required if deployment type is KUBERNETES
+k8s.pod.name=xoom-application
+#Aggregate names
+aggregates=AggregateName1;AggregateName2;AggregateName3
+#Domain Events per Aggregate
+events=AggregateName1,DomainEvent1,DomainEvent2;AggregateName2,DomainEvent1,DomainEvent2;AggregateName3,DomainEvent1,DomainEvent2
+#Aggregates exposed as Rest Resources
+rest.resources=AggregateName1;AggregateName2;AggregateName3
+#Storage Type (STATE_STORE or JOURNAL)
+storage.type=STATE_STORE
+#CQRS (true or false)
+cqrs=true
+#Projections Type (NONE, EVENT or OPERATION)
+projections=EVENT
+#Database for single model, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)
+database=HSQLDB
+#Command Model Database, required if CQRS is true (see database types above)
+command.model.database=MYSQL
+#Query Model Database, required if CQRS is true (see database types above)
+query.model.database=YUGA_BYTE
+
+````
+
+## Docker Commands
+
+`vlingo-xoom-starter` provides nice shortcuts for interacting with Docker as follows:
 
 <table>
     <thead>
@@ -79,11 +127,6 @@ Filling up every wizard step, you can readily take advantage of several auto-gen
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td align="center">xoom gen</td>
-            <td align="left">Allows application generation being an alternative for the graphical interface. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder.</td>
-            <td align="center">N/A</td>
-        </tr>
         <tr>
             <td align="center">xoom docker status</td>
             <td align="left">Shows the container status. Should be executed on the project root folder.</td>
