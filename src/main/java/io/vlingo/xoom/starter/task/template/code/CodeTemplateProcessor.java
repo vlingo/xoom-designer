@@ -24,6 +24,10 @@ public class CodeTemplateProcessor {
         return INSTANCE;
     }
 
+    public String process(final TemplateData templateData) {
+        return process(templateData.standard(), templateData.parameters());
+    }
+
     public String process(final CodeTemplateStandard standard, final CodeTemplateParameters parameters) {
         try {
             final String templateFilename =

@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.ADAPTER;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
 
 public class AdapterTemplateData extends TemplateData {
 
@@ -33,15 +32,12 @@ public class AdapterTemplateData extends TemplateData {
                                           final String persistencePackage,
                                           final StorageType storageType,
                                           final List<Content> contents) {
-        final List<CodeTemplateStandard> sourceClassStandards =
-                storageType.adapterSourceClassStandards;
-
-        return sourceClassStandards.stream().flatMap(sourceClassStandard ->
-                ContentQuery.findClassNames(sourceClassStandard, contents)
+        return ContentQuery.findClassNames(storageType.adapterSourceClassStandard, contents)
                     .stream().map(sourceClassName ->
                         new AdapterTemplateData(projectPath, sourceClassName,
-                                sourceClassStandard, persistencePackage, storageType, contents)
-                    )).collect(Collectors.toList());
+                                storageType.adapterSourceClassStandard,
+                                persistencePackage, storageType, contents)
+                    ).collect(Collectors.toList());
     }
 
     public AdapterTemplateData(final String projectPath,
@@ -53,31 +49,35 @@ public class AdapterTemplateData extends TemplateData {
         this.sourceClassName = sourceClassName;
         this.sourceClassStandard = sourceClassStandard;
         this.absolutePath = resolveAbsolutePath(persistencePackage, projectPath);
-        this.templateParameters =
-                loadParameters(persistencePackage, storageType, contents);
+        this.templateParameters = loadParameters(persistencePackage, storageType, contents);
     }
 
     private CodeTemplateParameters loadParameters(final String packageName,
                                                   final StorageType storageType,
                                                   final List<Content> contents) {
-        final String stateQualifiedClassName =
+        final String sourceQualifiedClassName =
                 ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName)
-                .and(IMPORTS, ImportParameter.of(stateQualifiedClassName))
+                .and(IMPORTS, ImportParameter.of(sourceQualifiedClassName))
                 .and(SOURCE_NAME, sourceClassName)
                 .and(ADAPTER_NAME, ADAPTER.resolveClassname(sourceClassName))
                 .and(STORAGE_TYPE, storageType);
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return templateParameters;
     }
 
     @Override
     public File file() {
-        return buildFile(ADAPTER, absolutePath, sourceClassName);
+        return buildFile(absolutePath, sourceClassName);
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return ADAPTER;
     }
 
 }

@@ -8,10 +8,7 @@ package io.vlingo.xoom.starter.task.template.code.projections;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import io.vlingo.xoom.starter.task.template.code.ProjectionType;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
-import io.vlingo.xoom.starter.task.template.code.TemplateData;
+import io.vlingo.xoom.starter.task.template.code.*;
 
 import java.io.File;
 import java.util.List;
@@ -45,12 +42,15 @@ public class ProjectionTemplateData extends TemplateData {
                                     final List<Content> contents,
                                     final ProjectionType projectionType,
                                     final TemplateData entityDataTemplateData) {
-        final String packageName =  resolvePackage(basePackage);
-        this.protocolName = protocolName;
         this.templateParameters =
-                loadParameters(packageName, protocolName, contents, projectionType, entityDataTemplateData);
+                loadParameters(resolvePackage(basePackage), protocolName,
+                        contents, projectionType, entityDataTemplateData);
+
         this.absolutePath =
-                resolveAbsolutePath(basePackage, projectPath, PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
+                resolveAbsolutePath(basePackage, projectPath,
+                        PARENT_PACKAGE_NAME, PERSISTENCE_PACKAGE_NAME);
+
+        this.protocolName = protocolName;
     }
 
     private CodeTemplateParameters loadParameters(final String packageName,
@@ -63,7 +63,7 @@ public class ProjectionTemplateData extends TemplateData {
         final String entityDataName = ENTITY_DATA.resolveClassname(protocolName);
 
         final List<ImportParameter> imports =
-                resolveImports(stateName, contents, entityDataTemplateData.templateParameters());
+                resolveImports(stateName, contents, entityDataTemplateData.parameters());
 
         return CodeTemplateParameters.with(PACKAGE_NAME, packageName).and(IMPORTS, imports)
                 .and(PROJECTION_NAME, projectionName).and(STATE_NAME, stateName)
@@ -89,12 +89,17 @@ public class ProjectionTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return buildFile(PROJECTION, absolutePath, protocolName);
+        return buildFile(absolutePath, protocolName);
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return templateParameters;
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return PROJECTION;
     }
 
 }

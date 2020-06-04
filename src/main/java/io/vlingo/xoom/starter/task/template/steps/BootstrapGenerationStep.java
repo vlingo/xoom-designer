@@ -8,20 +8,20 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateProcessor;
 import io.vlingo.xoom.starter.task.template.code.ProjectionType;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 import io.vlingo.xoom.starter.task.template.code.bootstrap.BootstrapTemplateData;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 
-import static io.vlingo.xoom.starter.task.Property.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.BOOTSTRAP;
+import java.util.Arrays;
+import java.util.List;
 
-public class BootstrapGenerationStep implements TaskExecutionStep {
+import static io.vlingo.xoom.starter.task.Property.*;
+
+public class BootstrapGenerationStep extends TemplateProcessingStep {
 
     @Override
-    public void process(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(PACKAGE);
         final String artifactId = context.propertyOf(ARTIFACT_ID);
@@ -34,9 +34,7 @@ public class BootstrapGenerationStep implements TaskExecutionStep {
                         storageType, useCQRS, projectionType.isProjectionEnabled(),
                         context.contents());
 
-        final String bootstrapCode =
-                CodeTemplateProcessor.instance().process(BOOTSTRAP, templateData.templateParameters());
-
-        context.addContent(BOOTSTRAP, templateData.file(), bootstrapCode);
+        return Arrays.asList(templateData);
     }
+
 }

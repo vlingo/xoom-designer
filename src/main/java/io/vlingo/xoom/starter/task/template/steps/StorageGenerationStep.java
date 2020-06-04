@@ -9,37 +9,24 @@ package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.task.template.code.*;
+import io.vlingo.xoom.starter.task.template.code.ProjectionType;
+import io.vlingo.xoom.starter.task.template.code.TemplateData;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageTemplateDataFactory;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 
 import java.util.List;
-import java.util.Map;
 
-public class StorageGenerationStep implements TaskExecutionStep {
+public class StorageGenerationStep extends TemplateProcessingStep {
 
     @Override
-    public void process(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(Property.PACKAGE);
         final Boolean enableCQRS = context.propertyOf(Property.CQRS, Boolean::valueOf);
         final StorageType storageType = context.propertyOf(Property.STORAGE_TYPE, StorageType::of);
         final ProjectionType projectionType = context.propertyOf(Property.PROJECTIONS, ProjectionType::valueOf);
-
-        final Map<CodeTemplateStandard, List<TemplateData>> storageTemplatesData =
-                StorageTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
+        return StorageTemplateDataFactory.build(basePackage, projectPath, enableCQRS,
                         context.contents(), storageType, context.databases(), projectionType);
-
-        storageTemplatesData.forEach(((standard, templatesData) -> {
-            templatesData.forEach(templateData -> {
-                final CodeTemplateParameters parameters = templateData.templateParameters();
-                final String code = CodeTemplateProcessor.instance().process(standard, parameters);
-                context.addContent(standard, templateData.file(), code);
-            });
-        }));
     }
-
-
 
 }

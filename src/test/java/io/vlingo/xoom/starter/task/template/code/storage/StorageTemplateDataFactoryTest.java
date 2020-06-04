@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
@@ -29,23 +30,23 @@ public class StorageTemplateDataFactoryTest {
 
     @Test
     public void testStorageTemplateDataOnSourcedSingleModel() {
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+        final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, false,
                         contents(), StorageType.JOURNAL, databaseTypes(), ProjectionType.EVENT_BASED);
 
         //General Assertions
 
-        Assertions.assertEquals(2, allTemplatesData.size());
-        Assertions.assertEquals(2, allTemplatesData.get(ADAPTER).size());
-        Assertions.assertEquals(1, allTemplatesData.get(STORE_PROVIDER).size());
+        Assertions.assertEquals(3, allTemplatesData.size());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
+        Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assertions for StateAdapter
 
         final TemplateData entryAdapterTemplateData =
-                allTemplatesData.get(ADAPTER).get(0);
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).findFirst().get();
 
         final CodeTemplateParameters stateAdapterConfigurationParameters =
-                entryAdapterTemplateData.templateParameters();
+                entryAdapterTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
         Assertions.assertEquals("BookRented", stateAdapterConfigurationParameters.find(SOURCE_NAME));
@@ -57,9 +58,9 @@ public class StorageTemplateDataFactoryTest {
         //Assertions for StoreProvider
 
         final TemplateData storeProviderTemplateData =
-                allTemplatesData.get(STORE_PROVIDER).get(0);
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).findFirst().get();
 
-        final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.templateParameters();
+        final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
         Assertions.assertEquals(SINGLE, storeProviderParameters.find(MODEL_CLASSIFICATION));
@@ -79,23 +80,23 @@ public class StorageTemplateDataFactoryTest {
 
     @Test
     public void testStorageTemplateDataOnStatefulSingleModel() {
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+        final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, false,
                         contents(), StorageType.STATE_STORE, databaseTypes(), ProjectionType.EVENT_BASED);
 
         //General Assertions
 
-        Assertions.assertEquals(2, allTemplatesData.size());
-        Assertions.assertEquals(2, allTemplatesData.get(ADAPTER).size());
-        Assertions.assertEquals(1, allTemplatesData.get(STORE_PROVIDER).size());
+        Assertions.assertEquals(3, allTemplatesData.size());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
+        Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assertions for StateAdapter
 
         final TemplateData stateAdapterTemplateData =
-                allTemplatesData.get(ADAPTER).get(0);
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).findFirst().get();
 
         final CodeTemplateParameters stateAdapterConfigurationParameters =
-                stateAdapterTemplateData.templateParameters();
+                stateAdapterTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
         Assertions.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
@@ -107,9 +108,9 @@ public class StorageTemplateDataFactoryTest {
         //Assertions for StoreProvider
 
         final TemplateData storeProviderTemplateData =
-                allTemplatesData.get(STORE_PROVIDER).get(0);
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).findFirst().get();
 
-        final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.templateParameters();
+        final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
         Assertions.assertEquals(SINGLE, storeProviderParameters.find(MODEL_CLASSIFICATION));
@@ -131,23 +132,23 @@ public class StorageTemplateDataFactoryTest {
 
     @Test
     public void testStorageTemplateDataOnStatefulCQRSModel() {
-        final Map<CodeTemplateStandard, List<TemplateData>> allTemplatesData =
+        final List<TemplateData> allTemplatesData =
                 StorageTemplateDataFactory.build("io.vlingo.xoomapp", PROJECT_PATH, true,
                         contents(), StorageType.STATE_STORE, databaseTypes(), ProjectionType.NONE);
 
         //General Assertions
 
-        Assertions.assertEquals(2, allTemplatesData.size());
-        Assertions.assertEquals(2, allTemplatesData.get(ADAPTER).size());
-        Assertions.assertEquals(2, allTemplatesData.get(STORE_PROVIDER).size());
+        Assertions.assertEquals(4, allTemplatesData.size());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).count());
+        Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.standard().equals(STORE_PROVIDER)).count());
 
         //Assertions for StateAdapter
 
         final TemplateData stateAdapterTemplateData =
-                allTemplatesData.get(ADAPTER).get(0);
+                allTemplatesData.stream().filter(templateData -> templateData.standard().equals(ADAPTER)).findFirst().get();
 
         final CodeTemplateParameters stateAdapterConfigurationParameters =
-                stateAdapterTemplateData.templateParameters();
+                stateAdapterTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, stateAdapterConfigurationParameters.find(PACKAGE_NAME));
         Assertions.assertEquals("AuthorState", stateAdapterConfigurationParameters.find(SOURCE_NAME));
@@ -158,10 +159,15 @@ public class StorageTemplateDataFactoryTest {
 
         //Assertions for StoreProvider
 
+        final List<TemplateData> storeProviders =
+                allTemplatesData.stream()
+                        .filter(templateData -> templateData.standard().equals(STORE_PROVIDER))
+                        .collect(Collectors.toList());
+
         IntStream.range(0, 1).forEach(modelClassificationIndex -> {
-            final TemplateData storeProviderTemplateData = allTemplatesData.get(STORE_PROVIDER).get(modelClassificationIndex);
+            final TemplateData storeProviderTemplateData = storeProviders.get(modelClassificationIndex);
             final ModelClassification modelClassification = modelClassificationIndex == 0 ? COMMAND : QUERY;
-            final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.templateParameters();
+            final CodeTemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
             final String expectedStateStoreActor = modelClassificationIndex == 0 ? "io.vlingo.symbio.store.state.jdbc.JDBCStateStoreActor" : "io.vlingo.symbio.store.state.jdbc.InMemoryStateStoreActor";
             final int expectedImports = modelClassificationIndex == 0 ? 4 : 2;
             Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(PACKAGE_NAME));
