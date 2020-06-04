@@ -55,19 +55,19 @@ public class ProjectionGenerationStepTest {
         final String expectedProjectionComment = projectionType.isEventBased() ? "replace with event" : "replace with operation text";
 
         Assertions.assertEquals(9, context.contents().size());
-        Assertions.assertEquals("AuthorData.java", context.contents().get(4).file.getName());
-        Assertions.assertEquals("BookData.java", context.contents().get(5).file.getName());
+        Assertions.assertEquals("ProjectionDispatcherProvider.java", context.contents().get(4).file.getName());
+        Assertions.assertEquals("AuthorData.java", context.contents().get(5).file.getName());
         Assertions.assertEquals("AuthorProjectionActor.java", context.contents().get(6).file.getName());
-        Assertions.assertEquals("BookProjectionActor.java", context.contents().get(7).file.getName());
-        Assertions.assertEquals("ProjectionDispatcherProvider.java", context.contents().get(8).file.getName());
+        Assertions.assertEquals("BookData.java", context.contents().get(7).file.getName());
+        Assertions.assertEquals("BookProjectionActor.java", context.contents().get(8).file.getName());
 
-        Assertions.assertTrue(context.contents().get(4).text.contains("class AuthorData"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("class BookData"));
+        Assertions.assertTrue(context.contents().get(4).text.contains("class ProjectionDispatcherProvider"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("class AuthorData"));
         Assertions.assertTrue(context.contents().get(6).text.contains("class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>"));
         Assertions.assertTrue(context.contents().get(6).text.contains(expectedProjectionComment));
-        Assertions.assertTrue(context.contents().get(7).text.contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
-        Assertions.assertTrue(context.contents().get(7).text.contains(expectedProjectionComment));
-        Assertions.assertTrue(context.contents().get(8).text.contains("class ProjectionDispatcherProvider"));
+        Assertions.assertTrue(context.contents().get(7).text.contains("class BookData"));
+        Assertions.assertTrue(context.contents().get(8).text.contains("class BookProjectionActor extends StateStoreProjectionActor<BookData>"));
+        Assertions.assertTrue(context.contents().get(8).text.contains(expectedProjectionComment));
     }
 
     private void loadContents(final TaskExecutionContext context) {

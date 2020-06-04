@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.task.template.code.bootstrap;
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
+import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.ImportParameter;
 import io.vlingo.xoom.starter.task.template.code.TemplateData;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
@@ -102,12 +103,17 @@ public class BootstrapTemplateData extends TemplateData {
 
     @Override
     public File file() {
-        return buildFile(BOOTSTRAP, parameters, absolutePath);
+        return buildFile(absolutePath);
     }
 
     @Override
-    public CodeTemplateParameters templateParameters() {
+    public CodeTemplateParameters parameters() {
         return parameters;
+    }
+
+    @Override
+    public CodeTemplateStandard standard() {
+        return BOOTSTRAP;
     }
 
 }

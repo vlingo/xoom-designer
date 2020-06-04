@@ -8,11 +8,15 @@
 package io.vlingo.xoom.starter.task.template.code.resource;
 
 import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.template.code.TemplateData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 import java.util.List;
+
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.REST_RESOURCE_NAME;
 
 public class RestResourceTemplateDataFactoryTest {
 
@@ -29,21 +33,18 @@ public class RestResourceTemplateDataFactoryTest {
         final String basePackage = "io.vlingo.xoomapp";
         final String restResourcesData = "Author;Book";
 
-        final List<RestResourceTemplateData> templateData =
+        final List<TemplateData> templateData =
                 RestResourceTemplateDataFactory.build(basePackage, PROJECT_PATH, restResourcesData);
-
-        final RestResourceTemplateData author = templateData.get(0);
-        final RestResourceTemplateData book = templateData.get(1);
 
         Assertions.assertEquals(2, templateData.size());
 
-        Assertions.assertEquals("Author", author.aggregateName);
-        Assertions.assertEquals("io.vlingo.xoomapp.resource", author.packageName);
-        Assertions.assertEquals(Paths.get(RESOURCE_PACKAGE_PATH, "AuthorResource.java").toString(), author.file().getAbsolutePath());
+        Assertions.assertEquals("AuthorResource", templateData.get(0).parameters().find(REST_RESOURCE_NAME));
+        Assertions.assertEquals("io.vlingo.xoomapp.resource", templateData.get(0).parameters().find(PACKAGE_NAME));
+        Assertions.assertEquals(Paths.get(RESOURCE_PACKAGE_PATH, "AuthorResource.java").toString(), templateData.get(0).file().getAbsolutePath());
 
-        Assertions.assertEquals("Book", book.aggregateName);
-        Assertions.assertEquals("io.vlingo.xoomapp.resource", book.packageName);
-        Assertions.assertEquals(Paths.get(RESOURCE_PACKAGE_PATH, "BookResource.java").toString(), book.file().getAbsolutePath());
+        Assertions.assertEquals("BookResource", templateData.get(1).parameters().find(REST_RESOURCE_NAME));
+        Assertions.assertEquals("io.vlingo.xoomapp.resource", templateData.get(1).parameters().find(PACKAGE_NAME));
+        Assertions.assertEquals(Paths.get(RESOURCE_PACKAGE_PATH, "BookResource.java").toString(), templateData.get(1).file().getAbsolutePath());
     }
 
 }

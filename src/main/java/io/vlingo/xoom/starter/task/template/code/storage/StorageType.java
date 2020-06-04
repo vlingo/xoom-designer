@@ -3,12 +3,12 @@ package io.vlingo.xoom.starter.task.template.code.storage;
 import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.DOMAIN_EVENT;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.STATE;
 
 public enum StorageType {
 
@@ -16,12 +16,13 @@ public enum StorageType {
             "io.vlingo.lattice.model.sourcing",
             "io.vlingo.symbio.store.journal.jdbc.JDBCJournalActor",
             "io.vlingo.symbio.store.journal.inmemory.InMemoryJournalActor",
-            DOMAIN_EVENT, PLACEHOLDER_DOMAIN_EVENT),
+            DOMAIN_EVENT),
 
     OBJECT_STORE("OBJECT_STORE", "ObjectStore", "ObjectTypeRegistry",
             "io.vlingo.lattice.model.object",
             "io.vlingo.symbio.store.object.jdbc.JDBCObjectStoreActor",
-            "io.vlingo.symbio.store.object.inmemory.InMemoryObjectStoreActor"),
+            "io.vlingo.symbio.store.object.inmemory.InMemoryObjectStoreActor",
+            STATE),
 
     STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry",
             "io.vlingo.lattice.model.stateful",
@@ -37,7 +38,7 @@ public enum StorageType {
     private final String typeRegistryPackage;
     private final String defaultStoreActorQualifiedName;
     private final String inMemoryStoreActorQualifiedName;
-    public final List<CodeTemplateStandard> adapterSourceClassStandards; //TODO: After ModelTemplateData refactoring, use a single parameter instead of List
+    public final CodeTemplateStandard adapterSourceClassStandard;
 
     StorageType(final String key,
                 final String title,
@@ -45,14 +46,14 @@ public enum StorageType {
                 final String typeRegistryPackage,
                 final String defaultStoreActorQualifiedName,
                 final String inMemoryStoreActorQualifiedName,
-                final CodeTemplateStandard ...adapterSourceClassStandards) {
+                final CodeTemplateStandard adapterSourceClassStandard) {
         this.key = key;
         this.title = title;
         this.typeRegistryClassName = typeRegistryClassName;
         this.typeRegistryPackage = typeRegistryPackage;
         this.defaultStoreActorQualifiedName = defaultStoreActorQualifiedName;
         this.inMemoryStoreActorQualifiedName = inMemoryStoreActorQualifiedName;
-        this.adapterSourceClassStandards = Arrays.asList(adapterSourceClassStandards);
+        this.adapterSourceClassStandard = adapterSourceClassStandard;
     }
 
     public static StorageType of(final String storage) {

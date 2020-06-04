@@ -42,7 +42,7 @@ public class BootstrapTemplateDataTest {
                         StorageType.STATE_STORE, true, true, contents);
 
         final CodeTemplateParameters parameters =
-                bootstrapTemplateData.templateParameters();
+                bootstrapTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
         Assertions.assertEquals(6, parameters.<List>find(IMPORTS).size());
@@ -90,7 +90,7 @@ public class BootstrapTemplateDataTest {
                         StorageType.STATE_STORE, false, false, contents);
 
         final CodeTemplateParameters parameters =
-                bootstrapTemplateData.templateParameters();
+                bootstrapTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
         Assertions.assertEquals(3, parameters.<List>find(IMPORTS).size());

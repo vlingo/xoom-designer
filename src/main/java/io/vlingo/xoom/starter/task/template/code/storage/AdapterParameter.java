@@ -33,7 +33,7 @@ public class AdapterParameter {
 
     public static List<AdapterParameter> from(final List<TemplateData> adaptersTemplateData) {
         return adaptersTemplateData.stream()
-                .map(adapterTemplateData -> new AdapterParameter(adapterTemplateData.templateParameters()))
+                .map(adapterTemplateData -> new AdapterParameter(adapterTemplateData.parameters()))
                 .collect(Collectors.toList());
     }
 
