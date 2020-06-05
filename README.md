@@ -146,16 +146,4 @@ Executing `xoom gen` causes the application generation based on the settings abo
         </tr>
     </tbody>
 </table>
-
-## Development Guide
-
-Our team really appreciates developers collaboration aiming the `vlingo` components evolution. In this section, a list of *how-to* steps are presented in regard to common `vlingo-xoom-starter` development tasks.
-
-> Add / Update Code Generation Template
-     
-One of the coolest features are the code generation. The following diagram shows how `starter` handles a set of options for project structure / code creation:
-
-
-   
-   
-   which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
+ 
