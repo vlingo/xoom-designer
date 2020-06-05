@@ -18,11 +18,8 @@ The structure is represented below:
     ├── src
     |   ├── main
     |   |     ├── java 
-    |   |     |     └──[custom-package]
-    |   |     |              └──  Bootstrap.java
-    |   |     └── resources 
-    |   |           ├──  application.yml
-    |   |           └──  logback.xml  
+    |   |           └──[custom-package]
+    |   |                    └──  Bootstrap.java
     |   └── test
     |         └── java 
     |              └──[custom-package]
@@ -153,9 +150,9 @@ Our team really appreciates developers collaboration aiming the `vlingo` compone
 
 > Add / Update Code Generation Template
      
-One of the coolest features are the code generation. The following diagram shows how `starter` handles a set of options for project structure / code creation:
+The automated code generation is a nice `starter` feature. If you want to collaborate on that, please first take a look at the following diagram showing the `starter` components responsible for code templates handling:
 
 
    
    
-   which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
+As illustrated above,   which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
