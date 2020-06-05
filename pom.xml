@@ -162,8 +162,20 @@
             </goals>
             <configuration>
               <tasks>
-                <echo>Moving jar files</echo>
                 <copy file="${jar.path}" tofile="${basedir}\dist\starter\bin\vlingo-xoom-starter-dist.jar"/>
+              </tasks>
+            </configuration>
+          </execution>
+          <execution>
+            <id>move-dist</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <copy file="${basedir}\target\starter-dist.tar" tofile="${basedir}\dist\starter.tar"/>
+                <copy file="${basedir}\target\starter-dist.zip" tofile="${basedir}\dist\starter.zip"/>
               </tasks>
             </configuration>
           </execution>

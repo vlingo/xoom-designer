@@ -145,7 +145,19 @@
             </goals>
             <configuration>
               <tasks>
-                <echo>Moving jar files</echo>
+                <copy />
+              </tasks>
+            </configuration>
+          </execution>
+          <execution>
+            <id>move-dist</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <copy />
                 <copy />
               </tasks>
             </configuration>
@@ -164,7 +176,7 @@
         </executions>
         <configuration>
           <descriptor>dist-assembly.xml</descriptor>
-          <finalName>""</finalName>
+          <finalName>starter</finalName>
         </configuration>
       </plugin>
       <plugin>
