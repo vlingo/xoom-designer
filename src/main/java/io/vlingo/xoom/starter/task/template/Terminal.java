@@ -17,12 +17,14 @@ public enum Terminal {
     LINUX("sh", "-c", osName -> osName.contains("Linux"));
 
     private static Terminal ENABLED;
-    private final String initializationCommand;
 
+    private final String initializationCommand;
     private final String parameter;
     private final Predicate<String> activationCondition;
 
-    Terminal(final String initializationCommand, final String parameter, final Predicate<String> activationCondition) {
+    Terminal(final String initializationCommand,
+             final String parameter,
+             final Predicate<String> activationCondition) {
         this.initializationCommand = initializationCommand;
         this.parameter = parameter;
         this.activationCondition = activationCondition;
