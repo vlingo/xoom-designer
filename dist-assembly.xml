@@ -1,0 +1,12 @@
+<assembly>
+    <id>dist</id>
+    <formats>
+        <format>tar</format>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>dist/starter</directory>
+        </fileSet>
+    </fileSets>
+</assembly>
