@@ -1,0 +1,1 @@
+call mvn clean package antrun:run@move-jar assembly:single antrun:run@move-dist
