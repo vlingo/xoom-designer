@@ -4,7 +4,7 @@
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom-starter</artifactId>
   <name>vlingo-xoom-starter</name>
-  <version>1.3.0</version>
+  <version>1.3.1-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <developers>
     <developer>
