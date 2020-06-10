@@ -157,5 +157,6 @@ The application generation is a nice feature. If you want to collaborate on that
 </p>
 
 As illustrated above, application generation can be run by [two commands](https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `vlingo\xoom`. The latter reads parameters from a properties file, the first consumes parameters from web-based UI. 
+
 The second half of the diagram shows external tools that, considering application generation as a process, perform important steps. [Maven Archetypes](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) creates the project structure dynamically organizing the directory hierarchy, also handling deployment resources as Dockerfile and K8s manifest file.   
 [Apache FreeMarker](https://freemarker.apache.org/) 
