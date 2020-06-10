@@ -153,7 +153,7 @@ Our team really appreciates developers collaboration aiming the `vlingo` compone
 The project generator is a nice feature. If you want to collaborate on that, first take a look at the following diagram showing the `vlingo-xoom-starter` components responsible for project generator:
 
 <p align="center">
-    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="300" />
+    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="400" />
 </p>
 
 As illustrated above, which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
