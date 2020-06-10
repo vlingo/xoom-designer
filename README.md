@@ -148,12 +148,14 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 Our team really appreciates developers collaboration aiming the `vlingo` components evolution. In this section, a list of *how-to* steps are presented in regard to common `vlingo-xoom-starter` development tasks.
 
-> Add / Update Code Generation Template
+## Introduction to Application generation
      
-The project generator is a nice feature. If you want to collaborate on that, first take a look at the following diagram showing the `vlingo-xoom-starter` components responsible for project generator:
+The application generation is a nice feature. If you want to collaborate on that, first take a look at the following diagram showing its components interaction:
 
 <p align="center">
     <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="400" />
 </p>
 
-As illustrated above, which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
+As illustrated above, application generation can be run by [two commands](https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `vlingo\xoom`. The latter reads parameters from a properties file, the first consumes parameters from web-based UI. 
+The second half of the diagram shows external tools that, considering application generation as a process, perform important steps. [Maven Archetypes](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) creates the project structure dynamically organizing the directory hierarchy, also handling deployment resources as Dockerfile and K8s manifest file.   
+[Apache FreeMarker](https://freemarker.apache.org/) 
