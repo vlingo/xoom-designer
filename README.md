@@ -150,9 +150,8 @@ Our team really appreciates developers collaboration aiming the `vlingo` compone
 
 > Add / Update Code Generation Template
      
-The automated code generation is a nice `starter` feature. If you want to collaborate on that, please first take a look at the following diagram showing the `starter` components responsible for code templates handling:
+The project generator is a nice feature. If you want to collaborate on that, first take a look at the following diagram showing the `vlingo-xoom-starter` components responsible for project generator:
 
+![project-generator-diagram](https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/starter-project-generator.png)
 
-   
-   
-As illustrated above,   which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
+As illustrated above, which relies on [Maven Archetype](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) and [Apache FreeMarker](https://freemarker.apache.org/). These two mechanism 
