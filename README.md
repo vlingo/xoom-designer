@@ -52,7 +52,11 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
  1.3.0
 ```
 
-## Application Generation 
+## Features
+
+This section shows a list of handy `vlingo-xoom-starter` features to speed up common development tasks.
+
+### Application Generation 
 
 `vlingo-xoom-starter` provides an user interface for a real quick application generation. Simply, open terminal, execute `xoom gui` and your preferred browser will be opened with a wizard-fashioned screen. 
 
@@ -113,7 +117,7 @@ See a commented properties file sample below:
 
 Executing `xoom gen` causes the application generation based on the settings above, which are the same available on user interface.  
 
-## Docker Commands
+### Docker Commands
 
 `vlingo-xoom-starter` provides cool shortcuts for interacting with Docker, from the project root folder, as follows:
 
