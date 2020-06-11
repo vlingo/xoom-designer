@@ -150,7 +150,7 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ## Development Guide
 
-Our team really appreciates developers collaboration aiming the `vlingo` components evolution. In this section, a list of *how-to* steps are presented in regard to common `vlingo-xoom-starter` development tasks.
+Our team really appreciates collaboration, not only because it boosts the `vlingo` components evolution but also for that simple fact: the more different standpoints, the more complete and mature `vlingo` community is. In this section, practical *how-to* steps are presented for anyone interested in making this tool even better.
 
 ### Introduction to `Application Generation` feature
      
