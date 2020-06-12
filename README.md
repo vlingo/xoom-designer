@@ -154,7 +154,7 @@ Our team really appreciates collaboration, not only because it boosts the `vling
 
 ### Introduction to `Application Generation` feature
      
-The `Application Generation` is a nice feature. If you want to collaborate on that, first take a look at the following diagram showing its components interaction:
+The following diagram gives us an `Application Generation` overview showing its components interaction:
 
 <p align="center">
     <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="400" />
@@ -164,5 +164,8 @@ As illustrated above, `Application Generation` can be run by [two commands](http
 
 The second half of the diagram shows some tools that perform core actions. [Maven Archetypes](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) creates the project structure dynamically organizing the directory hierarchy, Maven configuration, also handling  deployment resources as Dockerfile and K8s manifest file. Further, [Apache FreeMarker](https://freemarker.apache.org/) takes care of classes generation by processing preexisting code templates. That said, let's see how to add templates at code level.
 
-### Add Code Template
+### Create / Update Code Templates
 
+The main constituent parts for every auto-generated class are: 
+* A Freemarker template file
+* A `io.vlingo.xoom.starter.task.template.steps.TemplateProcessingStep` implementation
