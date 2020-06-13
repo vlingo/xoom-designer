@@ -20,7 +20,7 @@ import static io.vlingo.xoom.starter.task.Property.PROJECTIONS;
 public class ProjectionGenerationStep extends TemplateProcessingStep {
 
     @Override
-    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplatesData(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(Property.PACKAGE);
         final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);

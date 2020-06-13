@@ -21,8 +21,8 @@ public class RestResourceTemplateData extends TemplateData {
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String PARENT_PACKAGE_NAME = "resource";
 
-    public final String aggregateName;
-    public final String packageName;
+    private final String aggregateName;
+    private final String packageName;
     private final String absolutePath;
     private final CodeTemplateParameters parameters;
 
@@ -35,11 +35,6 @@ public class RestResourceTemplateData extends TemplateData {
         this.parameters = loadParameters();
     }
 
-    @Override
-    public CodeTemplateParameters parameters() {
-        return parameters;
-    }
-
     private CodeTemplateParameters loadParameters() {
         return CodeTemplateParameters
                 .with(REST_RESOURCE_NAME, REST_RESOURCE.resolveClassname(aggregateName))
@@ -50,12 +45,19 @@ public class RestResourceTemplateData extends TemplateData {
         return String.format(PACKAGE_PATTERN, basePackage, PARENT_PACKAGE_NAME).toLowerCase();
     }
 
-    public File file() {
-        return buildFile(absolutePath, aggregateName);
-    }
-
+    @Override
     public CodeTemplateStandard standard() {
         return REST_RESOURCE;
+    }
+
+    @Override
+    public CodeTemplateParameters parameters() {
+        return parameters;
+    }
+
+    @Override
+    public File file() {
+        return buildFile(absolutePath, aggregateName);
     }
 
 }

@@ -12,7 +12,7 @@ import static io.vlingo.xoom.starter.task.Property.REST_RESOURCES;
 public class RestResourceGenerationStep extends TemplateProcessingStep {
 
     @Override
-    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplatesData(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(PACKAGE);
         final String restResourcesData = context.propertyOf(REST_RESOURCES);
