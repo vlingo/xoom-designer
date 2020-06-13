@@ -19,7 +19,7 @@ import java.util.List;
 public class StorageGenerationStep extends TemplateProcessingStep {
 
     @Override
-    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplatesData(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String basePackage = context.propertyOf(Property.PACKAGE);
         final Boolean enableCQRS = context.propertyOf(Property.CQRS, Boolean::valueOf);

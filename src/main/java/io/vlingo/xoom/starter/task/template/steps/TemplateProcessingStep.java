@@ -17,12 +17,12 @@ public abstract class TemplateProcessingStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
-        buildTemplates(context).forEach(templateData -> {
+        buildTemplatesData(context).forEach(templateData -> {
             final String code = CodeTemplateProcessor.instance().process(templateData);
             context.addContent(templateData.standard(), templateData.file(), code);
         });
     }
 
-    protected abstract List<TemplateData> buildTemplates(final TaskExecutionContext context);
+    protected abstract List<TemplateData> buildTemplatesData(final TaskExecutionContext context);
 
 }
