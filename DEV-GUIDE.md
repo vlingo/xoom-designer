@@ -18,10 +18,10 @@ The second half of the diagram shows some tools that perform core actions. [Mave
 
 The main constituent parts for every auto-generated class are: 
 * A Freemarker template file
-* A [io.vlingo.xoom.starter.task.template.steps.TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) implementation
 * A [io.vlingo.xoom.starter.task.template.code.TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) implementation
+* A [io.vlingo.xoom.starter.task.template.steps.TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) implementation
 
-Examplifying, the following snippets are respectively [template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl), [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/RestResourceGenerationStep.java) and [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java) implementations for `RestResource` classes generation:
+Considering those parts, let's take `RestResource` classes generation as example and go through the implementation details, starting from the template file:
 
 ```
 package ${packageName};
@@ -38,24 +38,7 @@ public class ${resourceName}  {
 }
 ```
 
-```
-public class RestResourceGenerationStep extends TemplateProcessingStep {
-
-    @Override
-    protected List<TemplateData> buildTemplateData(final TaskExecutionContext context) {
-        final String projectPath = context.projectPath();
-        final String basePackage = context.propertyOf(Property.PACKAGE);
-        final String restResourcesData = context.propertyOf(Property.REST_RESOURCES);
-        return RestResourceTemplateDataFactory.build(basePackage, projectPath, restResourcesData);
-    }
-
-    @Override
-    public boolean shouldProcess(final TaskExecutionContext context) {
-        return context.hasProperty(Property.REST_RESOURCES);
-    }
-
-}
-```
+As easy as it seems, the [Rest Resource template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl) requires only two parameters values to generate a `Rest Resource` class. The parameters handling and mapping are addressed by [RestResourceTemplateData]:  
 
 ```
 public class RestResourceTemplateData extends TemplateData {
@@ -104,3 +87,23 @@ public class RestResourceTemplateData extends TemplateData {
 
 }
 ```
+
+```
+public class RestResourceGenerationStep extends TemplateProcessingStep {
+
+    @Override
+    protected List<TemplateData> buildTemplateData(final TaskExecutionContext context) {
+        final String projectPath = context.projectPath();
+        final String basePackage = context.propertyOf(Property.PACKAGE);
+        final String restResourcesData = context.propertyOf(Property.REST_RESOURCES);
+        return RestResourceTemplateDataFactory.build(basePackage, projectPath, restResourcesData);
+    }
+
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.hasProperty(Property.REST_RESOURCES);
+    }
+
+}
+```
+
