@@ -38,7 +38,7 @@ public class ${resourceName}  {
 }
 ```
 
-As easy as it seems, the [Rest Resource template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl) requires only two parameters values to generate a `Rest Resource` class. The parameters handling and mapping are addressed by [RestResourceTemplateData]:  
+As easy as it seems, the [Rest Resource template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl) requires only two parameters values to generate a `Rest Resource` class: `packageName` and `resourceName`. The parameters handling and mapping are addressed by [RestResourceTemplateData] as follows:  
 
 ```
 public class RestResourceTemplateData extends TemplateData {
@@ -88,6 +88,8 @@ public class RestResourceTemplateData extends TemplateData {
 }
 ```
 
+`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` classname are mapped to the template parameters in `loadParameters`. Additionally, `TemplateData` requires the `file` method implementation, which can simply invoke a parent method passing the file absolute path and the filename.
+
 ```
 public class RestResourceGenerationStep extends TemplateProcessingStep {
 
@@ -107,3 +109,4 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 }
 ```
 
+`RestResourceGenerationStep` implements `buildTemplateData` method that passes parameter values, from the Web-based UI or properties file, to `RestResourceTemplateData`. In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building `RestResourceTemplateData`. The `shouldProcess` method is also optional and useful when a `TemplateProcessingStep` subclass needs to be conditionally skipped.
