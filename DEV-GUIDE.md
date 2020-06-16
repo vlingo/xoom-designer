@@ -38,7 +38,7 @@ public class ${resourceName}  {
 }
 ```
 
-As easy as it seems, the [Rest Resource template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl) requires only two parameters values to generate a `Rest Resource` class: `packageName` and `resourceName`. The parameters handling and mapping are addressed by [RestResourceTemplateData] as follows:  
+As easy as it seems, the [Rest Resource template file](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/resources/codegen/RestResource.ftl) requires only two parameters values to generate a `Rest Resource` class: `packageName` and `resourceName`. The parameters handling and mapping are addressed by [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java) as follows:  
 
 ```
 public class RestResourceTemplateData extends TemplateData {
@@ -88,7 +88,7 @@ public class RestResourceTemplateData extends TemplateData {
 }
 ```
 
-`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` classname are mapped to the template parameters in `loadParameters`. Additionally, `TemplateData` requires the `file` method implementation, which can simply invoke a parent method passing the file absolute path and the filename.
+`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` classname are mapped to the template parameters in `loadParameters`. Additionally, [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) requires the [file method](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java#L19) implementation, which can simply invoke a parent method passing the file absolute path and the filename.
 
 ```
 public class RestResourceGenerationStep extends TemplateProcessingStep {
@@ -109,4 +109,4 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 }
 ```
 
-`RestResourceGenerationStep` implements `buildTemplateData` method that passes parameter values, coming from the Web-based UI or properties file, to `RestResourceTemplateData`. In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building `RestResourceTemplateData`. The `shouldProcess` method is also optional and useful when a `TemplateProcessingStep` subclass needs to be conditionally skipped.
+[RestResourceGenerationStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/RestResourceGenerationStep.java) implements `buildTemplateData` method that passes parameter values, coming from the Web-based UI or properties file, to [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). The [shouldProcess method](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/steps/TaskExecutionStep.java#L16) is also optional and useful when a [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) subclass needs to be conditionally skipped.
