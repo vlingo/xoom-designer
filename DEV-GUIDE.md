@@ -109,4 +109,4 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 }
 ```
 
-`RestResourceGenerationStep` implements `buildTemplateData` method that passes parameter values, from the Web-based UI or properties file, to `RestResourceTemplateData`. In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building `RestResourceTemplateData`. The `shouldProcess` method is also optional and useful when a `TemplateProcessingStep` subclass needs to be conditionally skipped.
+`RestResourceGenerationStep` implements `buildTemplateData` method that passes parameter values, coming from the Web-based UI or properties file, to `RestResourceTemplateData`. In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building `RestResourceTemplateData`. The `shouldProcess` method is also optional and useful when a `TemplateProcessingStep` subclass needs to be conditionally skipped.
