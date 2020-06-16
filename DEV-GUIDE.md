@@ -1,4 +1,4 @@
-### Development Guide
+## Development Guide
 
 In this section, practical development steps are discussed for anyone interested in contributing to `vlingo-xoom-starter`. 
 
@@ -109,4 +109,28 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
 }
 ```
 
-[RestResourceGenerationStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/RestResourceGenerationStep.java) implements `buildTemplateData` method that passes parameter values, coming from the Web-based UI or properties file, to [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). In this particular scenario, `RestResourceTemplateDataFactory` is an additional and optional class that helps building [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). The [shouldProcess method](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/steps/TaskExecutionStep.java#L16) is also optional and useful when a [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) subclass needs to be conditionally skipped.
+[RestResourceGenerationStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/RestResourceGenerationStep.java) implements `buildTemplateData` method that passes parameter values, coming from the Web-based UI or properties file, to [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). In this particular scenario, [RestResourceTemplateDataFactory](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateDataFactory.java)  is an additional and optional class that helps building [RestResourceTemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/resource/RestResourceTemplateData.java). The [shouldProcess method](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/steps/TaskExecutionStep.java#L16) is also optional and useful when a [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) subclass needs to be conditionally skipped.
+
+
+Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/d97811cd790c3a7b402126d019f27aa30ca8cd1f/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) has to be added in the [Configuration](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/Configuration.java) steps list:
+
+<pre>
+<code>
+    public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
+            new ResourcesLocationStep(), new PropertiesLoadStep(), new ArchetypeCommandResolverStep(),
+            new CommandExecutionStep(), new LoggingStep(), new StatusHandlingStep(),
+
+            // TemplateProcessingSteps starts here
+
+            new ModelGenerationStep(),
+            new ProjectionGenerationStep(),
+            new StorageGenerationStep(),
+            <strong>new RestResourceGenerationStep(),</strong>
+            new BootstrapGenerationStep(),
+
+            // TemplateProcessingSteps ends here
+
+            new ContentCreationStep(), new ContentPurgerStep()
+    );
+</code>
+</pre>
