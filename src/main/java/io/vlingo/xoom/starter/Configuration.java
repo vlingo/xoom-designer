@@ -107,11 +107,19 @@ public class Configuration {
     }
 
     public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
-            new ResourcesLocationStep(), new PropertiesLoadStep(),
-            new ArchetypeCommandResolverStep(), new CommandExecutionStep(),
-            new LoggingStep(), new StatusHandlingStep(), new ModelGenerationStep(),
-            new ProjectionGenerationStep(), new StorageGenerationStep(),
-            new RestResourceGenerationStep(), new BootstrapGenerationStep(),
+            new ResourcesLocationStep(), new PropertiesLoadStep(), new ArchetypeCommandResolverStep(),
+            new CommandExecutionStep(), new LoggingStep(), new StatusHandlingStep(),
+
+            // TemplateProcessingSteps starts here
+
+            new ModelGenerationStep(),
+            new ProjectionGenerationStep(),
+            new StorageGenerationStep(),
+            new RestResourceGenerationStep(),
+            new BootstrapGenerationStep(),
+
+            // TemplateProcessingSteps ends here
+
             new ContentCreationStep(), new ContentPurgerStep()
     );
 
