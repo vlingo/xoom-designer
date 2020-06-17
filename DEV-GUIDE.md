@@ -4,7 +4,7 @@ In this section, practical development steps are discussed for anyone interested
 
 ### Introduction to `Application Generation` feature
      
-The following diagram gives us an `Application Generation` overview showing its components interaction:
+The following diagram gives us an `Application Generation` overview showing the iteraction of its components:
 
 <p align="center">
     <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/master/docs/raw-proj-gen-diagram.png" height="400" />
