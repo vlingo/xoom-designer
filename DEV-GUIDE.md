@@ -88,7 +88,7 @@ public class RestResourceTemplateData extends TemplateData {
 }
 ```
 
-`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` classname are mapped to the template parameters in `loadParameters`. Additionally, [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) requires the [file method](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java#L19) implementation, which can simply invoke a parent method passing the file absolute path and the filename.
+`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` class name are mapped to the template parameters in `loadParameters`. Additionally, [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) requires the [file method](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java#L19) implementation, which can simply invoke a parent method passing the file absolute path and the filename.
 
 ```
 public class RestResourceGenerationStep extends TemplateProcessingStep {
@@ -135,7 +135,7 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
 </code>
 </pre>
 
-Eventually, some peripherals points in the code are also involved. The following list are mainly related when a new template file is added:
+Eventually, some peripheral points in the code are also involved. The following list are mainly related when a new template file is added:
 
 1.  Create a enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
 
