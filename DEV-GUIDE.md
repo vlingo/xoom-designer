@@ -135,9 +135,9 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
 </code>
 </pre>
 
-Eventually, some peripheral points in the code are also involved. The following list are mainly related when a new template file is added:
+Eventually, some peripheral points in the code are also involved. The following list is mainly related to a template file creation:
 
-1.  Create a enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
+1.  Create an enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
 
 <pre>
 <code>
@@ -166,6 +166,6 @@ Eventually, some peripheral points in the code are also involved. The following 
 </code>
 </pre>
 
-3. In case it doesn't already exist, create a enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
+3. In case it doesn't already exist, create an enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
 
 In sum, those are the common steps regarding `code template files` on `vlingo-xoom-starter`. Our team is available to discuss and provide more information on [Gitter](https://gitter.im/vlingo-platform-java/community/).
