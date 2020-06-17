@@ -168,3 +168,4 @@ Eventually, some peripherals points in the code are also involved. The following
 
 3. In case it doesn't already exist, create a enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
 
+In sum, those are the common steps regarding `code template files` on `vlingo-xoom-starter`. Our team is available to discuss and provide more information on [Gitter](https://gitter.im/vlingo-platform-java/community/).
