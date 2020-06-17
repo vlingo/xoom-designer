@@ -17,7 +17,8 @@ public class StatusHandlingStep implements TaskExecutionStep {
         try {
             final Integer status = context.process().waitFor();
             StatusHandler.forStatus(status).handle(context);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
+            System.out.println(e.getMessage());
             throw new TemplateGenerationException(e);
         }
     }
