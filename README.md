@@ -104,8 +104,8 @@ See a commented properties file sample below:
     storage.type=STATE_STORE
     <strong>#CQRS (true or false)</strong>
     cqrs=true
-    <strong>#Projections Type (NONE, EVENT or OPERATION)</strong>
-    projections=EVENT
+    <strong>#Projections Type (NONE, EVENT_BASED or OPERATION_BASED)</strong>
+    projections=EVENT_BASED
     <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)</strong>
     database=HSQLDB
     <strong>#Command Model Database, required if CQRS is true or Storage Type is Journal (see database types above)</strong>
