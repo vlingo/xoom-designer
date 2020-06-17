@@ -7,7 +7,7 @@ In this section, practical development steps are discussed for anyone interested
 The following diagram gives us an `Application Generation` overview showing its components interaction:
 
 <p align="center">
-    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="400" />
+    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/master/docs/raw-proj-gen-diagram.png" height="400" />
 </p>
 
 As illustrated above, `Application Generation` can be run by [two commands](https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `vlingo\xoom`, having exactly the same parameters list. The only difference is that the latter reads parameters from a properties file, while the first consumes parameters from web-based UI.
