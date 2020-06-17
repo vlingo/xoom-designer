@@ -120,7 +120,7 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
             new ResourcesLocationStep(), new PropertiesLoadStep(), new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(), new LoggingStep(), new StatusHandlingStep(),
 
-            // TemplateProcessingSteps starts here
+            <strong>// TemplateProcessingSteps starts here</strong>
 
             new ModelGenerationStep(),
             new ProjectionGenerationStep(),
@@ -128,9 +128,43 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
             <strong>new RestResourceGenerationStep(),</strong>
             new BootstrapGenerationStep(),
 
-            // TemplateProcessingSteps ends here
+            <strong>// TemplateProcessingSteps ends here</strong>
 
             new ContentCreationStep(), new ContentPurgerStep()
     );
 </code>
 </pre>
+
+Eventually, some peripherals points in the code are also involved. The following list are mainly related when a new template file is added:
+
+1.  Create a enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
+
+<pre>
+<code>
+    public enum CodeTemplateFile {
+
+        //Other template filenames
+
+        <strong>REST_RESOURCE("RestResource")</strong>
+
+        //Enum attributes
+    }
+</code>
+</pre>
+
+2. Map the new standard file to an existing [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) or create a new one. Sometimes there are multiple files for the same standard. For instance, there is one `Aggregate` template file for each `Storage` (Journal, State Store, Object Store). That means [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) is responsible for grouping template files by standard and helps the [CodeTemplateProcessor](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateProcessor.java) to find the proper file based on [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) such as [StorageType](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/storage/StorageType.java). The examples below demonstrates the `Aggregate` and `Rest Resource` standards. The latter has only one related template file:
+
+<pre>
+<code>
+    public enum CodeTemplateStandard {
+        
+        <strong>AGGREGATE(parameters -> AGGREGATE_TEMPLATES.get(parameters.from(STORAGE_TYPE))),</strong>
+        <strong>REST_RESOURCE(parameters -> CodeTemplateFile.REST_RESOURCE.filename),</strong>
+
+        //Other standards
+    }
+</code>
+</pre>
+
+3. In case it doesn't already exist, create a enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
+
