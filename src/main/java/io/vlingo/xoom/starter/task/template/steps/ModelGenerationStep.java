@@ -19,7 +19,7 @@ import static io.vlingo.xoom.starter.task.Property.*;
 public class ModelGenerationStep extends TemplateProcessingStep {
 
     @Override
-    protected List<TemplateData> buildTemplates(final TaskExecutionContext context) {
+    protected List<TemplateData> buildTemplatesData(final TaskExecutionContext context) {
         final String projectPath = context.projectPath();
         final String packageName = context.propertyOf(PACKAGE);
         final String aggregatesData = context.propertyOf(AGGREGATES);
