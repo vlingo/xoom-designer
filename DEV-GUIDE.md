@@ -137,7 +137,7 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
 
 Eventually, some peripheral points in the code are also involved. The following list is mainly related to a template file creation:
 
-1.  Create an enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
+1.  Create an enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the constructor. Example:
 
 <pre>
 <code>
