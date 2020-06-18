@@ -150,4 +150,4 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ## Collaboration
 
-Our team really appreciates collaboration, not only because it boosts the `vlingo` components evolution but also for that simple fact: the more standpoints, the more complete and mature `vlingo` community will be. If you are looking forward to it, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md). 
+Our team really appreciates collaboration, not only because it boosts the evolution of `vlingo` components but also for that simple fact: the more standpoints, the more complete and mature `vlingo` community will be. If you are looking forward to it, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md). 
