@@ -17,7 +17,7 @@ The structure is represented below:
 ```
     ├── src
     |   ├── main
-    |   |     ├── java 
+    |   |     └── java 
     |   |           └──[custom-package]
     |   |                    └──  Bootstrap.java
     |   └── test
