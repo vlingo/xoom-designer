@@ -44,9 +44,7 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   xoomVersions() : Array<String> {
     return [
-      "1.3.0",
-      "1.2.20",
-      "1.2.19"
+      "1.3.1-SNAPSHOT"
     ];
   }
 
