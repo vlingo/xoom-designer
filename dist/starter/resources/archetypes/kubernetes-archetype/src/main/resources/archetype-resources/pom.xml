@@ -10,9 +10,10 @@
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <exec.mainClass>${package}.infrastructure.Bootstrap</exec.mainClass>
+    <exec.mainClass>${package}.infrastructure.XoomInitializer</exec.mainClass>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
+    <vlingo.xoom.version>${vlingoXoomServerVersion}</vlingo.xoom.version>
   </properties>
   <repositories>
     <repository>
@@ -37,6 +38,12 @@
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-http</artifactId>
       <version>${vlingoXoomServerVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vlingo</groupId>
+      <artifactId>vlingo-xoom-server</artifactId>
+      <version>${vlingo.xoom.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -137,19 +144,9 @@
             </compilerArgs>
             <annotationProcessorPaths>
               <path>
-                <groupId>io.micronaut</groupId>
-                <artifactId>micronaut-inject-java</artifactId>
-                <version>1.2.10</version>
-              </path>
-              <path>
-                <groupId>io.micronaut</groupId>
-                <artifactId>micronaut-validation</artifactId>
-                <version>1.2.10</version>
-              </path>
-              <path>
-                <groupId>io.micronaut.data</groupId>
-                <artifactId>micronaut-data-processor</artifactId>
-                <version>1.0.0</version>
+                <groupId>io.vlingo</groupId>
+                <artifactId>vlingo-xoom-server</artifactId>
+                <version>${vlingo.xoom.version}</version>
               </path>
             </annotationProcessorPaths>
           </configuration>
@@ -165,14 +162,9 @@
                 </compilerArgs>
                 <annotationProcessorPaths>
                   <path>
-                    <groupId>io.micronaut</groupId>
-                    <artifactId>micronaut-inject-java</artifactId>
-                    <version>1.2.10</version>
-                  </path>
-                  <path>
-                    <groupId>io.micronaut</groupId>
-                    <artifactId>micronaut-validation</artifactId>
-                    <version>1.2.10</version>
+                    <groupId>io.vlingo</groupId>
+                    <artifactId>vlingo-xoom-server</artifactId>
+                    <version>${vlingo.xoom.version}</version>
                   </path>
                 </annotationProcessorPaths>
               </configuration>

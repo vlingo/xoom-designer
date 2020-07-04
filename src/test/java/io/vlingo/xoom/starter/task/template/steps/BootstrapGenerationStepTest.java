@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import io.vlingo.xoom.starter.task.template.code.ProjectionType;
@@ -38,11 +37,7 @@ public class BootstrapGenerationStepTest {
         Assertions.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
         Assertions.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
         Assertions.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("final AuthorResource authorResource = new AuthorResource();"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("final BookResource bookResource = new BookResource();"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("authorResource.routes(),"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("bookResource.routes()"));
-        Assertions.assertFalse(context.contents().get(5).text.contains("bookResource.routes(),"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("@Resources({AuthorResource.class, BookResource.class})"));
     }
 
     private void loadProperties(final TaskExecutionContext context) {

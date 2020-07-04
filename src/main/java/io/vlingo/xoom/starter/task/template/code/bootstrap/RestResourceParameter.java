@@ -9,51 +9,36 @@ package io.vlingo.xoom.starter.task.template.code.bootstrap;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
-import static java.util.stream.Collectors.toList;
 
 public class RestResourceParameter {
 
-    private final String className;
-    private final String objectName;
-    private final boolean last;
+    private final String classNames;
+    private final boolean exist;
 
-    public static List<RestResourceParameter> from(final List<Content> contents) {
+    public RestResourceParameter(final List<String> classNames) {
+        this.exist = !classNames.isEmpty();
+        this.classNames = classNames.stream()
+                .map(className -> className.concat(".class"))
+                .collect(Collectors.joining(", "));
+    }
+
+    public static RestResourceParameter from(final List<Content> contents) {
         final List<String> classNames =
                 ContentQuery.findClassNames(REST_RESOURCE, contents);
 
-        return IntStream.range(0, classNames.size()).mapToObj(index ->
-                new RestResourceParameter(classNames.get(index), index,
-                        classNames.size())).collect(toList());
+        return new RestResourceParameter(classNames);
     }
 
-    private RestResourceParameter(final String restResourceName,
-                                  final int resourceIndex,
-                                  final int numberOfResources) {
-        this.className = restResourceName;
-        this.objectName = formatObjectName(restResourceName);
-        this.last = resourceIndex == numberOfResources - 1;
+    public String getClassNames() {
+        return classNames;
     }
 
-    private String formatObjectName(final String restResourceName) {
-        return StringUtils.uncapitalize(restResourceName);
+    public boolean getExist() {
+        return exist;
     }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public boolean isLast() {
-        return last;
-    }
-
 }
