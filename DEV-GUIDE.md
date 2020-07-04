@@ -4,10 +4,10 @@ In this section, practical development steps are discussed for anyone interested
 
 ### Introduction to `Application Generation` feature
      
-The following diagram gives us an `Application Generation` overview showing its components interaction:
+The following diagram gives us an `Application Generation` overview showing the iteraction of its components:
 
 <p align="center">
-    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/docs/raw-proj-gen-diagram.png" height="400" />
+    <img src="https://github.com/vlingo/vlingo-xoom-starter/blob/master/docs/raw-proj-gen-diagram.png" height="400" />
 </p>
 
 As illustrated above, `Application Generation` can be run by [two commands](https://github.com/vlingo/vlingo-xoom-starter/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `vlingo\xoom`, having exactly the same parameters list. The only difference is that the latter reads parameters from a properties file, while the first consumes parameters from web-based UI.
@@ -21,7 +21,7 @@ The main constituent parts for every auto-generated class are:
 * A [io.vlingo.xoom.starter.task.template.code.TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) implementation
 * A [io.vlingo.xoom.starter.task.template.steps.TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) implementation
 
-Considering those parts, let's take `RestResource` classes generation as example and go through the implementation details, starting from the template file:
+Considering those parts, let's take `RestResource` class generation as an example and go through the implementation details, starting from the template file:
 
 ```
 package ${packageName};
@@ -88,7 +88,7 @@ public class RestResourceTemplateData extends TemplateData {
 }
 ```
 
-`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` classname are mapped to the template parameters in `loadParameters`. Additionally, [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) requires the [file method](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java#L19) implementation, which can simply invoke a parent method passing the file absolute path and the filename.
+`RestResource` classes should be placed under its own package. Hence, the `resolvePackage` method appends the project base package to the `resource` package. The full package name and the `RestResource` class name are mapped to the template parameters in `loadParameters`. Additionally, [TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) requires the [file method](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java#L19) implementation, which can simply invoke a parent method passing the file absolute path and the filename.
 
 ```
 public class RestResourceGenerationStep extends TemplateProcessingStep {
@@ -135,9 +135,9 @@ Finally, [TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/
 </code>
 </pre>
 
-Eventually, some peripherals points in the code are also involved. The following list are mainly related when a new template file is added:
+Eventually, some peripheral points in the code are also involved. The following list is mainly related to a template file creation:
 
-1.  Create a enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the construtor. Example:
+1.  Create an enum value in [CodeTemplateFile](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateFile.java) passing the template filename (without extension) in the constructor. Example:
 
 <pre>
 <code>
@@ -152,7 +152,7 @@ Eventually, some peripherals points in the code are also involved. The following
 </code>
 </pre>
 
-2. Map the new standard file to an existing [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) or create a new one. Sometimes there are multiple files for the same standard. For instance, there is one `Aggregate` template file for each `Storage` (Journal, State Store, Object Store). That means [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) is responsible for grouping template files by standard and helps the [CodeTemplateProcessor](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateProcessor.java) to find the proper file based on [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) such as [StorageType](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/storage/StorageType.java). The examples below demonstrates the `Aggregate` and `Rest Resource` standards. The latter has only one related template file:
+2. Map the new standard file to an existing [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) or create one. Sometimes there are multiple files for the same standard. For instance, there is one `Aggregate` template file for each `Storage` (Journal, State Store, Object Store). That means [CodeTemplateStandard](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateStandard.java) is responsible for grouping template files by standard and helps the [CodeTemplateProcessor](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateProcessor.java) to find the proper file based on [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) such as [StorageType](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/storage/StorageType.java). The examples below demonstrates the `Aggregate` and `Rest Resource` standards. The latter has only one related template file:
 
 <pre>
 <code>
@@ -166,6 +166,6 @@ Eventually, some peripherals points in the code are also involved. The following
 </code>
 </pre>
 
-3. In case it doesn't already exist, create a enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
+3. In case it doesn't already exist, create an enum value in [CodeTemplateParameters](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/CodeTemplateParameters.java) for each template parameter.
 
 In sum, those are the common steps regarding `code template files` on `vlingo-xoom-starter`. Our team is available to discuss and provide more information on [Gitter](https://gitter.im/vlingo-platform-java/community/).
