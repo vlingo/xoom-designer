@@ -8,10 +8,7 @@ package io.vlingo.xoom.starter.task.template.code.bootstrap;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateParameters;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
-import io.vlingo.xoom.starter.task.template.code.ImportParameter;
-import io.vlingo.xoom.starter.task.template.code.TemplateData;
+import io.vlingo.xoom.starter.task.template.code.*;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 
 import java.io.File;
@@ -19,11 +16,13 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class BootstrapTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String INFRA_PACKAGE_NAME = "infrastructure";
+    private static final String RESOURCES_ANNOTATION_QUALIFIED_NAME = "io.vlingo.xoom.annotation.initializer.Resources";
 
     private final String absolutePath;
     private final CodeTemplateParameters parameters;
@@ -62,9 +61,11 @@ public class BootstrapTemplateData extends TemplateData {
                                                   final List<Content> contents) {
         final String packageName = resolvePackage(basePackage);
 
+
+
         final List<ImportParameter> imports = loadImports(storageType, contents, useCQRS);
 
-        final List<RestResourceParameter> restResourceParameters =
+        final RestResourceParameter restResourceParameters =
                 RestResourceParameter.from(contents);
 
         final List<TypeRegistryParameter> typeRegistryParameters =
@@ -78,7 +79,7 @@ public class BootstrapTemplateData extends TemplateData {
                 .and(APPLICATION_NAME, artifactId)
                 .and(PROVIDERS, providerParameters)
                 .and(USE_PROJECTIONS, useProjections)
-                .and(REST_RESOURCES, restResourceParameters)
+                .and(CodeTemplateParameter.REST_RESOURCE, restResourceParameters)
                 .and(TYPE_REGISTRIES, typeRegistryParameters)
                 .andResolve(PROJECTION_DISPATCHER_PROVIDER_NAME,
                         param -> PROJECTION_DISPATCHER_PROVIDER.resolveClassname(param));
@@ -87,9 +88,14 @@ public class BootstrapTemplateData extends TemplateData {
     private List<ImportParameter> loadImports(final StorageType storageType,
                                               final List<Content> contents,
                                               final Boolean useCQRS) {
+
         final List<String> otherFullyQualifiedNames =
                 ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE,
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
+
+        if(ContentQuery.exists(REST_RESOURCE, contents)) {
+            otherFullyQualifiedNames.add(RESOURCES_ANNOTATION_QUALIFIED_NAME);
+        }
 
         final List<String> typeRegistriesFullyQualifiedNames =
                 storageType.resolveTypeRegistryQualifiedNames(useCQRS);
