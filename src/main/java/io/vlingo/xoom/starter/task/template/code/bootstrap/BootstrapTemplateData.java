@@ -22,7 +22,7 @@ public class BootstrapTemplateData extends TemplateData {
 
     private final static String PACKAGE_PATTERN = "%s.%s";
     private final static String INFRA_PACKAGE_NAME = "infrastructure";
-    private static final String RESOURCES_ANNOTATION_QUALIFIED_NAME = "io.vlingo.xoom.annotation.initializer.Resources";
+    private static final String RESOURCES_ANNOTATION_QUALIFIED_NAME = "io.vlingo.xoom.annotation.initializer.ResourceHandlers";
 
     private final String absolutePath;
     private final CodeTemplateParameters parameters;
