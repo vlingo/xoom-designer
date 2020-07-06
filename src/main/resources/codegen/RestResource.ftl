@@ -2,10 +2,10 @@ package ${packageName};
 
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.ResourceHandlers;
+import io.vlingo.http.resource.ResourceHandler;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
 
-public class ${resourceName} extends ResourceHandlers {
+public class ${resourceName} extends ResourceHandler {
 
     private final Stage stage;
 
