@@ -13,7 +13,7 @@ import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID;
 
 @Xoom(name = "${appName}", addressFactory = @AddressFactory(type = UUID))
 <#if restResource.exist>
-@Resources({${restResource.classNames}})
+@ResourceHandlers({${restResource.classNames}})
 </#if>
 public class Bootstrap implements StageInitializationAware {
 
