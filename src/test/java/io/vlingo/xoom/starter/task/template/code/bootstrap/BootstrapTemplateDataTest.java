@@ -53,7 +53,7 @@ public class BootstrapTemplateDataTest {
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(4).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.Resources", parameters.<List<ImportParameter>>find(IMPORTS).get(5).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(5).getQualifiedClassName());
         Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(6).getQualifiedClassName());
 
         Assertions.assertEquals(true, parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getExist());
@@ -94,7 +94,7 @@ public class BootstrapTemplateDataTest {
         Assertions.assertEquals(4, parameters.<List>find(IMPORTS).size());
         Assertions.assertEquals("io.vlingo.xoomapp.resource.AuthorResource", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.StateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.Resources", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
         Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
 
         Assertions.assertEquals(true, parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getExist());
