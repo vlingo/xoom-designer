@@ -7,13 +7,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.vlingo.xoom.starter.Configuration.*;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateFile.ANNOTATED_BOOTSTRAP;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateFile.DEFAULT_BOOTSTRAP;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
 import static io.vlingo.xoom.starter.task.template.code.storage.StorageType.STATE_STORE;
 
 public enum CodeTemplateStandard {
-
-    BOOTSTRAP(parameters -> CodeTemplateFile.BOOTSTRAP.filename,
-            (name, parameters) -> "Bootstrap"),
 
     AGGREGATE_PROTOCOL(parameters -> CodeTemplateFile.AGGREGATE_PROTOCOL.filename),
 
@@ -37,6 +36,10 @@ public enum CodeTemplateStandard {
 
     PROJECTION_DISPATCHER_PROVIDER(parameters -> CodeTemplateFile.PROJECTION_DISPATCHER_PROVIDER.filename,
             (name, parameters) -> "ProjectionDispatcherProvider"),
+
+    BOOTSTRAP(parameters -> parameters.find(USE_ANNOTATIONS) ?
+            ANNOTATED_BOOTSTRAP.filename : DEFAULT_BOOTSTRAP.filename,
+            (name, parameters) -> "Bootstrap"),
 
     DOMAIN_EVENT(parameters -> {
         if (parameters.find(PLACEHOLDER_EVENT)) {

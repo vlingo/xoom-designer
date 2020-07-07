@@ -23,11 +23,33 @@ import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 public class BootstrapGenerationStepTest {
 
     @Test
-    public void testBootstrapGeneration() {
+    public void testDefaultBootstrapGeneration() {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        loadProperties(context);
+        loadProperties(context, false);
+        loadContents(context);
+
+        new BootstrapGenerationStep().process(context);
+
+        Assertions.assertEquals(6, context.contents().size());
+        Assertions.assertEquals("Bootstrap.java", context.contents().get(5).file.getName());
+        Assertions.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("final AuthorResource authorResource = new AuthorResource();"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("final BookResource bookResource = new BookResource();"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("authorResource.routes(),"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("bookResource.routes()"));
+        Assertions.assertFalse(context.contents().get(5).text.contains("bookResource.routes(),"));
+    }
+
+    @Test
+    public void testAnnotatedBootstrapGeneration() {
+        final TaskExecutionContext context =
+                TaskExecutionContext.withoutOptions();
+
+        loadProperties(context, true);
         loadContents(context);
 
         new BootstrapGenerationStep().process(context);
@@ -40,7 +62,7 @@ public class BootstrapGenerationStepTest {
         Assertions.assertTrue(context.contents().get(5).text.contains("@ResourceHandlers({AuthorResource.class, BookResource.class})"));
     }
 
-    private void loadProperties(final TaskExecutionContext context) {
+    private void loadProperties(final TaskExecutionContext context, final Boolean useAnnotation) {
         final Properties properties = new Properties();
         properties.put(PACKAGE.literal(), "io.vlingo");
         properties.put(ARTIFACT_ID.literal(), "xoomapp");
@@ -48,6 +70,7 @@ public class BootstrapGenerationStepTest {
         properties.put(TARGET_FOLDER.literal(), HOME_DIRECTORY);
         properties.put(STORAGE_TYPE.literal(), "STATE_STORE");
         properties.put(PROJECTIONS.literal(), ProjectionType.OPERATION_BASED.name());
+        properties.put(ANNOTATIONS.literal(), useAnnotation.toString());
         context.onProperties(properties);
     }
 

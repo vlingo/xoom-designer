@@ -5,7 +5,7 @@ import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.actors.Stage;
-import io.vlingo.xoom.actors.StageInitializationAware;
+import io.vlingo.xoom.actors.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.AddressFactory;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
@@ -15,7 +15,7 @@ import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID;
 <#if restResource.exist>
 @ResourceHandlers({${restResource.classNames}})
 </#if>
-public class Bootstrap implements StageInitializationAware {
+public class Bootstrap implements XoomInitializationAware {
 
    @Override
    public void onInit(final Stage stage) {
