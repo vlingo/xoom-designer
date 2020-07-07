@@ -26,13 +26,14 @@ public class BootstrapGenerationStep extends TemplateProcessingStep {
         final String basePackage = context.propertyOf(PACKAGE);
         final String artifactId = context.propertyOf(ARTIFACT_ID);
         final Boolean useCQRS = context.propertyOf(CQRS, Boolean::valueOf);
+        final Boolean useAnnotations = context.propertyOf(ANNOTATIONS, Boolean::valueOf);
         final StorageType storageType = context.propertyOf(STORAGE_TYPE, StorageType::valueOf);
         final ProjectionType projectionType = context.propertyOf(PROJECTIONS, ProjectionType::valueOf);
 
         final TemplateData templateData =
                 BootstrapTemplateData.from(basePackage, projectPath, artifactId,
                         storageType, useCQRS, projectionType.isProjectionEnabled(),
-                        context.contents());
+                        useAnnotations, context.contents());
 
         return Arrays.asList(templateData);
     }
