@@ -35,7 +35,7 @@ public class Bootstrap {
 </#list>
 
 <#list restResources as restResource>
-    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}();
+    final ${restResource.className} ${restResource.objectName} = new ${restResource.className}(stage);
 </#list>
 
     Resources allResources = Resources.are(
