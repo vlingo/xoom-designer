@@ -5,7 +5,7 @@ import ${import.qualifiedClassName};
 </#list>
 
 import io.vlingo.actors.Stage;
-import io.vlingo.xoom.actors.XoomInitializationAware;
+import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.AddressFactory;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
