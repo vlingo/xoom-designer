@@ -22,18 +22,18 @@ public class GenerationSettingsData {
     public final ModelSettingsData model;
     public final DeploymentSettingsData deployment;
     public final String projectDirectory;
-    public final Boolean annotations;
+    public final Boolean useAnnotations;
 
     public GenerationSettingsData(final ContextSettingsData context,
                                   final ModelSettingsData model,
                                   final DeploymentSettingsData deployment,
                                   final String projectDirectory,
-                                  final Boolean annotations) {
+                                  final Boolean useAnnotations) {
         this.context = context;
         this.model = model;
         this.deployment = deployment;
         this.projectDirectory = projectDirectory;
-        this.annotations = annotations;
+        this.useAnnotations = useAnnotations;
     }
 
     public List<String> toArguments() {
@@ -45,7 +45,7 @@ public class GenerationSettingsData {
         args.add(TARGET_FOLDER.literal());
         args.add(projectDirectory);
         args.add(ANNOTATIONS.literal());
-        args.add(annotations.toString());
+        args.add(useAnnotations.toString());
         args.add(Agent.argumentKey());
         args.add(Agent.WEB.name());
         return args;

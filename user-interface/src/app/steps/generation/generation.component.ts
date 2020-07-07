@@ -36,6 +36,10 @@ export class GenerationComponent extends StepComponent {
     ));
   }
 
+  onAnnotationsClick($event) {
+    this.generationSettings.useAnnotations = $event.target.checked;
+  }
+
   next(): void {
     throw new Error("Operation Not Supported.");
   }
