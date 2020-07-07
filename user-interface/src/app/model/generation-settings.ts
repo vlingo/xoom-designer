@@ -10,13 +10,13 @@ export class GenerationSettings {
     public model: ModelSettings;
     public deployment: DeploymentSettings;
     public projectDirectory: String;
-    public annotations: Boolean;
+    public useAnnotations: Boolean;
     
     constructor() {
         this.model = new ModelSettings();
         this.context = new ContextSettings();
         this.deployment = new DeploymentSettings();
-        this.annotations = true;
+        this.useAnnotations = false;
     }
     
     public addAggregate(aggregate: Aggregate) {

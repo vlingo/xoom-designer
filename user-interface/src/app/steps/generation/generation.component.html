@@ -1,11 +1,22 @@
 <app-step-title title="Generation"></app-step-title>
 
 <form [formGroup]="generationForm">
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-4">
         <label for="projectDirectory">Where do you want to generate the project?</label>
         <input type="text" class="form-control starter-field" 
         id="projectDirectory" [(ngModel)]="generationSettings.projectDirectory"
         formControlName="ProjectDirectory"
         placeholder="Absolute path for the new xoom project">
+    </div>
+    <div class="form-row xoom-annotations">
+        <div class="col-md-2">
+            <label for="useAnnotations">Use VLINGO/XOOM annotations:</label>
+        </div>
+        <div class="col-md-1 pt-1 ml-3">
+            <input type="checkbox" 
+            class="form-check-input" 
+            (click)="onAnnotationsClick($event)"
+            [checked]="generationSettings.useAnnotations">
+        </div>
     </div>
 </form>
