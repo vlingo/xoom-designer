@@ -28,6 +28,7 @@ public enum Property {
     DOMAIN_EVENTS("events", true, false),
     STORAGE_TYPE("storage.type", true, false),
     CQRS("cqrs", true, false),
+    ANNOTATIONS("annotations", false),
     PROJECTIONS("projections", true, false),
     DATABASE("database", true, false),
     COMMAND_MODEL_DATABASE("command.model.database", true, false),

@@ -35,6 +35,7 @@ public class PropertiesLoadStepTest {
         Assertions.assertEquals("xoom-application", context.propertyOf(ARTIFACT_ID));
         Assertions.assertEquals("com.company.business", context.propertyOf(PACKAGE));
         Assertions.assertEquals("DOCKER", context.propertyOf(DEPLOYMENT));
+        Assertions.assertEquals("true", context.propertyOf(ANNOTATIONS));
         Assertions.assertNotNull(context.propertyOf(TARGET_FOLDER));
     }
 
@@ -55,6 +56,7 @@ public class PropertiesLoadStepTest {
         Assertions.assertEquals("dambrosio/xoom-app", context.propertyOf(DOCKER_REPOSITORY));
         Assertions.assertEquals("vlingo/xoom-app", context.propertyOf(KUBERNETES_IMAGE));
         Assertions.assertEquals("xoom-app-pod", context.propertyOf(KUBERNETES_POD_NAME));
+        Assertions.assertEquals("true", context.propertyOf(ANNOTATIONS));
     }
 
     private List<String> args() {
@@ -72,6 +74,7 @@ public class PropertiesLoadStepTest {
             KUBERNETES_IMAGE.literal(), "vlingo/xoom-app",
             KUBERNETES_POD_NAME.literal(), "xoom-app-pod",
             TARGET_FOLDER.literal(), "/home/projects/xoom-app",
+            ANNOTATIONS.literal(),  "true",
             Agent.argumentKey(), Agent.WEB.name()
         );
     }
