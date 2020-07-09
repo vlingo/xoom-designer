@@ -30,7 +30,7 @@
     <exec.mainClass>io.vlingo.xoom.starter.Initializer</exec.mainClass>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <jar.path>${basedir}\target\vlingo-xoom-starter-${version}.jar</jar.path>
+    <jar.path>${basedir}\target\vlingo-xoom-starter-${project.version}.jar</jar.path>
   </properties>
 
   <dependencyManagement>

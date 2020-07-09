@@ -17,11 +17,7 @@ import java.util.stream.Stream;
 
 public class ContentQuery {
 
-    public static String findClassName(final Object subject, final List<Content> contents) {
-        return findClassNames(subject, contents).stream().findFirst().get();
-    }
-
-    public static boolean exists(final Object subject, final List<Content> contents) {
+     public static boolean exists(final Object subject, final List<Content> contents) {
         return filterBySubject(subject, contents).findAny().isPresent();
     }
 
@@ -44,6 +40,12 @@ public class ContentQuery {
                     final String packageName = retrievePackage(content.text);
                     return String.format("%s.%s", packageName, className);
                 }).collect(Collectors.toList());
+    }
+
+    public static String findPackage(final Object subject, final List<Content> contents) {
+        return filterBySubject(subject, contents)
+                .map(content -> retrievePackage(content.text))
+                .findAny().orElse("");
     }
 
     public static String findFullyQualifiedClassName(final Object subject, final String className, final List<Content> contents) {

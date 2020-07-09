@@ -99,7 +99,7 @@ public abstract class BootstrapTemplateData extends TemplateData {
                                               final List<Content> contents,
                                               final Boolean useCQRS) {
         final List<String> otherFullyQualifiedNames =
-                ContentQuery.findFullyQualifiedClassNames(contents, REST_RESOURCE,
+                ContentQuery.findFullyQualifiedClassNames(contents,
                         STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER);
 
         final List<String> typeRegistriesFullyQualifiedNames =

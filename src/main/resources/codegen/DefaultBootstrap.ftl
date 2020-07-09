@@ -29,7 +29,6 @@ public class Bootstrap {
 <#list registries as registry>
     final ${registry.className} ${registry.objectName} = new ${registry.className}(world);
 </#list>
-
 <#list providers as provider>
     ${provider.initialization}.using(${provider.arguments});
 </#list>
