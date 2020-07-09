@@ -12,8 +12,8 @@ import io.vlingo.xoom.annotation.initializer.Xoom;
 import static io.vlingo.xoom.annotation.initializer.AddressFactory.Type.UUID;
 
 @Xoom(name = "${appName}", addressFactory = @AddressFactory(type = UUID))
-<#if restResource.exist>
-@ResourceHandlers({${restResource.classNames}})
+<#if restResourcePackage?has_content>
+@ResourceHandlers(packages = "${restResourcePackage}")
 </#if>
 public class Bootstrap implements XoomInitializationAware {
 
@@ -22,7 +22,6 @@ public class Bootstrap implements XoomInitializationAware {
      <#list registries as registry>
          final ${registry.className} ${registry.objectName} = new ${registry.className}(stage.world());
      </#list>
-
      <#list providers as provider>
          ${provider.initialization}.using(${provider.arguments});
      </#list>

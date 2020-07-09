@@ -52,6 +52,11 @@ public class CodeTemplateParameters {
         return this;
     }
 
+    public CodeTemplateParameters addImports(final List<String> qualifiedClassNames) {
+        qualifiedClassNames.forEach(this::addImport);
+        return this;
+    }
+
     public <T> T find(final CodeTemplateParameter parameter) {
         return (T) this.parameters.get(parameter.key);
     }
@@ -59,4 +64,6 @@ public class CodeTemplateParameters {
     public Map<String, Object> map() {
         return parameters;
     }
+
+
 }

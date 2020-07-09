@@ -40,7 +40,7 @@ public enum CodeTemplateParameter {
     MODEL_CLASSIFICATION("modelClassification"),
     STORE_ATTRIBUTE_NAME("storeAttributeName"),
     REST_RESOURCE_NAME("resourceName"),
-    REST_RESOURCE("restResource"),
+    REST_RESOURCE_PACKAGE("restResourcePackage"),
     REST_RESOURCES("restResources"),
     REGISTRY_QUALIFIED_CLASS_NAME("registryQualifiedClassName"),
     TYPE_REGISTRIES("registries"),

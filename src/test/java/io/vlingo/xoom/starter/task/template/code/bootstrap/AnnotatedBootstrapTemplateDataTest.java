@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.*;
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.*;
 
 public class AnnotatedBootstrapTemplateDataTest {
@@ -47,17 +46,14 @@ public class AnnotatedBootstrapTemplateDataTest {
                 bootstrapTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assertions.assertEquals(7, parameters.<List>find(IMPORTS).size());
-        Assertions.assertEquals("io.vlingo.xoomapp.resource.AuthorResource", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoomapp.resource.BookResource", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(4).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(5).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(6).getQualifiedClassName());
+        Assertions.assertEquals(5, parameters.<List>find(IMPORTS).size());
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.CommandModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.ProjectionDispatcherProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(4).getQualifiedClassName());
 
-        Assertions.assertEquals(true, parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getExist());
-        Assertions.assertEquals("AuthorResource.class, BookResource.class", parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getClassNames());
+        Assertions.assertEquals("io.vlingo.xoomapp.resource", parameters.find(CodeTemplateParameter.REST_RESOURCE_PACKAGE));
 
         Assertions.assertEquals(3, parameters.<List>find(PROVIDERS).size());
         Assertions.assertEquals("QueryModelStateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
@@ -91,14 +87,12 @@ public class AnnotatedBootstrapTemplateDataTest {
                 bootstrapTemplateData.parameters();
 
         Assertions.assertEquals(EXPECTED_PACKAGE, parameters.find(PACKAGE_NAME));
-        Assertions.assertEquals(4, parameters.<List>find(IMPORTS).size());
-        Assertions.assertEquals("io.vlingo.xoomapp.resource.AuthorResource", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.StateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
-        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(3).getQualifiedClassName());
+        Assertions.assertEquals(3, parameters.<List>find(IMPORTS).size());
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.persistence.StateStoreProvider", parameters.<List<ImportParameter>>find(IMPORTS).get(0).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.lattice.model.stateful.StatefulTypeRegistry", parameters.<List<ImportParameter>>find(IMPORTS).get(1).getQualifiedClassName());
+        Assertions.assertEquals("io.vlingo.xoom.annotation.initializer.ResourceHandlers", parameters.<List<ImportParameter>>find(IMPORTS).get(2).getQualifiedClassName());
 
-        Assertions.assertEquals(true, parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getExist());
-        Assertions.assertEquals("AuthorResource.class", parameters.<RestResourceParameter>find(CodeTemplateParameter.REST_RESOURCE).getClassNames());
+        Assertions.assertEquals("io.vlingo.xoomapp.resource", parameters.find(CodeTemplateParameter.REST_RESOURCE_PACKAGE));
 
         Assertions.assertEquals(1, parameters.<List>find(PROVIDERS).size());
         Assertions.assertEquals("StateStoreProvider", parameters.<List<ProviderParameter>>find(PROVIDERS).get(0).getInitialization());
