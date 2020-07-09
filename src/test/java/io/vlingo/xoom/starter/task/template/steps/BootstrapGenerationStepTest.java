@@ -59,7 +59,7 @@ public class BootstrapGenerationStepTest {
         Assertions.assertTrue(context.contents().get(5).text.contains("final ProjectionDispatcherProvider projectionDispatcherProvider"));
         Assertions.assertTrue(context.contents().get(5).text.contains("CommandModelStateStoreProvider.using(stage, statefulTypeRegistry, projectionDispatcherProvider.storeDispatcher)"));
         Assertions.assertTrue(context.contents().get(5).text.contains("QueryModelStateStoreProvider.using(stage, statefulTypeRegistry)"));
-        Assertions.assertTrue(context.contents().get(5).text.contains("@ResourceHandlers({AuthorResource.class, BookResource.class})"));
+        Assertions.assertTrue(context.contents().get(5).text.contains("@ResourceHandlers(packages = \"io.vlingo.xoomapp.resource\")"));
     }
 
     private void loadProperties(final TaskExecutionContext context, final Boolean useAnnotation) {

@@ -8,12 +8,12 @@ package io.vlingo.xoom.starter.task.template.code.bootstrap;
 
 import io.vlingo.xoom.starter.task.Content;
 import io.vlingo.xoom.starter.task.ContentQuery;
-import io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 
 import java.util.List;
 
-import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.REST_RESOURCE;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.REST_RESOURCE_PACKAGE;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
 
@@ -33,10 +33,11 @@ public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
 
     @Override
     protected void enrichParameters(final List<Content> contents) {
-        if(ContentQuery.exists(CodeTemplateStandard.REST_RESOURCE, contents)) {
+        if(ContentQuery.exists(REST_RESOURCE, contents)) {
             parameters().addImport(RESOURCES_ANNOTATION_QUALIFIED_NAME);
         }
-        parameters().and(REST_RESOURCE, RestResourceParameter.from(contents));
+
+        parameters().and(REST_RESOURCE_PACKAGE, ContentQuery.findPackage(REST_RESOURCE, contents));
     }
 
 }

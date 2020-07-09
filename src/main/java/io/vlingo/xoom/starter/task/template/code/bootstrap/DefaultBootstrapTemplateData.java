@@ -8,11 +8,13 @@
 package io.vlingo.xoom.starter.task.template.code.bootstrap;
 
 import io.vlingo.xoom.starter.task.Content;
+import io.vlingo.xoom.starter.task.ContentQuery;
 import io.vlingo.xoom.starter.task.template.code.storage.StorageType;
 
 import java.util.List;
 
 import static io.vlingo.xoom.starter.task.template.code.CodeTemplateParameter.REST_RESOURCES;
+import static io.vlingo.xoom.starter.task.template.code.CodeTemplateStandard.REST_RESOURCE;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
@@ -30,10 +32,8 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
     @Override
     protected void enrichParameters(final List<Content> contents) {
-        final List<RestResourcesParameter> restResourcesParameters =
-                RestResourcesParameter.from(contents);
-
-        parameters().and(REST_RESOURCES, restResourcesParameters);
+        parameters().and(REST_RESOURCES, RestResourcesParameter.from(contents))
+                .addImports(ContentQuery.findFullyQualifiedClassNames(REST_RESOURCE, contents));
     }
 
 }
