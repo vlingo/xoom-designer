@@ -19,8 +19,6 @@ import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.RequestHandler;
 import io.vlingo.http.resource.RequestHandler0;
 import io.vlingo.http.resource.RequestHandler1;
-import io.vlingo.xoom.resource.Endpoint;
-import io.vlingo.xoom.resource.annotations.Resource;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,8 +37,7 @@ import static io.vlingo.http.Response.Status.*;
 import static io.vlingo.http.ResponseHeader.ContentLength;
 import static io.vlingo.http.resource.ResourceBuilder.get;
 
-@Resource
-public class GraphicalUserInterfaceResourceHandler implements Endpoint {
+public class GraphicalUserInterfaceResourceHandler {
 
     private final LoadingCache<String, byte[]> staticFileCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
@@ -54,7 +51,6 @@ public class GraphicalUserInterfaceResourceHandler implements Endpoint {
                 }
             });
 
-    @Override
     public RequestHandler[] getHandlers() {
         final RequestHandler0.Handler0 serve0 = this::serve;
         final RequestHandler1.Handler1<String> serve1 = this::serve;
@@ -143,16 +139,6 @@ public class GraphicalUserInterfaceResourceHandler implements Endpoint {
 
     private void onRemoval(RemovalNotification<Object, Object> notification) {
         staticFileCache.invalidate(notification.getKey());
-    }
-
-    @Override
-    public String getName() {
-        return "xoom-starter";
-    }
-
-    @Override
-    public String getVersion() {
-        return "1.0";
     }
 
 }
