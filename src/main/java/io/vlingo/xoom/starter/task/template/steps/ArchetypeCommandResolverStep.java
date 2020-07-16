@@ -22,8 +22,8 @@ public class ArchetypeCommandResolverStep extends CommandResolverStep {
 
     @Override
     protected String formatCommands(TaskExecutionContext context) {
+        final Archetype archetype = Archetype.KUBERNETES;
         final Properties properties = context.properties();
-        final Archetype archetype = Archetype.support(properties);
         final String targetFolder = context.propertyOf(TARGET_FOLDER);
         final String archetypeFolderCommand = resolveDirectoryChangeCommand(archetype.folder());
         final String targetFolderCommand = resolveDirectoryChangeCommand(targetFolder);
