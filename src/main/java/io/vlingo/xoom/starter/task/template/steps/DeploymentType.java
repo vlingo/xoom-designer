@@ -19,5 +19,4 @@ public enum DeploymentType {
     public boolean isKubernetes() {
         return equals(KUBERNETES);
     }
-
 }

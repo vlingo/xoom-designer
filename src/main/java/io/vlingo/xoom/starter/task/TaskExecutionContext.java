@@ -7,14 +7,10 @@
 
 package io.vlingo.xoom.starter.task;
 
-import com.google.common.collect.Maps;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.template.code.storage.DatabaseType;
-import io.vlingo.xoom.starter.task.template.code.storage.ModelClassification;
 import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
 
-import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
@@ -29,7 +25,6 @@ public class TaskExecutionContext {
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
-    private final List<Content> contents = new ArrayList<>();
 
     public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
         return new TaskExecutionContext(optionValues);
@@ -55,10 +50,6 @@ public class TaskExecutionContext {
 
     public void followProcess(final Process process) {
         this.process = process;
-    }
-
-    public void addContent(final Object subject, final File file, final String text) {
-        this.contents.add(Content.with(subject, file, text));
     }
 
     public void onConfiguration(final Map<String, String> configurations) {
@@ -114,20 +105,6 @@ public class TaskExecutionContext {
 
     public List<String> args() {
         return args;
-    }
-
-    public List<Content> contents() {
-        return contents;
-    }
-
-    public Map<ModelClassification, DatabaseType> databases() {
-        return Maps.immutableEnumMap(
-                new HashMap<ModelClassification, DatabaseType>(){{
-                    put(ModelClassification.SINGLE, propertyOf(DATABASE, DatabaseType::valueOf));
-                    put(ModelClassification.COMMAND, propertyOf(COMMAND_MODEL_DATABASE, DatabaseType::valueOf));
-                    put(ModelClassification.QUERY, propertyOf(QUERY_MODEL_DATABASE, DatabaseType::valueOf));
-                }}
-        );
     }
 
     public String projectPath() {
