@@ -25,12 +25,12 @@ public class CodeGenerationStepAdapter implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
-        codeGenerationStep.process(CodeGenerationContextAdapter.of(context));
+        codeGenerationStep.process(context.codeGenerationContext());
     }
 
     @Override
     public boolean shouldProcess(final TaskExecutionContext context) {
-        return codeGenerationStep.shouldProcess(CodeGenerationContextAdapter.of(context));
+        return codeGenerationStep.shouldProcess(context.codeGenerationContext());
     }
 
 }

@@ -2,4 +2,4 @@ micronaut:
   application:
   name: xoom-starter
 
-ui: http://localhost:8080/xoom-starter
+ui: http://localhost:19090/xoom-starter
