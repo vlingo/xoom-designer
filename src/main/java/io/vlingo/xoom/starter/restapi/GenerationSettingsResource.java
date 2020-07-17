@@ -9,15 +9,21 @@ package io.vlingo.xoom.starter.restapi;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
+import io.vlingo.common.serialization.JsonSerialization;
+import io.vlingo.http.Header.Headers;
 import io.vlingo.http.Response;
+import io.vlingo.http.Version;
+import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.task.TaskExecutor;
 
+import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.resource.ResourceBuilder.post;
 import static io.vlingo.http.resource.ResourceBuilder.resource;
+import static io.vlingo.xoom.starter.Configuration.GENERATION_SETTINGS_RESPONSE_HEADER;
 
 public class GenerationSettingsResource extends ResourceHandler {
 
@@ -25,8 +31,9 @@ public class GenerationSettingsResource extends ResourceHandler {
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
         return Completes.withSuccess(settings.toArguments())
-                        .andThenConsume(args -> TaskExecutor.execute(args))
-                        .andThen(args -> Response.of(Ok));
+                .andThenConsume(args -> TaskExecutor.execute(args))
+                .andThen(args -> serialized(args))
+                .andThen(body -> Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), body));
     }
 
     @Override

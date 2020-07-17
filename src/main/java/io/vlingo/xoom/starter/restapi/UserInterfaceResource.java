@@ -67,10 +67,14 @@ public class UserInterfaceResource extends ResourceHandler {
         final RequestHandler4.Handler4<String, String, String, String> serve4 = this::serve;
 
         return resource("ui", 10,
-                get("/")
-                        .handle(this::redirectToApp),
-                get("/xoom-starter/")
-                        .handle(serve0),
+                get("/").handle(this::redirectToApp),
+                get("/xoom-starter").handle(serve0),
+                get("/xoom-starter/").handle(serve0),
+                get("/xoom-starter/settings/context").handle(this::redirectToApp),
+                get("/xoom-starter/settings/model").handle(this::redirectToApp),
+                get("/xoom-starter/settings/deployment").handle(this::redirectToApp),
+                get("/xoom-starter/settings/generation").handle(this::redirectToApp),
+
                 get("/xoom-starter/{file}")
                         .param(String.class)
                         .handle(serve1),
@@ -141,7 +145,7 @@ public class UserInterfaceResource extends ResourceHandler {
         return Stream.of(pathSegments)
                 .map(p -> p.startsWith("/") ? p.substring(1) : p)
                 .map(p -> p.endsWith("/") ? p.substring(0, p.length() - 1) : p)
-                .collect(Collectors.joining("/", "frontend/", ""));
+                .collect(Collectors.joining("/", "xoom-starter/", ""));
     }
 
     private byte[] readFileFromClasspath(final String path) throws IOException {

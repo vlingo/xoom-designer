@@ -1,6 +1,8 @@
 package io.vlingo.xoom.starter;
 
 import com.google.common.collect.Maps;
+import io.vlingo.http.ResponseHeader;
+import io.vlingo.http.media.ContentMediaType;
 import io.vlingo.xoom.codegen.steps.*;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.UserInterfaceBootstrapStep;
@@ -8,16 +10,15 @@ import io.vlingo.xoom.starter.task.steps.*;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import io.vlingo.xoom.starter.task.template.steps.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Configuration {
 
     public static final String USER_INTERFACE_CONFIG_KEY = "ui";
     public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
     public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
+    public static final ResponseHeader GENERATION_SETTINGS_RESPONSE_HEADER =
+            ResponseHeader.contentType(new ContentMediaType("application", "vnd.generationsettings+json").toString());
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
             Maps.immutableEnumMap(
@@ -28,7 +29,6 @@ public class Configuration {
                     }}
             );
 
-
     public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
             new ResourcesLocationStep(),
             new PropertiesLoadStep(),
@@ -36,14 +36,14 @@ public class Configuration {
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
-            // TemplateProcessingSteps starts here
+            // CodeGenerationSteps start here
             CodeGenerationStepAdapter.of(new ModelGenerationStep()),
             CodeGenerationStepAdapter.of(new ProjectionGenerationStep()),
             CodeGenerationStepAdapter.of(new StorageGenerationStep()),
             CodeGenerationStepAdapter.of(new RestResourceGenerationStep()),
             CodeGenerationStepAdapter.of(new BootstrapGenerationStep()),
-            // TemplateProcessingSteps ends here
             CodeGenerationStepAdapter.of(new ContentCreationStep()),
+            // CodeGenerationSteps end here
             new ContentPurgerStep()
     );
 
@@ -54,4 +54,3 @@ public class Configuration {
     );
 
 }
-

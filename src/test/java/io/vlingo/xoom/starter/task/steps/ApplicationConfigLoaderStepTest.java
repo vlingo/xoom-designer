@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class ApplicationConfigLoaderStepTest {
 
-    private static final String EXPECTED_URL = "http://localhost:8080/xoom-starter";
+    private static final String EXPECTED_URL = "http://localhost:19090/xoom-starter";
 
     @Test
     public void testConfigurationLoad() {

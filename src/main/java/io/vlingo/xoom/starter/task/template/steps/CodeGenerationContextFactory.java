@@ -17,13 +17,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CodeGenerationContextAdapter {
+public class CodeGenerationContextFactory {
 
-    public static CodeGenerationContext of(final TaskExecutionContext context) {
+    public static CodeGenerationContext from(final TaskExecutionContext context) {
+
         final Map<CodeGenerationParameter, String> parameters =
-                Stream.of(Property.values()).filter(property -> PROPERTY_TRANSLATION.containsKey(property))
-                .collect(Collectors.toMap(property -> PROPERTY_TRANSLATION.get(property),
-                        property -> context.propertyOf(property)));
+                Stream.of(Property.values())
+                        .filter(property ->
+                                context.hasProperty(property) && PROPERTY_TRANSLATION.containsKey(property))
+                        .collect(Collectors.toMap(property -> PROPERTY_TRANSLATION.get(property),
+                                property -> context.propertyOf(property)));
 
         return CodeGenerationContext.with(parameters);
     }

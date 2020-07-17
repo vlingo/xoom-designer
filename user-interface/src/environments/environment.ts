@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: 'http://localhost:8080/api/generation-settings'
+  endpoint: 'http://localhost:19090/api/generation-settings'
 };
 
 /*
