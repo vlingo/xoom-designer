@@ -7,8 +7,10 @@
 
 package io.vlingo.xoom.starter.task;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
+import io.vlingo.xoom.starter.task.template.steps.CodeGenerationContextFactory;
 import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
 
 import java.nio.file.Paths;
@@ -22,6 +24,7 @@ public class TaskExecutionContext {
     private Process process;
     private String[] commands;
     private Properties properties;
+    private CodeGenerationContext codeGenerationContext;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
@@ -58,6 +61,7 @@ public class TaskExecutionContext {
 
     public void onProperties(final Properties properties) {
         this.properties = properties;
+        this.codeGenerationContext = CodeGenerationContextFactory.from(this);
     }
 
     public void withCommands(final String[] commands) {
@@ -97,6 +101,10 @@ public class TaskExecutionContext {
 
     public DeploymentType deploymentType() {
         return DeploymentType.valueOf(propertyOf(DEPLOYMENT));
+    }
+
+    public CodeGenerationContext codeGenerationContext() {
+        return codeGenerationContext;
     }
 
     public String[] commands() {
