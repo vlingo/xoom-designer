@@ -22,7 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jdk.version>1.8</jdk.version>
     <micronaut.version>1.2.10</micronaut.version>
-    <vlingo.xoom.version>1.3.1-SNAPSHOT</vlingo.xoom.version>
+    <vlingo.xoom.version>1.3.2</vlingo.xoom.version>
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
