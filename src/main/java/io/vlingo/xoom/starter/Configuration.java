@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.media.ContentMediaType;
 import io.vlingo.xoom.codegen.steps.*;
+import io.vlingo.xoom.codegen.steps.CodeGenerationStep;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.steps.*;
@@ -34,17 +35,19 @@ public class Configuration {
             new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(),
+            new CodeGenerationExecutionerStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
-            // CodeGenerationSteps start here
-            CodeGenerationStepAdapter.of(new ModelGenerationStep()),
-            CodeGenerationStepAdapter.of(new ProjectionGenerationStep()),
-            CodeGenerationStepAdapter.of(new StorageGenerationStep()),
-            CodeGenerationStepAdapter.of(new RestResourceGenerationStep()),
-            CodeGenerationStepAdapter.of(new BootstrapGenerationStep()),
-            CodeGenerationStepAdapter.of(new ContentCreationStep()),
-            // CodeGenerationSteps end here
             new ContentPurgerStep()
+    );
+
+    public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
+            new ModelGenerationStep(),
+            new ProjectionGenerationStep(),
+            new StorageGenerationStep(),
+            new RestResourceGenerationStep(),
+            new BootstrapGenerationStep(),
+            new ContentCreationStep()
     );
 
     public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(

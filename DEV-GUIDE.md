@@ -19,7 +19,7 @@ The second half of the diagram shows some tools that perform core actions. [Mave
 The main constituent parts for every auto-generated class are: 
 * A Freemarker template file
 * A [io.vlingo.xoom.starter.task.template.code.TemplateData](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/code/TemplateData.java) implementation
-* A [io.vlingo.xoom.starter.task.template.steps.TemplateProcessingStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) implementation
+* A [io.vlingo.xoom.starter.task.template.steps.CodeGenerationExecutionerStep](https://github.com/vlingo/vlingo-xoom-starter/blob/master/src/main/java/io/vlingo/xoom/starter/task/template/steps/TemplateProcessingStep.java) implementation
 
 Considering those parts, let's take `RestResource` class generation as an example and go through the implementation details, starting from the template file:
 
