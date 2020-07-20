@@ -7,40 +7,41 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Properties;
 
 import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
 
-public class CodeGenerationContextFactoryTest {
+public class CodeGenerationParametersMapperTest {
 
     @Test
-    public void testCodeGenerationContextInstantiation() {
+    public void testCodeGenerationContextMapping() {
         final TaskExecutionContext taskExecutionContext =
                 TaskExecutionContext.withoutOptions();
 
         loadProperties(taskExecutionContext);
 
-        final CodeGenerationContext codeGenerationContext =
-                CodeGenerationContextFactory.from(taskExecutionContext);
+        final Map<CodeGenerationParameter, String> parameters =
+                CodeGenerationParametersMapper.of(taskExecutionContext);
 
-        Assertions.assertEquals("FirstAggregate;SecondAggregate", codeGenerationContext.parameterOf(AGGREGATES));
-        Assertions.assertEquals("true", codeGenerationContext.parameterOf(ANNOTATIONS));
-        Assertions.assertEquals("xoom-app-name", codeGenerationContext.parameterOf(APPLICATION_NAME));
-        Assertions.assertEquals("POSTGRES", codeGenerationContext.parameterOf(COMMAND_MODEL_DATABASE));
-        Assertions.assertEquals("false", codeGenerationContext.parameterOf(CQRS));
-        Assertions.assertEquals("HSQLDB", codeGenerationContext.parameterOf(DATABASE));
-        Assertions.assertEquals("io.vlingo.xoom", codeGenerationContext.parameterOf(PACKAGE));
-        Assertions.assertEquals("true", codeGenerationContext.parameterOf(PROJECTIONS));
-        Assertions.assertEquals("IN_MEMORY", codeGenerationContext.parameterOf(QUERY_MODEL_DATABASE));
-        Assertions.assertEquals("FirstAggregate;SecondAggregate", codeGenerationContext.parameterOf(REST_RESOURCES));
-        Assertions.assertEquals("STATE_STORE", codeGenerationContext.parameterOf(STORAGE_TYPE));
-        Assertions.assertEquals("/home/projects", codeGenerationContext.parameterOf(TARGET_FOLDER));
+        Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(AGGREGATES));
+        Assertions.assertEquals("true", parameters.get(ANNOTATIONS));
+        Assertions.assertEquals("xoom-app-name", parameters.get(APPLICATION_NAME));
+        Assertions.assertEquals("POSTGRES", parameters.get(COMMAND_MODEL_DATABASE));
+        Assertions.assertEquals("false", parameters.get(CQRS));
+        Assertions.assertEquals("HSQLDB", parameters.get(DATABASE));
+        Assertions.assertEquals("io.vlingo.xoom", parameters.get(PACKAGE));
+        Assertions.assertEquals("true", parameters.get(PROJECTIONS));
+        Assertions.assertEquals("IN_MEMORY", parameters.get(QUERY_MODEL_DATABASE));
+        Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(REST_RESOURCES));
+        Assertions.assertEquals("STATE_STORE", parameters.get(STORAGE_TYPE));
+        Assertions.assertEquals("/home/projects", parameters.get(TARGET_FOLDER));
     }
 
     private void loadProperties(final TaskExecutionContext context) {

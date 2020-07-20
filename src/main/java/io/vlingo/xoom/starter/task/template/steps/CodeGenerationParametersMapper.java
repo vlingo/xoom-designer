@@ -7,28 +7,25 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationParameter;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CodeGenerationContextFactory {
+public class CodeGenerationParametersMapper {
 
-    public static CodeGenerationContext from(final TaskExecutionContext context) {
+    public static Map<CodeGenerationParameter, String> of(final TaskExecutionContext context) {
+        final Predicate<Property> condition =
+                prop -> context.hasProperty(prop) && PROPERTY_TRANSLATION.containsKey(prop);
 
-        final Map<CodeGenerationParameter, String> parameters =
-                Stream.of(Property.values())
-                        .filter(property ->
-                                context.hasProperty(property) && PROPERTY_TRANSLATION.containsKey(property))
-                        .collect(Collectors.toMap(property -> PROPERTY_TRANSLATION.get(property),
-                                property -> context.propertyOf(property)));
-
-        return CodeGenerationContext.with(parameters);
+        return Stream.of(Property.values()).filter(condition)
+                .collect(Collectors.toMap(prop -> PROPERTY_TRANSLATION.get(prop),
+                        prop -> context.propertyOf(prop)));
     }
 
     private static final Map<Property, CodeGenerationParameter> PROPERTY_TRANSLATION =
