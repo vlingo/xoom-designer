@@ -37,7 +37,7 @@ public class CodeGenerationParametersMapper {
                 put(Property.CQRS, CodeGenerationParameter.CQRS);
                 put(Property.DATABASE, CodeGenerationParameter.DATABASE);
                 put(Property.PACKAGE, CodeGenerationParameter.PACKAGE);
-                put(Property.PROJECTIONS, CodeGenerationParameter.PROJECTIONS);
+                put(Property.PROJECTIONS, CodeGenerationParameter.PROJECTION_TYPE);
                 put(Property.QUERY_MODEL_DATABASE, CodeGenerationParameter.QUERY_MODEL_DATABASE);
                 put(Property.REST_RESOURCES, CodeGenerationParameter.REST_RESOURCES);
                 put(Property.STORAGE_TYPE, CodeGenerationParameter.STORAGE_TYPE);
