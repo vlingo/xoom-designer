@@ -37,7 +37,7 @@ public class CodeGenerationParametersMapperTest {
         Assertions.assertEquals("false", parameters.get(CQRS));
         Assertions.assertEquals("HSQLDB", parameters.get(DATABASE));
         Assertions.assertEquals("io.vlingo.xoom", parameters.get(PACKAGE));
-        Assertions.assertEquals("true", parameters.get(PROJECTIONS));
+        Assertions.assertEquals("CUSTOM", parameters.get(PROJECTION_TYPE));
         Assertions.assertEquals("IN_MEMORY", parameters.get(QUERY_MODEL_DATABASE));
         Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(REST_RESOURCES));
         Assertions.assertEquals("STATE_STORE", parameters.get(STORAGE_TYPE));
@@ -53,7 +53,7 @@ public class CodeGenerationParametersMapperTest {
         properties.put(Property.CQRS.literal(), "false");
         properties.put(Property.DATABASE.literal(), "HSQLDB");
         properties.put(Property.PACKAGE.literal(), "io.vlingo.xoom");
-        properties.put(Property.PROJECTIONS.literal(), "true");
+        properties.put(Property.PROJECTIONS.literal(), "CUSTOM");
         properties.put(Property.QUERY_MODEL_DATABASE.literal(), "IN_MEMORY");
         properties.put(Property.REST_RESOURCES.literal(), "FirstAggregate;SecondAggregate");
         properties.put(Property.STORAGE_TYPE.literal(), "STATE_STORE");
