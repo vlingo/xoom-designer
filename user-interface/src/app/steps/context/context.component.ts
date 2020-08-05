@@ -12,7 +12,7 @@ import { StepComponent } from '../step.component';
 })
 export class ContextComponent extends StepComponent implements OnInit {
 
-  contextForm: FormGroup; 
+  contextForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
     super();
@@ -27,11 +27,10 @@ export class ContextComponent extends StepComponent implements OnInit {
       GroupId: ['', Validators.required],
       ArtifactId: ['', Validators.required],
       ArtifactVersion: ['', Validators.required],
-      PackageName: ['', Validators.required],
-      XoomVersion: ['', Validators.required]
+      PackageName: ['', Validators.required]
     });
   }
-  
+
   next() {
     this.stepCompletion.emit(new StepCompletion(
         Step.CONTEXT, this.contextForm.valid, NavigationDirection.FORWARD
@@ -44,14 +43,14 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   xoomVersions() : Array<String> {
     return [
-      "1.3.1-SNAPSHOT"
+      "1.3.4-SNAPSHOT"
     ];
   }
 
   hasNext(): Boolean {
     return true;
   }
-  
+
   hasPrevious(): Boolean {
     return false;
   }

@@ -1,38 +1,32 @@
 <app-step-title title="Context"></app-step-title>
 
 <form [formGroup]="contextForm">
-    <div class="form-group col-md-3">    
+    <div class="form-group col-md-3">
         <label for="groupId">Group Id*:</label>
-        <input type="text" class="form-control starter-field" 
-        id="groupId" formControlName="GroupId" 
+        <input type="text" class="form-control starter-field"
+        id="groupId" formControlName="GroupId"
         [(ngModel)]="generationSettings.context.groupId"
         placeholder="Maven project group Id">
     </div>
     <div class="form-group col-md-3">
         <label for="artifactId">Artifact Id*:</label>
         <input type="text" class="form-control starter-field"
-        id="artifactId" formControlName="ArtifactId" 
-        [(ngModel)]="generationSettings.context.artifactId" 
+        id="artifactId" formControlName="ArtifactId"
+        [(ngModel)]="generationSettings.context.artifactId"
         placeholder="Maven artifactId Id">
     </div>
     <div class="form-group col-md-3">
         <label for="artifactVersion">Artifact Version*:</label>
-        <input type="text" class="form-control starter-field" 
-        id="artifactVersion" formControlName="ArtifactVersion" 
-        [(ngModel)]="generationSettings.context.artifactVersion" 
+        <input type="text" class="form-control starter-field"
+        id="artifactVersion" formControlName="ArtifactVersion"
+        [(ngModel)]="generationSettings.context.artifactVersion"
         placeholder="Maven artifact version">
     </div>
     <div class="form-group col-md-3">
         <label for="packageName">Base Package Name*:</label>
-        <input type="text" class="form-control starter-field" 
-        id="packageName" formControlName="PackageName" 
+        <input type="text" class="form-control starter-field"
+        id="packageName" formControlName="PackageName"
         [(ngModel)]="generationSettings.context.packageName"
         placeholder="com.company.servicecontextname">
-    </div>
-    <div class="form-group col-md-3">
-        <label for="xoomVersion">vlingo/xoom Version*:</label>
-        <select id="xoomVersion" formControlName="XoomVersion" class="form-control starter-field" [(ngModel)]="generationSettings.context.xoomVersion">
-            <option *ngFor="let version of xoomVersions();" [ngValue]="version">{{version}}</option>
-        </select>
     </div>
 </form>
