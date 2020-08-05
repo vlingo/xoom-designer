@@ -275,13 +275,13 @@
       </snapshots>
     </repository>
 
-<!--    <repository>-->
-<!--      <id>oss-jfrog-snapshot</id>-->
-<!--      <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>-->
-<!--      <releases>-->
-<!--        <enabled>false</enabled>-->
-<!--      </releases>-->
-<!--    </repository>-->
+    <repository>
+      <id>oss-jfrog-snapshot</id>
+      <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
   </repositories>
 
 </project>
