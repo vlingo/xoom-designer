@@ -19,7 +19,7 @@ import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 
 public class KubernetesPushCommandResolverStepTest {
 
-    private static final String LINUX_EXPECT_COMMAND = "kubectl apply -f ./deploymentk8s";
+    private static final String LINUX_EXPECT_COMMAND = "kubectl apply -f deployment/k8s";
     private static final String WINDOWS_EXPECT_COMMAND = "kubectl apply -f deployment\\k8s";
 
     @Test
