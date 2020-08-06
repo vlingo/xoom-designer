@@ -17,7 +17,7 @@ public class DockerSettingsLoadStepTest {
     @Test
     public void testDockerSettingsLoad() {
         final String propertiesAbsolutePath =
-                Paths.get(System.getProperty("user.dir"), "src", "test", "resources").toString();
+                Paths.get(System.getProperty("user.dir")).toString();
 
         final OptionValue currentDirectory =
                 OptionValue.with(CURRENT_DIRECTORY, propertiesAbsolutePath);
@@ -34,7 +34,7 @@ public class DockerSettingsLoadStepTest {
     @Test
     public void testMissingDockerSettings() {
         final String propertiesAbsolutePath =
-                Paths.get(System.getProperty("user.dir")).toString();
+                Paths.get(System.getProperty("user.dir"), "test").toString();
 
         final OptionValue currentDirectory =
                 OptionValue.with(CURRENT_DIRECTORY, propertiesAbsolutePath);
