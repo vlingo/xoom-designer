@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.docker.steps;
+package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-public class DockerSettingsLoadStep implements TaskExecutionStep {
+public class XoomPropertiesLoadStep implements TaskExecutionStep {
 
-    private final static String DOCKER_SETTINGS_FILE = "vlingo-xoom.properties";
-    private final static String[] FOLDERS = {"src", "main", "resources", DOCKER_SETTINGS_FILE};
+    private final static String XOOM_PROPERTIES_FILE = "vlingo-xoom.properties";
+    private final static String[] FOLDERS = {"src", "main", "resources", XOOM_PROPERTIES_FILE};
 
     @Override
     public void process(final TaskExecutionContext context) {
@@ -43,7 +43,7 @@ public class DockerSettingsLoadStep implements TaskExecutionStep {
             properties.load(new FileInputStream(propertiesFile));
             return properties;
         } catch (final FileNotFoundException e) {
-            throw new DockerCommandException("Cannot execute Docker commands: unable to find " + DOCKER_SETTINGS_FILE);
+            throw new DockerCommandException("Cannot execute Docker commands: unable to find " + XOOM_PROPERTIES_FILE);
         } catch (final IOException e) {
             throw new DockerCommandException(e);
         }

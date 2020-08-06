@@ -21,6 +21,7 @@ public enum Property {
     DEPLOYMENT("deployment", true, false),
     DOCKER_IMAGE("docker.image", true, true),
     DOCKER_REPOSITORY("docker.repository", true, false),
+    GLOO_UPSTREAM("gloo.upstream", true, false),
     KUBERNETES_IMAGE("k8s.image", true, true),
     KUBERNETES_POD_NAME("k8s.pod.name", true, true),
     REST_RESOURCES("rest.resources", true, false),

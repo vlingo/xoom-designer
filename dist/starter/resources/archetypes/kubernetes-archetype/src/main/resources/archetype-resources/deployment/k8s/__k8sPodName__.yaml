@@ -10,7 +10,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: 8080
+      targetPort: 18080
       protocol: TCP
       name: http
   selector:
@@ -36,11 +36,8 @@ spec:
       securityContext:
         {}
       containers:
-        - env:
-            - name: SERVER_PORT
-              value: "8080"
-          image: ${k8sImage}
+        - image: ${k8sImage}
           name: ${k8sPodName}
           ports:
-            - containerPort: 8080
+            - containerPort: 18080
               name: http
