@@ -18,3 +18,6 @@ out/
 /.recommenders/
 *.jtl
 **/.~lock.*
+
+# bin
+vlingo-xoom-starter-dist.jar
