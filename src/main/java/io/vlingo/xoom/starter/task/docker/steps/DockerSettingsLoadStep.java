@@ -22,6 +22,7 @@ import java.util.Properties;
 public class DockerSettingsLoadStep implements TaskExecutionStep {
 
     private final static String DOCKER_SETTINGS_FILE = "vlingo-xoom.properties";
+    private final static String[] FOLDERS = {"src", "main", "resources", DOCKER_SETTINGS_FILE};
 
     @Override
     public void process(final TaskExecutionContext context) {
@@ -36,7 +37,7 @@ public class DockerSettingsLoadStep implements TaskExecutionStep {
                     context.optionValueOf(OptionName.CURRENT_DIRECTORY);
 
             final String path =
-                    Paths.get(currentDirectory, DOCKER_SETTINGS_FILE).toString();
+                    Paths.get(currentDirectory, FOLDERS).toString();
 
             final File propertiesFile = new File(path);
             properties.load(new FileInputStream(propertiesFile));

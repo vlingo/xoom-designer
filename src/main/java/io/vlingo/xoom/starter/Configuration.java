@@ -43,9 +43,9 @@ public class Configuration {
             new PropertiesLoadStep(),
             new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(),
-            new CodeGenerationExecutionerStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
+            new CodeGenerationExecutionerStep(),
             new ContentPurgerStep()
     );
 
