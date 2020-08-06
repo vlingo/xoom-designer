@@ -11,7 +11,7 @@ import io.vlingo.xoom.starter.task.CommandNotFoundException;
 import io.vlingo.xoom.starter.task.SubTask;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskManager;
-import io.vlingo.xoom.starter.task.docker.steps.DockerSettingsLoadStep;
+import io.vlingo.xoom.starter.task.XoomPropertiesLoadStep;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
 import io.vlingo.xoom.starter.task.steps.LoggingStep;
@@ -42,7 +42,7 @@ public class DockerCommandManager implements TaskManager {
                 TaskExecutionContext.withOptions(optionValues);
 
         final List<TaskExecutionStep> steps =
-                Arrays.asList(new DockerSettingsLoadStep(),
+                Arrays.asList(new XoomPropertiesLoadStep(),
                         subTask.commandResolverStep(),
                         new CommandExecutionStep(),
                         new LoggingStep(),

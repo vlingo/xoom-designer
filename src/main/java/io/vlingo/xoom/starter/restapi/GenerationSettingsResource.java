@@ -9,11 +9,8 @@ package io.vlingo.xoom.starter.restapi;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
-import io.vlingo.common.serialization.JsonSerialization;
 import io.vlingo.http.Header.Headers;
 import io.vlingo.http.Response;
-import io.vlingo.http.Version;
-import io.vlingo.http.resource.ObjectResponse;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;

@@ -86,7 +86,11 @@ public class TaskExecutionContext {
     }
 
     public <T> T propertyOf(final Property property, final Function<String, T> mapper) {
-        final String value = properties.getProperty(property.literal());
+        return this.propertyOf(property.literal(), mapper);
+    }
+
+    public <T> T propertyOf(final String propertyValue, final Function<String, T> mapper) {
+        final String value = properties.getProperty(propertyValue);
         return (T) mapper.apply(value);
     }
 

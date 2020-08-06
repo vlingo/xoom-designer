@@ -1,1 +1,1 @@
-call mvn install -P deployment
+call mvn clean install -P deployment
