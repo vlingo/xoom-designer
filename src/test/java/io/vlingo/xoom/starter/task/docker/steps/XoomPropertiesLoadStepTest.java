@@ -2,6 +2,7 @@ package io.vlingo.xoom.starter.task.docker.steps;
 
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.XoomPropertiesLoadStep;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 
-public class DockerSettingsLoadStepTest {
+public class XoomPropertiesLoadStepTest {
 
     @Test
     public void testDockerSettingsLoad() {
@@ -25,7 +26,7 @@ public class DockerSettingsLoadStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withOptions(Arrays.asList(currentDirectory));
 
-        new DockerSettingsLoadStep().process(context);
+        new XoomPropertiesLoadStep().process(context);
 
         Assertions.assertEquals("xoom-app", context.propertyOf(Property.DOCKER_IMAGE));
         Assertions.assertEquals("vlingo/xoom-app", context.propertyOf(Property.DOCKER_REPOSITORY));
@@ -43,7 +44,7 @@ public class DockerSettingsLoadStepTest {
                 TaskExecutionContext.withOptions(Arrays.asList(currentDirectory));
 
         Assertions.assertThrows(DockerCommandException.class, () -> {
-            new DockerSettingsLoadStep().process(context);
+            new XoomPropertiesLoadStep().process(context);
         });
     }
 }

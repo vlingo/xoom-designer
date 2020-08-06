@@ -10,6 +10,10 @@ package io.vlingo.xoom.starter.task;
 import io.vlingo.xoom.starter.task.docker.steps.DockerPackageCommandResolverStep;
 import io.vlingo.xoom.starter.task.docker.steps.DockerPushCommandResolverStep;
 import io.vlingo.xoom.starter.task.docker.steps.DockerStatusCommandResolverStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooInitCommandResolverStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooRouteCommandResolverStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooSuspendCommandResolverStep;
+import io.vlingo.xoom.starter.task.k8s.steps.KubernetesPushCommandResolverStep;
 import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
@@ -35,7 +39,22 @@ public enum SubTask {
     DOCKER_PUSH(Task.DOCKER, "push",
             new DockerPushCommandResolverStep(),
             Option.required(CURRENT_DIRECTORY),
-            Option.of(TAG, "latest"));
+            Option.of(TAG, "latest")),
+
+    K8S_PUSH(Task.K8S, "push",
+            new KubernetesPushCommandResolverStep()),
+
+    GLOO_INIT(Task.GLOO, "init",
+            new GlooInitCommandResolverStep(),
+            Option.required(CURRENT_DIRECTORY)),
+
+    GLOO_ROUTE(Task.GLOO, "route",
+            new GlooRouteCommandResolverStep(),
+            Option.required(CURRENT_DIRECTORY)),
+
+    GLOO_SUSPEND(Task.GLOO, "suspend",
+            new GlooSuspendCommandResolverStep(),
+            Option.required(CURRENT_DIRECTORY));
 
     private final Task parentTask;
     private final String command;
