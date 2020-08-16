@@ -8,14 +8,9 @@
 package io.vlingo.xoom.starter.task.k8s.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.docker.steps.DockerStatusCommandResolverStep;
 import io.vlingo.xoom.starter.task.template.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Properties;
-
-import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 
 public class KubernetesPushCommandResolverStepTest {
 
