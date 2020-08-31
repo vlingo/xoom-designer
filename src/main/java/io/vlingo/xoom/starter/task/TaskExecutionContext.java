@@ -81,6 +81,10 @@ public class TaskExecutionContext {
         return this.configuration.get(key);
     }
 
+    public void addProperty(final Property property, final String value) {
+        this.properties.put(property.literal(), value);
+    }
+
     public <T> T propertyOf(final Property property) {
         return (T) propertyOf(property, value -> value);
     }
@@ -92,6 +96,10 @@ public class TaskExecutionContext {
     public <T> T propertyOf(final String propertyValue, final Function<String, T> mapper) {
         final String value = properties.getProperty(propertyValue);
         return (T) mapper.apply(value);
+    }
+
+    public boolean hasProperty(final Property property) {
+        return this.propertyOf(property) != null && !this.<String>propertyOf(property).trim().isEmpty();
     }
 
     public String optionValueOf(final OptionName optionName) {
@@ -117,9 +125,4 @@ public class TaskExecutionContext {
         final String targetFolder = propertyOf(TARGET_FOLDER);
         return Paths.get(targetFolder, artifactId).toString();
     }
-
-    public boolean hasProperty(final Property property) {
-        return this.propertyOf(property) != null && !this.<String>propertyOf(property).trim().isEmpty();
-    }
-
 }

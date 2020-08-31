@@ -4,6 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <requiredProperties>
+    <requiredProperty key="mainClass">
+      <defaultValue>main-class</defaultValue>
+    </requiredProperty>
     <requiredProperty key="vlingoXoomServerVersion">
       <defaultValue>1.2.9</defaultValue>
     </requiredProperty>
