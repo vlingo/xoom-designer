@@ -41,6 +41,7 @@ public class Configuration {
     public static final List<TaskExecutionStep> TEMPLATE_GENERATION_STEPS = Arrays.asList(
             new ResourcesLocationStep(),
             new PropertiesLoadStep(),
+            new MainClassResolverStep(),
             new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(),
             new LoggingStep(),

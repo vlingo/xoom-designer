@@ -17,7 +17,6 @@ import static io.vlingo.xoom.starter.task.template.Terminal.*;
 
 public class ArchetypeCommandResolverStepTest {
 
-
     private TaskExecutionContext context;
     private ArchetypeCommandResolverStep archetypeCommandResolverStep;
 
@@ -36,18 +35,20 @@ public class ArchetypeCommandResolverStepTest {
                     " && E: && cd E:\\projects && mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
-                    "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
-                    "-DvlingoXoomServerVersion=1.2.9 -DdockerImage=starter-example-image " +
-                    "-Dk8sPodName=starter-example-pod -Dk8sImage=starter-example-image ";
+                    "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
+                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
+                    "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
+                    "-Dk8sImage=starter-example-image ";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
                     "cd " + DEFAULT_ARCHETYPE_PATH +  " && mvn clean install && cd /home/projects && " +
                     "mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
-                    "-DartifactId=starter-example -Dpackage=io.vlingo.starterexample " +
-                    "-DvlingoXoomServerVersion=1.2.9 -DdockerImage=starter-example-image " +
-                    "-Dk8sPodName=starter-example-pod -Dk8sImage=starter-example-image ";
+                    "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
+                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
+                    "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
+                    "-Dk8sImage=starter-example-image ";
 
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
@@ -97,6 +98,7 @@ public class ArchetypeCommandResolverStepTest {
         properties.put(Property.DOCKER_IMAGE.literal(), "starter-example-image");
         properties.put(Property.KUBERNETES_IMAGE.literal(), "starter-example-image");
         properties.put(Property.KUBERNETES_POD_NAME.literal(), "starter-example-pod");
+        properties.put(Property.MAIN_CLASS.literal(), "io.vlingo.starterexample.infrastructure.Bootstrap");
         return properties;
     }
 
