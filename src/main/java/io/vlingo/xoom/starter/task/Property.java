@@ -16,6 +16,7 @@ public enum Property {
     GROUP_ID("group.id"),
     ARTIFACT_ID("artifact.id"),
     PACKAGE("package"),
+    MAIN_CLASS("main.class", true, true),
     TARGET_FOLDER("target.folder", false),
     XOOM_SERVER_VERSION("vlingo.xoom.server.version"),
     DEPLOYMENT("deployment", true, false),

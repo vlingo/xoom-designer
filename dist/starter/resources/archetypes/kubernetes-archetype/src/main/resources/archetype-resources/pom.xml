@@ -10,7 +10,7 @@
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <exec.mainClass>${package}.infrastructure.XoomInitializer</exec.mainClass>
+    <exec.mainClass>${mainClass}</exec.mainClass>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <vlingo.xoom.version>${vlingoXoomServerVersion}</vlingo.xoom.version>
