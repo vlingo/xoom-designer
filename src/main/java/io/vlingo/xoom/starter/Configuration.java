@@ -6,6 +6,7 @@ import io.vlingo.http.media.ContentMediaType;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.template.bootstrap.BootstrapGenerationStep;
+import io.vlingo.xoom.codegen.template.entitydata.EntityDataGenerationStep;
 import io.vlingo.xoom.codegen.template.model.ModelGenerationStep;
 import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
@@ -52,6 +53,7 @@ public class Configuration {
 
     public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
             new ModelGenerationStep(),
+            new EntityDataGenerationStep(),
             new ProjectionGenerationStep(),
             new StorageGenerationStep(),
             new RestResourceGenerationStep(),

@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 public class CodeGenerationParametersMapper {
 
-    public static Map<CodeGenerationParameter, String> of(final TaskExecutionContext context) {
+    public static Map<Label, String> of(final TaskExecutionContext context) {
         final Predicate<Property> condition =
                 prop -> context.hasProperty(prop) && PROPERTY_TRANSLATION.containsKey(prop);
 
@@ -28,19 +28,19 @@ public class CodeGenerationParametersMapper {
                         prop -> context.propertyOf(prop)));
     }
 
-    private static final Map<Property, CodeGenerationParameter> PROPERTY_TRANSLATION =
-            new HashMap<Property, CodeGenerationParameter>(){{
-                put(Property.AGGREGATES, CodeGenerationParameter.AGGREGATES);
-                put(Property.ANNOTATIONS, CodeGenerationParameter.ANNOTATIONS);
-                put(Property.ARTIFACT_ID, CodeGenerationParameter.APPLICATION_NAME);
-                put(Property.COMMAND_MODEL_DATABASE, CodeGenerationParameter.COMMAND_MODEL_DATABASE);
-                put(Property.CQRS, CodeGenerationParameter.CQRS);
-                put(Property.DATABASE, CodeGenerationParameter.DATABASE);
-                put(Property.PACKAGE, CodeGenerationParameter.PACKAGE);
-                put(Property.PROJECTIONS, CodeGenerationParameter.PROJECTION_TYPE);
-                put(Property.QUERY_MODEL_DATABASE, CodeGenerationParameter.QUERY_MODEL_DATABASE);
-                put(Property.REST_RESOURCES, CodeGenerationParameter.REST_RESOURCES);
-                put(Property.STORAGE_TYPE, CodeGenerationParameter.STORAGE_TYPE);
-                put(Property.TARGET_FOLDER, CodeGenerationParameter.TARGET_FOLDER);
+    private static final Map<Property, Label> PROPERTY_TRANSLATION =
+            new HashMap<Property, Label>(){{
+                put(Property.AGGREGATES, Label.AGGREGATES);
+                put(Property.ANNOTATIONS, Label.ANNOTATIONS);
+                put(Property.ARTIFACT_ID, Label.APPLICATION_NAME);
+                put(Property.COMMAND_MODEL_DATABASE, Label.COMMAND_MODEL_DATABASE);
+                put(Property.CQRS, Label.CQRS);
+                put(Property.DATABASE, Label.DATABASE);
+                put(Property.PACKAGE, Label.PACKAGE);
+                put(Property.PROJECTIONS, Label.PROJECTION_TYPE);
+                put(Property.QUERY_MODEL_DATABASE, Label.QUERY_MODEL_DATABASE);
+                put(Property.REST_RESOURCES, Label.REST_RESOURCES);
+                put(Property.STORAGE_TYPE, Label.STORAGE_TYPE);
+                put(Property.TARGET_FOLDER, Label.TARGET_FOLDER);
             }};
 }
