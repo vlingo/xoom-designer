@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.task.template.steps;
 
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.Properties;
 
-import static io.vlingo.xoom.codegen.CodeGenerationParameter.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class CodeGenerationParametersMapperTest {
 
@@ -27,7 +27,7 @@ public class CodeGenerationParametersMapperTest {
 
         loadProperties(taskExecutionContext);
 
-        final Map<CodeGenerationParameter, String> parameters =
+        final Map<Label, String> parameters =
                 CodeGenerationParametersMapper.of(taskExecutionContext);
 
         Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(AGGREGATES));

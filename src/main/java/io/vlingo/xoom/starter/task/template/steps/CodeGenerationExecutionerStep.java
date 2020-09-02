@@ -7,7 +7,7 @@
 package io.vlingo.xoom.starter.task.template.steps;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
@@ -19,7 +19,7 @@ public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext taskExecutionContext) {
-        final Map<CodeGenerationParameter, String> parameters =
+        final Map<Label, String> parameters =
                 CodeGenerationParametersMapper.of(taskExecutionContext);
 
         final CodeGenerationContext context =
