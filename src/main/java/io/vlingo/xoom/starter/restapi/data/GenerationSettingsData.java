@@ -12,8 +12,7 @@ import io.vlingo.xoom.starter.task.template.Agent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.vlingo.xoom.starter.task.Property.ANNOTATIONS;
-import static io.vlingo.xoom.starter.task.Property.TARGET_FOLDER;
+import static io.vlingo.xoom.starter.task.Property.*;
 import static io.vlingo.xoom.starter.task.Task.TEMPLATE_GENERATION;
 
 public class GenerationSettingsData {
@@ -23,17 +22,20 @@ public class GenerationSettingsData {
     public final DeploymentSettingsData deployment;
     public final String projectDirectory;
     public final Boolean useAnnotations;
+    public final Boolean useAutoDispatch;
 
     public GenerationSettingsData(final ContextSettingsData context,
                                   final ModelSettingsData model,
                                   final DeploymentSettingsData deployment,
                                   final String projectDirectory,
-                                  final Boolean useAnnotations) {
+                                  final Boolean useAnnotations,
+                                  final Boolean useAutoDispatch) {
         this.context = context;
         this.model = model;
         this.deployment = deployment;
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
+        this.useAutoDispatch = useAutoDispatch;
     }
 
     public List<String> toArguments() {
@@ -46,6 +48,8 @@ public class GenerationSettingsData {
         args.add(projectDirectory);
         args.add(ANNOTATIONS.literal());
         args.add(useAnnotations.toString());
+        args.add(AUTO_DISPATCH.literal());
+        args.add(useAutoDispatch.toString());
         args.add(Agent.argumentKey());
         args.add(Agent.WEB.name());
         return args;
