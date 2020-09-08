@@ -38,6 +38,13 @@ export class GenerationComponent extends StepComponent {
 
   onAnnotationsClick($event) {
     this.generationSettings.useAnnotations = $event.target.checked;
+    if(!this.generationSettings.useAnnotations) {
+      this.generationSettings.useAutoDispatch = false;
+    }
+  }
+
+  onAutoDispatchClick($event) {
+    this.generationSettings.useAutoDispatch = $event.target.checked;
   }
 
   next(): void {

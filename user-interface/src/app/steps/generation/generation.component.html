@@ -8,15 +8,29 @@
         formControlName="ProjectDirectory"
         placeholder="Absolute path for the new xoom project">
     </div>
+
     <div class="form-row xoom-annotations">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="useAnnotations">Use VLINGO/XOOM annotations:</label>
         </div>
-        <div class="col-md-1 pt-1 ml-3">
+        <div class="col-md-1 pt-1">
             <input type="checkbox" 
             class="form-check-input" 
             (click)="onAnnotationsClick($event)"
             [checked]="generationSettings.useAnnotations">
+        </div>
+    </div>
+
+    <div class="form-row xoom-annotations">
+        <div class="col-md-3">
+            <label for="useAutoDispatch">Use VLINGO/XOOM auto dispatch:</label>
+        </div>
+        <div class="col-md-1 pt-1">
+            <input type="checkbox" 
+            class="form-check-input" 
+            (click)="onAutoDispatchClick($event)"
+            [checked]="generationSettings.useAutoDispatch"
+            [disabled]="!generationSettings.useAnnotations">
         </div>
     </div>
 </form>

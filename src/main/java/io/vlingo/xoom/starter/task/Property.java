@@ -31,6 +31,7 @@ public enum Property {
     STORAGE_TYPE("storage.type", true, false),
     CQRS("cqrs", true, false),
     ANNOTATIONS("annotations", false),
+    AUTO_DISPATCH("auto.dispatch", false),
     PROJECTIONS("projections", true, false),
     DATABASE("database", true, false),
     COMMAND_MODEL_DATABASE("command.model.database", true, false),

@@ -11,12 +11,14 @@ export class GenerationSettings {
     public deployment: DeploymentSettings;
     public projectDirectory: String;
     public useAnnotations: Boolean;
+    public useAutoDispatch: Boolean;
     
     constructor() {
         this.model = new ModelSettings();
         this.context = new ContextSettings();
         this.deployment = new DeploymentSettings();
         this.useAnnotations = false;
+        this.useAutoDispatch = false;
     }
     
     public addAggregate(aggregate: Aggregate) {
