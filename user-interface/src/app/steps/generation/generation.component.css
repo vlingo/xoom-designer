@@ -1,4 +1,9 @@
 .xoom-annotations {
     margin: 0;
     padding-left: 10px;
+
+}
+
+.xoom-annotations .col-md-3 {
+    max-width: 19%;
 }
