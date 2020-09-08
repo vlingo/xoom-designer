@@ -57,6 +57,7 @@ public class PropertiesLoadStepTest {
         Assertions.assertEquals("vlingo/xoom-app", context.propertyOf(KUBERNETES_IMAGE));
         Assertions.assertEquals("xoom-app-pod", context.propertyOf(KUBERNETES_POD_NAME));
         Assertions.assertEquals("true", context.propertyOf(ANNOTATIONS));
+        Assertions.assertEquals("true", context.propertyOf(AUTO_DISPATCH));
     }
 
     private List<String> args() {
@@ -75,6 +76,7 @@ public class PropertiesLoadStepTest {
             KUBERNETES_POD_NAME.literal(), "xoom-app-pod",
             TARGET_FOLDER.literal(), "/home/projects/xoom-app",
             ANNOTATIONS.literal(),  "true",
+            AUTO_DISPATCH.literal(), "true",
             Agent.argumentKey(), Agent.WEB.name()
         );
     }

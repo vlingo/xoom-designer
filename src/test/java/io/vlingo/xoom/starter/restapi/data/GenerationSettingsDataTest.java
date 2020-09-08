@@ -43,7 +43,7 @@ public class GenerationSettingsDataTest {
 
         final GenerationSettingsData settings =
                 new GenerationSettingsData(context, model, deployment,
-                        "/home/projects/xoom-app", true);
+                        "/home/projects/xoom-app", true, true);
 
         final List<String> args = settings.toArguments();
 
@@ -88,7 +88,9 @@ public class GenerationSettingsDataTest {
         Assertions.assertEquals("/home/projects/xoom-app", args.get(38));
         Assertions.assertEquals(ANNOTATIONS.literal(), args.get(39));
         Assertions.assertEquals("true", args.get(40));
-        Assertions.assertEquals(Agent.argumentKey(), args.get(41));
-        Assertions.assertEquals(Agent.WEB.name(), args.get(42));
+        Assertions.assertEquals(AUTO_DISPATCH.literal(), args.get(41));
+        Assertions.assertEquals("true", args.get(42));
+        Assertions.assertEquals(Agent.argumentKey(), args.get(43));
+        Assertions.assertEquals(Agent.WEB.name(), args.get(44));
     }
 }
