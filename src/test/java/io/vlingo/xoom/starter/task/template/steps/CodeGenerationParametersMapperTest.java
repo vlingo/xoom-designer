@@ -39,6 +39,7 @@ public class CodeGenerationParametersMapperTest {
         Assertions.assertEquals("io.vlingo.xoom", parameters.get(PACKAGE));
         Assertions.assertEquals("CUSTOM", parameters.get(PROJECTION_TYPE));
         Assertions.assertEquals("IN_MEMORY", parameters.get(QUERY_MODEL_DATABASE));
+        Assertions.assertEquals("true", parameters.get(USE_AUTO_DISPATCH));
         Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(REST_RESOURCES));
         Assertions.assertEquals("STATE_STORE", parameters.get(STORAGE_TYPE));
         Assertions.assertEquals("/home/projects", parameters.get(TARGET_FOLDER));
@@ -56,6 +57,7 @@ public class CodeGenerationParametersMapperTest {
         properties.put(Property.PROJECTIONS.literal(), "CUSTOM");
         properties.put(Property.QUERY_MODEL_DATABASE.literal(), "IN_MEMORY");
         properties.put(Property.REST_RESOURCES.literal(), "FirstAggregate;SecondAggregate");
+        properties.put(Property.AUTO_DISPATCH.literal(), "true");
         properties.put(Property.STORAGE_TYPE.literal(), "STATE_STORE");
         properties.put(Property.TARGET_FOLDER.literal(), "/home/projects");
         context.onProperties(properties);

@@ -39,6 +39,7 @@ public class CodeGenerationParametersMapper {
                 put(Property.PACKAGE, Label.PACKAGE);
                 put(Property.PROJECTIONS, Label.PROJECTION_TYPE);
                 put(Property.QUERY_MODEL_DATABASE, Label.QUERY_MODEL_DATABASE);
+                put(Property.AUTO_DISPATCH, Label.USE_AUTO_DISPATCH);
                 put(Property.REST_RESOURCES, Label.REST_RESOURCES);
                 put(Property.STORAGE_TYPE, Label.STORAGE_TYPE);
                 put(Property.TARGET_FOLDER, Label.TARGET_FOLDER);
