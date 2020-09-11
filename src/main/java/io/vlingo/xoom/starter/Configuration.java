@@ -5,6 +5,7 @@ import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.media.ContentMediaType;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.codegen.template.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.codegen.template.entitydata.EntityDataGenerationStep;
 import io.vlingo.xoom.codegen.template.model.ModelGenerationStep;
@@ -57,6 +58,7 @@ public class Configuration {
             new ProjectionGenerationStep(),
             new StorageGenerationStep(),
             new RestResourceGenerationStep(),
+            new AutoDispatchMappingGenerationStep(),
             new BootstrapGenerationStep(),
             new ContentCreationStep()
     );
