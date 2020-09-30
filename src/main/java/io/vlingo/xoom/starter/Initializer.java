@@ -17,8 +17,6 @@ public class Initializer {
     public static void main(final String[] args) {
         try {
             TaskExecutor.execute(Arrays.asList(args));
-        } catch (final TaskExecutionException exception) {
-            System.out.println(exception.getMessage());
         } catch (final Exception exception) {
             exception.printStackTrace();
         } finally {
