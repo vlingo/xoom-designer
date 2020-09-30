@@ -14,12 +14,12 @@ import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.task.TaskExecutor;
+import io.vlingo.xoom.starter.task.template.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.ResponseHeader.*;
-import static io.vlingo.http.resource.ResourceBuilder.post;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
+import static io.vlingo.http.resource.ResourceBuilder.*;
 
 public class GenerationSettingsResource extends ResourceHandler {
 
@@ -31,12 +31,19 @@ public class GenerationSettingsResource extends ResourceHandler {
                 .andThenTo(args -> Completes.withSuccess(Response.of(Ok, headers(of(Location, "/api/generation-settings")), serialized(args))));
     }
 
+    public Completes<Response> supportedTypes() {
+        return Completes.withSuccess(SupportedTypes.names())
+                .andThenTo(typeNames -> Completes.withSuccess(Response.of(Ok, serialized(typeNames))));
+    }
+
     @Override
     public Resource<?> routes() {
         return resource("Generation Settings Resource",
                 post("/api/generation-settings")
                     .body(GenerationSettingsData.class)
-                    .handle(this::startGeneration));
+                    .handle(this::startGeneration),
+                options("/api/generation-settings/field-types")
+                    .handle(this::supportedTypes));
     }
 
 }
