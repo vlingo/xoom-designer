@@ -7,8 +7,7 @@
 
 package io.vlingo.xoom.starter.task.steps;
 
-import io.vlingo.xoom.starter.task.Property;
-import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import java.util.Arrays;
@@ -55,7 +54,7 @@ public class StatusHandler {
         return new StatusHandler(
                 status -> status != 0,
                 context -> {
-                    throw new TemplateGenerationException(FAILURE_MESSAGE);
+                    throw new ProjectGenerationException(FAILURE_MESSAGE);
                 });
     }
 

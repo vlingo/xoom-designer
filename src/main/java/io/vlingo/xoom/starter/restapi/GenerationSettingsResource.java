@@ -13,22 +13,25 @@ import io.vlingo.http.Response;
 import io.vlingo.http.resource.Resource;
 import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.starter.task.TaskExecutor;
-import io.vlingo.xoom.starter.task.template.SupportedTypes;
+import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
+import io.vlingo.xoom.starter.task.Task;
+import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.Ok;
 import static io.vlingo.http.ResponseHeader.*;
 import static io.vlingo.http.resource.ResourceBuilder.*;
+import static io.vlingo.xoom.starter.task.Task.DEFAULT_TEMPLATE_GENERATION;
 
 public class GenerationSettingsResource extends ResourceHandler {
 
     public GenerationSettingsResource(final Stage stage) {}
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-        return Completes.withSuccess(settings.toArguments())
-                .andThenConsume(args -> TaskExecutor.execute(args))
-                .andThenTo(args -> Completes.withSuccess(Response.of(Ok, headers(of(Location, "/api/generation-settings")), serialized(args))));
+        return Completes.withSuccess(TaskExecutionContextMapper.from(settings))
+                .andThenConsume(context -> Task.manage(DEFAULT_TEMPLATE_GENERATION, context).run(context))
+                .andThen(context -> Response.of(Ok, headers(of(Location, "/api/generation-settings"))))
+                .andThenTo(response -> Completes.withSuccess(response));
     }
 
     public Completes<Response> supportedTypes() {
