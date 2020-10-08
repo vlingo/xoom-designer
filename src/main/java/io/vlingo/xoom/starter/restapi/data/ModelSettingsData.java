@@ -7,72 +7,18 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import io.vlingo.xoom.starter.task.Property;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static io.vlingo.xoom.starter.task.Property.*;
 
 public class ModelSettingsData {
 
-    public final String storageType;
-    public final boolean useCQRS;
-    public final String projections;
-    public final String database;
-    public final String commandModelDatabase;
-    public final String queryModelDatabase;
-    public final List<AggregateData> aggregates = new ArrayList<>();
-    public final List<AggregateData> restResources = new ArrayList<>();
+    public final PersistenceData persistence;
+    public final List<AggregateData> aggregateSettings = new ArrayList<>();
 
-    public ModelSettingsData(final String storageType,
-                             final boolean useCQRS,
-                             final String projections,
-                             final String database,
-                             final String commandModelDatabase,
-                             final String queryModelDatabase,
-                             final List<AggregateData> aggregates,
-                             final List<AggregateData> restResources) {
-        this.storageType = storageType;
-        this.useCQRS = useCQRS;
-        this.projections = projections;
-        this.database = database;
-        this.commandModelDatabase = commandModelDatabase;
-        this.queryModelDatabase = queryModelDatabase;
-        this.aggregates.addAll(aggregates);
-        this.restResources.addAll(restResources);
+    public ModelSettingsData(final PersistenceData persistence,
+                             final List<AggregateData> aggregateSettings) {
+        this.persistence = persistence;
+        this.aggregateSettings.addAll(aggregateSettings);
     }
 
-    List<String> toArguments() {
-        return Arrays.asList(
-                STORAGE_TYPE.literal(), storageType,
-                AGGREGATES.literal(), flatAggregates(),
-                REST_RESOURCES.literal(), flatRestResources(),
-                CQRS.literal(), String.valueOf(useCQRS),
-                PROJECTIONS.literal(), projections,
-                DATABASE.literal(), database,
-                COMMAND_MODEL_DATABASE.literal(), commandModelDatabase,
-                QUERY_MODEL_DATABASE.literal(), queryModelDatabase
-        );
-    }
-
-    private String flatAggregates() {
-        if(aggregates.isEmpty()) {
-            return Property.DEFAULT_VALUE;
-        }
-        return aggregates.stream()
-                .map(aggregate -> aggregate.name + ";" + aggregate.flatEvents())
-                .collect(Collectors.joining("|"));
-    }
-
-    private String flatRestResources() {
-        if(restResources.isEmpty()) {
-            return Property.DEFAULT_VALUE;
-        }
-        return restResources.stream()
-                .map(aggregate -> aggregate.name)
-                .collect(Collectors.joining(";"));
-    }
 }
