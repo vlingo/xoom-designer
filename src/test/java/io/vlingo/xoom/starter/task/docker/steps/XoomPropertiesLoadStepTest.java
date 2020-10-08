@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import static io.vlingo.xoom.starter.task.Agent.TERMINAL;
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 
 public class XoomPropertiesLoadStepTest {
@@ -24,7 +25,8 @@ public class XoomPropertiesLoadStepTest {
                 OptionValue.with(CURRENT_DIRECTORY, propertiesAbsolutePath);
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(Arrays.asList(currentDirectory));
+                TaskExecutionContext.executedFrom(TERMINAL)
+                        .withOptions(Arrays.asList(currentDirectory));
 
         new XoomPropertiesLoadStep().process(context);
 
@@ -41,7 +43,8 @@ public class XoomPropertiesLoadStepTest {
                 OptionValue.with(CURRENT_DIRECTORY, propertiesAbsolutePath);
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(Arrays.asList(currentDirectory));
+                TaskExecutionContext.executedFrom(TERMINAL)
+                        .withOptions(Arrays.asList(currentDirectory));
 
         Assertions.assertThrows(DockerCommandException.class, () -> {
             new XoomPropertiesLoadStep().process(context);

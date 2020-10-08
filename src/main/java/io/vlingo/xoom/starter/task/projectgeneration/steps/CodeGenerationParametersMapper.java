@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
@@ -14,23 +15,26 @@ import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CodeGenerationParametersMapper {
 
-    public static Map<Label, String> of(final TaskExecutionContext context) {
+    public static CodeGenerationParameters of(final TaskExecutionContext context) {
         final Predicate<Property> condition =
                 prop -> context.hasProperty(prop) && PROPERTY_TRANSLATION.containsKey(prop);
 
-        return Stream.of(Property.values()).filter(condition)
-                .collect(Collectors.toMap(prop -> PROPERTY_TRANSLATION.get(prop),
-                        prop -> context.propertyOf(prop)));
+        final CodeGenerationParameters parameters = CodeGenerationParameters.empty();
+
+        Stream.of(Property.values()).filter(condition).forEach(prop -> {
+            parameters.add(PROPERTY_TRANSLATION.get(prop), context.propertyOf(prop));
+        });
+
+        return parameters;
     }
 
     private static final Map<Property, Label> PROPERTY_TRANSLATION =
             new HashMap<Property, Label>(){{
-                put(Property.AGGREGATES, Label.AGGREGATES);
+                //put(Property.AGGREGATES, Label.AGGREGATES);
                 put(Property.ANNOTATIONS, Label.USE_ANNOTATIONS);
                 put(Property.ARTIFACT_ID, Label.APPLICATION_NAME);
                 put(Property.COMMAND_MODEL_DATABASE, Label.COMMAND_MODEL_DATABASE);
