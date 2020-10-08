@@ -42,8 +42,6 @@ public enum Property {
     private final boolean optional;
     private final boolean supportedByMaven;
 
-    public static final String DEFAULT_VALUE = "";
-
     Property(final String key) {
         this(key, true);
     }

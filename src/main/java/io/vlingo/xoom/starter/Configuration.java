@@ -15,8 +15,8 @@ import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.steps.*;
-import io.vlingo.xoom.starter.task.template.Terminal;
-import io.vlingo.xoom.starter.task.template.steps.*;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.steps.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
