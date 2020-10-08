@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.task.steps;
 
-import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 public class StatusHandlingStep implements TaskExecutionStep {
@@ -19,7 +19,7 @@ public class StatusHandlingStep implements TaskExecutionStep {
             StatusHandler.forStatus(status).handle(context);
         } catch (final InterruptedException e) {
             System.out.println(e.getMessage());
-            throw new TemplateGenerationException(e);
+            throw new ProjectGenerationException(e);
         }
     }
 
