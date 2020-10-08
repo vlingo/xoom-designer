@@ -8,7 +8,6 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
@@ -28,40 +27,38 @@ public class TaskExecutionContext {
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
+    private final Agent agent;
 
-    public static TaskExecutionContext with(final CodeGenerationParameters parameters) {
-        return new TaskExecutionContext(parameters);
-    }
-
-    public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
-        return new TaskExecutionContext(optionValues);
-    }
-
-    public static TaskExecutionContext withArgs(final List<String> args) {
-        final TaskExecutionContext context = new TaskExecutionContext();
-        context.addArgs(args);
-        return context;
-    }
-
-    private TaskExecutionContext(final CodeGenerationParameters parameters) {
-        this.parameters = parameters;
-    }
-
-    private TaskExecutionContext() {
-        this(Collections.emptyList());
-    }
-
-    private TaskExecutionContext(final List<OptionValue> optionValues) {
-        this(CodeGenerationParameters.empty());
-        this.optionValues.addAll(optionValues);
+    public static TaskExecutionContext executedFrom(final Agent agent) {
+        return new TaskExecutionContext(agent);
     }
 
     public static TaskExecutionContext withoutOptions() {
-        return new TaskExecutionContext();
+        return new TaskExecutionContext(Agent.TERMINAL);
+    }
+
+    private TaskExecutionContext(final Agent agent) {
+        this.agent = agent;
+        this.parameters = CodeGenerationParameters.empty();
     }
 
     public void followProcess(final Process process) {
         this.process = process;
+    }
+
+    public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
+        this.optionValues.addAll(optionValues);
+        return this;
+    }
+
+    public TaskExecutionContext withArgs(final List<String> args) {
+        this.addArgs(args);
+        return this;
+    }
+
+    public TaskExecutionContext with(final CodeGenerationParameters parameters) {
+        this.parameters.addAll(parameters);
+        return this;
     }
 
     public TaskExecutionContext onConfiguration(final Map<String, String> configurations) {
@@ -88,6 +85,10 @@ public class TaskExecutionContext {
 
     public Properties properties() {
         return properties;
+    }
+
+    public Agent agent() {
+        return agent;
     }
 
     public String configurationOf(final String key) {
