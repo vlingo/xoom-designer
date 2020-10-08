@@ -34,7 +34,8 @@ public class GlooCommandManager implements TaskManager<List<String>> {
         final List<OptionValue> optionValues = subTask.findOptionValues(args);
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(optionValues);
+                TaskExecutionContext.executedFrom(Agent.TERMINAL)
+                        .withOptions(optionValues);
 
         final List<TaskExecutionStep> steps =
                 Arrays.asList(new XoomPropertiesLoadStep(),

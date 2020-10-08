@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.task.Agent;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskManager;
 

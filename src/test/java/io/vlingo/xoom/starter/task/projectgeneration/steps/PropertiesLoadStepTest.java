@@ -10,7 +10,7 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.starter.Resource;
 import io.vlingo.xoom.starter.task.Task;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.Agent;
+import io.vlingo.xoom.starter.task.Agent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +19,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.vlingo.xoom.starter.task.Agent.TERMINAL;
+import static io.vlingo.xoom.starter.task.Agent.WEB;
 import static io.vlingo.xoom.starter.task.Property.*;
 
 public class PropertiesLoadStepTest {
@@ -26,8 +28,8 @@ public class PropertiesLoadStepTest {
     private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
     @Test
-    public void testPropertiesLoadFromFile(){
-        final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
+    public void testThatPropertiesAreLoaded(){
+        final TaskExecutionContext context = TaskExecutionContext.executedFrom(TERMINAL);
         new PropertiesLoadStep().process(context);
         Assertions.assertNotNull(context.properties());
         Assertions.assertEquals("1.0", context.propertyOf(VERSION));
@@ -40,45 +42,13 @@ public class PropertiesLoadStepTest {
     }
 
     @Test
-    public void testPropertiesLoadFromArgs(){
-        final TaskExecutionContext context = TaskExecutionContext.withArgs(args());
-        new PropertiesLoadStep().process(context);
-        Assertions.assertNotNull(context.properties());
-        Assertions.assertEquals("1.0", context.propertyOf(VERSION));
-        Assertions.assertEquals("com.company", context.propertyOf(GROUP_ID));
-        Assertions.assertEquals("xoom-application", context.propertyOf(ARTIFACT_ID));
-        Assertions.assertEquals("com.company.business", context.propertyOf(PACKAGE));
-        Assertions.assertEquals("1.3.0", context.propertyOf(XOOM_SERVER_VERSION));
-        Assertions.assertEquals("3", context.propertyOf(CLUSTER_NODES));
-        Assertions.assertEquals("k8s", context.propertyOf(DEPLOYMENT));
-        Assertions.assertEquals("/home/projects/xoom-app", context.propertyOf(TARGET_FOLDER));
-        Assertions.assertEquals("xoom-app", context.propertyOf(DOCKER_IMAGE));
-        Assertions.assertEquals("dambrosio/xoom-app", context.propertyOf(DOCKER_REPOSITORY));
-        Assertions.assertEquals("vlingo/xoom-app", context.propertyOf(KUBERNETES_IMAGE));
-        Assertions.assertEquals("xoom-app-pod", context.propertyOf(KUBERNETES_POD_NAME));
-        Assertions.assertEquals("true", context.propertyOf(ANNOTATIONS));
-        Assertions.assertEquals("true", context.propertyOf(AUTO_DISPATCH));
+    public void testThatStepShouldProcess() {
+        Assertions.assertTrue(new PropertiesLoadStep().shouldProcess(TaskExecutionContext.executedFrom(TERMINAL)));
     }
 
-    private List<String> args() {
-        return Arrays.asList(
-            Task.DEFAULT_TEMPLATE_GENERATION.command(),
-            GROUP_ID.literal(), "com.company",
-            ARTIFACT_ID.literal(), "xoom-application",
-            VERSION.literal(), "1.0",
-            PACKAGE.literal(), "com.company.business",
-            XOOM_SERVER_VERSION.literal(), "1.3.0",
-            CLUSTER_NODES.literal(), "3",
-            DEPLOYMENT.literal(), "k8s",
-            DOCKER_IMAGE.literal(), "xoom-app",
-            DOCKER_REPOSITORY.literal(), "dambrosio/xoom-app",
-            KUBERNETES_IMAGE.literal(), "vlingo/xoom-app",
-            KUBERNETES_POD_NAME.literal(), "xoom-app-pod",
-            TARGET_FOLDER.literal(), "/home/projects/xoom-app",
-            ANNOTATIONS.literal(),  "true",
-            AUTO_DISPATCH.literal(), "true",
-            Agent.argumentKey(), Agent.WEB.name()
-        );
+    @Test
+    public void testThatStepShouldNotProcess() {
+        Assertions.assertFalse(new PropertiesLoadStep().shouldProcess(TaskExecutionContext.executedFrom(WEB)));
     }
 
     @BeforeEach
