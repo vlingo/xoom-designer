@@ -18,7 +18,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.Task.GLOO;
 
-public class GlooCommandManager implements TaskManager {
+public class GlooCommandManager implements TaskManager<List<String>> {
 
     private static final int SUB_TASK_INDEX = 1;
 
