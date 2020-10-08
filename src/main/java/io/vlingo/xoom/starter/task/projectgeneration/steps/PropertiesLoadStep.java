@@ -7,18 +7,13 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import io.vlingo.xoom.starter.ArgumentNotFoundException;
-import io.vlingo.xoom.starter.ArgumentRetriever;
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.task.projectgeneration.Agent;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 
 import static io.vlingo.xoom.starter.Resource.STARTER_PROPERTIES_FILE;
@@ -27,33 +22,10 @@ public class PropertiesLoadStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
-        context.onProperties(loadProperties(context));
+        context.onProperties(loadProperties());
     }
 
-    private Properties loadProperties(final TaskExecutionContext context) {
-        if (Agent.findAgent(context.args()).isTerminal()) {
-            return loadFromFile();
-        }
-        return loadFromArgs(context);
-    }
-
-    private Properties loadFromArgs(final TaskExecutionContext context) {
-        final Properties properties = new Properties();
-        Arrays.asList(Property.values()).forEach(property -> {
-            try {
-                final String key = property.literal();
-                final String value = ArgumentRetriever.retrieve(key, context.args());
-                properties.put(property.literal(), value);
-            } catch(final ArgumentNotFoundException exception) {
-                if(!property.isOptional()) {
-                    throw exception;
-                }
-            }
-        });
-        return properties;
-    }
-
-    private Properties loadFromFile() {
+    private Properties loadProperties() {
         try {
             final Properties properties = new Properties();
             final File propertiesFile = new File(STARTER_PROPERTIES_FILE.path());
@@ -62,6 +34,11 @@ public class PropertiesLoadStep implements TaskExecutionStep {
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
+    }
+
+    @Override
+    public boolean shouldProcess(final TaskExecutionContext context) {
+        return context.agent().isTerminal();
     }
 
 }

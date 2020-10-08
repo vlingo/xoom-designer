@@ -7,14 +7,6 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import io.vlingo.xoom.starter.task.projectgeneration.Agent;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.vlingo.xoom.starter.task.Property.*;
-import static io.vlingo.xoom.starter.task.Task.DEFAULT_TEMPLATE_GENERATION;
-
 public class GenerationSettingsData {
 
     public final ContextSettingsData context;
@@ -37,6 +29,5 @@ public class GenerationSettingsData {
         this.useAnnotations = useAnnotations;
         this.useAutoDispatch = useAutoDispatch;
     }
-
 
 }

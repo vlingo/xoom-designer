@@ -1,4 +1,4 @@
-package io.vlingo.xoom.starter.task.projectgeneration;
+package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.ArgumentNotFoundException;
 import io.vlingo.xoom.starter.ArgumentRetriever;
@@ -12,14 +12,10 @@ public enum Agent {
 
     public static Agent findAgent(final List<String> args) {
         try {
-            return Agent.valueOf(ArgumentRetriever.retrieve(argumentKey(), args));
+            return Agent.valueOf(ArgumentRetriever.retrieve("AGENT", args));
         } catch(final ArgumentNotFoundException exception) {
             return TERMINAL;
         }
-    }
-
-    public static String argumentKey() {
-        return "AGENT";
     }
 
     public boolean isTerminal() {

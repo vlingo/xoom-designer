@@ -15,6 +15,7 @@ import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import java.util.Properties;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.starter.task.Agent.WEB;
 
 public class TaskExecutionContextMapper {
 
@@ -25,7 +26,8 @@ public class TaskExecutionContextMapper {
     private TaskExecutionContextMapper() {}
 
     private TaskExecutionContext map(final GenerationSettingsData data) {
-        return TaskExecutionContext.with(mapCodeGenerationParameters(data))
+        return TaskExecutionContext.executedFrom(WEB)
+                .with(mapCodeGenerationParameters(data))
                 .onProperties(mapProperties(data));
     }
 
