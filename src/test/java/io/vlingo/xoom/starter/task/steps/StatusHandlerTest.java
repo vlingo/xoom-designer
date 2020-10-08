@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task.steps;
 
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.template.TemplateGenerationException;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ public class StatusHandlerTest {
     @Test
     public void testFailureHandler() {
         final StatusHandler statusHandler = StatusHandler.forStatus(3);
-        Assertions.assertThrows(TemplateGenerationException.class, () -> {
+        Assertions.assertThrows(ProjectGenerationException.class, () -> {
             statusHandler.handle(TaskExecutionContext.withoutOptions());
         });
     }

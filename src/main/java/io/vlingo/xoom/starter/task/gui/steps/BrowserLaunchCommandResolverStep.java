@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task.gui.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
-import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 
 import static io.vlingo.xoom.starter.Configuration.BROWSER_LAUNCH_COMMAND;
 import static io.vlingo.xoom.starter.Configuration.USER_INTERFACE_CONFIG_KEY;

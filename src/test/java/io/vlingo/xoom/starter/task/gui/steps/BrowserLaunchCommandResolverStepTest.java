@@ -2,7 +2,7 @@ package io.vlingo.xoom.starter.task.gui.steps;
 
 import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
