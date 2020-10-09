@@ -42,3 +42,6 @@ label, input, button, h5, select, .multiselect-dropdown {
     border-left: 3px solid transparent !important;
     border-right: 3px solid transparent !important;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
