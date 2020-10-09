@@ -7,12 +7,18 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DomainEventData {
 
     public final String name;
+    public final List<String> fields = new ArrayList<>();
 
-    public DomainEventData(final String name) {
+    public DomainEventData(final String name,
+                           final List<String> fields) {
         this.name = name;
+        this.fields.addAll(fields);
     }
 
 }

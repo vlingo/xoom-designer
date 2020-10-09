@@ -12,4 +12,9 @@ public class UnknownCommandException extends TaskExecutionException {
     public UnknownCommandException(final String command) {
         super("The informed command is not supported " + command);
     }
+
+    public UnknownCommandException(final Object args) {
+        super("The informed command does not support arguments type " + args.getClass());
+    }
+
 }
