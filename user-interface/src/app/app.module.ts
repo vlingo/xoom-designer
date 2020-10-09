@@ -26,6 +26,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule} from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { NgxJsonViewModule } from 'ng-json-view';
 import { HttpRequestHandler } from './interceptor/http-request-handler';
 import { LoaderComponent } from './loader/loader.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
@@ -63,7 +64,8 @@ import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/a
     MatInputModule,
     MatDividerModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    NgxJsonViewModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
