@@ -26,6 +26,7 @@
     "bootstrap-select": "^1.13.16",
     "jquery": "^3.5.0",
     "mdbootstrap": "^4.16.0",
+    "ng-json-view": "^4.0.0",
     "ng-multiselect-dropdown": "^0.2.10",
     "ngx-toastr": "^12.0.1",
     "rxjs": "~6.5.4",
