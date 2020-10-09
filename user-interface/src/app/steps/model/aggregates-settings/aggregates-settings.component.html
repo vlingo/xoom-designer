@@ -17,6 +17,7 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
 <div *ngIf="enableAdd">
   <form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()" >
     <mat-form-field appearance="fill">
@@ -94,6 +95,7 @@
     <button mat-button (click)="addNewRow('methods')" type="button">Add Method</button>
     <div>
       <mat-divider> </mat-divider>
+    <button mat-button type="submit" (click)="enableNewAggregate(false)">Cancel</button>
     <button mat-button type="submit" >Add</button>
   </div>
   </form>
