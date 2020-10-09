@@ -11,17 +11,17 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./generation.component.css']
 })
 export class GenerationComponent extends StepComponent {
-  
-  generationForm: FormGroup; 
-  
+
+  generationForm: FormGroup;
+
   constructor(private formBuilder: FormBuilder) {
     super();
-    this.createForm("gaba-hey");
+    // this.createForm("gaba-hey");
   }
-  
+
   ngOnInit(): void {
   }
-  
+
   createForm() {
     this.generationForm = this.formBuilder.group({
       ProjectDirectory: ['', Validators.required]
@@ -62,7 +62,7 @@ export class GenerationComponent extends StepComponent {
   hasNext(): Boolean {
     return false;
   }
-  
+
   hasPrevious(): Boolean {
     return true;
   }
