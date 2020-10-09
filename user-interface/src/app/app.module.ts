@@ -19,13 +19,13 @@ import { StepTitleComponent } from './steps/step-title/step-title.component';
 import { AboutComponent } from './about/about.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule} from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
 import { HttpRequestHandler } from './interceptor/http-request-handler';
 import { LoaderComponent } from './loader/loader.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
@@ -57,13 +57,13 @@ import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/a
     ReactiveFormsModule,
     ToastrModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
-    MatTableModule,
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatDividerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

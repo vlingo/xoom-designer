@@ -1,32 +1,21 @@
 <div *ngIf="!enableAdd" >
   <button mat-button (click)="enableNewAggregate(true)" >New Aggregate</button>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <mat-card class="example-card" *ngFor="let aggregatesSetting of aggregatesSettings; let i = index;">
+    <mat-card-header>
+      <mat-card-title>{{aggregatesSetting.aggregateName}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+        bred for hunting.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>Edit</button>
+      <button mat-button>View</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
 <div *ngIf="enableAdd">
   <form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()" >
@@ -53,7 +42,7 @@
         <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)"  >Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('stateFields')"  >Add State Field</button>
+    <button mat-button (click)="addNewRow('stateFields')" type="button">Add State Field</button>
     <mat-divider> </mat-divider>
     <span>Events</span>
     <div class="item" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
@@ -63,7 +52,7 @@
           <input matInput formControlName="name">
         </mat-form-field>
         <mat-form-field>
-          <mat-select multiple formControlName="field" placeholder="Fields" #singleSelect>
+          <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect>
             <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
               {{stateField.get('name').value}}
             </mat-option>
@@ -72,7 +61,7 @@
         <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)"  >Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('events')"  >Add Event</button>
+    <button mat-button (click)="addNewRow('events')" type="button">Add Event</button>
     <mat-divider> </mat-divider>
     <span>Methods</span>
     <div class="item" formArrayName="methods" *ngFor="let method of formMethods.controls; let i = index;">
@@ -102,7 +91,7 @@
         <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)"  >Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('methods')"  >Add Method</button>
+    <button mat-button (click)="addNewRow('methods')" type="button">Add Method</button>
     <div>
       <mat-divider> </mat-divider>
     <button mat-button type="submit" >Add</button>
