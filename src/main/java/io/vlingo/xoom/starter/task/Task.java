@@ -11,41 +11,54 @@ import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
 import io.vlingo.xoom.starter.task.gloo.GlooCommandManager;
 import io.vlingo.xoom.starter.task.gui.UserInterfaceManager;
 import io.vlingo.xoom.starter.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.starter.task.option.Option;
-import io.vlingo.xoom.starter.task.template.TemplateGenerationManager;
+import io.vlingo.xoom.starter.task.projectgeneration.CommandLineGenerationManager;
+import io.vlingo.xoom.starter.task.projectgeneration.DefaultGenerationManager;
 import io.vlingo.xoom.starter.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public enum Task {
 
-    TEMPLATE_GENERATION("gen", new TemplateGenerationManager()),
+    DEFAULT_TEMPLATE_GENERATION("gen", new DefaultGenerationManager()),
+    CLI_TEMPLATE_GENERATION("gen", new CommandLineGenerationManager()),
     DOCKER("docker", new DockerCommandManager()),
     K8S("k8s", new KubernetesCommandManager()),
     GLOO("gloo", new GlooCommandManager()),
     GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager()),
     VERSION("-version", new VersionDisplayManager());
 
-    private final String command;
+    public final String command;
     private final TaskManager manager;
-    private final List<Option> options;
 
-    Task(final String command, final TaskManager manager, final Option... options) {
+    Task(final String command,
+         final TaskManager manager) {
         this.command = command;
         this.manager = manager;
-        this.options = Arrays.asList(options);
     }
 
-    public static Task trigger(final String command) {
-        return Arrays.asList(values()).stream()
-                .filter(task -> task.triggeredBy(command))
-                .findFirst().orElseThrow(() -> new UnknownCommandException(command));
+    public static <T> TaskManager<T> manage(final String command, final T args) {
+        final List<Task> matchedTasks =
+                Arrays.asList(values()).stream()
+                        .filter(task -> task.triggeredBy(command))
+                        .collect(Collectors.toList());
+
+        if(matchedTasks.isEmpty()) {
+            throw new UnknownCommandException(command);
+        }
+
+        return findManager(matchedTasks, args);
     }
 
-    public void run(final List<String> args) {
-        this.manager.run(args);
+    public static <T> TaskManager<T> manage(final Task task, final T args) {
+        return findManager(Arrays.asList(task), args);
+    }
+
+    private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
+        return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
+                .findFirst().orElseThrow(() -> new UnknownCommandException(args));
     }
 
     public String command() {
@@ -64,4 +77,5 @@ public enum Task {
                 .stream().filter(matchCondition).findFirst()
                 .orElseThrow(() -> new UnknownCommandException(command));
     }
+
 }

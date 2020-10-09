@@ -7,10 +7,11 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
+import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -23,9 +24,14 @@ public class TaskExecutionContext {
     private Process process;
     private String[] commands;
     private Properties properties;
+    private final CodeGenerationParameters parameters;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
+
+    public static TaskExecutionContext with(final CodeGenerationParameters parameters) {
+        return new TaskExecutionContext(parameters);
+    }
 
     public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
         return new TaskExecutionContext(optionValues);
@@ -37,11 +43,16 @@ public class TaskExecutionContext {
         return context;
     }
 
+    private TaskExecutionContext(final CodeGenerationParameters parameters) {
+        this.parameters = parameters;
+    }
+
     private TaskExecutionContext() {
         this(Collections.emptyList());
     }
 
     private TaskExecutionContext(final List<OptionValue> optionValues) {
+        this(CodeGenerationParameters.empty());
         this.optionValues.addAll(optionValues);
     }
 
@@ -53,12 +64,14 @@ public class TaskExecutionContext {
         this.process = process;
     }
 
-    public void onConfiguration(final Map<String, String> configurations) {
+    public TaskExecutionContext onConfiguration(final Map<String, String> configurations) {
         this.configuration.putAll(configurations);
+        return this;
     }
 
-    public void onProperties(final Properties properties) {
+    public TaskExecutionContext onProperties(final Properties properties) {
         this.properties = properties;
+        return this;
     }
 
     public void withCommands(final String[] commands) {
@@ -81,8 +94,9 @@ public class TaskExecutionContext {
         return this.configuration.get(key);
     }
 
-    public void addProperty(final Property property, final String value) {
+    public TaskExecutionContext addProperty(final Property property, final String value) {
         this.properties.put(property.literal(), value);
+        return this;
     }
 
     public <T> T propertyOf(final Property property) {
@@ -116,6 +130,10 @@ public class TaskExecutionContext {
         return args;
     }
 
+    public CodeGenerationParameters codeGenerationParameters() {
+        return parameters;
+    }
+
     public DeploymentType deploymentType() {
         return DeploymentType.valueOf(propertyOf(DEPLOYMENT));
     }
@@ -125,4 +143,9 @@ public class TaskExecutionContext {
         final String targetFolder = propertyOf(TARGET_FOLDER);
         return Paths.get(targetFolder, artifactId).toString();
     }
+
+    public boolean hasCodeGenerationParameters() {
+        return parameters.isEmpty();
+    }
+
 }

@@ -23,7 +23,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.Task.DOCKER;
 
-public class DockerCommandManager implements TaskManager {
+public class DockerCommandManager implements TaskManager<List<String>> {
 
     private static final int SUB_TASK_INDEX = 1;
 
