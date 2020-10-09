@@ -1,4 +1,4 @@
-import { ModelAggregate, AggregatesSetting } from './../../../model/model-aggregate';
+import { AggregatesSetting } from './../../../model/model-aggregate';
 import {
   FormArray,
   FormGroup,

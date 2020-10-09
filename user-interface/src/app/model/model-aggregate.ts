@@ -11,21 +11,28 @@
   export interface Method {
     name: string;
     factory: string;
-    params: string[];
-    events: Event[];
+    parameters: string[];
+    event: string;
   }
 
   export interface Route {
-    route: string;
+    path: string;
     httpMethod: string;
     aggregateMethod: string;
+    requireEntityLoad: string;
+  }
+
+  export interface Api {
+    rootPath: string;
+    routes: Route[];
   }
 
   export interface AggregatesSetting {
     aggregateName: string;
     stateFields: StateField[];
+    events: Event[];
     methods: Method[];
-    routes: Route[];
+    api: Api;
   }
 
   export interface Persistence {
@@ -42,6 +49,6 @@
     persistence: Persistence;
   }
 
-  export interface ModelAggregate {
+  export interface RootObject {
     model: Model;
   }
