@@ -40,7 +40,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)"  >Remove</button>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)" type="button">Remove</button>
       </div>
     </div>
     <button mat-button (click)="addNewRow('stateFields')" type="button">Add State Field</button>
@@ -59,7 +59,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)"  >Remove</button>
+        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
     <button mat-button (click)="addNewRow('events')" type="button">Add Event</button>
@@ -89,14 +89,14 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)"  >Remove</button>
+        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
     <button mat-button (click)="addNewRow('methods')" type="button">Add Method</button>
     <div>
       <mat-divider> </mat-divider>
-    <button mat-button type="submit" (click)="enableNewAggregate(false)">Cancel</button>
-    <button mat-button type="submit" >Add</button>
+    <button mat-button type="submit" (click)="enableNewAggregate(false)" type="button">Cancel</button>
+    <button mat-button type="submit" type="button">Add</button>
   </div>
   </form>
 </div>
