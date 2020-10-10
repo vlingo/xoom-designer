@@ -1,4 +1,8 @@
-import { AggregatesSetting } from './../../../model/model-aggregate';
+import { NavigationDirection } from 'src/app/model/navigation-direction';
+import { StepCompletion } from 'src/app/model/step-completion';
+import { Step } from 'src/app/model/step';
+import { ViewDialogComponent } from './view-dialog/view-dialog.component';
+import { AggregatesSetting, Method, AggregateEvent, Api, StateField } from './../../../model/model-aggregate';
 import {
   FormArray,
   FormGroup,
@@ -9,19 +13,15 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { MatDialog } from '@angular/material/dialog';
+import { StepComponent } from '../../step.component';
 
 @Component({
   selector: 'app-aggregates-settings',
   templateUrl: './aggregates-settings.component.html',
   styleUrls: ['./aggregates-settings.component.css']
 })
-export class AggregatesSettingsComponent implements OnInit {
+export class AggregatesSettingsComponent  extends StepComponent implements OnInit {
 
   aggregateSettingsForm: FormGroup;
   stateFields: FormArray;
@@ -35,7 +35,10 @@ export class AggregatesSettingsComponent implements OnInit {
   };
   aggregatesSettings: AggregatesSetting[] = [];
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder,
+              private dialog: MatDialog) {
+                super();
+  }
 
   ngOnInit(): void {
   }
@@ -74,13 +77,55 @@ export class AggregatesSettingsComponent implements OnInit {
   }
 
   add(){
-    this.aggregatesSettings.push(this.aggregateSettingsForm.value as AggregatesSetting);
+    this.aggregatesSettings.push(this.parseAggregateForm());
     this.enableAdd = false;
   }
 
   addNewRow(type: string){
     const formArray = this.aggregateSettingsForm.get(type) as FormArray;
     formArray.push(this.creator[type](this.formBuilder));
+  }
+
+  view(aggregatesSetting: AggregatesSetting){
+    this.dialog.open(ViewDialogComponent, {
+      data: aggregatesSetting,
+      height: '500px',
+      width: '500px',
+    });
+  }
+
+  remove(index: number): void {
+    delete this.aggregatesSettings[index];
+  }
+
+  next(): void {
+    this.stepCompletion.emit(new StepCompletion(
+      Step.MODEL,
+      true,
+      NavigationDirection.FORWARD
+    ));
+  }
+  previous(): void {
+    this.stepCompletion.emit(new StepCompletion(
+      Step.MODEL,
+      true,
+      NavigationDirection.REWIND
+    ));
+  }
+
+  hasNext(): Boolean {
+    return true;
+  }
+  hasPrevious(): Boolean {
+    return true;
+  }
+
+  getMethodParameters(method: Method, stateFields: StateField[]){
+    return stateFields.filter(state => {
+      return method.parameters.includes(state.name);
+    }).map(state => {
+      return state.type + ' ' + state.name;
+    }).join(',');
   }
 
   private createStateField(formBuilder: FormBuilder): FormGroup{
@@ -120,5 +165,28 @@ export class AggregatesSettingsComponent implements OnInit {
         requireEntityLoad: ['', [Validators.required]],
       })],
     });
+  }
+
+  private parseAggregateForm(): AggregatesSetting{
+    const formValue = this.aggregateSettingsForm.value as AggregatesSetting;
+    const methods = (this.aggregateSettingsForm.value.methods).map(method => {
+      method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
+      return method as Method;
+    });
+    const events = (this.aggregateSettingsForm.value.events).map(event => {
+      event.fields = Array.isArray(event.fields) ? event.fields : [];
+      return event as AggregateEvent;
+    });
+    const api = (this.aggregateSettingsForm.value.api).map(ap => {
+      ap.parameters = Array.isArray(ap.parameters) ? ap.parameters : [];
+      return ap as Api;
+    });
+    return {
+      aggregateName: formValue.aggregateName,
+      stateFields: formValue.stateFields,
+      methods,
+      events,
+      api
+    } as AggregatesSetting;
   }
 }
