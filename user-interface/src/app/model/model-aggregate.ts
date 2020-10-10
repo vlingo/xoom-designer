@@ -3,7 +3,7 @@
     type: string;
   }
 
-  export interface Event {
+  export interface AggregateEvent {
     name: string;
     fields: string[];
   }
@@ -30,7 +30,7 @@
   export interface AggregatesSetting {
     aggregateName: string;
     stateFields: StateField[];
-    events: Event[];
+    events: AggregateEvent[];
     methods: Method[];
     api: Api;
   }
