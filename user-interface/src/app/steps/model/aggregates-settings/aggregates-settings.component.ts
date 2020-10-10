@@ -125,7 +125,7 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
       return method.parameters.includes(state.name);
     }).map(state => {
       return state.type + ' ' + state.name;
-    }).join(',');
+    }).join(', ');
   }
 
   private createStateField(formBuilder: FormBuilder): FormGroup{
