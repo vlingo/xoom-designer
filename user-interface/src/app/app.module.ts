@@ -30,6 +30,7 @@ import { NgxJsonViewModule } from 'ng-json-view';
 import { HttpRequestHandler } from './interceptor/http-request-handler';
 import { LoaderComponent } from './loader/loader.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
+import { ViewDialogComponent } from './steps/model/aggregates-settings/view-dialog/view-dialog.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/a
     AboutComponent,
     SettingsComponent,
     LoaderComponent,
-    AggregatesSettingsComponent
+    AggregatesSettingsComponent,
+    ViewDialogComponent
   ],
   imports: [
     BrowserModule,
