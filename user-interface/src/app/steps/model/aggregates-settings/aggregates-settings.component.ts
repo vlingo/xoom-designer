@@ -7,7 +7,7 @@ import {
   FormArray,
   FormGroup,
   FormBuilder,
-  Validators
+  Validators, FormControl, AbstractControl
 } from '@angular/forms';
 import {
   Component,
@@ -27,6 +27,7 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
   stateFields: FormArray;
   enableAdd = false;
   stateFieldsTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
+  httpsMethods = ['POST', 'PUT', 'DELETE', 'PATCH', 'GET', 'HEAD', 'OPTIONS'];
   creator = {
     stateFields: this.createStateField,
     events: this.createEvents,
@@ -43,10 +44,6 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
   ngOnInit(): void {
   }
 
-  removeRow(type: string, index: number): void {
-    (this.aggregateSettingsForm.get(type) as FormArray).removeAt(index);
-  }
-
   get formStateFields(): FormArray {
     return this.aggregateSettingsForm.get('stateFields') as FormArray;
   }
@@ -59,8 +56,12 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
     return this.aggregateSettingsForm.get('methods') as FormArray;
   }
 
-  get formApi(): FormArray {
-    return this.aggregateSettingsForm.get('api') as FormArray;
+  get formApi(): AbstractControl {
+    return this.aggregateSettingsForm.get('api');
+  }
+
+  get formApiParameters(): FormArray {
+    return this.formApi.get('parameters') as FormArray;
   }
 
   enableNewAggregate(flag: boolean){
@@ -71,19 +72,27 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
         stateFields: this.formBuilder.array([this.createStateField(this.formBuilder)]),
         events: this.formBuilder.array([this.createEvents(this.formBuilder)]),
         methods: this.formBuilder.array([this.createMethods(this.formBuilder)]),
-        api: this.formBuilder.array([this.createApi(this.formBuilder)])
+        api: this.createApi(this.formBuilder)
       });
     }
-  }
-
-  add(){
-    this.aggregatesSettings.push(this.parseAggregateForm());
-    this.enableAdd = false;
   }
 
   addNewRow(type: string){
     const formArray = this.aggregateSettingsForm.get(type) as FormArray;
     formArray.push(this.creator[type](this.formBuilder));
+  }
+
+  removeRow(type: string, index: number): void {
+    (this.aggregateSettingsForm.get(type) as FormArray).removeAt(index);
+  }
+
+  addApiRow(){
+    const formArray = this.formApiParameters;
+    formArray.push(this.createApiParameters(this.formBuilder));
+  }
+
+  removeApiRow(index: number){
+    this.formApiParameters.removeAt(index);
   }
 
   view(aggregatesSetting: AggregatesSetting){
@@ -93,6 +102,12 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
       width: '500px',
     });
   }
+
+  add(){
+    this.aggregatesSettings.push(this.parseAggregateForm());
+    this.enableAdd = false;
+  }
+
 
   remove(index: number): void {
     delete this.aggregatesSettings[index];
@@ -158,12 +173,16 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
   private createApi(formBuilder: FormBuilder): FormGroup{
     return formBuilder.group({
       rootPath: ['', [Validators.required]],
-      parameters: [formBuilder.group({
-        path: ['', [Validators.required]],
-        httpMethod: ['', [Validators.required]],
-        aggregateMethod: ['', [Validators.required]],
-        requireEntityLoad: ['', [Validators.required]],
-      })],
+      parameters: this.formBuilder.array([this.createApiParameters(this.formBuilder)])
+    });
+  }
+
+  private createApiParameters(formBuilder: FormBuilder): FormGroup{
+    return formBuilder.group({
+      path: ['', [Validators.required]],
+      httpMethod: ['', [Validators.required]],
+      aggregateMethod: ['', [Validators.required]],
+      requireEntityLoad: ['', [Validators.required]],
     });
   }
 
@@ -177,10 +196,8 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
       event.fields = Array.isArray(event.fields) ? event.fields : [];
       return event as AggregateEvent;
     });
-    const api = (this.aggregateSettingsForm.value.api).map(ap => {
-      ap.parameters = Array.isArray(ap.parameters) ? ap.parameters : [];
-      return ap as Api;
-    });
+    const api = this.aggregateSettingsForm.value.api;
+    api.parameters = Array.isArray(api.parameters) ? api.parameters : [];
     return {
       aggregateName: formValue.aggregateName,
       stateFields: formValue.stateFields,

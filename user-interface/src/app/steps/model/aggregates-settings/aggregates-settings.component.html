@@ -1,5 +1,5 @@
-<div *ngIf="!enableAdd" >
-  <button mat-button (click)="enableNewAggregate(true)" >New Aggregate</button>
+<div *ngIf="!enableAdd">
+  <button mat-button (click)="enableNewAggregate(true)">New Aggregate</button>
   <mat-card class="aggregate-card" *ngFor="let aggregatesSetting of aggregatesSettings; let i = index;">
     <mat-card-header>
       <mat-card-title>{{aggregatesSetting.aggregateName}}</mat-card-title>
@@ -7,27 +7,27 @@
     <mat-card-content>
       <mat-divider></mat-divider>
       <div class="parameters">
-      <div *ngFor="let state of aggregatesSetting.stateFields" >
-        <span>{{state.name}}: {{state.type}}</span>
+        <div *ngFor="let state of aggregatesSetting.stateFields">
+          <span>{{state.name}}: {{state.type}}</span>
+        </div>
       </div>
-    </div>
       <mat-divider></mat-divider>
       <div class="methods">
-      <div *ngFor="let method of aggregatesSetting.methods" >
-        <span>{{method.name}}({{getMethodParameters(method, aggregatesSetting.stateFields)}})</span>
+        <div *ngFor="let method of aggregatesSetting.methods">
+          <span>{{method.name}}({{getMethodParameters(method, aggregatesSetting.stateFields)}})</span>
+        </div>
       </div>
-    </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button (click)="remove(i)">Remove</button>
       <button mat-button>Edit</button>
-      <button mat-button (click)="view(aggregatesSetting)" >View</button>
+      <button mat-button (click)="view(aggregatesSetting)">View</button>
     </mat-card-actions>
   </mat-card>
 </div>
 
 <div *ngIf="enableAdd">
-  <form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()" >
+  <form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()">
     <mat-form-field appearance="fill">
       <mat-label>Aggregate Name</mat-label>
       <input matInput formControlName="aggregateName">
@@ -67,7 +67,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)" type="button">Remove</button>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
     <button mat-button (click)="addNewRow('events')" type="button">Add Event</button>
@@ -97,14 +97,53 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <button *ngIf="i > 0"  mat-button (click)="removeRow('events', i)" type="button">Remove</button>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
     <button mat-button (click)="addNewRow('methods')" type="button">Add Method</button>
+    <mat-divider> </mat-divider>
+    <!-- <span>API</span> -->
+    <!-- <div class="item">
+      <div [formGroupName]="formApi">
+        <mat-form-field appearance="fill">
+          <mat-label>Root Path</mat-label>
+          <input matInput formControlName="rootPath">
+        </mat-form-field>
+        <div class="item" formArrayName="parameters"
+          *ngFor="let parameter of formApiParameters.controls; let iApi = index;">
+          <div [formGroupName]="iApi">
+            <mat-form-field appearance="fill">
+              <mat-label>Path</mat-label>
+              <input matInput formControlName="path">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="httpMethod" placeholder="Http Method" #singleSelect>
+                <mat-option *ngFor="let httpMethod of httpsMethods" [value]="httpMethod">
+                  {{httpMethod}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect>
+                <mat-option *ngFor="let method of formMethods.controls" [value]="method.get('name').value">
+                  {{method.get('name').value}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Require Entity Load</mat-label>
+              <input matInput formControlName="requireEntityLoad">
+            </mat-form-field>
+            <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
+          </div>
+        </div>
+        <button mat-button (click)="addApiRow()" type="button">Add Api Method</button>
+      </div>
+    </div> -->
     <div>
       <mat-divider> </mat-divider>
-    <button mat-button type="submit" (click)="enableNewAggregate(false)" type="button">Cancel</button>
-    <button mat-button type="submit">Add</button>
-  </div>
+      <button mat-button type="submit" (click)="enableNewAggregate(false)" type="button">Cancel</button>
+      <button mat-button type="submit">Add</button>
+    </div>
   </form>
 </div>
