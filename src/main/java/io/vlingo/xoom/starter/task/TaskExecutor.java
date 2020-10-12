@@ -16,7 +16,7 @@ public class TaskExecutor {
 
     public static void execute(final List<String> args) {
         validateArgs(args);
-        Task.manage(args.get(MAIN_COMMAND_INDEX), args).run(args);
+        Task.of(args.get(MAIN_COMMAND_INDEX), args).run(args);
     }
 
     private static void validateArgs(final List<String> args){

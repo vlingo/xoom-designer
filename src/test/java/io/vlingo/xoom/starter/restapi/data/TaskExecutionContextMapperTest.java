@@ -9,22 +9,13 @@ package io.vlingo.xoom.starter.restapi.data;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.starter.task.Property;
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.codegen.parameter.Label.COMMAND_MODEL_DATABASE;
-import static io.vlingo.xoom.codegen.parameter.Label.CQRS;
-import static io.vlingo.xoom.codegen.parameter.Label.DATABASE;
-import static io.vlingo.xoom.codegen.parameter.Label.QUERY_MODEL_DATABASE;
-import static io.vlingo.xoom.codegen.parameter.Label.STORAGE_TYPE;
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.starter.task.Property.*;
 
 public class TaskExecutionContextMapperTest {
 
@@ -34,22 +25,23 @@ public class TaskExecutionContextMapperTest {
                 new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
                         deploymentSettingsData(), "/home/projects", true, false);
 
-        final TaskExecutionContext context = TaskExecutionContextMapper.from(data);
-        final CodeGenerationParameters codeGenerationParameters = context.codeGenerationParameters();
+        final CodeGenerationParameters codeGenerationParameters =
+                TaskExecutionContextMapper.from(data).codeGenerationParameters();
 
-        assertMavenOptions(context);
+        assertStructuralOptions(codeGenerationParameters);
         assertPersistenceParameters(codeGenerationParameters);
         assertModelParameters(codeGenerationParameters);
     }
 
-    private void assertMavenOptions(final TaskExecutionContext context) {
-        Assertions.assertEquals("io.vlingo", context.propertyOf(GROUP_ID));
-        Assertions.assertEquals("xoomapp", context.propertyOf(ARTIFACT_ID));
-        Assertions.assertEquals("1.0", context.propertyOf(VERSION));
-        Assertions.assertEquals("1.3.4-SNAPSHOT", context.propertyOf(XOOM_SERVER_VERSION));
-        Assertions.assertEquals("xoom-app", context.propertyOf(DOCKER_IMAGE));
-        Assertions.assertEquals("", context.propertyOf(KUBERNETES_IMAGE));
-        Assertions.assertEquals("", context.propertyOf(KUBERNETES_POD_NAME));
+    private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
+        Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
+        Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
+        Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
+        Assertions.assertEquals("1.3.4-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_SERVER_VERSION));
+        Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
+        Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
+        Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
+        Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
     }
 
     private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {

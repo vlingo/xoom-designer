@@ -13,6 +13,11 @@ public interface TaskManager<T> {
 
     void run(final T args);
 
+    default TaskStatus manage(final T args) {
+        run(args);
+        return TaskStatus.SUCCESSFUL;
+    }
+
     default boolean support(final Object args) {
         if(args instanceof List) {
             final List<?> argsList = (List<?>) args;
