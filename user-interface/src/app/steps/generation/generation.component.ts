@@ -1,3 +1,4 @@
+import { ModelService } from './../model/model.service';
 import { Component, OnInit } from '@angular/core';
 import { StepComponent } from '../step.component';
 import { StepCompletion } from 'src/app/model/step-completion';
@@ -14,7 +15,7 @@ export class GenerationComponent extends StepComponent {
 
   generationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
     super();
     // this.createForm("gaba-hey");
   }
@@ -29,6 +30,7 @@ export class GenerationComponent extends StepComponent {
   }
 
   generate() {
+    this.modelService.getModel$.subscribe(a => console.log(a));
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
       this.generationForm.valid,
