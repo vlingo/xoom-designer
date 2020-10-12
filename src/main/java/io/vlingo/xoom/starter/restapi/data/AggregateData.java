@@ -14,19 +14,19 @@ public class AggregateData {
 
     public final APIData api;
     public final String aggregateName;
-    public final List<StateFieldData> statesFields = new ArrayList<>();
+    public final List<StateFieldData> stateFields = new ArrayList<>();
     public final List<AggregateMethodData> methods = new ArrayList<>();
     public final List<DomainEventData> events = new ArrayList<>();
 
     public AggregateData(final String aggregateName,
                          final APIData api,
                          final List<DomainEventData> domainEvents,
-                         final List<StateFieldData> statesFields,
+                         final List<StateFieldData> stateFields,
                          final List<AggregateMethodData> methods) {
         this.api = api;
         this.methods.addAll(methods);
         this.events.addAll(domainEvents);
-        this.statesFields.addAll(statesFields);
+        this.stateFields.addAll(stateFields);
         this.aggregateName = aggregateName;
     }
 

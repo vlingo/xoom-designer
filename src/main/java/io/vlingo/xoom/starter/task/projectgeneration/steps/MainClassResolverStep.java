@@ -8,9 +8,10 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class MainClassResolverStep implements TaskExecutionStep {
 
@@ -19,15 +20,15 @@ public class MainClassResolverStep implements TaskExecutionStep {
     @Override
     public void process(final TaskExecutionContext context) {
         final String basePackage =
-                context.propertyOf(Property.PACKAGE);
+                context.codeGenerationParameters().retrieveValue(PACKAGE);
 
         final Boolean useAnnotations =
-                context.propertyOf(Property.ANNOTATIONS, Boolean::valueOf);
+                Boolean.valueOf(context.codeGenerationParameters().retrieveValue(USE_ANNOTATIONS));
 
         final String mainClass =
                 String.format(QUALIFIED_PATTERN, basePackage, resolveClassName(useAnnotations));
 
-        context.addProperty(Property.MAIN_CLASS, mainClass);
+        context.codeGenerationParameters().add(MAIN_CLASS, mainClass);
     }
 
     private String resolveClassName(final Boolean useAnnotations) {

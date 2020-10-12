@@ -7,69 +7,53 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.archetype;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.Resource;
-import io.vlingo.xoom.starter.task.Property;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.starter.task.Property.*;
+import static io.vlingo.xoom.starter.task.projectgeneration.archetype.ArchetypeOption.*;
 
 public enum Archetype {
 
     KUBERNETES("kubernetes-archetype", "vlingo-xoom-kubernetes-archetype",
-            "io.vlingo", "1.0", new KubernetesArchetypePropertiesValidator(),
-            VERSION, GROUP_ID, ARTIFACT_ID, MAIN_CLASS, PACKAGE, TARGET_FOLDER,
-            XOOM_SERVER_VERSION, DOCKER_IMAGE, DEPLOYMENT, KUBERNETES_POD_NAME,
+            "io.vlingo", "1.0", VERSION, GROUP_ID, ARTIFACT_ID, MAIN_CLASS,
+            PACKAGE, XOOM_SERVER_VERSION, DOCKER_IMAGE, KUBERNETES_POD_NAME,
             KUBERNETES_IMAGE);
 
     private final String label;
     private final String artifactId;
     private final String groupId;
     private final String version;
-    private final ArchetypePropertiesValidator validator;
-    private final List<Property> requiredProperties = new ArrayList<>();
+
+    private final List<ArchetypeOption> archetypeOptions = new ArrayList<>();
 
     Archetype(final String label,
               final String artifactId,
               final String groupId,
               final String version,
-              final ArchetypePropertiesValidator validator,
-              final Property... requiredProperties) {
+              final ArchetypeOption... requiredOptions) {
         this.label = label;
         this.artifactId = artifactId;
         this.groupId = groupId;
         this.version = version;
-        this.validator = validator;
-        this.requiredProperties.addAll(Arrays.asList(requiredProperties));
+        this.archetypeOptions.addAll(Arrays.asList(requiredOptions));
     }
 
-    public static Archetype support(final Properties properties) {
-        return Arrays.asList(Archetype.values()).stream()
-                .filter(archetype -> archetype.isSupported(properties))
-                .findFirst().orElseThrow(ArchetypeNotFoundException::new);
+    public static Archetype findDefault() {
+        //TODO: Optimize by creating lighter archetype that fits exactly a set of project generation parameters
+        return KUBERNETES;
     }
 
-    public String fillMavenOptions(final Properties properties) {
-        return ArchetypeMavenOptionsBuilder.instance().build(this, properties);
+    public String formatOptions(final CodeGenerationParameters parameters) {
+        return ArchetypeOptionsFormatter.instance().format(this, parameters);
     }
 
     public String folder() {
         return Paths.get(Resource.ARCHETYPES_FOLDER.path(), label).toString();
-    }
-
-    public List<Property> supportedMavenProperties() {
-        return this.requiredProperties.stream()
-                .filter(properties -> properties.isSupportedByMaven())
-                .collect(Collectors.toList());
-    }
-
-    private boolean isSupported(final Properties properties) {
-        return validator.validate(properties, requiredProperties);
     }
 
     String artifactId() {
@@ -82,6 +66,10 @@ public enum Archetype {
 
     String version() {
         return version;
+    }
+
+    List<ArchetypeOption> archetypeOptions() {
+        return archetypeOptions;
     }
 
 }
