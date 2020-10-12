@@ -11,8 +11,8 @@ import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
 import io.vlingo.xoom.starter.task.gloo.GlooCommandManager;
 import io.vlingo.xoom.starter.task.gui.UserInterfaceManager;
 import io.vlingo.xoom.starter.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.starter.task.projectgeneration.CommandLineGenerationManager;
-import io.vlingo.xoom.starter.task.projectgeneration.WebGenerationManager;
+import io.vlingo.xoom.starter.task.projectgeneration.CommandLineBasedProjectGenerationManager;
+import io.vlingo.xoom.starter.task.projectgeneration.WebBasedProjectGenerationManager;
 import io.vlingo.xoom.starter.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 
 public enum Task {
 
-    DEFAULT_TEMPLATE_GENERATION("gen", new WebGenerationManager()),
-    CLI_TEMPLATE_GENERATION("gen", new CommandLineGenerationManager()),
+    WEB_BASED_PROJECT_GENERATION("gen", new WebBasedProjectGenerationManager()),
+    CLI_BASED_PROJECT_GENERATION("gen", new CommandLineBasedProjectGenerationManager()),
     DOCKER("docker", new DockerCommandManager()),
     K8S("k8s", new KubernetesCommandManager()),
     GLOO("gloo", new GlooCommandManager()),
@@ -39,7 +39,7 @@ public enum Task {
         this.manager = manager;
     }
 
-    public static <T> TaskManager<T> manage(final String command, final T args) {
+    public static <T> TaskManager<T> of(final String command, final T args) {
         final List<Task> matchedTasks =
                 Arrays.asList(values()).stream()
                         .filter(task -> task.triggeredBy(command))
@@ -52,7 +52,7 @@ public enum Task {
         return findManager(matchedTasks, args);
     }
 
-    public static <T> TaskManager<T> manage(final Task task, final T args) {
+    public static <T> TaskManager<T> of(final Task task, final T args) {
         return findManager(Arrays.asList(task), args);
     }
 

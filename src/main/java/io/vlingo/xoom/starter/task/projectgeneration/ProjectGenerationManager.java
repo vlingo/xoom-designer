@@ -8,14 +8,13 @@
 package io.vlingo.xoom.starter.task.projectgeneration;
 
 import io.vlingo.xoom.starter.Configuration;
-import io.vlingo.xoom.starter.task.Agent;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskManager;
 
 public abstract class ProjectGenerationManager<S> implements TaskManager<S> {
 
     protected void processSteps(final TaskExecutionContext context) {
-        Configuration.TEMPLATE_GENERATION_STEPS.stream()
+        Configuration.PROJECT_GENERATION_STEPS.stream()
                 .filter(step -> step.shouldProcess(context))
                 .forEach(step -> step.process(context));
     }
