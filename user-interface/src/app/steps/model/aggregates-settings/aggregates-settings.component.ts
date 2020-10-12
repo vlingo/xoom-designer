@@ -1,30 +1,53 @@
-import { NavigationDirection } from 'src/app/model/navigation-direction';
-import { StepCompletion } from 'src/app/model/step-completion';
-import { Step } from 'src/app/model/step';
-import { ViewDialogComponent } from './view-dialog/view-dialog.component';
-import { AggregatesSetting, Method, AggregateEvent, Api, StateField } from './../../../model/model-aggregate';
-import {Component, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { StepComponent } from '../../step.component';
-import { CreateEditDialogComponent } from './create-edit-dialog/create-edit-dialog.component';
+import {
+  NavigationDirection
+} from 'src/app/model/navigation-direction';
+import {
+  StepCompletion
+} from 'src/app/model/step-completion';
+import {
+  Step
+} from 'src/app/model/step';
+import {
+  ViewDialogComponent
+} from './view-dialog/view-dialog.component';
+import {
+  AggregatesSetting,
+  Method,
+  StateField
+} from './../../../model/model-aggregate';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  MatDialog
+} from '@angular/material/dialog';
+import {
+  StepComponent
+} from '../../step.component';
+import {
+  CreateEditDialogComponent
+} from './create-edit-dialog/create-edit-dialog.component';
 
 @Component({
   selector: 'app-aggregates-settings',
   templateUrl: './aggregates-settings.component.html',
   styleUrls: ['./aggregates-settings.component.css']
 })
-export class AggregatesSettingsComponent  extends StepComponent implements OnInit {
+export class AggregatesSettingsComponent extends StepComponent implements OnInit {
 
   aggregatesSettings: AggregatesSetting[] = [];
 
   constructor(private dialog: MatDialog) {
-                super();
+    super();
+    if (this.aggregatesSettings.length === 0) {
+      this.openNewAggregateModal();
+    }
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  view(aggregatesSetting: AggregatesSetting){
+  view(aggregatesSetting: AggregatesSetting) {
     this.dialog.open(ViewDialogComponent, {
       data: aggregatesSetting,
       height: '500px',
@@ -38,7 +61,7 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
 
   next(): void {
     this.stepCompletion.emit(new StepCompletion(
-      Step.MODEL,
+      Step.AGGREGATE,
       true,
       NavigationDirection.FORWARD
     ));
@@ -46,7 +69,7 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
 
   previous(): void {
     this.stepCompletion.emit(new StepCompletion(
-      Step.MODEL,
+      Step.AGGREGATE,
       true,
       NavigationDirection.REWIND
     ));
@@ -72,7 +95,7 @@ export class AggregatesSettingsComponent  extends StepComponent implements OnIni
     });
   }
 
-  getMethodParameters(method: Method, stateFields: StateField[]){
+  getMethodParameters(method: Method, stateFields: StateField[]) {
     return stateFields.filter(state => {
       return method.parameters.includes(state.name);
     }).map(state => {
