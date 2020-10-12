@@ -1,3 +1,4 @@
+import { ModelService } from './../model.service';
 import {
   NavigationDirection
 } from 'src/app/model/navigation-direction';
@@ -38,7 +39,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
 
   aggregatesSettings: AggregatesSetting[] = [];
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private modelService: ModelService) {
     super();
     if (this.aggregatesSettings.length === 0) {
       this.openNewAggregateModal();
@@ -60,6 +61,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   next(): void {
+    this.modelService.addAggregate(this.aggregatesSettings);
     this.stepCompletion.emit(new StepCompletion(
       Step.AGGREGATE,
       true,
