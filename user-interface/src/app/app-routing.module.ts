@@ -1,3 +1,4 @@
+import { PersistenceComponent } from './steps/model/persistence/persistence.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -17,8 +18,12 @@ const routes: Routes = [
         component: ContextComponent
       },
       {
-        path: 'model',
+        path: 'model/aggregate',
         component: AggregatesSettingsComponent
+      },
+      {
+        path: 'model/persistence',
+        component: PersistenceComponent
       },
       {
         path: 'deployment',

@@ -1,4 +1,6 @@
-  <button mat-button (click)="openNewAggregateModal()">New Aggregate</button>
+  <div class="fright" >
+  <button mat-raised-button color="primary" (click)="openNewAggregateModal()">New Aggregate</button>
+  </div>
   <mat-card class="aggregate-card" *ngFor="let aggregatesSetting of aggregatesSettings; let i = index;">
     <mat-card-header>
       <mat-card-title>{{aggregatesSetting.aggregateName}}</mat-card-title>
