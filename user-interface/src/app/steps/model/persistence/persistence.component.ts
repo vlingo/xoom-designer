@@ -1,3 +1,4 @@
+import { ModelService } from './../model.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { Step } from 'src/app/model/step';
@@ -19,7 +20,7 @@ export class PersistenceComponent extends StepComponent implements OnInit {
   queryModelDatabases = ['MYSQL'];
 
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
     super();
     this.createNewForm();
   }
@@ -39,7 +40,7 @@ export class PersistenceComponent extends StepComponent implements OnInit {
 }
 
 next(): void {
-    console.log(this.persistenceForm.value);
+    this.modelService.addPersistence(this.persistenceForm.value);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
       true,
