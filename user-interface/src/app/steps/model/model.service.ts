@@ -1,7 +1,6 @@
 import { AggregatesSetting, Persistence, Model } from './../../model/model-aggregate';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Model } from 'src/app/model/model-aggregate';
 
 @Injectable()
 export class ModelService {
