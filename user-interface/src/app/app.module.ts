@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule} from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { NgxJsonViewModule } from 'ng-json-view';
 import { HttpRequestHandler } from './interceptor/http-request-handler';
@@ -71,7 +72,8 @@ import { PersistenceComponent } from './steps/model/persistence/persistence.comp
     MatDividerModule,
     MatSelectModule,
     MatCardModule,
-    NgxJsonViewModule
+    NgxJsonViewModule,
+    MatButtonToggleModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
