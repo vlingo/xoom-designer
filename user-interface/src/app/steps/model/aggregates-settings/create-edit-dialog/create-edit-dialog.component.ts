@@ -83,7 +83,7 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   cancel(){
-    this.dialogRef.close(false);
+    this.dialogRef.close();
   }
 
   private createStateField(formBuilder: FormBuilder): FormGroup{

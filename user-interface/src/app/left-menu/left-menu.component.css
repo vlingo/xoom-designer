@@ -72,6 +72,13 @@ a.disabled {
     padding-right: 5px;
 }
 
+.model-persistence-icon:before {
+    font-weight: 900;
+    font-size: 15px;
+    content: "\f1c0";
+    padding-right: 5px;
+}
+
 .deployment-icon:before {
     font-weight: 900;
     font-size: 18px;
