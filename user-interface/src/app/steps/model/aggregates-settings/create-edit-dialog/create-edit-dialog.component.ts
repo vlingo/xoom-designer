@@ -24,7 +24,7 @@ export class CreateEditDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<CreateEditDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public aggregate: AggregatesSetting) {
-    this.creteNewForm();
+    this.createNewForm();
   }
 
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class CreateEditDialogComponent implements OnInit {
     return this.formApi.get('parameters') as FormArray;
   }
 
-  creteNewForm(){
+  createNewForm(){
       this.aggregateSettingsForm = this.formBuilder.group({
         aggregateName: ['', [Validators.required]],
         stateFields: this.formBuilder.array([this.createStateField(this.formBuilder)]),
