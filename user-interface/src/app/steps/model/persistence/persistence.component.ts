@@ -22,6 +22,9 @@ export class PersistenceComponent extends StepComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
     super();
+    modelService.getModel$.subscribe(model => {
+      console.log(model.persistence);
+    });
     this.createNewForm();
   }
 
