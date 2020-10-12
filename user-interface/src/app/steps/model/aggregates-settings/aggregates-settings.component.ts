@@ -41,6 +41,11 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
 
   constructor(private dialog: MatDialog, private modelService: ModelService) {
     super();
+    modelService.getModel$.subscribe(model => {
+      if (model.aggregatesSettings){
+        this.aggregatesSettings = model.aggregatesSettings;
+      }
+    });
     if (this.aggregatesSettings.length === 0) {
       this.openNewAggregateModal();
     }
