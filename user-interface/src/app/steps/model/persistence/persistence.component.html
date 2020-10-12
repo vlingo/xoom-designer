@@ -1,1 +1,51 @@
-<p>persistence works!</p>
+<app-step-title title="Model - Persistence"></app-step-title>
+<form [formGroup]="persistenceForm" class="persistence-form">
+  <mat-form-field appearance="fill">
+    <mat-label>Storage Type</mat-label>
+    <mat-select formControlName="storageType">
+      <mat-option *ngFor="let type of storageTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Projections</mat-label>
+    <mat-select formControlName="projections">
+      <mat-option *ngFor="let proj of projections" [value]="proj">
+        {{proj}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+    <mat-label>Use CQRS?</mat-label>
+    <mat-button-toggle-group formControlName="useCqrs">
+      <mat-button-toggle value=false>No</mat-button-toggle>
+      <mat-button-toggle value=true>Yes</mat-button-toggle>
+    </mat-button-toggle-group>
+  <mat-form-field appearance="fill">
+    <mat-label>Database</mat-label>
+    <input matInput formControlName="database">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Command Model Database</mat-label>
+    <mat-select formControlName="commandModelDatabase">
+      <mat-option *ngFor="let commandModelDatabase of commandModelDatabases" [value]="commandModelDatabase">
+        {{commandModelDatabase}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Query Model Database</mat-label>
+    <mat-select formControlName="queryModelDatabase">
+      <mat-option *ngFor="let queryModelDatabase of queryModelDatabases" [value]="queryModelDatabase">
+        {{queryModelDatabase}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div>
+    <mat-divider> </mat-divider>
+    <!-- <div class="actions">
+      <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Add</button>
+    </div> -->
+  </div>
+</form>
