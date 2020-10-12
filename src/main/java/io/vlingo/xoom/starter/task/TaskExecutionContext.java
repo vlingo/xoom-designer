@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.starter.task.Property.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class TaskExecutionContext {
 
@@ -136,17 +136,13 @@ public class TaskExecutionContext {
     }
 
     public DeploymentType deploymentType() {
-        return DeploymentType.valueOf(propertyOf(DEPLOYMENT));
+        return DeploymentType.valueOf(parameters.retrieveValue(DEPLOYMENT));
     }
 
     public String projectPath() {
-        final String artifactId = propertyOf(ARTIFACT_ID);
-        final String targetFolder = propertyOf(TARGET_FOLDER);
+        final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
+        final String targetFolder = parameters.retrieveValue(TARGET_FOLDER);
         return Paths.get(targetFolder, artifactId).toString();
-    }
-
-    public boolean hasCodeGenerationParameters() {
-        return parameters.isEmpty();
     }
 
 }

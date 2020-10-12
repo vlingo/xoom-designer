@@ -1,7 +1,7 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.Resource;
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import org.junit.jupiter.api.AfterEach;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
-import java.util.Properties;
 
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.starter.task.projectgeneration.Terminal.*;
 
 public class ArchetypeCommandResolverStepTest {
@@ -53,7 +53,7 @@ public class ArchetypeCommandResolverStepTest {
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
         Terminal.enable(WINDOWS);
         Resource.rootIn(WINDOWS_ROOT_FOLDER);
-        context.onProperties(loadKubernetesArchetypeProperties("E:\\projects"));
+        context.with(loadGenerationParameters("E:\\projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
@@ -65,7 +65,7 @@ public class ArchetypeCommandResolverStepTest {
     public void testCommandPreparationWithKubernetesArchetypeOnLinux() {
         Terminal.enable(LINUX);
         Resource.rootIn(DEFAULT_ROOT_FOLDER);
-        context.onProperties(loadKubernetesArchetypeProperties("/home/projects"));
+        context.with(loadGenerationParameters("/home/projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
@@ -77,7 +77,7 @@ public class ArchetypeCommandResolverStepTest {
     public void testCommandPreparationWithKubernetesArchetypeOnMac() {
         Terminal.enable(MAC_OS);
         Resource.rootIn(DEFAULT_ROOT_FOLDER);
-        context.onProperties(loadKubernetesArchetypeProperties("/home/projects"));
+        context.with(loadGenerationParameters("/home/projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
@@ -85,20 +85,13 @@ public class ArchetypeCommandResolverStepTest {
         Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND, commands[2]);
     }
 
-    private Properties loadKubernetesArchetypeProperties(final String targetFolder) {
-        final Properties properties = new Properties();
-        properties.put(Property.VERSION.literal(), "1.0");
-        properties.put(Property.GROUP_ID.literal(), "io.vlingo");
-        properties.put(Property.ARTIFACT_ID.literal(), "starter-example");
-        properties.put(Property.PACKAGE.literal(), "io.vlingo.starterexample");
-        properties.put(Property.XOOM_SERVER_VERSION.literal(), "1.2.9");
-        properties.put(Property.TARGET_FOLDER.literal(), targetFolder);
-        properties.put(Property.DEPLOYMENT.literal(), "k8s");
-        properties.put(Property.DOCKER_IMAGE.literal(), "starter-example-image");
-        properties.put(Property.KUBERNETES_IMAGE.literal(), "starter-example-image");
-        properties.put(Property.KUBERNETES_POD_NAME.literal(), "starter-example-pod");
-        properties.put(Property.MAIN_CLASS.literal(), "io.vlingo.starterexample.infrastructure.Bootstrap");
-        return properties;
+    private CodeGenerationParameters loadGenerationParameters(final String targetFolder) {
+        return CodeGenerationParameters.from(VERSION, "1.0")
+                .add(GROUP_ID, "io.vlingo").add(ARTIFACT_ID, "starter-example")
+                .add(PACKAGE, "io.vlingo.starterexample").add(XOOM_SERVER_VERSION, "1.2.9")
+                .add(TARGET_FOLDER, targetFolder).add(DOCKER_IMAGE, "starter-example-image")
+                .add(KUBERNETES_IMAGE, "starter-example-image").add(KUBERNETES_POD_NAME, "starter-example-pod")
+                .add(MAIN_CLASS, "io.vlingo.starterexample.infrastructure.Bootstrap");
     }
 
     @BeforeEach
