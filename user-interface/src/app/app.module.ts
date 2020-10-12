@@ -32,6 +32,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
 import { ViewDialogComponent } from './steps/model/aggregates-settings/view-dialog/view-dialog.component';
 import { CreateEditDialogComponent } from './steps/model/aggregates-settings/create-edit-dialog/create-edit-dialog.component';
+import { PersistenceComponent } from './steps/model/persistence/persistence.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { CreateEditDialogComponent } from './steps/model/aggregates-settings/cre
     LoaderComponent,
     AggregatesSettingsComponent,
     ViewDialogComponent,
-    CreateEditDialogComponent
+    CreateEditDialogComponent,
+    PersistenceComponent
   ],
   imports: [
     BrowserModule,
