@@ -113,7 +113,9 @@
     </div>
     <div>
       <mat-divider> </mat-divider>
-      <button mat-button type="button" (click)="cancel()" >Cancel</button>
-      <button mat-button type="submit">Add</button>
+      <div class="actions">
+      <button mat-raised-button color="warn" type="button" (click)="cancel()" >Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Add</button>
+      </div>
     </div>
   </form>
