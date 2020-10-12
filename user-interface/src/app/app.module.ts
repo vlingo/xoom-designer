@@ -31,6 +31,7 @@ import { HttpRequestHandler } from './interceptor/http-request-handler';
 import { LoaderComponent } from './loader/loader.component';
 import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
 import { ViewDialogComponent } from './steps/model/aggregates-settings/view-dialog/view-dialog.component';
+import { CreateEditDialogComponent } from './steps/model/aggregates-settings/create-edit-dialog/create-edit-dialog.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ViewDialogComponent } from './steps/model/aggregates-settings/view-dial
     SettingsComponent,
     LoaderComponent,
     AggregatesSettingsComponent,
-    ViewDialogComponent
+    ViewDialogComponent,
+    CreateEditDialogComponent
   ],
   imports: [
     BrowserModule,
