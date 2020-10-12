@@ -1,3 +1,4 @@
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { Step } from 'src/app/model/step';
 import { Component, OnInit } from '@angular/core';
@@ -11,14 +12,34 @@ import { StepCompletion } from 'src/app/model/step-completion';
 })
 export class PersistenceComponent extends StepComponent implements OnInit {
 
-  constructor() {
+  persistenceForm: FormGroup;
+  storageTypes = ['STATE_STORE'];
+  projections = ['EVENT_BASED'];
+  commandModelDatabases = ['POSTGRES'];
+  queryModelDatabases = ['MYSQL'];
+
+
+  constructor(private formBuilder: FormBuilder) {
     super();
+    this.createNewForm();
   }
 
   ngOnInit(): void {
   }
 
-  next(): void {
+  createNewForm(){
+    this.persistenceForm = this.formBuilder.group({
+      storageType: ['', [Validators.required]],
+      useCqrs: [false, [Validators.required]],
+      projections: ['', [Validators.required]],
+      database: ['', [Validators.required]],
+      commandModelDatabase: ['', [Validators.required]],
+      queryModelDatabase: ['', [Validators.required]],
+    });
+}
+
+next(): void {
+    console.log(this.persistenceForm.value);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
       true,

@@ -22,7 +22,10 @@
         <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)" type="button">Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('stateFields')" type="button">Add State Field</button>
+    <div>
+      <button mat-stroked-button color="primary" class="fright" (click)="addNewRow('stateFields')" type="button">Add
+        State Field</button>
+    </div>
     <mat-divider> </mat-divider>
     <span>Events</span>
     <div class="item" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
@@ -41,8 +44,11 @@
         <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('events')" type="button">Add Event</button>
-    <mat-divider> </mat-divider>
+    <div>
+      <button mat-stroked-button color="primary" class="fright" (click)="addNewRow('events')" type="button">Add
+        Event</button>
+        <mat-divider> </mat-divider>
+    </div>
     <span>Methods</span>
     <div class="item" formArrayName="methods" *ngFor="let method of formMethods.controls; let i = index;">
       <div [formGroupName]="i">
@@ -71,7 +77,10 @@
         <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
       </div>
     </div>
-    <button mat-button (click)="addNewRow('methods')" type="button">Add Method</button>
+    <div>
+      <button mat-stroked-button color="primary" class="fright" (click)="addNewRow('methods')" type="button">Add
+        Method</button>
+    </div>
     <mat-divider> </mat-divider>
     <span>API</span>
     <div class="item">
@@ -108,14 +117,16 @@
             <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
           </div>
         </div>
-        <button mat-button (click)="addApiRow()" type="button">Add Api Method</button>
+        <div>
+          <button mat-stroked-button color="primary" class="fright" type="button">Add Api Method</button>
+        </div>
       </div>
     </div>
     <div>
       <mat-divider> </mat-divider>
       <div class="actions">
-      <button mat-raised-button color="warn" type="button" (click)="cancel()" >Cancel</button>
-      <button mat-raised-button color="primary" type="submit">Add</button>
+        <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit">Add</button>
       </div>
     </div>
   </form>
