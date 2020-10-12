@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.starter.task.Agent;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Properties;
-
-import static io.vlingo.xoom.starter.task.Property.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class MainClassResolverStepTest {
 
@@ -21,27 +21,24 @@ public class MainClassResolverStepTest {
     public void testThatDefaultMainClassIsResolved() {
         final TaskExecutionContext context = buildContext(false);
         new MainClassResolverStep().process(context);
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", context.properties().get(MAIN_CLASS.literal()));
+        final String mainClass = context.codeGenerationParameters().retrieveValue(MAIN_CLASS);
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", mainClass);
     }
 
     @Test
     public void testThatAnnotatedMainClassIsResolved() {
         final TaskExecutionContext context = buildContext(true);
         new MainClassResolverStep().process(context);
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", context.properties().get(MAIN_CLASS.literal()));
+        final String mainClass = context.codeGenerationParameters().retrieveValue(MAIN_CLASS);
+        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", mainClass);
     }
 
     private TaskExecutionContext buildContext(final Boolean useAnnotations) {
-        final Properties properties = new Properties();
-        properties.put(PACKAGE.literal(), "io.vlingo.xoomapp");
-        properties.put(ANNOTATIONS.literal(), useAnnotations.toString());
+        final CodeGenerationParameters parameters =
+                CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
+                        .add(USE_ANNOTATIONS, useAnnotations);
 
-        final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
-
-        context.onProperties(properties);
-
-        return context;
+        return TaskExecutionContext.executedFrom(Agent.WEB).with(parameters);
     }
 
 }
