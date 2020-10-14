@@ -8,12 +8,10 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 import io.vlingo.xoom.starter.task.projectgeneration.archetype.Archetype;
+import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 
-import java.util.Properties;
-
-import static io.vlingo.xoom.starter.task.Property.TARGET_FOLDER;
+import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
 
 public class ArchetypeCommandResolverStep extends CommandResolverStep {
 
@@ -22,13 +20,12 @@ public class ArchetypeCommandResolverStep extends CommandResolverStep {
 
     @Override
     protected String formatCommands(final TaskExecutionContext context) {
-        final Archetype archetype = Archetype.KUBERNETES;
-        final Properties properties = context.properties();
-        final String targetFolder = context.propertyOf(TARGET_FOLDER);
-        final String archetypeFolderCommand = resolveDirectoryChangeCommand(archetype.folder());
+        final Archetype defaultArchetype = Archetype.findDefault();
+        final String targetFolder = context.codeGenerationParameters().retrieveValue(TARGET_FOLDER);
+        final String archetypeFolderCommand = resolveDirectoryChangeCommand(defaultArchetype.folder());
         final String targetFolderCommand = resolveDirectoryChangeCommand(targetFolder);
         return String.format(ARCHETYPE_COMMANDS_PATTERN, archetypeFolderCommand,
-                targetFolderCommand, archetype.fillMavenOptions(properties));
+                targetFolderCommand, defaultArchetype.formatOptions(context.codeGenerationParameters()));
     }
 
 }

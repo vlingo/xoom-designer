@@ -1,17 +1,19 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import io.vlingo.xoom.starter.task.Property;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
 
+import static io.vlingo.xoom.codegen.parameter.Label.DEPLOYMENT;
+import static io.vlingo.xoom.starter.task.Agent.TERMINAL;
+import static io.vlingo.xoom.starter.task.Agent.WEB;
 import static io.vlingo.xoom.starter.task.projectgeneration.steps.ContentAvailability.DOCKER;
 import static io.vlingo.xoom.starter.task.projectgeneration.steps.ContentAvailability.KUBERNETES;
-import static io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType.NONE;
 
 public class ContentAvailabilityTest {
 
@@ -22,31 +24,34 @@ public class ContentAvailabilityTest {
 
     @Test
     public void testContentAvailabilityVerification() {
-        final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+        final TaskExecutionContext noneDeployment =
+                TaskExecutionContext.executedFrom(TERMINAL)
+                        .with(CodeGenerationParameters.from(DEPLOYMENT, DeploymentType.NONE));
 
-        context.onProperties(loadProperties(NONE));
+        Assertions.assertFalse(DOCKER.shouldBeAvailable(noneDeployment));
+        Assertions.assertFalse(KUBERNETES.shouldBeAvailable(noneDeployment));
 
-        Assertions.assertFalse(DOCKER.shouldBeAvailable(context));
-        Assertions.assertFalse(KUBERNETES.shouldBeAvailable(context));
+        final TaskExecutionContext dockerDeploymentContext =
+                TaskExecutionContext.executedFrom(WEB)
+                        .with(CodeGenerationParameters.from(DEPLOYMENT, DeploymentType.DOCKER));
 
-        context.onProperties(loadProperties(DeploymentType.DOCKER));
+        Assertions.assertTrue(DOCKER.shouldBeAvailable(dockerDeploymentContext));
+        Assertions.assertFalse(KUBERNETES.shouldBeAvailable(dockerDeploymentContext));
 
-        Assertions.assertTrue(DOCKER.shouldBeAvailable(context));
-        Assertions.assertFalse(KUBERNETES.shouldBeAvailable(context));
+        final TaskExecutionContext k8sDeploymentContext =
+                TaskExecutionContext.executedFrom(WEB)
+                        .with(CodeGenerationParameters.from(DEPLOYMENT, DeploymentType.KUBERNETES));
 
-        context.onProperties(loadProperties(DeploymentType.KUBERNETES));
-
-        Assertions.assertTrue(DOCKER.shouldBeAvailable(context));
-        Assertions.assertTrue(KUBERNETES.shouldBeAvailable(context));
+        Assertions.assertTrue(DOCKER.shouldBeAvailable(k8sDeploymentContext));
+        Assertions.assertTrue(KUBERNETES.shouldBeAvailable(k8sDeploymentContext));
     }
 
     @Test
     public void testContentAvailabilityPathResolution() {
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
-
-        context.onProperties(loadProperties());
+                TaskExecutionContext.executedFrom(TERMINAL)
+                .with(CodeGenerationParameters.from(Label.ARTIFACT_ID, ARTIFACT_ID)
+                        .add(Label.TARGET_FOLDER, TARGET_FOLDER));
 
         Assertions.assertEquals(EXPECTED_DOCKERFILE_PATH, DOCKER.resolvePath(context));
         Assertions.assertEquals(EXPECTED_KUBERNETES_PATH, KUBERNETES.resolvePath(context));
@@ -58,19 +63,6 @@ public class ContentAvailabilityTest {
         Assertions.assertEquals(2, availabilities.size());
         Assertions.assertTrue(availabilities.contains(DOCKER));
         Assertions.assertTrue(availabilities.contains(KUBERNETES));
-    }
-
-    private Properties loadProperties() {
-        final Properties properties = new Properties();
-        properties.put(Property.ARTIFACT_ID.literal(), ARTIFACT_ID);
-        properties.put(Property.TARGET_FOLDER.literal(), TARGET_FOLDER);
-        return properties;
-    }
-
-    private Properties loadProperties(final DeploymentType deploymentType) {
-        final Properties properties = new Properties();
-        properties.put(Property.DEPLOYMENT.literal(), deploymentType.name());
-        return properties;
     }
 
 }
