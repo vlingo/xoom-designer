@@ -6,10 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.projectgeneration;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
-public class DefaultGenerationManager extends ProjectGenerationManager<TaskExecutionContext> {
+public class WebBasedProjectGenerationManager extends ProjectGenerationManager<TaskExecutionContext> {
 
     @Override
     public void run(final TaskExecutionContext context) {
