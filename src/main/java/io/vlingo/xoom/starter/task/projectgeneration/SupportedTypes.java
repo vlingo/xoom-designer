@@ -15,9 +15,9 @@ import static java.util.stream.Collectors.toList;
 public enum SupportedTypes {
 
     INTEGER("int"),
-    LONG("Long"),
-    FLOAT("Float"),
-    DOUBLE("Double"),
+    LONG("long"),
+    FLOAT("float"),
+    DOUBLE("double"),
     STRING("String"),
     BOOLEAN("Boolean");
 
