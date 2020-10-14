@@ -1,4 +1,4 @@
-import { AggregatesSetting, Method, AggregateEvent } from './../../../../model/model-aggregate';
+import { AggregatesSetting, Method, AggregateEvent, StateField, Api, Route } from './../../../../model/model-aggregate';
 import { FormArray, FormGroup, FormBuilder, AbstractControl, Validators } from '@angular/forms';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -24,7 +24,7 @@ export class CreateEditDialogComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<CreateEditDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public aggregate: AggregatesSetting) {
-    this.createNewForm();
+    this.createNewForm(aggregate || {} as AggregatesSetting);
   }
 
   ngOnInit(): void {
@@ -46,23 +46,38 @@ export class CreateEditDialogComponent implements OnInit {
     return this.aggregateSettingsForm.get('api');
   }
 
-  get formApiParameters(): FormArray {
-    return this.formApi.get('parameters') as FormArray;
+  get formApiRoutes(): FormArray {
+    return this.formApi.get('routes') as FormArray;
   }
 
-  createNewForm(){
-      this.aggregateSettingsForm = this.formBuilder.group({
-        aggregateName: ['', [Validators.required]],
-        stateFields: this.formBuilder.array([this.createStateField(this.formBuilder)]),
-        events: this.formBuilder.array([this.createEvents(this.formBuilder)]),
-        methods: this.formBuilder.array([this.createMethods(this.formBuilder)]),
-        api: this.createApi(this.formBuilder)
+  createNewForm(aggregate: AggregatesSetting){
+    const stateFields = this.formBuilder.array(
+      (aggregate.stateFields && aggregate.stateFields.length > 0) ? aggregate.stateFields.map(sf => {
+      return this.createStateField(this.formBuilder, sf);
+    }) : [this.createStateField(this.formBuilder, {} as StateField)]);
+
+    const events = this.formBuilder.array(
+      (aggregate.events && aggregate.events.length > 0) ? aggregate.events.map(ev => {
+      return this.createEvents(this.formBuilder, ev);
+    }) : [this.createEvents(this.formBuilder, {} as AggregateEvent)]);
+
+    const methods = this.formBuilder.array(
+    (aggregate.methods && aggregate.methods.length > 0) ? aggregate.methods.map(method => {
+      return this.createMethods(this.formBuilder, method);
+    }) : [this.createMethods(this.formBuilder, {} as Method)]);
+
+    this.aggregateSettingsForm = this.formBuilder.group({
+        aggregateName: [aggregate.aggregateName, [Validators.required]],
+        stateFields,
+        events,
+        methods,
+        api: this.createApi(this.formBuilder, aggregate.api || {} as Api)
       });
   }
 
   addNewRow(type: string){
     const formArray = this.aggregateSettingsForm.get(type) as FormArray;
-    formArray.push(this.creator[type](this.formBuilder));
+    formArray.push(this.creator[type](this.formBuilder, {}));
   }
 
   removeRow(type: string, index: number): void {
@@ -70,62 +85,87 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   addApiRow(){
-    const formArray = this.formApiParameters;
-    formArray.push(this.createApiParameters(this.formBuilder));
+    const formArray = this.formApiRoutes;
+    formArray.push(this.createApiRoutes(this.formBuilder, {} as Route));
   }
 
   removeApiRow(index: number){
-    this.formApiParameters.removeAt(index);
+    this.formApiRoutes.removeAt(index);
   }
 
   add(){
-    this.dialogRef.close(this.parseAggregateForm());
+    this.dialogRef.close({
+      data: this.parseAggregateForm(),
+      type: 'ADD'
+    });
+  }
+
+  edit(){
+    this.dialogRef.close({
+      data: this.parseAggregateForm(),
+      type: 'EDIT'
+    });
   }
 
   cancel(){
     this.dialogRef.close();
   }
 
-  private createStateField(formBuilder: FormBuilder): FormGroup{
+  private createStateField(formBuilder: FormBuilder, stateField: StateField): FormGroup{
     return formBuilder.group({
-      name: ['', [Validators.required]],
-      type: ['', [Validators.required]],
+      name: [stateField.name, [Validators.required]],
+      type: [stateField.type, [Validators.required]],
     });
   }
 
-  private createEvents(formBuilder: FormBuilder): FormGroup{
+  private createEvents(formBuilder: FormBuilder, event: AggregateEvent): FormGroup{
+    const fields = (event.fields && event.fields.length > 0) ? event.fields.map(field => {
+      return formBuilder.group(
+        [field, [Validators.required]]
+      );
+    }) : [formBuilder.group(
+      ['', [Validators.required]]
+    )];
     return formBuilder.group({
-      name: ['', [Validators.required]],
-      fields: [formBuilder.group(
-        ['', [Validators.required]]
-      )]
+      name: [event.name, [Validators.required]],
+      fields
     });
   }
 
-  private createMethods(formBuilder: FormBuilder): FormGroup{
+  private createMethods(formBuilder: FormBuilder, method: Method): FormGroup{
+    const parameters = (method.parameters && method.parameters.length > 0) ? method.parameters.map(parameter => {
+      return formBuilder.group(
+        [parameter, [Validators.required]]
+      );
+    }) : [formBuilder.group(
+      ['', [Validators.required]]
+    )];
     return formBuilder.group({
-      name: ['', [Validators.required]],
-      factory: ['', [Validators.required]],
-      parameters: [formBuilder.group(
-        ['', [Validators.required]]
-      )],
-      event: ['', [Validators.required]]
+      name: [method.name, [Validators.required]],
+      factory: [(method.factory) ? 'YES' : 'NO', [Validators.required]],
+      parameters,
+      event: [method.event, [Validators.required]]
     });
   }
 
-  private createApi(formBuilder: FormBuilder): FormGroup{
+  private createApi(formBuilder: FormBuilder, api: Api): FormGroup{
+    const routes = this.formBuilder.array(
+      (api.routes && api.routes.length > 0) ? api.routes.map(route => {
+      return this.createApiRoutes(formBuilder, route);
+    }) : [this.createApiRoutes(formBuilder, {} as Route)]);
+
     return formBuilder.group({
-      rootPath: ['', [Validators.required]],
-      parameters: this.formBuilder.array([this.createApiParameters(this.formBuilder)])
+      rootPath: [api.rootPath, [Validators.required]],
+      routes
     });
   }
 
-  private createApiParameters(formBuilder: FormBuilder): FormGroup{
+  private createApiRoutes(formBuilder: FormBuilder, route: Route): FormGroup{
     return formBuilder.group({
-      path: ['', [Validators.required]],
-      httpMethod: ['', [Validators.required]],
-      aggregateMethod: ['', [Validators.required]],
-      requireEntityLoad: ['', [Validators.required]],
+      path: [route.path, [Validators.required]],
+      httpMethod: [route.httpMethod, [Validators.required]],
+      aggregateMethod: [route.aggregateMethod, [Validators.required]],
+      requireEntityLoad: [(route.requireEntityLoad) ? 'YES' : 'NO', [Validators.required]],
     });
   }
 

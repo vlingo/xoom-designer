@@ -61,8 +61,8 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     });
   }
 
-  remove(index: number): void {
-    delete this.aggregatesSettings[index];
+  remove(aggregatesSetting: AggregatesSetting): void {
+    this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== aggregatesSetting.aggregateName);
   }
 
   next(): void {
@@ -90,14 +90,23 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   openNewAggregateModal() {
+    this.openAggregateModal({} as AggregatesSetting);
+  }
+
+  openAggregateModal(aggregate: AggregatesSetting) {
     const dialogRef = this.dialog.open(CreateEditDialogComponent, {
-      data: {},
+      data: aggregate,
       height: '700px',
       width: '900px',
     });
-    dialogRef.afterClosed().subscribe(aggregate => {
+    dialogRef.afterClosed().subscribe(editedAggregate => {
       if (aggregate) {
-        this.aggregatesSettings.push(aggregate);
+        if (editedAggregate.type === 'ADD'){
+          this.aggregatesSettings.push(editedAggregate);
+          return;
+        }
+        this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== editedAggregate.data.aggregateName);
+        this.aggregatesSettings.push(editedAggregate);
       }
     });
   }
