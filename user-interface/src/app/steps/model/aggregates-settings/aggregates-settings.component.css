@@ -1,0 +1,16 @@
+.aggregate-card {
+  max-width: 300px;
+}
+
+.methods {
+  padding-top: 10px;
+}
+
+.parameters {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.fright{
+  float: right
+}
