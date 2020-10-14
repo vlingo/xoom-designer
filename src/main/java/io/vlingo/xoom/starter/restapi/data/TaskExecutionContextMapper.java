@@ -9,37 +9,31 @@ package io.vlingo.xoom.starter.restapi.data;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
-import java.util.Properties;
-
 import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.starter.task.Agent.WEB;
 
 public class TaskExecutionContextMapper {
 
+    private final GenerationSettingsData data;
+    private final CodeGenerationParameters parameters;
+
     public static TaskExecutionContext from(final GenerationSettingsData data) {
-        return new TaskExecutionContextMapper().map(data);
+        return new TaskExecutionContextMapper(data).map();
     }
 
-    private TaskExecutionContextMapper() {}
-
-    private TaskExecutionContext map(final GenerationSettingsData data) {
-        return TaskExecutionContext.with(mapCodeGenerationParameters(data))
-                .onProperties(mapProperties(data));
+    private TaskExecutionContextMapper(final GenerationSettingsData data) {
+        this.data = data;
+        this.parameters = CodeGenerationParameters.empty();
+        mapAggregates(); mapPersistence(); mapStructuralOptions();
     }
 
-    private CodeGenerationParameters mapCodeGenerationParameters(final GenerationSettingsData data) {
-        final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(APPLICATION_NAME, data.context.artifactId);
-        mapAggregates(parameters, data);
-        mapPersistence(parameters, data);
-        mapGeneration(parameters, data);
-        return parameters;
+    private TaskExecutionContext map() {
+        return TaskExecutionContext.executedFrom(WEB).with(parameters);
     }
 
-    private void mapAggregates(final CodeGenerationParameters parameters,
-                               final GenerationSettingsData data) {
+    private void mapAggregates() {
         data.model.aggregateSettings.forEach(aggregate -> {
             final CodeGenerationParameter aggregateParameter =
                     CodeGenerationParameter.of(AGGREGATE, aggregate.aggregateName)
@@ -55,7 +49,7 @@ public class TaskExecutionContextMapper {
 
     private void mapStateFields(final AggregateData aggregateData,
                                 final CodeGenerationParameter aggregateParameter) {
-        aggregateData.statesFields.forEach(stateField -> {
+        aggregateData.stateFields.forEach(stateField -> {
             aggregateParameter.relate(
                     CodeGenerationParameter.of(STATE_FIELD, stateField.name)
                             .relate(FIELD_TYPE, stateField.type));
@@ -96,15 +90,14 @@ public class TaskExecutionContextMapper {
             final CodeGenerationParameter routeParameter =
                     CodeGenerationParameter.of(ROUTE_SIGNATURE, route.aggregateMethod)
                             .relate(ROUTE_METHOD, route.httpMethod)
-                            .relate(ROUTE_PATH, route.route)
-                            .relate(REQUIRE_ENTITY_LOAD, route.requireEntityLoad);
+                            .relate(ROUTE_PATH, route.path)
+                            .relate(REQUIRE_ENTITY_LOADING, route.requireEntityLoad);
 
             aggregateParameter.relate(routeParameter);
         });
     }
 
-    private void mapPersistence(final CodeGenerationParameters parameters,
-                                final GenerationSettingsData data) {
+    private void mapPersistence() {
         parameters.add(CQRS, data.model.persistence.useCQRS)
                 .add(DATABASE, data.model.persistence.database)
                 .add(PROJECTION_TYPE, data.model.persistence.projections)
@@ -113,24 +106,20 @@ public class TaskExecutionContextMapper {
                 .add(QUERY_MODEL_DATABASE, data.model.persistence.queryModelDatabase);
     }
 
-    private void mapGeneration(final CodeGenerationParameters parameters,
-                               final GenerationSettingsData data) {
-        parameters.add(TARGET_FOLDER, data.projectDirectory)
+    private void mapStructuralOptions() {
+        parameters.add(APPLICATION_NAME, data.context.artifactId)
                 .add(USE_ANNOTATIONS, data.useAnnotations)
-                .add(USE_AUTO_DISPATCH, data.useAutoDispatch);
-    }
-
-    private Properties mapProperties(final GenerationSettingsData data) {
-        final Properties properties = new Properties();
-        properties.put(Property.GROUP_ID.literal(), data.context.groupId);
-        properties.put(Property.ARTIFACT_ID.literal(), data.context.artifactId);
-        properties.put(Property.VERSION.literal(), data.context.artifactVersion);
-        properties.put(Property.PACKAGE.literal(), data.context.packageName);
-        properties.put(Property.XOOM_SERVER_VERSION.literal(), data.context.xoomVersion);
-        properties.put(Property.DOCKER_IMAGE.literal(), data.deployment.dockerImage);
-        properties.put(Property.KUBERNETES_IMAGE.literal(), data.deployment.kubernetesImage);
-        properties.put(Property.KUBERNETES_POD_NAME.literal(), data.deployment.kubernetesPod);
-        return properties;
+                .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
+                .add(GROUP_ID, data.context.groupId)
+                .add(ARTIFACT_ID, data.context.artifactId)
+                .add(VERSION, data.context.artifactVersion)
+                .add(PACKAGE, data.context.packageName)
+                .add(XOOM_SERVER_VERSION, data.context.xoomVersion)
+                .add(DEPLOYMENT, data.deployment.type)
+                .add(DOCKER_IMAGE, data.deployment.dockerImage)
+                .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
+                .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
+                .add(TARGET_FOLDER, data.projectDirectory);
     }
 
 }
