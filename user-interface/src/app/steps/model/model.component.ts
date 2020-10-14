@@ -25,8 +25,8 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   @ViewChild('domainEventTable') domainEventTable: TableComponent;
   @ViewChild('multipleSelection') multipleSelection: MultipleSelectionComponent;
 
-  constructor() { 
-    super(); 
+  constructor() {
+    super();
     this.setupRestResources();
   }
 
@@ -46,15 +46,15 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
       this.generationSettings.addAggregate(aggregate);
       this.multipleSelection.add(aggregate);
     });
-    
+
     this.aggregateTable.itemUpdate.subscribe(item => {
       this.multipleSelection.update(new Aggregate(item.id, item.name));
     });
-    
+
     this.aggregateTable.itemSelection.subscribe(aggregateId => {
       this.selectedAggregateId = aggregateId;
     });
-    
+
     this.aggregateTable.itemRemoval.subscribe(id => {
       this.multipleSelection.remove(id);
     });
@@ -67,17 +67,17 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   shouldDisableNewDomainEvents() {
     return this.selectedAggregateId == undefined;
   }
-  
+
   next() {
     this.multipleSelection.save();
     this.move(NavigationDirection.FORWARD);
-  }  
-  
+  }
+
   previous() {
     this.multipleSelection.save();
     this.move(NavigationDirection.REWIND);
   }
-  
+
   onStorageTypeSelection() {
     this.generationSettings.model.projections = 'NONE';
     if(this.generationSettings.model.storageType === 'JOURNAL') {
@@ -91,10 +91,10 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   onCQRSClick($event) {
     this.generationSettings.model.useCQRS = $event.target.checked;
   }
-  
+
   move(navigationDirection: NavigationDirection) {
     this.stepCompletion.emit(new StepCompletion(
-      Step.MODEL,
+      Step.AGGREGATE,
       true,
       navigationDirection
     ));
@@ -103,7 +103,7 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   hasNext(): Boolean {
     return true;
   }
-  
+
   hasPrevious(): Boolean {
     return true;
   }
