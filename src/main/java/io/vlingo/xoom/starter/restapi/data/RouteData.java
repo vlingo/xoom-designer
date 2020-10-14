@@ -9,16 +9,16 @@ package io.vlingo.xoom.starter.restapi.data;
 
 public class RouteData {
 
-    public final String route;
+    public final String path;
     public final String httpMethod;
     public final String aggregateMethod;
     public final Boolean requireEntityLoad;
 
-    public RouteData(final String route,
+    public RouteData(final String path,
                      final String httpMethod,
                      final String aggregateMethod,
                      final Boolean requireEntityLoad) {
-        this.route = route;
+        this.path = path;
         this.httpMethod = httpMethod;
         this.aggregateMethod = aggregateMethod;
         this.requireEntityLoad = requireEntityLoad;
