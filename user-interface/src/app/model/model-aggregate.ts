@@ -37,7 +37,7 @@
 
   export interface Persistence {
     storageType: string;
-    useCQRS: string;
+    useCQRS: boolean;
     projections: string;
     database: string;
     commandModelDatabase: string;
