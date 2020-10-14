@@ -90,8 +90,8 @@ public class TaskExecutionContextMapper {
             final CodeGenerationParameter routeParameter =
                     CodeGenerationParameter.of(ROUTE_SIGNATURE, route.aggregateMethod)
                             .relate(ROUTE_METHOD, route.httpMethod)
-                            .relate(ROUTE_PATH, route.route)
-                            .relate(REQUIRE_ENTITY_LOAD, route.requireEntityLoad);
+                            .relate(ROUTE_PATH, route.path)
+                            .relate(REQUIRE_ENTITY_LOADING, route.requireEntityLoad);
 
             aggregateParameter.relate(routeParameter);
         });
