@@ -1,3 +1,4 @@
+import { ModelService } from './../model/model.service';
 import { Component, OnInit } from '@angular/core';
 import { StepComponent } from '../step.component';
 import { StepCompletion } from 'src/app/model/step-completion';
@@ -11,17 +12,17 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./generation.component.css']
 })
 export class GenerationComponent extends StepComponent {
-  
-  generationForm: FormGroup; 
-  
-  constructor(private formBuilder: FormBuilder) {
+
+  generationForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
     super();
-    this.createForm("gaba-hey");
+    // this.createForm("gaba-hey");
   }
-  
+
   ngOnInit(): void {
   }
-  
+
   createForm() {
     this.generationForm = this.formBuilder.group({
       ProjectDirectory: ['', Validators.required]
@@ -29,6 +30,7 @@ export class GenerationComponent extends StepComponent {
   }
 
   generate() {
+    this.modelService.getModel$.subscribe(a => console.log(a));
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
       this.generationForm.valid,
@@ -62,7 +64,7 @@ export class GenerationComponent extends StepComponent {
   hasNext(): Boolean {
     return false;
   }
-  
+
   hasPrevious(): Boolean {
     return true;
   }
