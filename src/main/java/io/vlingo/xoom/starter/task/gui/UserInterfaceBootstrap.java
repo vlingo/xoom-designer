@@ -41,8 +41,7 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
 
     @Override
     public StaticFilesConfiguration staticFilesConfiguration() {
-        final List<String> subPaths = Arrays.asList("/xoom-starter");
-        return StaticFilesConfiguration.defineWith(100, "static", subPaths);
+        return StaticFilesConfiguration.defineWith(100, "static", Arrays.asList("/xoom-starter"));
     }
 
     @Override
