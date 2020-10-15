@@ -82,7 +82,7 @@ public class TaskExecutionContextMapperTest {
                 .anyMatch(routeSignature -> routeSignature.value.equals("defineWith") &&
                         routeSignature.relatedParameterValueOf(ROUTE_METHOD).equals("POST") &&
                         routeSignature.relatedParameterValueOf(ROUTE_PATH).equals("/persons/") &&
-                        routeSignature.relatedParameterValueOf(REQUIRE_ENTITY_LOAD).equals("false")));
+                        routeSignature.relatedParameterValueOf(REQUIRE_ENTITY_LOADING).equals("false")));
 
         Assertions.assertEquals("/persons/", personAggregateParameter.relatedParameterValueOf(URI_ROOT));
     }
