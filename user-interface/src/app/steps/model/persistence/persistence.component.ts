@@ -1,10 +1,31 @@
-import { ModelService } from './../model.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NavigationDirection } from 'src/app/model/navigation-direction';
-import { Step } from 'src/app/model/step';
-import { Component, OnInit } from '@angular/core';
-import { StepComponent } from '../../step.component';
-import { StepCompletion } from 'src/app/model/step-completion';
+import {
+  Persistence,
+  Model
+} from './../../../model/model-aggregate';
+import {
+  ModelService
+} from './../model.service';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators
+} from '@angular/forms';
+import {
+  NavigationDirection
+} from 'src/app/model/navigation-direction';
+import {
+  Step
+} from 'src/app/model/step';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  StepComponent
+} from '../../step.component';
+import {
+  StepCompletion
+} from 'src/app/model/step-completion';
 
 @Component({
   selector: 'app-persistence',
@@ -14,36 +35,69 @@ import { StepCompletion } from 'src/app/model/step-completion';
 export class PersistenceComponent extends StepComponent implements OnInit {
 
   persistenceForm: FormGroup;
-  storageTypes = ['STATE_STORE'];
-  projections = ['EVENT_BASED'];
-  commandModelDatabases = ['POSTGRES'];
-  queryModelDatabases = ['MYSQL'];
+  projections;
+  storageTypes = [{
+      name: 'State Store',
+      value: 'STATE_STORE'
+    },
+    {
+      name: 'Journal',
+      value: 'JOURNAL'
+    }
+  ];
+  databases = [{
+      name: 'In Memory',
+      value: 'IN_MEMORY'
+    },
+    {
+      name: 'Postgres',
+      value: 'POSTGRES'
+    },
+    {
+      name: 'HSQLDB',
+      value: 'HSQLDB'
+    },
+    {
+      name: 'MySQL',
+      value: 'MYSQL'
+    },
+    {
+      name: 'YugaByte',
+      value: 'YUGA_BYTE'
+    }
+  ];
 
 
   constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
     super();
     modelService.getModel$.subscribe(model => {
-      console.log(model.persistence);
+      this.createNewForm(model);
     });
-    this.createNewForm();
   }
 
   ngOnInit(): void {
+    this.persistenceForm.get('storageType').valueChanges.subscribe(value => {
+      this.defineProjections(value);
+    });
   }
 
-  createNewForm(){
+  createNewForm(model: Model) {
+    const persistence = (model && model.persistence) ? model.persistence : {} as Persistence;
     this.persistenceForm = this.formBuilder.group({
-      storageType: ['', [Validators.required]],
-      useCqrs: [false, [Validators.required]],
-      projections: ['', [Validators.required]],
-      database: ['', [Validators.required]],
-      commandModelDatabase: ['', [Validators.required]],
-      queryModelDatabase: ['', [Validators.required]],
+      storageType: [persistence.storageType, [Validators.required]],
+      useCQRS: [(persistence.useCQRS) ? 'YES' : 'NO', [Validators.required]],
+      projections: [persistence.projections, [Validators.required]],
+      database: [persistence.database, []],
+      commandModelDatabase: [persistence.commandModelDatabase, []],
+      queryModelDatabase: [persistence.queryModelDatabase, []],
     });
-}
+    this.defineProjections(persistence.storageType);
+  }
 
-next(): void {
-    this.modelService.addPersistence(this.persistenceForm.value);
+  next(): void {
+    const persistence = this.persistenceForm.value;
+    persistence.useCQRS = (persistence.useCQRS === 'YES') ? true : false;
+    this.modelService.addPersistence(persistence);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
       true,
@@ -64,6 +118,31 @@ next(): void {
   }
   hasPrevious(): Boolean {
     return true;
+  }
+
+  private defineProjections(storageType: string){
+    this.projections = (storageType === 'JOURNAL') ? [{
+      name: 'Not Applicable',
+      value: 'NONE'
+    },
+    {
+      name: 'Event Based',
+      value: 'EVENT_BASED'
+    }
+  ] :
+  [{
+      name: 'Not Applicable',
+      value: 'NONE'
+    },
+    {
+      name: 'Event Based',
+      value: 'EVENT_BASED'
+    },
+    {
+      name: 'Operation Based',
+      value: 'OPERATION_BASED'
+    }
+  ];
   }
 
 }
