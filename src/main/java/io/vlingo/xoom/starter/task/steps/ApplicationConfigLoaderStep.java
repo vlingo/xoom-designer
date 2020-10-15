@@ -8,11 +8,9 @@
 package io.vlingo.xoom.starter.task.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
-import java.util.Map;
 
 public class ApplicationConfigLoaderStep implements TaskExecutionStep {
 
