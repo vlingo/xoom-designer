@@ -174,17 +174,12 @@
           </plugin>
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.2-beta-5</version>
             <executions>
               <execution>
                 <phase>integration-test</phase>
                 <goals>
                   <goal>single</goal>
                 </goals>
-                <configuration>
-                  <descriptor>dist-assembly.xml</descriptor>
-                  <finalName>starter</finalName>
-                </configuration>
               </execution>
             </executions>
             <configuration>
