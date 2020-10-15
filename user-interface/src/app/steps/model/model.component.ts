@@ -31,7 +31,6 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.loadDatabaseTypes();
   }
 
   ngAfterViewInit(): void {
@@ -85,7 +84,6 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
     } else {
       this.generationSettings.model.useCQRS = false;
     }
-    this.loadDatabaseTypes();
   }
 
   onCQRSClick($event) {
@@ -110,37 +108,6 @@ export class ModelComponent extends StepComponent implements AfterViewInit {
 
   canFinish(): Boolean {
     return false;
-  }
-
-  storageTypes() {
-    return [
-      {name: "State Store", value: "STATE_STORE"},
-      {name: "Journal", value: "JOURNAL"}
-    ];
-  }
-
-  loadDatabaseTypes() {
-    this.databaseTypes = [
-      {name: "In Memory", value: "IN_MEMORY"},
-      {name: "Postgres", value: "POSTGRES"},
-      {name: "HSQLDB", value: "HSQLDB"},
-      {name: "MySQL", value: "MYSQL"},
-      {name: "YugaByte", value: "YUGA_BYTE"}
-    ];
-  }
-
-  projectionOptions() {
-    if(this.generationSettings.model.storageType === 'JOURNAL') {
-      return [
-        {name: "Not Applicable", value: "NONE"},
-        {name: "Event Based", value: "EVENT_BASED"}
-      ];
-    }
-    return [
-      {name: "Not Applicable", value: "NONE"},
-      {name: "Event Based", value: "EVENT_BASED"},
-      {name: "Operation Based", value: "OPERATION_BASED"}
-    ];
   }
 
   useCQRS() {
