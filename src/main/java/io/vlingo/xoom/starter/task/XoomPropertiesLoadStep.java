@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.starter.task.option.OptionName;

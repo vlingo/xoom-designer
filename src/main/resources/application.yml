@@ -1,5 +1,1 @@
-micronaut:
-  application:
-  name: xoom-starter
-
-ui: http://localhost:19090/xoom-starter
+ui: http://localhost:19090/xoom-starter/index.html
