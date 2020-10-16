@@ -94,17 +94,9 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   add(){
-    this.dialogRef.close({
-      data: this.parseAggregateForm(),
-      type: 'ADD'
-    });
-  }
-
-  edit(){
-    this.dialogRef.close({
-      data: this.parseAggregateForm(),
-      type: 'EDIT'
-    });
+    this.dialogRef.close(
+      this.parseAggregateForm()
+    );
   }
 
   cancel(){
