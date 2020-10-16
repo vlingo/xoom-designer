@@ -96,16 +96,12 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   openAggregateModal(aggregate: AggregatesSetting) {
     const dialogRef = this.dialog.open(CreateEditDialogComponent, {
       data: aggregate,
-      height: '700px',
-      width: '900px',
+      height: '83%',
+      width: '65%',
     });
     dialogRef.afterClosed().subscribe(editedAggregate => {
-      if (aggregate) {
-        if (editedAggregate.type === 'ADD'){
-          this.aggregatesSettings.push(editedAggregate);
-          return;
-        }
-        this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== editedAggregate.data.aggregateName);
+      if (editedAggregate && editedAggregate.aggregateName) {
+        this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== editedAggregate.aggregateName);
         this.aggregatesSettings.push(editedAggregate);
       }
     });
