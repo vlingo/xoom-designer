@@ -1,5 +1,11 @@
 .aggregate-card {
   max-width: 300px;
+  margin-left: 2%;
+  margin-top: 3%;
+}
+
+.cards{
+  display: flex;
 }
 
 .methods {
