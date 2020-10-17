@@ -77,7 +77,7 @@ export class CreateEditDialogComponent implements OnInit {
             }
           });
         });
-      })
+      });
     });
   }
 
@@ -162,43 +162,17 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   private createEvents(formBuilder: FormBuilder, event: AggregateEvent): FormGroup {
-    const fields = (event.fields && event.fields.length > 0) ? event.fields.map(field => {
-      return formBuilder.group(
-        [
-          [field],
-          [Validators.required]
-        ]
-      );
-    }) : [formBuilder.group(
-      [
-        [],
-        [Validators.required]
-      ]
-    )];
     return formBuilder.group({
       name: [event.name, [Validators.required]],
-      fields
+      fields: [(event.fields && event.fields.length > 0) ? event.fields : [], [Validators.required]]
     });
   }
 
   private createMethods(formBuilder: FormBuilder, method: Method): FormGroup {
-    const parameters = (method.parameters && method.parameters.length > 0) ? method.parameters.map(parameter => {
-      return formBuilder.group(
-        [
-          [parameter],
-          [Validators.required]
-        ]
-      );
-    }) : [formBuilder.group(
-      [
-        [],
-        [Validators.required]
-      ]
-    )];
     return formBuilder.group({
       name: [method.name, [Validators.required]],
       factory: [(method.factory) ? 'YES' : 'NO', [Validators.required]],
-      parameters,
+      parameters: [(method.parameters && method.parameters.length > 0) ? method.parameters : [], [Validators.required]],
       event: [method.event, [Validators.required]]
     });
   }
