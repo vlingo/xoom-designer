@@ -7,6 +7,7 @@ target/
 *.log
 build/
 .metadata/
+.factorypath
 
 # Intellij
 .idea/
@@ -21,3 +22,6 @@ out/
 
 # bin
 vlingo-xoom-starter-dist.jar
+
+# vscode
+.vscode/
