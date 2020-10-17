@@ -42,7 +42,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   constructor(private dialog: MatDialog, private modelService: ModelService) {
     super();
     modelService.getModel$.subscribe(model => {
-      if (model.aggregatesSettings){
+      if (model && model.aggregatesSettings){
         this.aggregatesSettings = model.aggregatesSettings;
       }
     });
@@ -97,7 +97,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     const dialogRef = this.dialog.open(CreateEditDialogComponent, {
       data: aggregate,
       height: '83%',
-      width: '65%',
+      width: '70%',
     });
     dialogRef.afterClosed().subscribe(editedAggregate => {
       if (editedAggregate && editedAggregate.aggregateName) {
