@@ -36,12 +36,12 @@
       <span>Events</span>
       <div class="ptop1" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
         <div [formGroupName]="i" class="item">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" >
             <mat-label>Name</mat-label>
             <input matInput formControlName="name">
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect>
+            <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect [disabled] = "formStateFields.invalid">
               <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
                 {{stateField.get('name').value}}
               </mat-option>
@@ -68,14 +68,14 @@
             <mat-button-toggle value="YES">Yes</mat-button-toggle>
           </mat-button-toggle-group>
           <mat-form-field appearance="fill">
-            <mat-select multiple formControlName="parameters" placeholder="Parameters" #singleSelect>
+            <mat-select multiple formControlName="parameters" placeholder="Parameters" #singleSelect [disabled] = "formStateFields.invalid">
               <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
                 {{stateField.get('name').value}}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-select formControlName="event" placeholder="Event" #singleSelect>
+            <mat-select formControlName="event" placeholder="Event" #singleSelect [disabled] = "formEvents.invalid">
               <mat-option *ngFor="let ev of formEvents.controls" [value]="ev.get('name').value">
                 {{ev.get('name').value}}
               </mat-option>
@@ -110,7 +110,7 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="fill">
-                <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect>
+                <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect [disabled] = "formMethods.invalid">
                   <mat-option *ngFor="let method of formMethods.controls" [value]="method.get('name').value">
                     {{method.get('name').value}}
                   </mat-option>
