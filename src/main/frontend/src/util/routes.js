@@ -32,9 +32,9 @@ export default [
 		href: 'deployment'
 	},
 	{
-		text: 'Generate',
+		text: 'Generation',
 		icon: mdiFolderDownloadOutline,
 		openIcon: mdiFolderDownload,
-		href: 'generate'
+		href: 'generation'
 	},
 ];
