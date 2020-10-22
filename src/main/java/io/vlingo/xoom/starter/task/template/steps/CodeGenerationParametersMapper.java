@@ -31,7 +31,7 @@ public class CodeGenerationParametersMapper {
     private static final Map<Property, Label> PROPERTY_TRANSLATION =
             new HashMap<Property, Label>(){{
                 put(Property.AGGREGATES, Label.AGGREGATES);
-                put(Property.ANNOTATIONS, Label.ANNOTATIONS);
+                put(Property.ANNOTATIONS, Label.USE_ANNOTATIONS);
                 put(Property.ARTIFACT_ID, Label.APPLICATION_NAME);
                 put(Property.COMMAND_MODEL_DATABASE, Label.COMMAND_MODEL_DATABASE);
                 put(Property.CQRS, Label.CQRS);
