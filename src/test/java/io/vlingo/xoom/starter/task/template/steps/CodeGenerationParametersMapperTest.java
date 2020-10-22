@@ -31,7 +31,7 @@ public class CodeGenerationParametersMapperTest {
                 CodeGenerationParametersMapper.of(taskExecutionContext);
 
         Assertions.assertEquals("FirstAggregate;SecondAggregate", parameters.get(AGGREGATES));
-        Assertions.assertEquals("true", parameters.get(ANNOTATIONS));
+        Assertions.assertEquals("true", parameters.get(USE_ANNOTATIONS));
         Assertions.assertEquals("xoom-app-name", parameters.get(APPLICATION_NAME));
         Assertions.assertEquals("POSTGRES", parameters.get(COMMAND_MODEL_DATABASE));
         Assertions.assertEquals("false", parameters.get(CQRS));
