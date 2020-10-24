@@ -1,10 +1,32 @@
 .aggregate-card {
-  max-width: 300px;
-  margin-left: 2%;
-  margin-top: 3%;
+  margin-top: 4%;
+  background-color: #fff9c4;
 }
 
-.cards{
+.aggregate {
+  margin-top: 2%;
+  margin-left: 4%;
+  max-width: 300px;
+  /* border-right: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card {
+  margin-top: 4%;
+  background-color: #fd7e14;
+}
+
+.api-card {
+  margin-top: 2%;
+  background-color: #2196f3;
+}
+
+.aggregate .GET {
+  background-color: #40c057;
+}
+
+.cards {
   display: flex;
 }
 
@@ -17,6 +39,11 @@
   padding-bottom: 10px;
 }
 
-.fright{
-  float: right
+.model-aggregate{
+  height: 80%;
 }
+
+.aggregate div:last-child {
+  border: none;
+}
+
