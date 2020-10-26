@@ -1,4 +1,4 @@
-import { ModelService } from './../model.service';
+import { SettingsStepService } from '../../../service/settings-step.service';
 import {
   NavigationDirection
 } from 'src/app/model/navigation-direction';
@@ -39,11 +39,11 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
 
   aggregatesSettings: AggregatesSetting[] = [];
 
-  constructor(private dialog: MatDialog, private modelService: ModelService) {
+  constructor(private dialog: MatDialog, private settingsStepService: SettingsStepService) {
     super();
-    modelService.getModel$.subscribe(model => {
-      if (model && model.aggregatesSettings){
-        this.aggregatesSettings = model.aggregatesSettings;
+    settingsStepService.getSettings$.subscribe(settings => {
+      if (settings.model && settings.model.aggregatesSettings){
+        this.aggregatesSettings = settings.model.aggregatesSettings;
       }
     });
     if (this.aggregatesSettings.length === 0) {
@@ -66,7 +66,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   next(): void {
-    this.modelService.addAggregate(this.aggregatesSettings);
+    this.settingsStepService.addAggregate(this.aggregatesSettings);
     this.stepCompletion.emit(new StepCompletion(
       Step.AGGREGATE,
       true,
