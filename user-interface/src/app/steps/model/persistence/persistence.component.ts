@@ -3,8 +3,8 @@ import {
   Model
 } from './../../../model/model-aggregate';
 import {
-  ModelService
-} from './../model.service';
+  SettingsStepService
+} from '../../../service/settings-step.service';
 import {
   FormGroup,
   FormBuilder,
@@ -68,10 +68,10 @@ export class PersistenceComponent extends StepComponent implements OnInit {
   ];
 
 
-  constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
+  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
-    modelService.getModel$.subscribe(model => {
-      this.createNewForm(model);
+    settingsStepService.getSettings$.subscribe(settings => {
+      this.createNewForm(settings.model);
     });
   }
 
@@ -97,7 +97,7 @@ export class PersistenceComponent extends StepComponent implements OnInit {
   next(): void {
     const persistence = this.persistenceForm.value;
     persistence.useCQRS = (persistence.useCQRS === 'YES') ? true : false;
-    this.modelService.addPersistence(persistence);
+    this.settingsStepService.addPersistence(persistence);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
       true,
