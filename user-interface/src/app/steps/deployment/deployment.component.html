@@ -26,7 +26,6 @@
             <input id="none"
                     type="radio"
                     class="form-check-input"
-                    name="DeploymentType"
                     formControlName="deploymentType"
                     value="NONE">
             <label class="form-check-label" for="none">None</label>
@@ -35,7 +34,6 @@
             <input id="docker"
                     type="radio"
                     class="form-check-input"
-                    name="DeploymentType"
                     formControlName="deploymentType"
                     value="DOCKER">
             <label class="form-check-label" for="docker">Docker</label>
@@ -44,14 +42,13 @@
             <input id="kubernetes"
                     type="radio"
                     class="form-check-input"
-                    name="DeploymentType"
                     formControlName="deploymentType"
                     value="KUBERNETES">
             <label class="form-check-label" for="kubernetes">Kubernetes</label>
         </div>
     </div>
 
-    <div *ngIf="isDeploymentTypeSelected()" class="form-group col-md-2 mb-3">
+    <div *ngIf="isDeploymentTypeSelected" class="form-group col-md-2 mb-3">
         <label for="dockerImage">Docker Image*:</label>
         <input id="dockerImage"
                 type="text"
@@ -60,7 +57,7 @@
                 placeholder="Local Docker Image">
     </div>
 
-    <div *ngIf="isKubernetesSelected()" class="form-group col-md-2 mb-3">
+    <div *ngIf="isKubernetesSelected" class="form-group col-md-2 mb-3">
         <label for="kubernetesImage">Kubernetes Image*:</label>
         <input id="kubernetesImage"
                 type="text"
@@ -70,7 +67,7 @@
 
     </div>
 
-    <div *ngIf="isKubernetesSelected()" class="form-group col-md-2 mb-3">
+    <div *ngIf="isKubernetesSelected" class="form-group col-md-2 mb-3">
         <label for="kubernetesPOD">Kubernetes POD*:</label>
         <input id="kubernetesPOD"
                 type="text"
