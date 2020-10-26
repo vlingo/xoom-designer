@@ -15,6 +15,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 export class DeploymentComponent extends StepComponent {
 
   deploymentForm: FormGroup;
+  isDeploymentTypeSelected = false;
+  isKubernetesSelected = false;
 
   constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
@@ -22,8 +24,6 @@ export class DeploymentComponent extends StepComponent {
   }
 
   ngOnInit(): void {
-    this.deploymentForm.get('deploymentType')
-    .setValue(this.generationSettings.deployment.type);
   }
 
   createForm() {
@@ -41,28 +41,33 @@ export class DeploymentComponent extends StepComponent {
 
     this.deploymentForm.get('deploymentType').valueChanges
       .subscribe(deploymentType => {
-        if(deploymentType === 'NONE') {
+        if (deploymentType === 'NONE') {
           dockerImage.setValidators(null);
           kubernetesImage.setValidators(null);
           kubernetesPOD.setValidators(null);
+          this.isDeploymentTypeSelected = false;
+          this.isKubernetesSelected = false;
         }
 
-        if(deploymentType === 'DOCKER') {
+        if (deploymentType === 'DOCKER') {
           dockerImage.setValidators([Validators.required]);
           kubernetesImage.setValidators(null);
           kubernetesPOD.setValidators(null);
+          this.isDeploymentTypeSelected = true;
+          this.isKubernetesSelected = false;
         }
 
-        if(deploymentType === 'KUBERNETES') {
+        if (deploymentType === 'KUBERNETES') {
           dockerImage.setValidators([Validators.required]);
           kubernetesImage.setValidators([Validators.required]);
           kubernetesPOD.setValidators([Validators.required]);
+          this.isDeploymentTypeSelected = false;
+          this.isKubernetesSelected = true;
         }
 
         dockerImage.updateValueAndValidity();
         kubernetesPOD.updateValueAndValidity();
         kubernetesImage.updateValueAndValidity();
-        this.generationSettings.deployment.type = deploymentType;
       });
   }
 
@@ -74,14 +79,6 @@ export class DeploymentComponent extends StepComponent {
 
   previous() {
     this.move(NavigationDirection.REWIND);
-  }
-
-  isDeploymentTypeSelected() : Boolean {
-    return this.generationSettings.deployment.type !== 'NONE';
-  }
-
-  isKubernetesSelected() : Boolean {
-    return this.generationSettings.deployment.type === 'KUBERNETES';
   }
 
   private move(navigationDirection: NavigationDirection) {
