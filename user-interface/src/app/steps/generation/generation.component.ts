@@ -17,7 +17,7 @@ export class GenerationComponent extends StepComponent {
 
   constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
-    // this.createForm("gaba-hey");
+    this.createForm();
   }
 
   ngOnInit(): void {
@@ -25,11 +25,15 @@ export class GenerationComponent extends StepComponent {
 
   createForm() {
     this.generationForm = this.formBuilder.group({
-      ProjectDirectory: ['', Validators.required]
+      projectDirectory: ['', Validators.required],
+      useAnnotations: [false, Validators.required],
+      useAutoDispatch: [false, Validators.required]
     });
   }
 
   generate() {
+    const value = this.generationForm.value;
+    this.settingsStepService.addGenerationData(value.projectDirectory, value.useAnnotations, value.useAutoDispatch);
     this.settingsStepService.getSettings$.subscribe(a => console.log(a));
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
@@ -50,7 +54,7 @@ export class GenerationComponent extends StepComponent {
   }
 
   next(): void {
-    throw new Error("Operation Not Supported.");
+    throw new Error('Operation Not Supported.');
   }
 
   previous(): void {

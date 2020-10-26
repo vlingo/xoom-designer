@@ -3,9 +3,9 @@
 <form [formGroup]="generationForm">
     <div class="form-group col-md-4">
         <label for="projectDirectory">Where do you want to generate the project?</label>
-        <input type="text" class="form-control starter-field" 
-        id="projectDirectory" [(ngModel)]="generationSettings.projectDirectory"
-        formControlName="ProjectDirectory"
+        <input type="text" class="form-control starter-field"
+        id="projectDirectory"
+        formControlName="projectDirectory"
         placeholder="Absolute path for the new xoom project">
     </div>
 
@@ -14,10 +14,10 @@
             <label for="useAnnotations">Use VLINGO/XOOM annotations:</label>
         </div>
         <div class="col-md-1 pt-1">
-            <input type="checkbox" 
-            class="form-check-input" 
-            (click)="onAnnotationsClick($event)"
-            [checked]="generationSettings.useAnnotations">
+            <input type="checkbox"
+            class="form-check-input"
+            formControlName="useAnnotations"
+            (click)="onAnnotationsClick($event)">
         </div>
     </div>
 
@@ -26,10 +26,10 @@
             <label for="useAutoDispatch">Use VLINGO/XOOM auto dispatch:</label>
         </div>
         <div class="col-md-1 pt-1">
-            <input type="checkbox" 
-            class="form-check-input" 
+            <input type="checkbox"
+            class="form-check-input"
             (click)="onAutoDispatchClick($event)"
-            [checked]="generationSettings.useAutoDispatch"
+            formControlName="useAutoDispatch"
             [disabled]="!generationSettings.useAnnotations">
         </div>
     </div>

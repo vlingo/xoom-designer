@@ -36,6 +36,14 @@ export class SettingsStepService {
     this.settings$.next(settings);
   }
 
+  addGenerationData(projectDirectory: string, useAnnotations: boolean, useAutoDispatch: boolean): void {
+    const settings = this.getSettings();
+    settings.projectDirectory = projectDirectory;
+    settings.useAnnotations = useAnnotations;
+    settings.useAutoDispatch = useAutoDispatch;
+    this.settings$.next(settings);
+  }
+
   private getSettings(): GenerationSettings{
     const settings = this.settings$.getValue() || {} as GenerationSettings;
     settings.model = settings.model || {} as Model;
