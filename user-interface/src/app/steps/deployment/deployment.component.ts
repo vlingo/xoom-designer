@@ -1,3 +1,5 @@
+import { SettingsStepService } from './../../service/settings-step.service';
+import { DeploymentSettings } from './../../model/deployment-settings';
 import { Component, OnInit } from '@angular/core';
 import { StepComponent } from '../step.component';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
@@ -12,32 +14,32 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 })
 export class DeploymentComponent extends StepComponent {
 
-  deploymentForm: FormGroup; 
+  deploymentForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { 
+  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
     this.createForm();
   }
 
   ngOnInit(): void {
-    this.deploymentForm.get("DeploymentType")
+    this.deploymentForm.get('deploymentType')
     .setValue(this.generationSettings.deployment.type);
   }
-  
+
   createForm() {
     this.deploymentForm = this.formBuilder.group({
-      ClusterNodes: ['', Validators.required],
-      DeploymentType: ['NONE', Validators.required],
-      DockerImage: [''],
-      KubernetesImage: [''],
-      KubernetesPOD: ['']
+      clusterNodes: ['', Validators.required],
+      deploymentType: ['NONE', Validators.required],
+      dockerImage: [''],
+      kubernetesImage: [''],
+      kubernetesPOD: ['']
     });
 
-    const dockerImage = this.deploymentForm.get('DockerImage');
-    const kubernetesImage = this.deploymentForm.get('KubernetesImage');
-    const kubernetesPOD = this.deploymentForm.get('KubernetesPOD');
+    const dockerImage = this.deploymentForm.get('dockerImage');
+    const kubernetesImage = this.deploymentForm.get('kubernetesImage');
+    const kubernetesPOD = this.deploymentForm.get('kubernetesPOD');
 
-    this.deploymentForm.get("DeploymentType").valueChanges
+    this.deploymentForm.get('deploymentType').valueChanges
       .subscribe(deploymentType => {
         if(deploymentType === 'NONE') {
           dockerImage.setValidators(null);
@@ -65,19 +67,21 @@ export class DeploymentComponent extends StepComponent {
   }
 
   next() {
+    const deployment = this.deploymentForm.value as DeploymentSettings;
+    this.settingsStepService.addDeployment(deployment);
     this.move(NavigationDirection.FORWARD);
-  }  
+  }
 
   previous() {
     this.move(NavigationDirection.REWIND);
   }
 
   isDeploymentTypeSelected() : Boolean {
-    return this.generationSettings.deployment.type != "NONE";
+    return this.generationSettings.deployment.type !== 'NONE';
   }
 
   isKubernetesSelected() : Boolean {
-    return this.generationSettings.deployment.type === "KUBERNETES";
+    return this.generationSettings.deployment.type === 'KUBERNETES';
   }
 
   private move(navigationDirection: NavigationDirection) {
@@ -91,7 +95,7 @@ export class DeploymentComponent extends StepComponent {
   hasNext(): Boolean {
     return true;
   }
-  
+
   hasPrevious(): Boolean {
     return true;
   }
@@ -99,5 +103,5 @@ export class DeploymentComponent extends StepComponent {
   canFinish(): Boolean {
     return false;
   }
-  
+
 }
