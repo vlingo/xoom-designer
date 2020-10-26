@@ -1,3 +1,5 @@
+import { SettingsStepService } from './../../service/settings-step.service';
+import { ContextSettings } from './../../model/context-settings';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StepCompletion } from '../../model/step-completion';
@@ -14,7 +16,7 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   contextForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
     this.createForm();
   }
@@ -24,14 +26,16 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   createForm() {
     this.contextForm = this.formBuilder.group({
-      GroupId: ['', Validators.required],
-      ArtifactId: ['', Validators.required],
-      ArtifactVersion: ['', Validators.required],
-      PackageName: ['', Validators.required]
+      groupId: ['', Validators.required],
+      artifactId: ['', Validators.required],
+      artifactVersion: ['', Validators.required],
+      packageName: ['', Validators.required]
     });
   }
 
   next() {
+    const context = this.contextForm.value as ContextSettings;
+    this.settingsStepService.addContext(context);
     this.stepCompletion.emit(new StepCompletion(
         Step.CONTEXT, this.contextForm.valid, NavigationDirection.FORWARD
     ));
