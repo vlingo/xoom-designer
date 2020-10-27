@@ -1,4 +1,4 @@
-import { AggregatesSetting } from './../../../../model/model-aggregate';
+import { AggregateSetting } from './../../../../model/model-aggregate';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -11,7 +11,7 @@ export class ViewDialogComponent implements OnInit {
 
 
   constructor(private dialogRef: MatDialogRef<ViewDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public aggregate: AggregatesSetting) {
+              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSetting) {
   }
 
   ngOnInit(): void {
