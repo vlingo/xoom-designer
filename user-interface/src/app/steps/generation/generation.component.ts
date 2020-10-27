@@ -1,3 +1,4 @@
+import { GenerationSettingsService } from './../../service/generation-settings.service';
 import { SettingsStepService } from '../../service/settings-step.service';
 import { Component, OnInit } from '@angular/core';
 import { StepComponent } from '../step.component';
@@ -15,7 +16,8 @@ export class GenerationComponent extends StepComponent {
 
   generationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
+  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService,
+              private generationSettingsService: GenerationSettingsService) {
     super();
     this.createForm();
   }
@@ -34,12 +36,22 @@ export class GenerationComponent extends StepComponent {
   generate() {
     const value = this.generationForm.value;
     this.settingsStepService.addGenerationData(value.projectDirectory, value.useAnnotations, value.useAutoDispatch);
-    this.settingsStepService.getSettings$.subscribe(a => console.log(a));
+    this.settingsStepService.getSettings$.subscribe(settings => {
+      this.generationSettingsService.generate(settings).subscribe(response => {
+        this.downloadFile(response);
+      });
+    });
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
       this.generationForm.valid,
       NavigationDirection.FINISH
     ));
+  }
+
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: 'zip' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
   }
 
   onAnnotationsClick($event) {

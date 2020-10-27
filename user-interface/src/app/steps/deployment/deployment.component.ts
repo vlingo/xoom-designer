@@ -28,7 +28,7 @@ export class DeploymentComponent extends StepComponent {
 
   createForm() {
     this.deploymentForm = this.formBuilder.group({
-      clusterNodes: ['', Validators.required],
+      clusterNodes: [ 3, Validators.required],
       deploymentType: ['NONE', Validators.required],
       dockerImage: [''],
       kubernetesImage: [''],
