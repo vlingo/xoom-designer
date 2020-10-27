@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.template.model.ModelGenerationStep;
 import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
+import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
@@ -31,6 +32,7 @@ public class Configuration {
     public static final String USER_INTERFACE_CONFIG_KEY = "ui";
     public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
     public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
+    private static final String XOOM_VERSION_PLACEHOLDER = "1.3.4-SNAPSHOT";
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
             Maps.immutableEnumMap(
@@ -79,6 +81,15 @@ public class Configuration {
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
+    }
+
+    public static String resolveDefaultXoomVersion() {
+        final String version = Configuration.class.getPackage().getImplementationVersion();
+        if(version == null) {
+            System.out.println("Unable to find default VLINGO/XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
+            return XOOM_VERSION_PLACEHOLDER;
+        }
+        return version;
     }
 
 }

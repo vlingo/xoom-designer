@@ -23,35 +23,35 @@ export class SettingsComponent implements OnInit {
   generationSettings: GenerationSettings;
   stepStatus = new Map<Step, Boolean>();
 
-  constructor(private router: Router, 
-              private routingHistoryService: RoutingHistoryService, 
+  constructor(private router: Router,
+              private routingHistoryService: RoutingHistoryService,
               private service: GenerationSettingsService,
               private loaderService: LoaderService,
               private toastrService: ToastrService) {
-    
+
     if(routingHistoryService.isFirstAccess()) {
       this.router.navigate(['/settings/context']);
     }
-    
+
     this.loaderService.loaderState
     .subscribe((state: LoaderState) => {
       this.ongoingRequest = state.show;
     });
-    
-    this.generationSettings = new GenerationSettings();
+
+    this.generationSettings = {} as GenerationSettings;
   }
 
   ngOnInit(): void {
   }
 
   handleStepCompletion(stepCompletion: StepCompletion) {
-   
+
     this.stepStatus.set(stepCompletion.step, stepCompletion.valid);
-   
+
     if(stepCompletion.requiresNavigation()) {
       let path = StepPath.get(stepCompletion.nextStep());
       this.router.navigate([path]);
-    } 
+    }
 
     if(stepCompletion.isGenerationRequested()) {
       if(this.validate()) {
@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
 
   private validate() {
     let invalidSteps = new Array<String>();
-    
+
     this.stepStatus.forEach((value: Boolean, key: Step) => {
       if(!value) {
         invalidSteps.push(StepName.get(key));
@@ -72,7 +72,7 @@ export class SettingsComponent implements OnInit {
     if(invalidSteps.length != 0) {
       this.toastrService.warning("Please inform the required settings in the following step(s): " + invalidSteps.join(", "));
       return false;
-    } 
+    }
 
     return true;
   }
@@ -85,7 +85,7 @@ export class SettingsComponent implements OnInit {
 
   onComponentActivated(componentReference: StepComponent) {
     this.activeStep = componentReference;
-    this.activeStep.generationSettings = this.generationSettings; 
+    this.activeStep.generationSettings = this.generationSettings;
     this.activeStep.stepCompletion.subscribe((stepCompletion: StepCompletion) => {
       this.handleStepCompletion(stepCompletion);
     })
@@ -117,7 +117,7 @@ export class SettingsComponent implements OnInit {
 
   enableGenerateButton() {
     return !this.ongoingRequest && this.activeStep.isLastStep();
-  } 
+  }
 
   isLastStep() {
     return this.activeStep.isLastStep();
