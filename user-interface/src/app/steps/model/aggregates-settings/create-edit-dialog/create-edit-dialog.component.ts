@@ -1,5 +1,5 @@
 import {
-  AggregatesSetting,
+  AggregateSetting,
   Method,
   AggregateEvent,
   StateField,
@@ -43,8 +43,8 @@ export class CreateEditDialogComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef < CreateEditDialogComponent > ,
-              @Inject(MAT_DIALOG_DATA) public aggregate: AggregatesSetting) {
-    this.createNewForm(aggregate || {} as AggregatesSetting);
+              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSetting) {
+    this.createNewForm(aggregate || {} as AggregateSetting);
   }
 
   ngOnInit(): void {
@@ -101,7 +101,7 @@ export class CreateEditDialogComponent implements OnInit {
     return this.formApi.get('routes') as FormArray;
   }
 
-  createNewForm(aggregate: AggregatesSetting) {
+  createNewForm(aggregate: AggregateSetting) {
     const stateFields = this.formBuilder.array(
       (aggregate.stateFields && aggregate.stateFields.length > 0) ? aggregate.stateFields.map(sf => {
         return this.createStateField(this.formBuilder, sf);
@@ -198,8 +198,8 @@ export class CreateEditDialogComponent implements OnInit {
     });
   }
 
-  private parseAggregateForm(): AggregatesSetting {
-    const formValue = this.aggregateSettingsForm.value as AggregatesSetting;
+  private parseAggregateForm(): AggregateSetting {
+    const formValue = this.aggregateSettingsForm.value as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
       return method as Method;
@@ -216,7 +216,7 @@ export class CreateEditDialogComponent implements OnInit {
       methods,
       events,
       api
-    } as AggregatesSetting;
+    } as AggregateSetting;
   }
 
 }

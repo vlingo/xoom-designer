@@ -4,7 +4,7 @@
     <button mat-raised-button color="primary" (click)="openNewAggregateModal()">New Aggregate</button>
   </div>
   <div class="cards">
-    <div class="aggregate" *ngFor="let aggregatesSetting of aggregatesSettings; let i = index;">
+    <div class="aggregate" *ngFor="let aggregatesSetting of aggregateSettings; let i = index;">
 
       <mat-card class="api-card {{route.httpMethod}}" *ngFor="let route of aggregatesSetting.api.routes">
         <mat-card-header>
