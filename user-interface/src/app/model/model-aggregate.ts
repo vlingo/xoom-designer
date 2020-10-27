@@ -27,7 +27,7 @@
     routes: Route[];
   }
 
-  export interface AggregatesSetting {
+  export interface AggregateSetting {
     aggregateName: string;
     stateFields: StateField[];
     events: AggregateEvent[];
@@ -45,7 +45,7 @@
   }
 
   export interface Model {
-    aggregatesSettings: AggregatesSetting[];
+    aggregateSettings: AggregateSetting[];
     persistence: Persistence;
   }
 

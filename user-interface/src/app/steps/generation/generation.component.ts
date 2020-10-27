@@ -1,4 +1,5 @@
-import { ModelService } from './../model/model.service';
+import { GenerationSettingsService } from './../../service/generation-settings.service';
+import { SettingsStepService } from '../../service/settings-step.service';
 import { Component, OnInit } from '@angular/core';
 import { StepComponent } from '../step.component';
 import { StepCompletion } from 'src/app/model/step-completion';
@@ -15,9 +16,10 @@ export class GenerationComponent extends StepComponent {
 
   generationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private modelService: ModelService) {
+  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService,
+              private generationSettingsService: GenerationSettingsService) {
     super();
-    // this.createForm("gaba-hey");
+    this.createForm();
   }
 
   ngOnInit(): void {
@@ -25,17 +27,31 @@ export class GenerationComponent extends StepComponent {
 
   createForm() {
     this.generationForm = this.formBuilder.group({
-      ProjectDirectory: ['', Validators.required]
+      projectDirectory: ['', Validators.required],
+      useAnnotations: [false, Validators.required],
+      useAutoDispatch: [false, Validators.required]
     });
   }
 
   generate() {
-    this.modelService.getModel$.subscribe(a => console.log(a));
+    const value = this.generationForm.value;
+    this.settingsStepService.addGenerationData(value.projectDirectory, value.useAnnotations, value.useAutoDispatch);
+    this.settingsStepService.getSettings$.subscribe(settings => {
+      this.generationSettingsService.generate(settings).subscribe(response => {
+        this.downloadFile(response);
+      });
+    });
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
       this.generationForm.valid,
       NavigationDirection.FINISH
     ));
+  }
+
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: 'zip' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
   }
 
   onAnnotationsClick($event) {
@@ -50,7 +66,7 @@ export class GenerationComponent extends StepComponent {
   }
 
   next(): void {
-    throw new Error("Operation Not Supported.");
+    throw new Error('Operation Not Supported.');
   }
 
   previous(): void {

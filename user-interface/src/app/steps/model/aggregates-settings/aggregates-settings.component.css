@@ -1,5 +1,38 @@
 .aggregate-card {
+  margin-top: 4%;
+  background-color: #fff9c4;
+}
+
+.aggregate {
+  margin-top: 2%;
+  margin-left: 4%;
   max-width: 300px;
+  /* border-right: 1px solid #b3b3b3;
+  border-left: 1px solid #b3b3b3;
+  padding-left: 15px;
+  padding-right: 15px; */
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card {
+  margin-top: 4%;
+  background-color: #fd7e14;
+  height: 45px;
+}
+
+.api-card {
+  margin-top: 2%;
+  background-color: #2196f3;
+  height: 45px;
+}
+
+.aggregate .GET {
+  background-color: #40c057;
+}
+
+.cards {
+  display: flex;
 }
 
 .methods {
@@ -11,6 +44,11 @@
   padding-bottom: 10px;
 }
 
-.fright{
-  float: right
+.model-aggregate{
+  height: 80%;
 }
+
+.aggregate div:last-child {
+  border: none;
+}
+
