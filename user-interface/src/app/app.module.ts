@@ -1,3 +1,4 @@
+import { GenerationSettingsService } from './service/generation-settings.service';
 import { SettingsStepService } from './service/settings-step.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -75,7 +76,8 @@ import { PersistenceComponent } from './steps/model/persistence/persistence.comp
     useClass: HttpRequestHandler,
     multi: true,
   },
-    SettingsStepService],
+    SettingsStepService,
+    GenerationSettingsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
