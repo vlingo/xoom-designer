@@ -6,9 +6,9 @@
 	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
 	import { goto } from '@sapper/app';
 	
-	export let title;
-	export let previous;
-	export let next;
+	export let title = "";
+	export let previous = "";
+	export let next = "";
 	
 	const goToPrevious = () => previous && goto(previous);
 	const goToNext = () => next && goto(next);
