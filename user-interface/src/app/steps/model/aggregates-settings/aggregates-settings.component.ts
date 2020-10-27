@@ -12,7 +12,7 @@ import {
   ViewDialogComponent
 } from './view-dialog/view-dialog.component';
 import {
-  AggregatesSetting,
+  AggregateSetting,
   Method,
   StateField
 } from './../../../model/model-aggregate';
@@ -37,23 +37,23 @@ import {
 })
 export class AggregatesSettingsComponent extends StepComponent implements OnInit {
 
-  aggregatesSettings: AggregatesSetting[] = [];
+  aggregateSettings: AggregateSetting[] = [];
 
   constructor(private dialog: MatDialog, private settingsStepService: SettingsStepService) {
     super();
     settingsStepService.getSettings$.subscribe(settings => {
-      if (settings.model && settings.model.aggregatesSettings){
-        this.aggregatesSettings = settings.model.aggregatesSettings;
+      if (settings.model && settings.model.aggregateSettings){
+        this.aggregateSettings = settings.model.aggregateSettings;
       }
     });
-    if (this.aggregatesSettings.length === 0) {
+    if (this.aggregateSettings.length === 0) {
       this.openNewAggregateModal();
     }
   }
 
   ngOnInit(): void {}
 
-  view(aggregatesSetting: AggregatesSetting) {
+  view(aggregatesSetting: AggregateSetting) {
     this.dialog.open(ViewDialogComponent, {
       data: aggregatesSetting,
       height: '500px',
@@ -61,12 +61,12 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     });
   }
 
-  remove(aggregatesSetting: AggregatesSetting): void {
-    this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== aggregatesSetting.aggregateName);
+  remove(aggregateSetting: AggregateSetting): void {
+    this.aggregateSettings = this.aggregateSettings.filter(ag => ag.aggregateName !== aggregateSetting.aggregateName);
   }
 
   next(): void {
-    this.settingsStepService.addAggregate(this.aggregatesSettings);
+    this.settingsStepService.addAggregate(this.aggregateSettings);
     this.stepCompletion.emit(new StepCompletion(
       Step.AGGREGATE,
       true,
@@ -90,10 +90,10 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   openNewAggregateModal() {
-    this.openAggregateModal({} as AggregatesSetting);
+    this.openAggregateModal({} as AggregateSetting);
   }
 
-  openAggregateModal(aggregate: AggregatesSetting) {
+  openAggregateModal(aggregate: AggregateSetting) {
     const dialogRef = this.dialog.open(CreateEditDialogComponent, {
       data: aggregate,
       height: '83%',
@@ -101,8 +101,8 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     });
     dialogRef.afterClosed().subscribe(editedAggregate => {
       if (editedAggregate && editedAggregate.aggregateName) {
-        this.aggregatesSettings = this.aggregatesSettings.filter(ag => ag.aggregateName !== editedAggregate.aggregateName);
-        this.aggregatesSettings.push(editedAggregate);
+        this.aggregateSettings = this.aggregateSettings.filter(ag => ag.aggregateName !== editedAggregate.aggregateName);
+        this.aggregateSettings.push(editedAggregate);
       }
     });
   }

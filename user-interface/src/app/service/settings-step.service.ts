@@ -1,7 +1,7 @@
 import { DeploymentSettings } from './../model/deployment-settings';
 import { ContextSettings } from '../model/context-settings';
 import { GenerationSettings } from '../model/generation-settings';
-import { AggregatesSetting, Persistence, Model } from '../model/model-aggregate';
+import { AggregateSetting, Persistence, Model } from '../model/model-aggregate';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -12,9 +12,9 @@ export class SettingsStepService {
 
   constructor() { }
 
-  addAggregate(aggregates: AggregatesSetting[]): void {
+  addAggregate(aggregates: AggregateSetting[]): void {
     const settings = this.getSettings();
-    settings.model.aggregatesSettings = aggregates;
+    settings.model.aggregateSettings = aggregates;
     this.settings$.next(settings);
   }
 

@@ -246,15 +246,15 @@
     </dependency>
   </dependencies>
   <properties>
-    <maven.compiler.target>${jdk.version}</maven.compiler.target>
-    <exec.mainClass>io.vlingo.xoom.starter.Initializer</exec.mainClass>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-    <maven.compiler.source>${jdk.version}</maven.compiler.source>
+    <micronaut.version>1.2.10</micronaut.version>
     <jar.path>${basedir}\target\vlingo-xoom-starter-${project.version}.jar</jar.path>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jdk.version>1.8</jdk.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <exec.mainClass>io.vlingo.xoom.starter.Initializer</exec.mainClass>
+    <jdk.version>1.8</jdk.version>
+    <maven.compiler.source>${jdk.version}</maven.compiler.source>
   </properties>
 </project>
-
