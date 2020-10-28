@@ -29,7 +29,7 @@ export class DeploymentComponent extends StepComponent {
   createForm() {
     this.deploymentForm = this.formBuilder.group({
       clusterNodes: [ 3, Validators.required],
-      deploymentType: ['NONE', Validators.required],
+      type: ['NONE', Validators.required],
       dockerImage: [''],
       kubernetesImage: [''],
       kubernetesPOD: ['']
@@ -39,9 +39,9 @@ export class DeploymentComponent extends StepComponent {
     const kubernetesImage = this.deploymentForm.get('kubernetesImage');
     const kubernetesPOD = this.deploymentForm.get('kubernetesPOD');
 
-    this.deploymentForm.get('deploymentType').valueChanges
-      .subscribe(deploymentType => {
-        if (deploymentType === 'NONE') {
+    this.deploymentForm.get('type').valueChanges
+      .subscribe(type => {
+        if (type === 'NONE') {
           dockerImage.setValidators(null);
           kubernetesImage.setValidators(null);
           kubernetesPOD.setValidators(null);
@@ -49,7 +49,7 @@ export class DeploymentComponent extends StepComponent {
           this.isKubernetesSelected = false;
         }
 
-        if (deploymentType === 'DOCKER') {
+        if (type === 'DOCKER') {
           dockerImage.setValidators([Validators.required]);
           kubernetesImage.setValidators(null);
           kubernetesPOD.setValidators(null);
@@ -57,7 +57,7 @@ export class DeploymentComponent extends StepComponent {
           this.isKubernetesSelected = false;
         }
 
-        if (deploymentType === 'KUBERNETES') {
+        if (type === 'KUBERNETES') {
           dockerImage.setValidators([Validators.required]);
           kubernetesImage.setValidators([Validators.required]);
           kubernetesPOD.setValidators([Validators.required]);
