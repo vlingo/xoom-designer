@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { GenerationSettingsService } from './../../service/generation-settings.service';
 import { SettingsStepService } from '../../service/settings-step.service';
 import { Component, OnInit } from '@angular/core';
@@ -17,7 +18,7 @@ export class GenerationComponent extends StepComponent {
   generationForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService,
-              private generationSettingsService: GenerationSettingsService) {
+              private generationSettingsService: GenerationSettingsService, private toastrService: ToastrService) {
     super();
     this.createForm();
   }
@@ -40,7 +41,7 @@ export class GenerationComponent extends StepComponent {
       settings.useAnnotations = value.useAnnotations;
       settings.useAutoDispatch = value.useAutoDispatch;
       this.generationSettingsService.generate(settings).subscribe(response => {
-        this.downloadFile(response);
+        this.toastrService.success('Code generated. Please check folder ' + value.projectDirectory);
       });
     });
     this.stepCompletion.emit(new StepCompletion(
@@ -48,12 +49,6 @@ export class GenerationComponent extends StepComponent {
       this.generationForm.valid,
       NavigationDirection.FINISH
     ));
-  }
-
-  downloadFile(data: any) {
-    const blob = new Blob([data], { type: 'zip' });
-    const url = window.URL.createObjectURL(blob);
-    window.open(url);
   }
 
   onAnnotationsClick($event) {
