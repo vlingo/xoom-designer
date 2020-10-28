@@ -35,8 +35,10 @@ export class GenerationComponent extends StepComponent {
 
   generate() {
     const value = this.generationForm.value;
-    this.settingsStepService.addGenerationData(value.projectDirectory, value.useAnnotations, value.useAutoDispatch);
     this.settingsStepService.getSettings$.subscribe(settings => {
+      settings.projectDirectory = value.projectDirectory;
+      settings.useAnnotations = value.useAnnotations;
+      settings.useAutoDispatch = value.useAutoDispatch;
       this.generationSettingsService.generate(settings).subscribe(response => {
         this.downloadFile(response);
       });
