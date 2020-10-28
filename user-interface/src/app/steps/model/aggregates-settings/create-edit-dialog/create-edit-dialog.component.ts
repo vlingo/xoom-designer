@@ -202,6 +202,7 @@ export class CreateEditDialogComponent implements OnInit {
     const formValue = this.aggregateSettingsForm.value as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
+      method.factory = (method.factory === 'YES') ? true : false;
       return method as Method;
     });
     const events = (this.aggregateSettingsForm.value.events).map(event => {
@@ -209,7 +210,10 @@ export class CreateEditDialogComponent implements OnInit {
       return event as AggregateEvent;
     });
     const api = this.aggregateSettingsForm.value.api;
-    api.parameters = Array.isArray(api.parameters) ? api.parameters : [];
+    api.routes = Array.isArray(api.routes) ? api.routes : [];
+    api.routes.forEach(route => {
+      route.requireEntityLoad = (route.requireEntityLoad === 'YES') ? true : false;
+    });
     return {
       aggregateName: formValue.aggregateName,
       stateFields: formValue.stateFields,

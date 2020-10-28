@@ -19,7 +19,7 @@
     path: string;
     httpMethod: string;
     aggregateMethod: string;
-    requireEntityLoad: string;
+    requireEntityLoad: boolean;
   }
 
   export interface Api {

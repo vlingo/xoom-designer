@@ -29,7 +29,8 @@ export class ContextComponent extends StepComponent implements OnInit {
       groupId: ['', Validators.required],
       artifactId: ['', Validators.required],
       artifactVersion: ['', Validators.required],
-      packageName: ['', Validators.required]
+      packageName: ['', Validators.required],
+      xoomVersion: ['1.3.4-SNAPSHOT']
     });
   }
 
