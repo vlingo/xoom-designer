@@ -52,12 +52,6 @@ export class SettingsComponent implements OnInit {
       let path = StepPath.get(stepCompletion.nextStep());
       this.router.navigate([path]);
     }
-
-    if(stepCompletion.isGenerationRequested()) {
-      if(this.validate()) {
-        this.submit();
-      }
-    }
   }
 
   private validate() {
@@ -76,13 +70,6 @@ export class SettingsComponent implements OnInit {
 
     return true;
   }
-
-  private submit() {
-    this.service.generate(this.generationSettings).subscribe(data => {
-      this.toastrService.success("Project has been successfully generated.");
-    });
-  }
-
   onComponentActivated(componentReference: StepComponent) {
     this.activeStep = componentReference;
     this.activeStep.generationSettings = this.generationSettings;
