@@ -42,6 +42,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "outputPath": "../src/main/resources/static/xoom-starter",
+              "baseHref": "/xoom-starter/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
