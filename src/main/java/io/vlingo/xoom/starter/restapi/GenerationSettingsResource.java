@@ -36,11 +36,7 @@ public class GenerationSettingsResource extends ResourceHandler {
         return Completes.withSuccess(TaskExecutionContextMapper.from(settings))
                 .andThen(context -> Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context))
                 .andThenTo(taskStatus -> Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(taskStatus))))
-                .otherwise(response -> Response.of(NotFound)).recoverFrom(e -> {
-                    e.printStackTrace();
-                    stage.world().defaultLogger().error(e.getMessage());
-                    return Response.of(InternalServerError, e.getMessage());
-                });
+                .otherwise(response -> Response.of(NotFound)).recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
     }
 
     public Completes<Response> supportedTypes() {
