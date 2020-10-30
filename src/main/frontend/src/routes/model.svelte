@@ -11,7 +11,7 @@
       {name: "State Store", value: "STATE_STORE"},
       {name: "Journal", value: "JOURNAL"}
 	];
-	const storageFormat = (val) => storageTypes.find(t => t.value === val[0]).name
+	const storageFormat = (val) => storageTypes.find(t => t.value === val).name;
 	const databaseTypes = [
       {name: "In Memory", value: "IN_MEMORY"},
       {name: "Postgres", value: "POSTGRES"},
@@ -23,17 +23,20 @@
 
 	let aggregates = []; //new Array<Aggregate>()
     let restResources = []; //new Array<Aggregate>()
-    let storageType = ["STATE_STORE"];
+    let storageType = "STATE_STORE";
     let useCQRS = false;
-    let projections  = "NONE";
+    let projections = "NONE";
     let database = "IN_MEMORY";
     let commandModelDatabase = "IN_MEMORY";
 	let queryModelDatabase = "IN_MEMORY";
-
-	$: $modelSettings = { aggregates, restResources, storageType, useCQRS, projections, database, commandModelDatabase, queryModelDatabase }
+	
+	const changeType = () => {
+		storageType = "JOURNAL"
+	}
+	$: $modelSettings = { aggregates, restResources, storageType: storageType, useCQRS, projections, database, commandModelDatabase, queryModelDatabase }
 	$: console.log($modelSettings);
 </script>
-
+<Button on:click={changeType}>JOURNAL</Button>
 <!-- add newbie tooltips -->
 <CardForm title="Model" previous="context" next="deployment">
 	<div class="flex">
