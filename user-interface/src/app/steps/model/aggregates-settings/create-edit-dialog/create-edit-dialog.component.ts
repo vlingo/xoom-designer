@@ -108,7 +108,7 @@ export class CreateEditDialogComponent implements OnInit {
         return this.createStateField(this.formBuilder, sf);
       });
     } else {
-      formState = [this.createStateField(this.formBuilder, {name : 'id', type: 'int'})];
+      formState = [this.createStateField(this.formBuilder, {name : 'id', type: 'String'})];
     }
     formState[0].disable();
     const stateFields = this.formBuilder.array(formState);
