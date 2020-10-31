@@ -8,7 +8,7 @@
 
       <mat-card class="api-card {{route.httpMethod}}" *ngFor="let route of aggregatesSetting.api.routes">
         <mat-card-header>
-          <mat-card-title>{{route.httpMethod + ' -  /' + aggregatesSetting.api.rootPath + '/' +  route.path}}
+          <mat-card-title>{{getApiEntirePath(aggregatesSetting.api, route)}}
           </mat-card-title>
         </mat-card-header>
       </mat-card>
