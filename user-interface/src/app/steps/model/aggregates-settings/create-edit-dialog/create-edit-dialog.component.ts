@@ -102,11 +102,16 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   createNewForm(aggregate: AggregateSetting) {
-    const stateFields = this.formBuilder.array(
-      (aggregate.stateFields && aggregate.stateFields.length > 0) ? aggregate.stateFields.map(sf => {
+    let formState;
+    if (aggregate.stateFields && aggregate.stateFields.length > 0) {
+      formState = aggregate.stateFields.map(sf => {
         return this.createStateField(this.formBuilder, sf);
-      }) : [this.createStateField(this.formBuilder, {} as StateField)]);
-
+      });
+    } else {
+      formState = [this.createStateField(this.formBuilder, {name : 'id', type: 'int'})];
+    }
+    formState[0].disable();
+    const stateFields = this.formBuilder.array(formState);
     const events = this.formBuilder.array(
       (aggregate.events && aggregate.events.length > 0) ? aggregate.events.map(ev => {
         return this.createEvents(this.formBuilder, ev);
@@ -190,8 +195,9 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   private createApiRoutes(formBuilder: FormBuilder, route: Route): FormGroup {
+    route.path = (route.requireEntityLoad) ? route.path.replace('/{id}/', '') : route.path;
     return formBuilder.group({
-      path: [route.path, [Validators.required]],
+      path: [route.path, []],
       httpMethod: [route.httpMethod, [Validators.required]],
       aggregateMethod: [route.aggregateMethod, [Validators.required]],
       requireEntityLoad: [(route.requireEntityLoad) ? 'YES' : 'NO', [Validators.required]],
@@ -199,7 +205,7 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   private parseAggregateForm(): AggregateSetting {
-    const formValue = this.aggregateSettingsForm.value as AggregateSetting;
+    const formValue = this.aggregateSettingsForm.getRawValue() as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
       method.factory = (method.factory === 'YES') ? true : false;
@@ -212,7 +218,12 @@ export class CreateEditDialogComponent implements OnInit {
     const api = this.aggregateSettingsForm.value.api;
     api.routes = Array.isArray(api.routes) ? api.routes : [];
     api.routes.forEach(route => {
-      route.requireEntityLoad = (route.requireEntityLoad === 'YES') ? true : false;
+      if (route.requireEntityLoad === 'YES') {
+        route.requireEntityLoad = true;
+        route.path = `/{id}/${route.path}`;
+        return;
+      }
+      route.requireEntityLoad = false;
     });
     return {
       aggregateName: formValue.aggregateName,
