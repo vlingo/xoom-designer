@@ -13,8 +13,10 @@ import {
 } from './view-dialog/view-dialog.component';
 import {
   AggregateSetting,
+  Api,
   Method,
-  StateField
+  StateField,
+  Route
 } from './../../../model/model-aggregate';
 import {
   Component,
@@ -113,5 +115,12 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     }).map(state => {
       return state.type + ' ' + state.name;
     }).join(', ');
+  }
+
+  getApiEntirePath(api: Api, route: Route): string {
+    const path = (route.requireEntityLoad) ?
+                  api.rootPath + route.path :
+                  api.rootPath + '/';
+    return route.httpMethod + ' - /' + (path.endsWith('/') ? path.substring(0, path.length - 1) : path);
   }
 }
