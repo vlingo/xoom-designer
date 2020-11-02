@@ -9,8 +9,23 @@ package io.vlingo.xoom.starter.task;
 
 import java.util.List;
 
-public interface TaskManager {
+public interface TaskManager<T> {
 
-    void run(final List<String> args);
+    void run(final T args);
+
+    default TaskStatus manage(final T args) {
+        run(args);
+        return TaskStatus.SUCCESSFUL;
+    }
+
+    default boolean support(final Object args) {
+        if(args instanceof List) {
+            final List<?> argsList = (List<?>) args;
+            if(argsList != null && !argsList.isEmpty()) {
+                return argsList.stream().allMatch(arg -> arg.getClass().equals(String.class));
+            }
+        }
+        return false;
+    }
 
 }

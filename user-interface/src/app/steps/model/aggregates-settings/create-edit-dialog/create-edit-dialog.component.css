@@ -1,0 +1,26 @@
+.actions{
+  float:right;
+  padding: 2px;
+}
+
+.item{
+  display: flex;
+  gap: 15px;
+}
+
+.add-container{
+  margin-left: 87%;
+  margin-bottom: 2%;
+}
+
+.fright{
+  float:right;
+}
+
+.ptop1{
+  padding-top: 1%;
+}
+
+.select-multiple{
+  height: 100%;
+}

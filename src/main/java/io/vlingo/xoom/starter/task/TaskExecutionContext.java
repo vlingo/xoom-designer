@@ -7,58 +7,68 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.template.steps.DeploymentType;
+import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.starter.task.Property.*;
+import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class TaskExecutionContext {
 
     private Process process;
     private String[] commands;
     private Properties properties;
+    private final CodeGenerationParameters parameters;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
     private final Map<String, String> configuration = new HashMap<>();
+    private final Agent agent;
 
-    public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
-        return new TaskExecutionContext(optionValues);
-    }
-
-    public static TaskExecutionContext withArgs(final List<String> args) {
-        final TaskExecutionContext context = new TaskExecutionContext();
-        context.addArgs(args);
-        return context;
-    }
-
-    private TaskExecutionContext() {
-        this(Collections.emptyList());
-    }
-
-    private TaskExecutionContext(final List<OptionValue> optionValues) {
-        this.optionValues.addAll(optionValues);
+    public static TaskExecutionContext executedFrom(final Agent agent) {
+        return new TaskExecutionContext(agent);
     }
 
     public static TaskExecutionContext withoutOptions() {
-        return new TaskExecutionContext();
+        return new TaskExecutionContext(Agent.TERMINAL);
+    }
+
+    private TaskExecutionContext(final Agent agent) {
+        this.agent = agent;
+        this.parameters = CodeGenerationParameters.empty();
     }
 
     public void followProcess(final Process process) {
         this.process = process;
     }
 
-    public void onConfiguration(final Map<String, String> configurations) {
-        this.configuration.putAll(configurations);
+    public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
+        this.optionValues.addAll(optionValues);
+        return this;
     }
 
-    public void onProperties(final Properties properties) {
+    public TaskExecutionContext withArgs(final List<String> args) {
+        this.addArgs(args);
+        return this;
+    }
+
+    public TaskExecutionContext with(final CodeGenerationParameters parameters) {
+        this.parameters.addAll(parameters);
+        return this;
+    }
+
+    public TaskExecutionContext onConfiguration(final Map<String, String> configurations) {
+        this.configuration.putAll(configurations);
+        return this;
+    }
+
+    public TaskExecutionContext onProperties(final Properties properties) {
         this.properties = properties;
+        return this;
     }
 
     public void withCommands(final String[] commands) {
@@ -77,12 +87,17 @@ public class TaskExecutionContext {
         return properties;
     }
 
+    public Agent agent() {
+        return agent;
+    }
+
     public String configurationOf(final String key) {
         return this.configuration.get(key);
     }
 
-    public void addProperty(final Property property, final String value) {
+    public TaskExecutionContext addProperty(final Property property, final String value) {
         this.properties.put(property.literal(), value);
+        return this;
     }
 
     public <T> T propertyOf(final Property property) {
@@ -116,13 +131,18 @@ public class TaskExecutionContext {
         return args;
     }
 
+    public CodeGenerationParameters codeGenerationParameters() {
+        return parameters;
+    }
+
     public DeploymentType deploymentType() {
-        return DeploymentType.valueOf(propertyOf(DEPLOYMENT));
+        return DeploymentType.valueOf(parameters.retrieveValue(DEPLOYMENT));
     }
 
     public String projectPath() {
-        final String artifactId = propertyOf(ARTIFACT_ID);
-        final String targetFolder = propertyOf(TARGET_FOLDER);
+        final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
+        final String targetFolder = parameters.retrieveValue(TARGET_FOLDER);
         return Paths.get(targetFolder, artifactId).toString();
     }
+
 }

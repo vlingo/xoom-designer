@@ -15,8 +15,14 @@ public class TaskExecutor {
     private static final int MAIN_COMMAND_INDEX = 0;
 
     public static void execute(final List<String> args) {
-        validateArgs(args);
-        Task.trigger(args.get(MAIN_COMMAND_INDEX)).run(args);
+        try {
+            validateArgs(args);
+            Task.of(args.get(MAIN_COMMAND_INDEX), args).run(args);
+        } catch (final Exception exception) {
+            System.out.println(exception.getMessage());
+            exception.printStackTrace();
+            throw exception;
+        }
     }
 
     private static void validateArgs(final List<String> args){
