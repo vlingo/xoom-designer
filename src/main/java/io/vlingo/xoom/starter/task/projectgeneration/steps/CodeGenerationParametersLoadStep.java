@@ -60,7 +60,7 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
                 put(Property.STORAGE_TYPE, Label.STORAGE_TYPE);
                 put(Property.CQRS, Label.CQRS);
                 put(Property.ANNOTATIONS, Label.USE_ANNOTATIONS);
-                put(Property.AUTO_DISPATCH, Label.AUTO_DISPATCH);
+                put(Property.AUTO_DISPATCH, Label.USE_AUTO_DISPATCH);
                 put(Property.PROJECTIONS, Label.PROJECTION_TYPE);
                 put(Property.DATABASE, Label.DATABASE);
                 put(Property.DEPLOYMENT, Label.DEPLOYMENT);
