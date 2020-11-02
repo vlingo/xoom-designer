@@ -38,7 +38,7 @@ public class CodeGenerationParametersLoadStepTest {
         Assertions.assertEquals("HSQLDB", context.codeGenerationParameters().retrieveValue(DATABASE));
         Assertions.assertEquals("EVENT_BASED", context.codeGenerationParameters().retrieveValue(PROJECTION_TYPE));
         Assertions.assertEquals("YUGA_BYTE", context.codeGenerationParameters().retrieveValue(QUERY_MODEL_DATABASE));
-        Assertions.assertEquals("true", context.codeGenerationParameters().retrieveValue(AUTO_DISPATCH));
+        Assertions.assertEquals("true", context.codeGenerationParameters().retrieveValue(USE_AUTO_DISPATCH));
         Assertions.assertEquals("STATE_STORE", context.codeGenerationParameters().retrieveValue(STORAGE_TYPE));
         Assertions.assertEquals("DOCKER", context.codeGenerationParameters().retrieveValue(DEPLOYMENT));
         Assertions.assertEquals("/home/projects", context.codeGenerationParameters().retrieveValue(TARGET_FOLDER));
