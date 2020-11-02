@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.starter;
 
-import io.vlingo.xoom.starter.task.TaskExecutionException;
 import io.vlingo.xoom.starter.task.TaskExecutor;
 
 import java.util.Arrays;
@@ -17,6 +16,9 @@ public class Initializer {
     public static void main(final String[] args) {
         try {
             TaskExecutor.execute(Arrays.asList(args));
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+            System.out.println(exception.getMessage());
         } finally {
             if(TaskExecutor.shouldExit()) {
                 System.exit(0);
