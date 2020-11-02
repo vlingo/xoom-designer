@@ -9,9 +9,14 @@ package io.vlingo.xoom.starter.task.gui;
 
 import io.vlingo.actors.Stage;
 import io.vlingo.http.resource.Configuration;
+import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.annotation.initializer.Xoom;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Xoom(name = "xoom-starter")
 @ResourceHandlers(packages = "io.vlingo.xoom.starter.restapi")
@@ -32,6 +37,11 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
         return Configuration.define()
                 .withPort(DEFAULT_PORT)
                 .with(timing).with(sizing);
+    }
+
+    @Override
+    public StaticFilesConfiguration staticFilesConfiguration() {
+        return StaticFilesConfiguration.defineWith(100, "static", Arrays.asList("/xoom-starter"));
     }
 
     @Override

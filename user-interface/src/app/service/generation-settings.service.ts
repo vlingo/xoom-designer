@@ -4,12 +4,10 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { GenerationSettings } from '../model/generation-settings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GenerationSettingsService {
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
 
   }
 

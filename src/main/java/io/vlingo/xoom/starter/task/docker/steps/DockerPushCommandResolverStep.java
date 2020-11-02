@@ -3,7 +3,6 @@ package io.vlingo.xoom.starter.task.docker.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
-import io.vlingo.xoom.starter.task.template.Terminal;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 import static io.vlingo.xoom.starter.task.Property.DOCKER_REPOSITORY;

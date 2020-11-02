@@ -13,7 +13,7 @@ import io.vlingo.xoom.starter.task.TaskManager;
 
 import java.util.List;
 
-public class UserInterfaceManager implements TaskManager {
+public class UserInterfaceManager implements TaskManager<List<String>> {
 
     @Override
     public void run(final List<String> args) {

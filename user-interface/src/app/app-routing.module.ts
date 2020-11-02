@@ -1,7 +1,8 @@
+import { PersistenceComponent } from './steps/model/persistence/persistence.component';
+import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/aggregates-settings.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ContextComponent } from './steps/context/context.component';
-import { ModelComponent } from './steps/model/model.component';
 import { DeploymentComponent } from './steps/deployment/deployment.component';
 import { GenerationComponent } from './steps/generation/generation.component';
 import { AboutComponent } from './about/about.component';
@@ -17,8 +18,12 @@ const routes: Routes = [
         component: ContextComponent
       },
       {
-        path: 'model',
-        component: ModelComponent
+        path: 'model/aggregate',
+        component: AggregatesSettingsComponent
+      },
+      {
+        path: 'model/persistence',
+        component: PersistenceComponent
       },
       {
         path: 'deployment',
@@ -37,7 +42,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
