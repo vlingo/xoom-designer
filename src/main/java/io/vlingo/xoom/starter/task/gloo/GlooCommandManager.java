@@ -18,7 +18,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.Task.GLOO;
 
-public class GlooCommandManager implements TaskManager {
+public class GlooCommandManager implements TaskManager<List<String>> {
 
     private static final int SUB_TASK_INDEX = 1;
 
@@ -34,7 +34,8 @@ public class GlooCommandManager implements TaskManager {
         final List<OptionValue> optionValues = subTask.findOptionValues(args);
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(optionValues);
+                TaskExecutionContext.executedFrom(Agent.TERMINAL)
+                        .withOptions(optionValues);
 
         final List<TaskExecutionStep> steps =
                 Arrays.asList(new XoomPropertiesLoadStep(),

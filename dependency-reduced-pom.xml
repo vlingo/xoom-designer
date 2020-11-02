@@ -80,6 +80,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
         <configuration>
           <archive>
             <manifest>
@@ -174,12 +175,17 @@
           </plugin>
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.2-beta-5</version>
             <executions>
               <execution>
                 <phase>integration-test</phase>
                 <goals>
                   <goal>single</goal>
                 </goals>
+                <configuration>
+                  <descriptor>dist-assembly.xml</descriptor>
+                  <finalName>starter</finalName>
+                </configuration>
               </execution>
             </executions>
             <configuration>
@@ -246,7 +252,6 @@
     </dependency>
   </dependencies>
   <properties>
-    <micronaut.version>1.2.10</micronaut.version>
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <exec.mainClass>io.vlingo.xoom.starter.Initializer</exec.mainClass>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>

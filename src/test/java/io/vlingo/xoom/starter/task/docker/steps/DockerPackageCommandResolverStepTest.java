@@ -1,10 +1,11 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.task.Agent;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.template.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class DockerPackageCommandResolverStepTest {
         properties.put(DOCKER_IMAGE.literal(), "xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(Arrays.asList(tag, directory));
+                TaskExecutionContext.executedFrom(Agent.TERMINAL).withOptions(Arrays.asList(tag, directory));
 
         context.onProperties(properties);
 
@@ -52,7 +53,7 @@ public class DockerPackageCommandResolverStepTest {
                 OptionValue.with(OptionName.CURRENT_DIRECTORY, "/home/projects/xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withOptions(Arrays.asList(tag, directory));
+                TaskExecutionContext.executedFrom(Agent.TERMINAL).withOptions(Arrays.asList(tag, directory));
 
         context.onProperties(new Properties());
 

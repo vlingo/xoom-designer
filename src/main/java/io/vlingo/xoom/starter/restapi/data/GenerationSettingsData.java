@@ -7,14 +7,6 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import io.vlingo.xoom.starter.task.template.Agent;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.vlingo.xoom.starter.task.Property.*;
-import static io.vlingo.xoom.starter.task.Task.TEMPLATE_GENERATION;
-
 public class GenerationSettingsData {
 
     public final ContextSettingsData context;
@@ -38,20 +30,4 @@ public class GenerationSettingsData {
         this.useAutoDispatch = useAutoDispatch;
     }
 
-    public List<String> toArguments() {
-        final List<String> args = new ArrayList<>();
-        args.add(TEMPLATE_GENERATION.command());
-        args.addAll(context.toArguments());
-        args.addAll(model.toArguments());
-        args.addAll(deployment.toArguments());
-        args.add(TARGET_FOLDER.literal());
-        args.add(projectDirectory);
-        args.add(ANNOTATIONS.literal());
-        args.add(useAnnotations.toString());
-        args.add(AUTO_DISPATCH.literal());
-        args.add(useAutoDispatch.toString());
-        args.add(Agent.argumentKey());
-        args.add(Agent.WEB.name());
-        return args;
-    }
 }

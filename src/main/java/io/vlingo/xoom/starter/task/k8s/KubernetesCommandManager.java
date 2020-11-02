@@ -18,7 +18,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.starter.task.Task.K8S;
 
-public class KubernetesCommandManager implements TaskManager {
+public class KubernetesCommandManager implements TaskManager<List<String>> {
 
     private static final int SUB_TASK_INDEX = 1;
 

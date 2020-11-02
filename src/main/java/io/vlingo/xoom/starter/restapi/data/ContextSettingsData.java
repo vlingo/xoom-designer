@@ -32,18 +32,4 @@ public class ContextSettingsData {
         this.xoomVersion = xoomVersion;
     }
 
-    List<String> toArguments() {
-        return Arrays.asList(
-                Property.GROUP_ID.literal(),
-                groupId,
-                Property.ARTIFACT_ID.literal(),
-                artifactId,
-                Property.VERSION.literal(),
-                artifactVersion,
-                Property.PACKAGE.literal(),
-                packageName,
-                Property.XOOM_SERVER_VERSION.literal(),
-                xoomVersion
-        );
-    }
 }
