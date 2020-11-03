@@ -56,34 +56,16 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formMethods.valueChanges.subscribe(formMethods => {
-      formMethods.forEach(formMethod => {
-        this.formApiRoutes.controls.forEach(control => {
-          if (control.get('aggregateMethod').value === formMethod.name) {
-            if (formMethod.factory) {
-              control.get('requireEntityLoad').disable();
-              control.get('requireEntityLoad').setValue(false);
+    this.formMethods.valueChanges.subscribe((methodValues) => {
+      methodValues.forEach(methodValue => {
+        this.formApiRoutes.controls.forEach(formRoute => {
+          if (formRoute.get('aggregateMethod').value === methodValue.name){
+            if (methodValue.factory) {
+              formRoute.get('requireEntityLoad').setValue(false);
             } else {
-              control.get('requireEntityLoad').setValue(true);
-              control.get('requireEntityLoad').enable();
+              formRoute.get('requireEntityLoad').setValue(true);
             }
           }
-        });
-      });
-
-      this.formApiRoutes.controls.forEach(formRoute => {
-        formRoute.get('aggregateMethod').valueChanges.subscribe(aggregateMethod => {
-          this.formMethods.controls.forEach(control => {
-            if (control.get('name').value === aggregateMethod) {
-              if (control.get('factory').value) {
-                formRoute.get('requireEntityLoad').disable();
-                formRoute.get('requireEntityLoad').setValue(false);
-              } else {
-                formRoute.get('requireEntityLoad').setValue(true);
-                formRoute.get('requireEntityLoad').enable();
-              }
-            }
-          });
         });
       });
     });
@@ -107,6 +89,21 @@ export class CreateEditDialogComponent implements OnInit {
 
   get formApiRoutes(): FormArray {
     return this.formApi.get('routes') as FormArray;
+  }
+
+  methodChanged($event) {
+    const methodName = $event.value;
+    this.formApiRoutes.controls.forEach(formRoute => {
+        this.formMethods.controls.forEach(formMethod => {
+          if (formMethod.get('name').value === methodName){
+            if (formMethod.get('factory').value) {
+              formRoute.get('requireEntityLoad').setValue(false);
+            } else {
+              formRoute.get('requireEntityLoad').setValue(true);
+            }
+          }
+        });
+    });
   }
 
   createNewForm(aggregate: AggregateSetting) {
