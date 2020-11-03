@@ -35,6 +35,16 @@
     api: Api;
   }
 
+  export class AggregateSettingWrapper {
+    aggregateSettings: AggregateSetting;
+    id: number;
+
+    constructor(aggregateSettings: AggregateSetting){
+      this.id = Date.now();
+      this.aggregateSettings = aggregateSettings;
+    }
+  }
+
   export interface Persistence {
     storageType: string;
     useCQRS: boolean;
