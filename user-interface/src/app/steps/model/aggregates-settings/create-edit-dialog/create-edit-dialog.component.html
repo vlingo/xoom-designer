@@ -99,7 +99,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Path</mat-label>
                 <input matInput formControlName="path">
-                <span matPrefix *ngIf="route.get('requireEntityLoad').value === 'YES'">{{'/{id}/'}}</span>
+                <span matPrefix *ngIf="route.get('requireEntityLoad').value">{{'/{id}/'}}</span>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-select formControlName="httpMethod" placeholder="Http Method" #singleSelect>
