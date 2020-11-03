@@ -4,7 +4,8 @@ import {
   AggregateEvent,
   StateField,
   Api,
-  Route
+  Route,
+  AggregateSettingWrapper
 } from './../../../../model/model-aggregate';
 import {
   FormArray,
@@ -40,13 +41,18 @@ export class CreateEditDialogComponent implements OnInit {
     methods: this.createMethods,
     api: this.createApi
   };
-  saveButtonLabel: string;
+  saveButtonLabel = 'Add';
+  currentId = 0;
+
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef < CreateEditDialogComponent > ,
-              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSetting) {
-    this.createNewForm(aggregate || {} as AggregateSetting);
-    this.saveButtonLabel = aggregate.aggregateName ? 'Save' : 'Add';
+              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSettingWrapper) {
+    if (aggregate.aggregateSettings != null){
+      this.currentId = aggregate.id;
+      this.saveButtonLabel = 'Save';
+    }
+    this.createNewForm(aggregate.aggregateSettings || {} as AggregateSetting);
   }
 
   ngOnInit(): void {
@@ -178,7 +184,7 @@ export class CreateEditDialogComponent implements OnInit {
   private createMethods(formBuilder: FormBuilder, method: Method): FormGroup {
     return formBuilder.group({
       name: [method.name, [Validators.required]],
-      factory: [method.factory, [Validators.required]],
+      factory: [!!method.factory, []],
       parameters: [(method.parameters && method.parameters.length > 0) ? method.parameters : [], [Validators.required]],
       event: [method.event, [Validators.required]]
     });
@@ -209,11 +215,11 @@ export class CreateEditDialogComponent implements OnInit {
       path: [route.path, []],
       httpMethod: [route.httpMethod, [Validators.required]],
       aggregateMethod: [route.aggregateMethod, [Validators.required]],
-      requireEntityLoad: [route.requireEntityLoad, [Validators.required]],
+      requireEntityLoad: [!!route.requireEntityLoad, []],
     });
   }
 
-  private parseAggregateForm(): AggregateSetting {
+  private parseAggregateForm(): AggregateSettingWrapper {
     const formValue = this.aggregateSettingsForm.getRawValue() as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
@@ -231,13 +237,17 @@ export class CreateEditDialogComponent implements OnInit {
         return;
       }
     });
-    return {
+    const wrapper = new AggregateSettingWrapper({
       aggregateName: formValue.aggregateName,
       stateFields: formValue.stateFields,
       methods,
       events,
       api
-    } as AggregateSetting;
+    } as AggregateSetting);
+    if (this.currentId !== 0){
+      wrapper.id = this.currentId;
+    }
+    return wrapper;
   }
 
 }
