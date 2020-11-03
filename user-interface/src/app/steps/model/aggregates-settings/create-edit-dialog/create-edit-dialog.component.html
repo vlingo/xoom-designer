@@ -109,15 +109,12 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="fill">
-                <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect [disabled] = "formMethods.invalid">
+                <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect [disabled] = "formMethods.invalid" (selectionChange)="methodChanged($event)">
                   <mat-option *ngFor="let method of formMethods.controls" [value]="method.get('name').value">
                     {{method.get('name').value}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div>
-              <mat-slide-toggle formControlName="requireEntityLoad">Require Entity Load?</mat-slide-toggle>
-              </div>
               <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
             </div>
           </div>
