@@ -40,11 +40,13 @@ export class CreateEditDialogComponent implements OnInit {
     methods: this.createMethods,
     api: this.createApi
   };
+  saveButtonLabel: string;
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef < CreateEditDialogComponent > ,
               @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSetting) {
     this.createNewForm(aggregate || {} as AggregateSetting);
+    this.saveButtonLabel = aggregate.aggregateName ? 'Save' : 'Add';
   }
 
   ngOnInit(): void {
@@ -52,11 +54,11 @@ export class CreateEditDialogComponent implements OnInit {
       formMethods.forEach(formMethod => {
         this.formApiRoutes.controls.forEach(control => {
           if (control.get('aggregateMethod').value === formMethod.name) {
-            if (formMethod.factory === 'YES') {
+            if (formMethod.factory) {
               control.get('requireEntityLoad').disable();
-              control.get('requireEntityLoad').setValue('NO');
+              control.get('requireEntityLoad').setValue(false);
             } else {
-              control.get('requireEntityLoad').setValue('YES');
+              control.get('requireEntityLoad').setValue(true);
               control.get('requireEntityLoad').enable();
             }
           }
@@ -67,11 +69,11 @@ export class CreateEditDialogComponent implements OnInit {
         formRoute.get('aggregateMethod').valueChanges.subscribe(aggregateMethod => {
           this.formMethods.controls.forEach(control => {
             if (control.get('name').value === aggregateMethod) {
-              if (control.get('factory').value === 'YES') {
+              if (control.get('factory').value) {
                 formRoute.get('requireEntityLoad').disable();
-                formRoute.get('requireEntityLoad').setValue('NO');
+                formRoute.get('requireEntityLoad').setValue(false);
               } else {
-                formRoute.get('requireEntityLoad').setValue('YES');
+                formRoute.get('requireEntityLoad').setValue(true);
                 formRoute.get('requireEntityLoad').enable();
               }
             }
@@ -176,7 +178,7 @@ export class CreateEditDialogComponent implements OnInit {
   private createMethods(formBuilder: FormBuilder, method: Method): FormGroup {
     return formBuilder.group({
       name: [method.name, [Validators.required]],
-      factory: [(method.factory) ? 'YES' : 'NO', [Validators.required]],
+      factory: [method.factory, [Validators.required]],
       parameters: [(method.parameters && method.parameters.length > 0) ? method.parameters : [], [Validators.required]],
       event: [method.event, [Validators.required]]
     });
@@ -200,7 +202,7 @@ export class CreateEditDialogComponent implements OnInit {
       path: [route.path, []],
       httpMethod: [route.httpMethod, [Validators.required]],
       aggregateMethod: [route.aggregateMethod, [Validators.required]],
-      requireEntityLoad: [(route.requireEntityLoad) ? 'YES' : 'NO', [Validators.required]],
+      requireEntityLoad: [route.requireEntityLoad, [Validators.required]],
     });
   }
 
@@ -208,7 +210,6 @@ export class CreateEditDialogComponent implements OnInit {
     const formValue = this.aggregateSettingsForm.getRawValue() as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
-      method.factory = (method.factory === 'YES') ? true : false;
       return method as Method;
     });
     const events = (this.aggregateSettingsForm.value.events).map(event => {
@@ -218,12 +219,10 @@ export class CreateEditDialogComponent implements OnInit {
     const api = this.aggregateSettingsForm.value.api;
     api.routes = Array.isArray(api.routes) ? api.routes : [];
     api.routes.forEach(route => {
-      if (route.requireEntityLoad === 'YES') {
-        route.requireEntityLoad = true;
+      if (route.requireEntityLoad) {
         route.path = `/{id}/${route.path}`;
         return;
       }
-      route.requireEntityLoad = false;
     });
     return {
       aggregateName: formValue.aggregateName,
