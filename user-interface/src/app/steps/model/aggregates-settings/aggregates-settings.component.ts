@@ -118,9 +118,34 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   getApiEntirePath(api: Api, route: Route): string {
-    const path = (route.requireEntityLoad) ?
-                  api.rootPath + route.path :
-                  api.rootPath + '/';
-    return route.httpMethod + ' - /' + (path.endsWith('/') ? path.substring(0, path.length - 1) : path);
+    return route.httpMethod + ' - ' + (this.addSlashs(api.rootPath, route.path) + this.addStartSlash(route.path)).replace(/\/\//g, '/');
   }
+  private addSlashs(path: string, afterPath: string){
+    path = this.addStartSlash(path);
+    if (afterPath) {
+      path = this.addEndSlash(path);
+    }
+    return path;
+  }
+
+  private addStartSlash(path: string){
+    if (!path){
+      return '';
+    }
+    if (!path.startsWith('/')) {
+      path = '/' + path;
+    }
+    return path;
+  }
+
+  private addEndSlash(path: string){
+    if (!path){
+      return '';
+    }
+    if (!path.endsWith('/')) {
+      path = path + '/';
+    }
+    return path;
+  }
+
 }

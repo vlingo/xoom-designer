@@ -197,7 +197,14 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   private createApiRoutes(formBuilder: FormBuilder, route: Route): FormGroup {
-    route.path = (route.requireEntityLoad) ? route.path.replace('/{id}/', '') : route.path;
+    if(route.path){
+      if (route.path.startsWith('/{id}/')){
+        route.path = route.path.replace('/{id}/', '');
+      }
+      if (route.path.startsWith('/{id}')){
+        route.path = route.path.replace('/{id}', '');
+      }
+    }
     return formBuilder.group({
       path: [route.path, []],
       httpMethod: [route.httpMethod, [Validators.required]],
@@ -220,7 +227,7 @@ export class CreateEditDialogComponent implements OnInit {
     api.routes = Array.isArray(api.routes) ? api.routes : [];
     api.routes.forEach(route => {
       if (route.requireEntityLoad) {
-        route.path = `/{id}/${route.path}`;
+        route.path = (route.path) ? `/{id}/${route.path}` : `/{id}`;
         return;
       }
     });
