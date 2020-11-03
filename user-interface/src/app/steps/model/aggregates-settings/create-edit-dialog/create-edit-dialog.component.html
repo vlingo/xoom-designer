@@ -62,11 +62,6 @@
             <mat-label>Name</mat-label>
             <input matInput formControlName="name">
           </mat-form-field>
-          <mat-label>Use Factory?</mat-label>
-          <mat-button-toggle-group formControlName="factory" style="height: 8%;">
-            <mat-button-toggle value="NO">No</mat-button-toggle>
-            <mat-button-toggle value="YES">Yes</mat-button-toggle>
-          </mat-button-toggle-group>
           <mat-form-field appearance="fill">
             <mat-select multiple formControlName="parameters" placeholder="Parameters" #singleSelect [disabled] = "formStateFields.invalid">
               <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
@@ -81,6 +76,9 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <div>
+            <mat-slide-toggle formControlName="factory">Use Factory?</mat-slide-toggle>
+          </div>
           <button *ngIf="i > 0" mat-button (click)="removeRow('methods', i)" type="button">Remove</button>
         </div>
       </div>
@@ -117,11 +115,9 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-label>Require Entity Load?</mat-label>
-              <mat-button-toggle-group formControlName="requireEntityLoad" style="height: 8%;">
-                <mat-button-toggle value="NO">No</mat-button-toggle>
-                <mat-button-toggle value="YES">Yes</mat-button-toggle>
-              </mat-button-toggle-group>
+              <div>
+              <mat-slide-toggle formControlName="requireEntityLoad">Require Entity Load?</mat-slide-toggle>
+              </div>
               <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
             </div>
           </div>
@@ -134,8 +130,8 @@
     <div>
       <mat-divider> </mat-divider>
       <div mat-dialog-actions class="actions">
-        <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit" [disabled] = "aggregateSettingsForm.invalid">Add</button>
+        <button mat-raised-button class="cancel-button" type="button" (click)="cancel()">Cancel</button>
+        <button mat-raised-button class="save-button" type="submit" [disabled] = "aggregateSettingsForm.invalid">{{saveButtonLabel}}</button>
       </div>
     </div>
   </form>

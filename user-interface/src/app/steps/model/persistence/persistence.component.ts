@@ -85,7 +85,7 @@ export class PersistenceComponent extends StepComponent implements OnInit {
     const persistence = (model && model.persistence) ? model.persistence : {} as Persistence;
     this.persistenceForm = this.formBuilder.group({
       storageType: [persistence.storageType, [Validators.required]],
-      useCQRS: [(persistence.useCQRS) ? 'YES' : 'NO', [Validators.required]],
+      useCQRS: [persistence.useCQRS, [Validators.required]],
       projections: [persistence.projections, [Validators.required]],
       database: [persistence.database, []],
       commandModelDatabase: [persistence.commandModelDatabase, []],
@@ -96,7 +96,6 @@ export class PersistenceComponent extends StepComponent implements OnInit {
 
   next(): void {
     const persistence = this.persistenceForm.value;
-    persistence.useCQRS = (persistence.useCQRS === 'YES') ? true : false;
     this.settingsStepService.addPersistence(persistence);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
