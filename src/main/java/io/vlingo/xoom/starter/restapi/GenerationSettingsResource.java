@@ -15,6 +15,7 @@ import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
@@ -33,9 +34,20 @@ public class GenerationSettingsResource extends ResourceHandler {
     }
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-        return Completes.withSuccess(TaskExecutionContextMapper.from(settings))
-                .andThen(context -> Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context))
-                .andThenTo(taskStatus -> Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(taskStatus))));
+        try {
+            final TaskExecutionContext executionContext = TaskExecutionContextMapper.from(settings);
+            return Completes.withSuccess(executionContext).andThen(context -> {
+                try {
+                    return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
+                } catch (Exception exception) {
+                    stage.world().defaultLogger().error(exception.getMessage());
+                    return TaskExecutionContext.withoutOptions();
+                }}).andThenTo(taskStatus -> Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(taskStatus))));
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+            stage.world().defaultLogger().error(exception.getMessage());
+            return Completes.withSuccess(Response.of(InternalServerError));
+        }
     }
 
     public Completes<Response> supportedTypes() {
