@@ -34,20 +34,19 @@
     <mat-divider> </mat-divider>
     <span>Events</span>
     <div class="ptop1" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
-      <div [formGroupName]="i" class="item">
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="name">
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect
-            [disabled]="formStateFields.invalid">
-            <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
-              {{stateField.get('name').value}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
+      <div [formGroupName]="i">
+        <div class="item">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+        </div>
+        <div class="second-item-line">
+          <app-parameters-chips [formStateFields]="formStateFields" [parentForm]="formEvents"
+            parametersFormName="fields" [formIndex]=i>
+          </app-parameters-chips>
+          <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
+        </div>
       </div>
     </div>
     <div class="add-container">
@@ -75,9 +74,10 @@
           </div>
         </div>
         <div class="second-item-line">
-        <app-parameters-chips [formStateFields]="formStateFields" [parentForm]="formMethods" parametersFormName="parameters" [formIndex]=i>
-        </app-parameters-chips>
-        <button *ngIf="i > 0" mat-button (click)="removeRow('methods', i)" type="button">Remove Method Row</button>
+          <app-parameters-chips [formStateFields]="formStateFields" [parentForm]="formMethods"
+            parametersFormName="parameters" [formIndex]=i>
+          </app-parameters-chips>
+          <button *ngIf="i > 0" mat-button (click)="removeRow('methods', i)" type="button">Remove Method Row</button>
         </div>
       </div>
     </div>
