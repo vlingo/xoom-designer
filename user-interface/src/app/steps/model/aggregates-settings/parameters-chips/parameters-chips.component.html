@@ -1,0 +1,27 @@
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Parameters</mat-label>
+    <mat-select [formControl]="formParameter" (selectionChange)="selected($event)">
+      <mat-option *ngFor="let parameter of filteredParameters" [value]="parameter">
+        {{parameter.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-chip-list
+    class="example-chip"
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
+    #chipList aria-label="Fruit selection">
+    <mat-chip
+      class="example-box"
+      cdkDrag
+      *ngFor="let parameter of parameters"
+      [selectable]="true"
+      [removable]="true"
+      (removed)="remove(parameter)">
+      {{parameter.name + ': ' + parameter.type}}
+      <span matChipRemove>x</span>
+    </mat-chip>
+  </mat-chip-list>
+</form>

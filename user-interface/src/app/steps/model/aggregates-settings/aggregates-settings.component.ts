@@ -116,8 +116,8 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   getMethodParameters(method: Method, stateFields: StateField[]) {
-    return stateFields.filter(state => {
-      return method.parameters.includes(state.name);
+    return method.parameters.map(meth => {
+      return stateFields.filter(sf => sf.name === meth).pop();
     }).map(state => {
       return state.type + ' ' + state.name;
     }).join(', ');
