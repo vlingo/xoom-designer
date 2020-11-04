@@ -1,76 +1,70 @@
 <h1 mat-dialog-title>Aggregate</h1>
-  <form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()">
-    <div mat-dialog-content>
-      <span>Aggregate</span>
-      <div class="ptop1">
+<form [formGroup]="aggregateSettingsForm" (ngSubmit)="add()">
+  <div mat-dialog-content>
+    <span>Aggregate</span>
+    <div class="ptop1">
+      <mat-form-field appearance="fill">
+        <mat-label>Aggregate Name</mat-label>
+        <input matInput formControlName="aggregateName">
+      </mat-form-field>
+    </div>
+    <mat-divider> </mat-divider>
+    <span>State Fields</span>
+    <div class="ptop1" formArrayName="stateFields" *ngFor="let stateField of formStateFields.controls; let i = index;">
+      <div [formGroupName]="i" class="item">
         <mat-form-field appearance="fill">
-          <mat-label>Aggregate Name</mat-label>
-          <input matInput formControlName="aggregateName">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let stateFieldsType of stateFieldsTypes" [value]="stateFieldsType">
+              {{stateFieldsType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)" type="button">Remove</button>
       </div>
-      <mat-divider> </mat-divider>
-      <span>State Fields</span>
-      <div class="ptop1" formArrayName="stateFields"
-        *ngFor="let stateField of formStateFields.controls; let i = index;">
-        <div [formGroupName]="i" class="item">
+    </div>
+    <div class="add-container">
+      <button mat-stroked-button color="primary" (click)="addNewRow('stateFields')" type="button">Add
+        State Field</button>
+    </div>
+    <mat-divider> </mat-divider>
+    <span>Events</span>
+    <div class="ptop1" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
+      <div [formGroupName]="i" class="item">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect
+            [disabled]="formStateFields.invalid">
+            <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
+              {{stateField.get('name').value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
+      </div>
+    </div>
+    <div class="add-container">
+      <button mat-stroked-button color="primary" (click)="addNewRow('events')" type="button">Add
+        Event</button>
+    </div>
+    <mat-divider> </mat-divider>
+    <span>Methods</span>
+    <div class="ptop1" formArrayName="methods" *ngFor="let method of formMethods.controls; let i = index;">
+      <div [formGroupName]="i">
+        <div class="item">
           <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
             <input matInput formControlName="name">
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Type</mat-label>
-            <mat-select formControlName="type">
-              <mat-option *ngFor="let stateFieldsType of stateFieldsTypes" [value]="stateFieldsType">
-                {{stateFieldsType}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button *ngIf="i > 0" mat-button (click)="removeRow('stateFields', i)" type="button">Remove</button>
-        </div>
-      </div>
-      <div class="add-container">
-        <button mat-stroked-button color="primary" (click)="addNewRow('stateFields')" type="button">Add
-          State Field</button>
-      </div>
-      <mat-divider> </mat-divider>
-      <span>Events</span>
-      <div class="ptop1" formArrayName="events" *ngFor="let event of formEvents.controls; let i = index;">
-        <div [formGroupName]="i" class="item">
-          <mat-form-field appearance="fill" >
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-select multiple formControlName="fields" placeholder="Fields" #singleSelect [disabled] = "formStateFields.invalid">
-              <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
-                {{stateField.get('name').value}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button *ngIf="i > 0" mat-button (click)="removeRow('events', i)" type="button">Remove</button>
-        </div>
-      </div>
-      <div class="add-container">
-        <button mat-stroked-button color="primary" (click)="addNewRow('events')" type="button">Add
-          Event</button>
-      </div>
-      <mat-divider> </mat-divider>
-      <span>Methods</span>
-      <div class="ptop1" formArrayName="methods" *ngFor="let method of formMethods.controls; let i = index;">
-        <div [formGroupName]="i" class="item">
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="name">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-select multiple formControlName="parameters" placeholder="Parameters" #singleSelect [disabled] = "formStateFields.invalid">
-              <mat-option *ngFor="let stateField of formStateFields.controls" [value]="stateField.get('name').value">
-                {{stateField.get('name').value}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-select formControlName="event" placeholder="Event" #singleSelect [disabled] = "formEvents.invalid">
+            <mat-select formControlName="event" placeholder="Event" #singleSelect [disabled]="formEvents.invalid">
               <mat-option *ngFor="let ev of formEvents.controls" [value]="ev.get('name').value">
                 {{ev.get('name').value}}
               </mat-option>
@@ -79,56 +73,63 @@
           <div>
             <mat-slide-toggle formControlName="factory">Use Factory?</mat-slide-toggle>
           </div>
-          <button *ngIf="i > 0" mat-button (click)="removeRow('methods', i)" type="button">Remove</button>
         </div>
-      </div>
-      <div class="add-container">
-        <button mat-stroked-button color="primary" (click)="addNewRow('methods')" type="button">Add
-          Method</button>
-      </div>
-      <mat-divider> </mat-divider>
-      <span>API</span>
-      <div class="ptop1">
-        <div [formGroup]="formApi">
-          <mat-form-field appearance="fill">
-            <mat-label>Root Path</mat-label>
-            <input matInput formControlName="rootPath">
-          </mat-form-field>
-          <div formArrayName="routes" *ngFor="let route of formApiRoutes.controls; let iApi = index;">
-            <div [formGroupName]="iApi" class="item">
-              <mat-form-field appearance="fill">
-                <mat-label>Path</mat-label>
-                <input matInput formControlName="path">
-                <span matPrefix *ngIf="route.get('requireEntityLoad').value">{{'/{id}/'}}</span>
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-select formControlName="httpMethod" placeholder="Http Method" #singleSelect>
-                  <mat-option *ngFor="let httpMethod of httpsMethods" [value]="httpMethod">
-                    {{httpMethod}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect [disabled] = "formMethods.invalid" (selectionChange)="methodChanged($event)">
-                  <mat-option *ngFor="let method of formMethods.controls" [value]="method.get('name').value">
-                    {{method.get('name').value}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
-            </div>
-          </div>
-          <div class="add-container">
-            <button mat-stroked-button color="primary" (click)="addApiRow()" type="button">Add Api Method</button>
-          </div>
+        <div class="second-item-line">
+        <app-parameters-chips [formStateFields]="formStateFields" [parentForm]="formMethods" parametersFormName="parameters" [formIndex]=i>
+        </app-parameters-chips>
+        <button *ngIf="i > 0" mat-button (click)="removeRow('methods', i)" type="button">Remove Method Row</button>
         </div>
       </div>
     </div>
-    <div>
-      <mat-divider> </mat-divider>
-      <div mat-dialog-actions class="actions">
-        <button mat-raised-button class="cancel-button" type="button" (click)="cancel()">Cancel</button>
-        <button mat-raised-button class="save-button" type="submit" [disabled] = "aggregateSettingsForm.invalid">{{saveButtonLabel}}</button>
+    <div class="add-container">
+      <button mat-stroked-button color="primary" (click)="addNewRow('methods')" type="button">Add
+        Method</button>
+    </div>
+    <mat-divider> </mat-divider>
+    <span>API</span>
+    <div class="ptop1">
+      <div [formGroup]="formApi">
+        <mat-form-field appearance="fill">
+          <mat-label>Root Path</mat-label>
+          <input matInput formControlName="rootPath">
+        </mat-form-field>
+        <div formArrayName="routes" *ngFor="let route of formApiRoutes.controls; let iApi = index;">
+          <div [formGroupName]="iApi" class="item">
+            <mat-form-field appearance="fill">
+              <mat-label>Path</mat-label>
+              <input matInput formControlName="path">
+              <span matPrefix *ngIf="route.get('requireEntityLoad').value">{{'/{id}/'}}</span>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="httpMethod" placeholder="Http Method" #singleSelect>
+                <mat-option *ngFor="let httpMethod of httpsMethods" [value]="httpMethod">
+                  {{httpMethod}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-select formControlName="aggregateMethod" placeholder="Aggregate Method" #singleSelect
+                [disabled]="formMethods.invalid" (selectionChange)="methodChanged($event)">
+                <mat-option *ngFor="let method of formMethods.controls" [value]="method.get('name').value">
+                  {{method.get('name').value}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button *ngIf="iApi > 0" mat-button (click)="removeApiRow(iApi)" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="add-container">
+          <button mat-stroked-button color="primary" (click)="addApiRow()" type="button">Add Api Method</button>
+        </div>
       </div>
     </div>
-  </form>
+  </div>
+  <div>
+    <mat-divider> </mat-divider>
+    <div mat-dialog-actions class="actions">
+      <button mat-raised-button class="cancel-button" type="button" (click)="cancel()">Cancel</button>
+      <button mat-raised-button class="save-button" type="submit"
+        [disabled]="aggregateSettingsForm.invalid">{{saveButtonLabel}}</button>
+    </div>
+  </div>
+</form>
