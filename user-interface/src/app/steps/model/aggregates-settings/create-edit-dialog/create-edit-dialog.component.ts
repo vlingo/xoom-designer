@@ -95,7 +95,7 @@ export class CreateEditDialogComponent implements OnInit {
     const methodName = $event.value;
     this.formApiRoutes.controls.forEach(formRoute => {
         this.formMethods.controls.forEach(formMethod => {
-          if (formMethod.get('name').value === methodName){
+          if (formRoute.get('aggregateMethod').value === methodName && formMethod.get('name').value === methodName){
             if (formMethod.get('factory').value) {
               formRoute.get('requireEntityLoad').setValue(false);
             } else {
