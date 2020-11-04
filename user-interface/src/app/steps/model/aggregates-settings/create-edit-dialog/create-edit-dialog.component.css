@@ -7,6 +7,11 @@
   gap: 15px;
 }
 
+.second-item-line{
+  display: flex;
+  gap: 15px;
+}
+
 .add-container{
   margin-left: 87%;
   margin-bottom: 2%;

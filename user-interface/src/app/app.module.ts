@@ -23,9 +23,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule} from '@angular/material/select';
+import { MatChipsModule} from '@angular/material/chips';
+import { DragDropModule} from '@angular/cdk/drag-drop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import {  MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { NgxJsonViewModule } from 'ng-json-view';
 import { HttpRequestHandler } from './interceptor/http-request-handler';
@@ -34,6 +36,7 @@ import { AggregatesSettingsComponent } from './steps/model/aggregates-settings/a
 import { ViewDialogComponent } from './steps/model/aggregates-settings/view-dialog/view-dialog.component';
 import { CreateEditDialogComponent } from './steps/model/aggregates-settings/create-edit-dialog/create-edit-dialog.component';
 import { PersistenceComponent } from './steps/model/persistence/persistence.component';
+import { ParametersChipsComponent } from './steps/model/aggregates-settings/parameters-chips/parameters-chips.component';
 
 
 @NgModule({
@@ -51,7 +54,8 @@ import { PersistenceComponent } from './steps/model/persistence/persistence.comp
     AggregatesSettingsComponent,
     ViewDialogComponent,
     CreateEditDialogComponent,
-    PersistenceComponent
+    PersistenceComponent,
+    ParametersChipsComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,9 @@ import { PersistenceComponent } from './steps/model/persistence/persistence.comp
     MatCardModule,
     NgxJsonViewModule,
     MatButtonToggleModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatChipsModule,
+    DragDropModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -7,6 +7,7 @@ import { DeploymentComponent } from './steps/deployment/deployment.component';
 import { GenerationComponent } from './steps/generation/generation.component';
 import { AboutComponent } from './about/about.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ParametersChipsComponent } from './steps/model/aggregates-settings/parameters-chips/parameters-chips.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'teste',
+    component: ParametersChipsComponent
   }
 ];
 
