@@ -16,7 +16,8 @@ import {
   Api,
   Method,
   StateField,
-  Route
+  Route,
+  AggregateSettingWrapper
 } from './../../../model/model-aggregate';
 import {
   Component,
@@ -31,6 +32,7 @@ import {
 import {
   CreateEditDialogComponent
 } from './create-edit-dialog/create-edit-dialog.component';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-aggregates-settings',
@@ -39,16 +41,20 @@ import {
 })
 export class AggregatesSettingsComponent extends StepComponent implements OnInit {
 
-  aggregateSettings: AggregateSetting[] = [];
+  aggregateSettingsWrapper: AggregateSettingWrapper[] = [];
 
   constructor(private dialog: MatDialog, private settingsStepService: SettingsStepService) {
     super();
-    settingsStepService.getSettings$.subscribe(settings => {
-      if (settings.model && settings.model.aggregateSettings){
-        this.aggregateSettings = settings.model.aggregateSettings;
+    settingsStepService.getSettings$.pipe(map(settings => {
+      let wrappers = [];
+      if (settings && settings.model && settings.model.aggregateSettings){
+        wrappers = settings.model.aggregateSettings.map(setting => new AggregateSettingWrapper(setting));
       }
+      return wrappers;
+    })).subscribe(wrappers => {
+      this.aggregateSettingsWrapper = wrappers;
     });
-    if (this.aggregateSettings.length === 0) {
+    if (this.aggregateSettingsWrapper.length === 0) {
       this.openNewAggregateModal();
     }
   }
@@ -63,8 +69,8 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
     });
   }
 
-  remove(aggregateSetting: AggregateSetting): void {
-    this.aggregateSettings = this.aggregateSettings.filter(ag => ag.aggregateName !== aggregateSetting.aggregateName);
+  remove(id: number): void {
+    this.aggregateSettingsWrapper = this.aggregateSettingsWrapper.filter(wrapper => wrapper.id !== id);
   }
 
   next(): void {
@@ -92,35 +98,69 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   openNewAggregateModal() {
-    this.openAggregateModal({} as AggregateSetting);
+    this.openAggregateModal(new AggregateSettingWrapper(null));
   }
 
-  openAggregateModal(aggregate: AggregateSetting) {
+  openAggregateModal(aggregate: AggregateSettingWrapper) {
     const dialogRef = this.dialog.open(CreateEditDialogComponent, {
       data: aggregate,
       height: '83%',
       width: '70%',
     });
     dialogRef.afterClosed().subscribe(editedAggregate => {
-      if (editedAggregate && editedAggregate.aggregateName) {
-        this.aggregateSettings = this.aggregateSettings.filter(ag => ag.aggregateName !== editedAggregate.aggregateName);
-        this.aggregateSettings.push(editedAggregate);
+      if (editedAggregate) {
+        this.remove(editedAggregate.id);
+        this.aggregateSettingsWrapper.push(editedAggregate);
       }
     });
   }
 
   getMethodParameters(method: Method, stateFields: StateField[]) {
-    return stateFields.filter(state => {
-      return method.parameters.includes(state.name);
+    return method.parameters.map(meth => {
+      return stateFields.filter(sf => sf.name === meth).pop();
     }).map(state => {
       return state.type + ' ' + state.name;
     }).join(', ');
   }
 
   getApiEntirePath(api: Api, route: Route): string {
-    const path = (route.requireEntityLoad) ?
-                  api.rootPath + route.path :
-                  api.rootPath + '/';
-    return route.httpMethod + ' - /' + (path.endsWith('/') ? path.substring(0, path.length - 1) : path);
+    return route.httpMethod + ' - ' + (this.addSlashs(api.rootPath, route.path) + this.addStartSlash(route.path)).replace(/\/\//g, '/');
   }
+
+  get aggregateSettings(): AggregateSetting[]{
+    return this.aggregateSettingsWrapper.map(ag => ag.aggregateSettings);
+  }
+
+  aggregateSettingsWrapperSorted(): AggregateSettingWrapper[]{
+    return this.aggregateSettingsWrapper.sort((first, second) => first.id - second.id);
+  }
+
+  private addSlashs(path: string, afterPath: string){
+    path = this.addStartSlash(path);
+    if (afterPath) {
+      path = this.addEndSlash(path);
+    }
+    return path;
+  }
+
+  private addStartSlash(path: string){
+    if (!path){
+      return '';
+    }
+    if (!path.startsWith('/')) {
+      path = '/' + path;
+    }
+    return path;
+  }
+
+  private addEndSlash(path: string){
+    if (!path){
+      return '';
+    }
+    if (!path.endsWith('/')) {
+      path = path + '/';
+    }
+    return path;
+  }
+
 }
