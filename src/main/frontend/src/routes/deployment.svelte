@@ -22,7 +22,7 @@
 </script>
 
 <!-- add newbie tooltips -->
-<CardForm title="Deployment" previous="model" next="generation">
+<CardForm title="Deployment" previous="persistence" next="generation">
 	{#each types as {label}}
 		<Radio bind:group={type} value={label}>{label}</Radio>
 	{/each}
