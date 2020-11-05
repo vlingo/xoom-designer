@@ -7,12 +7,11 @@
 
 package io.vlingo.xoom.starter.restapi;
 
-import io.vlingo.actors.Logger;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
+import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
@@ -21,20 +20,17 @@ import io.vlingo.xoom.starter.task.TaskStatus;
 import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
-import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.*;
+import static io.vlingo.http.Response.Status.InternalServerError;
+import static io.vlingo.http.Response.Status.Ok;
+import static io.vlingo.http.ResponseHeader.Headers;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 import static io.vlingo.xoom.starter.Configuration.GENERATION_SETTINGS_RESPONSE_HEADER;
 import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
 
-public class GenerationSettingsResource extends ResourceHandler {
-
-    private final Stage stage;
-    private final Logger logger;
+public class GenerationSettingsResource extends DynamicResourceHandler {
 
     public GenerationSettingsResource(final Stage stage) {
-        this.stage = stage;
-        this.logger = stage.world().defaultLogger();
+        super(stage);
     }
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
@@ -44,7 +40,7 @@ public class GenerationSettingsResource extends ResourceHandler {
 
             return executionContext.andThen(this::runProjectGeneration).andThenTo(this::buildSuccessfulResponse);
         } catch (final Exception exception) {
-            logger.error(exception.getMessage());
+            logger().error(exception.getMessage());
             exception.printStackTrace();
             return Completes.withFailure(Response.of(InternalServerError));
         }
@@ -55,7 +51,7 @@ public class GenerationSettingsResource extends ResourceHandler {
             return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
         } catch (final Exception exception) {
             exception.printStackTrace();
-            logger.error(exception.getMessage());
+            logger().error(exception.getMessage());
             return TaskStatus.FAILED;
         }
     }
