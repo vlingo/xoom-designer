@@ -6,6 +6,7 @@ import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { StepCompletion } from 'src/app/model/step-completion';
 import { Step } from 'src/app/model/step';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-deployment',
@@ -20,19 +21,26 @@ export class DeploymentComponent extends StepComponent {
 
   constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
-    this.createForm();
+    settingsStepService.getSettings$.pipe(map(settings => {
+      if (settings && settings.deployment){
+        return settings.deployment;
+      }
+      return {} as DeploymentSettings;
+    })).subscribe(deployment => {
+      this.createForm(deployment);
+    });
   }
 
   ngOnInit(): void {
   }
 
-  createForm() {
+  createForm(deployment: DeploymentSettings) {
     this.deploymentForm = this.formBuilder.group({
       clusterNodes: [ 3, Validators.required],
-      type: ['NONE', Validators.required],
-      dockerImage: [''],
-      kubernetesImage: [''],
-      kubernetesPOD: ['']
+      type: ['', Validators.required],
+      dockerImage: [deployment.dockerImage],
+      kubernetesImage: [deployment.kubernetesImage],
+      kubernetesPOD: [deployment.kubernetesPod]
     });
 
     const dockerImage = this.deploymentForm.get('dockerImage');
@@ -69,6 +77,7 @@ export class DeploymentComponent extends StepComponent {
         kubernetesPOD.updateValueAndValidity();
         kubernetesImage.updateValueAndValidity();
       });
+    this.deploymentForm.get('type').setValue(deployment.type);
   }
 
   next() {
@@ -78,6 +87,8 @@ export class DeploymentComponent extends StepComponent {
   }
 
   previous() {
+    const deployment = this.deploymentForm.value as DeploymentSettings;
+    this.settingsStepService.addDeployment(deployment);
     this.move(NavigationDirection.REWIND);
   }
 
