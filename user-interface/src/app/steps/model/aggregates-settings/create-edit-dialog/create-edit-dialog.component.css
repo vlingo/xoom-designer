@@ -1,9 +1,13 @@
 .actions{
-  float:right;
   padding: 2px;
 }
 
 .item{
+  display: flex;
+  gap: 15px;
+}
+
+.second-item-line{
   display: flex;
   gap: 15px;
 }
@@ -23,4 +27,22 @@
 
 .select-multiple{
   height: 100%;
+}
+
+mat-slide-toggle {
+  margin-top: 10%;
+}
+
+mat-slide-toggle .mat-slide-toggle-content span {
+  font-size: 13px !important;
+}
+
+.cancel-button {
+  background-color: #e64325;
+  color: white;
+}
+
+.save-button{
+  background-color: #00753b;
+  color: white;
 }

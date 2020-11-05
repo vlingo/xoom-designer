@@ -10,37 +10,58 @@ package io.vlingo.xoom.starter.restapi;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
+import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.Resource;
-import io.vlingo.http.resource.ResourceHandler;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.TaskStatus;
 import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
-import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.ResponseHeader.*;
+import static io.vlingo.http.Response.Status.InternalServerError;
+import static io.vlingo.http.Response.Status.Ok;
+import static io.vlingo.http.ResponseHeader.Headers;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 import static io.vlingo.xoom.starter.Configuration.GENERATION_SETTINGS_RESPONSE_HEADER;
 import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
 
-public class GenerationSettingsResource extends ResourceHandler {
-
-    private final Stage stage;
+public class GenerationSettingsResource extends DynamicResourceHandler {
 
     public GenerationSettingsResource(final Stage stage) {
-        this.stage = stage;
+        super(stage);
     }
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-        return Completes.withSuccess(TaskExecutionContextMapper.from(settings))
-                .andThen(context -> Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context))
-                .andThenTo(taskStatus -> Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(taskStatus))));
+        try {
+            final Completes<TaskExecutionContext> executionContext =
+                    Completes.withSuccess(TaskExecutionContextMapper.from(settings));
+
+            return executionContext.andThen(this::runProjectGeneration).andThenTo(this::buildSuccessfulResponse);
+        } catch (final Exception exception) {
+            logger().error(exception.getMessage());
+            exception.printStackTrace();
+            return Completes.withFailure(Response.of(InternalServerError));
+        }
+    }
+
+    private TaskStatus runProjectGeneration(final TaskExecutionContext context) {
+        try {
+            return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+            logger().error(exception.getMessage());
+            return TaskStatus.FAILED;
+        }
     }
 
     public Completes<Response> supportedTypes() {
-        return Completes.withSuccess(SupportedTypes.names())
-                .andThenTo(typeNames -> Completes.withSuccess(Response.of(Ok, serialized(typeNames))));
+        return Completes.withSuccess(SupportedTypes.names()).andThenTo(this::buildSuccessfulResponse);
+    }
+
+    private Completes<Response> buildSuccessfulResponse(final Object payload) {
+        return Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(payload)));
     }
 
     @Override
