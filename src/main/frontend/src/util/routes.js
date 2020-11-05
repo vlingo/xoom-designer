@@ -1,4 +1,4 @@
-import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiEllipse, mdiEllipseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiHome, mdiHomeOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
+import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiEllipse, mdiEllipseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiHome, mdiHomeOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
 
 export default [
 	{
@@ -13,17 +13,23 @@ export default [
 		openIcon: mdiComment,
 		href: 'context'
 	},
+	// {
+	// 	text: 'or Context with same icon as schemata-context',
+	// 	icon: mdiEllipseOutline,
+	// 	openIcon: mdiEllipse,
+	// 	href: 'context'
+	// },
 	{
-		text: 'or Context with same icon as schemata-context',
-		icon: mdiEllipseOutline,
-		openIcon: mdiEllipse,
-		href: 'context'
-	},
-	{
-		text: 'Model',
+		text: 'Aggregates',
 		icon: mdiShapeOutline,
 		openIcon: mdiShape,
-		href: 'model'
+		href: 'aggregates'
+	},
+	{
+		text: 'Persistence',
+		icon: mdiDatabaseOutline,
+		openIcon: mdiDatabase,
+		href: 'persistence'
 	},
 	{
 		text: 'Deployment',

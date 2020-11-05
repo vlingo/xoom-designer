@@ -2,10 +2,10 @@
 	import Switch from "svelte-materialify/src/components/Switch";
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, modelSettings, deploymentSettings, generationSettings } from "../stores";
+	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings } from "../stores";
 
 	let context = $contextSettings;
-    let model = $modelSettings;
+    let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings};
     let deployment  = $deploymentSettings;
     let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : "";
     let useAnnotations = $generationSettings ? $generationSettings.useAnnotations : false;
