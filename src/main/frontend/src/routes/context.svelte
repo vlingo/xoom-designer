@@ -15,9 +15,9 @@
 </script>
 
 <!-- add newbie tooltips -->
-<CardForm title="Context" previous="." next="model">
-	<TextField placeholder="com.example" bind:value={groupId} rules={[notEmpty]} validateOnBlur={!groupId}>Group Id</TextField>
-	<TextField placeholder="demo" bind:value={artifactId} rules={[notEmpty]} validateOnBlur={!artifactId}>Artifact Id</TextField>
-	<TextField placeholder="1.0.0" bind:value={artifactVersion} rules={[notEmpty, validVersion]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
-	<TextField placeholder="com.example.demo" bind:value={packageName} rules={[notEmpty]} validateOnBlur={!packageName}>Base Package Name</TextField>
+<CardForm title="Context" previous="." next="aggregates">
+	<TextField class="ma-4" placeholder="com.example" bind:value={groupId} rules={[notEmpty]} validateOnBlur={!groupId}>Group Id</TextField>
+	<TextField class="ma-4" placeholder="demo" bind:value={artifactId} rules={[notEmpty]} validateOnBlur={!artifactId}>Artifact Id</TextField>
+	<TextField class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[notEmpty, validVersion]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
+	<TextField class="ma-4" placeholder="com.example.demo" bind:value={packageName} rules={[notEmpty]} validateOnBlur={!packageName}>Base Package Name</TextField>
 </CardForm>
