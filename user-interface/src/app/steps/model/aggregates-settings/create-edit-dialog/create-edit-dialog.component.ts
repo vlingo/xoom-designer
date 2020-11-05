@@ -4,7 +4,8 @@ import {
   AggregateEvent,
   StateField,
   Api,
-  Route
+  Route,
+  AggregateSettingWrapper
 } from './../../../../model/model-aggregate';
 import {
   FormArray,
@@ -40,42 +41,31 @@ export class CreateEditDialogComponent implements OnInit {
     methods: this.createMethods,
     api: this.createApi
   };
+  saveButtonLabel = 'Add';
+  currentId = 0;
+
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef < CreateEditDialogComponent > ,
-              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSetting) {
-    this.createNewForm(aggregate || {} as AggregateSetting);
+              @Inject(MAT_DIALOG_DATA) public aggregate: AggregateSettingWrapper) {
+    if (aggregate.aggregateSettings != null){
+      this.currentId = aggregate.id;
+      this.saveButtonLabel = 'Save';
+    }
+    this.createNewForm(aggregate.aggregateSettings || {} as AggregateSetting);
   }
 
   ngOnInit(): void {
-    this.formMethods.valueChanges.subscribe(formMethods => {
-      formMethods.forEach(formMethod => {
-        this.formApiRoutes.controls.forEach(control => {
-          if (control.get('aggregateMethod').value === formMethod.name) {
-            if (formMethod.factory === 'YES') {
-              control.get('requireEntityLoad').disable();
-              control.get('requireEntityLoad').setValue('NO');
+    this.formMethods.valueChanges.subscribe((methodValues) => {
+      methodValues.forEach(methodValue => {
+        this.formApiRoutes.controls.forEach(formRoute => {
+          if (formRoute.get('aggregateMethod').value === methodValue.name){
+            if (methodValue.factory) {
+              formRoute.get('requireEntityLoad').setValue(false);
             } else {
-              control.get('requireEntityLoad').setValue('YES');
-              control.get('requireEntityLoad').enable();
+              formRoute.get('requireEntityLoad').setValue(true);
             }
           }
-        });
-      });
-
-      this.formApiRoutes.controls.forEach(formRoute => {
-        formRoute.get('aggregateMethod').valueChanges.subscribe(aggregateMethod => {
-          this.formMethods.controls.forEach(control => {
-            if (control.get('name').value === aggregateMethod) {
-              if (control.get('factory').value === 'YES') {
-                formRoute.get('requireEntityLoad').disable();
-                formRoute.get('requireEntityLoad').setValue('NO');
-              } else {
-                formRoute.get('requireEntityLoad').setValue('YES');
-                formRoute.get('requireEntityLoad').enable();
-              }
-            }
-          });
         });
       });
     });
@@ -99,6 +89,21 @@ export class CreateEditDialogComponent implements OnInit {
 
   get formApiRoutes(): FormArray {
     return this.formApi.get('routes') as FormArray;
+  }
+
+  methodChanged($event) {
+    const methodName = $event.value;
+    this.formApiRoutes.controls.forEach(formRoute => {
+        this.formMethods.controls.forEach(formMethod => {
+          if (formRoute.get('aggregateMethod').value === methodName && formMethod.get('name').value === methodName){
+            if (formMethod.get('factory').value) {
+              formRoute.get('requireEntityLoad').setValue(false);
+            } else {
+              formRoute.get('requireEntityLoad').setValue(true);
+            }
+          }
+        });
+    });
   }
 
   createNewForm(aggregate: AggregateSetting) {
@@ -176,7 +181,7 @@ export class CreateEditDialogComponent implements OnInit {
   private createMethods(formBuilder: FormBuilder, method: Method): FormGroup {
     return formBuilder.group({
       name: [method.name, [Validators.required]],
-      factory: [(method.factory) ? 'YES' : 'NO', [Validators.required]],
+      factory: [!!method.factory, []],
       parameters: [(method.parameters && method.parameters.length > 0) ? method.parameters : [], [Validators.required]],
       event: [method.event, [Validators.required]]
     });
@@ -195,20 +200,26 @@ export class CreateEditDialogComponent implements OnInit {
   }
 
   private createApiRoutes(formBuilder: FormBuilder, route: Route): FormGroup {
-    route.path = (route.requireEntityLoad) ? route.path.replace('/{id}/', '') : route.path;
+    if(route.path){
+      if (route.path.startsWith('/{id}/')){
+        route.path = route.path.replace('/{id}/', '');
+      }
+      if (route.path.startsWith('/{id}')){
+        route.path = route.path.replace('/{id}', '');
+      }
+    }
     return formBuilder.group({
       path: [route.path, []],
       httpMethod: [route.httpMethod, [Validators.required]],
       aggregateMethod: [route.aggregateMethod, [Validators.required]],
-      requireEntityLoad: [(route.requireEntityLoad) ? 'YES' : 'NO', [Validators.required]],
+      requireEntityLoad: [!!route.requireEntityLoad, []],
     });
   }
 
-  private parseAggregateForm(): AggregateSetting {
+  private parseAggregateForm(): AggregateSettingWrapper {
     const formValue = this.aggregateSettingsForm.getRawValue() as AggregateSetting;
     const methods = (this.aggregateSettingsForm.value.methods).map(method => {
       method.parameters = Array.isArray(method.parameters) ? method.parameters : [];
-      method.factory = (method.factory === 'YES') ? true : false;
       return method as Method;
     });
     const events = (this.aggregateSettingsForm.value.events).map(event => {
@@ -218,20 +229,22 @@ export class CreateEditDialogComponent implements OnInit {
     const api = this.aggregateSettingsForm.value.api;
     api.routes = Array.isArray(api.routes) ? api.routes : [];
     api.routes.forEach(route => {
-      if (route.requireEntityLoad === 'YES') {
-        route.requireEntityLoad = true;
-        route.path = `/{id}/${route.path}`;
+      if (route.requireEntityLoad) {
+        route.path = (route.path) ? `/{id}/${route.path}` : `/{id}`;
         return;
       }
-      route.requireEntityLoad = false;
     });
-    return {
+    const wrapper = new AggregateSettingWrapper({
       aggregateName: formValue.aggregateName,
       stateFields: formValue.stateFields,
       methods,
       events,
       api
-    } as AggregateSetting;
+    } as AggregateSetting);
+    if (this.currentId !== 0){
+      wrapper.id = this.currentId;
+    }
+    return wrapper;
   }
 
 }

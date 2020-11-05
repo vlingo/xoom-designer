@@ -16,19 +16,18 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-    <mat-label>Use CQRS?</mat-label>
-    <mat-button-toggle-group formControlName="useCQRS" style="width: 30%;">
-      <mat-button-toggle value="NO">No</mat-button-toggle>
-      <mat-button-toggle value="YES">Yes</mat-button-toggle>
-    </mat-button-toggle-group>
-  <mat-form-field appearance="fill" *ngIf="persistenceForm.get('useCQRS').value === 'NO'" style="padding-top: 8%;">
+  <div style="display: flex; justify-content: space-between;">
+  <mat-label>Use CQRS?</mat-label>
+  <mat-slide-toggle formControlName="useCQRS"></mat-slide-toggle>
+  </div>
+  <mat-form-field appearance="fill" *ngIf="!persistenceForm.get('useCQRS').value" style="padding-top: 8%;">
     <mat-label>Database</mat-label>
     <mat-select formControlName="database">
       <mat-option *ngFor="let database of databases" [value]="database.value">
         {{database.name}}
       </mat-option>
     </mat-select>  </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="persistenceForm.get('useCQRS').value  === 'YES'" style="padding-top: 8%;">
+  <mat-form-field appearance="fill" *ngIf="persistenceForm.get('useCQRS').value" style="padding-top: 8%;">
     <mat-label>Command Model Database</mat-label>
     <mat-select formControlName="commandModelDatabase">
       <mat-option *ngFor="let commandModelDatabase of databases" [value]="commandModelDatabase.value">
@@ -36,7 +35,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="fill" *ngIf="persistenceForm.get('useCQRS').value === 'YES'">
+  <mat-form-field appearance="fill" *ngIf="persistenceForm.get('useCQRS').value">
     <mat-label>Query Model Database</mat-label>
     <mat-select formControlName="queryModelDatabase">
       <mat-option *ngFor="let queryModelDatabase of databases" [value]="queryModelDatabase.value">
