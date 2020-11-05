@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.restapi;
 
+import io.vlingo.actors.Logger;
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
@@ -16,6 +17,7 @@ import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.TaskStatus;
 import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
@@ -28,31 +30,42 @@ import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
 public class GenerationSettingsResource extends ResourceHandler {
 
     private final Stage stage;
+    private final Logger logger;
 
     public GenerationSettingsResource(final Stage stage) {
         this.stage = stage;
+        this.logger = stage.world().defaultLogger();
     }
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
         try {
-            final TaskExecutionContext executionContext = TaskExecutionContextMapper.from(settings);
-            return Completes.withSuccess(executionContext).andThen(context -> {
-                try {
-                    return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
-                } catch (Exception exception) {
-                    stage.world().defaultLogger().error(exception.getMessage());
-                    return TaskExecutionContext.withoutOptions();
-                }}).andThenTo(taskStatus -> Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(taskStatus))));
+            final Completes<TaskExecutionContext> executionContext =
+                    Completes.withSuccess(TaskExecutionContextMapper.from(settings));
+
+            return executionContext.andThen(this::runProjectGeneration).andThenTo(this::buildSuccessfulResponse);
+        } catch (final Exception exception) {
+            logger.error(exception.getMessage());
+            exception.printStackTrace();
+            return Completes.withFailure(Response.of(InternalServerError));
+        }
+    }
+
+    private TaskStatus runProjectGeneration(final TaskExecutionContext context) {
+        try {
+            return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
         } catch (final Exception exception) {
             exception.printStackTrace();
-            stage.world().defaultLogger().error(exception.getMessage());
-            return Completes.withSuccess(Response.of(InternalServerError));
+            logger.error(exception.getMessage());
+            return TaskStatus.FAILED;
         }
     }
 
     public Completes<Response> supportedTypes() {
-        return Completes.withSuccess(SupportedTypes.names())
-                .andThenTo(typeNames -> Completes.withSuccess(Response.of(Ok, serialized(typeNames))));
+        return Completes.withSuccess(SupportedTypes.names()).andThenTo(this::buildSuccessfulResponse);
+    }
+
+    private Completes<Response> buildSuccessfulResponse(final Object payload) {
+        return Completes.withSuccess(Response.of(Ok, Headers.of(GENERATION_SETTINGS_RESPONSE_HEADER), serialized(payload)));
     }
 
     @Override
