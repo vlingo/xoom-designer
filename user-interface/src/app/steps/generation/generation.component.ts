@@ -50,10 +50,7 @@ export class GenerationComponent extends StepComponent {
     this.settingsStepService.getSettings$.pipe(take(1), tap(settings => {
       this.generationSettingsService.generate(settings).pipe(tap(() => {
         this.toastrService.success('Code generated. Please check folder ' + value.projectDirectory);
-      }), () => {
-        this.toastrService.error('Code not generated. Please check the values and try again.');
-        return EMPTY;
-      });
+      })).subscribe();
     })).subscribe();
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
