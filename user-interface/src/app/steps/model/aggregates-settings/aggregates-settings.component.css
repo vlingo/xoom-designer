@@ -1,26 +1,21 @@
 .aggregate-card {
-  margin-top: 4%;
+  margin-top: 10px;
   background-color: #fff9c4;
 }
 
 .aggregate {
-  margin-top: 2%;
-  margin-left: 4%;
-  max-width: 300px;
-  display: flex;
+  margin-top: 10px;
+  margin-left: 10px;
   flex-direction: column;
-  overflow-wrap: break-word;
-  max-height: 200px;
-  line-break: anywhere;
 }
 
 .event-card {
-  margin-top: 4%;
+  margin-top: 10px;
   background-color: #fd7e14;
 }
 
 .api-card {
-  margin-top: 2%;
+  margin-top: 10px;
   background-color: #64B5F6;
 }
 
@@ -32,6 +27,7 @@
   display: flex;
   overflow: auto;
   height: 445px;
+  white-space: nowrap;
 }
 
 .methods {
