@@ -27,6 +27,7 @@
 		<Radio bind:group={type} value={label}>{label}</Radio>
 	{/each}
 	{#if type === "Docker" || type === "Kubernetes"}
+	<div style="height: 16px"></div>
 		<TextField placeholder="demo-app" bind:value={dockerImage} rules={[notEmpty]} validateOnBlur={!dockerImage}>Local Docker Image</TextField>
 	{/if}
 	{#if type === "Kubernetes"}

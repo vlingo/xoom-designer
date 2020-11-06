@@ -10,6 +10,8 @@
 	import PathField from "../components/PathField.svelte";
 	import { aggregateSettings } from "../stores";
 	import { notEmpty } from "../validators";
+	import Dialog from "svelte-materialify/src/components/Dialog";
+
 	function formatArrayForSelect(array) {
 		return array.map(
 			element => ({ name: element, value: element })
@@ -18,7 +20,7 @@
 
 	const stateFieldsTypes =  formatArrayForSelect(['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char']);
 	const httpMethods = formatArrayForSelect(['POST', 'PUT', 'DELETE', 'PATCH', 'GET', 'HEAD', 'OPTIONS']);
-	const prependedRoute = "/{id}/";
+	let dialogActive = false;
 
 	let aggregateName = "";
 	let stateFields = [{ name: "id", type: "String" }];
@@ -36,12 +38,22 @@
 	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "", aggregateMethod: "", requireEntityLoad: false });
 	const deleteRoute = (index) => { routes.splice(index, 1); routes = routes; }
 	
-	$: $aggregateSettings = { aggregateName, stateFields, events, methods, rootPath, routes }
-	$: console.log($aggregateSettings, stateFields);
+	$: aggregateSetting = { aggregateName, stateFields, events, methods, rootPath, routes }
+
+	const addAggregate = () => {
+		$aggregateSettings = [...$aggregateSettings, aggregateSetting];
+		dialogActive = !dialogActive;
+	}
+
+	$: console.log($aggregateSettings, dialogActive);
 </script>
 
 <!-- add newbie tooltips -->
 <CardForm title="Aggregates" previous="context" next="persistence">
+	<Button on:click={() => dialogActive = !dialogActive}>New Aggregate</Button>
+</CardForm>
+
+<Dialog bind:active={dialogActive} width={1000} class="pa-4">
 	<TextField bind:value={aggregateName} rules={[notEmpty]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<Divider class="ma-2" />
 
@@ -55,9 +67,11 @@
 			</Button>
 		</span>
 	{/each}
-	<Button on:click={addStateField} icon class="ma-2">
-		<Icon path={mdiPlusThick}/>
-	</Button>
+	<div class="d-flex justify-center">
+		<Button fab on:click={addStateField} class="ma-2">
+			<Icon path={mdiPlusThick}/>
+		</Button>
+	</div>
 	<Divider class="ma-2" />
 
 	<h5>Events:</h5>
@@ -70,9 +84,11 @@
 			</Button>
 		</span>
 	{/each}
-	<Button on:click={addEvent} icon class="ma-2">
-		<Icon path={mdiPlusThick}/>
-	</Button>
+	<div class="d-flex justify-center">
+		<Button fab on:click={addEvent} class="ma-2">
+			<Icon path={mdiPlusThick}/>
+		</Button>
+	</div>
 	<Divider class="ma-2" />
 
 	<h5>Methods:</h5>
@@ -87,9 +103,11 @@
 			</Button>
 		</span>
 	{/each}
-	<Button on:click={addMethod} icon class="ma-2">
-		<Icon path={mdiPlusThick}/>
-	</Button>
+	<div class="d-flex justify-center">
+		<Button fab on:click={addMethod} class="ma-2">
+			<Icon path={mdiPlusThick}/>
+		</Button>
+	</div>
 	<Divider class="ma-2" />
 
 	<h5>API:</h5>
@@ -105,9 +123,12 @@
 			</Button>
 		</span>
 	{/each}
-	<Button on:click={addRoute} icon class="ma-2">
-		<Icon path={mdiPlusThick}/>
-	</Button>
+	<div class="d-flex justify-center">
+		<Button fab on:click={addRoute} class="ma-2">
+			<Icon path={mdiPlusThick}/>
+		</Button>
+	</div>
 	<Divider class="ma-2" />
-
-</CardForm>
+	<Button on:click={addAggregate}>Add</Button>
+	<Button on:click={() => dialogActive = !dialogActive}>Cancel</Button>
+</Dialog>
