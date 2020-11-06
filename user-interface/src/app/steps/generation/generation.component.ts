@@ -47,11 +47,6 @@ export class GenerationComponent extends StepComponent {
   generate() {
     const value = this.generationForm.value;
     this.settingsStepService.addGeneralSettingsInfo(value.projectDirectory, value.useAnnotations, value.useAutoDispatch);
-    this.settingsStepService.getSettings$.pipe(take(1), tap(settings => {
-      this.generationSettingsService.generate(settings).pipe(tap(() => {
-        this.toastrService.success('Code generated. Please check folder ' + value.projectDirectory);
-      })).subscribe();
-    })).subscribe();
     this.stepCompletion.emit(new StepCompletion(
       Step.GENERATION,
       this.generationForm.valid,

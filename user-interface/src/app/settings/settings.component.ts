@@ -9,6 +9,8 @@ import { RoutingHistoryService } from '../routing/routing-history.service';
 import { GenerationSettingsService } from '../service/generation-settings.service';
 import { LoaderService } from '../service/loader.service';
 import { LoaderState } from '../loader/loader-state';
+import { SettingsStepService } from '../service/settings-step.service';
+import { take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-settings',
@@ -25,7 +27,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(private router: Router,
               private routingHistoryService: RoutingHistoryService,
-              private service: GenerationSettingsService,
+              private settingsStepService: SettingsStepService,
+              private generationSettingsService: GenerationSettingsService,
               private loaderService: LoaderService,
               private toastrService: ToastrService) {
 
@@ -52,6 +55,12 @@ export class SettingsComponent implements OnInit {
       let path = StepPath.get(stepCompletion.nextStep());
       this.router.navigate([path]);
     }
+
+    if(stepCompletion.isGenerationRequested()) {
+      if(this.validate()) {
+        this.submit();
+      }
+    }
   }
 
   private validate() {
@@ -70,6 +79,15 @@ export class SettingsComponent implements OnInit {
 
     return true;
   }
+
+  private submit() {
+    this.settingsStepService.getSettings$.pipe(take(1), tap(settings => {
+      this.generationSettingsService.generate(settings).pipe(tap(() => {
+        this.toastrService.success('Code generated. Please check folder ' + settings.projectDirectory);
+      })).subscribe();
+    })).subscribe();
+  }
+
   onComponentActivated(componentReference: StepComponent) {
     this.activeStep = componentReference;
     this.activeStep.generationSettings = this.generationSettings;
