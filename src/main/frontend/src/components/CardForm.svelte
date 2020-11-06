@@ -14,17 +14,24 @@
 	const goToNext = () => next && goto(next);
 </script>
 
-<Card>
+<Card style="display: flex;" class="justify-center align-center flex-column">
 	<CardTitle>{title}</CardTitle>
 	<CardText>
 		<slot/>
 	</CardText>
 	<CardActions>
 		{#if previous}
-			<Button on:click={goToPrevious}>▲ Previous</Button>
+		<div title="Previous">
+			<Button on:click={goToPrevious}>▲</Button>
+		</div>
+		{/if}
+		{#if previous && next}
+			<div style="width: 16px"></div>
 		{/if}
 		{#if next}
-			<Button on:click={goToNext}>▼ Next</Button>
+		<div title="Next">
+			<Button on:click={goToNext}>▼</Button>
+		</div>
 		{/if}
 	</CardActions>
 </Card>

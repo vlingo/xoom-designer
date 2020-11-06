@@ -19,7 +19,7 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField placeholder="D:\demo-projects" bind:value={projectDirectory}>Absolute path where you want to generate the project</TextField>
+	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory}>Absolute path where you want to generate the project</TextField>
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
 	<Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 </CardForm>
