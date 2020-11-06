@@ -30,6 +30,8 @@
 
 .cards {
   display: flex;
+  overflow: auto;
+  height: 445px;
 }
 
 .methods {
