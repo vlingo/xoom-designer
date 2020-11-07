@@ -6,6 +6,7 @@ import { StepCompletion } from '../../model/step-completion';
 import { Step } from '../../model/step';
 import { NavigationDirection } from 'src/app/model/navigation-direction';
 import { StepComponent } from '../step.component';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-context',
@@ -18,18 +19,25 @@ export class ContextComponent extends StepComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService) {
     super();
-    this.createForm();
+    settingsStepService.getSettings$.pipe(map(settings => {
+      if (settings && settings.context){
+        return settings.context;
+      }
+      return {} as ContextSettings;
+    })).subscribe(context => {
+      this.createForm(context);
+    });
   }
 
   ngOnInit(): void {
   }
 
-  createForm() {
+  createForm(context: ContextSettings) {
     this.contextForm = this.formBuilder.group({
-      groupId: ['', Validators.required],
-      artifactId: ['', Validators.required],
-      artifactVersion: ['', Validators.required],
-      packageName: ['', Validators.required],
+      groupId: [context.groupId, Validators.required],
+      artifactId: [context.artifactId, Validators.required],
+      artifactVersion: [context.artifactVersion, Validators.required],
+      packageName: [context.packageName, Validators.required],
       xoomVersion: ['1.3.4-SNAPSHOT']
     });
   }
