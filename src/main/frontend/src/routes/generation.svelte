@@ -1,8 +1,10 @@
 <script>
+	import Button from "svelte-materialify/src/components/Button";
 	import Switch from "svelte-materialify/src/components/Switch";
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings } from "../stores";
+	import XoomStarterRepository from "../api/XoomStarterRepository";
 
 	let context = $contextSettings;
     let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings};
@@ -10,6 +12,8 @@
     let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : "";
     let useAnnotations = $generationSettings ? $generationSettings.useAnnotations : false;
 	let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
+
+	const generate = () => XoomStarterRepository.postGenerationSettings($generationSettings);
 
 	$: if(!useAnnotations) useAutoDispatch = false;
 
@@ -22,4 +26,5 @@
 	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory}>Absolute path where you want to generate the project</TextField>
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
 	<Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
+	<Button on:click={generate}>Generate</Button>
 </CardForm>
