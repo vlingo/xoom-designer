@@ -24,30 +24,32 @@ public class ArchetypeCommandResolverStepTest {
     private static final String DEFAULT_ROOT_FOLDER = Paths.get("home", "tools", "starter").toString();
 
     private static final String WINDOWS_ARCHETYPE_PATH =
-            Paths.get(WINDOWS_ROOT_FOLDER, "resources", "archetypes", "kubernetes-archetype").toString();
+            Paths.get(WINDOWS_ROOT_FOLDER, "resources", "archetypes").toString();
 
     private static final String DEFAULT_ARCHETYPE_PATH =
-            Paths.get(DEFAULT_ROOT_FOLDER, "resources", "archetypes", "kubernetes-archetype").toString();
+            Paths.get(DEFAULT_ROOT_FOLDER, "resources", "archetypes").toString();
 
     private static final String EXPECTED_ARCHETYPE_COMMAND_ON_WINDOWS =
-                    "D: && cd " + WINDOWS_ARCHETYPE_PATH + " && mvn clean install" +
-                    " && E: && cd E:\\projects && mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
+                    "D: && cd " + WINDOWS_ARCHETYPE_PATH + " && mvnw.cmd -f kubernetes-archetype\\pom.xml clean install " +
+                    "&& mvnw.cmd archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
                     "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
-                    "-Dk8sImage=starter-example-image ";
+                    "-Dk8sImage=starter-example-image " +
+                    "&& MOVE /Y starter-example E:\\projects";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
-                    "cd " + DEFAULT_ARCHETYPE_PATH +  " && mvn clean install && cd /home/projects && " +
-                    "mvn archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
+                    "cd " + DEFAULT_ARCHETYPE_PATH +  " && mvnw -f .\\kubernetes-archetype\\pom.xml clean install " +
+                    "&& mvnw archetype:generate -B -DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
                     "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
-                    "-Dk8sImage=starter-example-image ";
+                    "-Dk8sImage=starter-example-image " +
+                    "&& mv -f starter-example /home/projects";
 
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
