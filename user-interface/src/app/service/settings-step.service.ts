@@ -49,6 +49,12 @@ export class SettingsStepService {
     settings.model = settings.model || {} as Model;
     settings.context = settings.context || {} as ContextSettings;
     settings.deployment = settings.deployment || {} as DeploymentSettings;
+    if(settings.useAnnotations === undefined) {
+      settings.useAnnotations = false;
+    }
+    if(settings.useAutoDispatch === undefined) {
+      settings.useAutoDispatch = false;
+    }
     return settings;
   }
 
