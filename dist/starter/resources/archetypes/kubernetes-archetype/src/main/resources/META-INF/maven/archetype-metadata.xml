@@ -53,6 +53,8 @@
         <include>pom.xml</include>
         <include>Dockerfile</include>
         <include>**/*.properties</include>
+        <include>mvnw</include>
+        <include>mvnw.cmd</include>
       </includes>
     </fileSet>
   </fileSets>
