@@ -10,14 +10,14 @@
 		{ label: "Docker" },
 		{ label: "Kubernetes" },
 	]
-	
+
 	let clusterNodes = $deploymentSettings ? $deploymentSettings.clusterNodes : 3;
     let type = $deploymentSettings ? $deploymentSettings.type : "None";
     let dockerImage = $deploymentSettings ? $deploymentSettings.dockerImage : "";
     let kubernetesImage = $deploymentSettings ? $deploymentSettings.kubernetesImage : "";
 	let kubernetesPod = $deploymentSettings ? $deploymentSettings.kubernetesPod : "";
 
-	$: $deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod }
+	$: $deploymentSettings = { clusterNodes, type: type.toUpperCase(), dockerImage, kubernetesImage, kubernetesPod }
 	$: console.log($deploymentSettings);
 </script>
 

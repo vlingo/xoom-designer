@@ -7,18 +7,19 @@
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 
 	let context = $contextSettings;
-    let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings};
+    let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings };
     let deployment  = $deploymentSettings;
     let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : "";
     let useAnnotations = $generationSettings ? $generationSettings.useAnnotations : false;
 	let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
 
-	const generate = () => XoomStarterRepository.postGenerationSettings($generationSettings);
-
+	const generate = () => {
+		XoomStarterRepository.postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch)
+		.then(console.log);
+	}
 	$: if(!useAnnotations) useAutoDispatch = false;
 
-	$: $generationSettings = { context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch }
-	$: console.log($generationSettings);
+	$: console.log(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch);
 </script>
 
 <!-- add newbie tooltips -->
