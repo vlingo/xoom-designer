@@ -61,7 +61,7 @@ public class TaskExecutionContextMapper {
         aggregateData.methods.forEach(method -> {
             final CodeGenerationParameter methodParameter =
                     CodeGenerationParameter.of(AGGREGATE_METHOD, method.name)
-                            .relate(FACTORY_METHOD, method.factory)
+                            .relate(FACTORY_METHOD, method.useFactory)
                             .relate(DOMAIN_EVENT, method.event);
 
             method.parameters.forEach(param -> methodParameter.relate(METHOD_PARAMETER, param));
@@ -98,12 +98,12 @@ public class TaskExecutionContextMapper {
     }
 
     private void mapPersistence() {
-        parameters.add(CQRS, data.model.persistence.useCQRS)
-                .add(DATABASE, data.model.persistence.database)
-                .add(PROJECTION_TYPE, data.model.persistence.projections)
-                .add(STORAGE_TYPE, data.model.persistence.storageType)
-                .add(COMMAND_MODEL_DATABASE, data.model.persistence.commandModelDatabase)
-                .add(QUERY_MODEL_DATABASE, data.model.persistence.queryModelDatabase);
+        parameters.add(CQRS, data.model.persistenceSettings.useCQRS)
+                .add(DATABASE, data.model.persistenceSettings.database)
+                .add(PROJECTION_TYPE, data.model.persistenceSettings.projections)
+                .add(STORAGE_TYPE, data.model.persistenceSettings.storageType)
+                .add(COMMAND_MODEL_DATABASE, data.model.persistenceSettings.commandModelDatabase)
+                .add(QUERY_MODEL_DATABASE, data.model.persistenceSettings.queryModelDatabase);
     }
 
     private void mapStructuralOptions() {

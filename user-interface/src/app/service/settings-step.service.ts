@@ -20,7 +20,7 @@ export class SettingsStepService {
 
   addPersistence(persistence: Persistence): void {
     const settings = this.getSettings();
-    settings.model.persistence = persistence;
+    settings.model.persistenceSettings = persistence;
     this.settings$.next(settings);
   }
 
