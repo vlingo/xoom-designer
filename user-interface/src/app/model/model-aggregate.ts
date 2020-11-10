@@ -10,7 +10,7 @@
 
   export interface Method {
     name: string;
-    factory: string;
+    useFactory: string;
     parameters: string[];
     event: string;
   }
@@ -56,7 +56,7 @@
 
   export interface Model {
     aggregateSettings: AggregateSetting[];
-    persistence: Persistence;
+    persistenceSettings: Persistence;
   }
 
   export interface RootObject {

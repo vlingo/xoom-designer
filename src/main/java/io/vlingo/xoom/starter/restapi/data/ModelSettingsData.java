@@ -12,12 +12,12 @@ import java.util.List;
 
 public class ModelSettingsData {
 
-    public final PersistenceData persistence;
+    public final PersistenceData persistenceSettings;
     public final List<AggregateData> aggregateSettings = new ArrayList<>();
 
-    public ModelSettingsData(final PersistenceData persistence,
+    public ModelSettingsData(final PersistenceData persistenceSettings,
                              final List<AggregateData> aggregateSettings) {
-        this.persistence = persistence;
+        this.persistenceSettings = persistenceSettings;
         this.aggregateSettings.addAll(aggregateSettings);
     }
 
