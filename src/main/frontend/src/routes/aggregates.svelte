@@ -33,12 +33,12 @@
 	const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
 	const addEvent = () => events = events.concat({ name: "", fields: [] });
 	const deleteEvent = (index) => { events.splice(index, 1); events = events; }
-	const addMethod = () => methods = methods.concat({ name: "", useFactory: "", parameters: [], event: "" });
+	const addMethod = () => methods = methods.concat({ name: "", useFactory: false, parameters: [], event: "" });
 	const deleteMethod = (index) => { methods.splice(index, 1); methods = methods; }
 	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "", aggregateMethod: "", requireEntityLoad: false });
 	const deleteRoute = (index) => { routes.splice(index, 1); routes = routes; }
 	
-	$: aggregateSetting = { aggregateName, stateFields, events, methods, rootPath, routes }
+	$: aggregateSetting = { aggregateName, stateFields, events, methods, api: { rootPath, routes } }
 
 	const addAggregate = () => {
 		$aggregateSettings = [...$aggregateSettings, aggregateSetting];
@@ -97,7 +97,7 @@
 			<TextField class="ma-2" bind:value={method.name}>Name</TextField>
 			<Switch bind:checked={method.useFactory}>Use Factory</Switch>
 			<Select multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
-			<Select multiple class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
+			<Select class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
 			<Button on:click={() => deleteMethod(i)} icon class="ma-2 red-text">
 				<Icon path={mdiDelete}/>
 			</Button>
