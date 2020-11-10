@@ -20,8 +20,8 @@ export class GenerationComponent extends StepComponent {
 
   generationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private settingsStepService: SettingsStepService,
-              private generationSettingsService: GenerationSettingsService, private toastrService: ToastrService) {
+  constructor(private formBuilder: FormBuilder,
+              private settingsStepService: SettingsStepService) {
     super();
     settingsStepService.getSettings$.pipe(map(settings => {
       if (settings){
