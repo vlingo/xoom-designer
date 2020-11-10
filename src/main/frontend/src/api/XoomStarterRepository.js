@@ -22,7 +22,9 @@ async function repoPost(path, body) {
 }
   
 export default {
-	postGenerationSettings(generationSettingsData) {
-		return repoPost(resources.generation, { generationSettingsData });
+	postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
+		return repoPost(resources.generation, { 
+			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
+		});
 	},
 }
