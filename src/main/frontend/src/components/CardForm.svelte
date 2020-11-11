@@ -21,17 +21,13 @@
 	</CardText>
 	<CardActions>
 		{#if previous}
-		<div title="Previous">
-			<Button on:click={goToPrevious}>▲</Button>
-		</div>
+			<Button title="Previous" on:click={goToPrevious}>▲</Button>
 		{/if}
 		{#if previous && next}
 			<div style="width: 16px"></div>
 		{/if}
 		{#if next}
-		<div title="Next">
-			<Button on:click={goToNext}>▼</Button>
-		</div>
+			<Button title="Next" on:click={goToNext}>▼</Button>
 		{/if}
 	</CardActions>
 </Card>
