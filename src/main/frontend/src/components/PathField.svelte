@@ -7,7 +7,7 @@
 	$: changed(requireEntityLoad);
 	function changed(requireEntityLoad) {
 		if(requireEntityLoad) {
-			path = "/{id}/"+path;
+			path = regexPrefix(/^\/\{id\}\//, "/{id}/", path, "/{id}/"+path);
 		} else {
 			path = path.substring(6);
 		}

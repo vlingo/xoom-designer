@@ -8,6 +8,7 @@
 
 	export let stateFields;
 	export let events;
+	export let methods;
 	export let method;
 	export let id;
 	
