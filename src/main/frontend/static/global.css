@@ -14,13 +14,31 @@ body {
 	height: 100%;
 }
 
+.command {
+	--theme-cards: #64B5F6;
+	--theme-text-primary: black;
+}
+
+.s-card-title {
+	flex-direction: column;
+}
+
+.aggregate {
+	--theme-cards: #fff9c4;
+	--theme-text-primary: black;
+	--theme-text-secondary: black;
+	--theme-dividers: rgba(0, 0, 0, 0.12);
+}
+
+.event {
+	--theme-cards: #fd7e14;
+	--theme-text-primary: black;
+}
+
 a {
 	text-decoration: none;
 	color: #00753b !important;
 }
-
-
-
 
 h1, h2, h3, h4, h5, h6 {
 	margin: 0 0 0.5em 0;
