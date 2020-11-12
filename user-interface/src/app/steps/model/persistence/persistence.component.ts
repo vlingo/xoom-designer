@@ -105,6 +105,8 @@ export class PersistenceComponent extends StepComponent implements OnInit {
   }
 
   previous(): void {
+    const persistence = this.persistenceForm.value;
+    this.settingsStepService.addPersistence(persistence);
     this.stepCompletion.emit(new StepCompletion(
       Step.PERSISTENCE,
       true,

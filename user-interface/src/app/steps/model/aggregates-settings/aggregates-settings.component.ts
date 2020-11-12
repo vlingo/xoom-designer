@@ -83,6 +83,7 @@ export class AggregatesSettingsComponent extends StepComponent implements OnInit
   }
 
   previous(): void {
+    this.settingsStepService.addAggregate(this.aggregateSettings);
     this.stepCompletion.emit(new StepCompletion(
       Step.AGGREGATE,
       true,

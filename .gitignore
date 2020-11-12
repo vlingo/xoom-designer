@@ -19,6 +19,7 @@ out/
 /.recommenders/
 *.jtl
 **/.~lock.*
+dependency-reduced-pom.xml
 
 # bin
 vlingo-xoom-starter-dist.jar
