@@ -5,7 +5,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
-	import { requireRule } from "../validators";
+	import { requireRule, versionRule } from "../validators";
 
 	let context = $contextSettings;
     let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings };
@@ -15,12 +15,14 @@
 	let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
 
 	const generate = () => {
-		if(!projectDirectory) return;
+		if(invalid) return;
 		XoomStarterRepository.postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch)
 		.then(console.log);
 	}
-	$: if(!useAnnotations) useAutoDispatch = false;
 
+	$: if(!useAnnotations) useAutoDispatch = false;
+	$: invalid = !projectDirectory || !context || !context.groupId || !context.artifactId || versionRule(context.artifactVersion) || !context.packageName;
+	$: $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
 	$: console.log(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch);
 </script>
 
@@ -29,5 +31,5 @@
 	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
 	<Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
-	<Button on:click={generate} disabled={!projectDirectory}>Generate</Button>
+	<Button on:click={generate} disabled={invalid}>Generate</Button>
 </CardForm>
