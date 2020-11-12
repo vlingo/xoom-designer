@@ -1,16 +1,16 @@
 <script>
 	import Button from "svelte-materialify/src/components/Button";
-	import Icon from "svelte-materialify/src/components/Icon";
 	import Select from "svelte-materialify/src/components/Select";
 	import TextField from "svelte-materialify/src/components/TextField";
 	import Dialog from "svelte-materialify/src/components/Dialog";
 	import Method from "./Method.svelte";
 	import Route from "./Route.svelte";
 	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import { mdiDelete, mdiPlusThick } from "@mdi/js";
 	import { aggregateSettings } from "../../stores";
-	import { notEmpty } from "../../validators";
+	import { requireRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
+	import DeleteButton from "./DeleteButton.svelte";
+	import CreateButton from "./CreateButton.svelte";
 
 	const stateFieldsTypes =  formatArrayForSelect(['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char']);
 	export let dialogActive;
@@ -30,9 +30,10 @@
 	const addEvent = () => events = events.concat({ name: "", fields: [] });
 	const deleteEvent = (index) => { events.splice(index, 1); events = events; }
 	const addMethod = () => methods = methods.concat({ name: "", useFactory: false, parameters: [], event: "" });
-	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "", aggregateMethod: "", requireEntityLoad: false });
+	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "GET", aggregateMethod: "", requireEntityLoad: false });
 
 	const add = () => {
+		if(requireRule(aggregateName)) return;
 		$aggregateSettings = [...$aggregateSettings, aggregateSetting];
 		currentId = undefined;
 		reset();
@@ -40,6 +41,7 @@
 	}
 
 	const update = () => {
+		if(requireRule(aggregateName)) return;
 		$aggregateSettings.splice(currentId, 1, aggregateSetting);
 		$aggregateSettings = $aggregateSettings;
 		currentId = undefined;
@@ -78,25 +80,31 @@
 </script>
 
 <Dialog bind:active={dialogActive} width={1000} class="pa-4">
-	<h4 style="text-align: center;">New Aggregate</h4>
-	<TextField bind:value={aggregateName} rules={[notEmpty]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<h4 style="text-align: center;">
+		{#if editMode}
+			Update Aggregate
+		{:else}
+			New Aggregate
+		{/if}
+	</h4>
+	<TextField bind:value={aggregateName} rules={[requireRule]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>State Fields:</h5>
 	{#each stateFields as stateField, i}
 		<span class="d-flex">
-			<TextField class="ma-2" bind:value={stateField.name}>Name</TextField>
-			<Select class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
-			<Button title="Delete State Field" on:click={() => deleteStateField(i)} icon class="ma-2 red-text">
-				<Icon path={mdiDelete}/>
-			</Button>
+		<div style="max-width: 100%">
+			<TextField disabled={i<1} class="ma-2" bind:value={stateField.name}>Name</TextField>
+		</div>
+		<div style="max-width: 100%">
+			<Select disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+		</div>
+		{#if i>0}
+			<DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
+		{/if}
 		</span>
 	{/each}
-	<div class="d-flex justify-center">
-		<Button title="Add State Field" fab on:click={addStateField} class="ma-2">
-			<Icon path={mdiPlusThick}/>
-		</Button>
-	</div>
+	<CreateButton title="Add State Field" on:click={addStateField}/>
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>Events:</h5>
@@ -104,27 +112,17 @@
 		<span class="d-flex">
 			<TextField class="ma-2" bind:value={event.name}>Name</TextField>
 			<Select multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
-			<Button title="Delete Event" on:click={() => deleteEvent(i)} icon class="ma-2 red-text">
-				<Icon path={mdiDelete}/>
-			</Button>
+			<DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
 		</span>
 	{/each}
-	<div class="d-flex justify-center">
-		<Button title="Add Event" fab on:click={addEvent} class="ma-2">
-			<Icon path={mdiPlusThick}/>
-		</Button>
-	</div>
+	<CreateButton title="Add Event" on:click={addEvent}/>
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>Methods:</h5>
 	{#each methods as method, id}
 		<Method bind:method {id} stateFields={formatArrayForSelect(stateFields.map(f => f.name))} events={formatArrayForSelect(events.map(e => e.name))} bind:methods/>
 	{/each}
-	<div class="d-flex justify-center">
-		<Button title="Add Method" fab on:click={addMethod} class="ma-2">
-			<Icon path={mdiPlusThick}/>
-		</Button>
-	</div>
+	<CreateButton title="Add Method" on:click={addMethod}/>
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>API:</h5>
@@ -133,17 +131,14 @@
 	{#each routes as { path, httpMethod, aggregateMethod, requireEntityLoad } , id}
 		<Route bind:path bind:httpMethod bind:aggregateMethod bind:requireEntityLoad {id} bind:methods bind:routes/>
 	{/each}
-	<div class="d-flex justify-center">
-		<Button title="Add Route" fab on:click={addRoute} class="ma-2">
-			<Icon path={mdiPlusThick}/>
-		</Button>
-	</div>
+	<CreateButton title="Add Route" on:click={addRoute}/>
 	<!-- <Divider class="ma-2" /> -->
+	
 	<CardActions>
 		{#if editMode}
-			<Button class="mr-3" on:click={update}>Update</Button>
+			<Button class="mr-3" on:click={update} disabled={requireRule(aggregateName)}>Update</Button>
 		{:else}
-			<Button class="mr-3" on:click={add}>Add</Button>
+			<Button class="mr-3" on:click={add} disabled={requireRule(aggregateName)}>Add</Button>
 		{/if}
 		<Button on:click={() => dialogActive = !dialogActive}>Cancel</Button>
 		<span style="width: 100%;"></span>
