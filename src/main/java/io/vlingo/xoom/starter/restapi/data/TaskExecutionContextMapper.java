@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.restapi.data;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -114,7 +115,7 @@ public class TaskExecutionContextMapper {
                 .add(ARTIFACT_ID, data.context.artifactId)
                 .add(VERSION, data.context.artifactVersion)
                 .add(PACKAGE, data.context.packageName)
-                .add(XOOM_SERVER_VERSION, data.context.xoomVersion)
+                .add(XOOM_SERVER_VERSION, Configuration.resolveDefaultXoomVersion())
                 .add(DEPLOYMENT, data.deployment.type)
                 .add(DOCKER_IMAGE, data.deployment.dockerImage)
                 .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
