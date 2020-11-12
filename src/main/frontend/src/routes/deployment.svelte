@@ -28,10 +28,10 @@
 	{/each}
 	{#if type === "Docker" || type === "Kubernetes"}
 	<div style="height: 16px"></div>
-		<TextField placeholder="demo-app" bind:value={dockerImage} rules={[requireRule]} validateOnBlur={!dockerImage}>Local Docker Image</TextField>
+		<TextField style="min-width: 300px" class="ma-4" placeholder="demo-app" bind:value={dockerImage} rules={[requireRule]} validateOnBlur={!dockerImage}>Local Docker Image</TextField>
 	{/if}
 	{#if type === "Kubernetes"}
-		<TextField placeholder="demo-application" bind:value={kubernetesImage} rules={[requireRule]} validateOnBlur={!kubernetesImage}>Published Docker Image</TextField>
-		<TextField placeholder="demo-application" bind:value={kubernetesPod} rules={[requireRule]} validateOnBlur={!kubernetesPod}>Kubernetes POD</TextField>
+		<TextField style="min-width: 300px" class="ma-4" placeholder="demo-application" bind:value={kubernetesImage} rules={[requireRule]} validateOnBlur={!kubernetesImage}>Published Docker Image</TextField>
+		<TextField style="min-width: 300px" class="ma-4" placeholder="demo-application" bind:value={kubernetesPod} rules={[requireRule]} validateOnBlur={!kubernetesPod}>Kubernetes POD</TextField>
 	{/if}
 </CardForm>
