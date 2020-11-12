@@ -6,8 +6,9 @@
 	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
 	import Divider from "svelte-materialify/src/components/Divider";
 	import Icon from "svelte-materialify/src/components/Icon";
-	import { mdiDelete, mdiPencil } from "@mdi/js";
+	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
+	import DeleteWithDialog from "./DeleteWithDialog.svelte";
 
 	const dispatch = createEventDispatcher();
 
@@ -19,7 +20,8 @@
 	const remove = () => dispatch("remove");
 </script>
 
-<Card class="pa-3 ma-3">
+<Card class="pa-3 ma-3" style="min-width: 15rem; min-height: 20rem">
+	<div class="d-flex flex-column" style="height: 100%">
 	<div class="mb-2">
 		{#each aggregate.api.routes as route}
 			<Card class="command mb-1">
@@ -49,12 +51,11 @@
 			<CardTitle>{event.name}</CardTitle>
 		</Card>
 	{/each}
-	<CardActions class="d-flex justify-space-around">
-		<Button title="Edit Aggregate" on:click={edit} fab class="ma-2">
+	<CardActions style="margin-top: auto" class="justify-space-around">
+		<Button title="Edit Aggregate" on:click={edit} icon class="ma-2">
 			<Icon path={mdiPencil}/>
 		</Button>
-		<Button title="Remove Aggregate" on:click={remove} fab class="ma-2 red-text">
-			<Icon path={mdiDelete}/>
-		</Button>
+		<DeleteWithDialog type="Aggregate" on:click={remove}/>
 	</CardActions>
+</div>
 </Card>
