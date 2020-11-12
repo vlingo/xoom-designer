@@ -2,7 +2,7 @@
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings } from '../stores';
-	import { requireRule, validVersion } from '../validators';
+	import { requireRule, versionRule } from '../validators';
 	
 	let groupId = $contextSettings ? $contextSettings.groupId : "";
 	let artifactId = $contextSettings ? $contextSettings.artifactId : "";
@@ -18,6 +18,6 @@
 <CardForm title="Context" previous="." next="aggregates">
 	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule]} validateOnBlur={!groupId}>Group Id</TextField>
 	<TextField style="min-width: 300px" class="ma-4" placeholder="demo" bind:value={artifactId} rules={[requireRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, validVersion]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
+	<TextField style="min-width: 300px" class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
 	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
 </CardForm>

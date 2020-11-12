@@ -1,6 +1,6 @@
 <script>
 	import Select from "svelte-materialify/src/components/Select";
-	import PathField from "../PathField.svelte";
+	import PathField from "./PathField.svelte";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
 	const httpMethods = formatArrayForSelect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']);
