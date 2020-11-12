@@ -16,16 +16,24 @@
 
 	const methodParameters = (parameters) => parameters.map(p => aggregate.stateFields.find(sf => sf.name === p)).map(sf => sf.name + ': ' + sf.type);
 
+	const fullRoute = (route) => {
+		return (
+			route.httpMethod + " " +
+			aggregate.api.rootPath +
+			route.path
+		).replaceAll("//", "/");
+	};
+
 	const edit = () => dispatch("edit");
 	const remove = () => dispatch("remove");
 </script>
 
-<Card class="pa-3 ma-3" style="min-width: 15rem; min-height: 20rem">
+<Card flat class="pa-3 ma-3" style="min-width: 15rem; min-height: 20rem">
 	<div class="d-flex flex-column" style="height: 100%">
 	<div class="mb-2">
 		{#each aggregate.api.routes as route}
 			<Card class="command mb-1">
-				<CardTitle>{route.httpMethod} {(!route.requireEntityLoad? aggregate.api.rootPath : aggregate.api.rootPath==="/"? "" : aggregate.api.rootPath) + route.path}</CardTitle>
+				<CardTitle>{fullRoute(route)}</CardTitle>
 			</Card>
 		{/each}
 	</div>

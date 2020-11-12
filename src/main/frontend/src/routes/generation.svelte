@@ -5,6 +5,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
+	import { requireRule } from "../validators";
 
 	let context = $contextSettings;
     let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings };
@@ -14,6 +15,7 @@
 	let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
 
 	const generate = () => {
+		if(!projectDirectory) return;
 		XoomStarterRepository.postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch)
 		.then(console.log);
 	}
@@ -24,8 +26,8 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory}>Absolute path where you want to generate the project</TextField>
+	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
 	<Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
-	<Button on:click={generate}>Generate</Button>
+	<Button on:click={generate} disabled={!projectDirectory}>Generate</Button>
 </CardForm>
