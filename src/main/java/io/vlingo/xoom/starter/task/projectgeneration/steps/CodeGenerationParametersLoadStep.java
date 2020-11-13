@@ -52,7 +52,7 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
                 put(Property.ARTIFACT_ID, Label.ARTIFACT_ID);
                 put(Property.VERSION, Label.VERSION);
                 put(Property.PACKAGE, Label.PACKAGE);
-                put(Property.XOOM_SERVER_VERSION, Label.XOOM_SERVER_VERSION);
+                put(Property.XOOM_VERSION, Label.XOOM_VERSION);
                 put(Property.DOCKER_IMAGE, Label.DOCKER_IMAGE);
                 put(Property.KUBERNETES_IMAGE, Label.KUBERNETES_IMAGE);
                 put(Property.KUBERNETES_POD_NAME, Label.KUBERNETES_POD_NAME);

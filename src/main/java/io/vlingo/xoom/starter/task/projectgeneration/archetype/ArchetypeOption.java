@@ -14,7 +14,7 @@ public enum ArchetypeOption {
     ARTIFACT_ID("artifactId"),
     PACKAGE("package"),
     MAIN_CLASS("mainClass"),
-    XOOM_SERVER_VERSION("vlingoXoomServerVersion"),
+    XOOM_VERSION("vlingoXoomVersion"),
     DOCKER_IMAGE("dockerImage"),
     KUBERNETES_IMAGE("k8sImage"),
     KUBERNETES_POD_NAME("k8sPodName");
