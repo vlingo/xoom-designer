@@ -7,8 +7,8 @@
     <requiredProperty key="mainClass">
       <defaultValue>main-class</defaultValue>
     </requiredProperty>
-    <requiredProperty key="vlingoXoomServerVersion">
-      <defaultValue>1.2.9</defaultValue>
+    <requiredProperty key="vlingoXoomVersion">
+      <defaultValue>1.4.0</defaultValue>
     </requiredProperty>
     <requiredProperty key="dockerImage">
       <defaultValue>vlingo-xoom-application</defaultValue>

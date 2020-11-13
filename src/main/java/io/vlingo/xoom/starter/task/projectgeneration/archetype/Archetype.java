@@ -21,7 +21,7 @@ public enum Archetype {
 
     KUBERNETES("kubernetes-archetype", "vlingo-xoom-kubernetes-archetype",
             "io.vlingo", "1.0", VERSION, GROUP_ID, ARTIFACT_ID, MAIN_CLASS,
-            PACKAGE, XOOM_SERVER_VERSION, DOCKER_IMAGE, KUBERNETES_POD_NAME,
+            PACKAGE, XOOM_VERSION, DOCKER_IMAGE, KUBERNETES_POD_NAME,
             KUBERNETES_IMAGE);
 
     private final String label;
