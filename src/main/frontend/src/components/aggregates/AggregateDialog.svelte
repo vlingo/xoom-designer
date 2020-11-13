@@ -94,7 +94,7 @@
 	{#each stateFields as stateField, i}
 		<span class="d-flex">
 		<div style="max-width: 100%">
-			<TextField disabled={i<1} class="ma-2" bind:value={stateField.name}>Name</TextField>
+			<TextField disabled={i<1} class="ma-2" bind:value={stateField.name} rules={[requireRule]}>Name</TextField>
 		</div>
 		<div style="max-width: 100%">
 			<Select disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
@@ -110,8 +110,8 @@
 	<h5>Events:</h5>
 	{#each events as event, i}
 		<span class="d-flex">
-			<TextField class="ma-2" bind:value={event.name}>Name</TextField>
-			<Select multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+			<TextField class="ma-2" bind:value={event.name} rules={[requireRule]} validateOnBlur={!event.name}>Name</TextField>
+			<Select disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
 			<DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
 		</span>
 	{/each}
