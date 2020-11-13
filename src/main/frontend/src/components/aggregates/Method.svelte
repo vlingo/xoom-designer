@@ -2,6 +2,7 @@
 	import Select from "svelte-materialify/src/components/Select";
 	import Switch from "svelte-materialify/src/components/Switch";
 	import TextField from "svelte-materialify/src/components/TextField";
+import { requireRule } from "../../validators";
 	import DeleteButton from "./DeleteButton.svelte";
 
 	export let stateFields;
@@ -17,9 +18,9 @@
 <div class="d-flex align-center">
 	<div>
 		<span class="d-flex">
-			<TextField class="ma-2" bind:value={method.name}>Name</TextField>
-			<Select multiple class="ma-2" items={stateFields} bind:value={method.parameters}>Parameters</Select>
-			<Select class="ma-2" items={events} bind:value={method.event}>Event</Select>
+			<TextField class="ma-2" bind:value={method.name} rules={[requireRule]} validateOnBlur={!method.name}>Name</TextField>
+			<Select disabled={!stateFields.length} multiple class="ma-2" items={stateFields} bind:value={method.parameters}>Parameters</Select>
+			<Select disabled={!events.length} class="ma-2" items={events} bind:value={method.event}>Event</Select>
 		</span>
 		<div>
 			<Switch bind:checked={method.useFactory}>Involves creation of entity?</Switch>
