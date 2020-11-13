@@ -46,13 +46,13 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
         }
     }
 
-    private TaskStatus runProjectGeneration(final TaskExecutionContext context) {
+    private Completes<Response> runProjectGeneration(final TaskExecutionContext context) {
         try {
-            return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
+            return buildSuccessfulResponse(Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context));
         } catch (final Exception exception) {
             exception.printStackTrace();
             logger().error(exception.getMessage());
-            return TaskStatus.FAILED;
+            return Completes.withSuccess(Response.of(InternalServerError, serialized(TaskStatus.FAILED)));
         }
     }
 
