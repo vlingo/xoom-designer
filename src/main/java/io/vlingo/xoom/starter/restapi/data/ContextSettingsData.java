@@ -7,8 +7,6 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import java.util.List;
-
 public class ContextSettingsData {
 
     public final String groupId;
