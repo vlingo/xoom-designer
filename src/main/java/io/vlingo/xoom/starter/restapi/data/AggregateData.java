@@ -32,27 +32,27 @@ public class AggregateData {
 
     public List<String> validate(List<String> errorStrings) {
         if(api==null) {
-            errorStrings.add("api is null");
+            errorStrings.add("AggregateData.api is null");
         } else {
             api.validate(errorStrings);
         }
-        if(aggregateName==null) errorStrings.add("aggregateName is null");
+        if(aggregateName==null) errorStrings.add("AggregateData.aggregateName is null");
         if(stateFields==null) {
-            errorStrings.add("stateFields is null");
+            errorStrings.add("AggregateData.stateFields is null");
         } else {
             stateFields.forEach(
                 stateField -> stateField.validate(errorStrings)
             );
         }
         if(methods==null) {
-            errorStrings.add("methods is null");
+            errorStrings.add("AggregateData.methods is null");
         } else {
             methods.forEach(
                 method -> method.validate(errorStrings)
             );
         }
         if(events==null) {
-            errorStrings.add("events is null");
+            errorStrings.add("AggregateData.events is null");
         } else {
             events.forEach(
                 event -> event.validate(errorStrings)

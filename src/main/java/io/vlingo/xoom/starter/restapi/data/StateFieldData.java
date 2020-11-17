@@ -21,8 +21,8 @@ public class StateFieldData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(name==null) errorStrings.add("name is null");
-        if(type==null) errorStrings.add("type is null");
+        if(name==null) errorStrings.add("StateFieldData.name is null");
+        if(type==null) errorStrings.add("StateFieldData.type is null");
         return errorStrings;
     }
 }
