@@ -21,9 +21,9 @@ public class APIData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(rootPath==null) errorStrings.add("APIData.rootPath is null");
+        if(rootPath==null) errorStrings.add("rootPath is null");
         if(routes==null) {
-            errorStrings.add("APIData.routes is null");
+            errorStrings.add("routes is null");
         } else {
             routes.forEach(route ->
                 route.validate(errorStrings)
