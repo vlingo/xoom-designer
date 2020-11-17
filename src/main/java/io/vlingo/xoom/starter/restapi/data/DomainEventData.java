@@ -22,8 +22,8 @@ public class DomainEventData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(name==null) errorStrings.add("DomainEventData.name is null");
-        if(fields==null) errorStrings.add("DomainEventData.fields is null");
+        if(name==null) errorStrings.add("name is null");
+        if(fields==null) errorStrings.add("fields is null");
         return errorStrings;
     }
 }
