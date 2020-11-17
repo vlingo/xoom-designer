@@ -27,10 +27,10 @@ public class RouteData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(path==null) errorStrings.add("path is null");
-        if(httpMethod==null) errorStrings.add("httpMethod is null");
-        if(aggregateMethod==null) errorStrings.add("aggregateMethod is null");
-        if(requireEntityLoad==null) errorStrings.add("requireEntityLoad is null");
+        if(path==null) errorStrings.add("RouteData.path is null");
+        if(httpMethod==null) errorStrings.add("RouteData.httpMethod is null");
+        if(aggregateMethod==null) errorStrings.add("RouteData.aggregateMethod is null");
+        if(requireEntityLoad==null) errorStrings.add("RouteData.requireEntityLoad is null");
         return errorStrings;
     }
 }

@@ -33,12 +33,12 @@ public class PersistenceData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(storageType==null) errorStrings.add("storageType is null");
-        if(useCQRS==null) errorStrings.add("useCQRS is null");
-        if(projections==null) errorStrings.add("projections is null");
-        if(database==null && queryModelDatabase==null && commandModelDatabase==null) errorStrings.add("database is null"); 
-        if(commandModelDatabase==null && database==null) errorStrings.add("commandModelDatabase is null");
-        if(queryModelDatabase==null && database==null) errorStrings.add("queryModelDatabase is null");
+        if(storageType==null) errorStrings.add("PersistenceData.storageType is null");
+        if(useCQRS==null) errorStrings.add("PersistenceData.useCQRS is null");
+        if(projections==null) errorStrings.add("PersistenceData.projections is null");
+        if(database==null && queryModelDatabase==null && commandModelDatabase==null) errorStrings.add("PersistenceData.database is null"); 
+        if(commandModelDatabase==null && database==null) errorStrings.add("PersistenceData.commandModelDatabase is null");
+        if(queryModelDatabase==null && database==null) errorStrings.add("PersistenceData.queryModelDatabase is null");
         return errorStrings;
     }
 }
