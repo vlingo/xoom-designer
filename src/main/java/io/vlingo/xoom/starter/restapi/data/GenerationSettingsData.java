@@ -34,23 +34,23 @@ public class GenerationSettingsData {
 
     public List<String> validate(List<String> errorStrings) {
         if(context==null) {
-            errorStrings.add("GenerationSettingsData.context is null");
+            errorStrings.add("context is null");
         } else {
             context.validate(errorStrings);
         }
         if(model==null) {
-            errorStrings.add("GenerationSettingsData.model is null");
+            errorStrings.add("model is null");
         } else {
             model.validate(errorStrings);
         }
         if(deployment==null) {
-            errorStrings.add("GenerationSettingsData.deployment is null");
+            errorStrings.add("deployment is null");
         } else {
             deployment.validate(errorStrings);
         }
-        if(projectDirectory==null) errorStrings.add("GenerationSettingsData.projectDirectory is null");
-        if(useAnnotations==null) errorStrings.add("GenerationSettingsData.useAnnotations is null");
-        if(useAutoDispatch==null) errorStrings.add("GenerationSettingsData.useAutoDispatch is null");
+        if(projectDirectory==null) errorStrings.add("projectDirectory is null");
+        if(useAnnotations==null) errorStrings.add("useAnnotations is null");
+        if(useAutoDispatch==null) errorStrings.add("useAutoDispatch is null");
         return errorStrings;
     }
 }
