@@ -25,4 +25,11 @@ public class AggregateMethodData {
         this.parameters = parameters;
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(name==null) errorStrings.add("name is null");
+        if(parameters==null) errorStrings.add("parameters is null");
+        if(factory==null) errorStrings.add("factory is null");
+        if(event==null) errorStrings.add("event is null");
+        return errorStrings;
+    }
 }

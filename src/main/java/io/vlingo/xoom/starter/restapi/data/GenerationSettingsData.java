@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import java.util.List;
+
 public class GenerationSettingsData {
 
     public final ContextSettingsData context;
@@ -30,4 +32,25 @@ public class GenerationSettingsData {
         this.useAutoDispatch = useAutoDispatch;
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(context==null) {
+            errorStrings.add("context is null");
+        } else {
+            context.validate(errorStrings);
+        }
+        if(model==null) {
+            errorStrings.add("model is null");
+        } else {
+            model.validate(errorStrings);
+        }
+        if(deployment==null) {
+            errorStrings.add("deployment is null");
+        } else {
+            deployment.validate(errorStrings);
+        }
+        if(projectDirectory==null) errorStrings.add("projectDirectory is null");
+        if(useAnnotations==null) errorStrings.add("useAnnotations is null");
+        if(useAutoDispatch==null) errorStrings.add("useAutoDispatch is null");
+        return errorStrings;
+    }
 }

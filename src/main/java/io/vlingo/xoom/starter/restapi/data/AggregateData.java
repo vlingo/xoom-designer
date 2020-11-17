@@ -30,4 +30,34 @@ public class AggregateData {
         this.aggregateName = aggregateName;
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(api==null) {
+            errorStrings.add("api is null");
+        } else {
+            api.validate(errorStrings);
+        }
+        if(aggregateName==null) errorStrings.add("aggregateName is null");
+        if(stateFields==null) {
+            errorStrings.add("stateFields is null");
+        } else {
+            stateFields.forEach(
+                stateField -> stateField.validate(errorStrings)
+            );
+        }
+        if(methods==null) {
+            errorStrings.add("methods is null");
+        } else {
+            methods.forEach(
+                method -> method.validate(errorStrings)
+            );
+        }
+        if(events==null) {
+            errorStrings.add("events is null");
+        } else {
+            events.forEach(
+                event -> event.validate(errorStrings)
+            );
+        }
+        return errorStrings;
+    }
 }
