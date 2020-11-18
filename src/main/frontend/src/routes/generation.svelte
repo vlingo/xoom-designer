@@ -21,7 +21,7 @@
 	}
 
 	$: if(!useAnnotations) useAutoDispatch = false;
-	$: invalid = !projectDirectory || !context || !context.groupId || !context.artifactId || versionRule(context.artifactVersion) || !context.packageName;
+	$: invalid = !projectDirectory || !context || !model || !model.aggregateSettings || !model.persistenceSettings || !deployment
 	$: $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
 	$: console.log(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch);
 </script>
