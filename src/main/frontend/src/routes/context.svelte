@@ -2,22 +2,23 @@
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings } from '../stores';
-	import { requireRule, versionRule } from '../validators';
+	import { artifactRule, packageRule, requireRule, versionRule, xoomVersionRule } from '../validators';
 	
 	let groupId = $contextSettings ? $contextSettings.groupId : "";
 	let artifactId = $contextSettings ? $contextSettings.artifactId : "";
 	let artifactVersion = $contextSettings ? $contextSettings.artifactVersion : "";
 	let packageName = $contextSettings ? $contextSettings.packageName : "";
-	let xoomVersion = "1.3.4-SNAPSHOT";
+	let xoomVersion = "1.4.1-SNAPSHOT";
 
-	$: $contextSettings = { groupId, artifactId, artifactVersion, packageName, xoomVersion }
+	$: valid = !packageRule(groupId) && !artifactRule(artifactId) && !versionRule(artifactVersion) && !packageRule(packageName) && !xoomVersionRule(xoomVersion);
+	$: $contextSettings = valid ? { groupId, artifactId, artifactVersion, packageName, xoomVersion } : undefined;
 	$: console.log($contextSettings);
 </script>
 
 <!-- add newbie tooltips -->
 <CardForm title="Context" previous="." next="aggregates">
-	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule]} validateOnBlur={!groupId}>Group Id</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="demo" bind:value={artifactId} rules={[requireRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
+	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>
+	<TextField style="min-width: 300px" class="ma-4" placeholder="demo" bind:value={artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
 	<TextField style="min-width: 300px" class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
+	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule, packageRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
 </CardForm>

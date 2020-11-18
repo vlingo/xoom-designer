@@ -39,7 +39,7 @@
 	<div style="max-width: 100%">
 		<Select mandatory class="ma-2" items={httpMethods} bind:value={httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
 	</div>
-	<Select class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={aggregateMethod}>Aggregate Method</Select>
+	<Select mandatory class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={aggregateMethod}>Aggregate Method</Select>
 	<!-- <Switch class="ma-2" bind:checked={requireEntityLoad}>Require Entity Load</Switch> -->
 	<DeleteButton title="Delete Route" on:click={() => deleteRoute(id)}/>
 </span>

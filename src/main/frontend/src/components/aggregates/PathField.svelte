@@ -1,5 +1,6 @@
 <script>
 	import TextField from "svelte-materialify/src/components/TextField";
+	import { requireRule } from "../../validators";
 
 	export let path = "";
 	export let requireEntityLoad = false;
@@ -35,4 +36,4 @@
 	
 </script>
 
-<TextField class="ma-2" value={path} on:input={handleInput}>Path</TextField>
+<TextField class="ma-2" value={path} rules={[requireRule]} on:input={handleInput} validateOnBlur={!path}>Path</TextField>
