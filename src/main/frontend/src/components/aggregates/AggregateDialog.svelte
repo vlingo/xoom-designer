@@ -7,7 +7,7 @@
 	import Route from "./Route.svelte";
 	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
 	import { aggregateSettings } from "../../stores";
-	import { requireRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
@@ -74,7 +74,13 @@
 		}
 	}
 
-	$: aggregateSetting = { aggregateName, stateFields, events, methods, api: { rootPath, routes } };
+	const validField = (f) => !identifierRule(f.name) && f.type;
+	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0;
+	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event;
+	const validRoute = (r) => r.path && r.aggregateMethod;
+
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
+	$: aggregateSetting = valid ? { aggregateName, stateFields, events, methods, api: { rootPath, routes } } : undefined;
 	$: console.log(aggregateSetting);
 	$: console.log(currentId);
 </script>
@@ -87,17 +93,17 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField bind:value={aggregateName} rules={[requireRule]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField bind:value={aggregateName} rules={[requireRule, classNameRule]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>State Fields:</h5>
 	{#each stateFields as stateField, i}
 		<span class="d-flex">
 		<div style="max-width: 100%">
-			<TextField disabled={i<1} class="ma-2" bind:value={stateField.name} rules={[requireRule]}>Name</TextField>
+			<TextField disabled={i<1} class="ma-2" bind:value={stateField.name} rules={[requireRule, identifierRule]}>Name</TextField>
 		</div>
 		<div style="max-width: 100%">
-			<Select disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+			<Select mandatory disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
 		</div>
 		{#if i>0}
 			<DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
@@ -110,8 +116,8 @@
 	<h5>Events:</h5>
 	{#each events as event, i}
 		<span class="d-flex">
-			<TextField class="ma-2" bind:value={event.name} rules={[requireRule]} validateOnBlur={!event.name}>Name</TextField>
-			<Select disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+			<TextField class="ma-2" bind:value={event.name} rules={[requireRule, classNameRule]} validateOnBlur={!event.name}>Name</TextField>
+			<Select mandatory disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
 			<DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
 		</span>
 	{/each}
@@ -126,7 +132,7 @@
 	<!-- <Divider class="ma-2" /> -->
 
 	<h5>API:</h5>
-	<TextField class="ma-2" bind:value={rootPath}>Root Path</TextField>
+	<TextField class="ma-2" bind:value={rootPath} rules={[requireRule, routeRule]} validateOnBlur={!rootPath}>Root Path</TextField>
 
 	{#each routes as { path, httpMethod, aggregateMethod, requireEntityLoad } , id}
 		<Route bind:path bind:httpMethod bind:aggregateMethod bind:requireEntityLoad {id} bind:methods bind:routes/>
@@ -136,9 +142,9 @@
 	
 	<CardActions>
 		{#if editMode}
-			<Button class="mr-3" on:click={update} disabled={requireRule(aggregateName)}>Update</Button>
+			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button>
 		{:else}
-			<Button class="mr-3" on:click={add} disabled={requireRule(aggregateName)}>Add</Button>
+			<Button class="mr-3" on:click={add} disabled={!valid}>Add</Button>
 		{/if}
 		<Button on:click={() => dialogActive = !dialogActive}>Cancel</Button>
 		<span style="width: 100%;"></span>
