@@ -78,8 +78,8 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     private boolean areStateFieldsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAll(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
-                stateField.retrieveAll(Label.FIELD_TYPE).allMatch(type -> 
+            aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
+                stateField.retrieveAllRelated(Label.FIELD_TYPE).allMatch(type -> 
                     Stream.of(
                         SupportedTypes.INTEGER.name(),
                         SupportedTypes.LONG.name(),
@@ -95,24 +95,24 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     private boolean areDomainEventsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAll(Label.DOMAIN_EVENT).allMatch(event -> event.value.matches(CLASSNAME_PATTERN))
+            aggregate -> aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).allMatch(event -> event.value.matches(CLASSNAME_PATTERN))
         ).allMatch(bool -> bool==true);
     }
 
     private boolean areMethodsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.relatedParameterValueOf(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN)
+            aggregate -> aggregate.retrieveRelatedValue(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN)
         ).allMatch(bool -> bool==true);
     }
 
     private boolean areRestResourcesValid() {
         return parameters.retrieveAll(Label.AGGREGATE)
         .map(aggregate ->
-            aggregate.retrieveAll(Label.REST_RESOURCES).allMatch(rest ->
+            aggregate.retrieveAllRelated(Label.REST_RESOURCES).allMatch(rest ->
                 rest.value.startsWith("/") &&
-                rest.relatedParameterValueOf(Label.ROUTE_PATH).matches(ROUTE_PATTERN) &&
-                aggregate.retrieveAll(Label.AGGREGATE_METHOD).map(
-                    method -> method.value.equals(rest.relatedParameterValueOf(Label.ROUTE_SIGNATURE))
+                rest.retrieveRelatedValue(Label.ROUTE_PATH).matches(ROUTE_PATTERN) &&
+                aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(
+                    method -> method.value.equals(rest.retrieveRelatedValue(Label.ROUTE_SIGNATURE))
                 ).allMatch(bool -> bool==true) &&
                 Stream.of(
                     "POST",
@@ -122,7 +122,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
                     "GET",
                     "HEAD",
                     "OPTIONS"
-                ).anyMatch(rest.relatedParameterValueOf(Label.ROUTE_METHOD)::equals)
+                ).anyMatch(rest.retrieveRelatedValue(Label.ROUTE_METHOD)::equals)
             )
         ).allMatch(bool -> bool==true);
     }
