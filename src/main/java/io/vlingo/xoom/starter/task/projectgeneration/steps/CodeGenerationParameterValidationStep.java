@@ -9,6 +9,7 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
+import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
@@ -27,8 +28,10 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     private static String ARTIFACT_PATTERN = "^[a-z-]+$";
     private static String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
     private static String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
-    private static String FIELDNAME_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-    private static String ROUTE_PATTERN = "^[a-zA-Z_$/?]+$";
+    private static String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
+    private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%]+$";
+    private static String DOCKERIMAGE_PATTERN = "^[a-zA-Z._$/?]+$";
+    private static String KUBERNETESPOD_PATTERN = "^[a-zA-Z._$/?]+$";
     private static CodeGenerationParameters parameters;
 
     @Override
@@ -50,13 +53,19 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         if(!isStorageTypeValid()) errorStrings.add("StorageType is not valid");
         if(!isProjectionValid(retrieve(Label.PROJECTION_TYPE), retrieve(Label.STORAGE_TYPE))) errorStrings.add("ProjectionType is not valid");
         if(!isDatabaseValid()) errorStrings.add("Database is not valid");
+
         if(!isDeploymentValid()) errorStrings.add("");
+        
         if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("");
 
         if(errorStrings.size() > 0) {
             String errorMessage = String.join(", ", errorStrings);
             throw new IllegalArgumentException(errorMessage);
         }
+    }
+
+    private boolean isXoomVersionValid() {
+        return Stream.of("1.4.1-SNAPSHOT", "1.4.0").anyMatch(retrieve(Label.XOOM_VERSION)::equals);
     }
 
     private String retrieve(Label label) {
@@ -69,7 +78,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     private boolean areStateFieldsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAll(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(FIELDNAME_PATTERN) &&
+            aggregate -> aggregate.retrieveAll(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
                 stateField.retrieveAll(Label.FIELD_TYPE).allMatch(type -> 
                     Stream.of(
                         SupportedTypes.INTEGER.name(),
@@ -92,7 +101,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     private boolean areMethodsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.relatedParameterValueOf(Label.AGGREGATE_METHOD).matches(FIELDNAME_PATTERN)
+            aggregate -> aggregate.relatedParameterValueOf(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN)
         ).allMatch(bool -> bool==true);
     }
 
@@ -113,37 +122,31 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
                     "GET",
                     "HEAD",
                     "OPTIONS"
-                    ).anyMatch(rest.relatedParameterValueOf(Label.ROUTE_METHOD)::equals)
+                ).anyMatch(rest.relatedParameterValueOf(Label.ROUTE_METHOD)::equals)
             )
         ).allMatch(bool -> bool==true);
-    }
-
-    // parameters.retrieve(Label.AGGREGATE).relatedParameterOf(Label.STATE_FIELD)
-
-    private boolean isXoomVersionValid() {
-        return retrieve(Label.XOOM_VERSION).equals("1.4.1-SNAPSHOT") && !retrieve(Label.XOOM_VERSION).equals("1.4.0");
     }
 
     private boolean isStorageTypeValid() {
         return Stream.of(StorageType.STATE_STORE.key, StorageType.JOURNAL.key).anyMatch(retrieve(Label.STORAGE_TYPE)::equals);
     }
 
+    private boolean isProjectionValid(String projectionType, String storageType) {
+        if(storageType == StorageType.JOURNAL.key) {
+            return Stream.of(ProjectionType.NONE.name(), ProjectionType.EVENT_BASED.name()).anyMatch(projectionType::equals);
+        }
+        return Stream.of(ProjectionType.NONE.name(), ProjectionType.EVENT_BASED.name(), ProjectionType.OPERATION_BASED.name()).anyMatch(projectionType::equals);
+    }
+
     private boolean isDatabaseValid() {
         String database = retrieve(Label.DATABASE);
         String queryDatabase = retrieve(Label.QUERY_MODEL_DATABASE);
         String commandDatabase = retrieve(Label.COMMAND_MODEL_DATABASE);
-        Stream<String> databases = Stream.of("IN_MEMORY", "POSTGRES", "HSQLDB", "MYSQL", "YUGA_BYTE");
+        Stream<String> databases = Stream.of(DatabaseType.values()).map(db -> db.name());
         if(database.length()>0) {
             return databases.anyMatch(database::equals);
         }
         return databases.anyMatch(queryDatabase::equals) && databases.anyMatch(commandDatabase::equals);
-    }
-
-    private boolean isProjectionValid(String projectionType, String storageType) {
-        if(storageType == "JOURNAL") {
-            return Stream.of(ProjectionType.NONE.name(), ProjectionType.EVENT_BASED.name()).anyMatch(projectionType::equals);
-        }
-        return Stream.of(ProjectionType.NONE.name(), ProjectionType.EVENT_BASED.name(), ProjectionType.OPERATION_BASED.name()).anyMatch(projectionType::equals);
     }
 
     private boolean isDeploymentValid() {
@@ -152,10 +155,10 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         //no break, fall through
         switch(deploymentType) {
             case "KUBERNETES": validImage = validImage && 
-                retrieve(Label.KUBERNETES_IMAGE).matches("regex") &&
-                retrieve(Label.KUBERNETES_POD_NAME).matches("regex");
+                retrieve(Label.KUBERNETES_IMAGE).matches(DOCKERIMAGE_PATTERN) &&
+                retrieve(Label.KUBERNETES_POD_NAME).matches(KUBERNETESPOD_PATTERN);
             case "DOCKER": validImage = validImage &&
-                retrieve(Label.DOCKER_IMAGE).matches("regex");
+                retrieve(Label.DOCKER_IMAGE).matches(DOCKERIMAGE_PATTERN);
         }
         return validImage && Stream.of(DeploymentType.values()).map(dt -> dt.name()).anyMatch(deploymentType::equals);
     }
