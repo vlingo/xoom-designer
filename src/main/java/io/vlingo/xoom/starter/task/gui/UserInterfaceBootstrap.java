@@ -14,9 +14,7 @@ import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Xoom(name = "xoom-starter")
 @ResourceHandlers(packages = "io.vlingo.xoom.starter.restapi")
@@ -41,7 +39,7 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
 
     @Override
     public StaticFilesConfiguration staticFilesConfiguration() {
-        return StaticFilesConfiguration.defineWith(100, "static", Arrays.asList("/xoom-starter"));
+        return StaticFilesConfiguration.defineWith(100, "frontend", Arrays.asList("/"));
     }
 
     @Override
