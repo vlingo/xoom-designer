@@ -23,7 +23,7 @@
 	$: if(!useAnnotations) useAutoDispatch = false;
 	$: invalid = !projectDirectory || !context || !model || !model.aggregateSettings || !model.persistenceSettings || !deployment
 	$: $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
-	$: console.log(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch);
+	$: console.log(context, model, deployment, $generationSettings);
 </script>
 
 <!-- add newbie tooltips -->

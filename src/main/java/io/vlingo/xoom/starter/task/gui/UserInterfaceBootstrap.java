@@ -15,6 +15,7 @@ import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Xoom(name = "xoom-starter")
 @ResourceHandlers(packages = "io.vlingo.xoom.starter.restapi")
@@ -27,19 +28,21 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
         final Configuration.Timing timing =
                 Configuration.Timing.defineWith(7, 3, 100);
 
-        final Configuration.Sizing sizing =
-                Configuration.Sizing.define().withDispatcherPoolSize(2)
-                        .withMaxBufferPoolSize(100)
-                        .withMaxMessageSize(4096);
+        // final Configuration.Sizing sizing =
+        //         Configuration.Sizing.define().withDispatcherPoolSize(2)
+        //                 .withMaxBufferPoolSize(100)
+        //                 .withMaxMessageSize(4096);
 
         return Configuration.define()
                 .withPort(DEFAULT_PORT)
-                .with(timing).with(sizing);
+                .with(timing);
+                // .with(sizing);
     }
 
     @Override
     public StaticFilesConfiguration staticFilesConfiguration() {
-        return StaticFilesConfiguration.defineWith(100, "frontend", Arrays.asList("/"));
+        final List<String> subPaths = Arrays.asList("/", "/client", "/aggregates", "/context", "/deployment", "/generation", "/persistence");
+        return StaticFilesConfiguration.defineWith(100, "frontend", subPaths);
     }
 
     @Override
