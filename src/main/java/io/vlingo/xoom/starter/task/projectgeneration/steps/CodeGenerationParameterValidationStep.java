@@ -22,16 +22,15 @@ import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 public class CodeGenerationParameterValidationStep implements TaskExecutionStep {
 
-    //some of these are not complete
-    //first word is lowercase letters, after that we match first letter a-zA-Z_, then a-zA-z_ and digits, then repeat last two steps
+    //complete: PACKAGE_PATTERN, ARTIFACT_PATTERN, VERSION_PATTERN, IDENTIFIER_PATTERN
+    //some of the others are maybe not complete
     private static String PACKAGE_PATTERN = "^[a-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
     private static String ARTIFACT_PATTERN = "^[a-z-]+$";
     private static String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
     private static String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
     private static String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%]+$";
-    private static String DOCKERIMAGE_PATTERN = "^[a-zA-Z._$/?]+$";
-    private static String KUBERNETESPOD_PATTERN = "^[a-zA-Z._$/?]+$";
+    private static String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._-\\d]*$";
     private static CodeGenerationParameters parameters;
 
     @Override
@@ -155,10 +154,10 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         //no break, fall through
         switch(deploymentType) {
             case "KUBERNETES": validImage = validImage && 
-                retrieve(Label.KUBERNETES_IMAGE).matches(DOCKERIMAGE_PATTERN) &&
-                retrieve(Label.KUBERNETES_POD_NAME).matches(KUBERNETESPOD_PATTERN);
+                retrieve(Label.KUBERNETES_IMAGE).matches(DOCKER_PATTERN) &&
+                retrieve(Label.KUBERNETES_POD_NAME).matches(DOCKER_PATTERN);
             case "DOCKER": validImage = validImage &&
-                retrieve(Label.DOCKER_IMAGE).matches(DOCKERIMAGE_PATTERN);
+                retrieve(Label.DOCKER_IMAGE).matches(DOCKER_PATTERN);
         }
         return validImage && Stream.of(DeploymentType.values()).map(dt -> dt.name()).anyMatch(deploymentType::equals);
     }
