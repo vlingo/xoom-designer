@@ -20,5 +20,8 @@ out/
 **/.~lock.*
 dependency-reduced-pom.xml
 
+# vscode
+.vscode/
+
 # bin
 vlingo-xoom-starter-dist.jar
