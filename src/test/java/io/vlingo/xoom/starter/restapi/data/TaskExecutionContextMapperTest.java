@@ -60,31 +60,31 @@ public class TaskExecutionContextMapperTest {
                         .findFirst().get();
 
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-                .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")));
+        Assertions.assertTrue(personAggregateParameter.retrieveAll(STATE_FIELD)
+                .anyMatch(field -> field.value.equals("id") && field.relatedParameterValueOf(FIELD_TYPE).equals("Long")));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-                .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+        Assertions.assertTrue(personAggregateParameter.retrieveAll(STATE_FIELD)
+                .anyMatch(field -> field.value.equals("name") && field.relatedParameterValueOf(FIELD_TYPE).equals("String")));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
+        Assertions.assertTrue(personAggregateParameter.retrieveAll(AGGREGATE_METHOD)
                 .anyMatch(method -> method.value.equals("defineWith") &&
-                        method.retrieveRelatedValue(FACTORY_METHOD).equals("true") &&
-                        method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonDefined") &&
-                        method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
+                        method.relatedParameterValueOf(FACTORY_METHOD).equals("true") &&
+                        method.relatedParameterValueOf(DOMAIN_EVENT).equals("PersonDefined") &&
+                        method.retrieveAll(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
+        Assertions.assertTrue(personAggregateParameter.retrieveAll(AGGREGATE_METHOD)
                 .anyMatch(method -> method.value.equals("changeName") &&
-                        method.retrieveRelatedValue(FACTORY_METHOD).equals("false") &&
-                        method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonNameChanged") &&
-                        method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
+                        method.relatedParameterValueOf(FACTORY_METHOD).equals("false") &&
+                        method.relatedParameterValueOf(DOMAIN_EVENT).equals("PersonNameChanged") &&
+                        method.retrieveAll(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
+        Assertions.assertTrue(personAggregateParameter.retrieveAll(ROUTE_SIGNATURE)
                 .anyMatch(routeSignature -> routeSignature.value.equals("defineWith") &&
-                        routeSignature.retrieveRelatedValue(ROUTE_METHOD).equals("POST") &&
-                        routeSignature.retrieveRelatedValue(ROUTE_PATH).equals("/persons/") &&
-                        routeSignature.retrieveRelatedValue(REQUIRE_ENTITY_LOADING).equals("false")));
+                        routeSignature.relatedParameterValueOf(ROUTE_METHOD).equals("POST") &&
+                        routeSignature.relatedParameterValueOf(ROUTE_PATH).equals("/persons/") &&
+                        routeSignature.relatedParameterValueOf(REQUIRE_ENTITY_LOADING).equals("false")));
 
-        Assertions.assertEquals("/persons/", personAggregateParameter.retrieveRelatedValue(URI_ROOT));
+        Assertions.assertEquals("/persons/", personAggregateParameter.relatedParameterValueOf(URI_ROOT));
     }
 
     private ContextSettingsData contextSettingsData() {
