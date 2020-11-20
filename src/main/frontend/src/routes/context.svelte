@@ -15,6 +15,10 @@
 	$: console.log($contextSettings);
 </script>
 
+<svelte:head>
+	<title>Context</title>
+</svelte:head>
+
 <!-- add newbie tooltips -->
 <CardForm title="Context" previous="." next="aggregates">
 	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>

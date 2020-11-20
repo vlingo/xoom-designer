@@ -34,6 +34,10 @@
 	$: console.log($aggregateSettings);
 </script>
 
+<svelte:head>
+	<title>Aggregates</title>
+</svelte:head>
+
 <!-- add newbie tooltips -->
 <CardForm title="Aggregates" previous="context" next="persistence">
 	<div class="d-flex flex-wrap">
