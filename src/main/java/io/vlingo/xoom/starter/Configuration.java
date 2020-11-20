@@ -48,6 +48,7 @@ public class Configuration {
     public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
             new ResourcesLocationStep(),
             new CodeGenerationParametersLoadStep(),
+            new CodeGenerationParameterValidationStep(),
             new MainClassResolverStep(),
             new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(),

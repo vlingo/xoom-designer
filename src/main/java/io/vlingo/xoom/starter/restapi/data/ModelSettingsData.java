@@ -21,4 +21,19 @@ public class ModelSettingsData {
         this.aggregateSettings.addAll(aggregateSettings);
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(persistence==null) {
+            errorStrings.add("ModelSettingsData.persistence is null");
+        } else {
+            persistence.validate(errorStrings);
+        }
+        if(aggregateSettings==null) {
+            errorStrings.add("ModelSettingsData.aggregateSettings is null");
+        } else {
+            aggregateSettings.forEach(aggregateSetting ->
+                aggregateSetting.validate(errorStrings)
+            );
+        }
+        return errorStrings;
+    }
 }
