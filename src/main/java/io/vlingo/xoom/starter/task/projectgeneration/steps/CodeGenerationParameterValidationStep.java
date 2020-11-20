@@ -141,11 +141,14 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         String database = retrieve(Label.DATABASE);
         String queryDatabase = retrieve(Label.QUERY_MODEL_DATABASE);
         String commandDatabase = retrieve(Label.COMMAND_MODEL_DATABASE);
-        Stream<String> databases = Stream.of(DatabaseType.values()).map(db -> db.name());
         if(database.length()>0) {
-            return databases.anyMatch(database::equals);
+            return databases().anyMatch(database::equals);
         }
-        return databases.anyMatch(queryDatabase::equals) && databases.anyMatch(commandDatabase::equals);
+        return databases().anyMatch(queryDatabase::equals) && databases().anyMatch(commandDatabase::equals);
+    }
+
+    private Stream<String> databases() {
+        return Stream.of(DatabaseType.values()).map(db -> db.name());
     }
 
     private boolean isDeploymentValid() {
