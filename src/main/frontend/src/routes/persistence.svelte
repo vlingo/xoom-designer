@@ -51,6 +51,10 @@
 	$: console.log($persistenceSettings);
 </script>
 
+<svelte:head>
+	<title>Persistence</title>
+</svelte:head>
+
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
 	<Select class="ma-4" mandatory items={storageTypes} bind:value={storageType} format={(val) => storageFormat(val)}>Storage Type</Select>

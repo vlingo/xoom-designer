@@ -22,6 +22,10 @@
 	$: console.log($deploymentSettings);
 </script>
 
+<svelte:head>
+	<title>Deployment</title>
+</svelte:head>
+
 <!-- add newbie tooltips -->
 <CardForm title="Deployment" previous="persistence" next="generation">
 	{#each types as {label, value}}
