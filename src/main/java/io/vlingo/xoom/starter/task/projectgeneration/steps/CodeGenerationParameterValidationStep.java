@@ -30,7 +30,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     private static String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
     private static String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
     private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%]+$";
-    private static String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._-\\d]*$";
+    private static String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
     private static CodeGenerationParameters parameters;
 
     @Override
@@ -53,7 +53,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         if(!isProjectionValid(retrieve(Label.PROJECTION_TYPE), retrieve(Label.STORAGE_TYPE))) errorStrings.add("ProjectionType is not valid");
         if(!isDatabaseValid()) errorStrings.add("Database is not valid");
 
-        if(!isDeploymentValid()) errorStrings.add("");
+        if(!isDeploymentValid()) errorStrings.add("Deployment is not valid");
         
         if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("");
 
@@ -86,7 +86,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
                         SupportedTypes.DOUBLE.name(),
                         SupportedTypes.STRING.name(),
                         SupportedTypes.BOOLEAN.name()
-                    ).anyMatch(type.value::equals)
+                    ).anyMatch(type.value::equalsIgnoreCase) //ignoring case, you can send things like "Long", too.
                 )
             )
         ).allMatch(bool -> bool==true);
