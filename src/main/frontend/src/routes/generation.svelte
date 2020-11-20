@@ -26,6 +26,10 @@
 	$: console.log(context, model, deployment, $generationSettings);
 </script>
 
+<svelte:head>
+	<title>Generation</title>
+</svelte:head>
+
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
 	<TextField style="min-width: 400px" placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
