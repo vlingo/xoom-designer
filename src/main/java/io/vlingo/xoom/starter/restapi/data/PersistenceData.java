@@ -7,17 +7,19 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import java.util.List;
+
 public class PersistenceData {
 
     public final String storageType;
-    public final boolean useCQRS;
+    public final Boolean useCQRS;
     public final String projections;
     public final String database;
     public final String commandModelDatabase;
     public final String queryModelDatabase;
 
     public PersistenceData(final String storageType,
-                           final boolean useCQRS,
+                           final Boolean useCQRS,
                            final String projections,
                            final String database,
                            final String commandModelDatabase,
@@ -30,4 +32,13 @@ public class PersistenceData {
         this.queryModelDatabase = queryModelDatabase;
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(storageType==null) errorStrings.add("PersistenceData.storageType is null");
+        if(useCQRS==null) errorStrings.add("PersistenceData.useCQRS is null");
+        if(projections==null) errorStrings.add("PersistenceData.projections is null");
+        if(database==null && queryModelDatabase==null && commandModelDatabase==null) errorStrings.add("PersistenceData.database is null"); 
+        if(commandModelDatabase==null && database==null) errorStrings.add("PersistenceData.commandModelDatabase is null");
+        if(queryModelDatabase==null && database==null) errorStrings.add("PersistenceData.queryModelDatabase is null");
+        return errorStrings;
+    }
 }
