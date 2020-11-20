@@ -28,7 +28,7 @@ public class AggregateMethodData {
     public List<String> validate(List<String> errorStrings) {
         if(name==null) errorStrings.add("AggregateMethodData.name is null");
         if(parameters==null) errorStrings.add("AggregateMethodData.parameters is null");
-        if(factory==null) errorStrings.add("AggregateMethodData.factory is null");
+        if(useFactory==null) errorStrings.add("AggregateMethodData.factory is null");
         if(event==null) errorStrings.add("AggregateMethodData.event is null");
         return errorStrings;
     }
