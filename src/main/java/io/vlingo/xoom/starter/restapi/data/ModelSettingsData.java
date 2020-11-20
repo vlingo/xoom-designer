@@ -22,10 +22,10 @@ public class ModelSettingsData {
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(persistence==null) {
+        if(persistenceSettings==null) {
             errorStrings.add("ModelSettingsData.persistence is null");
         } else {
-            persistence.validate(errorStrings);
+            persistenceSettings.validate(errorStrings);
         }
         if(aggregateSettings==null) {
             errorStrings.add("ModelSettingsData.aggregateSettings is null");
