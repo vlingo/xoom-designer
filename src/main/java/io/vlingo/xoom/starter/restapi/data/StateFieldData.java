@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import java.util.List;
+
 public class StateFieldData {
 
     public final String name;
@@ -16,5 +18,11 @@ public class StateFieldData {
                           final String type) {
         this.name = name;
         this.type = type;
+    }
+
+    public List<String> validate(List<String> errorStrings) {
+        if(name==null) errorStrings.add("StateFieldData.name is null");
+        if(type==null) errorStrings.add("StateFieldData.type is null");
+        return errorStrings;
     }
 }
