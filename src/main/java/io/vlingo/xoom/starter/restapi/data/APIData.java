@@ -19,4 +19,16 @@ public class APIData {
         this.rootPath = rootPath;
         this.routes = routes;
     }
+
+    public List<String> validate(List<String> errorStrings) {
+        if(rootPath==null) errorStrings.add("APIData.rootPath is null");
+        if(routes==null) {
+            errorStrings.add("APIData.routes is null");
+        } else {
+            routes.forEach(route ->
+                route.validate(errorStrings)
+            );
+        }
+        return errorStrings;
+    }
 }

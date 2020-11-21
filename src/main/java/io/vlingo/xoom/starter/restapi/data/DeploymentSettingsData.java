@@ -8,6 +8,7 @@
 package io.vlingo.xoom.starter.restapi.data;
 
 import io.vlingo.xoom.starter.task.Property;
+import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,4 +44,14 @@ public class DeploymentSettingsData {
         );
     }
 
+    public List<String> validate(List<String> errorStrings) {
+        if(clusterNodes==null) errorStrings.add("DeploymentSettingsData.clusterNodes is null");
+        if(type==null) errorStrings.add("DeploymentSettingsData.type is null");
+        if(type.equals(DeploymentType.DOCKER.name()) && dockerImage==null) errorStrings.add("DeploymentSettingsData.dockerImage is null");
+        if(type.equals(DeploymentType.KUBERNETES.name())) {
+            if(kubernetesImage==null) errorStrings.add("DeploymentSettingsData.kubernetesImage is null");
+            if(kubernetesPod==null) errorStrings.add("DeploymentSettingsData.kubernetesPod is null");
+        }
+        return errorStrings;
+    }
 }
