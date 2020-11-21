@@ -24,12 +24,12 @@
     ];
 	const databaseFormat = (val) => databaseTypes.find(t => t.value === val).name;
 
-    let storageType = "STATE_STORE";
-    let useCQRS = false;
-    let projections = "NONE";
-    let database = "IN_MEMORY";
-    let commandModelDatabase = "IN_MEMORY";
-	let queryModelDatabase = "IN_MEMORY";
+    let storageType = $persistenceSettings ? $persistenceSettings.storageType : "STATE_STORE";
+    let useCQRS = $persistenceSettings ? $persistenceSettings.useCQRS : false;
+    let projections = $persistenceSettings ? $persistenceSettings.projections : "NONE";
+    let database = $persistenceSettings ? $persistenceSettings.database : "IN_MEMORY";
+    let commandModelDatabase = $persistenceSettings ? $persistenceSettings.commandModelDatabase : "IN_MEMORY";
+	let queryModelDatabase = $persistenceSettings ? $persistenceSettings.queryModelDatabase : "IN_MEMORY";
 	
 	$: changedStorageType(storageType);
 	function changedStorageType(storageType) {
