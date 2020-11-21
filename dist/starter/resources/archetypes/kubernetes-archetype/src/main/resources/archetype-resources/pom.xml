@@ -13,7 +13,7 @@
     <exec.mainClass>${mainClass}</exec.mainClass>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <vlingo.xoom.version>${vlingoXoomServerVersion}</vlingo.xoom.version>
+    <vlingo.xoom.version>${vlingoXoomVersion}</vlingo.xoom.version>
   </properties>
   <repositories>
     <repository>
@@ -33,24 +33,6 @@
     </repository>
   </repositories>
   <dependencies>
-    <dependency>
-      <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-lattice</artifactId>
-      <version>${vlingoXoomServerVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-symbio-jdbc</artifactId>
-      <version>${vlingoXoomServerVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.vlingo</groupId>
-      <artifactId>vlingo-http</artifactId>
-      <version>${vlingoXoomServerVersion}</version>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>io.vlingo</groupId>
       <artifactId>vlingo-xoom</artifactId>

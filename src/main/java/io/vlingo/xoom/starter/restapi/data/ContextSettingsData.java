@@ -7,9 +7,6 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import io.vlingo.xoom.starter.task.Property;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class ContextSettingsData {
@@ -30,6 +27,15 @@ public class ContextSettingsData {
         this.artifactVersion = artifactVersion;
         this.packageName = packageName;
         this.xoomVersion = xoomVersion;
+    }
+
+    public List<String> validate(List<String> errorStrings) {
+        if(groupId==null) errorStrings.add("ContextSettingsData.groupId is null");
+        if(artifactId==null) errorStrings.add("ContextSettingsData.artifactId is null");
+        if(artifactVersion==null) errorStrings.add("ContextSettingsData.artifactVersion is null");
+        if(packageName==null) errorStrings.add("ContextSettingsData.packageName is null");
+        if(xoomVersion==null) errorStrings.add("ContextSettingsData.xoomVersion is null");
+        return errorStrings;
     }
 
 }
