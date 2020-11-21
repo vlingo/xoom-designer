@@ -22,10 +22,14 @@ import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.InternalServerError;
 import static io.vlingo.http.Response.Status.Ok;
+import static io.vlingo.http.Response.Status.Conflict;
 import static io.vlingo.http.ResponseHeader.Headers;
 import static io.vlingo.http.resource.ResourceBuilder.*;
 import static io.vlingo.xoom.starter.Configuration.GENERATION_SETTINGS_RESPONSE_HEADER;
 import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenerationSettingsResource extends DynamicResourceHandler {
 
@@ -35,6 +39,12 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
     public Completes<Response> startGeneration(final GenerationSettingsData settings) {
         try {
+            String validationMessage = validate(settings);
+            if(validationMessage.length() > 0) {
+                logger().debug(validationMessage);
+                return Completes.withFailure(Response.of(Conflict, serialized(validationMessage)));
+            }
+            
             final Completes<TaskExecutionContext> executionContext =
                     Completes.withSuccess(TaskExecutionContextMapper.from(settings));
 
@@ -45,14 +55,21 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
             return Completes.withFailure(Response.of(InternalServerError));
         }
     }
+    private String validate(final GenerationSettingsData settings) {
+        // if(!Validator.validate(settings)) { }
+        List<String> errorStrings = new ArrayList<>();
+        errorStrings = settings.validate(errorStrings);
+        logger().debug("errorStrings: "+errorStrings);
+        return String.join(", ", errorStrings);
+    }
 
-    private TaskStatus runProjectGeneration(final TaskExecutionContext context) {
+    private Completes<Response> runProjectGeneration(final TaskExecutionContext context) {
         try {
-            return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
+            return buildSuccessfulResponse(Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context));
         } catch (final Exception exception) {
             exception.printStackTrace();
             logger().error(exception.getMessage());
-            return TaskStatus.FAILED;
+            return Completes.withSuccess(Response.of(InternalServerError, serialized(TaskStatus.FAILED)));
         }
     }
 

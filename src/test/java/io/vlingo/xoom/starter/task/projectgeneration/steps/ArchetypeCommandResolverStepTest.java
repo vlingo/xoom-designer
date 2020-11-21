@@ -37,7 +37,7 @@ public class ArchetypeCommandResolverStepTest {
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
-                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
+                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
                     "-Dk8sImage=starter-example-image " +
                     "&& MOVE /Y starter-example E:\\projects";
@@ -49,7 +49,7 @@ public class ArchetypeCommandResolverStepTest {
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
-                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomServerVersion=1.2.9 " +
+                    "-Dpackage=io.vlingo.starterexample -DvlingoXoomVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
                     "-Dk8sImage=starter-example-image " +
                     "&& mv -f starter-example /home/projects";
@@ -93,7 +93,7 @@ public class ArchetypeCommandResolverStepTest {
     private CodeGenerationParameters loadGenerationParameters(final String targetFolder) {
         return CodeGenerationParameters.from(VERSION, "1.0")
                 .add(GROUP_ID, "io.vlingo").add(ARTIFACT_ID, "starter-example")
-                .add(PACKAGE, "io.vlingo.starterexample").add(XOOM_SERVER_VERSION, "1.2.9")
+                .add(PACKAGE, "io.vlingo.starterexample").add(XOOM_VERSION, "1.2.9")
                 .add(TARGET_FOLDER, targetFolder).add(DOCKER_IMAGE, "starter-example-image")
                 .add(KUBERNETES_IMAGE, "starter-example-image").add(KUBERNETES_POD_NAME, "starter-example-pod")
                 .add(MAIN_CLASS, "io.vlingo.starterexample.infrastructure.Bootstrap");
