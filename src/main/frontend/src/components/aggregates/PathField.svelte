@@ -7,10 +7,11 @@
 
 	$: changed(requireEntityLoad);
 	function changed(requireEntityLoad) {
+		console.log(requireEntityLoad);
 		if(requireEntityLoad) {
 			path = regexPrefix(/^\/\{id\}\//, "/{id}/", path, "/{id}/"+path);
 		} else {
-			path = path.substring(6);
+			path = hasPrefix(/^\/\{id\}\//, path) ? path.substring(6) : path;
 		}
 	}
 
@@ -22,6 +23,9 @@
 	}
 	function regexPrefix (regex, prefix, newValue, oldValue) {
 		return regex.test(newValue) ? newValue : (newValue ? oldValue : prefix);
+	}
+	function hasPrefix(regex, value) {
+		return regex.test(value);
 	}
 	
 	const handleInput = (e) => {

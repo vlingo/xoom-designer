@@ -4,7 +4,8 @@
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
 	import { aggregateSettings } from "../stores";
 	import Card from "svelte-materialify/src/components/Card";
-	import CreateButton from "../components/aggregates/CreateButton.svelte";
+	import Icon from "svelte-materialify/src/components/Icon";
+	import { mdiPlusThick } from "@mdi/js";
 
 	let dialogActive = false;
 	let editMode = false;
@@ -41,8 +42,10 @@
 <!-- add newbie tooltips -->
 <CardForm title="Aggregates" previous="context" next="persistence">
 	<div class="d-flex flex-wrap">
-		<Card class="pa-3 ma-3" style="width: 15rem; height: 20rem">
-			<CreateButton fab={false} title="Add Aggregate" on:click={newAggregate}/>
+		<Card class="ma-3" style="width: 15rem; height: 20rem" hover>
+			<div title="Add Aggregate" class="d-flex align-center justify-center" style="width: 100%; height: 100%" on:click={newAggregate}>
+				<Icon class="black-text" path={mdiPlusThick}/>
+			</div>
 		</Card>
 		{#each $aggregateSettings as aggregate, id}
 			<AggregateCard {aggregate} on:edit={() => edit(id)} on:remove={() => remove(id)}/>
