@@ -14,7 +14,7 @@
 
 	export let aggregate;
 
-	const methodParameters = (parameters) => parameters.map(p => aggregate.stateFields.find(sf => sf.name === p)).map(sf => sf.name + ': ' + sf.type);
+	const methodParameters = (parameters) => parameters.map(p => aggregate.stateFields.find(sf => sf.name === p)).map(sf => sf.name + ': ' + sf.type).join(", ");
 
 	const fullRoute = (route) => {
 		return (
