@@ -135,6 +135,92 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>frontend</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.7.6</version>
+            <configuration>
+              <workingDirectory>src/main/frontend</workingDirectory>
+              <outputdir>${project.build.directory}/frontend</outputdir>
+              <installDirectory>target/</installDirectory>
+              <nodeVersion>v12.18.3</nodeVersion>
+            </configuration>
+            <executions>
+              <execution>
+                <id>install node and npm</id>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <phase>initialize</phase>
+              </execution>
+              <execution>
+                <id>npm install</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+              <!-- export does not delete the files inside __sapper__/export first, find a way to clean before running export. -->
+              <execution>
+                <id>npm run export</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>run export</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.7.0</version>
+            <configuration>
+              <compilerArgs>
+                <arg>-parameters</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>io.vlingo</groupId>
+                  <artifactId>vlingo-xoom</artifactId>
+                  <version>${project.version}</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+            <executions>
+              <execution>
+                <id>test-compile</id>
+                <goals>
+                  <goal>testCompile</goal>
+                </goals>
+                <configuration>
+                  <compilerArgs>
+                    <arg>-parameters</arg>
+                  </compilerArgs>
+                  <annotationProcessorPaths>
+                    <path>
+                      <groupId>io.vlingo</groupId>
+                      <artifactId>vlingo-xoom</artifactId>
+                      <version>${project.version}</version>
+                    </path>
+                  </annotationProcessorPaths>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <build>
@@ -178,6 +264,28 @@
                   <resource>.RSA</resource>
                 </transformer>
               </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/main/frontend/__sapper__/export</directory>
+                  <targetPath>frontend</targetPath>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>
