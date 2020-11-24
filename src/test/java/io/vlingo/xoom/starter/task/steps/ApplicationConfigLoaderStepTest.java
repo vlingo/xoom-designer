@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class ApplicationConfigLoaderStepTest {
 
-    private static final String EXPECTED_URL = "http://localhost:19090/";
+    private static final String EXPECTED_URL = "http://localhost:19090/context";
 
     @Test
     public void testConfigurationLoad() {
