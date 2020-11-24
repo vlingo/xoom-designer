@@ -1,12 +1,12 @@
 import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiEllipse, mdiEllipseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiHome, mdiHomeOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
 
 export default [
-	{
-		text: 'Home',
-		icon: mdiHomeOutline,
-		openIcon: mdiHome,
-		href: ''
-	},
+	// {
+	// 	text: 'Home',
+	// 	icon: mdiHomeOutline,
+	// 	openIcon: mdiHome,
+	// 	href: ''
+	// },
 	{
 		text: 'Context',
 		icon: mdiCommentOutline,
