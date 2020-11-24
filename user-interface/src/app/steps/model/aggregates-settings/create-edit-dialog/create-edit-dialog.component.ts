@@ -181,7 +181,7 @@ export class CreateEditDialogComponent implements OnInit {
   private createMethods(formBuilder: FormBuilder, method: Method): FormGroup {
     return formBuilder.group({
       name: [method.name, [Validators.required]],
-      factory: [!!method.factory, []],
+      factory: [!!method.useFactory, []],
       parameters: [(method.parameters && method.parameters.length > 0) ? method.parameters : [], [Validators.required]],
       event: [method.event, [Validators.required]]
     });
