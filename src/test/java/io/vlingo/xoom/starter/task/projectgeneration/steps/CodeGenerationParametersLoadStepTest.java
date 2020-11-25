@@ -28,7 +28,7 @@ public class CodeGenerationParametersLoadStepTest {
         final TaskExecutionContext context = TaskExecutionContext.executedFrom(TERMINAL);
         new CodeGenerationParametersLoadStep().process(context);
         Assertions.assertFalse(context.codeGenerationParameters().isEmpty());
-        Assertions.assertEquals("1.0", context.codeGenerationParameters().retrieveValue(VERSION));
+        Assertions.assertEquals("1.0.0", context.codeGenerationParameters().retrieveValue(VERSION));
         Assertions.assertEquals("com.company", context.codeGenerationParameters().retrieveValue(GROUP_ID));
         Assertions.assertEquals("xoom-application", context.codeGenerationParameters().retrieveValue(ARTIFACT_ID));
         Assertions.assertEquals("com.company.business", context.codeGenerationParameters().retrieveValue(PACKAGE));

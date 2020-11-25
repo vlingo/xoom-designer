@@ -12,23 +12,23 @@ public class AggregateMethodData {
 
     public final String name;
     public final List<String> parameters;
-    public final Boolean factory;
+    public final Boolean useFactory;
     public final String event;
 
     public AggregateMethodData(final String name,
                                final List<String> parameters,
-                               final Boolean factory,
+                               final Boolean useFactory,
                                final String event) {
         this.name = name;
         this.event = event;
-        this.factory = factory;
+        this.useFactory = useFactory;
         this.parameters = parameters;
     }
 
     public List<String> validate(List<String> errorStrings) {
         if(name==null) errorStrings.add("AggregateMethodData.name is null");
         if(parameters==null) errorStrings.add("AggregateMethodData.parameters is null");
-        if(factory==null) errorStrings.add("AggregateMethodData.factory is null");
+        if(useFactory==null) errorStrings.add("AggregateMethodData.factory is null");
         if(event==null) errorStrings.add("AggregateMethodData.event is null");
         return errorStrings;
     }

@@ -12,20 +12,20 @@ import java.util.List;
 
 public class ModelSettingsData {
 
-    public final PersistenceData persistence;
+    public final PersistenceData persistenceSettings;
     public final List<AggregateData> aggregateSettings = new ArrayList<>();
 
-    public ModelSettingsData(final PersistenceData persistence,
+    public ModelSettingsData(final PersistenceData persistenceSettings,
                              final List<AggregateData> aggregateSettings) {
-        this.persistence = persistence;
+        this.persistenceSettings = persistenceSettings;
         this.aggregateSettings.addAll(aggregateSettings);
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(persistence==null) {
+        if(persistenceSettings==null) {
             errorStrings.add("ModelSettingsData.persistence is null");
         } else {
-            persistence.validate(errorStrings);
+            persistenceSettings.validate(errorStrings);
         }
         if(aggregateSettings==null) {
             errorStrings.add("ModelSettingsData.aggregateSettings is null");
