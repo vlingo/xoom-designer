@@ -1,2 +1,1 @@
-call build-ui.bat
-call build.bat
+call mvn clean install -P deployment,frontend
