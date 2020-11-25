@@ -8,11 +8,11 @@ Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
 ## Introduction
 
-A common reality of unfamiliarity exists for many developers either when they try to develop reactive applications or if the dilemma is about how to implement DDD properly, aiming for an accurate concretization from what has been strategically captured to a well-crafted domain model. Facing these obstacles, some choose to shoot in the dark while others may give up on using concepts and paradigms that are proven to be a strong foundation for building real-world, robust, modularized, and scalable applications. 
+A common reality of unfamiliarity exists for many developers either when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar, yet outdated, frameworks and tools.
 
-Now, the question is: can VLINGO/PLATFORM help developers surrounded by this challenging context and looking forward to having a successful combination of Actor Model + Reactive DDD? The correct answer is "that's the reason why VLINGO/PLATFORM exists". So, yes, we can really help you out on this journey in so many ways. One of them is to put VLINGO/XOOM Starter in your hands, a useful tool that generates a VLINGO/XOOM project and gives you an instant experience of start programming very quickly after a few minutes of setup steps. Also, it fits very well when you are having your first steps in the VLINGO components and want to learn how to start a DDD-friendly project powered by an Actor Model ecosystem. 
+The VLINGO/PLATFORM was created to help developers who face such challenges to confidently move forward and modernize their work. One platform component that greatly accelerates developer modernization efforts is the VLINGO/XOOM Starter. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that can be immediately built and your services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
 
-The next lines show you how to run VLINGO/XOOM Starter in your local environment. Let's get started!
+The next section show you how to run and use the VLINGO/XOOM Starter in your local environment. Let's get started!
 
 ## Installation 
 
@@ -42,44 +42,65 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ### Application Generation 
 
-In addition to the command-line interface (see below), `vlingo-xoom-starter` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window, execute `xoom gui` and your preferred browser will be opened with a wizard-fashioned screen, consisting of 5 steps.
+In addition to the command-line interface (see below), `vlingo-xoom-starter` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Starter.
+
+``` 
+ $ ./xoom gui
+```
+
+Following this your preferred browser will open with a wizard-fashioned screen, consisting of five steps.
 
 **Context Step**
 
+The first step defines the project artifact and service packaging.
+
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM0sShPfweroMLy17IM%2F-MM159JUDGJ54jMcKZX5%2Fimage.png)
 
-The first step has to do with the project build settings, including the project base package. So far, only Maven is supported, but you can easily convert the generated project using [Gradle's conversion version task](https://docs.gradle.org/current/userguide/migrating_from_maven.html#migmvn:automatic_conversion).
+Currently Maven build is supported. You may easily convert the generated project build to Gradle by using the [Gradle conversion version task](https://docs.gradle.org/current/userguide/migrating_from_maven.html#migmvn:automatic_conversion).
 
 **Model - Aggregate Step**
 
+The second step is used to design feature-based slices through the architecture. The vital parts of three architecture responsibilities are defined by means of a domain model focus. By first visually defining each domain model aggregate/entity type, its events emitted by each of its command message handlers and the REST API at the frontend, may be correspondingly specified.
+
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1ED3Unz8WBDfG1Taa%2F-MM1FX_DCts7bJHJ5aLX%2Fimage.png)
 
-The *Model - Aggregate step* informs the project generator of how your domain model must be generated. Here you are able to define:
-* Aggregates (name, fields, methods, and its emitted events)
-* Domain Events (name and fields)
-* Rest Resources (HTTP method, path, and related aggregate method) 
-Further on, you can keep track of each aggregate you've created and other relevant details on the *Model - Aggregate* review section. It shows an interesting angle of your model through an *Event Storming* perspective.
+In a single form, define the model aggregate/entity type, state, events, and REST API for :
+
+* Aggregates and State: protocol name; message handler methods; state attributes/properties; emitted events
+* Domain Events: name; attributes/properties
+* REST Resources: HTTP method; URI path and path parameters; aggregate message handler method to which the resource dispatches
+
+Following each aggregate definition, add it to the model and see it in the design view.
 
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1IvPWmZlz3V0QdMPM%2F-MM1KFlltcy6E7Fo7DQ_%2Fimage.png?alt=media&token=3f9a7722-c1ef-4c3a-a84b-b61ba67926be)
 
+Track each architectural slice, including REST API, aggregate, and emitted events, on the _Model - Aggregate_ design view. It shows an interesting angle of your model through a design-level _Event Storming_ perspective.
+
 **Model - Persistence Step**
+
+The third step is used to define the persistence, and if CQRS is in used, both command and query models.
 
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1IvPWmZlz3V0QdMPM%2F-MM1OXroZiao0hr-lz0m%2Fimage.png)
 
-This step displays some persistence preferences where you can pick the configuration that fits best for your project including the [storage type](https://docs.vlingo.io/vlingo-symbio), CQRS usage, database vendors, and, when applicable, how events are going to projected to your query model.
+This step displays persistence preferences. Configuration selections include the [storage type](https://docs.vlingo.io/vlingo-symbio), CQRS usage, specific database mechanisms, and when applicable, how events are projected to the query model.
 
 **Deployment Step**
 
+The fourth step defines the deployment container types.
+
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1OnfL6SZVQVnR5BAn%2F-MM1Rr473DOo9d6ijq4N%2Fimage.png)
 
-The project generator can also include containerization files facilitating Docker and Kubernetes deployment. Filling in the *Deployment Step*, you can choose different deployment types according to your needs. 
+The project generator provides default packaging, such as Java JAR, but may also include containerization files facilitating Docker and Kubernetes deployment. Using the _Deployment Step_, choose among deployment types as needed.  
 
 **Generation Step**
 
+The fifth and final step defines project component types, and generates the project.
+
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1SB3vLO4INqIJkXOx%2F-MM1UeV0LJIuciHmQ8ax%2Fimage.png)
 
-In the last step, you just need to inform your parent folder of your project. In addition, here you can decide whether VLINGO/XOOM annotations and auto-dispatch are preferred or not. 
-Once these 5 steps are completed, you can take advantage of the power of VLINGO/XOOM components on your new project. Go ahead! Also, count on VLINGO/PLATFORM comprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) willing to support developers on their journey.
+Enter the project parent folder. In addition, select whether VLINGO/XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
+
+Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO/XOOM acceleration components. Use the VLINGO/PLATFORM comprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
      
 ### CLI
 

@@ -14,7 +14,7 @@ public enum Property {
     ARTIFACT_ID("artifact.id"),
     PACKAGE("package"),
     TARGET_FOLDER("target.folder"),
-    XOOM_VERSION("vlingo.xoom.server.version"),
+    XOOM_VERSION("vlingo.xoom.version"),
     DEPLOYMENT("deployment"),
     DOCKER_IMAGE("docker.image"),
     DOCKER_REPOSITORY("docker.repository"),
