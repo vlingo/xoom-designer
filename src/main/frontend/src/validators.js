@@ -19,5 +19,5 @@ export const packageRule = (value) => /^[a-z]+(\.[a-zA-Z_]([a-zA-Z_$#\d])*)+$/.t
 export const artifactRule = (value) => /^[a-z-]+$/.test(value) ? undefined : errors.ARTIFACT;
 export const classNameRule = (value) => /^[A-Z]+[A-Za-z]*$/.test(value) ? undefined : errors.CLASSNAME;
 export const identifierRule = (value) => /^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(value) ? undefined : errors.FIELDNAME;
-export const routeRule = (value) => /^[a-zA-Z_$/?%]+$/.test(value) ? undefined : errors.ROUTEPATH;
+export const routeRule = (value) => /^[a-zA-Z_$/?%-]+$/.test(value) ? undefined : errors.ROUTEPATH;
 export const xoomVersionRule = (value) => ["1.4.1-SNAPSHOT", "1.4.0"].some(v => v == value) ? undefined : errors.XOOMVERSION;
