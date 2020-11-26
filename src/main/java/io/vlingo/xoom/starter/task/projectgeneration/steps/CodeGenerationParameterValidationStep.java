@@ -29,7 +29,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     private static String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
     private static String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
     private static String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-    private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%]+$";
+    private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%-]+$";
     private static String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
     private static CodeGenerationParameters parameters;
 
@@ -54,7 +54,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         if(!isDatabaseValid()) errorStrings.add("Database is not valid");
 
         if(!isDeploymentValid()) errorStrings.add("Deployment is not valid");
-        
+
         if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("");
 
         if(errorStrings.size() > 0) {
@@ -78,15 +78,9 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     private boolean areStateFieldsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
             aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
-                stateField.retrieveAllRelated(Label.FIELD_TYPE).allMatch(type -> 
-                    Stream.of(
-                        SupportedTypes.INTEGER.name(),
-                        SupportedTypes.LONG.name(),
-                        SupportedTypes.FLOAT.name(),
-                        SupportedTypes.DOUBLE.name(),
-                        SupportedTypes.STRING.name(),
-                        SupportedTypes.BOOLEAN.name()
-                    ).anyMatch(type.value::equalsIgnoreCase) //ignoring case, you can send things like "Long", too.
+                stateField.retrieveAllRelated(Label.FIELD_TYPE).allMatch(type ->
+                  SupportedTypes.names().stream()
+                    .anyMatch(type.value::equalsIgnoreCase) //ignoring case, you can send things like "Long", too.
                 )
             )
         ).allMatch(bool -> bool==true);
@@ -156,7 +150,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         boolean validImage = true;
         //no break, fall through
         switch(deploymentType) {
-            case "KUBERNETES": validImage = validImage && 
+            case "KUBERNETES": validImage = validImage &&
                 retrieve(Label.KUBERNETES_IMAGE).matches(DOCKER_PATTERN) &&
                 retrieve(Label.KUBERNETES_POD_NAME).matches(DOCKER_PATTERN);
             case "DOCKER": validImage = validImage &&
