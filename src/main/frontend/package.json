@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "export": "sapper export --entry \"aggregates context deployment generation persistence\"",
     "start": "node __sapper__/build"
   },
   "dependencies": {
