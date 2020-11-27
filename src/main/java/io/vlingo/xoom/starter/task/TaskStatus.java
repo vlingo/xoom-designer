@@ -12,4 +12,7 @@ public enum TaskStatus {
     SUCCESSFUL,
     FAILED;
 
+    public boolean failed() {
+        return equals(FAILED);
+    }
 }

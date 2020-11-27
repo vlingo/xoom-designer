@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenerationSettingsData {
@@ -32,7 +33,8 @@ public class GenerationSettingsData {
         this.useAutoDispatch = useAutoDispatch;
     }
 
-    public List<String> validate(List<String> errorStrings) {
+    public List<String> validate() {
+        final List<String> errorStrings = new ArrayList<>();
         if(context==null) {
             errorStrings.add("GenerationSettingsData.context is null");
         } else {
