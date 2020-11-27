@@ -55,7 +55,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
         if(!isDeploymentValid()) errorStrings.add("Deployment is not valid");
 
-        if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("");
+        if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("Target folder is not valid");
 
         if(errorStrings.size() > 0) {
             String errorMessage = String.join(", ", errorStrings);
