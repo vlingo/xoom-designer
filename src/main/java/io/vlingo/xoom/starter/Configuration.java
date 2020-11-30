@@ -50,11 +50,11 @@ public class Configuration {
             new MainClassResolverStep(),
             new ArchetypeFolderCleanUpStep(),
             new ArchetypeCommandResolverStep(),
-            new ProjectInstallationStep(),
-            new MavenWrapperInstallationStep(),
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
+            new ProjectInstallationStep(),
+            new MavenWrapperInstallationStep(),
             new CodeGenerationExecutionerStep(),
             new ContentPurgerStep()
     );
