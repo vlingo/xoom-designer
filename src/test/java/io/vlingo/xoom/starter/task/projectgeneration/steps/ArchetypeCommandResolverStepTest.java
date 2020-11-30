@@ -39,8 +39,7 @@ public class ArchetypeCommandResolverStepTest {
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
                     "-Dpackage=io.vlingo.starterexample -DvlingoXoomVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
-                    "-Dk8sImage=starter-example-image " +
-                    "&& MOVE /Y starter-example E:\\projects";
+                    "-Dk8sImage=starter-example-image ";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
                     "cd " + DEFAULT_ARCHETYPE_PATH +  " && mvnw -f ." + File.separator +  "kubernetes-archetype"
@@ -51,8 +50,7 @@ public class ArchetypeCommandResolverStepTest {
                     "-DartifactId=starter-example -DmainClass=io.vlingo.starterexample.infrastructure.Bootstrap " +
                     "-Dpackage=io.vlingo.starterexample -DvlingoXoomVersion=1.2.9 " +
                     "-DdockerImage=starter-example-image -Dk8sPodName=starter-example-pod " +
-                    "-Dk8sImage=starter-example-image " +
-                    "&& mv -f starter-example /home/projects";
+                    "-Dk8sImage=starter-example-image ";
 
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
