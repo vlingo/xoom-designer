@@ -61,6 +61,10 @@ public enum Archetype {
         return ArchetypeOptionsFormatter.instance().format(this, parameters);
     }
 
+    public String label() {
+        return label;
+    }
+
     String artifactId() {
         return artifactId;
     }
