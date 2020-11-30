@@ -26,9 +26,10 @@ public class ProjectInstallationStep implements TaskExecutionStep {
         try {
             final String artifactId = context.codeGenerationParameters().retrieveValue(Label.ARTIFACT_ID);
             final File sourceDirectory = Paths.get(ARCHETYPES_FOLDER.path(), artifactId).toFile();
-            FileUtils.copyDirectory(sourceDirectory, new File(context.projectPath()));
+            FileUtils.moveDirectory(sourceDirectory, new File(context.projectPath()));
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
     }
+
 }
