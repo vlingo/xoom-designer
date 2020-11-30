@@ -95,11 +95,6 @@ public class TaskExecutionContext {
         return this.configuration.get(key);
     }
 
-    public TaskExecutionContext addProperty(final Property property, final String value) {
-        this.properties.put(property.literal(), value);
-        return this;
-    }
-
     public <T> T propertyOf(final Property property) {
         return (T) propertyOf(property, value -> value);
     }
