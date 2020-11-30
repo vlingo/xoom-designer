@@ -28,7 +28,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class MavenWrapperInstallationStep implements TaskExecutionStep {
 
-    private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw");
+    private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw.cmd");
 
     @Override
     public void process(final TaskExecutionContext context) {
