@@ -30,8 +30,16 @@
     let database = $persistenceSettings ? $persistenceSettings.database : "IN_MEMORY";
     let commandModelDatabase = $persistenceSettings ? $persistenceSettings.commandModelDatabase : "IN_MEMORY";
 	let queryModelDatabase = $persistenceSettings ? $persistenceSettings.queryModelDatabase : "IN_MEMORY";
-	
+
+	$: changedCQRS(useCQRS);
 	$: changedStorageType(storageType);
+
+	function changedCQRS(useCQRS) {
+		if(!useCQRS) {
+			projections = "NONE";
+		} 
+	}
+
 	function changedStorageType(storageType) {
 		if(storageType === "JOURNAL") {
 			projectionsTypes = [
@@ -58,8 +66,10 @@
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
 	<Select class="ma-4" mandatory items={storageTypes} bind:value={storageType} format={(val) => storageFormat(val)}>Storage Type</Select>
-	<Select class="ma-4" mandatory items={projectionsTypes} bind:value={projections} format={(val) => projectionFormat(val)}>Projections</Select>
-	<Switch class="ma-4" bind:checked={useCQRS}>Use CQRS</Switch>
+	<div class="cqrs-button">
+		<Switch class="ma-4" bind:checked={useCQRS}>Use CQRS</Switch>
+	</div>
+	<Select disabled={!useCQRS} class="ma-4" mandatory items={projectionsTypes} bind:value={projections} format={(val) => projectionFormat(val)}>Projections</Select>
 	{#if useCQRS}
 		<Select class="ma-4" mandatory items={databaseTypes} bind:value={commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
 		<Select class="ma-4" mandatory items={databaseTypes} bind:value={queryModelDatabase} format={(val) => databaseFormat(val)}>Query Model Database</Select>
