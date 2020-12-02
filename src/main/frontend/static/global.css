@@ -35,6 +35,10 @@ body {
 	--theme-text-primary: black;
 }
 
+.cqrs-button {
+	margin-bottom: 30px !important;
+}
+
 a {
 	text-decoration: none;
 	color: #00753b !important;
