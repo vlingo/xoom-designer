@@ -14,10 +14,7 @@ import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 
 import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
 
-public class ArchetypeCommandResolverStep extends CommandResolverStep {
-
-    private static final String ARCHETYPE_COMMANDS_PATTERN = "%s && %s -f %s clean install && " +
-            "%s archetype:generate -B -DarchetypeCatalog=internal %s";
+public final class ArchetypeCommandResolverStep extends CommandResolverStep {
 
     @Override
     protected String formatCommands(final TaskExecutionContext context) {
@@ -25,8 +22,9 @@ public class ArchetypeCommandResolverStep extends CommandResolverStep {
         final Archetype defaultArchetype = Archetype.findDefault();
         final String archetypeFolderCommand = resolveDirectoryChangeCommand(ARCHETYPES_FOLDER.path());
         final String archetypeOptions = defaultArchetype.formatOptions(context.codeGenerationParameters());
-        return String.format(ARCHETYPE_COMMANDS_PATTERN, archetypeFolderCommand, terminal.mavenCommand(),
-                defaultArchetype.resolvePomPath(), terminal.mavenCommand(), archetypeOptions);
+        return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
+                archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
+                terminal.mavenCommand(), archetypeOptions);
     }
 
 }
