@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class ProjectInstallationStep implements TaskExecutionStep {
 
@@ -26,7 +27,7 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
         try {
             final String artifactId = context.codeGenerationParameters().retrieveValue(Label.ARTIFACT_ID);
             final Path sourceDirectory = Paths.get(ARCHETYPES_FOLDER.path(), artifactId);
-            Files.move(sourceDirectory, Paths.get(context.projectPath()));
+            Files.move(sourceDirectory, Paths.get(context.projectPath()), REPLACE_EXISTING);
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
