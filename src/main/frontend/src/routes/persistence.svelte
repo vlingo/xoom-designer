@@ -66,9 +66,7 @@
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
 	<Select class="ma-4" mandatory items={storageTypes} bind:value={storageType} format={(val) => storageFormat(val)}>Storage Type</Select>
-	<div class="cqrs-button">
-		<Switch class="ma-4" bind:checked={useCQRS}>Use CQRS</Switch>
-	</div>
+	<Switch class="ma-4 mb-8" bind:checked={useCQRS}>Use CQRS</Switch>
 	<Select disabled={!useCQRS} class="ma-4" mandatory items={projectionsTypes} bind:value={projections} format={(val) => projectionFormat(val)}>Projections</Select>
 	{#if useCQRS}
 		<Select class="ma-4" mandatory items={databaseTypes} bind:value={commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
