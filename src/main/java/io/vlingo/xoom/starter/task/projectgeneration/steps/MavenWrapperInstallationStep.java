@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,7 +50,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
         try {
             final Path source = Paths.get(ARCHETYPES_FOLDER.path(), MAVEN_WRAPPER_DIRECTORY);
             final Path destination = projectPath.resolve(MAVEN_WRAPPER_DIRECTORY);
-            Files.copy(source, destination);
+            FileUtils.copyDirectory(source.toFile(), destination.toFile());
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
