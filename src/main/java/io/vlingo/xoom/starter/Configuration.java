@@ -31,6 +31,7 @@ public class Configuration {
     public static final String USER_INTERFACE_CONFIG_KEY = "ui";
     public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
     public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
+    public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
     private static final String XOOM_VERSION_PLACEHOLDER = "1.4.1-SNAPSHOT";
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
@@ -47,10 +48,13 @@ public class Configuration {
             new CodeGenerationParametersLoadStep(),
             new CodeGenerationParameterValidationStep(),
             new MainClassResolverStep(),
+            new ArchetypeFolderCleanUpStep(),
             new ArchetypeCommandResolverStep(),
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
+            new ProjectInstallationStep(),
+            new MavenWrapperInstallationStep(),
             new CodeGenerationExecutionerStep(),
             new ContentPurgerStep()
     );
