@@ -8,24 +8,23 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.projectgeneration.archetype.Archetype;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 
-import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
 
-public class ArchetypeCommandResolverStep extends CommandResolverStep {
-
-    private static final String ARCHETYPE_COMMANDS_PATTERN = "%s && mvn clean install && " +
-            "%s && mvn archetype:generate -B -DarchetypeCatalog=internal %s";
+public final class ArchetypeCommandResolverStep extends CommandResolverStep {
 
     @Override
     protected String formatCommands(final TaskExecutionContext context) {
+        final Terminal terminal = Terminal.supported();
         final Archetype defaultArchetype = Archetype.findDefault();
-        final String targetFolder = context.codeGenerationParameters().retrieveValue(TARGET_FOLDER);
-        final String archetypeFolderCommand = resolveDirectoryChangeCommand(defaultArchetype.folder());
-        final String targetFolderCommand = resolveDirectoryChangeCommand(targetFolder);
-        return String.format(ARCHETYPE_COMMANDS_PATTERN, archetypeFolderCommand,
-                targetFolderCommand, defaultArchetype.formatOptions(context.codeGenerationParameters()));
+        final String archetypeFolderCommand = resolveDirectoryChangeCommand(ARCHETYPES_FOLDER.path());
+        final String archetypeOptions = defaultArchetype.formatOptions(context.codeGenerationParameters());
+        return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
+                archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
+                terminal.mavenCommand(), archetypeOptions);
     }
 
 }

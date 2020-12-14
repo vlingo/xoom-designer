@@ -1,1 +1,1 @@
-call mvn clean install -P deployment,frontend
+call mvnw.cmd clean install -P deployment,frontend

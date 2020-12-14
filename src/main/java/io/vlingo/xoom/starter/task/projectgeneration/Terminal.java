@@ -12,21 +12,24 @@ import java.util.function.Predicate;
 
 public enum Terminal {
 
-    WINDOWS("cmd.exe", "/c", osName -> osName.contains("Windows")),
-    MAC_OS("sh", "-c", osName -> osName.toUpperCase().contains("MAC OS")),
-    LINUX("sh", "-c", osName -> osName.contains("Linux"));
+    WINDOWS("cmd.exe", "/c", "mvnw.cmd", osName -> osName.contains("Windows")),
+    MAC_OS("sh", "-c", "mvnw", osName -> osName.toUpperCase().contains("MAC OS")),
+    LINUX("sh", "-c", "mvnw", osName -> osName.contains("Linux"));
 
     private static Terminal ENABLED;
 
     private final String initializationCommand;
     private final String parameter;
+    private final String mavenCommand;
     private final Predicate<String> activationCondition;
 
     Terminal(final String initializationCommand,
              final String parameter,
+             final String mavenCommand,
              final Predicate<String> activationCondition) {
         this.initializationCommand = initializationCommand;
         this.parameter = parameter;
+        this.mavenCommand = mavenCommand;
         this.activationCondition = activationCondition;
     }
 
@@ -62,4 +65,9 @@ public enum Terminal {
     public boolean isWindows() {
         return this.equals(WINDOWS);
     }
+
+    public String mavenCommand() {
+        return mavenCommand;
+    }
+
 }

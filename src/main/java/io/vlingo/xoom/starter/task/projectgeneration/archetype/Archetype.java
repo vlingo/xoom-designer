@@ -8,9 +8,9 @@
 package io.vlingo.xoom.starter.task.projectgeneration.archetype;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,6 @@ public enum Archetype {
     private final String artifactId;
     private final String groupId;
     private final String version;
-
     private final List<ArchetypeOption> archetypeOptions = new ArrayList<>();
 
     Archetype(final String label,
@@ -48,12 +47,18 @@ public enum Archetype {
         return KUBERNETES;
     }
 
+    public String resolvePomPath() {
+        final Terminal terminal = Terminal.supported();
+        final String relativePathPrefix = terminal.isWindows() ? "" : "." + File.separator;
+        return String.format("%s%s%spom.xml", relativePathPrefix, label, File.separator);
+    }
+
     public String formatOptions(final CodeGenerationParameters parameters) {
         return ArchetypeOptionsFormatter.instance().format(this, parameters);
     }
 
-    public String folder() {
-        return Paths.get(Resource.ARCHETYPES_FOLDER.path(), label).toString();
+    public String label() {
+        return label;
     }
 
     String artifactId() {
