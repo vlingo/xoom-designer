@@ -1,6 +1,6 @@
 # vlingo-xoom-starter
 
-[![Build Status](https://travis-ci.org/vlingo/vlingo-xoom-starter.svg?branch=master)](https://travis-ci.org/vlingo/vlingo-xoom-starter) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/vlingo-platform-java/community/)
+[![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
 
 Be guided into the Reactive DDD world by the project generator for the VLINGO/XOOM components.
 
