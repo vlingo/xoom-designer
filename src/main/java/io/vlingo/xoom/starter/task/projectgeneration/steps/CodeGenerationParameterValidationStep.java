@@ -41,7 +41,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         if(!retrieve(Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
         if(!retrieve(Label.VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
         if(!retrieve(Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
-        if(!isXoomVersionValid()) errorStrings.add("Xoom version must be either 1.4.1-SNAPSHOT or 1.4.0");
+//        if(!isXoomVersionValid()) errorStrings.add("Xoom version must be either 1.4.1-SNAPSHOT or 1.4.0");
 
         if(!areAggregateNamesValid()) errorStrings.add("Aggregate names must follow classname pattern");
         if(!areStateFieldsValid()) errorStrings.add("State Fields must follow fieldname pattern");
