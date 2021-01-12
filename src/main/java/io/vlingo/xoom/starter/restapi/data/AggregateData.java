@@ -17,13 +17,19 @@ public class AggregateData {
     public final List<StateFieldData> stateFields = new ArrayList<>();
     public final List<AggregateMethodData> methods = new ArrayList<>();
     public final List<DomainEventData> events = new ArrayList<>();
+    public final ConsumerExchangeData consumerExchange;
+    public final ProducerExchangeData producerExchange;
 
     public AggregateData(final String aggregateName,
                          final APIData api,
                          final List<DomainEventData> domainEvents,
                          final List<StateFieldData> stateFields,
-                         final List<AggregateMethodData> methods) {
+                         final List<AggregateMethodData> methods,
+                         final ConsumerExchangeData consumerExchange,
+                         final ProducerExchangeData producerExchange) {
         this.api = api;
+        this.consumerExchange = consumerExchange;
+        this.producerExchange = producerExchange;
         this.methods.addAll(methods);
         this.events.addAll(domainEvents);
         this.stateFields.addAll(stateFields);

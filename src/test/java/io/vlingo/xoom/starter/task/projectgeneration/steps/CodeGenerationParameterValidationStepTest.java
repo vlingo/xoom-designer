@@ -5,21 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.util.Arrays;
 import java.util.List;
 
+import io.vlingo.xoom.starter.restapi.data.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import io.vlingo.xoom.starter.restapi.data.APIData;
-import io.vlingo.xoom.starter.restapi.data.AggregateData;
-import io.vlingo.xoom.starter.restapi.data.AggregateMethodData;
-import io.vlingo.xoom.starter.restapi.data.ContextSettingsData;
-import io.vlingo.xoom.starter.restapi.data.DeploymentSettingsData;
-import io.vlingo.xoom.starter.restapi.data.DomainEventData;
-import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.starter.restapi.data.ModelSettingsData;
-import io.vlingo.xoom.starter.restapi.data.PersistenceData;
-import io.vlingo.xoom.starter.restapi.data.RouteData;
-import io.vlingo.xoom.starter.restapi.data.StateFieldData;
-import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 public class CodeGenerationParameterValidationStepTest {
@@ -71,7 +60,7 @@ public class CodeGenerationParameterValidationStepTest {
                 Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
                         new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
 
-        return new AggregateData("Person", apiData, events, statesFields, methods);
+        return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
     }
 
     private AggregateData profileAggregateData() {
@@ -90,7 +79,7 @@ public class CodeGenerationParameterValidationStepTest {
                 Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
                         new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
 
-        return new AggregateData("Profile", apiData, events, statesFields, methods);
+        return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
     }
 
     private DeploymentSettingsData deploymentSettingsData() {
