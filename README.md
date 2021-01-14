@@ -6,6 +6,17 @@ Be guided into the Reactive DDD world by the project generator for the VLINGO/XO
 
 Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
+## Download
+
+*File type:* `zip`
+```
+$ curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.zip
+```
+*File type:* `tar`
+```
+$ curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.tar
+```
+
 ## Introduction
 
 A common reality of unfamiliarity exists for many developers either when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar, yet outdated, frameworks and tools.
