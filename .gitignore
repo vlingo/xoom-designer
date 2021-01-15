@@ -28,6 +28,3 @@ dependency-reduced-pom.xml
 vlingo-xoom-starter-dist.jar
 starter.tar
 starter.zip
-
-# vscode
-.vscode/
