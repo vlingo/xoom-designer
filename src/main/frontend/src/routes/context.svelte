@@ -1,7 +1,7 @@
 <script>
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings } from '../stores';
+	import { contextSettings, setLocalStorage } from '../stores';
 	import { artifactRule, packageRule, requireRule, versionRule, xoomVersionRule } from '../validators';
 	
 	let groupId = $contextSettings ? $contextSettings.groupId : "";
@@ -11,7 +11,10 @@
 	let xoomVersion = "1.4.1-SNAPSHOT";
 
 	$: valid = !packageRule(groupId) && !artifactRule(artifactId) && !versionRule(artifactVersion) && !packageRule(packageName) && !xoomVersionRule(xoomVersion);
-	$: $contextSettings = valid ? { groupId, artifactId, artifactVersion, packageName, xoomVersion } : undefined;
+	$: if(valid) {
+		$contextSettings = { groupId, artifactId, artifactVersion, packageName, xoomVersion };
+		setLocalStorage("contextSettings", $contextSettings)
+	}
 	$: console.log($contextSettings);
 </script>
 
@@ -20,7 +23,7 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Context" previous="." next="aggregates">
+<CardForm title="Context" next="aggregates">
 	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>
 	<TextField style="min-width: 300px" class="ma-4" placeholder="demo" bind:value={artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
 	<TextField style="min-width: 300px" class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>

@@ -3,7 +3,7 @@
 	import Switch from "svelte-materialify/src/components/Switch";
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings } from "../stores";
+	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
   import ProgressCircular from "svelte-materialify/src/components/ProgressCircular/ProgressCircular.svelte";
@@ -43,9 +43,12 @@
 	}
 
 	$: if(!useAnnotations) useAutoDispatch = false;
-	$: invalid = !projectDirectory || !context || !model || !model.aggregateSettings || !model.persistenceSettings || !deployment
-	$: $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
-	$: console.log(context, model, deployment, $generationSettings);
+  $: valid = projectDirectory && context && model && model.aggregateSettings && model.persistenceSettings && deployment
+  $: if(projectDirectory) {
+    $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
+    setLocalStorage("generationSettings", $generationSettings)
+	}
+	$: console.log($generationSettings);
 </script>
 
 <svelte:head>
@@ -58,7 +61,7 @@
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mr-3" on:click={generate} disabled={invalid}>Generate</Button>
+  <Button class="mr-3" on:click={generate} disabled={!valid}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}

@@ -6,7 +6,7 @@
 	import Method from "./Method.svelte";
 	import Route from "./Route.svelte";
 	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import { aggregateSettings } from "../../stores";
+	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, routeRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
@@ -18,7 +18,7 @@
 
 	export let currentId;
 	
-	let aggregateName = "";
+	let aggregateName = $currentAggregate ? $currentAggregate.aggregateName : "";
 	let stateFields = [{ name: "id", type: "String" }];
 	let events = [];
 	let methods = [];
@@ -34,7 +34,7 @@
 
 	const add = () => {
 		if(requireRule(aggregateName)) return;
-		$aggregateSettings = [...$aggregateSettings, aggregateSetting];
+		$aggregateSettings = [...$aggregateSettings, $currentAggregate];
 		currentId = undefined;
 		reset();
 		dialogActive = false;
@@ -42,7 +42,7 @@
 
 	const update = () => {
 		if(requireRule(aggregateName)) return;
-		$aggregateSettings.splice(currentId, 1, aggregateSetting);
+		$aggregateSettings.splice(currentId, 1, $currentAggregate);
 		$aggregateSettings = $aggregateSettings;
 		currentId = undefined;
 		reset();
@@ -80,8 +80,12 @@
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
-	$: aggregateSetting = valid ? { aggregateName, stateFields, events, methods, api: { rootPath, routes } } : undefined;
-	$: console.log(aggregateSetting);
+	$: if(valid) {
+		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes } };
+		//TODO: rework this - we need to keep the modal open, too. 
+		setLocalStorage("currentAggregate", $currentAggregate);
+	}
+	$: console.log($currentAggregate);
 	$: console.log(currentId);
 </script>
 
