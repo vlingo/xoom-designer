@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter.restapi.data;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
@@ -104,13 +105,14 @@ public class TaskExecutionContextMapper {
                               final CodeGenerationParameter aggregateParameter) {
         final CodeGenerationParameter consumerExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
-                        .relate(Label.ROLE, "consumer");
+                        .relate(Label.ROLE, ExchangeRole.CONSUMER);
 
         aggregate.consumerExchange.supportedSchemas.forEach(schema -> consumerExchange.relate(SCHEMA, schema));
 
         final CodeGenerationParameter producerExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, aggregate.producerExchange.exchangeName)
-                        .relate(Label.SCHEMA_GROUP, aggregate.producerExchange.schemaGroup);
+                        .relate(Label.SCHEMA_GROUP, aggregate.producerExchange.schemaGroup)
+                        .relate(Label.ROLE, ExchangeRole.PRODUCER);
 
         aggregate.producerExchange.outgoingEvents.forEach(eventName -> producerExchange.relate(DOMAIN_EVENT, eventName));
 
