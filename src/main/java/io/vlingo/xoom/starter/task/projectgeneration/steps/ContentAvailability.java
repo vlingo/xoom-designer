@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.parameter.Label;
+import io.vlingo.xoom.codegen.template.exchange.ExchangeRole;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 
 import java.nio.file.Paths;
@@ -22,7 +24,12 @@ public enum ContentAvailability {
                 return deploymentType.isDocker() || deploymentType.isKubernetes();
             }),
 
-    KUBERNETES("deployment", context -> context.deploymentType().isKubernetes());
+    KUBERNETES("deployment", context -> context.deploymentType().isKubernetes()),
+
+    SCHEMATA(Paths.get("src", "main", "vlingo").toString(),
+            context -> context.codeGenerationParameters().retrieveAll(Label.AGGREGATE)
+                    .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
+                    .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer()));
 
     private final String relativePath;
     private final Predicate<TaskExecutionContext> condition;

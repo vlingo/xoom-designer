@@ -60,7 +60,7 @@ public class ContentAvailabilityTest {
     @Test
     public void testContentAvailabilityRetrieval() {
         final List<ContentAvailability> availabilities = ContentAvailability.availabilities();
-        Assertions.assertEquals(2, availabilities.size());
+        Assertions.assertEquals(3, availabilities.size());
         Assertions.assertTrue(availabilities.contains(DOCKER));
         Assertions.assertTrue(availabilities.contains(KUBERNETES));
     }

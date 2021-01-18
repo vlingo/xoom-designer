@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.template.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.codegen.template.model.ModelGenerationStep;
 import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
+import io.vlingo.xoom.codegen.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.starter.task.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.gui.steps.UserInterfaceBootstrapStep;
@@ -68,6 +69,7 @@ public class Configuration {
             new RestResourceGenerationStep(),
             new AutoDispatchMappingGenerationStep(),
             new ExchangeGenerationStep(),
+            new SchemataGenerationStep(),
             new BootstrapGenerationStep(),
             new ContentCreationStep()
     );

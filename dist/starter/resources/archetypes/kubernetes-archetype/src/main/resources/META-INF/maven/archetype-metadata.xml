@@ -42,6 +42,12 @@
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/vlingo/java</directory>
+      <includes>
+        <include>**/*.vss</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
       <directory>deployment/k8s</directory>
       <includes>
         <include>**/*.yaml</include>
