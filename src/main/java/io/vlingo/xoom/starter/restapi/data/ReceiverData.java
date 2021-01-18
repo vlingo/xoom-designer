@@ -7,15 +7,13 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ReceiverData {
 
-public class ConsumerExchangeData {
+    public final String schema;
+    public final String aggregateMethod;
 
-    public final String exchangeName;
-    public final List<ReceiverData> receivers = new ArrayList<>();
-
-    public ConsumerExchangeData(final String exchangeName) {
-        this.exchangeName = exchangeName;
+    public ReceiverData(final String schema, final String aggregateMethod) {
+        this.schema = schema;
+        this.aggregateMethod = aggregateMethod;
     }
 }
