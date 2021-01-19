@@ -59,6 +59,11 @@
 			<CardTitle>{event.name}</CardTitle>
 		</Card>
 	{/each}
+	{#each aggregate.consumerExchange.receivers as receiver}
+		<Card class="event mb-1">
+			<CardTitle>{receiver.schema.split(":")[3]} -> {receiver.aggregateMethod}</CardTitle>
+		</Card>
+	{/each}
 	<CardActions style="margin-top: auto" class="justify-space-around">
 		<Button title="Edit Aggregate" on:click={edit} icon class="ma-2">
 			<Icon path={mdiPencil}/>

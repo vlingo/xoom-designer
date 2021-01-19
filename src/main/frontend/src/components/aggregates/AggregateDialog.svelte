@@ -7,7 +7,7 @@
 	import Route from "./Route.svelte";
 	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
 	import { aggregateSettings } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, schemaGroupRule, schemaRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
@@ -23,7 +23,12 @@
 	let events = [];
 	let methods = [];
 	let rootPath = "/";
+	let producerExchangeName = "";
+	let consumerExchangeName = "";
+	let schemaGroup = $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
 	let routes = [];
+	let outgoingEvents = [];
+	let receivers = [];
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
 	const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
@@ -31,6 +36,20 @@
 	const deleteEvent = (index) => { events.splice(index, 1); events = events; }
 	const addMethod = () => methods = methods.concat({ name: "", useFactory: false, parameters: [], event: "" });
 	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "GET", aggregateMethod: "", requireEntityLoad: false });
+	const addOutgoingEvent = () => outgoingEvents = outgoingEvents.concat("");
+	const deleteOutgoingEvent = (index) => { outgoingEvents.splice(index, 1); outgoingEvents = outgoingEvents; }
+	const addReceiver = () => {
+		if(receivers.length > 0) {
+			const lastReceiver = receivers[receivers.length-1];
+			const schemaPrefix = lastReceiver.schema.split(":").splice(0, 3).join(":");
+			const schemaPlaceholder = schemaPrefix + ":[Inform the schema name]:0.0.1";
+			receivers = receivers.concat({ aggregateMethod: "", schema: schemaPlaceholder})
+		} else {
+			receivers = receivers.concat({ aggregateMethod: "", schema: "" })
+		}
+	}
+	const deleteReceiver = (index) => { receivers.splice(index, 1); receivers = receivers; }
+
 
 	const add = () => {
 		if(requireRule(aggregateName)) return;
@@ -56,6 +75,11 @@
 		methods = [];
 		rootPath = "/";
 		routes = [];
+		producerExchangeName = "";
+		schemaGroup = $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+		outgoingEvents = [];
+		consumerExchangeName = "";
+		receivers = []; 
 	}
 
 	$: changedCurrent(currentId);
@@ -69,6 +93,11 @@
 			methods = aggregateWithId.methods;
 			rootPath = aggregateWithId.api.rootPath;
 			routes = aggregateWithId.api.routes;
+			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
+			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
+			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
+			consumerExchangeName = aggregateWithId.consumerExchange.exchangeName;
+			receivers = aggregateWithId.consumerExchange.receivers;
 		} else {
 			reset();
 		}
@@ -80,7 +109,7 @@
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
-	$: aggregateSetting = valid ? { aggregateName, stateFields, events, methods, api: { rootPath, routes } } : undefined;
+	$: aggregateSetting = valid ? { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } } : undefined;
 	$: console.log(aggregateSetting);
 	$: console.log(currentId);
 </script>
@@ -140,6 +169,33 @@
 	<CreateButton title="Add Route" on:click={addRoute}/>
 	<!-- <Divider class="ma-2" /> -->
 	
+	<h5>Producer Exchange:</h5>
+	<span class="d-flex">
+		<TextField class="ma-2" bind:value={producerExchangeName}>Exchange name</TextField>
+		<TextField class="ma-2" bind:value={schemaGroup} rules={[schemaGroupRule]} validateOnBlur={!schemaGroup}>Organization : Unit : Context</TextField>				
+	</span>
+
+	{#each outgoingEvents as outgoingEvent, i}
+	<span class="d-flex">
+		<Select mandatory disabled={!events.length} class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={outgoingEvent}>Domain Event</Select>
+		<DeleteButton title="Delete Event" on:click={() => deleteOutgoingEvent(i)}/>
+	</span>
+	{/each}
+
+	<CreateButton title="Add Event" on:click={addOutgoingEvent}/>
+
+	<h5>Consumer Exchange:</h5>
+	<TextField class="ma-2" bind:value={consumerExchangeName}>Exchange name</TextField>				
+
+	{#each receivers as receiver, i}
+	<span class="d-flex">
+		<TextField class="ma-2" bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
+		<Select mandatory class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
+		<DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
+	</span>
+	{/each}
+	<CreateButton title="Add Schema" on:click={addReceiver}/>
+
 	<CardActions>
 		{#if editMode}
 			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button>
