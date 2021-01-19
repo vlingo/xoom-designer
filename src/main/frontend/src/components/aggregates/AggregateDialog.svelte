@@ -25,24 +25,23 @@
 	let rootPath = "/";
 	let producerExchangeName = "";
 	let consumerExchangeName = "";
-	let schemaGroup = $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+	let schemaGroup = "";
+	let disableSchemaGroup = false;
 	let routes = [];
 	let outgoingEvents = [];
 	let receivers = [];
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
 	const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
-	const addEvent = () => events = events.concat({ name: "", fields: [] });
+	const addEvent = () => events = events.concat({ name: "", fields: ["id"] });
 	const deleteEvent = (index) => { events.splice(index, 1); events = events; }
 	const addMethod = () => methods = methods.concat({ name: "", useFactory: false, parameters: [], event: "" });
 	const addRoute = () => routes = routes.concat({ path: "", httpMethod: "GET", aggregateMethod: "", requireEntityLoad: false });
-	const addOutgoingEvent = () => outgoingEvents = outgoingEvents.concat("");
-	const deleteOutgoingEvent = (index) => { outgoingEvents.splice(index, 1); outgoingEvents = outgoingEvents; }
 	const addReceiver = () => {
 		if(receivers.length > 0) {
 			const lastReceiver = receivers[receivers.length-1];
 			const schemaPrefix = lastReceiver.schema.split(":").splice(0, 3).join(":");
-			const schemaPlaceholder = schemaPrefix + ":[Inform the schema name]:0.0.1";
+			const schemaPlaceholder = schemaPrefix + ":[Enter the schema name]:0.0.1";
 			receivers = receivers.concat({ aggregateMethod: "", schema: schemaPlaceholder})
 		} else {
 			receivers = receivers.concat({ aggregateMethod: "", schema: "" })
@@ -76,10 +75,19 @@
 		rootPath = "/";
 		routes = [];
 		producerExchangeName = "";
-		schemaGroup = $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+		schemaGroup = retrieveSchemaGroup();
+		disableSchemaGroup = !canWriteSchemaGroup();
 		outgoingEvents = [];
 		consumerExchangeName = "";
 		receivers = []; 
+	}
+
+	const retrieveSchemaGroup = () => {
+		return $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+	}
+
+	const canWriteSchemaGroup = () => {
+		return currentId == 0 || (schemaGroup == undefined && schemaGroup.length == 0);
 	}
 
 	$: changedCurrent(currentId);
@@ -95,6 +103,7 @@
 			routes = aggregateWithId.api.routes;
 			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
 			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
+			disableSchemaGroup = !canWriteSchemaGroup();
 			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
 			consumerExchangeName = aggregateWithId.consumerExchange.exchangeName;
 			receivers = aggregateWithId.consumerExchange.receivers;
@@ -171,21 +180,13 @@
 	
 	<h5>Producer Exchange:</h5>
 	<span class="d-flex">
-		<TextField class="ma-2" bind:value={producerExchangeName}>Exchange name</TextField>
-		<TextField class="ma-2" bind:value={schemaGroup} rules={[schemaGroupRule]} validateOnBlur={!schemaGroup}>Organization : Unit : Context</TextField>				
+		<TextField class="ma-2" bind:value={producerExchangeName}>Exchange Name</TextField>
+		<TextField class="ma-2" bind:value={schemaGroup} rules={[schemaGroupRule]} validateOnBlur={!schemaGroup} disabled={disableSchemaGroup}>Organization : Unit : Context</TextField>					
 	</span>
-
-	{#each outgoingEvents as outgoingEvent, i}
-	<span class="d-flex">
-		<Select mandatory disabled={!events.length} class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={outgoingEvent}>Domain Event</Select>
-		<DeleteButton title="Delete Event" on:click={() => deleteOutgoingEvent(i)}/>
-	</span>
-	{/each}
-
-	<CreateButton title="Add Event" on:click={addOutgoingEvent}/>
+	<Select mandatory disabled={!events.length} multiple class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={outgoingEvents}>Domain Event</Select>
 
 	<h5>Consumer Exchange:</h5>
-	<TextField class="ma-2" bind:value={consumerExchangeName}>Exchange name</TextField>				
+	<TextField class="ma-2" bind:value={consumerExchangeName}>Exchange Name</TextField>				
 
 	{#each receivers as receiver, i}
 	<span class="d-flex">

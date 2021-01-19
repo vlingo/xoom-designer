@@ -21,7 +21,11 @@
 			route.httpMethod + " " +
 			aggregate.api.rootPath +
 			route.path
-		).replaceAll("//", "/");
+		).replaceAll("//", "/")  + "->" + route.aggregateMethod;
+	};
+
+	const fullReceiver = (receiver) => {
+		return receiver.schema.split(":")[3] + "->" + receiver.aggregateMethod;
 	};
 
 	const edit = () => dispatch("edit");
@@ -35,6 +39,11 @@
 			<Card class="command mb-1">
 				<CardTitle>{fullRoute(route)}</CardTitle>
 			</Card>
+		{/each}
+		{#each aggregate.consumerExchange.receivers as receiver}
+		<Card class="event mb-1">
+			<CardTitle>{fullReceiver(receiver)}</CardTitle>
+		</Card>
 		{/each}
 	</div>
 	<div class="mb-2">
@@ -59,11 +68,7 @@
 			<CardTitle>{event.name}</CardTitle>
 		</Card>
 	{/each}
-	{#each aggregate.consumerExchange.receivers as receiver}
-		<Card class="event mb-1">
-			<CardTitle>{receiver.schema.split(":")[3]} -> {receiver.aggregateMethod}</CardTitle>
-		</Card>
-	{/each}
+
 	<CardActions style="margin-top: auto" class="justify-space-around">
 		<Button title="Edit Aggregate" on:click={edit} icon class="ma-2">
 			<Icon path={mdiPencil}/>
