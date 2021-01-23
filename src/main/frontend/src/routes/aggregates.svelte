@@ -2,7 +2,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
-	import { aggregateSettings } from "../stores";
+	import { aggregateSettings, setLocalStorage } from "../stores";
 	import Card from "svelte-materialify/src/components/Card";
 	import Icon from "svelte-materialify/src/components/Icon";
 	import { mdiPlusThick } from "@mdi/js";
@@ -32,6 +32,7 @@
 
 	$: if(!dialogActive && editMode) editMode = false;
 
+	$: setLocalStorage("aggregateSettings", $aggregateSettings)
 	$: console.log($aggregateSettings);
 </script>
 

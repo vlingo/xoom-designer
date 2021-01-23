@@ -2,7 +2,7 @@
 	import Select from "svelte-materialify/src/components/Select";
 	import Switch from "svelte-materialify/src/components/Switch";
 	import CardForm from "../components/CardForm.svelte";
-	import { persistenceSettings } from "../stores";
+	import { persistenceSettings, setLocalStorage } from "../stores";
 
 	const storageTypes = [
       {name: "State Store", value: "STATE_STORE"},
@@ -56,6 +56,7 @@
 		}
 	}
 	$: $persistenceSettings = { storageType, useCQRS, projections, database, commandModelDatabase, queryModelDatabase }
+	$: setLocalStorage("persistenceSettings", $persistenceSettings)
 	$: console.log($persistenceSettings);
 </script>
 

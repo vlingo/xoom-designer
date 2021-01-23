@@ -7,7 +7,7 @@
 	import Route from "./Route.svelte";
 	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
 	import { aggregateSettings } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, schemaGroupRule, schemaRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
@@ -18,7 +18,7 @@
 
 	export let currentId;
 	
-	let aggregateName = "";
+	let aggregateName = $currentAggregate ? $currentAggregate.aggregateName : "";
 	let stateFields = [{ name: "id", type: "String" }];
 	let events = [];
 	let methods = [];
@@ -52,7 +52,7 @@
 
 	const add = () => {
 		if(requireRule(aggregateName)) return;
-		$aggregateSettings = [...$aggregateSettings, aggregateSetting];
+		$aggregateSettings = [...$aggregateSettings, $currentAggregate];
 		currentId = undefined;
 		reset();
 		dialogActive = false;
@@ -60,7 +60,7 @@
 
 	const update = () => {
 		if(requireRule(aggregateName)) return;
-		$aggregateSettings.splice(currentId, 1, aggregateSetting);
+		$aggregateSettings.splice(currentId, 1, $currentAggregate);
 		$aggregateSettings = $aggregateSettings;
 		currentId = undefined;
 		reset();
@@ -79,7 +79,7 @@
 		disableSchemaGroup = !canWriteSchemaGroup();
 		outgoingEvents = [];
 		consumerExchangeName = "";
-		receivers = []; 
+		receivers = [];
 	}
 
 	const retrieveSchemaGroup = () => {
@@ -101,12 +101,6 @@
 			methods = aggregateWithId.methods;
 			rootPath = aggregateWithId.api.rootPath;
 			routes = aggregateWithId.api.routes;
-			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
-			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
-			disableSchemaGroup = !canWriteSchemaGroup();
-			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
-			consumerExchangeName = aggregateWithId.consumerExchange.exchangeName;
-			receivers = aggregateWithId.consumerExchange.receivers;
 		} else {
 			reset();
 		}
@@ -118,8 +112,12 @@
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
-	$: aggregateSetting = valid ? { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } } : undefined;
-	$: console.log(aggregateSetting);
+	$: if(valid) {
+		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
+		//TODO: rework this - we need to keep the modal open, too.
+		setLocalStorage("currentAggregate", $currentAggregate);
+	}
+	$: console.log($currentAggregate);
 	$: console.log(currentId);
 </script>
 
@@ -178,25 +176,6 @@
 	<CreateButton title="Add Route" on:click={addRoute}/>
 	<!-- <Divider class="ma-2" /> -->
 	
-	<h5>Producer Exchange:</h5>
-	<span class="d-flex">
-		<TextField class="ma-2" bind:value={producerExchangeName}>Exchange Name</TextField>
-		<TextField class="ma-2" bind:value={schemaGroup} rules={[schemaGroupRule]} validateOnBlur={!schemaGroup} disabled={disableSchemaGroup}>Organization : Unit : Context</TextField>					
-	</span>
-	<Select mandatory disabled={!events.length} multiple class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={outgoingEvents}>Domain Event</Select>
-
-	<h5>Consumer Exchange:</h5>
-	<TextField class="ma-2" bind:value={consumerExchangeName}>Exchange Name</TextField>				
-
-	{#each receivers as receiver, i}
-	<span class="d-flex">
-		<TextField class="ma-2" bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
-		<Select mandatory class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
-		<DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
-	</span>
-	{/each}
-	<CreateButton title="Add Schema" on:click={addReceiver}/>
-
 	<CardActions>
 		{#if editMode}
 			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button>

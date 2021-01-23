@@ -2,7 +2,7 @@
 	import Radio from "svelte-materialify/src/components/Radio";
 	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
-	import { deploymentSettings } from "../stores";
+	import { deploymentSettings, setLocalStorage } from "../stores";
 	import { requireRule } from '../validators';
 
 	let types = [
@@ -18,7 +18,10 @@
 	let kubernetesPod = $deploymentSettings ? $deploymentSettings.kubernetesPod : "";
 
 	$: valid = clusterNodes && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));
-	$: $deploymentSettings = valid ? { clusterNodes, type: type, dockerImage, kubernetesImage, kubernetesPod } : undefined;
+	$: if(valid) {
+		$deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod };
+		setLocalStorage("deploymentSettings", $deploymentSettings)
+	}
 	$: console.log($deploymentSettings);
 </script>
 
