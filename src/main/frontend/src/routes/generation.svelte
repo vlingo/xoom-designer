@@ -24,7 +24,7 @@
   let failure;
 
 	const generate = () => {
-    if(invalid) return;
+    if(!valid) return;
     processing = true;
 		XoomStarterRepository.postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch)
 		  .then(s => {
