@@ -1,7 +1,6 @@
 import { writable } from 'svelte/store';
 
 export const theme = writable("light");
-export const mobileStore = writable(false);
 
 export const contextSettings = writable(getLocalStorage("contextSettings"));
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
@@ -22,3 +21,22 @@ export function setLocalStorage(key, value) {
 		localStorage.setItem(key, JSON.stringify(value));
 	}
 }
+
+function localStorageStore(key, initialValue = {}) {
+
+}
+
+function isMobileStore() {
+	const { subscribe, set } = writable(false);
+	return {
+		subscribe,
+		set,
+		check: () => {
+			import('svelte-materialify/src/utils/breakpoints').then(({ default: breakpoints }) => {
+				set(window.matchMedia(breakpoints['md-and-down']).matches);
+			});
+		},
+	};
+};
+
+export const isMobile = isMobileStore();
