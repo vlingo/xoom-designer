@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const theme = writable("light");
+// export const theme = writable("light");
 
 export const contextSettings = writable(getLocalStorage("contextSettings"));
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
@@ -22,8 +22,19 @@ export function setLocalStorage(key, value) {
 	}
 }
 
-function localStorageStore(key, initialValue = {}) {
+function createLocalStore(key, initialValue = {}) {
+	const localValue = process.browser ? localStorage.getItem(key) : initialValue;
+	const { subscribe, set } = writable(localValue);
 
+	return {
+		subscribe,
+		set: (value) => {
+			if (process.browser) {
+				localStorage.setItem(key, value);
+			}
+			set(value)
+		},
+	};
 }
 
 function isMobileStore() {
@@ -40,3 +51,4 @@ function isMobileStore() {
 };
 
 export const isMobile = isMobileStore();
+export const theme = createLocalStore('theme', 'light')
