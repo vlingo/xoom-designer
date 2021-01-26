@@ -16,7 +16,13 @@
 
 	export let aggregate;
 
-	const methodParameters = (parameters) => parameters.map(p => aggregate.stateFields.find(sf => sf.name === p)).map(sf => sf.name + ': ' + sf.type).join(", ");
+	const methodParameters = (parameters) => {
+		return parameters.reduce((acc, cur) => {
+			const field = aggregate.stateFields.find(sf => sf.name === cur);
+			if (field) acc.push(`${field.name}: ${field.type}`);
+			return acc;
+		}, []).join(', ');
+	};
 
 	const fullRoute = (route) => {
 		return (
