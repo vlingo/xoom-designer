@@ -1,8 +1,7 @@
 <script>
-	import Select from "svelte-materialify/src/components/Select";
-	import Switch from "svelte-materialify/src/components/Switch";
 	import CardForm from "../components/CardForm.svelte";
 	import { persistenceSettings, setLocalStorage } from "../stores";
+	import { Select, Switch } from "svelte-materialify";
 
 	const storageTypes = [
       {name: "State Store", value: "STATE_STORE"},

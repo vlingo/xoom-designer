@@ -1,4 +1,4 @@
-import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiEllipse, mdiEllipseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiHome, mdiHomeOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
+import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
 
 export default [
 	// {
