@@ -9,6 +9,10 @@ export const persistenceSettings = writable(getLocalStorage("persistenceSettings
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
 export const generationSettings = writable(getLocalStorage("generationSettings"));
 
+/*
+* checking process.browser simply means that only run code snippet in client side.
+*/
+
 export function getLocalStorage(key) {
 	if(process.browser) {
 		return JSON.parse(localStorage.getItem(key)) || undefined;
