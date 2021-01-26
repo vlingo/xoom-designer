@@ -3,18 +3,9 @@
 	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
-	import { onMount } from 'svelte';
 	export let segment;
 
 	let sidenav = false;
-	onMount(() => {
-		$theme = window.localStorage.getItem('theme') || 'light';
-		const unsubscribe = theme.subscribe((value) => {
-			window.localStorage.setItem('theme', value);
-		});
-		return unsubscribe;
-	});
-
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
 	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
 </script>
