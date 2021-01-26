@@ -3,8 +3,7 @@
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
 	import { aggregateSettings, setLocalStorage } from "../stores";
-	import Card from "svelte-materialify/src/components/Card";
-	import Icon from "svelte-materialify/src/components/Icon";
+	import { Card, Icon } from "svelte-materialify";
 	import { mdiPlusThick } from "@mdi/js";
 
 	let dialogActive = false;

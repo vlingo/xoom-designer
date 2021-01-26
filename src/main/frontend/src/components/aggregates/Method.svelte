@@ -1,7 +1,5 @@
 <script>
-	import Select from "svelte-materialify/src/components/Select";
-	import Switch from "svelte-materialify/src/components/Switch";
-	import TextField from "svelte-materialify/src/components/TextField";
+	import { Select, Switch, TextField } from 'svelte-materialify';
 	import { identifierRule, requireRule } from "../../validators";
 	import DeleteButton from "./DeleteButton.svelte";
 

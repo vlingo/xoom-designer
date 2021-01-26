@@ -1,5 +1,5 @@
 <script>
-	import TextField from "svelte-materialify/src/components/TextField";
+	import { TextField } from "svelte-materialify";
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, setLocalStorage } from '../stores';
 	import { artifactRule, packageRule, requireRule, versionRule, xoomVersionRule } from '../validators';

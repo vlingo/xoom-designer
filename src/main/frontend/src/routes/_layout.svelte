@@ -1,8 +1,6 @@
 <script>
 	import { mobileStore, theme } from '../stores';
-	import { Button, Icon, MaterialApp } from "svelte-materialify/src";
-	import AppBar from 'svelte-materialify/src/components/AppBar';
-	import Container from 'svelte-materialify/src/components/Grid/Container.svelte';
+	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	import { onMount } from 'svelte';

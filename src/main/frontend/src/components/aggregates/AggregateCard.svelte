@@ -1,11 +1,13 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Card from "svelte-materialify/src/components/Card";
-	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import CardText from "svelte-materialify/src/components/Card/CardText.svelte";
-	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
-	import Divider from "svelte-materialify/src/components/Divider";
-	import Icon from "svelte-materialify/src/components/Icon";
+	import {
+		Button,
+		Card,
+		CardActions,
+		CardText,
+		CardTitle,
+		Divider,
+		Icon,
+	} from 'svelte-materialify';
 	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
 	import DeleteWithDialog from "./DeleteWithDialog.svelte";

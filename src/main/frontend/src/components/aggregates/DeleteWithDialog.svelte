@@ -1,9 +1,11 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Card from "svelte-materialify/src/components/Card";
-	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
-	import Dialog from "svelte-materialify/src/components/Dialog";
+	import {
+		Button,
+		Card,
+		CardActions,
+		CardTitle,
+		Dialog,
+	} from "svelte-materialify";
 	import DeleteButton from "./DeleteButton.svelte";
 	
 	export let type;
