@@ -90,6 +90,12 @@
 		return currentId == 0 || (schemaGroup == undefined && schemaGroup.length == 0);
 	}
 
+	const onEventFieldChange = () => {
+		//The items selected in the "event-fields" combo, which are binded in the "events.fields" array, 
+		//have to follow the same order of "stateFields" items.
+		//the items can be matched by name (eg: "eventField.name == stateField.name").
+	}
+
 	$: changedCurrent(currentId);
 	function changedCurrent(id) {
 		console.log(id, $aggregateSettings[id]);
@@ -153,7 +159,7 @@
 	{#each events as event, i}
 		<span class="d-flex">
 			<TextField class="ma-2" bind:value={event.name} rules={[requireRule, classNameRule]} validateOnBlur={!event.name}>Name</TextField>
-			<Select mandatory disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+			<Select id="event-fields" mandatory on:change={onEventFieldChange} disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
 			<DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
 		</span>
 	{/each}

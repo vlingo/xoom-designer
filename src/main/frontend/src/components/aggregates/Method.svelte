@@ -10,6 +10,12 @@
 	export let methods;
 	export let method;
 	export let id;
+
+	const onMethodParameterChange = () => {
+		//The items selected in the "method-parameters" combo, which are binded in the "method.parameters" array, 
+		//have to follow the same order of "stateFields" items, declared on the parent component (AggregateDialog.svelte).
+		//The items can be matched by name (eg: "methodParameter.name == stateField.name").
+	}
 	
 	const deleteMethod = (index) => { methods.splice(index, 1); methods = methods; }
 	$: console.log(method);
@@ -19,7 +25,7 @@
 	<div>
 		<span class="d-flex">
 			<TextField class="ma-2" bind:value={method.name} rules={[requireRule, identifierRule]} validateOnBlur={!method.name}>Name</TextField>
-			<Select mandatory disabled={!stateFields.length} multiple class="ma-2" items={stateFields} bind:value={method.parameters}>Parameters</Select>
+			<Select id="method-parameter" mandatory on:change={onMethodParameterChange} disabled={!stateFields.length} multiple class="ma-2" items={stateFields} bind:value={method.parameters}>Parameters</Select>
 			<Select mandatory disabled={!events.length} class="ma-2" items={events} bind:value={method.event}>Event</Select>
 		</span>
 		<div>
