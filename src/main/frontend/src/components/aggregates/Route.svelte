@@ -1,5 +1,5 @@
 <script>
-	import Select from "svelte-materialify/src/components/Select";
+	import { Select } from "svelte-materialify";
 	import PathField from "./PathField.svelte";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";

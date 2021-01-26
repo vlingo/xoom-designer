@@ -1,11 +1,13 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Select from "svelte-materialify/src/components/Select";
-	import TextField from "svelte-materialify/src/components/TextField";
-	import Dialog from "svelte-materialify/src/components/Dialog";
+	import {
+		Button,
+		Select,
+		TextField,
+		Dialog,
+		CardActions
+	} from 'svelte-materialify';
 	import Method from "./Method.svelte";
 	import Route from "./Route.svelte";
-	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
 	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, routeRule, schemaGroupRule, schemaRule } from "../../validators";
 	import { formatArrayForSelect } from "../../utils";
