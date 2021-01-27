@@ -1,4 +1,4 @@
-import { readable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 
 export const storageTypes = readable(null, function start(set) {
 	set([
@@ -7,13 +7,11 @@ export const storageTypes = readable(null, function start(set) {
   ]);
 });
 
-export const projectionsTypes = readable(null, function start(set) {
-	set([
-		{name: 'Not Applicable', value: 'NONE'},
-		{name: 'Event Based', value: 'EVENT_BASED'},
-		{name: 'Operation Based', value: 'OPERATION_BASED'}
-  ]);
-});
+export const projectionsTypes = writable([
+  {name: 'Not Applicable', value: 'NONE'},
+  {name: 'Event Based', value: 'EVENT_BASED'},
+  {name: 'Operation Based', value: 'OPERATION_BASED'}
+]);
 
 export const databaseTypes = readable(null, function start(set) {
 	set([
