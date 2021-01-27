@@ -71,7 +71,7 @@
 
 	const reset = () => {
 		aggregateName = "";
-		stateFields = [{ name: "id", type: "String" }];
+		stateFields = [{ name: "id", type: "String", removable: false }];
 		events = [];
 		methods = [];
 		rootPath = "/";
@@ -143,7 +143,7 @@
 		<div style="max-width: 100%">
 			<Select mandatory disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
 		</div>
-		{#if i>0}
+		{#if stateField.removable !== false}
 			<DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
 		{/if}
 		</span>
