@@ -3,12 +3,8 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { deploymentSettings, setLocalStorage } from "../stores";
 	import { requireRule } from '../validators';
+	import { deploymentTypes } from '../stores/deployment.js';
 
-	let types = [
-		{ label: "None", value: "NONE" },
-		{ label: "Docker", value: "DOCKER" },
-		{ label: "Kubernetes", value: "KUBERNETES" },
-	]
 	// [{ name: "id", type: "String" }];
 	let clusterNodes = $deploymentSettings ? $deploymentSettings.clusterNodes : 3;
     let type = $deploymentSettings ? $deploymentSettings.type : "NONE";
@@ -30,7 +26,7 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Deployment" previous="persistence" next="generation">
-	{#each types as {label, value}}
+	{#each $deploymentTypes as {label, value}}
 		<Radio bind:group={type} value={value}>{label}</Radio>
 	{/each}
 	{#if type === "DOCKER" || type === "KUBERNETES"}
