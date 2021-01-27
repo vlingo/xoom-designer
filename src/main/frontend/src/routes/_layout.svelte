@@ -1,6 +1,6 @@
 <script>
 	import { theme, isMobile } from '../stores';
-	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify";
+	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	export let segment;
@@ -51,11 +51,17 @@
 </MaterialApp>
 </div>
 
-<style>
+<style lang="scss" global>
 	main {
 	  padding-top: 5rem;
 	}
 	.navigation-enabled {
 	  padding: 5rem 11rem 0 18rem;
+	}
+
+	.error-text {
+		.s-input__details {
+			color: inherit;
+		}
 	}
 </style>

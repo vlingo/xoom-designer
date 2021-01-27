@@ -5,7 +5,7 @@
 		CardActions,
 		CardTitle,
 		Dialog,
-	} from "svelte-materialify";
+	} from "svelte-materialify/src";
 	import DeleteButton from "./DeleteButton.svelte";
 	
 	export let type;

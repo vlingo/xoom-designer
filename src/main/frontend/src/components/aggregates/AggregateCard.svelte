@@ -7,7 +7,7 @@
 		CardTitle,
 		Divider,
 		Icon,
-	} from 'svelte-materialify';
+	} from 'svelte-materialify/src';
 	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
 	import DeleteWithDialog from "./DeleteWithDialog.svelte";

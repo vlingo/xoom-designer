@@ -1,6 +1,6 @@
 <script>
 	import { mdiPlusThick } from "@mdi/js";
-	import { Button, Icon } from "svelte-materialify";
+	import { Button, Icon } from "svelte-materialify/src";
 
 	export let title;
 	export let fab = true;

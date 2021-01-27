@@ -11,7 +11,7 @@
     ProgressCircular,
     Snackbar,
     Icon
-  } from 'svelte-materialify';
+  } from 'svelte-materialify/src';
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings };

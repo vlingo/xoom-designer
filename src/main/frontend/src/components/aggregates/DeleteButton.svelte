@@ -1,6 +1,6 @@
 <script>
 	import { mdiDelete } from "@mdi/js";
-	import { Button, Icon} from "svelte-materialify";
+	import { Button, Icon} from "svelte-materialify/src";
 	
 	export let title;
 	export let color = "red";

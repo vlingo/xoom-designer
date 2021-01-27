@@ -1,5 +1,5 @@
 <script>
-	import { Radio, TextField } from "svelte-materialify";
+	import { Radio, TextField } from "svelte-materialify/src";
 	import CardForm from "../components/CardForm.svelte";
 	import { deploymentSettings, setLocalStorage } from "../stores";
 	import { requireRule } from '../validators';
