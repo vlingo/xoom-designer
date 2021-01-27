@@ -33,12 +33,11 @@
         success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
         status = s;
         console.log(status);
-        processing = false;
-        snackbar = true;
       }).catch(e => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
         status = e;
         console.log(status);
+      }).finally(() => {
         processing = false;
         snackbar = true;
       })
