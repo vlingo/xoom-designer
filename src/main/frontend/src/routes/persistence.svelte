@@ -2,7 +2,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { persistenceSettings, setLocalStorage } from "../stores";
 	import { storageTypes, projectionsTypes, databaseTypes } from '../stores/persistance';
-	import { Select, Switch } from "svelte-materialify";
+	import { Select, Switch } from "svelte-materialify/src";
 
 	const storageFormat = (val) => $storageTypes.find(t => t.value === val).name;
 	const projectionFormat = (val) => $projectionsTypes.find(t => t.value === val).name;

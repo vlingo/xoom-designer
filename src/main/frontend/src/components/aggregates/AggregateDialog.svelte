@@ -5,7 +5,7 @@
 		TextField,
 		Dialog,
 		CardActions
-	} from 'svelte-materialify';
+	} from 'svelte-materialify/src';
 	import Method from "./Method.svelte";
 	import Route from "./Route.svelte";
 	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
