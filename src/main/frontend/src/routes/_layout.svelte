@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import { theme, isMobile } from '../stores';
 	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
@@ -8,6 +9,10 @@
 	let sidenav = false;
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
 	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
+
+	onMount(() => {
+		isMobile.check();
+	})
 </script>
 
 <svelte:window on:resize={isMobile.check} />
