@@ -15,8 +15,8 @@
 	export let id;
 
 	let requestMethodDisabled = false;
-	$: changedMethodOrMethods(methods);
-	const changedMethodOrMethods = (methods) => {
+	$: changedMethodOrMethods(aggregateMethod, methods);
+	const changedMethodOrMethods = (aggregateMethod, methods) => {
 		const method = methods.find(m => m.name === aggregateMethod);
 		console.log(method);
 		if(method) {
