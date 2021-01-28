@@ -92,10 +92,36 @@
 		return currentId == 0 || (schemaGroup == undefined && schemaGroup.length == 0);
 	}
 
-	const onEventFieldChange = () => {
 		//The items selected in the "event-fields" combo, which are binded in the "events.fields" array, 
 		//have to follow the same order of "stateFields" items.
 		//the items can be matched by name (eg: "eventField.name == stateField.name").
+
+		/* There was no on:change function emitted from svelte-materialify Select component,
+		*  so function would not be called at any moment, instead I used this piece of code to achive what you described in your comment
+		*/
+
+	$: {
+		events = events.map((event) => {
+			return {
+				...event,
+				fields: stateFields.reduce((acc, cur) => {
+					if (event.fields && event.fields.includes(cur.name)) acc.push(cur.name);
+					return acc;
+				}, [])
+			};
+		})
+	}
+		
+	$: {
+		methods = methods.map((method) => {
+			return {
+				...method,
+				parameters: stateFields.reduce((acc, cur) => {
+					if (method.parameters && method.parameters.includes(cur.name)) acc.push(cur.name);
+					return acc;
+				}, [])
+			};
+		})
 	}
 
 	$: changedCurrent(currentId);
@@ -125,8 +151,6 @@
 		//TODO: rework this - we need to keep the modal open, too.
 		setLocalStorage("currentAggregate", $currentAggregate);
 	}
-	$: console.log($currentAggregate);
-	$: console.log(currentId);
 </script>
 
 <Dialog bind:active={dialogActive} width={1000} class="pa-4">
@@ -161,7 +185,7 @@
 	{#each events as event, i}
 		<span class="d-flex">
 			<TextField class="ma-2" bind:value={event.name} rules={[requireRule, classNameRule]} validateOnBlur={!event.name}>Name</TextField>
-			<Select id="event-fields" mandatory on:change={onEventFieldChange} disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+			<Select id="event-fields" mandatory disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
 			<DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
 		</span>
 	{/each}
