@@ -62,7 +62,7 @@
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mr-3" on:click={generate} disabled={!valid}>Generate</Button>
+  <Button class="mt-4 mr-3" on:click={generate} disabled={!valid}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
