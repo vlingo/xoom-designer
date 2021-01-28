@@ -53,6 +53,6 @@
 	</div>
 </CardForm>
 
-{#if currentId !== undefined}
+{#if dialogActive}
 	<AggregateDialog bind:dialogActive bind:editMode bind:currentId/>
 {/if}
