@@ -1,44 +1,27 @@
 <script>
-	import { mobileStore, theme } from '../stores';
-	import { Button, Icon, MaterialApp } from "svelte-materialify/src";
-	import AppBar from 'svelte-materialify/src/components/AppBar';
-	import Container from 'svelte-materialify/src/components/Grid/Container.svelte';
+	import { onMount } from 'svelte';
+	import { theme, isMobile } from '../stores';
+	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
-	import { onMount } from 'svelte';
-
 	export let segment;
 
 	let sidenav = false;
-	let breakpoints = {};
-	let mobile = false;
-	$: $mobileStore = mobile;
-	function checkMobile() {
-		mobile = window.matchMedia(breakpoints['md-and-down']).matches;
-	}
-	onMount(() => {
-		$theme = window.localStorage.getItem('theme') || 'light';
-		const unsubscribe = theme.subscribe((value) => {
-			window.localStorage.setItem('theme', value);
-		});
-		import('svelte-materialify/src/utils/breakpoints').then(({ default: data }) => {
-			breakpoints = data;
-			checkMobile();
-		});
-		return unsubscribe;
-	});
-
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
-	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121"
+	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
+
+	onMount(() => {
+		isMobile.check();
+	})
 </script>
 
-<svelte:window on:resize={checkMobile} />
+<svelte:window on:resize={isMobile.check} />
 
 <div style="height: 100%; background-color: {bgTheme}">
 <MaterialApp theme={$theme}>
 	<AppBar fixed style="width:100%"> <!-- class={'primary-color theme--dark'} -->
     	<div slot="icon">
-    	  {#if mobile}
+    	  {#if $isMobile}
     	    <Button fab depressed on:click={() => (sidenav = !sidenav)} aria-label="Open Menu">
     	    	<Icon path={mdiMenu} />
     	    </Button>
@@ -60,9 +43,9 @@
     	</Button>
 	</AppBar>
 
-	<SiteNavigation {segment} {mobile} bind:sidenav />
+	<SiteNavigation {segment} bind:mobile={$isMobile} bind:sidenav />
 
-	<main class:navigation-enabled={!mobile}>
+	<main class:navigation-enabled={!$isMobile}>
 		<Container>
     	<!-- {#if ...}
     		<Loading />
@@ -73,11 +56,17 @@
 </MaterialApp>
 </div>
 
-<style>
+<style lang="scss" global>
 	main {
 	  padding-top: 5rem;
 	}
 	.navigation-enabled {
 	  padding: 5rem 11rem 0 18rem;
+	}
+
+	.error-text {
+		.s-input__details {
+			color: inherit;
+		}
 	}
 </style>

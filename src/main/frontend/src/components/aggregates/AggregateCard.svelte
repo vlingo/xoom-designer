@@ -1,11 +1,13 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Card from "svelte-materialify/src/components/Card";
-	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import CardText from "svelte-materialify/src/components/Card/CardText.svelte";
-	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
-	import Divider from "svelte-materialify/src/components/Divider";
-	import Icon from "svelte-materialify/src/components/Icon";
+	import {
+		Button,
+		Card,
+		CardActions,
+		CardText,
+		CardTitle,
+		Divider,
+		Icon,
+	} from 'svelte-materialify/src';
 	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
 	import DeleteWithDialog from "./DeleteWithDialog.svelte";
@@ -14,7 +16,13 @@
 
 	export let aggregate;
 
-	const methodParameters = (parameters) => parameters.map(p => aggregate.stateFields.find(sf => sf.name === p)).map(sf => sf.name + ': ' + sf.type).join(", ");
+	const methodParameters = (parameters) => {
+		return parameters.reduce((acc, cur) => {
+			const field = aggregate.stateFields.find(sf => sf.name === cur);
+			if (field) acc.push(`${field.name}: ${field.type}`);
+			return acc;
+		}, []).join(', ');
+	};
 
 	const fullRoute = (route) => {
 		return (

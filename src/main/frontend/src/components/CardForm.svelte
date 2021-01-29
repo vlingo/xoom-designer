@@ -1,9 +1,5 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Card from "svelte-materialify/src/components/Card";
-	import CardActions from "svelte-materialify/src/components/Card/CardActions.svelte";
-	import CardText from "svelte-materialify/src/components/Card/CardText.svelte";
-	import CardTitle from "svelte-materialify/src/components/Card/CardTitle.svelte";
+	import { Button, Card, CardActions, CardText, CardTitle } from 'svelte-materialify/src';
 	
 	export let title = "";
 	export let previous = "";

@@ -1,5 +1,5 @@
 <script>
-	import Select from "svelte-materialify/src/components/Select";
+	import { Select } from "svelte-materialify/src";
 	import PathField from "./PathField.svelte";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
@@ -16,7 +16,7 @@
 
 	let requestMethodDisabled = false;
 	$: changedMethodOrMethods(aggregateMethod, methods);
-	const changedMethodOrMethods = (_, methods) => {
+	const changedMethodOrMethods = (aggregateMethod, methods) => {
 		const method = methods.find(m => m.name === aggregateMethod);
 		console.log(method);
 		if(method) {

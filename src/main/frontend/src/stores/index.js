@@ -1,7 +1,5 @@
 import { writable } from 'svelte/store';
-
-export const theme = writable("light");
-export const mobileStore = writable(false);
+import { isMobileStore, createLocalStore } from './utils';
 
 export const contextSettings = writable(getLocalStorage("contextSettings"));
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
@@ -9,6 +7,10 @@ export const aggregateSettings = writable(getLocalStorage("aggregateSettings") |
 export const persistenceSettings = writable(getLocalStorage("persistenceSettings"));
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
 export const generationSettings = writable(getLocalStorage("generationSettings"));
+
+/*
+* checking process.browser simply means that only run code snippet in client side.
+*/
 
 export function getLocalStorage(key) {
 	if(process.browser) {
@@ -22,3 +24,6 @@ export function setLocalStorage(key, value) {
 		localStorage.setItem(key, JSON.stringify(value));
 	}
 }
+
+export const isMobile = isMobileStore();
+export const theme = createLocalStore('theme', 'light')

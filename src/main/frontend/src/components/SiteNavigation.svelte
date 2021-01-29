@@ -1,7 +1,7 @@
 <script>
 	export let mobile;
 	export let sidenav;
-	import { NavigationDrawer, List, Overlay } from 'svelte-materialify/src/';
+	import { NavigationDrawer, List, Overlay } from 'svelte-materialify/src';
 	import NavItem from './NavItem.svelte';
 	import routes from '../util/routes';
 

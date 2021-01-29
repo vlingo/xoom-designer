@@ -1,5 +1,5 @@
 <script>
-	import TextField from "svelte-materialify/src/components/TextField";
+	import { TextField } from "svelte-materialify/src";
 	import { requireRule } from "../../validators";
 
 	export let path = "";

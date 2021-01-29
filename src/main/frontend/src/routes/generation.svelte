@@ -1,15 +1,17 @@
 <script>
-	import Button from "svelte-materialify/src/components/Button";
-	import Switch from "svelte-materialify/src/components/Switch";
-	import TextField from "svelte-materialify/src/components/TextField";
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
-  import ProgressCircular from "svelte-materialify/src/components/ProgressCircular/ProgressCircular.svelte";
-  import Snackbar from "svelte-materialify/src/components/Snackbar/Snackbar.svelte"
-  import Icon from "svelte-materialify/src/components/Icon";
   import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
+  import {
+    Button,
+    Switch,
+    TextField,
+    ProgressCircular,
+    Snackbar,
+    Icon
+  } from 'svelte-materialify/src';
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings };
@@ -31,12 +33,11 @@
         success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
         status = s;
         console.log(status);
-        processing = false;
-        snackbar = true;
       }).catch(e => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
         status = e;
         console.log(status);
+      }).finally(() => {
         processing = false;
         snackbar = true;
       })
@@ -61,7 +62,7 @@
 	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mr-3" on:click={generate} disabled={!valid}>Generate</Button>
+  <Button class="mt-4 mr-3" on:click={generate} disabled={!valid}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
