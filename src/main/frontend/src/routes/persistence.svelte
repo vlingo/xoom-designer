@@ -50,13 +50,13 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
-	<Select class="ma-4" mandatory items={$storageTypes} bind:value={storageType} format={(val) => storageFormat(val)}>Storage Type</Select>
-	<Switch class="ma-4 mb-8" bind:checked={useCQRS}>Use CQRS</Switch>
-	<Select disabled={!useCQRS} class="ma-4" mandatory items={$projectionsTypes} bind:value={projections} format={(val) => projectionFormat(val)}>Projections</Select>
+	<Select class="pb-4" mandatory items={$storageTypes} bind:value={storageType} format={(val) => storageFormat(val)}>Storage Type</Select>
+	<Switch class="mb-4 pb-4" bind:checked={useCQRS}>Use CQRS</Switch>
+	<Select disabled={!useCQRS} class="mb-4 pb-4" mandatory items={$projectionsTypes} bind:value={projections} format={(val) => projectionFormat(val)}>Projections</Select>
 	{#if useCQRS}
-		<Select class="ma-4" mandatory items={$databaseTypes} bind:value={commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
-		<Select class="ma-4" mandatory items={$databaseTypes} bind:value={queryModelDatabase} format={(val) => databaseFormat(val)}>Query Model Database</Select>
+		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
+		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={queryModelDatabase} format={(val) => databaseFormat(val)}>Query Model Database</Select>
 	{:else}
-		<Select class="ma-4" mandatory items={$databaseTypes} bind:value={database} format={(val) => databaseFormat(val)}>Database</Select>
+		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={database} format={(val) => databaseFormat(val)}>Database</Select>
 	{/if}
 </CardForm>
