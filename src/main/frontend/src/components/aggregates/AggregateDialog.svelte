@@ -89,12 +89,17 @@
 		}
 	}
 
+	const isAggregateNameUnique = (value) => {
+		const result = $aggregateSettings.filter(aggregate => aggregate.aggregateName === value);
+		return result.length < 1 ? undefined : 'Aggregate name must be unique';
+	}
+
 	const validField = (f) => !identifierRule(f.name) && f.type;
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0;
 	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event;
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isAggregateNameUnique(aggregateName);
 	$: if(valid) {
 		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
 		//TODO: rework this - we need to keep the modal open, too.
@@ -110,7 +115,7 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField bind:value={aggregateName} rules={[requireRule, classNameRule]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField bind:value={aggregateName} rules={[requireRule, classNameRule, isAggregateNameUnique]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 	<StateFields bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->
