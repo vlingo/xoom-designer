@@ -1,0 +1,119 @@
+{
+  "model":{
+    "aggregateSettings":[
+      {
+        "aggregateName":"Account",
+        "stateFields":[
+          {
+            "name":"id",
+            "type":"String"
+          },
+          {
+            "name":"creditLimit",
+            "type":"double"
+          },
+          {
+            "name":"creditLimitThreshold",
+            "type":"double"
+          },
+          {
+            "name": "description",
+            "type": "String"
+          }
+        ],
+        "events":[
+          {
+            "name":"AccountOpened",
+            "fields":["id"]
+          },
+          {
+            "name":"CreditLimitChanged",
+            "fields": ["id", "creditLimit", "creditLimitThreshold"]
+          }
+        ],
+        "methods":[
+          {
+            "name":"open",
+            "useFactory":"true",
+            "parameters":[
+              "creditLimitThreshold"
+            ],
+            "event": "AccountOpened"
+          },
+          {
+            "name":"updateCreditLimit",
+            "useFactory":"false",
+            "parameters":[
+              "creditLimit",
+              "creditLimitThreshold"
+            ],
+            "event": "CreditLimitChanged"
+          }
+        ],
+        "api": {
+          "rootPath": "/accounts/",
+          "routes": [
+            {
+              "path":"",
+              "httpMethod":"POST",
+              "aggregateMethod":"open",
+              "requireEntityLoad": "false"
+            },
+            {
+              "path":"/{id}/credit-limits",
+              "httpMethod":"PATCH",
+              "aggregateMethod":"updateCreditLimit",
+              "requireEntityLoad": "true"
+            }
+          ]
+        },
+        "consumerExchange": {
+          "exchangeName": "first-exchange",
+          "receivers": [
+            {
+              "aggregateMethod":"open",
+              "schema":"vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1"
+            },
+            {
+              "aggregateMethod": "updateCreditLimit",
+              "schema":"vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2"
+            }
+          ]
+        },
+        "producerExchange": {
+          "exchangeName": "second-exchange",
+          "schemaGroup": "vlingo:xoom:io.vlingo.banking",
+          "outgoingEvents": [
+            "AccountOpened",
+            "CreditLimitChanged"
+          ]
+        }
+      }
+    ],
+    "persistenceSettings":{
+      "storageType":"STATE_STORE",
+      "useCQRS":"true",
+      "projections":"EVENT_BASED",
+      "database":"IN_MEMORY",
+      "commandModelDatabase":"IN_MEMORY",
+      "queryModelDatabase":"IN_MEMORY"
+    }
+  },
+  "context":{
+    "xoomVersion":"1.4.4-SNAPSHOT",
+    "groupId":"io.vlingo",
+    "artifactId":"banking",
+    "artifactVersion":"1.0.0",
+    "packageName":"io.vlingo.banking"
+  },
+  "deployment":{
+    "type":"KUBERNETES",
+    "dockerImage": "gaba",
+    "kubernetesImage": "hey",
+    "kubernetesPod": "zul",
+    "clusterNodes": 0
+  },
+  "useAnnotations":true,
+  "useAutoDispatch":true,
+  "projectDirectory":"D:\\projects"
+}
