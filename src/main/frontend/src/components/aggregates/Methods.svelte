@@ -30,7 +30,18 @@
 				}, [])
 			};
 		})
-	}
+  }
+
+	const isMethodNameUnique = (value) => {
+    const result = methods.filter(method => method.name === value);
+		return result.length === 1 ? undefined : 'Name must be unique';
+  }
+  
+  $: if (methods) {
+    methods.forEach(method => {
+      isMethodNameUnique(method.name);
+    })
+  }
 </script>
 
 <h5>Methods:</h5>
@@ -38,7 +49,7 @@
   <div class="d-flex align-center">
     <div>
       <span class="d-flex">
-        <TextField class="ma-2" bind:value={method.name} rules={[requireRule, identifierRule]} validateOnBlur={!method.name}>Name</TextField>
+        <TextField class="ma-2" bind:value={method.name} rules={[requireRule, identifierRule, isMethodNameUnique]} validateOnBlur={!method.name}>Name</TextField>
         <Select id="method-parameter" mandatory disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
         <Select mandatory disabled={!events.length} class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
       </span>
