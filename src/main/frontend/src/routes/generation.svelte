@@ -58,11 +58,11 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
-	<Switch bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
-  <Switch bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
+	<TextField class="mb-4" placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+	<Switch class="mb-4" bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
+  <Switch class="mb-4" bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mt-4 mr-3" on:click={generate} disabled={!valid}>Generate</Button>
+  <Button class="mt-4 mr-4" on:click={generate} disabled={!valid}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
