@@ -61,7 +61,7 @@
 	  padding-top: 5rem;
 	}
 	.navigation-enabled {
-	  padding: 5rem 11rem 0 18rem;
+	  padding: 5rem 5rem 5rem calc(256px + 5rem);
 	}
 
 	.error-text {
