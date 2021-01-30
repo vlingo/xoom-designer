@@ -1,6 +1,6 @@
 <script>
   import { Select, TextField } from 'svelte-materialify/src';
-  import DeleteButton from "./DeleteButton.svelte";
+  import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
 	import { classNameRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
@@ -40,7 +40,9 @@
         <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
       </div>
       <div style="width: 36px;">
-        <DeleteButton title="Delete Event" on:click={() => deleteEvent(i)}/>
+        <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>
+          <b>{event.name}</b> might be in use at Methods and Producer Exchange sections.
+        </DeleteWithDialog>
       </div>
     </div>
   {/each}
