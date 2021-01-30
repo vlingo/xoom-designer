@@ -1,4 +1,5 @@
 <script>
+  import { afterUpdate } from 'svelte';
   import { Select, TextField } from 'svelte-materialify/src';
 	import { schemaGroupRule } from "../../validators";
   import { formatArrayForSelect } from "../../utils";
@@ -8,6 +9,13 @@
   export let outgoingEvents;
   export let schemaGroup;
   export let disableSchemaGroup;
+
+  afterUpdate(() => {
+    outgoingEvents = outgoingEvents.reduce((acc, cur) => {
+      if (events.some(e => e.name === cur)) acc.push(cur);
+      return acc;
+    }, []);
+	});
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
