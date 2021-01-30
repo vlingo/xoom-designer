@@ -75,7 +75,6 @@
 
 	$: changedCurrent(currentId);
 	function changedCurrent(id) {
-		console.log(id, $aggregateSettings[id]);
 		if(id !== undefined && $aggregateSettings[id]) {
 			const aggregateWithId =  $aggregateSettings[id];
 			aggregateName = aggregateWithId.aggregateName;
