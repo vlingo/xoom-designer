@@ -16,7 +16,7 @@
 			return {
 				...event,
 				fields: stateFields.reduce((acc, cur) => {
-					if (event.fields && event.fields.includes(cur.name)) acc.push(cur.name);
+					if (event.fields && event.fields.includes(cur.name) && acc.findIndex(a => a === cur.name) < 0) acc.push(cur.name);
 					return acc;
 				}, [])
 			};
