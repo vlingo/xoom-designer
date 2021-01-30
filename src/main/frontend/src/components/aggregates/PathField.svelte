@@ -40,4 +40,4 @@
 	
 </script>
 
-<TextField class="ma-2" value={path} rules={[requireRule]} on:input={handleInput} validateOnBlur={!path}>Path</TextField>
+<TextField value={path} rules={[requireRule]} on:input={handleInput} validateOnBlur={!path}>Path</TextField>
