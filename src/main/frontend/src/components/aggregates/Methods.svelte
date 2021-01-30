@@ -2,7 +2,7 @@
 	import { Select, Switch, TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
-	import { identifierRule, requireRule } from "../../validators";
+	import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 
   export let methods;
@@ -31,11 +31,6 @@
 			};
 		})
   }
-
-	const isMethodNameUnique = (value) => {
-    const result = methods.filter(method => method.name === value);
-		return result.length === 1 ? undefined : 'Name must be unique';
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -50,7 +45,7 @@
       <div style="flex: 1;">
         <div class="d-flex">
           <div class="mb-1 pb-1 mr-4" style="flex: 1;">
-            <TextField bind:value={method.name} rules={[requireRule, identifierRule, isMethodNameUnique]} validateOnBlur={!method.name}>Name</TextField>
+            <TextField bind:value={method.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, methods, 'name')]} validateOnBlur={!method.name}>Name</TextField>
           </div>
           <div class="mb-1 pb-1 mr-4" style="flex: 1;">
             <Select id="method-parameter" mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>

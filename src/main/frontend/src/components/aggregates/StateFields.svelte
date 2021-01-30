@@ -2,7 +2,7 @@
   import { Select, TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
-  import { identifierRule, requireRule } from "../../validators";
+  import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 
   export let stateFields;
@@ -10,11 +10,6 @@
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
-  
-  const isFieldNameUnique = (value) => {
-    const result = stateFields.filter(field => field.name === value);
-		return result.length === 1 ? undefined : 'Name must be unique';
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -24,7 +19,7 @@
   {#each stateFields as stateField, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-        <TextField disabled={stateField.name === 'id'} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, isFieldNameUnique ]}>Name</TextField>
+        <TextField disabled={stateField.name === 'id'} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, stateFields, 'name') ]}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-4">
         <Select mandatory disabled={stateField.name === 'id'} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
