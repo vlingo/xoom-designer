@@ -1,4 +1,5 @@
 <script>
+	import { afterUpdate } from 'svelte';
 	import { Select } from "svelte-materialify/src";
 	import PathField from "./PathField.svelte";
 	import { formatArrayForSelect } from "../../utils";
@@ -31,7 +32,9 @@
 		}
 	}
 	const deleteRoute = (index) => { routes.splice(index, 1); routes = routes; }
-	$: console.log(path, aggregateMethod, requireEntityLoad);
+	afterUpdate(() => {
+		aggregateMethod = methods.some(method => method.name === aggregateMethod) ? aggregateMethod : undefined;
+	});
 </script>
 
 <div class="d-flex align-center">
