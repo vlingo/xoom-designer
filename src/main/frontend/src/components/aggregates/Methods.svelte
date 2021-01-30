@@ -44,20 +44,35 @@
   }
 </script>
 
-<h5>Methods:</h5>
-{#each methods as method, id}
-  <div class="d-flex align-center">
-    <div>
-      <span class="d-flex">
-        <TextField class="ma-2" bind:value={method.name} rules={[requireRule, identifierRule, isMethodNameUnique]} validateOnBlur={!method.name}>Name</TextField>
-        <Select id="method-parameter" mandatory disabled={!stateFields.length} multiple class="ma-2" items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
-        <Select mandatory disabled={!events.length} class="ma-2" items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
-      </span>
-      <div>
-        <Switch bind:checked={method.useFactory}>Involves creation of entity?</Switch>
+<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
+  <legend>
+    <h6 class="ma-0 pl-3 pr-3">Methods</h6>
+  </legend>
+  {#if methods.length < 1}
+    <div class="text-center">There is no method! Add One.</div>
+  {/if}
+  {#each methods as method, id}
+    <div class="d-flex align-center">
+      <div style="flex: 1;">
+        <div class="d-flex">
+          <div class="mb-1 pb-1 mr-4" style="flex: 1;">
+            <TextField bind:value={method.name} rules={[requireRule, identifierRule, isMethodNameUnique]} validateOnBlur={!method.name}>Name</TextField>
+          </div>
+          <div class="mb-1 pb-1 mr-4" style="flex: 1;">
+            <Select id="method-parameter" mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
+          </div>
+          <div class="mb-1 pb-1 " style="flex: 1;">
+            <Select mandatory disabled={!events.length} items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
+          </div>
+        </div>
+        <div class="mb-3 pb-3 " style="flex: 1;">
+          <Switch bind:checked={method.useFactory}>Involves creation of entity?</Switch>
+        </div>
+      </div>
+      <div style="align-self: flex-start; width: 32px;">
+        <DeleteButton title="Delete Method" on:click={() => deleteMethod(id)}/>
       </div>
     </div>
-    <DeleteButton title="Delete Method" on:click={() => deleteMethod(id)}/>
-  </div>
-{/each}
-<CreateButton title="Add Method" on:click={addMethod}/>
+  {/each}
+  <CreateButton title="Add Method" on:click={addMethod}/>
+</fieldset>
