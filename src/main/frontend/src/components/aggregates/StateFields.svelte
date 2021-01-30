@@ -23,18 +23,24 @@
   }
 </script>
 
-<h5>State Fields:</h5>
-{#each stateFields as stateField, i}
-  <span class="d-flex">
-  <div style="max-width: 100%">
-    <TextField disabled={i<1} class="ma-2" bind:value={stateField.name} rules={[requireRule, identifierRule, isFieldNameUnique ]}>Name</TextField>
-  </div>
-  <div style="max-width: 100%">
-    <Select mandatory disabled={i<1} class="ma-2" items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
-  </div>
-  {#if stateField.name !== 'id'}
-    <DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
-  {/if}
-  </span>
-{/each}
-<CreateButton title="Add State Field" on:click={addStateField}/>
+<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
+  <legend>
+    <h6 class="ma-0 pl-3 pr-3">State Fields</h6>
+  </legend>
+  {#each stateFields as stateField, i}
+    <div class="d-flex">
+      <div style="flex: 1;" class="mb-3 pb-4 mr-4">
+        <TextField disabled={i<1} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, isFieldNameUnique ]}>Name</TextField>
+      </div>
+      <div style="flex: 1;" class="mb-3 pb-4">
+        <Select mandatory disabled={i<1} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+      </div>
+      <div style="{stateFields.length > 1 ? 'width: 36px;' : ''}">
+        {#if stateField.name !== 'id'}
+          <DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
+        {/if}
+      </div>
+    </div>
+  {/each}
+  <CreateButton title="Add State Field" on:click={addStateField}/>
+</fieldset>
