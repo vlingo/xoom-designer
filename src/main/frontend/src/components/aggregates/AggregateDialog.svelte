@@ -94,7 +94,7 @@
 	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event;
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isAggregateNameUnique(aggregateName);
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isPropertyUnique(aggregateName, [...$aggregateSettings, { aggregateName }], 'aggregateName');
 	$: if(valid) {
 		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
 		//TODO: rework this - we need to keep the modal open, too.
