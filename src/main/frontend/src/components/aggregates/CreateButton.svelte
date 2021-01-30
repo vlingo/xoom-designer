@@ -9,15 +9,22 @@
 
 
 
-<div class="d-flex justify-center align-center">
-	<Button {title} {fab} {icon} on:click class="ma-2">
+<div class="vl-btn d-flex justify-center align-center">
+	<Button {title} {fab} {icon} on:click>
 		<Icon path={mdiPlusThick}/>
 	</Button>
 </div>
 
 <style>
-	div {
-		width: 100%;
-		height: 100%;
+	:global(fieldset) { 
+		position: relative;
+	}
+	.vl-btn {
+		position: absolute;
+    bottom: -14px;
+    right: -14px;
+    display: flex;
+    width: auto;
+    height: auto;
 	}
 </style>
