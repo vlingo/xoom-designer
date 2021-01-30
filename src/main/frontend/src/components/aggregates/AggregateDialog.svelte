@@ -101,7 +101,7 @@
 	}
 </script>
 
-<Dialog bind:active={dialogActive} width={1000} class="pa-4 pa-lg-8 rounded">
+<Dialog bind:active={dialogActive} persistent width={1000} class="pa-4 pa-lg-8 rounded">
 	<h4 class="mb-5" style="text-align: center;">
 		{#if editMode}
 			Update Aggregate
