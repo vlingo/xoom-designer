@@ -36,12 +36,6 @@
     const result = methods.filter(method => method.name === value);
 		return result.length === 1 ? undefined : 'Name must be unique';
   }
-  
-  $: if (methods) {
-    methods.forEach(method => {
-      isMethodNameUnique(method.name);
-    })
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -51,7 +45,7 @@
   {#if methods.length < 1}
     <div class="text-center">There is no method! Add One.</div>
   {/if}
-  {#each methods as method, id}
+  {#each methods as method, id (id)}
     <div class="d-flex align-center">
       <div style="flex: 1;">
         <div class="d-flex">
