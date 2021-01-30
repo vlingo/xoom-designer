@@ -41,7 +41,6 @@
 	}
 	$: $persistenceSettings = { storageType, useCQRS, projections, database, commandModelDatabase, queryModelDatabase }
 	$: setLocalStorage("persistenceSettings", $persistenceSettings)
-	$: console.log($persistenceSettings);
 </script>
 
 <svelte:head>

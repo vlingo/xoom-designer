@@ -32,11 +32,9 @@
 		  .then(s => {
         success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
         status = s;
-        console.log(status);
       }).catch(e => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
         status = e;
-        console.log(status);
       }).finally(() => {
         processing = false;
         snackbar = true;
@@ -49,7 +47,6 @@
     $generationSettings = { projectDirectory, useAnnotations, useAutoDispatch }
     setLocalStorage("generationSettings", $generationSettings)
 	}
-	$: console.log($generationSettings);
 </script>
 
 <svelte:head>
