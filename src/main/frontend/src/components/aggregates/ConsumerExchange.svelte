@@ -23,15 +23,25 @@
 
 
 </script>
+<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
+  <legend>
+    <h6 class="ma-0 pl-3 pr-3">Consumer Exchange</h6>
+  </legend>
+	<TextField class="mb-3 pb-3" bind:value={consumerExchangeName}>Exchange Name</TextField>
 
-<h5>Consumer Exchange:</h5>
-<TextField class="ma-2" bind:value={consumerExchangeName}>Exchange Name</TextField>
-
-{#each receivers as receiver, i}
-<span class="d-flex">
-  <TextField class="ma-2" bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
-  <Select mandatory class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
-  <DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
-</span>
-{/each}
-<CreateButton title="Add Schema" on:click={addReceiver}/>
+	{#each receivers as receiver, i}
+		<div class="d-flex">
+			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
+				<TextField bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
+			</div>
+			<div style="flex: 1;" mandatory class="mb-3 pb-3">
+				<Select items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
+			</div>
+			<div style="width: 36px;">
+				<DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
+			</div>
+		</div>
+	{/each}
+	<CreateButton title="Add Schema" on:click={addReceiver}/>
+	
+</fieldset>
