@@ -1,6 +1,6 @@
 <script>
 	import { Select, Switch, TextField } from 'svelte-materialify/src';
-  import DeleteButton from "./DeleteButton.svelte";
+  import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
 	import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
@@ -60,7 +60,9 @@
         </div>
       </div>
       <div style="align-self: flex-start; width: 32px;">
-        <DeleteButton title="Delete Method" on:click={() => deleteMethod(id)}/>
+        <DeleteWithDialog type="Method" on:click={() => deleteMethod(id)}>
+          <b>{method.name}</b> might be in use at API and Consumer Exchange sections.
+        </DeleteWithDialog>
       </div>
     </div>
   {/each}
