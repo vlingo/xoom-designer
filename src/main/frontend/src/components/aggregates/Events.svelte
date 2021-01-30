@@ -2,7 +2,7 @@
   import { Select, TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
-	import { classNameRule, requireRule } from "../../validators";
+	import { classNameRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 
   export let events;
@@ -22,11 +22,6 @@
 			};
 		})
 	}
-
-	const isEventNameUnique = (value) => {
-    const result = events.filter(event => event.name === value);
-		return result.length === 1 ? undefined : 'Name must be unique';
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -39,7 +34,7 @@
   {#each events as event, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-3 mr-4">
-        <TextField  bind:value={event.name} rules={[requireRule, classNameRule, isEventNameUnique]} validateOnBlur={!event.name}>Name</TextField>
+        <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-3">
         <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
