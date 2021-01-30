@@ -81,7 +81,7 @@
 		<Button title="Edit Aggregate" on:click={edit} icon class="ma-2">
 			<Icon path={mdiPencil}/>
 		</Button>
-		<DeleteWithDialog type="Aggregate" on:click={remove}/>
+		<DeleteWithDialog type="Aggregate" on:click={remove} color=""/>
 	</CardActions>
 </div>
 </Card>
