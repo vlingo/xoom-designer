@@ -12,12 +12,11 @@
     let kubernetesImage = $deploymentSettings ? $deploymentSettings.kubernetesImage : "";
 	let kubernetesPod = $deploymentSettings ? $deploymentSettings.kubernetesPod : "";
 
-	$: valid = clusterNodes && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));
+	$: valid = clusterNodes >= 0 && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));
 	$: if(valid) {
 		$deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod };
 		setLocalStorage("deploymentSettings", $deploymentSettings)
 	}
-	$: console.log($deploymentSettings);
 </script>
 
 <svelte:head>
@@ -25,7 +24,7 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Deployment" previous="persistence" next="generation">
+<CardForm title="Deployment" previous="persistence" next="generation" bind:valid>
 	<div class="d-flex justify-center pb-4 mb-4 mt-4">
 		{#each $deploymentTypes as {label, value}}
 			<Radio bind:group={type} value={value}>{label}</Radio>
