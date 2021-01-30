@@ -1,4 +1,5 @@
 <script>
+	import { afterUpdate } from 'svelte';
 	import { Select,  TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
 	import CreateButton from "./CreateButton.svelte";
@@ -21,6 +22,14 @@
 	}
 	const deleteReceiver = (index) => { receivers.splice(index, 1); receivers = receivers; }
 
+	afterUpdate(() => {
+		receivers = receivers.map(receiver => {
+			return {
+				...receiver,
+				aggregateMethod: methods.some(method => method.name === receiver.aggregateMethod) ? receiver.aggregateMethod : undefined
+			}
+		})
+	});
 
 </script>
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
