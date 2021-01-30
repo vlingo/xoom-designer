@@ -88,9 +88,9 @@
 		}
 	}
 
-	const validField = (f) => !identifierRule(f.name) && f.type;
-	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0;
-	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event;
+	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUnique(f.name, stateFields, 'name');
+	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUnique(e.name, events, 'name');
+	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUnique(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isPropertyUnique(aggregateName, [...$aggregateSettings, { aggregateName }], 'aggregateName');
