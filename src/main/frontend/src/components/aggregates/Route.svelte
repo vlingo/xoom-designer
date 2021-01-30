@@ -34,12 +34,18 @@
 	$: console.log(path, aggregateMethod, requireEntityLoad);
 </script>
 
-<span class="d-flex align-center">
-	<PathField bind:path={path} bind:requireEntityLoad={requireEntityLoad}/>
-	<div style="max-width: 100%">
-		<Select mandatory class="ma-2" items={httpMethods} bind:value={httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
+<div class="d-flex align-center">
+	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
+		<PathField bind:path={path} bind:requireEntityLoad={requireEntityLoad}/>
 	</div>
-	<Select mandatory class="ma-2" items={formatArrayForSelect(methods.map(m => m.name))} bind:value={aggregateMethod}>Aggregate Method</Select>
+	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
+		<Select mandatory items={httpMethods} bind:value={httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
+	</div>
+	<div class="mb-3 pb-3" style="flex: 1;">
+		<Select mandatory items={formatArrayForSelect(methods.map(m => m.name))} bind:value={aggregateMethod}>Aggregate Method</Select>
+	</div>
 	<!-- <Switch class="ma-2" bind:checked={requireEntityLoad}>Require Entity Load</Switch> -->
-	<DeleteButton title="Delete Route" on:click={() => deleteRoute(id)}/>
-</span>
+	<div style="width: 36px;">
+		<DeleteButton title="Delete Route" on:click={() => deleteRoute(id)}/>
+	</div>
+</div>
