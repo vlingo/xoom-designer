@@ -15,25 +15,19 @@
     const result = stateFields.filter(field => field.name === value);
 		return result.length === 1 ? undefined : 'Name must be unique';
   }
-
-  $: if (stateFields) {
-    stateFields.forEach(field => {
-      isFieldNameUnique(field.name);
-    })
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
   <legend>
     <h6 class="ma-0 pl-3 pr-3">State Fields</h6>
   </legend>
-  {#each stateFields as stateField, i}
+  {#each stateFields as stateField, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-        <TextField disabled={i<1} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, isFieldNameUnique ]}>Name</TextField>
+        <TextField disabled={stateField.name === 'id'} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, isFieldNameUnique ]}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-4">
-        <Select mandatory disabled={i<1} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+        <Select mandatory disabled={stateField.name === 'id'} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
       </div>
       <div style="{stateFields.length > 1 ? 'width: 36px;' : ''}">
         {#if stateField.name !== 'id'}

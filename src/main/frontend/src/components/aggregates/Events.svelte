@@ -27,12 +27,6 @@
     const result = events.filter(event => event.name === value);
 		return result.length === 1 ? undefined : 'Name must be unique';
   }
-  
-  $: if (events) {
-    events.forEach(event => {
-      isEventNameUnique(event.name);
-    })
-  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -42,7 +36,7 @@
   {#if events.length < 1}
     <div class="text-center">There is no event! Add one.</div>
   {/if}
-  {#each events as event, i}
+  {#each events as event, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-3 mr-4">
         <TextField  bind:value={event.name} rules={[requireRule, classNameRule, isEventNameUnique]} validateOnBlur={!event.name}>Name</TextField>
