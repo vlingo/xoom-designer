@@ -107,15 +107,15 @@
 	}
 </script>
 
-<Dialog bind:active={dialogActive} width={1000} class="pa-4">
-	<h4 style="text-align: center;">
+<Dialog bind:active={dialogActive} width={1000} class="pa-4 pa-lg-8 rounded">
+	<h4 class="mb-5" style="text-align: center;">
 		{#if editMode}
 			Update Aggregate
 		{:else}
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField bind:value={aggregateName} rules={[requireRule, classNameRule, isAggregateNameUnique]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, isAggregateNameUnique]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 	<StateFields bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->
