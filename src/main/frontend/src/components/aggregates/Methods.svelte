@@ -25,9 +25,10 @@
 			return {
 				...method,
 				parameters: stateFields.reduce((acc, cur) => {
-					if (method.parameters && method.parameters.includes(cur.name)) acc.push(cur.name);
+					if (method.parameters && method.parameters.includes(cur.name) && acc.findIndex(a => a === cur.name) < 0) acc.push(cur.name);
 					return acc;
-				}, [])
+        }, []),
+        event: events.some((e) => e.name === method.event) ? method.event : undefined
 			};
 		})
   }
