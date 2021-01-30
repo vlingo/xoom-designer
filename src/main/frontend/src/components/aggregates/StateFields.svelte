@@ -19,13 +19,13 @@
   {#each stateFields as stateField, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-        <TextField disabled={stateField.name === 'id'} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, stateFields, 'name') ]}>Name</TextField>
+        <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, stateFields, 'name') ]}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-4">
-        <Select mandatory disabled={stateField.name === 'id'} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+        <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
       </div>
       <div style="{stateFields.length > 1 ? 'width: 36px;' : ''}">
-        {#if stateField.name !== 'id'}
+        {#if i !== 0}
           <DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
         {/if}
       </div>
