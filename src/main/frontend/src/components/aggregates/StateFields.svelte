@@ -1,6 +1,6 @@
 <script>
   import { Select, TextField } from 'svelte-materialify/src';
-  import DeleteButton from "./DeleteButton.svelte";
+  import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
@@ -26,7 +26,9 @@
       </div>
       <div style="{stateFields.length > 1 ? 'width: 36px;' : ''}">
         {#if i !== 0}
-          <DeleteButton title="Delete State Field" on:click={() => deleteStateField(i)}/>
+          <DeleteWithDialog type="State Field" on:click={() => deleteStateField(i)}>
+            <b>{stateField.name}</b> might be in use at events or methods sections.
+          </DeleteWithDialog>
         {/if}
       </div>
     </div>
