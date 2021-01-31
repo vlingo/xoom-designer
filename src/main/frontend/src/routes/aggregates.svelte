@@ -12,13 +12,11 @@
 	let currentId;
 
 	const newAggregate = () => {
-		console.log($aggregateSettings.length);
 		currentId = $aggregateSettings.length;
 		dialogActive = true;
 	}
 
 	const edit = (id) => {
-		console.log(id);
 		currentId = id;
 		dialogActive = true;
 		editMode = true;
@@ -32,7 +30,6 @@
 	$: if(!dialogActive && editMode) editMode = false;
 
 	$: setLocalStorage("aggregateSettings", $aggregateSettings)
-	$: console.log($aggregateSettings);
 </script>
 
 <svelte:head>

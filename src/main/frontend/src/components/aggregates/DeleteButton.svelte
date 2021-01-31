@@ -9,7 +9,7 @@
 </script>
 
 
-<Button {title} on:click icon class="ma-2 {color}-text">
+<Button {title} on:click icon class="ml-2 {color}-text">
 	<Icon path={mdiDelete}/>
 </Button>
 

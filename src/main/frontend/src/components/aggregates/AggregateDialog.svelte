@@ -6,7 +6,7 @@
 		CardActions
 	} from 'svelte-materialify/src';
 	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUnique } from "../../validators";
 
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
@@ -75,7 +75,6 @@
 
 	$: changedCurrent(currentId);
 	function changedCurrent(id) {
-		console.log(id, $aggregateSettings[id]);
 		if(id !== undefined && $aggregateSettings[id]) {
 			const aggregateWithId =  $aggregateSettings[id];
 			aggregateName = aggregateWithId.aggregateName;
@@ -89,12 +88,12 @@
 		}
 	}
 
-	const validField = (f) => !identifierRule(f.name) && f.type;
-	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0;
-	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event;
+	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUnique(f.name, stateFields, 'name');
+	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUnique(e.name, events, 'name');
+	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUnique(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute);
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isPropertyUnique(aggregateName, [...$aggregateSettings, { aggregateName }], 'aggregateName');
 	$: if(valid) {
 		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
 		//TODO: rework this - we need to keep the modal open, too.
@@ -102,15 +101,15 @@
 	}
 </script>
 
-<Dialog bind:active={dialogActive} width={1000} class="pa-4">
-	<h4 style="text-align: center;">
+<Dialog bind:active={dialogActive} persistent width={1000} class="pa-4 pa-lg-8 rounded">
+	<h4 class="mb-5" style="text-align: center;">
 		{#if editMode}
 			Update Aggregate
 		{:else}
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField bind:value={aggregateName} rules={[requireRule, classNameRule]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, [...$aggregateSettings, { aggregateName }], 'aggregateName')]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 	<StateFields bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->

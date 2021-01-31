@@ -15,7 +15,6 @@
 		$contextSettings = { groupId, artifactId, artifactVersion, packageName, xoomVersion };
 		setLocalStorage("contextSettings", $contextSettings)
 	}
-	$: console.log($contextSettings);
 </script>
 
 <svelte:head>
@@ -23,9 +22,9 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Context" next="aggregates">
-	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="demo" bind:value={artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
-	<TextField style="min-width: 300px" class="ma-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule, packageRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
+<CardForm title="Context" next="aggregates" bind:valid>
+	<TextField class="mb-4 pb-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="demo" bind:value={artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
+	<TextField class="mb-4 pb-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule, packageRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
 </CardForm>
