@@ -13,7 +13,7 @@ public class DockerPushCommandResolverStep extends CommandResolverStep {
 
     private static final String LOCAL = "LOCAL";
     private static final String REMOTE = "REMOTE";
-    private static final String COMMAND_PATTERN = "%s && docker tag %s:%s %s:%s && docker push %s";
+    private static final String COMMAND_PATTERN = "%s && docker tag %s:%s %s:%s && docker push %s:%s";
 
     @Override
     protected String formatCommands(final TaskExecutionContext context) {
@@ -27,7 +27,8 @@ public class DockerPushCommandResolverStep extends CommandResolverStep {
         }
 
         return String.format(COMMAND_PATTERN, projectDirectoryCommand, image,
-                getTag(context, LOCAL), repo, getTag(context, REMOTE), repo);
+                getTag(context, LOCAL), repo, getTag(context, REMOTE),
+                repo, getTag(context, REMOTE));
     }
 
     private String getTag(final TaskExecutionContext context, final String type) {
