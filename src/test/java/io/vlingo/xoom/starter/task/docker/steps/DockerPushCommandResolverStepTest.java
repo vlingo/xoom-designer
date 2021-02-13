@@ -19,7 +19,7 @@ import static io.vlingo.xoom.starter.task.Property.DOCKER_REPOSITORY;
 
 public class DockerPushCommandResolverStepTest {
 
-    private static final String EXPECTED_COMMAND = "cd /home/projects/xoom-app && docker tag xoom-app:1.0.0 vlingo/xoom-app:latest && docker push vlingo/xoom-app";
+    private static final String EXPECTED_COMMAND = "cd /home/projects/xoom-app && docker tag xoom-app:1.0.0 vlingo/xoom-app:latest && docker push vlingo/xoom-app:latest";
 
     @Test
     public void testDockerPackageCommandResolution() {
