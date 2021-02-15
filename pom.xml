@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo</groupId>
   <artifactId>vlingo-xoom-starter</artifactId>
-  <version>1.4.4-SNAPSHOT</version>
+  <version>1.5.1-SNAPSHOT</version>
   <name>vlingo-xoom-starter</name>
   <url>http://maven.apache.org</url>
 
@@ -221,6 +221,38 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>jfrog</id>
+      <activation>
+        <property>
+          <name>useJFrogBintray</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>bintray-deploy</id>
+          <name>vlingo-platform-java</name>
+          <url>https://api.bintray.com/maven/vlingo/vlingo-platform-java/vlingo-xoom/;publish=1</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+    <profile>
+      <id>github</id>
+      <activation>
+        <property>
+          <name>useGitHubPackages</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/vlingo/vlingo-platform</url>
+        </repository>
+      </distributionManagement>
+    </profile>
   </profiles>
 
   <build>
@@ -384,11 +416,10 @@
     </repository>
 
     <repository>
-      <id>oss-jfrog-snapshot</id>
-      <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/vlingo/vlingo-platform</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
 
