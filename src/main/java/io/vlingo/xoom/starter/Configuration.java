@@ -34,7 +34,7 @@ public class Configuration {
     public static final String PROPERTIES_FILENAME = "vlingo-xoom-starter.properties";
     public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
     public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
-    private static final String XOOM_VERSION_PLACEHOLDER = "1.4.1-SNAPSHOT";
+    private static final String XOOM_VERSION_PLACEHOLDER = "1.5.1-SNAPSHOT";
 
     public static final Map<Terminal, String> BROWSER_LAUNCH_COMMAND =
             Maps.immutableEnumMap(

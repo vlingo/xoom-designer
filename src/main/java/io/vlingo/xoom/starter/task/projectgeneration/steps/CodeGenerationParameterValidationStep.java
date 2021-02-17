@@ -64,7 +64,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     }
 
     private boolean isXoomVersionValid() {
-        return Stream.of("1.4.1-SNAPSHOT", "1.4.0").anyMatch(retrieve(Label.XOOM_VERSION)::equals);
+        return Stream.of("1.5.1-SNAPSHOT", "1.5.0").anyMatch(retrieve(Label.XOOM_VERSION)::equals);
     }
 
     private String retrieve(Label label) {
@@ -151,7 +151,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         //no break, fall through
         switch(deploymentType) {
             case "KUBERNETES": validImage = validImage &&
-                retrieve(Label.KUBERNETES_IMAGE).matches(DOCKER_PATTERN) &&
+                //retrieve(Label.KUBERNETES_IMAGE).matches(DOCKER_PATTERN) &&
                 retrieve(Label.KUBERNETES_POD_NAME).matches(DOCKER_PATTERN);
             case "DOCKER": validImage = validImage &&
                 retrieve(Label.DOCKER_IMAGE).matches(DOCKER_PATTERN);
