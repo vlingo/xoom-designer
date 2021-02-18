@@ -42,8 +42,8 @@ public class ArchetypeCommandResolverStepTest {
                     "-Dk8sImage=starter-example-image ";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
-                    "cd " + DEFAULT_ARCHETYPE_PATH +  " && mvnw -f ." + File.separator +  "kubernetes-archetype"
-                    + File.separator + "pom.xml clean install && mvnw archetype:generate -B " +
+                    "cd " + DEFAULT_ARCHETYPE_PATH +  " && ./mvnw -f ." + File.separator +  "kubernetes-archetype"
+                    + File.separator + "pom.xml clean install && ./mvnw archetype:generate -B " +
                     "-DarchetypeCatalog=internal -DarchetypeGroupId=io.vlingo " +
                     "-DarchetypeArtifactId=vlingo-xoom-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo " +

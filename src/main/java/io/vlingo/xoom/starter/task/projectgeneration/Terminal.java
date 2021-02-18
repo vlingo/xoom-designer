@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 public enum Terminal {
 
     WINDOWS("cmd.exe", "/c", "mvnw.cmd", osName -> osName.contains("Windows")),
-    MAC_OS("sh", "-c", "mvnw", osName -> osName.toUpperCase().contains("MAC OS")),
-    LINUX("sh", "-c", "mvnw", osName -> osName.contains("Linux"));
+    MAC_OS("sh", "-c", "./mvnw", osName -> osName.toUpperCase().contains("MAC OS")),
+    LINUX("sh", "-c", "./mvnw", osName -> osName.contains("Linux"));
 
     private static Terminal ENABLED;
 
