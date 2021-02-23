@@ -8,11 +8,48 @@ const errors = Object.freeze({
 	ROUTEPATH: "Must follow route path pattern",
 	XOOMVERSION: "Must be either 1.4.1-SNAPSHOT or 1.4.0",
 	SCHEMAGROUP: "Must consist of organization, unit and context separated by colon",
-	SCHEMA: "Must consist of organization, unit, context, name and semantic version separated by colon"
+	SCHEMA: "Must consist of organization, unit, context, name and semantic version separated by colon",
+	PROJECTNAME: "Must be formatted like MyCompany.MyTechnology.FirstFeature"
 	// SUBMIT: "Fields may not be empty",
 	// SUBMITVER: "Previous and current version must be a semantic version number (major.minor.patch, e.g. 1.6.12)",
 	// SUBMITVEREXISTS: "The chosen current version already exists"
 });
+
+const frameworks = [
+	'netcoreapp 1.0',
+	'netcoreapp 1.1',
+	'netcoreapp2.0',
+	'netcoreapp 2.1',
+	'netcoreapp 2.2',
+	'netcoreapp 3.0',
+	'netcoreapp 3.1',
+	'NET 5.0 *',
+	'Netstandard 1.0',
+	'Netstandard 1.1',
+	'Netstandard 1.2',
+	'Netstandard 1.3',
+	'Netstandard 1.4',
+	'Netstandard 1.5',
+	'Netstandard 1.6',
+	'Netstandard 2.0',
+	'Netstandard 2.1',
+	'net11',
+	'net20',
+	'net35',
+	'net40',
+	'net403',
+	'net45',
+	'net451',
+	'net452',
+	'net46',
+	'net461',
+	'net462',
+	'net47',
+	'net471',
+	'net472',
+	'net48',
+	'netmf'
+]
 
 export const requireRule = (value) => !!value ? undefined : errors.EMPTY;
 
@@ -26,3 +63,5 @@ export const xoomVersionRule = (value) => ["1.4.1-SNAPSHOT", "1.4.0"].some(v => 
 export const schemaGroupRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+$/.test(value) ? undefined : errors.SCHEMAGROUP;
 export const schemaRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+\:[A-Za-z]+\:\d+\.\d+\.\d+$/.test(value) ? undefined : errors.SCHEMA;
 export const isPropertyUnique = (value, store, prop) => store.filter(obj => obj[prop] === value).length === 1 ? undefined : `${prop.charAt(0).toUpperCase() + prop.slice(1)} must be unique`;
+export const projectNameRule = (value) => /^([A-Z]+[A-Za-z]*.){1,2}[A-Za-z]+$/.test(value) ? undefined : errors.PROJECTNAME;
+export const frameworkRule = (v) => frameworks.includes(v) ? undefined : 'framework should match one of the available frameworks here! https://docs.microsoft.com/fr-fr/dotnet/standard/frameworks'
