@@ -66,4 +66,14 @@ public class AggregateData {
         }
         return errorStrings;
     }
+
+    public boolean hasConsumerExchange() {
+        return consumerExchange.exchangeName != null
+                && !consumerExchange.exchangeName.trim().isEmpty();
+    }
+
+    public boolean hasProducerExchange() {
+        return producerExchange.exchangeName != null
+                && !producerExchange.exchangeName.trim().isEmpty();
+    }
 }

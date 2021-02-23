@@ -103,24 +103,28 @@ public class TaskExecutionContextMapper {
 
     private void mapExchanges(final AggregateData aggregate,
                               final CodeGenerationParameter aggregateParameter) {
-        final CodeGenerationParameter consumerExchange =
-                CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
-                        .relate(Label.ROLE, ExchangeRole.CONSUMER);
+        if(aggregate.hasConsumerExchange()) {
+            final CodeGenerationParameter consumerExchange =
+                    CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
+                            .relate(Label.ROLE, ExchangeRole.CONSUMER);
 
-        aggregate.consumerExchange.receivers.forEach(receiver -> {
-            consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
-                    .relate(MODEL_METHOD, receiver.aggregateMethod)
-                    .relate(SCHEMA, receiver.schema));
-        });
+            aggregate.consumerExchange.receivers.forEach(receiver -> {
+                consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
+                        .relate(MODEL_METHOD, receiver.aggregateMethod)
+                        .relate(SCHEMA, receiver.schema));
+            });
+            aggregateParameter.relate(consumerExchange);
+        }
+        if(aggregate.hasProducerExchange()) {
+            final CodeGenerationParameter producerExchange =
+                    CodeGenerationParameter.of(Label.EXCHANGE, aggregate.producerExchange.exchangeName)
+                            .relate(Label.SCHEMA_GROUP, aggregate.producerExchange.schemaGroup)
+                            .relate(Label.ROLE, ExchangeRole.PRODUCER);
 
-        final CodeGenerationParameter producerExchange =
-                CodeGenerationParameter.of(Label.EXCHANGE, aggregate.producerExchange.exchangeName)
-                        .relate(Label.SCHEMA_GROUP, aggregate.producerExchange.schemaGroup)
-                        .relate(Label.ROLE, ExchangeRole.PRODUCER);
+            aggregate.producerExchange.outgoingEvents.forEach(eventName -> producerExchange.relate(DOMAIN_EVENT, eventName));
 
-        aggregate.producerExchange.outgoingEvents.forEach(eventName -> producerExchange.relate(DOMAIN_EVENT, eventName));
-
-        aggregateParameter.relate(consumerExchange, producerExchange);
+            aggregateParameter.relate(producerExchange);
+        }
     }
 
     private void mapPersistence() {

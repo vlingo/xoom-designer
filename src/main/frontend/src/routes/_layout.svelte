@@ -1,6 +1,7 @@
 <script>
+	import { onMount } from 'svelte';
 	import { theme, isMobile } from '../stores';
-	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify";
+	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	export let segment;
@@ -8,6 +9,10 @@
 	let sidenav = false;
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
 	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
+
+	onMount(() => {
+		isMobile.check();
+	})
 </script>
 
 <svelte:window on:resize={isMobile.check} />
@@ -51,11 +56,17 @@
 </MaterialApp>
 </div>
 
-<style>
+<style lang="scss" global>
 	main {
 	  padding-top: 5rem;
 	}
 	.navigation-enabled {
-	  padding: 5rem 11rem 0 18rem;
+	  padding: 5rem 5rem 5rem calc(256px + 5rem);
+	}
+
+	.error-text {
+		.s-input__details {
+			color: inherit;
+		}
 	}
 </style>

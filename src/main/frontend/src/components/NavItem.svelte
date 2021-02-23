@@ -1,5 +1,5 @@
 <script>
-	import { Icon, ListItem } from "svelte-materialify";
+	import { Icon, ListItem } from "svelte-materialify/src";
 
 	export let item;
 	export let segment;

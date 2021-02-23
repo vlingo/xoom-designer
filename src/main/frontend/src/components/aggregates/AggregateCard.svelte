@@ -7,7 +7,7 @@
 		CardTitle,
 		Divider,
 		Icon,
-	} from 'svelte-materialify';
+	} from 'svelte-materialify/src';
 	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
 	import DeleteWithDialog from "./DeleteWithDialog.svelte";
@@ -81,7 +81,7 @@
 		<Button title="Edit Aggregate" on:click={edit} icon class="ma-2">
 			<Icon path={mdiPencil}/>
 		</Button>
-		<DeleteWithDialog type="Aggregate" on:click={remove}/>
+		<DeleteWithDialog type="Aggregate" on:click={remove} color=""/>
 	</CardActions>
 </div>
 </Card>

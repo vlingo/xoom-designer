@@ -3,7 +3,7 @@
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
 	import { aggregateSettings, setLocalStorage } from "../stores";
-	import { Card, Icon } from "svelte-materialify";
+	import { Card, Icon } from "svelte-materialify/src";
 	import { mdiPlusThick } from "@mdi/js";
 
 	let dialogActive = false;
@@ -12,13 +12,11 @@
 	let currentId;
 
 	const newAggregate = () => {
-		console.log($aggregateSettings.length);
 		currentId = $aggregateSettings.length;
 		dialogActive = true;
 	}
 
 	const edit = (id) => {
-		console.log(id);
 		currentId = id;
 		dialogActive = true;
 		editMode = true;
@@ -32,7 +30,6 @@
 	$: if(!dialogActive && editMode) editMode = false;
 
 	$: setLocalStorage("aggregateSettings", $aggregateSettings)
-	$: console.log($aggregateSettings);
 </script>
 
 <svelte:head>
@@ -53,6 +50,6 @@
 	</div>
 </CardForm>
 
-{#if currentId !== undefined}
+{#if dialogActive}
 	<AggregateDialog bind:dialogActive bind:editMode bind:currentId/>
 {/if}
