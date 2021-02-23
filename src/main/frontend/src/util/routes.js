@@ -1,4 +1,4 @@
-import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
+import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiShape, mdiShapeOutline, mdiHomeOutline, mdiHome } from '@mdi/js';
 
 export default [
 	// {
@@ -7,6 +7,12 @@ export default [
 	// 	openIcon: mdiHome,
 	// 	href: ''
 	// },
+	{
+		text: 'Platform',
+		icon: mdiHomeOutline,
+		openIcon: mdiHome,
+		href: 'platform'
+	},
 	{
 		text: 'Context',
 		icon: mdiCommentOutline,

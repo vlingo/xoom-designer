@@ -7,6 +7,7 @@ export const aggregateSettings = writable(getLocalStorage("aggregateSettings") |
 export const persistenceSettings = writable(getLocalStorage("persistenceSettings"));
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
 export const generationSettings = writable(getLocalStorage("generationSettings"));
+export const platformSettings = writable(getLocalStorage("platformSettings"));
 
 /*
 * checking process.browser simply means that only run code snippet in client side.
