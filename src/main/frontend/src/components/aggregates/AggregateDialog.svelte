@@ -32,6 +32,7 @@
 	let routes = [];
 	let outgoingEvents = [];
 	let receivers = [];
+	let customTypes = [];
 
 	const add = () => {
 		if(requireRule(aggregateName)) return;
@@ -63,6 +64,7 @@
 		outgoingEvents = [];
 		consumerExchangeName = "";
 		receivers = [];
+		customTypes = [];
 	}
 
 	const retrieveSchemaGroup = () => {
@@ -83,6 +85,7 @@
 			methods = aggregateWithId.methods;
 			rootPath = aggregateWithId.api.rootPath;
 			routes = aggregateWithId.api.routes;
+			customTypes = aggregateWithId.customTypes;
 		} else {
 			reset();
 		}
@@ -111,7 +114,7 @@
 	</h4>
 	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, [...$aggregateSettings, { aggregateName }], 'aggregateName')]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
-	<StateFields bind:stateFields bind:aggregateType={aggregateName} />
+	<StateFields bind:stateFields bind:aggregateType={aggregateName} bind:customTypes />
 	<!-- <Divider class="ma-2" /> -->
 	<Events bind:events  bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->
