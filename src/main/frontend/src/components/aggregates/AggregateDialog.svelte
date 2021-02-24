@@ -111,7 +111,7 @@
 	</h4>
 	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, [...$aggregateSettings, { aggregateName }], 'aggregateName')]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
-	<StateFields bind:stateFields />
+	<StateFields bind:stateFields bind:aggregateType={aggregateName} />
 	<!-- <Divider class="ma-2" /> -->
 	<Events bind:events  bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->
