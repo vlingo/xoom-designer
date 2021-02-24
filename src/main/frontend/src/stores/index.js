@@ -27,4 +27,3 @@ export function setLocalStorage(key, value) {
 
 export const isMobile = isMobileStore();
 export const theme = createLocalStore('theme', 'light')
-export const customTypes = createLocalStore('customTypes', [])
