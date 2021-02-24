@@ -3,8 +3,9 @@
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
 	import { aggregateSettings, setLocalStorage } from "../stores";
-	import { Card, Icon } from "svelte-materialify/src";
-	import { mdiPlusThick } from "@mdi/js";
+	import { SlideGroup, SlideItem, Icon } from "svelte-materialify/src";
+	import { mdiPlus } from "@mdi/js";
+import Button from "svelte-materialify/src/components/Button";
 
 	let dialogActive = false;
 	let editMode = false;
@@ -38,15 +39,20 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Aggregates" previous="context" next="persistence">
-	<div class="d-flex flex-wrap">
-		<Card class="ma-3" style="width: 15rem; height: 20rem" hover>
-			<div title="Add Aggregate" class="d-flex align-center justify-center" style="width: 100%; height: 100%" on:click={newAggregate}>
-				<Icon class="black-text" path={mdiPlusThick}/>
-			</div>
-		</Card>
-		{#each $aggregateSettings as aggregate, id}
-			<AggregateCard {aggregate} on:edit={() => edit(id)} on:remove={() => remove(id)}/>
-		{/each}
+	<Button class="mb-4" hover on:click={newAggregate}>
+		<div title="Add Aggregate" class="d-flex align-center justify-center">
+			<Icon class="black-text mr-4" path={mdiPlus}/>
+			New Aggregate
+		</div>
+	</Button>
+	<div class="d-flex">
+		<SlideGroup activeClass="white-text">
+			<SlideItem>
+				{#each $aggregateSettings as aggregate, id}
+					<AggregateCard {aggregate} on:edit={() => edit(id)} on:remove={() => remove(id)}/>
+				{/each}
+			</SlideItem>
+		</SlideGroup>
 	</div>
 </CardForm>
 
