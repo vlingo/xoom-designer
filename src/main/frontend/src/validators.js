@@ -26,3 +26,4 @@ export const xoomVersionRule = (value) => ["1.4.1-SNAPSHOT", "1.4.0"].some(v => 
 export const schemaGroupRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+$/.test(value) ? undefined : errors.SCHEMAGROUP;
 export const schemaRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+\:[A-Za-z]+\:\d+\.\d+\.\d+$/.test(value) ? undefined : errors.SCHEMA;
 export const isPropertyUnique = (value, store, prop) => store.filter(obj => obj[prop] === value).length === 1 ? undefined : `${prop.charAt(0).toUpperCase() + prop.slice(1)} must be unique`;
+export const isAggregateUnique = (aggregateIndex, aggregateName, store) => store.filter(obj => obj.aggregateIndex != aggregateIndex && obj.aggregateName === aggregateName).length === 1 ? undefined : `Aggregate name must be unique`;
