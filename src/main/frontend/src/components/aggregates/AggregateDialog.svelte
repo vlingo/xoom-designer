@@ -6,7 +6,7 @@
 		CardActions
 	} from 'svelte-materialify/src';
 	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUnique } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUnique, isAggregateUnique } from "../../validators";
 
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
@@ -20,6 +20,7 @@
 
 	export let currentId;
 	
+	let aggregateIndex = undefined;
 	let aggregateName = $currentAggregate ? $currentAggregate.aggregateName : "";
 	let stateFields = [{ name: "id", type: "String" }];
 	let events = [];
@@ -74,15 +75,21 @@
 	}
 
 	$: changedCurrent(currentId);
-	function changedCurrent(id) {
-		if(id !== undefined && $aggregateSettings[id]) {
-			const aggregateWithId =  $aggregateSettings[id];
+	function changedCurrent(index) {
+		aggregateIndex = index;
+		if(index !== undefined && $aggregateSettings[index]) {
+			const aggregateWithId =  $aggregateSettings[index];
 			aggregateName = aggregateWithId.aggregateName;
 			stateFields = aggregateWithId.stateFields;
 			events = aggregateWithId.events;
 			methods = aggregateWithId.methods;
 			rootPath = aggregateWithId.api.rootPath;
 			routes = aggregateWithId.api.routes;
+			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
+			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
+			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
+			consumerExchangeName = aggregateWithId.consumerExchange.exchangeName;
+			receivers = aggregateWithId.consumerExchange.receivers;
 		} else {
 			reset();
 		}
@@ -93,9 +100,9 @@
 	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUnique(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isPropertyUnique(aggregateName, [...$aggregateSettings, { aggregateName }], 'aggregateName');
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUnique(aggregateIndex, aggregateName, [...$aggregateSettings, { aggregateName }]);
 	$: if(valid) {
-		$currentAggregate = { aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
+		$currentAggregate = {aggregateIndex, aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
 		//TODO: rework this - we need to keep the modal open, too.
 		setLocalStorage("currentAggregate", $currentAggregate);
 	}
@@ -109,7 +116,7 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, [...$aggregateSettings, { aggregateName }], 'aggregateName')]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUnique(aggregateIndex, name, [...$aggregateSettings, { aggregateName }])]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<!-- <Divider class="ma-2" /> -->
 	<StateFields bind:stateFields />
 	<!-- <Divider class="ma-2" /> -->

@@ -202,6 +202,31 @@ Executing `xoom gen` causes the application generation based on the settings abo
     </tbody>
 </table>
 
+## Building snapshots
+
+To build examples from this repository you'll need access to VLINGO snapshot builds on
+[GitHub Packages](https://github.com/vlingo/vlingo-platform/packages).
+
+GitHub [requires authentication with a Personal Access Token](https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token)
+to use their Maven repository.
+In order to build VLINGO examples locally, you will need to configure the following in your `~/.m2/settings.xml`:
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>github</id>
+      <username>GITHUB-USERNAME</username>
+      <password>GITHUB-PERSONAL-ACCESS-TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+
+Replace `GITHUB-USERNAME` with your GitHub username, and `GITHUB-PERSONAL-ACCESS-TOKEN` with your Personal Access Token.
+Personal Access Tokens can be created in Settings > Developer Settings > [Personal Access Tokens](https://github.com/settings/tokens) on GitHub.
+Remember to create the token with `read:packages` scope.
+
 ## Collaboration
 
 Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md). 
