@@ -8,6 +8,7 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.starter.Resource;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
@@ -138,6 +139,12 @@ public class TaskExecutionContext {
         final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
         final String targetFolder = parameters.retrieveValue(TARGET_FOLDER);
         return Paths.get(targetFolder, artifactId).toString();
+    }
+
+    public String temporaryProjectPath() {
+        final String archetypeFolder = Resource.ARCHETYPES_FOLDER.path();
+        final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
+        return Paths.get(archetypeFolder, artifactId).toString();
     }
 
 }

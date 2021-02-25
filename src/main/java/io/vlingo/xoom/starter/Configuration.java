@@ -52,6 +52,7 @@ public class Configuration {
             new MainClassResolverStep(),
             new ArchetypeFolderCleanUpStep(),
             new ArchetypeCommandResolverStep(),
+            new AngularSchematicExecutionStep(),
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
