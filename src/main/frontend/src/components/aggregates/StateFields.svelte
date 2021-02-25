@@ -7,21 +7,21 @@
 
   export let stateFields;
   export let aggregateType;
-  export let customTypes = [];
+  export let valueObjectTypes = [];
   let isNewTypeInputActive = false;
   let customFieldName = "";
-  let stateTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
+  let simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date'];
 
-  $: stateFieldsTypes =  formatArrayForSelect([...stateTypes, ...customTypes]);
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...valueObjectTypes]);
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
   const createCustomField = () => {
-    customTypes = [...customTypes, customFieldName];
+    valueObjectTypes = [...valueObjectTypes, customFieldName];
     isNewTypeInputActive = false;
     customFieldName = "";
   };
-  const isTypeUnique = (value) => [...stateTypes, ...customTypes].some((item) => item === customFieldName) ? `${customFieldName} is already exist.` : undefined;
+  const isTypeUnique = (value) => [...simpleTypes, ...valueObjectTypes].some((item) => item === value) ? `${value} already exists.` : undefined;
 
 </script>
 
@@ -33,7 +33,7 @@
     <List style="min-width: 150px;">
       <ListItem on:click={() => isNewTypeInputActive = true}>New</ListItem>
       <ListItem>{aggregateType}State</ListItem>
-      {#each customTypes as type (type)}
+      {#each valueObjectTypes as type (type)}
         <ListItem>{type}</ListItem>
       {/each}
     </List>
