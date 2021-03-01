@@ -7,11 +7,11 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import org.apache.commons.io.FileUtils;
+import static io.vlingo.xoom.starter.Configuration.MAVEN_WRAPPER_DIRECTORY;
+import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,9 +19,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.starter.Configuration.MAVEN_WRAPPER_DIRECTORY;
-import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import org.apache.commons.io.FileUtils;
+
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 public final class MavenWrapperInstallationStep implements TaskExecutionStep {
 
@@ -40,6 +42,10 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
                 final Path source = Paths.get(ARCHETYPES_FOLDER.path(), filename);
                 final Path destination = projectPath.resolve(filename);
                 Files.copy(source, destination, REPLACE_EXISTING);
+                final File file = destination.toFile();
+                file.setReadable(true);
+                file.setWritable(true);
+                file.setExecutable(true);
             } catch (final IOException e) {
                 throw new ProjectGenerationException(e);
             }
