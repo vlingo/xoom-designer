@@ -20,6 +20,7 @@ public class CommandExecutionStep implements TaskExecutionStep {
                 Runtime.getRuntime().exec(context.commands())
             );
         } catch (final IOException e) {
+            e.printStackTrace();
             throw new TaskExecutionException(e);
         }
     }
