@@ -30,6 +30,9 @@
 				{name: 'Not Applicable', value: 'NONE'},
 				{name: 'Event Based', value: 'EVENT_BASED'},
 			];
+			if($projectionsTypes.filter(p => p.value === projections).length < 1){
+				projections = "NONE";
+			}
 		} else {
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
