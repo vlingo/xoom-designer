@@ -1,16 +1,49 @@
 <script>
-  import { Select, TextField } from 'svelte-materialify/src';
+  import { Select, TextField, Menu, Button, List, ListItem, Dialog } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 
   export let stateFields;
-  const stateFieldsTypes =  formatArrayForSelect(['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char']);
+  export let aggregateType;
+  export let valueObjectTypes = [];
+  let isNewTypeInputActive = false;
+  let customFieldName = "";
+  let simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date'];
+
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...valueObjectTypes]);
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
+  const createCustomField = () => {
+    valueObjectTypes = [...valueObjectTypes, customFieldName];
+    isNewTypeInputActive = false;
+    customFieldName = "";
+  };
+  const isTypeUnique = (value) => [...simpleTypes, ...valueObjectTypes].some((item) => item === value) ? `${value} already exists.` : undefined;
+
 </script>
+
+<div class="pb-4">
+  <Menu offsetX={true}>
+    <div slot="activator">
+      <Button><span style="text-transform: none;">{aggregateType}State</span></Button>
+    </div>
+    <List style="min-width: 150px;">
+      <ListItem on:click={() => isNewTypeInputActive = true}>New</ListItem>
+      <ListItem>{aggregateType}State</ListItem>
+      {#each valueObjectTypes as type (type)}
+        <ListItem>{type}</ListItem>
+      {/each}
+    </List>
+  </Menu>
+
+  <Dialog class="pa-8" bind:active={isNewTypeInputActive}>
+    <TextField bind:value={customFieldName} rules={[isTypeUnique]}>Field Name</TextField>
+    <Button on:click={createCustomField} disabled={customFieldName == "" || isTypeUnique(customFieldName)}>Add</Button>
+  </Dialog>
+</div>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
   <legend>
