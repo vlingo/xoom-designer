@@ -77,12 +77,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     private boolean areStateFieldsValid() {
         return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
-                stateField.retrieveAllRelated(Label.FIELD_TYPE).allMatch(type ->
-                  SupportedTypes.names().stream()
-                    .anyMatch(type.value::equalsIgnoreCase) //ignoring case, you can send things like "Long", too.
-                )
-            )
+            aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN))
         ).allMatch(bool -> bool==true);
     }
 

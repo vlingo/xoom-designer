@@ -1,15 +1,15 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
-import java.util.Arrays;
-import java.util.List;
-
 import io.vlingo.xoom.starter.restapi.data.*;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class CodeGenerationParameterValidationStepTest {
 	
@@ -36,7 +36,7 @@ public class CodeGenerationParameterValidationStepTest {
 
     private ModelSettingsData modelSettingsData() {
         return new ModelSettingsData(persistenceData(),
-                Arrays.asList(personAggregateData(), profileAggregateData()));
+                Arrays.asList(personAggregateData(), profileAggregateData()), Collections.emptyList());
     }
 
     private PersistenceData persistenceData() {

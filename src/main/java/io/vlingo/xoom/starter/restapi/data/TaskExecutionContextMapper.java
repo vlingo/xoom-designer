@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
@@ -28,8 +29,8 @@ public class TaskExecutionContextMapper {
 
     private TaskExecutionContextMapper(final GenerationSettingsData data) {
         this.data = data;
-        this.parameters = CodeGenerationParameters.empty();
-        mapAggregates(); mapPersistence(); mapStructuralOptions();
+        this.parameters = CodeGenerationParameters.from(LANGUAGE, Language.JAVA);
+        mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
     }
 
     private TaskExecutionContext map() {
@@ -48,6 +49,23 @@ public class TaskExecutionContextMapper {
             mapRoutes(aggregate, aggregateParameter);
             mapExchanges(aggregate, aggregateParameter);
             parameters.add(aggregateParameter);
+        });
+    }
+
+    private void mapValueObjects() {
+        data.model.valueObjectSettings.forEach(valueObject -> {
+            final CodeGenerationParameter valueObjectParameter =
+                    CodeGenerationParameter.of(VALUE_OBJECT, valueObject.name);
+
+            valueObject.fields.forEach(field -> {
+                final CodeGenerationParameter fieldParameter =
+                        CodeGenerationParameter.of(VALUE_OBJECT_FIELD, field.name)
+                                .relate(FIELD_TYPE, field.type);
+
+                valueObjectParameter.relate(fieldParameter);
+            });
+
+            parameters.add(valueObjectParameter);
         });
     }
 
