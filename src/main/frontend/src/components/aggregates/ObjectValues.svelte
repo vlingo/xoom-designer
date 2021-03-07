@@ -37,14 +37,14 @@
     $valueObjectSettings = [...$valueObjectSettings, valueObjectForm];
     dialogActive = false;
   }
-  function remove(valueObject) {
-		$valueObjectSettings.splice($valueObjectSettings.findIndex(item => item.name == valueObject.name), 1);
+  function remove() {
+		$valueObjectSettings.splice($valueObjectSettings.findIndex(item => item.name == selectedValueObjectForDelete.name), 1);
 		$valueObjectSettings = $valueObjectSettings;
     deleteDialogActive = false;
   }
   function showDeleteDialog(valueObject) {
-    deleteDialogActive = true;
     selectedValueObjectForDelete = valueObject;
+    deleteDialogActive = true;
   }
   function update() {
     const i = $valueObjectSettings.findIndex(valueObject => valueObject.name === updateValueName)
@@ -99,7 +99,7 @@
     </div>
   </Button>
   {#if $valueObjectSettings.length > 0}
-    <Menu closeOnClickOutside={false}>
+    <Menu>
       <div slot="activator">
         <Button class="success-color">Edit Value Object</Button>
       </div>
