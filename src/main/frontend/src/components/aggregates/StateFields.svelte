@@ -4,24 +4,48 @@
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+	import { valueObjectTypes } from '../../stores';
 
   export let stateFields;
   export let aggregateType;
-  export let valueObjectTypes = [];
-  let isNewTypeInputActive = false;
+  let isValueObjectInputActive = false;
   let customFieldName = "";
   let simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date'];
+  let updateValue = null;
 
-  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...valueObjectTypes]);
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectTypes]);
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
-  const createCustomField = () => {
-    valueObjectTypes = [...valueObjectTypes, customFieldName];
-    isNewTypeInputActive = false;
-    customFieldName = "";
+  const createValueObjectState = () => {
+    $valueObjectTypes = [...$valueObjectTypes, customFieldName];
+    reset();
   };
-  const isTypeUnique = (value) => [...simpleTypes, ...valueObjectTypes].some((item) => item === value) ? `${value} already exists.` : undefined;
+  const updateValueObjectState = () => {
+    if (customFieldName !== updateValue) {
+      $valueObjectTypes = $valueObjectTypes.filter(type => type !== updateValue);
+      $valueObjectTypes = [...$valueObjectTypes, customFieldName];
+    }
+    reset();
+  }
+  const openDialogForCreate = () => {
+    updateValue = null;
+    isValueObjectInputActive = true;
+  }
+  const openDialogForUpdate = (value) => {
+    updateValue = value;
+    customFieldName = value;
+    isValueObjectInputActive = true;
+  }
+  const reset = () => {
+    isValueObjectInputActive = false;
+    customFieldName = "";
+    updateValue = null;
+  }
+  const isTypeUnique = (value) => {
+    if (updateValue === value) return undefined;
+    return [...simpleTypes, ...$valueObjectTypes].some((item) => item === value) ?  `${value} already exists.` : undefined;
+  };
 
 </script>
 
@@ -31,17 +55,19 @@
       <Button><span style="text-transform: none;">{aggregateType}State</span></Button>
     </div>
     <List style="min-width: 150px;">
-      <ListItem on:click={() => isNewTypeInputActive = true}>New</ListItem>
-      <ListItem>{aggregateType}State</ListItem>
-      {#each valueObjectTypes as type (type)}
-        <ListItem>{type}</ListItem>
+      <ListItem class="primary-text" on:click={openDialogForCreate}>New</ListItem>
+      {#each $valueObjectTypes as type (type)}
+        <ListItem on:click={() => openDialogForUpdate(type)}>{type}</ListItem>
       {/each}
     </List>
   </Menu>
 
-  <Dialog class="pa-8" bind:active={isNewTypeInputActive}>
+  <Dialog class="pa-8" bind:active={isValueObjectInputActive}>
     <TextField bind:value={customFieldName} rules={[isTypeUnique]}>Field Name</TextField>
-    <Button on:click={createCustomField} disabled={customFieldName == "" || isTypeUnique(customFieldName)}>Add</Button>
+    <div class="d-flex justify-space-between">
+      <Button on:click={updateValue ? updateValueObjectState : createValueObjectState} disabled={customFieldName == "" || isTypeUnique(customFieldName)}>{updateValue ? 'Update' : 'Add'}</Button>
+      <Button class="red white-text" on:click={reset}>Cancel</Button>
+    </div>
   </Dialog>
 </div>
 
