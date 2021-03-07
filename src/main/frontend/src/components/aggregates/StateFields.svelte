@@ -4,72 +4,15 @@
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
-	import { valueObjectTypes } from '../../stores';
+	import { objectValueSettings, simpleTypes } from '../../stores';
 
   export let stateFields;
-  export let aggregateType;
-  let isValueObjectInputActive = false;
-  let customFieldName = "";
-  let simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date'];
-  let updateValue = null;
 
-  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectTypes]);
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$objectValueSettings.map(type => type.name)]);
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
-  const createValueObjectState = () => {
-    $valueObjectTypes = [...$valueObjectTypes, customFieldName];
-    reset();
-  };
-  const updateValueObjectState = () => {
-    if (customFieldName !== updateValue) {
-      $valueObjectTypes = $valueObjectTypes.filter(type => type !== updateValue);
-      $valueObjectTypes = [...$valueObjectTypes, customFieldName];
-    }
-    reset();
-  }
-  const openDialogForCreate = () => {
-    updateValue = null;
-    isValueObjectInputActive = true;
-  }
-  const openDialogForUpdate = (value) => {
-    updateValue = value;
-    customFieldName = value;
-    isValueObjectInputActive = true;
-  }
-  const reset = () => {
-    isValueObjectInputActive = false;
-    customFieldName = "";
-    updateValue = null;
-  }
-  const isTypeUnique = (value) => {
-    if (updateValue === value) return undefined;
-    return [...simpleTypes, ...$valueObjectTypes].some((item) => item === value) ?  `${value} already exists.` : undefined;
-  };
-
 </script>
-
-<div class="pb-4">
-  <Menu offsetX={true}>
-    <div slot="activator">
-      <Button><span style="text-transform: none;">{aggregateType}State</span></Button>
-    </div>
-    <List style="min-width: 150px;">
-      <ListItem class="primary-text" on:click={openDialogForCreate}>New</ListItem>
-      {#each $valueObjectTypes as type (type)}
-        <ListItem on:click={() => openDialogForUpdate(type)}>{type}</ListItem>
-      {/each}
-    </List>
-  </Menu>
-
-  <Dialog class="pa-8" bind:active={isValueObjectInputActive}>
-    <TextField bind:value={customFieldName} rules={[isTypeUnique]}>Field Name</TextField>
-    <div class="d-flex justify-space-between">
-      <Button on:click={updateValue ? updateValueObjectState : createValueObjectState} disabled={customFieldName == "" || isTypeUnique(customFieldName)}>{updateValue ? 'Update' : 'Add'}</Button>
-      <Button class="red white-text" on:click={reset}>Cancel</Button>
-    </div>
-  </Dialog>
-</div>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
   <legend>
