@@ -1,6 +1,6 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage } from "../stores";
+	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectTypes } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
   import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
@@ -32,6 +32,7 @@
 		  .then(s => {
         success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
         status = s;
+        $valueObjectTypes = [];
       }).catch(e => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
         status = e;
