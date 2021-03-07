@@ -91,7 +91,7 @@
 <svelte:head>
 	<title>Object Value Settings</title>
 </svelte:head>
-<div class="d-flex justify-center mb-4">
+<div class="d-flex mb-4">
   <Button class="mr-4" hover on:click={newvalueObject}>
     <div title="Add Aggregate" class="d-flex align-center justify-center">
       <Icon class="black-text mr-4" path={mdiPlus}/>
@@ -121,6 +121,7 @@
 
 <Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" bind:active={deleteDialogActive}>
   <div>
+    <b>{selectedValueObjectForDelete.name}</b> might be in use by other Value Objects or state fields of aggregates!
     Are you sure you want to delete value object of <b>{selectedValueObjectForDelete.name}</b>?
   </div>
   <CardActions class="d-flex justify-end">
