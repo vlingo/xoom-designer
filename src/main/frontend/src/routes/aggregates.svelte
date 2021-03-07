@@ -38,7 +38,7 @@ import Button from "svelte-materialify/src/components/Button";
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Aggregates" previous="context" next="persistence">
+<CardForm title="Aggregates" previous="object-values" next="persistence">
 	<Button class="mb-4" hover on:click={newAggregate}>
 		<div title="Add Aggregate" class="d-flex align-center justify-center">
 			<Icon class="black-text mr-4" path={mdiPlus}/>
