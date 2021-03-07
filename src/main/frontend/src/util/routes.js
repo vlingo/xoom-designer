@@ -1,4 +1,4 @@
-import { mdiComment, mdiCommentOutline, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
+import { mdiComment, mdiCommentOutline, mdiShapeOvalPlus, mdiCube, mdiCubeOutline, mdiDatabase, mdiDatabaseOutline, mdiFolderDownload, mdiFolderDownloadOutline, mdiShape, mdiShapeOutline } from '@mdi/js';
 
 export default [
 	// {
@@ -12,6 +12,12 @@ export default [
 		icon: mdiCommentOutline,
 		openIcon: mdiComment,
 		href: 'context'
+	},
+	{
+		text: 'Object Values',
+		icon: mdiShapeOvalPlus,
+		openIcon: mdiShapeOvalPlus,
+		href: 'object-values'
 	},
 	// {
 	// 	text: 'or Context with same icon as schemata-context',
