@@ -4,11 +4,11 @@
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
-	import { objectValueSettings, simpleTypes } from '../../stores';
+	import { valueObjectSettings, simpleTypes } from '../../stores';
 
   export let stateFields;
 
-  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$objectValueSettings.map(type => type.name)]);
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectSettings.map(type => type.name)]);
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
