@@ -14,11 +14,14 @@ public class ModelSettingsData {
 
     public final PersistenceData persistenceSettings;
     public final List<AggregateData> aggregateSettings = new ArrayList<>();
+    public final List<ValueObjectData> valueObjectSettings = new ArrayList<>();
 
     public ModelSettingsData(final PersistenceData persistenceSettings,
-                             final List<AggregateData> aggregateSettings) {
+                             final List<AggregateData> aggregateSettings,
+                             final List<ValueObjectData> valueObjectSettings) {
         this.persistenceSettings = persistenceSettings;
         this.aggregateSettings.addAll(aggregateSettings);
+        this.valueObjectSettings.addAll(valueObjectSettings);
     }
 
     public List<String> validate(List<String> errorStrings) {

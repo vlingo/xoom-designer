@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
@@ -94,7 +95,8 @@ public class TaskExecutionContextMapperTest {
 
     private ModelSettingsData modelSettingsData() {
         return new ModelSettingsData(persistenceData(),
-                Arrays.asList(personAggregateData(), profileAggregateData()));
+                Arrays.asList(personAggregateData(), profileAggregateData()),
+                Collections.EMPTY_LIST);
     }
 
     private PersistenceData persistenceData() {
