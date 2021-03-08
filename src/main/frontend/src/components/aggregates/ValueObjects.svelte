@@ -88,14 +88,11 @@
     && valueObjectForm.fields.every((field) => !isFieldUnique(field.name));
 </script>
 
-<svelte:head>
-	<title>Object Value Settings</title>
-</svelte:head>
 <div class="d-flex mb-4">
   <Button class="mr-4" hover on:click={newvalueObject}>
     <div title="Add Aggregate" class="d-flex align-center justify-center">
       <Icon class="black-text mr-4" path={mdiPlus}/>
-      New Object Value
+      New Value Object
     </div>
   </Button>
   {#if $valueObjectSettings.length > 0}
@@ -108,7 +105,7 @@
           <ListItem>
             <div class="d-flex align-center">
               <div style="flex:1;" class="mr-4" on:click={() => edit(valueObject)}>{valueObject.name}</div>
-              <Button on:click={() => showDeleteDialog(valueObject)} title="Delete Object Value"  icon class="red-text">
+              <Button on:click={() => showDeleteDialog(valueObject)} title="Delete Value Object"  icon class="red-text">
                 <Icon class="ma-0" path={mdiDelete}/>
               </Button>
             </div>
@@ -132,7 +129,7 @@
 
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
-    <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Object Value Name</TextField>
+    <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Value Object Name</TextField>
     {#each valueObjectForm.fields as field, i (i)}
       <Row>
         <Col>

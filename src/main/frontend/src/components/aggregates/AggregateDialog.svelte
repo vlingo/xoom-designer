@@ -14,7 +14,7 @@
 	import Routes from './Routes.svelte';
 	import ProducerExchange from './ProducerExchange.svelte';
 	import ConsumerExchange from './ConsumerExchange.svelte';
-	import ObjectValues from './ObjectValues.svelte';
+	import ValueObjects from './ValueObjects.svelte';
 
 	export let dialogActive;
 	export let editMode;
@@ -118,7 +118,7 @@
 		{/if}
 	</h4>
 	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUnique(aggregateIndex, name, [...$aggregateSettings, { aggregateName }])]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
-	<ObjectValues />
+	<ValueObjects />
 	<StateFields bind:stateFields />
 	<Events bind:events  bind:stateFields />
 	<Methods bind:methods bind:stateFields bind:events />
