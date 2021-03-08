@@ -14,7 +14,6 @@
 	import Routes from './Routes.svelte';
 	import ProducerExchange from './ProducerExchange.svelte';
 	import ConsumerExchange from './ConsumerExchange.svelte';
-	import ObjectValues from './ObjectValues.svelte';
 
 	export let dialogActive;
 	export let editMode;
@@ -34,6 +33,7 @@
 	let routes = [];
 	let outgoingEvents = [];
 	let receivers = [];
+	let valueObjectTypes = [];
 
 	const add = () => {
 		if(requireRule(aggregateName)) return;
@@ -65,6 +65,7 @@
 		outgoingEvents = [];
 		consumerExchangeName = "";
 		receivers = [];
+		valueObjectTypes = [];
 	}
 
 	const retrieveSchemaGroup = () => {
@@ -86,6 +87,7 @@
 			methods = aggregateWithId.methods;
 			rootPath = aggregateWithId.api.rootPath;
 			routes = aggregateWithId.api.routes;
+			valueObjectTypes = aggregateWithId.valueObjectTypes;
 			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
 			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
 			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
@@ -118,13 +120,19 @@
 		{/if}
 	</h4>
 	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUnique(aggregateIndex, name, [...$aggregateSettings, { aggregateName }])]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
-	<ObjectValues />
-	<StateFields bind:stateFields />
+	<!-- <Divider class="ma-2" /> -->
+	<StateFields bind:stateFields bind:aggregateType={aggregateName} bind:valueObjectTypes />
+	<!-- <Divider class="ma-2" /> -->
 	<Events bind:events  bind:stateFields />
+	<!-- <Divider class="ma-2" /> -->
 	<Methods bind:methods bind:stateFields bind:events />
+	<!-- <Divider class="ma-2" /> -->
 	<Routes bind:routes bind:methods bind:rootPath />
+	<!-- <Divider class="ma-2" /> -->
 	<ProducerExchange bind:events bind:producerExchangeName bind:outgoingEvents bind:schemaGroup bind:disableSchemaGroup  />
+
 	<ConsumerExchange bind:consumerExchangeName bind:receivers bind:methods />
+
 	<CardActions>
 		{#if editMode}
 			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button>
