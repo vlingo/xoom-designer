@@ -27,3 +27,6 @@ export function setLocalStorage(key, value) {
 
 export const isMobile = isMobileStore();
 export const theme = createLocalStore('theme', 'light')
+export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
+export const valueObjectSettings = createLocalStore('valueObjectSettings', [])
+export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date'];
