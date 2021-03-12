@@ -12,75 +12,70 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class CodeGenerationParameterValidationStepTest {
-	
-	@Test
-	public void testThatParametersAreValidated() {
-		final GenerationSettingsData data =
-                new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-						deploymentSettingsData(), "/home/projects", true, false);
-						
-		TaskExecutionContext context = TaskExecutionContextMapper.from(data);
 
-		assertDoesNotThrow(new Executable() {
-			@Override
-			public void execute() throws Throwable {
-				new CodeGenerationParameterValidationStep().process(context);
-			}
-		});
-	}
+  @Test
+  public void testThatParametersAreValidated() {
+    final GenerationSettingsData data =
+            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+                    deploymentSettingsData(), "/home/projects", true, false);
 
-	private ContextSettingsData contextSettingsData() {
-        return new ContextSettingsData("io.vlingo", "xoomapp",
-                "1.0.0", "io.vlingo.xoomapp", "1.3.4-SNAPSHOT");
-    }
+    TaskExecutionContext context = TaskExecutionContextMapper.from(data);
 
-    private ModelSettingsData modelSettingsData() {
-        return new ModelSettingsData(persistenceData(),
-                Arrays.asList(personAggregateData(), profileAggregateData()), Collections.emptyList());
-    }
+    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
+  }
 
-    private PersistenceData persistenceData() {
-        return new PersistenceData("STATE_STORE", true, "EVENT_BASED",
-                "IN_MEMORY", "POSTGRES", "MYSQL");
-    }
+  private ContextSettingsData contextSettingsData() {
+    return new ContextSettingsData("io.vlingo", "xoomapp",
+            "1.0.0", "io.vlingo.xoomapp", "1.3.4-SNAPSHOT");
+  }
 
-    private AggregateData personAggregateData() {
-        final List<StateFieldData> statesFields =
-                Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
+  private ModelSettingsData modelSettingsData() {
+    return new ModelSettingsData(persistenceData(),
+            Arrays.asList(personAggregateData(), profileAggregateData()), Collections.emptyList());
+  }
 
-        final List<AggregateMethodData> methods =
-                Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
-                        new AggregateMethodData("changeName", Arrays.asList("name"), false, "PersonNameChanged"));
+  private PersistenceData persistenceData() {
+    return new PersistenceData("STATE_STORE", true, "EVENT_BASED",
+            "IN_MEMORY", "POSTGRES", "MYSQL");
+  }
 
-        final List<DomainEventData> events =
-                Arrays.asList(new DomainEventData("PersonDefined", Arrays.asList("id", "name")),
-                        new DomainEventData("PersonNameChanged", Arrays.asList("name")));
+  private AggregateData personAggregateData() {
+    final List<StateFieldData> statesFields =
+            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
 
-        final APIData apiData = new APIData("/persons/",
-                Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
-                        new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
+    final List<AggregateMethodData> methods =
+            Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
+                    new AggregateMethodData("changeName", Arrays.asList("name"), false, "PersonNameChanged"));
 
-        return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
-    }
+    final List<DomainEventData> events =
+            Arrays.asList(new DomainEventData("PersonDefined", Arrays.asList("id", "name")),
+                    new DomainEventData("PersonNameChanged", Arrays.asList("name")));
 
-    private AggregateData profileAggregateData() {
-        final List<StateFieldData> statesFields =
-                Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
+    final APIData apiData = new APIData("/persons/",
+            Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
+                    new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
 
-        final List<AggregateMethodData> methods =
-                Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
-                        new AggregateMethodData("changeStatus", Arrays.asList("status"), false, "ProfileStatusChanged"));
+    return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+  }
 
-        final List<DomainEventData> events =
-                Arrays.asList(new DomainEventData("ProfilePublished", Arrays.asList("id", "status")),
-                        new DomainEventData("ProfilePublished", Arrays.asList("status")));
+  private AggregateData profileAggregateData() {
+    final List<StateFieldData> statesFields =
+            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
 
-        final APIData apiData = new APIData("/profiles/",
-                Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
-                        new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
+    final List<AggregateMethodData> methods =
+            Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
+                    new AggregateMethodData("changeStatus", Arrays.asList("status"), false, "ProfileStatusChanged"));
 
-        return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
-    }
+    final List<DomainEventData> events =
+            Arrays.asList(new DomainEventData("ProfilePublished", Arrays.asList("id", "status")),
+                    new DomainEventData("ProfilePublished", Arrays.asList("status")));
+
+    final APIData apiData = new APIData("/profiles/",
+            Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
+                    new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
+
+    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+  }
 
     private DeploymentSettingsData deploymentSettingsData() {
         return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
