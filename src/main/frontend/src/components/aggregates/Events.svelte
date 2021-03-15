@@ -1,5 +1,5 @@
 <script>
-  import { Select, TextField, ListItem, Checkbox } from 'svelte-materialify/src';
+  import { Select, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
 	import { classNameRule, requireRule, isPropertyUnique } from "../../validators";
