@@ -1,5 +1,5 @@
 <script>
-  import { Select, TextField } from 'svelte-materialify/src';
+  import { Select, TextField, ListItem, Checkbox } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
 	import { classNameRule, requireRule, isPropertyUnique } from "../../validators";
@@ -37,7 +37,7 @@
         <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-3">
-        <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+        <Select chips mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
       </div>
       <div style="width: 36px;">
         <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>
