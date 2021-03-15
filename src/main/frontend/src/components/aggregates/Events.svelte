@@ -37,7 +37,7 @@
         <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-3">
-        <Select chips mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
+        <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
       </div>
       <div style="width: 36px;">
         <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>
