@@ -27,7 +27,7 @@
     	    </Button>
     	  {/if}
 		</div>
-		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO/XOOM Starter </span></a>
+		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO/XOOM Designer </span></a>
 		<div style="flex-grow:1" />
     	<!-- <a
     	  href="https://github.com/TheComputerM/svelte-materialify"
