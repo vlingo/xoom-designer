@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
@@ -43,6 +45,8 @@ public class TaskExecutionContextMapperTest {
         Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
         Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
         Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
+        Assertions.assertNotNull(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD));
+        Assertions.assertTrue(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
     }
 
     private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {
@@ -55,11 +59,22 @@ public class TaskExecutionContextMapperTest {
     }
 
     private void assertModelParameters(final CodeGenerationParameters codeGenerationParameters) {
+        Assertions.assertEquals(2, codeGenerationParameters.retrieveAll(VALUE_OBJECT).count());
+
+        final CodeGenerationParameter classificationValueObject =
+                codeGenerationParameters.retrieveAll(VALUE_OBJECT)
+                        .filter(vo -> vo.value.equals("Classification")).findFirst().get();
+
+        Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+                .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+
+        Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+                .anyMatch(field -> field.value.equals("rank") && field.retrieveRelatedValue(FIELD_TYPE).equals("Rank")));
+
         final CodeGenerationParameter personAggregateParameter =
                 codeGenerationParameters.retrieveAll(AGGREGATE)
                         .filter(aggregate -> aggregate.value.equals("Person"))
                         .findFirst().get();
-
 
         Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
                 .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")));
@@ -96,7 +111,7 @@ public class TaskExecutionContextMapperTest {
     private ModelSettingsData modelSettingsData() {
         return new ModelSettingsData(persistenceData(),
                 Arrays.asList(personAggregateData(), profileAggregateData()),
-                Collections.EMPTY_LIST);
+                valueObjects());
     }
 
     private PersistenceData persistenceData() {
@@ -140,6 +155,19 @@ public class TaskExecutionContextMapperTest {
                         new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
 
         return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+    }
+
+    private List<ValueObjectData> valueObjects() {
+        final ValueObjectData classification =
+                new ValueObjectData("Classification",
+                        Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
+
+        return Arrays.asList(rankValueObjectData(), classification);
+    }
+
+    private ValueObjectData rankValueObjectData() {
+        return new ValueObjectData("Rank",
+                Arrays.asList(new ValueObjectFieldData("points", "int")));
     }
 
     private DeploymentSettingsData deploymentSettingsData() {

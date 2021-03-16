@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.starter.restapi.data;
 
+import io.vlingo.common.serialization.JsonSerialization;
 import io.vlingo.xoom.codegen.language.Language;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -167,6 +168,7 @@ public class TaskExecutionContextMapper {
                 .add(DOCKER_IMAGE, data.deployment.dockerImage)
                 .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
                 .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
-                .add(TARGET_FOLDER, data.projectDirectory);
+                .add(TARGET_FOLDER, data.projectDirectory)
+                .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
     }
 }
