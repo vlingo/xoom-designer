@@ -13,7 +13,7 @@
 	export let dialogActive;
 	export let editMode;
 	export let oldAggregate;
-	let newAggregate; //TODO: get newAggregate state from localstorage
+	let newAggregate;
 	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
 
 
@@ -80,14 +80,23 @@
 	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUniqueRule(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	/* this changes if editMode OR oldAggregate changes (so even if you enter with editMode multiple times, it will react) */
-	$: editMode ? initFieldsWith(oldAggregate) : clearFields();
+	
+	$: {
+		const storageState = getLocalStorage("aggregateDialogState");
+		if(storageState && storageState.newAggregate) initFieldsWith(storageState.newAggregate);
+		/* this changes if editMode OR oldAggregate changes (so even if you enter with editMode multiple times, it will react) */
+		else editMode ? initFieldsWith(oldAggregate) : clearFields();
+	}
+
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
 	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $aggregateSettings);
 	
 	$: if(valid) {
-		newAggregate = {aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
-		//TODO: rework this - we need to keep the modal open, too.
+		newAggregate = {
+			aggregateName, stateFields, events, methods, api: { rootPath, routes }
+			, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }
+			, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers }
+		};
 		setLocalStorage("aggregateDialogState", {oldAggregate, newAggregate, dialogActive, editMode});
 	}
 </script>
