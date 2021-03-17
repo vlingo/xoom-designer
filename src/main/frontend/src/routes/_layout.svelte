@@ -1,10 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	import { theme, isMobile } from '../stores';
+	import { theme, isMobile, settingsInfo } from '../stores';
 	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	export let segment;
+	import Repository from '../api/Repository';
 
 	let sidenav = false;
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
@@ -12,6 +13,15 @@
 
 	onMount(() => {
 		isMobile.check();
+		Repository.get('/generation-settings/info')
+			.then(response => response.json())
+			.then(data => {
+				if ($settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
+					localStorage.clear();
+				} else {
+					$settingsInfo = data;					
+				}
+			});
 	})
 </script>
 
