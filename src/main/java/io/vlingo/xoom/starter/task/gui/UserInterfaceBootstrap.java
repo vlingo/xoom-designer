@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.starter.task.gui;
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.XoomInitializationAware;
@@ -24,29 +24,20 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
     private static int DEFAULT_PORT = 19090;
 
     @Override
-    public Configuration configureServer(final Stage stage, final String[] args) {
-        final Configuration.Timing timing =
-                Configuration.Timing.defineWith(7, 3, 100);
+    public void onInit(final Grid grid) {
+    }
 
-        // final Configuration.Sizing sizing =
-        //         Configuration.Sizing.define().withDispatcherPoolSize(2)
-        //                 .withMaxBufferPoolSize(100)
-        //                 .withMaxMessageSize(4096);
-
+    @Override
+    public Configuration configureServer(final Grid grid, final String[] args) {
         return Configuration.define()
                 .withPort(DEFAULT_PORT)
-                .with(timing);
-                // .with(sizing);
+                .with(Configuration.Timing.defineWith(7, 3, 100));
     }
 
     @Override
     public StaticFilesConfiguration staticFilesConfiguration() {
         final List<String> subPaths = Arrays.asList("/", "/client", "/aggregates", "/context", "/deployment", "/generation", "/persistence");
         return StaticFilesConfiguration.defineWith(100, "frontend", subPaths);
-    }
-
-    @Override
-    public void onInit(final Stage stage) {
     }
 
 }
