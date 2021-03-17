@@ -1,13 +1,7 @@
 <script>
-	import {
-		Button,
-		TextField,
-		Dialog,
-		CardActions
-	} from 'svelte-materialify/src';
-	import { aggregateSettings, currentAggregate, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUnique, isAggregateUnique } from "../../validators";
-
+	import { Button, TextField, Dialog, CardActions } from 'svelte-materialify/src';
+	import { aggregateSettings, getLocalStorage, setLocalStorage } from "../../stores";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
 	import Methods from './Methods.svelte';
@@ -18,94 +12,83 @@
 
 	export let dialogActive;
 	export let editMode;
+	export let oldAggregate;
+	let newAggregate;
+	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
 
-	export let currentId;
-	
-	let aggregateIndex = undefined;
-	let aggregateName = $currentAggregate ? $currentAggregate.aggregateName : "";
-	let stateFields = [{ name: "id", type: "String" }];
-	let events = [];
-	let methods = [];
-	let rootPath = "/";
-	let producerExchangeName = "";
-	let consumerExchangeName = "";
-	let schemaGroup = "";
-	let disableSchemaGroup = false;
-	let routes = [];
-	let outgoingEvents = [];
-	let receivers = [];
+
+	const retrieveSchemaGroup = () => $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
+	const initialAggregate = {
+		aggregateName: "",
+		stateFields: [{ name: "id", type: "String" }],
+		events: [],
+		methods: [],
+		api: {
+			rootPath: "/",
+			routes: [],
+		},
+		producerExchange: {
+			exchangeName: "",
+			schemaGroup: retrieveSchemaGroup(),
+			outgoingEvents: [],
+		},
+		consumerExchange: {
+			exchangeName: "",
+			receivers: [],
+		},
+		disableSchemaGroup: !canWriteSchemaGroup(),
+	}
 
 	const add = () => {
-		if(requireRule(aggregateName)) return;
-		$aggregateSettings = [...$aggregateSettings, $currentAggregate];
-		currentId = undefined;
-		reset();
-		dialogActive = false;
+		if(!valid) return;
+		$aggregateSettings = [...$aggregateSettings, newAggregate];
+		closeDialog();
 	}
 
 	const update = () => {
-		if(requireRule(aggregateName)) return;
-		$aggregateSettings.splice(currentId, 1, $currentAggregate);
-		$aggregateSettings = $aggregateSettings;
-		currentId = undefined;
-		reset();
+		if(!valid) return;
+		$aggregateSettings = $aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate));
+		$aggregateSettings = [...$aggregateSettings, newAggregate];
+		closeDialog();
+	}
+
+	const closeDialog = () => {
+		clearFields();
 		dialogActive = false;
+		setLocalStorage("aggregateDialogState", {});
 	}
 
-	const reset = () => {
-		aggregateName = "";
-		stateFields = [{ name: "id", type: "String" }];
-		events = [];
-		methods = [];
-		rootPath = "/";
-		routes = [];
-		producerExchangeName = "";
-		schemaGroup = retrieveSchemaGroup();
-		disableSchemaGroup = !canWriteSchemaGroup();
-		outgoingEvents = [];
-		consumerExchangeName = "";
-		receivers = [];
+	const initFieldsWith = (aggregate) => {
+		aggregateName = aggregate.aggregateName;
+		stateFields = aggregate.stateFields;
+		events = aggregate.events;
+		methods = aggregate.methods;
+		rootPath = aggregate.api.rootPath;
+		routes = aggregate.api.routes;
+		producerExchangeName = aggregate.producerExchange.exchangeName;
+		schemaGroup = aggregate.producerExchange.schemaGroup;
+		outgoingEvents = aggregate.producerExchange.outgoingEvents;
+		consumerExchangeName = aggregate.consumerExchange.exchangeName;
+		receivers = aggregate.consumerExchange.receivers;
+		disableSchemaGroup = aggregate.disableSchemaGroup;
 	}
+	const clearFields = () => initFieldsWith(initialAggregate);
 
-	const retrieveSchemaGroup = () => {
-		return $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
-	}
-
-	const canWriteSchemaGroup = () => {
-		return currentId == 0 || (schemaGroup == undefined && schemaGroup.length == 0);
-	}
-
-	$: changedCurrent(currentId);
-	function changedCurrent(index) {
-		aggregateIndex = index;
-		if(index !== undefined && $aggregateSettings[index]) {
-			const aggregateWithId =  $aggregateSettings[index];
-			aggregateName = aggregateWithId.aggregateName;
-			stateFields = aggregateWithId.stateFields;
-			events = aggregateWithId.events;
-			methods = aggregateWithId.methods;
-			rootPath = aggregateWithId.api.rootPath;
-			routes = aggregateWithId.api.routes;
-			producerExchangeName = aggregateWithId.producerExchange.exchangeName;
-			schemaGroup = aggregateWithId.producerExchange.schemaGroup;
-			outgoingEvents = aggregateWithId.producerExchange.outgoingEvents;
-			consumerExchangeName = aggregateWithId.consumerExchange.exchangeName;
-			receivers = aggregateWithId.consumerExchange.receivers;
-		} else {
-			reset();
-		}
-	}
-
-	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUnique(f.name, stateFields, 'name');
-	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUnique(e.name, events, 'name');
-	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUnique(m.name, methods, 'name');
+	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
+	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
+	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUniqueRule(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) && !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUnique(aggregateIndex, aggregateName, [...$aggregateSettings, { aggregateName }]);
+	/* this changes if editMode OR oldAggregate changes (so even if you enter with editMode multiple times, it will react) */
+	$: editMode ? initFieldsWith(oldAggregate) : clearFields();
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
+	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $aggregateSettings);
+	
 	$: if(valid) {
-		$currentAggregate = {aggregateIndex, aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
+		newAggregate = {aggregateName, stateFields, events, methods, api: { rootPath, routes }, producerExchange: { "exchangeName" : producerExchangeName, schemaGroup, outgoingEvents }, consumerExchange: {  "exchangeName" : consumerExchangeName, receivers } };
 		//TODO: rework this - we need to keep the modal open, too.
-		setLocalStorage("currentAggregate", $currentAggregate);
+		setLocalStorage("aggregateDialogState", {oldAggregate, newAggregate, dialogActive, editMode});
 	}
 </script>
 
@@ -117,7 +100,7 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUnique(aggregateIndex, name, [...$aggregateSettings, { aggregateName }])]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<ValueObjects />
 	<StateFields bind:stateFields />
 	<Events bind:events  bind:stateFields />
@@ -127,12 +110,12 @@
 	<ConsumerExchange bind:consumerExchangeName bind:receivers bind:methods />
 	<CardActions>
 		{#if editMode}
-			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button>
+			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button> <!--TODO: vlingo colors: class="primary-color", right now materialify overwrites disabled state-->
 		{:else}
-			<Button class="mr-3" on:click={add} disabled={!valid}>Add</Button>
+			<Button class="mr-3" on:click={add} disabled={!valid}>Add</Button> <!--TODO: vlingo colors-->
 		{/if}
-		<Button on:click={() => dialogActive = !dialogActive}>Cancel</Button>
+		<Button outlined on:click={closeDialog}>Cancel</Button>
 		<span style="width: 100%;"></span>
-		<Button on:click={reset}>Reset</Button>
+		<Button outlined class="red red-text" on:click={clearFields}>Clear Fields</Button>
 	</CardActions>
 </Dialog>
