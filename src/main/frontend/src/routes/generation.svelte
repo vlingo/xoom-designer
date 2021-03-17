@@ -73,7 +73,8 @@
     <div slot="icon">
       <Icon path={mdiAlert} />
     </div>
-    Project generation depends on Maven and requires the use of mvnw. Ensure that Maven is installed and that mvnw has file execution permission for your user account. For example: <code>chmod mvnw 755</code>
+    <p class="mb-1">Project generation depends on Maven and requires the use of mvnw. Ensure that Maven is installed and that mvnw has file execution permission for your user account.</p>
+    <p class="mb-1">For example: <code>chmod mvnw 755</code></p>
   </Alert>
 </CardForm>
 
