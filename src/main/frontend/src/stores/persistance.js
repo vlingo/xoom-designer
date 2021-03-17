@@ -2,8 +2,8 @@ import { readable, writable } from 'svelte/store';
 
 export const storageTypes = readable(null, function start(set) {
 	set([
-    {name: "State Store", value: "STATE_STORE"},
-    {name: "Journal", value: "JOURNAL"}
+    {name: "StateStore for Key-Value Persistence", value: "STATE_STORE"},
+    {name: "Journal for Event Sourcing", value: "JOURNAL"}
   ]);
 });
 
