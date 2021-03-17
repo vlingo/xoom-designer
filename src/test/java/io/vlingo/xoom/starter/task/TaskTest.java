@@ -18,7 +18,7 @@ public class TaskTest {
     @Test
     public void testTaskRetrievalByCommand() {
         Assertions.assertEquals(CommandLineBasedProjectGenerationManager.class, Task.of("gen", Arrays.asList("0")).getClass());
-        Assertions.assertEquals(WebBasedProjectGenerationManager.class, Task.of("web-gen", TaskExecutionContext.withoutOptions()).getClass());
+        Assertions.assertEquals(WebBasedProjectGenerationManager.class, Task.of("gen", TaskExecutionContext.withoutOptions()).getClass());
         Assertions.assertEquals(UserInterfaceManager.class, Task.of("gui", Arrays.asList("0")).getClass());
         Assertions.assertEquals(DockerCommandManager.class, Task.of("dOckEr", Arrays.asList("0")).getClass());
         Assertions.assertEquals(VersionDisplayManager.class, Task.of("-version", Arrays.asList("0")).getClass());
@@ -43,10 +43,5 @@ public class TaskTest {
         Assertions.assertThrows(UnknownCommandException.class, () -> {
             DOCKER.subTaskOf("reset");
         });
-    }
-
-    @Test
-    public void testHey() {
-        System.out.println(System.getProperty("user.home").replace("\\\\", "\\"));
     }
 }

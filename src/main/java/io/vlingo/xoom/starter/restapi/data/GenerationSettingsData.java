@@ -20,7 +20,7 @@ public class GenerationSettingsData {
     public final String projectDirectory;
     public final Boolean useAnnotations;
     public final Boolean useAutoDispatch;
-    public final String schemaVersion;
+    public final String fileVersion;
 
     public GenerationSettingsData(final ContextSettingsData context,
                                   final ModelSettingsData model,
@@ -34,7 +34,7 @@ public class GenerationSettingsData {
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
         this.useAutoDispatch = useAutoDispatch;
-        this.schemaVersion = Configuration.PROJECT_GENERATION_SETTINGS_SCHEMA_VERSION;
+        this.fileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
     }
 
     public List<String> validate() {

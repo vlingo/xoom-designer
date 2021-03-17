@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import org.apache.commons.io.FileUtils;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
@@ -43,9 +44,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
                 final Path destination = projectPath.resolve(filename);
                 Files.copy(source, destination, REPLACE_EXISTING);
                 final File file = destination.toFile();
-                file.setReadable(true);
-                file.setWritable(true);
-                file.setExecutable(true);
+                Terminal.grantAllPermissions(file);
             } catch (final IOException e) {
                 throw new ProjectGenerationException(e);
             }

@@ -8,17 +8,21 @@ package io.vlingo.xoom.starter.task.projectgeneration;
 
 import io.vlingo.xoom.starter.Configuration;
 
+import java.io.File;
+
 public class ProjectGenerationInformation {
 
   public final String userHomePath;
-  public final String settingsSchemaVersion;
+  public final String pathSeparator;
+  public final String xoomDesignerFileVersion;
 
   public static ProjectGenerationInformation load() {
     return new ProjectGenerationInformation();
   }
 
   private ProjectGenerationInformation() {
+    this.pathSeparator = File.separator;
     this.userHomePath = System.getProperty("user.home");
-    this.settingsSchemaVersion = Configuration.PROJECT_GENERATION_SETTINGS_SCHEMA_VERSION;
+    this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
   }
 }
