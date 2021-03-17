@@ -1,7 +1,7 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
 	import { persistenceSettings, setLocalStorage } from "../stores";
-	import { storageTypes, projectionsTypes, databaseTypes } from '../stores/persistance';
+	import { storageTypes, projectionsTypes, databaseTypes } from '../stores/persistence';
 	import { Select, Switch } from "svelte-materialify/src";
 
 	const storageFormat = (val) => $storageTypes.find(t => t.value === val).name;
@@ -28,16 +28,15 @@
 		if(storageType === "JOURNAL") {
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
-				{name: 'Event Based', value: 'EVENT_BASED'},
+				{name: 'Event-based', value: 'EVENT_BASED'},
 			];
-			if(projections === 'OPERATION_BASED') {
-				projections = "NONE";
-			}
+			useCQRS = true;
+			projections = "EVENT_BASED";
 		} else {
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
-				{name: 'Event Based', value: 'EVENT_BASED'},
-				{name: 'Operation Based', value: 'OPERATION_BASED'}
+				{name: 'Event-based', value: 'EVENT_BASED'},
+				{name: 'Operation-based', value: 'OPERATION_BASED'}
 			];
 		}
 	}

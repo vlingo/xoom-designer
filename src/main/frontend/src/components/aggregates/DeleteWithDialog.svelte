@@ -8,7 +8,7 @@
 	} from "svelte-materialify/src";
 	import DeleteButton from "./DeleteButton.svelte";
 	import { createEventDispatcher } from "svelte";
-	import Portal from "svelte-portal";
+	import Portal from "svelte-portal/src/Portal.svelte";
 
 	const dispatch = createEventDispatcher();
 	

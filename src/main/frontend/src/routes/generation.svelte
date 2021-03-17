@@ -3,7 +3,7 @@
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
-  import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
+  import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
     Button,
     Switch,
@@ -12,6 +12,7 @@
     Snackbar,
     Icon
   } from 'svelte-materialify/src';
+  import Alert from "svelte-materialify/src/components/Alert";
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
@@ -55,7 +56,7 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField class="mb-4" placeholder="D:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+	<TextField class="mb-4" placeholder="C:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
 	<Switch class="mb-4" bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
@@ -68,6 +69,12 @@
     <Icon class="red-text" path={mdiCloseThick}/> {failure[0]}
     <a href="https://github.com/vlingo/vlingo-xoom-starter/issues" rel="noopener" target="_blank">{failure[1]}</a>
   {/if}
+  <Alert class="info-color mt-5">
+    <div slot="icon">
+      <Icon path={mdiAlert} />
+    </div>
+    Project generation depends on Maven and requires the use of mvnw. Ensure that Maven is installed and that mvnw has file execution permission for your user account. For example: <code>chmod mvnw 755</code>
+  </Alert>
 </CardForm>
 
 
