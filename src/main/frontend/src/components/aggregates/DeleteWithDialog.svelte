@@ -26,7 +26,7 @@
 
 <DeleteButton title="Delete {type}" on:click={open} bind:color/>
 
-<Portal target=".s-app"> <!-- solves Dialog -->
+<Portal target=".s-app"> <!-- solves Dialog capturing problem -->
 	<Dialog persistent bind:active={dialogActive}>
 		<Card class="pa-3">
 			<div class="d-flex flex-column">

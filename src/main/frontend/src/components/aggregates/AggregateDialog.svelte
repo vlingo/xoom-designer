@@ -13,7 +13,7 @@
 	export let dialogActive;
 	export let editMode;
 	export let oldAggregate;
-	let newAggregate;
+	let newAggregate; //TODO: get newAggregate state from localstorage
 	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
 
 
