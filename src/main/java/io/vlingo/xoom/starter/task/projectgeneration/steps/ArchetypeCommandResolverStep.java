@@ -12,6 +12,12 @@ import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.projectgeneration.archetype.Archetype;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
 
 public final class ArchetypeCommandResolverStep extends CommandResolverStep {
@@ -25,6 +31,11 @@ public final class ArchetypeCommandResolverStep extends CommandResolverStep {
         return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
                 archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
                 terminal.mavenCommand(), archetypeOptions);
+    }
+
+    @Override
+    protected List<File> executableFiles() {
+        return Arrays.asList(Terminal.supported().executableMavenFileLocation());
     }
 
 }

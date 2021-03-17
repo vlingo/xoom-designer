@@ -7,6 +7,11 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration;
 
+import io.vlingo.xoom.starter.Resource;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -68,6 +73,17 @@ public enum Terminal {
 
     public String mavenCommand() {
         return mavenCommand;
+    }
+
+    public File executableMavenFileLocation() {
+        final String executableFile = mavenCommand.replaceAll("./", "");
+        return Paths.get(Resource.ARCHETYPES_FOLDER.path(), executableFile).toFile();
+    }
+
+    public static void grantAllPermissions(final File file) {
+        file.setReadable(true);
+        file.setWritable(true);
+        file.setExecutable(true);
     }
 
 }

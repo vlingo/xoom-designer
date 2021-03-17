@@ -135,9 +135,7 @@ public class TaskExecutionContext {
     }
 
     public String projectPath() {
-        final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
-        final String targetFolder = parameters.retrieveValue(TARGET_FOLDER);
-        return Paths.get(targetFolder, artifactId).toString();
+        return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
     }
 
 }

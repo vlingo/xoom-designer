@@ -10,11 +10,16 @@ package io.vlingo.xoom.starter.task.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 
 public abstract class CommandResolverStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
+        grantPermissions();
         context.withCommands(new String[]{
                 Terminal.supported().initializationCommand(),
                 Terminal.supported().parameter(),
@@ -29,5 +34,13 @@ public abstract class CommandResolverStep implements TaskExecutionStep {
             return drive + " && cd " + targetFolder;
         }
         return "cd " + targetFolder;
+    }
+
+    protected List<File> executableFiles() {
+        return Collections.emptyList();
+    }
+
+    protected void grantPermissions() {
+        executableFiles().forEach(file -> Terminal.grantAllPermissions(file));
     }
 }
