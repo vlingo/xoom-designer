@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.gui;
+package io.vlingo.xoom.starter.task.projectgeneration.gui;
 
 import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;

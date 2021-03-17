@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
 import io.vlingo.xoom.starter.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.starter.task.gui.UserInterfaceManager;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.UserInterfaceManager;
 import io.vlingo.xoom.starter.task.k8s.KubernetesCommandManager;
 import io.vlingo.xoom.starter.task.projectgeneration.CommandLineBasedProjectGenerationManager;
 import io.vlingo.xoom.starter.task.projectgeneration.WebBasedProjectGenerationManager;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public enum Task {
 
-    WEB_BASED_PROJECT_GENERATION("gen", new WebBasedProjectGenerationManager()),
+    WEB_BASED_PROJECT_GENERATION("web-gen", new WebBasedProjectGenerationManager()),
     CLI_BASED_PROJECT_GENERATION("gen", new CommandLineBasedProjectGenerationManager()),
     DOCKER("docker", new DockerCommandManager()),
     K8S("k8s", new KubernetesCommandManager()),

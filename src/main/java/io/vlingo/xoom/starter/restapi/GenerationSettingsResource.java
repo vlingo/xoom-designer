@@ -13,18 +13,19 @@ import io.vlingo.http.Response;
 import io.vlingo.http.ResponseHeader;
 import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.Resource;
+import io.vlingo.http.resource.ResourceBuilder;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskStatus;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationInformation;
 
 import java.util.List;
 
 import static io.vlingo.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.http.Response.Status.*;
-import static io.vlingo.http.resource.ResourceBuilder.post;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
+import static io.vlingo.http.resource.ResourceBuilder.*;
 import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
 
 public class GenerationSettingsResource extends DynamicResourceHandler {
@@ -42,6 +43,11 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
         }
 
         return mapContext(settings).andThen(this::runProjectGeneration).andThenTo(this::buildResponse);
+    }
+
+    public Completes<Response> queryGenerationSettingsInformation() {
+        final ProjectGenerationInformation information = ProjectGenerationInformation.load();
+        return Completes.withSuccess(Response.of(Ok, serialized(information)));
     }
 
     private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
@@ -77,8 +83,10 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     public Resource<?> routes() {
         return resource("Generation Settings Resource",
                 post("/api/generation-settings")
-                    .body(GenerationSettingsData.class)
-                    .handle(this::startGeneration));
+                        .body(GenerationSettingsData.class)
+                        .handle(this::startGeneration),
+                get("/api/generation-settings/info")
+                        .handle(this::queryGenerationSettingsInformation));
     }
 
 }
