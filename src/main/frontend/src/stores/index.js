@@ -37,3 +37,4 @@ export const persistenceSettings = createLocalStore('persistenceSettings', {
 	queryModelDatabase: 'IN_MEMORY',
 })
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
+export const settingsInfo = createLocalStore('settingsInfo', {});
