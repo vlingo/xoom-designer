@@ -13,5 +13,7 @@
   }
 </script>
 
-<Select {...$$props} bind:value>Storage Type</Select>
+<Select {...$$props} bind:value>
+  <slot />
+</Select>
 
