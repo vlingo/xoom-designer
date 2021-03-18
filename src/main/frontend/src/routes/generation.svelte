@@ -1,6 +1,6 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings } from "../stores";
+	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
   import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
@@ -10,14 +10,21 @@
     TextField,
     ProgressCircular,
     Snackbar,
-    Icon
+    Icon,
+    Dialog,
+    Card,
+    CardTitle,
+    CardActions,
+    CardText,
+    Alert
   } from 'svelte-materialify/src';
-  import Alert from "svelte-materialify/src/components/Alert";
+  import Portal from "svelte-portal/src/Portal.svelte";
+
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
   let deployment  = $deploymentSettings;
-  let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : "";
+  let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : $contextSettings ? `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${$contextSettings.groupId}${$settingsInfo.pathSeparator}${$contextSettings.artifactId}${$projectGenerationIndex}` : `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   let useAnnotations = $generationSettings ? $generationSettings.useAnnotations : false;
   let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
   let processing = false;
@@ -25,6 +32,7 @@
   let snackbar = false;
   let success;
   let failure;
+  let dialogActive = false;
 
 	const generate = () => {
     if(!valid) return;
@@ -33,12 +41,18 @@
 		  .then(s => {
         success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
         status = s;
+        const tempProjectGenerationIndex = $projectGenerationIndex + 1;
+        const tempGeneratedProjectsPaths = [...$generatedProjectsPaths, projectDirectory];
+        localStorage.clear();
+        $projectGenerationIndex = tempProjectGenerationIndex;
+        $generatedProjectsPaths = tempGeneratedProjectsPaths;
       }).catch(e => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
         status = e;
       }).finally(() => {
         processing = false;
         snackbar = true;
+        dialogActive = false;
       })
 	}
 
@@ -56,11 +70,11 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField class="mb-4" placeholder="C:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
 	<Switch class="mb-4" bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mt-4 mr-4" on:click={generate} disabled={!valid}>Generate</Button>
+  <Button class="mt-4 mr-4" on:click={() => dialogActive = true} disabled={!valid}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
@@ -89,3 +103,28 @@
     Dismiss
   </Button>
 </Snackbar>
+
+<Portal target=".s-app">
+	<Dialog persistent bind:active={dialogActive}>
+		<Card class="pa-3">
+			<div class="d-flex flex-column">
+				<CardTitle class="error-text">
+          Be Careful!
+        </CardTitle>
+        {#if $generatedProjectsPaths.includes(projectDirectory)}
+          <CardText>
+            You already generated a project with the same path. If that project still exists and you continue, that project will be overwritten.
+          </CardText>
+        {:else}
+          <CardText>
+            Warning: You are about to potentially overwrite a previously generated project. Are you sure?
+          </CardText>
+        {/if}
+				<CardActions style="margin-top: auto" class="justify-space-around">
+          <Button on:click={() => dialogActive = false}>Cancel</Button>
+          <Button class="primary-color" disabled={!valid} on:click={generate}>Generate</Button>
+				</CardActions>
+			</div>
+		</Card>
+	</Dialog>
+</Portal>
