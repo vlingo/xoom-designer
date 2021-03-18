@@ -2,15 +2,15 @@ import { readable, writable } from 'svelte/store';
 
 export const storageTypes = readable(null, function start(set) {
 	set([
-    {name: "StateStore for Key-Value Persistence", value: "STATE_STORE"},
+    {name: "State Store for Key-Value Persistence", value: "STATE_STORE"},
     {name: "Journal for Event Sourcing", value: "JOURNAL"}
   ]);
 });
 
 export const projectionsTypes = writable([
   {name: 'Not Applicable', value: 'NONE'},
-  {name: 'Event Based', value: 'EVENT_BASED'},
-  {name: 'Operation Based', value: 'OPERATION_BASED'}
+  {name: 'Event-based', value: 'EVENT_BASED'},
+  {name: 'Operation-based', value: 'OPERATION_BASED'}
 ]);
 
 export const databaseTypes = readable(null, function start(set) {
