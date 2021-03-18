@@ -18,9 +18,8 @@
 			.then(data => {
 				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
 					localStorage.clear();
-				} else {
-					$settingsInfo = data;					
 				}
+				$settingsInfo = data;					
 			});
 	})
 </script>
