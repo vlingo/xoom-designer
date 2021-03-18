@@ -38,3 +38,5 @@ export const persistenceSettings = createLocalStore('persistenceSettings', {
 })
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
 export const settingsInfo = createLocalStore('settingsInfo', {});
+export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
+export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
