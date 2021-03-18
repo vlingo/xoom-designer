@@ -113,12 +113,11 @@
         </CardTitle>
         {#if $generatedProjectsPaths.includes(projectDirectory)}
           <CardText>
-            You already generated a project with same path.
-            If you continue, already generated project will be overwritten.
+            You already generated a project with the same path. If that project still exists and you continue, that project will be overwritten.
           </CardText>
         {:else}
           <CardText>
-            Everything will be overwritten, if you have a folder/file inside given path.
+            Warning: You are about to potentially overwrite a previously generated project. Are you sure?
           </CardText>
         {/if}
 				<CardActions style="margin-top: auto" class="justify-space-around">
