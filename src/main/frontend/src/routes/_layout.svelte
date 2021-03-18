@@ -16,7 +16,7 @@
 		Repository.get('/generation-settings/info')
 			.then(response => response.json())
 			.then(data => {
-				if ($settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
+				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
 					localStorage.clear();
 				} else {
 					$settingsInfo = data;					
