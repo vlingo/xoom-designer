@@ -11,7 +11,7 @@ public class UserInterfaceBootstrapStep implements TaskExecutionStep {
     @Override
     public void process(final TaskExecutionContext context) {
         try {
-            XoomInitializer.main(new String[]{"node1"});
+            XoomInitializer.main(new String[]{});
             TaskExecutor.skipAutomaticExit();
         } catch (final Exception exception) {
             throw new TaskExecutionException(exception);
