@@ -1,6 +1,6 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings } from "../stores";
+	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo } from "../stores";
 	import XoomStarterRepository from "../api/XoomStarterRepository";
 	import { requireRule } from "../validators";
   import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
@@ -17,7 +17,7 @@
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
   let deployment  = $deploymentSettings;
-  let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : "";
+  let projectDirectory = $generationSettings ? $generationSettings.projectDirectory : $contextSettings ? `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${$contextSettings.groupId}${$settingsInfo.pathSeparator}${$contextSettings.artifactId}${$settingsInfo.pathSeparator}projectGenerationIndex` : `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   let useAnnotations = $generationSettings ? $generationSettings.useAnnotations : false;
   let useAutoDispatch = $generationSettings ? $generationSettings.useAutoDispatch : false;
   let processing = false;
@@ -56,7 +56,7 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField class="mb-4" placeholder="C:\demo-projects" bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
 	<Switch class="mb-4" bind:checked={useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={useAutoDispatch} disabled={!useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
