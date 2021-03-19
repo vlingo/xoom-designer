@@ -38,18 +38,13 @@
     processing = true;
     Repository.post('/generation-paths', $generationSettings.projectDirectory)
 			.then(response => {
-        console.timeLog(response)
-        generate();
-      })
-      .catch(error => {
-        console.log(error)
-        if (error.code === 403) {
-          failure = ['The path directories cannot be created']
-        } else if (error.code === 409) {
-          dialogStatus = 'Conflict';
+        if(response.status === 201) {
+          generate();
+        } else if (response.status === 403) {
+          dialogStatus = 'Forbidden';
           dialogActive = true;
-        } else {
-          dialogStatus = null;
+        } else if (response.status === 409) {
+          dialogStatus = 'Conflict';
           dialogActive = true;
         }
       })
@@ -132,14 +127,16 @@
           <CardText>
             You already generated a project with the same path. If that project still exists and you continue, that project will be overwritten.
           </CardText>
-        {:else}
+        {:else if dialogStatus === 'Forbidden'}
           <CardText>
-            Warning: You are about to potentially overwrite a previously generated project. Are you sure?
+            Warning: the directory cannot be used for generation!
           </CardText>
         {/if}
 				<CardActions style="margin-top: auto" class="justify-space-around">
-          <Button on:click={() => dialogActive = false}>Cancel</Button>
-          <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
+          <Button on:click={() => dialogActive = false}>{dialogStatus === 'Forbidden' ? 'OK' : 'Cancel'}</Button>
+          {#if dialogStatus === 'Conflict'}
+            <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
+          {/if}
 				</CardActions>
 			</div>
 		</Card>
