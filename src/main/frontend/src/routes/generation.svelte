@@ -16,7 +16,6 @@
     CardTitle,
     CardActions,
     CardText,
-    Alert
   } from 'svelte-materialify/src';
   import Portal from "svelte-portal/src/Portal.svelte";
 	import Repository from '../api/Repository';
@@ -95,13 +94,6 @@
     <Icon class="red-text" path={mdiCloseThick}/> {failure[0]}
     <a href="https://github.com/vlingo/vlingo-xoom-starter/issues" rel="noopener" target="_blank">{failure[1]}</a>
   {/if}
-  <Alert class="info-color mt-5">
-    <div slot="icon">
-      <Icon path={mdiAlert} />
-    </div>
-    <p class="mb-1">Project generation depends on Maven and requires the use of mvnw. Ensure that Maven is installed and that mvnw has file execution permission for your user account.</p>
-    <p class="mb-1">For example: <code>chmod mvnw 755</code></p>
-  </Alert>
 </CardForm>
 
 
