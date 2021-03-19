@@ -112,7 +112,8 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
                 get("/api/generation-settings/info")
                         .handle(this::queryGenerationSettingsInformation),
                 post("/api/generation-paths")
-                        .body(String.class));
+                        .body(String.class)
+                        .handle(this::makeGenerationPath));
     }
 
 }
