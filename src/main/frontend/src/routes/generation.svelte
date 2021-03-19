@@ -39,7 +39,7 @@
     processing = true;
 		XoomStarterRepository.postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch)
 		  .then(s => {
-        success = ["Project generated. ","Please check folder: " + projectDirectory + "\\" + context.artifactId];
+        success = ["Project generated. ","Please check folder: " + projectDirectory];
         status = s;
         const tempProjectGenerationIndex = $projectGenerationIndex + 1;
         const tempGeneratedProjectsPaths = [...$generatedProjectsPaths, projectDirectory];
