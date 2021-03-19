@@ -5,7 +5,6 @@ export const contextSettings = writable(getLocalStorage("contextSettings"));
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const aggregateSettings = writable(getLocalStorage("aggregateSettings") || []);
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
-export const generationSettings = writable(getLocalStorage("generationSettings"));
 
 /*
 * checking process.browser simply means that only run code snippet in client side.
@@ -40,3 +39,4 @@ export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte',
 export const settingsInfo = createLocalStore('settingsInfo', {});
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
+export const generationSettings = createLocalStore('generationSettings', {});
