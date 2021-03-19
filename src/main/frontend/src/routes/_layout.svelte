@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { theme, isMobile, settingsInfo } from '../stores';
+	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from '../stores';
 	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
@@ -17,7 +17,13 @@
 			.then(response => response.json())
 			.then(data => {
 				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
+					const tempProjectGenerationIndex = $projectGenerationIndex;
+					const tempGeneratedProjectsPaths = [...$generatedProjectsPaths];
+					const tempSettingsInfo = {...$settingsInfo};
 					localStorage.clear();
+					$projectGenerationIndex = tempProjectGenerationIndex;
+					$generatedProjectsPaths = tempGeneratedProjectsPaths;
+					$settingsInfo = tempSettingsInfo;
 				}
 				$settingsInfo = data;					
 			});
