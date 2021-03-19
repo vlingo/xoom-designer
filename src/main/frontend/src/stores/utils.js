@@ -9,7 +9,18 @@ function parseIfJson(val){
 }
 
 export function createLocalStore(key, initialValue) {
-	const localValue = process.browser && localStorage.getItem(key) ? parseIfJson(localStorage.getItem(key)) : initialValue;
+  let localValue = initialValue;
+
+  if (process.browser && localStorage.getItem(key)) {
+    maybeStoredValue = parseIfJson(localStorage.getItem(key));
+    if (!isNaN(maybeStoredValue)) {
+      if ((typeof maybeStoredValue === 'number' && isFinite(maybeStoredValue)) ||
+          (Object.prototype.toString.apply(maybeStoredValue) === '[object Number]')) {
+          localValue = Number(maybeStoredValue);
+      }
+    }
+  }
+
 	const { subscribe, set } = writable(localValue);
 
 	return {
