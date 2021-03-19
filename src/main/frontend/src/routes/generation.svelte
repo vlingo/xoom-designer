@@ -32,9 +32,10 @@
   let failure;
   let dialogActive = false;
   let dialogStatus;
+  let isLoading = false;
 
   function checkPath() {
-    processing = true;
+    isLoading = true;
     Repository.post('/generation-paths', $generationSettings.projectDirectory)
 			.then(response => {
         if(response.status === 201) {
@@ -48,7 +49,7 @@
         }
       })
       .finally(() => {
-        processing = false;
+        isLoading = false;
       })
   }
 
@@ -71,6 +72,11 @@
       })
 	}
 
+  function cancelDialog() {
+    dialogActive = false
+    isLoading = false;
+  }
+
 	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
   $: valid = $generationSettings.projectDirectory && context && model && model.aggregateSettings && model.persistenceSettings && deployment
 </script>
@@ -85,7 +91,7 @@
 	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing}>Generate</Button>
+  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
@@ -125,7 +131,7 @@
           </CardText>
         {/if}
 				<CardActions style="margin-top: auto" class="justify-space-around">
-          <Button on:click={() => dialogActive = false}>{dialogStatus === 'Forbidden' ? 'OK' : 'Cancel'}</Button>
+          <Button on:click={cancelDialog}>{dialogStatus === 'Forbidden' ? 'OK' : 'Cancel'}</Button>
           {#if dialogStatus === 'Conflict'}
             <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
           {/if}
