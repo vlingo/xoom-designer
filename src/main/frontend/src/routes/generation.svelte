@@ -38,7 +38,7 @@
     dialogActive = false;
 		XoomStarterRepository.postGenerationSettings(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
 		  .then(s => {
-        success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory + "\\" + context.artifactId];
+        success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
         status = s;
         $projectGenerationIndex = Number($projectGenerationIndex) + 1;
         $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
