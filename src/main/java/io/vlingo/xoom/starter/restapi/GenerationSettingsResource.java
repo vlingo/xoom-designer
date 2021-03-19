@@ -61,7 +61,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     public Completes<Response> makeGenerationPath(final String path) {
       final File generationPath = new File(path);
 
-      if (generationPath.exists() && generationPath.isDirectory() && generationPath.listFiles().length > 0) {
+      if (generationPath.exists() && generationPath.isDirectory() && generationPath.list().length > 0) {
         return Completes.withSuccess(Response.of(Conflict));
       }
 
