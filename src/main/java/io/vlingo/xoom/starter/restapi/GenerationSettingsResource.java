@@ -78,7 +78,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
       }
 
       System.out.println("MKDIR GEN 6: CREATED: " + path);
-      return Completes.withSuccess(Response.of(Created, headers(of(Location, path))));
+      return Completes.withSuccess(Response.of(Created, headers(of(Location, path)), path));
     }
 
     private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
