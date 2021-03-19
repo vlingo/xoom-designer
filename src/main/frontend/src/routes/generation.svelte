@@ -19,6 +19,7 @@
     Alert
   } from 'svelte-materialify/src';
   import Portal from "svelte-portal/src/Portal.svelte";
+	import Repository from '../api/Repository';
 
 
 	let context = $contextSettings;
@@ -31,6 +32,31 @@
   let success;
   let failure;
   let dialogActive = false;
+  let dialogStatus;
+
+  function checkPath() {
+    processing = true;
+    Repository.post('/generation-paths', $generationSettings.projectDirectory)
+			.then(response => {
+        console.timeLog(response)
+        generate();
+      })
+      .catch(error => {
+        console.log(error)
+        if (error.code === 403) {
+          failure = ['The path directories cannot be created']
+        } else if (error.code === 409) {
+          dialogStatus = 'Conflict';
+          dialogActive = true;
+        } else {
+          dialogStatus = null;
+          dialogActive = true;
+        }
+      })
+      .finally(() => {
+        processing = false;
+      })
+  }
 
 	const generate = () => {
     if(!valid) return;
@@ -65,7 +91,7 @@
 	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
-  <Button class="mt-4 mr-4" on:click={() => dialogActive = true} disabled={!valid}>Generate</Button>
+  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing}>Generate</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}
@@ -102,7 +128,7 @@
 				<CardTitle class="error-text">
           Be Careful!
         </CardTitle>
-        {#if $generatedProjectsPaths.includes($generationSettings.projectDirectory)}
+        {#if dialogStatus === 'Conflict'}
           <CardText>
             You already generated a project with the same path. If that project still exists and you continue, that project will be overwritten.
           </CardText>
