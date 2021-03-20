@@ -55,7 +55,7 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ### Note for Developers
 
-If developing on the `vlingo-xoom-start` project, the `VLINGO_XOOM_STARTER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as bash, do this:
+If developing on the `vlingo-xoom-start` project, the `VLINGO_XOOM_STARTER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as `bash`, do this:
 
 ```
 $ VLINGO_XOOM_STARTER_HOME=[git-clone-path]/dist/starter
