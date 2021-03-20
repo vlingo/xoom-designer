@@ -27,7 +27,20 @@ Download the `vlingo-xoom-starter` compressed distribution file via `curl`:
 * `zip` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.zip`
 * `tar` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.tar`
 
-Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path for the uncompressed folder. Additionally, on Unix-based operating systems, it is necessary to allow _read_ and _execute_ access on executable script, placed under the root folder, as following:
+Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path of the uncompressed folder; that is, the installation folder. Using a *nix shell, such as bash, do this:
+
+```
+ $ VLINGO_XOOM_STARTER_HOME=[installation-path]
+ $ export VLINGO_XOOM_STARTER_HOME
+```
+
+On Windows you can use the *System Properties > Advanced > Environment Variables...* to set the property permanently. For a one-time setting before running the design tool you can use the command line:
+
+```
+ C:\> set VLINGO_XOOM_STARTER_HOME=[installation-path]
+```
+
+Additionally, on Unix-based operating systems, it is necessary to allow _read_ and _execute_ access on executable script, placed under the root folder, as following:
 
 ``` 
  $ chmod 755 xoom
@@ -37,10 +50,42 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ``` 
  $ ./xoom -version
- 1.4.0
+ 1.6.0
 ```
 
-### Application Generation 
+### Note for Developers
+
+If developing on the `vlingo-xoom-start project`, the `VLINGO_XOOM_STARTER_HOME` must be set a bit differently. You must point to an inner folder under the cloned repository. Using a *nix shell, such as bash, do this:
+
+```
+$ VLINGO_XOOM_STARTER_HOME=[git-clone-path]/dist/starter
+$ export VLINGO_XOOM_STARTER_HOME
+```
+
+On Windows you can use the *System Properties > Advanced > Environment Variables...* to set the property permanently. For a one-time setting before running the design tool you can use the command line:
+
+```
+C:\> set VLINGO_XOOM_STARTER_HOME=[git-clone-path]\dist\starter
+```
+
+After making changes, from the root project directory build and run the starter. On *nix do this:
+
+```
+$ mvn clean package -P frontend
+...
+$ java -jar target/vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+```
+On Windows, do this:
+
+```
+C:\[git-clone-path]> mvn clean package -P frontend
+...
+C:\[git-clone-path]> java -jar target\vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+```
+
+We look forward to your VLINGO XOOM contribution!
+
+### Application Generation
 
 In addition to the command-line interface (see below), `vlingo-xoom-starter` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Starter.
 
