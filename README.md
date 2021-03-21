@@ -277,4 +277,13 @@ Remember to create the token with `read:packages` scope.
 
 ## Collaboration
 
-Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md). 
+Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md).
+
+License (See LICENSE file for full license)
+-------------------------------------------
+Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+
+This Source Code Form is subject to the terms of the
+Mozilla Public License, v. 2.0. If a copy of the MPL
+was not distributed with this file, You can obtain
+one at https://mozilla.org/MPL/2.0/.
