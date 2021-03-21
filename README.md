@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
 
-Be guided into the Reactive DOMA and DDD world by the project quick start for the VLINGO XOOM components.
+The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code Reactive, Event-Driven Microservices and Applications using DOMA, DDD, and other approaches.
 
 Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
