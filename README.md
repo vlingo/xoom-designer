@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
 
-Be guided into the Reactive DDD world by the project generator for the VLINGO/XOOM components.
+Be guided into the Reactive DOMA and DDD world by the project quick start for the VLINGO XOOM components.
 
 Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
@@ -13,9 +13,9 @@ If using snapshot builds [follow these instructions](https://github.com/vlingo/v
 
 A common reality of unfamiliarity exists for many developers either when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar, yet outdated, frameworks and tools.
 
-The VLINGO/PLATFORM was created to help developers who face such challenges to confidently move forward and modernize their work. One platform component that greatly accelerates developer modernization efforts is the VLINGO/XOOM Starter. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that can be immediately built and your services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
+The VLINGO XOOM platform SDK was created to help developers who face such challenges to confidently move forward and modernize their work. One platform component that greatly accelerates developer modernization efforts is the VLINGO XOOM Designer. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that can be immediately built and your services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
 
-The next section show you how to run and use the VLINGO/XOOM Starter in your local environment. Let's get started!
+The next section show you how to run and use the VLINGO XOOM Designer in your local environment. Let's get started!
 
 ## Installation 
 
@@ -146,9 +146,9 @@ The fifth and final step defines project component types, and generates the proj
 
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1SB3vLO4INqIJkXOx%2F-MM1UeV0LJIuciHmQ8ax%2Fimage.png)
 
-Enter the project parent folder. In addition, select whether VLINGO/XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
+Enter the project parent folder. In addition, select whether VLINGO XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
 
-Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO/XOOM acceleration components. Use the VLINGO/PLATFORM comprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
+Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO XOOM acceleration components. Use the VLINGO XOOM platform SDK omprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
      
 ### CLI
 
