@@ -68,6 +68,7 @@
 		<slot />
 		</Container>
   	</main>
+		<div id="portal">
 </MaterialApp>
 </div>
 
