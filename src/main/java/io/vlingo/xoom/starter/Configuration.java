@@ -58,6 +58,7 @@ public class Configuration {
             new LoggingStep(),
             new StatusHandlingStep(),
             new ProjectInstallationStep(),
+            new ArchetypeFolderCleanUpStep(),
             new MavenWrapperInstallationStep(),
             new CodeGenerationExecutionerStep(),
             new ContentPurgerStep()
