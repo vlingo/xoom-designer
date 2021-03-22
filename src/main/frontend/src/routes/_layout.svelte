@@ -17,15 +17,15 @@
 			.then(response => response.json())
 			.then(data => {
 				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
-					const tempProjectGenerationIndex = $projectGenerationIndex;
+					const tempProjectGenerationIndex = Number($projectGenerationIndex);
 					const tempGeneratedProjectsPaths = [...$generatedProjectsPaths];
 					const tempSettingsInfo = {...$settingsInfo};
 					localStorage.clear();
-					$projectGenerationIndex = tempProjectGenerationIndex;
+					$projectGenerationIndex = Number(tempProjectGenerationIndex);
 					$generatedProjectsPaths = tempGeneratedProjectsPaths;
 					$settingsInfo = tempSettingsInfo;
 				}
-				$settingsInfo = data;					
+				$settingsInfo = data;			
 			});
 	})
 </script>
@@ -68,6 +68,7 @@
 		<slot />
 		</Container>
   	</main>
+		<div id="portal">
 </MaterialApp>
 </div>
 
