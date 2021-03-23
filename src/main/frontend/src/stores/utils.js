@@ -10,6 +10,7 @@ function parseIfJson(val){
 
 export function createLocalStore(key, initialValue) {
 	const localValue = process.browser && localStorage.getItem(key) ? parseIfJson(localStorage.getItem(key)) : initialValue;
+
 	const { subscribe, set } = writable(localValue);
 
 	return {

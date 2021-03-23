@@ -9,6 +9,14 @@
   export let stateFields;
 
   $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectSettings.map(type => type.name)]);
+  $: if (stateFieldsTypes) {
+    stateFields = stateFields.map(f => {
+      return {
+        ...f,
+        type: [...simpleTypes, ...$valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
+      }
+    })
+  }
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }

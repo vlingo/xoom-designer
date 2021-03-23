@@ -59,25 +59,18 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     }
 
     public Completes<Response> makeGenerationPath(final String path) {
-      System.out.println("MKDIR GEN 1: " + path);
-
       final File generationPath = new File(path);
 
-      System.out.println("MKDIR GEN 2: TESTING FOR EXISTING: " + path);
       if (generationPath.exists() && generationPath.isDirectory() && generationPath.list().length > 0) {
-        System.out.println("MKDIR GEN 3: CONFLICT: " + path);
         return Completes.withSuccess(Response.of(Conflict, path));
       }
 
       try {
-        System.out.println("MKDIR GEN 4: MKDIRS: " + path);
         generationPath.mkdirs();
       } catch (Exception e) {
-        System.out.println("MKDIR GEN 5: FORBIDDEN: " + path);
         return Completes.withSuccess(Response.of(Forbidden, path));
       }
 
-      System.out.println("MKDIR GEN 6: CREATED: " + path);
       return Completes.withSuccess(Response.of(Created, headers(of(Location, path)), path));
     }
 
