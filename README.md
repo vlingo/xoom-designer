@@ -6,9 +6,6 @@ The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code
 
 Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
-### Important
-If using snapshot builds [follow these instructions](https://github.com/vlingo/vlingo-platform#snapshots-repository) or you will experience failures.
-
 ## Introduction
 
 A common reality of unfamiliarity exists for many developers either when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar, yet outdated, frameworks and tools.
@@ -249,31 +246,6 @@ Executing `xoom gen` causes the application generation based on the settings abo
        </tr>
     </tbody>
 </table>
-
-## Building snapshots
-
-To build examples from this repository you'll need access to VLINGO snapshot builds on
-[GitHub Packages](https://github.com/vlingo/vlingo-platform/packages).
-
-GitHub [requires authentication with a Personal Access Token](https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token)
-to use their Maven repository.
-In order to build VLINGO examples locally, you will need to configure the following in your `~/.m2/settings.xml`:
-
-```xml
-<settings>
-  <servers>
-    <server>
-      <id>github</id>
-      <username>GITHUB-USERNAME</username>
-      <password>GITHUB-PERSONAL-ACCESS-TOKEN</password>
-    </server>
-  </servers>
-</settings>
-```
-
-Replace `GITHUB-USERNAME` with your GitHub username, and `GITHUB-PERSONAL-ACCESS-TOKEN` with your Personal Access Token.
-Personal Access Tokens can be created in Settings > Developer Settings > [Personal Access Tokens](https://github.com/settings/tokens) on GitHub.
-Remember to create the token with `read:packages` scope.
 
 ## Collaboration
 
