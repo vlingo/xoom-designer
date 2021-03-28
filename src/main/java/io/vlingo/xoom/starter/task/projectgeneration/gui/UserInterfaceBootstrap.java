@@ -7,18 +7,17 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.gui;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import io.vlingo.actors.Grid;
-import io.vlingo.cluster.ClusterProperties;
 import io.vlingo.cluster.model.Properties;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.annotation.initializer.Xoom;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 @Xoom(name = "xoom-starter")
 @ResourceHandlers(packages = "io.vlingo.xoom.starter.restapi")
@@ -48,7 +47,7 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
         try {
             final java.util.Properties properties = new java.util.Properties();
             properties.load(this.getClass().getResourceAsStream("/vlingo-cluster.properties"));
-            return Properties.openForTest(properties);
+            return Properties.openWith(properties);
         } catch (IOException e) {
             System.out.println("Unable to load cluster properties for Xoom Designer.");
             return null;
