@@ -2,32 +2,30 @@
 	import CardForm from "../components/CardForm.svelte";
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
-	import { aggregateSettings, setLocalStorage } from "../stores";
-	import { Card, Icon } from "svelte-materialify/src";
-	import { mdiPlusThick } from "@mdi/js";
+	import { aggregateSettings, getLocalStorage, setLocalStorage } from "../stores";
+	import { SlideGroup, SlideItem, Icon } from "svelte-materialify/src";
+	import { mdiPlus } from "@mdi/js";
+	import Button from "svelte-materialify/src/components/Button";
 
-	let dialogActive = false;
-	let editMode = false;
+	let dialogActive = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").dialogActive : false;
+	let editMode = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").editMode : false;
 
-	let currentId;
+	let oldAggregate = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").oldAggregate : undefined;
 
 	const newAggregate = () => {
-		currentId = $aggregateSettings.length;
 		dialogActive = true;
+		editMode = false;
 	}
 
-	const edit = (id) => {
-		currentId = id;
+	const edit = (aggregate) => {
+		oldAggregate = aggregate;
 		dialogActive = true;
 		editMode = true;
 	}
 
-	const remove = (id) => {
-		$aggregateSettings.splice(id, 1);
-		$aggregateSettings = $aggregateSettings;
+	const remove = (aggregate) => {
+		$aggregateSettings = $aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(aggregate));
 	}
-
-	$: if(!dialogActive && editMode) editMode = false;
 
 	$: setLocalStorage("aggregateSettings", $aggregateSettings)
 </script>
@@ -38,18 +36,23 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Aggregates" previous="context" next="persistence">
-	<div class="d-flex flex-wrap">
-		<Card class="ma-3" style="width: 15rem; height: 20rem" hover>
-			<div title="Add Aggregate" class="d-flex align-center justify-center" style="width: 100%; height: 100%" on:click={newAggregate}>
-				<Icon class="black-text" path={mdiPlusThick}/>
-			</div>
-		</Card>
-		{#each $aggregateSettings as aggregate, id}
-			<AggregateCard {aggregate} on:edit={() => edit(id)} on:remove={() => remove(id)}/>
-		{/each}
+	<Button class="mb-4" hover on:click={newAggregate}>
+		<div title="Add Aggregate" class="d-flex align-center justify-center">
+			<Icon class="black-text mr-4" path={mdiPlus}/>
+			New Aggregate
+		</div>
+	</Button>
+	<div class="d-flex">
+		<SlideGroup activeClass="white-text">
+			<SlideItem>
+				{#each $aggregateSettings as aggregate}
+					<AggregateCard {aggregate} on:edit={() => edit(aggregate)} on:remove={() => remove(aggregate)}/>
+				{/each}
+			</SlideItem>
+		</SlideGroup>
 	</div>
 </CardForm>
 
 {#if dialogActive}
-	<AggregateDialog bind:dialogActive bind:editMode bind:currentId/>
+	<AggregateDialog bind:dialogActive bind:editMode bind:oldAggregate/>
 {/if}

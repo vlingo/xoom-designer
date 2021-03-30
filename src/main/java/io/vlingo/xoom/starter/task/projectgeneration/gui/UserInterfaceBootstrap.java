@@ -5,15 +5,18 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.gui;
+package io.vlingo.xoom.starter.task.projectgeneration.gui;
 
-import io.vlingo.actors.Stage;
+import io.vlingo.actors.Grid;
+import io.vlingo.cluster.ClusterProperties;
+import io.vlingo.cluster.model.Properties;
 import io.vlingo.http.resource.Configuration;
 import io.vlingo.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.XoomInitializationAware;
 import io.vlingo.xoom.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.annotation.initializer.Xoom;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,19 +27,14 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
     private static int DEFAULT_PORT = 19090;
 
     @Override
-    public Configuration configureServer(final Stage stage, final String[] args) {
-        final Configuration.Timing timing =
-                Configuration.Timing.defineWith(7, 3, 100);
+    public void onInit(final Grid grid) {
+    }
 
-        // final Configuration.Sizing sizing =
-        //         Configuration.Sizing.define().withDispatcherPoolSize(2)
-        //                 .withMaxBufferPoolSize(100)
-        //                 .withMaxMessageSize(4096);
-
+    @Override
+    public Configuration configureServer(final Grid grid, final String[] args) {
         return Configuration.define()
                 .withPort(DEFAULT_PORT)
-                .with(timing);
-                // .with(sizing);
+                .with(Configuration.Timing.defineWith(7, 3, 100));
     }
 
     @Override
@@ -46,7 +44,15 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
     }
 
     @Override
-    public void onInit(final Stage stage) {
+    public Properties clusterProperties() {
+        try {
+            final java.util.Properties properties = new java.util.Properties();
+            properties.load(this.getClass().getResourceAsStream("/vlingo-cluster.properties"));
+            return Properties.openForTest(properties);
+        } catch (IOException e) {
+            System.out.println("Unable to load cluster properties for Xoom Designer.");
+            return null;
+        }
     }
 
 }

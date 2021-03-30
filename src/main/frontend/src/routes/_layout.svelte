@@ -1,10 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	import { theme, isMobile } from '../stores';
+	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from '../stores';
 	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	export let segment;
+	import Repository from '../api/Repository';
 
 	let sidenav = false;
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
@@ -12,6 +13,20 @@
 
 	onMount(() => {
 		isMobile.check();
+		Repository.get('/generation-settings/info')
+			.then(response => response.json())
+			.then(data => {
+				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
+					const tempProjectGenerationIndex = Number($projectGenerationIndex);
+					const tempGeneratedProjectsPaths = [...$generatedProjectsPaths];
+					const tempSettingsInfo = {...$settingsInfo};
+					localStorage.clear();
+					$projectGenerationIndex = Number(tempProjectGenerationIndex);
+					$generatedProjectsPaths = tempGeneratedProjectsPaths;
+					$settingsInfo = tempSettingsInfo;
+				}
+				$settingsInfo = data;			
+			});
 	})
 </script>
 
@@ -27,7 +42,7 @@
     	    </Button>
     	  {/if}
 		</div>
-		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO/XOOM Starter </span></a>
+		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO/XOOM Designer </span></a>
 		<div style="flex-grow:1" />
     	<!-- <a
     	  href="https://github.com/TheComputerM/svelte-materialify"
@@ -53,6 +68,7 @@
 		<slot />
 		</Container>
   	</main>
+		<div id="portal">
 </MaterialApp>
 </div>
 

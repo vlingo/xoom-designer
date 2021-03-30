@@ -1,7 +1,7 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
-import io.vlingo.xoom.starter.task.gui.UserInterfaceManager;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.UserInterfaceManager;
 import io.vlingo.xoom.starter.task.projectgeneration.CommandLineBasedProjectGenerationManager;
 import io.vlingo.xoom.starter.task.projectgeneration.WebBasedProjectGenerationManager;
 import io.vlingo.xoom.starter.task.version.VersionDisplayManager;

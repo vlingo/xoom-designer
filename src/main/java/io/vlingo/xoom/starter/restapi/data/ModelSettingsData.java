@@ -9,19 +9,24 @@ package io.vlingo.xoom.starter.restapi.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModelSettingsData {
 
     public final PersistenceData persistenceSettings;
     public final List<AggregateData> aggregateSettings = new ArrayList<>();
+    public final List<ValueObjectData> valueObjectSettings = new ArrayList<>();
 
     public ModelSettingsData(final PersistenceData persistenceSettings,
-                             final List<AggregateData> aggregateSettings) {
+                             final List<AggregateData> aggregateSettings,
+                             final List<ValueObjectData> valueObjectSettings) {
         this.persistenceSettings = persistenceSettings;
         this.aggregateSettings.addAll(aggregateSettings);
+        this.valueObjectSettings.addAll(valueObjectSettings);
     }
 
-    public List<String> validate(List<String> errorStrings) {
+    public List<String> validate(final List<String> errorStrings) {
         if(persistenceSettings==null) {
             errorStrings.add("ModelSettingsData.persistence is null");
         } else {
@@ -34,6 +39,31 @@ public class ModelSettingsData {
                 aggregateSetting.validate(errorStrings)
             );
         }
+        if(valueObjectSettings != null && !valueObjectSettings.isEmpty()) {
+            final Map<String, List<ValueObjectFieldData>> fieldsByType =
+                    valueObjectSettings.stream().collect(Collectors.toMap(vo -> vo.name, vo -> vo.fields));
+
+            for(final ValueObjectData vo : valueObjectSettings) {
+                try {
+                    validateValueObjectsRecursion(vo.name, vo.fields, fieldsByType);
+                } catch (final IllegalStateException ex) {
+                    errorStrings.add(ex.getMessage());
+                    break;
+                }
+            }
+        }
         return errorStrings;
+    }
+
+    private void validateValueObjectsRecursion(final String parentValueObjectType,
+                                               final List<ValueObjectFieldData> fields,
+                                               final Map<String, List<ValueObjectFieldData>> fieldsByType) {
+        for(final ValueObjectFieldData field : fields) {
+            if (parentValueObjectType.equals(field.type)) {
+                throw new IllegalStateException("Recursive Value Object relationship");
+            } else if (fieldsByType.containsKey(field.type)) {
+                validateValueObjectsRecursion(parentValueObjectType, fieldsByType.get(field.type), fieldsByType);
+            }
+        }
     }
 }

@@ -18,9 +18,9 @@ import static io.vlingo.xoom.starter.task.projectgeneration.steps.ContentAvailab
 public class ContentAvailabilityTest {
 
     private static final String ARTIFACT_ID = "xoom-app";
-    private static final String TARGET_FOLDER = Paths.get("home", "projects").toString();
-    private static final String EXPECTED_DOCKERFILE_PATH = Paths.get(TARGET_FOLDER, ARTIFACT_ID, "Dockerfile").toString();
-    private static final String EXPECTED_KUBERNETES_PATH = Paths.get(TARGET_FOLDER, ARTIFACT_ID, "deployment").toString();
+    private static final String TARGET_FOLDER = Paths.get("home", "projects", "xoom-app").toString();
+    private static final String EXPECTED_DOCKERFILE_PATH = Paths.get(TARGET_FOLDER, "Dockerfile").toString();
+    private static final String EXPECTED_KUBERNETES_PATH = Paths.get(TARGET_FOLDER, "deployment").toString();
 
     @Test
     public void testContentAvailabilityVerification() {

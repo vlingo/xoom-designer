@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.starter.task.docker.DockerCommandManager;
 import io.vlingo.xoom.starter.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.starter.task.gui.UserInterfaceManager;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.UserInterfaceManager;
 import io.vlingo.xoom.starter.task.k8s.KubernetesCommandManager;
 import io.vlingo.xoom.starter.task.projectgeneration.CommandLineBasedProjectGenerationManager;
 import io.vlingo.xoom.starter.task.projectgeneration.WebBasedProjectGenerationManager;

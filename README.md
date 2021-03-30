@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
 
-Be guided into the Reactive DDD world by the project generator for the VLINGO/XOOM components.
+The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code Reactive, Event-Driven Microservices and Applications using DOMA, DDD, and other approaches.
 
 Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
@@ -10,9 +10,9 @@ Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
 
 A common reality of unfamiliarity exists for many developers either when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar, yet outdated, frameworks and tools.
 
-The VLINGO/PLATFORM was created to help developers who face such challenges to confidently move forward and modernize their work. One platform component that greatly accelerates developer modernization efforts is the VLINGO/XOOM Starter. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that can be immediately built and your services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
+The VLINGO XOOM platform SDK was created to help developers who face such challenges to confidently move forward and modernize their work. One platform component that greatly accelerates developer modernization efforts is the VLINGO XOOM Designer. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that can be immediately built and your services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
 
-The next section show you how to run and use the VLINGO/XOOM Starter in your local environment. Let's get started!
+The next section show you how to run and use the VLINGO XOOM Designer in your local environment. Let's get started!
 
 ## Installation 
 
@@ -27,7 +27,20 @@ Download the `vlingo-xoom-starter` compressed distribution file via `curl`:
 * `zip` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.zip`
 * `tar` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.tar`
 
-Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path for the uncompressed folder. Additionally, on Unix-based operating systems, it is necessary to allow _read_ and _execute_ access on executable script, placed under the root folder, as following:
+Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path of the uncompressed folder; that is, the installation folder. Using a *nix shell, such as `bash`, do this:
+
+```
+ $ VLINGO_XOOM_STARTER_HOME=[installation-path]
+ $ export VLINGO_XOOM_STARTER_HOME
+```
+
+On Windows you can use the _System Properties > Advanced > Environment Variables..._ to set the property permanently. For a one-time setting before running the design tool you can use the command line:
+
+```
+ C:\> set VLINGO_XOOM_STARTER_HOME=[installation-path]
+```
+
+Additionally, on *nix systems, it is necessary to set _read_ and _execute_ access on executable script, placed under the root folder, as following:
 
 ``` 
  $ chmod 755 xoom
@@ -37,10 +50,42 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ``` 
  $ ./xoom -version
- 1.4.0
+ 1.6.0
 ```
 
-### Application Generation 
+### Note for Developers
+
+If developing on the `vlingo-xoom-start` project, the `VLINGO_XOOM_STARTER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as `bash`, do this:
+
+```
+$ VLINGO_XOOM_STARTER_HOME=[git-clone-path]/dist/starter
+$ export VLINGO_XOOM_STARTER_HOME
+```
+
+On Windows you can use the *System Properties > Advanced > Environment Variables...* to set the property permanently. For a one-time setting before running the design tool you can use the command line:
+
+```
+C:\> set VLINGO_XOOM_STARTER_HOME=[git-clone-path]\dist\starter
+```
+
+After making changes, from the root project directory build and run the starter. On *nix do this:
+
+```
+$ mvn clean package -P frontend
+...
+$ java -jar target/vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+```
+On Windows, do this:
+
+```
+C:\[git-clone-path]> mvn clean package -P frontend
+...
+C:\[git-clone-path]> java -jar target\vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+```
+
+We look forward to your VLINGO XOOM contribution!
+
+### Application Generation
 
 In addition to the command-line interface (see below), `vlingo-xoom-starter` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Starter.
 
@@ -98,9 +143,9 @@ The fifth and final step defines project component types, and generates the proj
 
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1SB3vLO4INqIJkXOx%2F-MM1UeV0LJIuciHmQ8ax%2Fimage.png)
 
-Enter the project parent folder. In addition, select whether VLINGO/XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
+Enter the project parent folder. In addition, select whether VLINGO XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
 
-Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO/XOOM acceleration components. Use the VLINGO/PLATFORM comprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
+Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO XOOM acceleration components. Use the VLINGO XOOM platform SDK omprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
      
 ### CLI
 
@@ -202,31 +247,15 @@ Executing `xoom gen` causes the application generation based on the settings abo
     </tbody>
 </table>
 
-## Building snapshots
-
-To build examples from this repository you'll need access to VLINGO snapshot builds on
-[GitHub Packages](https://github.com/vlingo/vlingo-platform/packages).
-
-GitHub [requires authentication with a Personal Access Token](https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token)
-to use their Maven repository.
-In order to build VLINGO examples locally, you will need to configure the following in your `~/.m2/settings.xml`:
-
-```xml
-<settings>
-  <servers>
-    <server>
-      <id>github</id>
-      <username>GITHUB-USERNAME</username>
-      <password>GITHUB-PERSONAL-ACCESS-TOKEN</password>
-    </server>
-  </servers>
-</settings>
-```
-
-Replace `GITHUB-USERNAME` with your GitHub username, and `GITHUB-PERSONAL-ACCESS-TOKEN` with your Personal Access Token.
-Personal Access Tokens can be created in Settings > Developer Settings > [Personal Access Tokens](https://github.com/settings/tokens) on GitHub.
-Remember to create the token with `read:packages` scope.
-
 ## Collaboration
 
-Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md). 
+Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md).
+
+License (See LICENSE file for full license)
+-------------------------------------------
+Copyright © 2012-2020 VLINGO LABS. All rights reserved.
+
+This Source Code Form is subject to the terms of the
+Mozilla Public License, v. 2.0. If a copy of the MPL
+was not distributed with this file, You can obtain
+one at https://mozilla.org/MPL/2.0/.

@@ -2,11 +2,21 @@
   import { Select, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
-  import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
+  import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+	import { valueObjectSettings, simpleTypes } from '../../stores';
 
   export let stateFields;
-  const stateFieldsTypes =  formatArrayForSelect(['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char']);
+
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectSettings.map(type => type.name)]);
+  $: if (stateFieldsTypes) {
+    stateFields = stateFields.map(f => {
+      return {
+        ...f,
+        type: [...simpleTypes, ...$valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
+      }
+    })
+  }
 
 	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
@@ -19,7 +29,7 @@
   {#each stateFields as stateField, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-        <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, stateFields, 'name') ]}>Name</TextField>
+        <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-4">
         <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>

@@ -41,8 +41,9 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         if(!retrieve(Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
         if(!retrieve(Label.VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
         if(!retrieve(Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
-//        if(!isXoomVersionValid()) errorStrings.add("Xoom version must be either 1.4.1-SNAPSHOT or 1.4.0");
 
+        if(!areValueObjectNamesValid()) errorStrings.add("Value Object names must follow classname pattern");
+        if(!areValueObjectFieldsValid()) errorStrings.add("Value Object fields must follow fieldname pattern");
         if(!areAggregateNamesValid()) errorStrings.add("Aggregate names must follow classname pattern");
         if(!areStateFieldsValid()) errorStrings.add("State Fields must follow fieldname pattern");
         if(!areDomainEventsValid()) errorStrings.add("Domain Events must follow classname pattern");
@@ -63,12 +64,17 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
         }
     }
 
-    private boolean isXoomVersionValid() {
-        return Stream.of("1.5.1-SNAPSHOT", "1.5.0").anyMatch(retrieve(Label.XOOM_VERSION)::equals);
-    }
-
     private String retrieve(Label label) {
         return parameters.retrieveValue(label);
+    }
+
+    private boolean areValueObjectNamesValid() {
+        return parameters.retrieveAll(Label.VALUE_OBJECT).allMatch(valueObject -> valueObject.value.matches(CLASSNAME_PATTERN));
+    }
+
+    private boolean areValueObjectFieldsValid() {
+        return parameters.retrieveAll(Label.VALUE_OBJECT).flatMap(aggregate -> aggregate.retrieveAllRelated(Label.VALUE_OBJECT_FIELD))
+                .allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN));
     }
 
     private boolean areAggregateNamesValid() {
@@ -76,26 +82,20 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     }
 
     private boolean areStateFieldsValid() {
-        return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN) &&
-                stateField.retrieveAllRelated(Label.FIELD_TYPE).allMatch(type ->
-                  SupportedTypes.names().stream()
-                    .anyMatch(type.value::equalsIgnoreCase) //ignoring case, you can send things like "Long", too.
-                )
-            )
-        ).allMatch(bool -> bool==true);
+        return parameters.retrieveAll(Label.AGGREGATE)
+                .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD))
+                .allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN));
     }
 
     private boolean areDomainEventsValid() {
-        return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).allMatch(event -> event.value.matches(CLASSNAME_PATTERN))
-        ).allMatch(bool -> bool==true);
+        return parameters.retrieveAll(Label.AGGREGATE)
+                .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.DOMAIN_EVENT))
+                .allMatch(event -> event.value.matches(CLASSNAME_PATTERN));
     }
 
     private boolean areMethodsValid() {
-        return parameters.retrieveAll(Label.AGGREGATE).map(
-            aggregate -> aggregate.retrieveRelatedValue(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN)
-        ).allMatch(bool -> bool==true);
+        return parameters.retrieveAll(Label.AGGREGATE).allMatch(
+            aggregate -> aggregate.retrieveRelatedValue(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN));
     }
 
     private boolean areRestResourcesValid() {
@@ -104,17 +104,9 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
             aggregate.retrieveAllRelated(Label.REST_RESOURCES).allMatch(rest ->
                 rest.value.startsWith("/") &&
                 rest.retrieveRelatedValue(Label.ROUTE_PATH).matches(ROUTE_PATTERN) &&
-                aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(
-                    method -> method.value.equals(rest.retrieveRelatedValue(Label.ROUTE_SIGNATURE))
-                ).allMatch(bool -> bool==true) &&
-                Stream.of(
-                    "POST",
-                    "PUT",
-                    "DELETE",
-                    "PATCH",
-                    "GET",
-                    "HEAD",
-                    "OPTIONS"
+                aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).allMatch(
+                    method -> method.value.equals(rest.retrieveRelatedValue(Label.ROUTE_SIGNATURE))) &&
+                Stream.of("POST", "PUT", "DELETE", "PATCH", "GET", "HEAD", "OPTIONS"
                 ).anyMatch(rest.retrieveRelatedValue(Label.ROUTE_METHOD)::equals)
             )
         ).allMatch(bool -> bool==true);

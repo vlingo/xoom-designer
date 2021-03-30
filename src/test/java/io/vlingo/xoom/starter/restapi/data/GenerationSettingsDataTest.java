@@ -1,27 +1,38 @@
-package io.vlingo.xoom.starter.task.projectgeneration.steps;
+// Copyright © 2012-2021 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
 
-import io.vlingo.xoom.starter.restapi.data.*;
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
+package io.vlingo.xoom.starter.restapi.data;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
-public class CodeGenerationParameterValidationStepTest {
+public class GenerationSettingsDataTest {
 
   @Test
-  public void testThatParametersAreValidated() {
+  public void testThatGenerationSettingsDataIsValidated() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), "/home/projects", true, false);
 
-    TaskExecutionContext context = TaskExecutionContextMapper.from(data);
+    Assertions.assertTrue(data.validate().isEmpty());
+  }
 
-    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
+  @Test
+  public void testThatGenerationSettingsDataValidationFailsDueToRecursiveValueObject() {
+    final GenerationSettingsData data =
+            new GenerationSettingsData(contextSettingsData(), invalidModelSettingsData(),
+                    deploymentSettingsData(), "/home/projects", true, false);
+
+    final List<String> errors = data.validate();
+    Assertions.assertEquals(1, errors.size());
+    Assertions.assertEquals("Recursive Value Object relationship", errors.get(0));
   }
 
   private ContextSettingsData contextSettingsData() {
@@ -31,7 +42,12 @@ public class CodeGenerationParameterValidationStepTest {
 
   private ModelSettingsData modelSettingsData() {
     return new ModelSettingsData(persistenceData(),
-            Arrays.asList(personAggregateData(), profileAggregateData()), Collections.emptyList());
+            Arrays.asList(personAggregateData(), profileAggregateData()), Arrays.asList(rankValueObjectData()));
+  }
+
+  private ModelSettingsData invalidModelSettingsData() {
+    return new ModelSettingsData(persistenceData(),
+            Arrays.asList(personAggregateData(), profileAggregateData()), recursiveValueObjectData());
   }
 
   private PersistenceData persistenceData() {
@@ -77,7 +93,21 @@ public class CodeGenerationParameterValidationStepTest {
     return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
   }
 
-    private DeploymentSettingsData deploymentSettingsData() {
-        return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
-    }
+  private List<ValueObjectData> recursiveValueObjectData() {
+    final ValueObjectData classification =
+            new ValueObjectData("Classification",
+                    Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
+
+    return Arrays.asList(rankValueObjectData(), classification);
+  }
+
+  private ValueObjectData rankValueObjectData() {
+    return new ValueObjectData("Rank",
+                    Arrays.asList(new ValueObjectFieldData("points", "int"), new ValueObjectFieldData("classification", "Classification")));
+  }
+
+  private DeploymentSettingsData deploymentSettingsData() {
+    return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
+  }
+
 }
