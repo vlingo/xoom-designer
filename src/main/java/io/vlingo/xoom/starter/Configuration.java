@@ -14,10 +14,10 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.codegen.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
-import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.*;
 import io.vlingo.xoom.starter.task.steps.*;
 
@@ -54,6 +54,9 @@ public class Configuration {
             new MainClassResolverStep(),
             new ArchetypeFolderCleanUpStep(),
             new ArchetypeCommandResolverStep(),
+            new CommandExecutionStep(),
+            new LoggingStep(),
+            new StatusHandlingStep(),
             new AngularSchematicExecutionStep(),
             new CommandExecutionStep(),
             new LoggingStep(),
