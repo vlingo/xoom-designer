@@ -57,7 +57,7 @@ public class Configuration {
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),
-            new AngularSchematicExecutionStep(),
+            new AngularProjectGenerationStep(),
             new CommandExecutionStep(),
             new LoggingStep(),
             new StatusHandlingStep(),

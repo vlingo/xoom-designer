@@ -10,16 +10,15 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 
-import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
+public class AngularProjectGenerationStep extends CommandResolverStep {
 
-public class AngularSchematicExecutionStep extends CommandResolverStep {
+  private static final String PROJECT_GENERATION_COMMAND = "ng new user-interface --routing=true --style=css --skip-git=true --skip-install=true";
 
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
-    final String schematicCommand = "ng schematic";
     final String temporaryProjectPath = context.temporaryProjectPath();
     final String projectFolderCommand = resolveDirectoryChangeCommand(temporaryProjectPath);
-    return projectFolderCommand + " && " + schematicCommand;
+    return projectFolderCommand + " && " + PROJECT_GENERATION_COMMAND;
   }
 
 }
