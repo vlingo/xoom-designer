@@ -1,4 +1,4 @@
-# XOOM Starter
+# XOOM Designer
 
 [![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
 
