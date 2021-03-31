@@ -40,8 +40,8 @@
 	const remove = () => dispatch("remove");
 </script>
 
-<Card class="pa-3 ma-3" style="min-width: 15rem; min-height: 20rem">
-	<div class="d-flex flex-column" style="height: 100%">
+<Card class="pa-3 ma-3" style="min-width: 15rem;height:fit-content;">
+	<div class="">
 	<div class="mb-2">
 		{#each aggregate.api.routes as route}
 			<Card class="command mb-1">
