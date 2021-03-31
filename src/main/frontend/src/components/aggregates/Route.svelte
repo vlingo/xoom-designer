@@ -7,23 +7,19 @@
 	const httpMethods = formatArrayForSelect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']);
 
 	export let methods;
-
-	export let path;
-	export let httpMethod;
-	export let aggregateMethod;
-	export let requireEntityLoad;
+	export let route;
 
 	let requestMethodDisabled = false;
-	$: changedMethodOrMethods(aggregateMethod, methods);
+	$: changedMethodOrMethods(route.aggregateMethod, methods);
 	const changedMethodOrMethods = (aggregateMethod, methods) => {
 		const method = methods.find(m => m.name === aggregateMethod);
 		if(method) {
 			if(method.useFactory) {
 				httpMethod = "POST";
-				requireEntityLoad = false;
+				route.requireEntityLoad = false;
 				requestMethodDisabled = true;
 			} else {
-				requireEntityLoad = true;
+				route.requireEntityLoad = true;
 				requestMethodDisabled = false;
 			}
 		}
@@ -36,21 +32,21 @@
 	};
 
 	afterUpdate(() => {
-		aggregateMethod = methods.some(method => method.name === aggregateMethod) ? aggregateMethod : undefined;
+		route.aggregateMethod = methods.some(method => method.name === route.aggregateMethod) ? route.aggregateMethod : undefined;
 	});
 </script>
 
 <div class="d-flex align-center">
 	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
-		<PathField bind:path />
+		<PathField bind:path={route.path} />
 	</div>
 	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
-		<Select mandatory items={httpMethods} bind:value={httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
+		<Select mandatory items={httpMethods} bind:value={route.httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
 	</div>
 	<div class="mb-3 pb-3" style="flex: 1;">
-		<Select mandatory items={formatArrayForSelect(methods.map(m => m.name))} bind:value={aggregateMethod}>Aggregate Method</Select>
+		<Select mandatory items={formatArrayForSelect(methods.map(m => m.name))} bind:value={route.aggregateMethod}>Aggregate Method</Select>
 	</div>
-	<!-- <Switch class="ma-2" bind:checked={requireEntityLoad}>Require Entity Load</Switch> -->
+	<!-- <Switch class="ma-2" bind:checked={route.requireEntityLoad}>Require Entity Load</Switch> -->
 	<div style="width: 36px;">
 		<DeleteButton title="Delete Route" on:click={deleteRoute}/>
 	</div>
