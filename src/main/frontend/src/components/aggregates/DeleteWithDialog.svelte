@@ -19,9 +19,10 @@
 	const open = () => dialogActive = true;
 	const close = () => dialogActive = false;
 	const onDelete = () => {
-		dispatch('click');
 		close();
-		document.getElementById('portal').innerHTML = '';
+		setTimeout(() => {
+			dispatch('click');
+		}, 0);
 	}
 </script>
 
