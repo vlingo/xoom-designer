@@ -1,6 +1,6 @@
 <script>
 	import { TextField } from 'svelte-materialify/src';
-  import { requireRule, routeRule } from "../../validators";
+  import { pathShouldHaveId, requireRule, routeRule } from "../../validators";
 	import CreateButton from "./CreateButton.svelte";
 
   import Route from "./Route.svelte";
@@ -26,5 +26,11 @@
   {#each routes as route, i}
     <Route bind:route bind:methods on:delete={() => deleteRoute(i)}/>
   {/each}
+
+  {#if routes.filter(route => requireRule(route.path) || pathShouldHaveId(route.path) || !route.aggregateMethod).length > 0 || routeRule(rootPath)}
+    <div class="error-text small">
+      <b>Note:</b> make sure you filled all the fields in the form.
+    </div>
+  {/if}
   <CreateButton title="Add Route" on:click={addRoute}/>
 </fieldset>

@@ -66,5 +66,10 @@
       </div>
     </div>
   {/each}
+  {#if methods.filter(method => requireRule(method.name) || identifierRule(method.name) || isPropertyUniqueRule(method.name, methods, 'name') || method.parameters.length < 1 || !method.event).length > 0}
+    <div class="error-text small">
+      <b>Note:</b> make sure you filled all the fields in the form.
+    </div>
+  {/if}
   <CreateButton title="Add Method" on:click={addMethod}/>
 </fieldset>
