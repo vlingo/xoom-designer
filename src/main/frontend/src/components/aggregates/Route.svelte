@@ -15,7 +15,7 @@
 		const method = methods.find(m => m.name === aggregateMethod);
 		if(method) {
 			if(method.useFactory) {
-				httpMethod = "POST";
+				route.httpMethod = "POST";
 				route.requireEntityLoad = false;
 				requestMethodDisabled = true;
 			} else {
