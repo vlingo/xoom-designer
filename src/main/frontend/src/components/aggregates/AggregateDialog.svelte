@@ -1,7 +1,7 @@
 <script>
 	import { Button, TextField, Dialog, CardActions } from 'svelte-materialify/src';
 	import { aggregateSettings, getLocalStorage, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule, pathShouldHaveId } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
 	import Methods from './Methods.svelte';
@@ -78,7 +78,7 @@
 	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
 	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUniqueRule(m.name, methods, 'name');
-	const validRoute = (r) => r.path && r.aggregateMethod;
+	const validRoute = (r) => r.path && r.aggregateMethod && !pathShouldHaveId(r.path);
 
 	
 	$: {
