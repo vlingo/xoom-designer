@@ -5,6 +5,7 @@
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 	import { valueObjectSettings, simpleTypes } from '../../stores';
+  import FillFieldsNote from './FillFieldsNote.svelte';
 
   export let stateFields;
 
@@ -44,9 +45,7 @@
     </div>
   {/each}
   {#if stateFields.filter(field => requireRule(field.name) || identifierRule(field.name) || isPropertyUniqueRule(field.name, stateFields, 'name') || requireRule(field.type)).length > 0}
-    <div class="error-text small">
-      <b>Note:</b> make sure you filled all the fields in the form.
-    </div>
+    <FillFieldsNote />
   {/if}
   <CreateButton title="Add State Field" on:click={addStateField}/>
 </fieldset>
