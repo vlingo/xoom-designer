@@ -9,7 +9,7 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.parameter.Label;
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterProperties;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
@@ -26,7 +26,7 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
     }
 
     private CodeGenerationParameters loadParameters() {
-        final Properties properties = Configuration.loadProperties();
+        final Properties properties = StarterProperties.properties();
         final CodeGenerationParameters parameters = CodeGenerationParameters.empty();
         PROPERTY_TRANSLATION.entrySet().forEach(
                 entry -> translate(parameters, properties,

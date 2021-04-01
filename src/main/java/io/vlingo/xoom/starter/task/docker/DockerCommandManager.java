@@ -9,10 +9,7 @@ package io.vlingo.xoom.starter.task.docker;
 
 import io.vlingo.xoom.starter.task.*;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.task.steps.LoggingStep;
-import io.vlingo.xoom.starter.task.steps.StatusHandlingStep;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.steps.*;
 
 import java.util.Arrays;
 import java.util.List;

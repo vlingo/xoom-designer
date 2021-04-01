@@ -1,11 +1,14 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
+import io.vlingo.xoom.starter.infrastructure.ResourceLoadException;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.XoomPropertiesLoadStep;
-import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionValue;
+import io.vlingo.xoom.starter.task.steps.XoomPropertiesLoadStep;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
@@ -37,7 +40,7 @@ public class XoomPropertiesLoadStepTest {
     @Test
     public void testMissingDockerSettings() {
         final String propertiesAbsolutePath =
-                Paths.get(System.getProperty("user.dir"), "test").toString();
+                Paths.get(System.getProperty("user.dir"), "invalid-directory").toString();
 
         final OptionValue currentDirectory =
                 OptionValue.with(CURRENT_DIRECTORY, propertiesAbsolutePath);
@@ -46,8 +49,20 @@ public class XoomPropertiesLoadStepTest {
                 TaskExecutionContext.executedFrom(TERMINAL)
                         .withOptions(Arrays.asList(currentDirectory));
 
-        Assertions.assertThrows(DockerCommandException.class, () -> {
+        Assertions.assertThrows(ResourceLoadException.class, () -> {
             new XoomPropertiesLoadStep().process(context);
         });
+    }
+
+    @BeforeEach
+    public void setUp() {
+        Configuration.enableTestProfile();
+        Infrastructure.clear();
+    }
+
+    @BeforeEach
+    public void clear() {
+        Configuration.disableTestProfile();
+        Infrastructure.clear();
     }
 }

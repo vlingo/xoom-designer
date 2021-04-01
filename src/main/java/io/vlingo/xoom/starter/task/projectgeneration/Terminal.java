@@ -7,34 +7,35 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration;
 
-import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
 public enum Terminal {
 
-    WINDOWS("cmd.exe", "/c", "mvnw.cmd", osName -> osName.contains("Windows")),
-    MAC_OS("sh", "-c", "./mvnw", osName -> osName.toUpperCase().contains("MAC OS")),
-    LINUX("sh", "-c", "./mvnw", osName -> osName.contains("Linux"));
+    WINDOWS("cmd.exe", "/c", "mvnw.cmd", "start", osName -> osName.contains("Windows")),
+    MAC_OS("sh", "-c", "./mvnw", "open", osName -> osName.toUpperCase().contains("MAC OS")),
+    LINUX("sh", "-c", "./mvnw", "xdg-open", osName -> osName.contains("Linux"));
 
     private static Terminal ENABLED;
 
     private final String initializationCommand;
     private final String parameter;
     private final String mavenCommand;
+    private final String browserLaunchCommand;
     private final Predicate<String> activationCondition;
 
     Terminal(final String initializationCommand,
              final String parameter,
              final String mavenCommand,
+             final String browserLaunchCommand,
              final Predicate<String> activationCondition) {
         this.initializationCommand = initializationCommand;
         this.parameter = parameter;
         this.mavenCommand = mavenCommand;
+        this.browserLaunchCommand = browserLaunchCommand;
         this.activationCondition = activationCondition;
     }
 
@@ -75,9 +76,13 @@ public enum Terminal {
         return mavenCommand;
     }
 
+    public String browserLaunchCommand() {
+        return browserLaunchCommand;
+    }
+
     public File executableMavenFileLocation() {
         final String executableFile = mavenCommand.replaceAll("./", "");
-        return Paths.get(Resource.ARCHETYPES_FOLDER.path(), executableFile).toFile();
+        return ArchetypesFolder.path().resolve(executableFile).toFile();
     }
 
     public static void grantAllPermissions(final File file) {

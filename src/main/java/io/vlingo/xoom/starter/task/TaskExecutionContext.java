@@ -13,10 +13,13 @@ import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.codegen.parameter.Label.*;
+import static io.vlingo.xoom.codegen.parameter.Label.DEPLOYMENT;
+import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
@@ -26,7 +29,6 @@ public class TaskExecutionContext {
     private final CodeGenerationParameters parameters;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
-    private final Map<String, String> configuration = new HashMap<>();
     private final Agent agent;
 
     public static TaskExecutionContext executedFrom(final Agent agent) {
@@ -61,11 +63,6 @@ public class TaskExecutionContext {
         return this;
     }
 
-    public TaskExecutionContext onConfiguration(final Map<String, String> configurations) {
-        this.configuration.putAll(configurations);
-        return this;
-    }
-
     public TaskExecutionContext onProperties(final Properties properties) {
         this.properties = properties;
         return this;
@@ -91,10 +88,6 @@ public class TaskExecutionContext {
         return agent;
     }
 
-    public String configurationOf(final String key) {
-        return this.configuration.get(key);
-    }
-
     public <T> T propertyOf(final Property property) {
         return (T) propertyOf(property, value -> value);
     }
@@ -118,6 +111,10 @@ public class TaskExecutionContext {
                 .map(optionValue -> optionValue.value()).findFirst().get();
     }
 
+    public boolean hasOption(final OptionName optionName) {
+        return optionValues.stream().anyMatch(optionValue -> optionValue.hasName(optionName));
+    }
+
     public String[] commands() {
         return commands;
     }
@@ -137,5 +134,4 @@ public class TaskExecutionContext {
     public String projectPath() {
         return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
     }
-
 }

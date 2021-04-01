@@ -1,7 +1,8 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import org.junit.jupiter.api.AfterEach;
@@ -55,7 +56,7 @@ public class ArchetypeCommandResolverStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
         Terminal.enable(WINDOWS);
-        Resource.rootIn(WINDOWS_ROOT_FOLDER);
+        Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
         context.with(loadGenerationParameters("E:\\projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
@@ -67,7 +68,7 @@ public class ArchetypeCommandResolverStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnLinux() {
         Terminal.enable(LINUX);
-        Resource.rootIn(DEFAULT_ROOT_FOLDER);
+        Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
@@ -79,7 +80,7 @@ public class ArchetypeCommandResolverStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnMac() {
         Terminal.enable(MAC_OS);
-        Resource.rootIn(DEFAULT_ROOT_FOLDER);
+        Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         archetypeCommandResolverStep.process(context);
         final String[] commands = context.commands();
@@ -99,7 +100,7 @@ public class ArchetypeCommandResolverStepTest {
 
     @BeforeEach
     public void setUp() {
-        Resource.clear();
+        Infrastructure.clear();
         this.archetypeCommandResolverStep = new ArchetypeCommandResolverStep();
         this.context = TaskExecutionContext.withoutOptions();
     }

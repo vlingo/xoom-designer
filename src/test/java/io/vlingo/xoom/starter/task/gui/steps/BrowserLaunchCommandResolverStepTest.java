@@ -1,26 +1,25 @@
 package io.vlingo.xoom.starter.task.gui.steps;
 
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.nio.file.Paths;
 
 public class BrowserLaunchCommandResolverStepTest {
 
-    private static final String EXPECTED_URL = "http://localhost:8080/xoom-starter";
+    private static final String EXPECTED_URL = "http://127.0.0.1:19090/xoom-starter";
+    private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
     @Test
     public void testBrowserLaunchCommandResolution() {
-        final TaskExecutionContext context = TaskExecutionContext.withoutOptions();
-
-        context.onConfiguration(new HashMap<String, String>(){{
-            put(Configuration.USER_INTERFACE_CONFIG_KEY, EXPECTED_URL);
-        }});
+        final TaskExecutionContext context =
+                TaskExecutionContext.withoutOptions();
 
         new BrowserLaunchCommandResolverStep().process(context);
         final String[] commands = context.commands();
@@ -43,8 +42,10 @@ public class BrowserLaunchCommandResolverStepTest {
         throw new RuntimeException("Terminal is not supported");
     }
 
-    @AfterEach
+    @BeforeEach
     public void clear() {
         Terminal.disable();
+        Infrastructure.clear();
+        Infrastructure.resolveInternalResources(HomeDirectory.from(ROOT_FOLDER));
     }
 }

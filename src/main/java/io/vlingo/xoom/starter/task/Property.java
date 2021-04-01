@@ -16,6 +16,7 @@ public enum Property {
     TARGET_FOLDER("target.folder"),
     XOOM_VERSION("vlingo.xoom.version"),
     DEPLOYMENT("deployment"),
+    STARTER_SERVER_PORT("starter.server.port"),
     DOCKER_IMAGE("docker.image"),
     DOCKER_REPOSITORY("docker.repository"),
     GLOO_UPSTREAM("gloo.upstream"),

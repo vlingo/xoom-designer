@@ -7,7 +7,8 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,8 +58,8 @@ public class CodeGenerationParametersLoadStepTest {
 
     @BeforeEach
     public void setUp() {
-        Resource.clear();
-        Resource.rootIn(ROOT_FOLDER);
+        Infrastructure.clear();
+        Infrastructure.resolveInternalResources(HomeDirectory.from(ROOT_FOLDER));
     }
 
 
