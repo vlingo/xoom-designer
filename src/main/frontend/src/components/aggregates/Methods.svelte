@@ -4,6 +4,7 @@
 	import CreateButton from "./CreateButton.svelte";
 	import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+  import FillFieldsNote from './FillFieldsNote.svelte';
 
   export let methods;
   export let stateFields;
@@ -66,5 +67,8 @@
       </div>
     </div>
   {/each}
+  {#if methods.filter(method => requireRule(method.name) || identifierRule(method.name) || isPropertyUniqueRule(method.name, methods, 'name') || method.parameters.length < 1 || !method.event).length > 0}
+    <FillFieldsNote />
+  {/if}
   <CreateButton title="Add Method" on:click={addMethod}/>
 </fieldset>
