@@ -29,6 +29,8 @@ import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
 import io.vlingo.http.resource.DynamicResourceHandler;
 import io.vlingo.http.resource.Resource;
+import io.vlingo.http.resource.serialization.JsonSerialization;
+import io.vlingo.xoom.starter.restapi.data.GenerationPath;
 import io.vlingo.xoom.starter.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.starter.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.starter.task.Task;
@@ -58,20 +60,22 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
         return Completes.withSuccess(Response.of(Ok, serialized(information)));
     }
 
-    public Completes<Response> makeGenerationPath(final String path) {
-      final File generationPath = new File(path);
+    public Completes<Response> makeGenerationPath(final GenerationPath path) {
+      final File generationPath = new File(path.path);
+
+      final String serializedPath = JsonSerialization.serialized(path);
 
       if (generationPath.exists() && generationPath.isDirectory() && generationPath.list().length > 0) {
-        return Completes.withSuccess(Response.of(Conflict, path));
+        return Completes.withSuccess(Response.of(Conflict, serializedPath));
       }
 
       try {
         generationPath.mkdirs();
       } catch (Exception e) {
-        return Completes.withSuccess(Response.of(Forbidden, path));
+        return Completes.withSuccess(Response.of(Forbidden, serializedPath));
       }
 
-      return Completes.withSuccess(Response.of(Created, headers(of(Location, path)), path));
+      return Completes.withSuccess(Response.of(Created, headers(of(Location, path.path)), serializedPath));
     }
 
     private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
@@ -112,7 +116,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
                 get("/api/generation-settings/info")
                         .handle(this::queryGenerationSettingsInformation),
                 post("/api/generation-paths")
-                        .body(String.class)
+                        .body(GenerationPath.class)
                         .handle(this::makeGenerationPath));
     }
 
