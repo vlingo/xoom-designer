@@ -85,7 +85,7 @@ public class Infrastructure {
   public static class StarterServer {
     private static StarterServer instance;
     private static final int DEFAULT_SERVER_PORT = 19090;
-    private static final String DEFAULT_SERVER_HOST = "127.0.0.1";
+    private static final String DEFAULT_SERVER_HOST = "localhost";
     private final URL url;
 
     private static void resolve() {

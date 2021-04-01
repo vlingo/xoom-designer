@@ -1,20 +1,19 @@
 package io.vlingo.xoom.starter.task.gui.steps;
 
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Paths;
-
 public class BrowserLaunchCommandResolverStepTest {
 
-    private static final String EXPECTED_URL = "http://127.0.0.1:19090/xoom-starter";
-    private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
+    private static final String EXPECTED_URL = "http://localhost:19090/xoom-starter";
 
     @Test
     public void testBrowserLaunchCommandResolution() {
@@ -43,9 +42,15 @@ public class BrowserLaunchCommandResolverStepTest {
     }
 
     @BeforeEach
-    public void clear() {
+    public void setUp() {
         Terminal.disable();
         Infrastructure.clear();
-        Infrastructure.resolveInternalResources(HomeDirectory.from(ROOT_FOLDER));
+        Configuration.enableTestProfile();
+        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+    }
+
+    @AfterAll
+    public static void clear() {
+        Configuration.disableTestProfile();
     }
 }

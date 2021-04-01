@@ -21,6 +21,7 @@ import io.vlingo.xoom.starter.task.steps.LoggingStep;
 import io.vlingo.xoom.starter.task.steps.StatusHandlingStep;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +30,8 @@ public class Configuration {
   private static boolean TEST_PROFILE_ENABLED = false;
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.6.0";
-  public static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
   private static final String XOOM_VERSION_PLACEHOLDER = "1.6.1-SNAPSHOT";
+  private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
           new ResourcesLocationStep(),
@@ -77,6 +78,13 @@ public class Configuration {
       return XOOM_VERSION_PLACEHOLDER;
     }
     return version;
+  }
+
+  public static String resolveHomePath() {
+    if(isTestProfileEnabled()) {
+      return Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
+    }
+    return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);
   }
 
   public static void enableTestProfile() {

@@ -6,6 +6,7 @@ import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterProperties;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterServer;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.UserInterface;
 import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,12 @@ public class InfrastructureTest {
 
     @Test
     public void testInfraResourcesAreResolved() {
-        Infrastructure.resolveInternalResources(HomeDirectory.from(ROOT_FOLDER));
+        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
         Infrastructure.resolveExternalResources(ExternalDirectory.from(BASE_PATH));
         Assertions.assertEquals(Paths.get(ROOT_FOLDER, "resources", "archetypes"), ArchetypesFolder.path());
         Assertions.assertEquals(19090, StarterProperties.retrieveServerPort(1));
-        Assertions.assertEquals("http://127.0.0.1:19090", StarterServer.url().toString());
-        Assertions.assertEquals("http://127.0.0.1:19090/xoom-starter", UserInterface.rootContext());
+        Assertions.assertEquals("http://localhost:19090", StarterServer.url().toString());
+        Assertions.assertEquals("http://localhost:19090/xoom-starter", UserInterface.rootContext());
         Assertions.assertFalse(Infrastructure.XoomProperties.properties().isEmpty());
     }
 
@@ -41,8 +42,8 @@ public class InfrastructureTest {
         Infrastructure.clear();
     }
 
-    @BeforeEach
-    public void clear() {
+    @AfterAll
+    public static void clear() {
         Configuration.disableTestProfile();
         Infrastructure.clear();
     }

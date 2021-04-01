@@ -7,22 +7,20 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 import static io.vlingo.xoom.starter.task.Agent.TERMINAL;
 import static io.vlingo.xoom.starter.task.Agent.WEB;
 
 public class CodeGenerationParametersLoadStepTest {
-
-    private static final String ROOT_FOLDER = Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
 
     @Test
     public void testThatPropertiesAreLoaded(){
@@ -59,8 +57,13 @@ public class CodeGenerationParametersLoadStepTest {
     @BeforeEach
     public void setUp() {
         Infrastructure.clear();
-        Infrastructure.resolveInternalResources(HomeDirectory.from(ROOT_FOLDER));
+        Configuration.enableTestProfile();
+        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     }
 
+    @AfterAll
+    public static void clear() {
+        Configuration.disableTestProfile();
+    }
 
 }

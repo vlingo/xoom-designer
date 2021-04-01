@@ -13,7 +13,7 @@ public class HomeDirectory {
   public final String path;
 
   public static HomeDirectory fromEnvironment() {
-    return from(System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE));
+    return from(Configuration.resolveHomePath());
   }
 
   public static HomeDirectory from(final String path) {
