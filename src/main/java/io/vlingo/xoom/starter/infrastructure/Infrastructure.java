@@ -7,8 +7,7 @@
 
 package io.vlingo.xoom.starter.infrastructure;
 
-import io.vlingo.xoom.starter.Configuration;
-import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
+import static io.vlingo.xoom.starter.task.Property.STARTER_SERVER_PORT;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import static io.vlingo.xoom.starter.task.Property.STARTER_SERVER_PORT;
+import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
 
 public class Infrastructure {
 
@@ -110,7 +110,7 @@ public class Infrastructure {
 
   public static class UserInterface {
     private static UserInterface instance;
-    private static final String USER_INTERFACE_CONTEXT = "xoom-starter";
+    private static final String USER_INTERFACE_CONTEXT = "context"; // "xoom-designer": This will not work until a resource for it is created.
     private final String rootContext;
 
     private static void resolve() {

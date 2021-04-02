@@ -1,17 +1,18 @@
 package io.vlingo.xoom.starter.infrastructure;
 
+import java.nio.file.Paths;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import io.vlingo.xoom.starter.Configuration;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterProperties;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterServer;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.UserInterface;
 import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.nio.file.Paths;
 
 public class InfrastructureTest {
 
@@ -25,7 +26,8 @@ public class InfrastructureTest {
         Assertions.assertEquals(Paths.get(ROOT_FOLDER, "resources", "archetypes"), ArchetypesFolder.path());
         Assertions.assertEquals(19090, StarterProperties.retrieveServerPort(1));
         Assertions.assertEquals("http://localhost:19090", StarterServer.url().toString());
-        Assertions.assertEquals("http://localhost:19090/xoom-starter", UserInterface.rootContext());
+        // "xoom-designer": This will not work until a resource for it is created.
+        Assertions.assertEquals("http://localhost:19090/context", UserInterface.rootContext());
         Assertions.assertFalse(Infrastructure.XoomProperties.properties().isEmpty());
     }
 
