@@ -8,7 +8,8 @@ package io.vlingo.xoom.starter.task.gloo;
 
 import io.vlingo.xoom.starter.task.*;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.task.steps.*;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.task.steps.XoomPropertiesLoadStep;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,11 +36,7 @@ public class GlooCommandManager implements TaskManager<List<String>> {
                         .withOptions(optionValues);
 
         final List<TaskExecutionStep> steps =
-                Arrays.asList(new XoomPropertiesLoadStep(),
-                        subTask.commandResolverStep(),
-                        new CommandExecutionStep(),
-                        new LoggingStep(),
-                        new StatusHandlingStep());
+                Arrays.asList(new XoomPropertiesLoadStep(), subTask.commandResolverStep());
 
         steps.forEach(step -> step.process(context));
     }

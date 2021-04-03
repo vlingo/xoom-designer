@@ -5,19 +5,28 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.task.projectgeneration;
+package io.vlingo.xoom.starter.terminal;
 
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public enum Terminal {
 
-    WINDOWS("cmd.exe", "/c", "mvnw.cmd", "start", osName -> osName.contains("Windows")),
-    MAC_OS("sh", "-c", "./mvnw", "open", osName -> osName.toUpperCase().contains("MAC OS")),
-    LINUX("sh", "-c", "./mvnw", "xdg-open", osName -> osName.contains("Linux"));
+    WINDOWS("cmd.exe", "/c", "mvnw.cmd", "start",
+            osName -> osName.contains("Windows"),
+            targetFolder -> targetFolder.substring(0, 2) + " && cd " + targetFolder),
+
+    MAC_OS("sh", "-c", "./mvnw", "open",
+            osName -> osName.toUpperCase().contains("MAC OS"),
+            targetFolder -> "cd " + targetFolder),
+
+    LINUX("sh", "-c", "./mvnw", "xdg-open",
+            osName -> osName.contains("Linux"),
+            targetFolder -> "cd " + targetFolder);
 
     private static Terminal ENABLED;
 
@@ -26,17 +35,20 @@ public enum Terminal {
     private final String mavenCommand;
     private final String browserLaunchCommand;
     private final Predicate<String> activationCondition;
+    private final Function<String, String> directoryChangeCommandResolver;
 
     Terminal(final String initializationCommand,
              final String parameter,
              final String mavenCommand,
              final String browserLaunchCommand,
-             final Predicate<String> activationCondition) {
+             final Predicate<String> activationCondition,
+             final Function<String, String> directoryChangeCommandResolver) {
         this.initializationCommand = initializationCommand;
         this.parameter = parameter;
         this.mavenCommand = mavenCommand;
         this.browserLaunchCommand = browserLaunchCommand;
         this.activationCondition = activationCondition;
+        this.directoryChangeCommandResolver = directoryChangeCommandResolver;
     }
 
     public static Terminal supported() {
@@ -83,6 +95,10 @@ public enum Terminal {
     public File executableMavenFileLocation() {
         final String executableFile = mavenCommand.replaceAll("./", "");
         return ArchetypesFolder.path().resolve(executableFile).toFile();
+    }
+
+    public String resolveDirectoryChangeCommand(final String targetFolder) {
+        return directoryChangeCommandResolver.apply(targetFolder);
     }
 
     public static void grantAllPermissions(final File file) {

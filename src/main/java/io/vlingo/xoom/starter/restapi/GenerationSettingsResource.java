@@ -7,23 +7,6 @@
 
 package io.vlingo.xoom.starter.restapi;
 
-import static io.vlingo.common.serialization.JsonSerialization.serialized;
-import static io.vlingo.http.Response.Status.Conflict;
-import static io.vlingo.http.Response.Status.Created;
-import static io.vlingo.http.Response.Status.Forbidden;
-import static io.vlingo.http.Response.Status.InternalServerError;
-import static io.vlingo.http.Response.Status.Ok;
-import static io.vlingo.http.ResponseHeader.Location;
-import static io.vlingo.http.ResponseHeader.headers;
-import static io.vlingo.http.ResponseHeader.of;
-import static io.vlingo.http.resource.ResourceBuilder.get;
-import static io.vlingo.http.resource.ResourceBuilder.post;
-import static io.vlingo.http.resource.ResourceBuilder.resource;
-import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
-
-import java.io.File;
-import java.util.List;
-
 import io.vlingo.actors.Stage;
 import io.vlingo.common.Completes;
 import io.vlingo.http.Response;
@@ -37,6 +20,15 @@ import io.vlingo.xoom.starter.task.Task;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskStatus;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationInformation;
+
+import java.io.File;
+import java.util.List;
+
+import static io.vlingo.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.http.Response.Status.*;
+import static io.vlingo.http.ResponseHeader.*;
+import static io.vlingo.http.resource.ResourceBuilder.*;
+import static io.vlingo.xoom.starter.task.Task.WEB_BASED_PROJECT_GENERATION;
 
 public class GenerationSettingsResource extends DynamicResourceHandler {
 

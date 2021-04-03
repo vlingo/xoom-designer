@@ -17,43 +17,45 @@ import io.vlingo.xoom.starter.task.k8s.steps.KubernetesPushCommandResolverStep;
 import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.starter.ComponentRegistry.withType;
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
 public enum SubTask {
 
     DOCKER_STATUS(Task.DOCKER, "status",
-            new DockerStatusCommandResolverStep(),
+            new DockerStatusCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     DOCKER_PACKAGE(Task.DOCKER, "package",
-            new DockerPackageCommandResolverStep(),
+            new DockerPackageCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     DOCKER_PUSH(Task.DOCKER, "push",
-            new DockerPushCommandResolverStep(),
+            new DockerPushCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     K8S_PUSH(Task.K8S, "push",
-            new KubernetesPushCommandResolverStep()),
+            new KubernetesPushCommandResolverStep(withType(CommandExecutionProcess.class))),
 
     GLOO_INIT(Task.GLOO, "init",
-            new GlooInitCommandResolverStep(),
+            new GlooInitCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_ROUTE(Task.GLOO, "route",
-            new GlooRouteCommandResolverStep(),
+            new GlooRouteCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_SUSPEND(Task.GLOO, "suspend",
-            new GlooSuspendCommandResolverStep(),
+            new GlooSuspendCommandResolverStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY));
 
     private final Task parentTask;

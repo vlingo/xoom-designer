@@ -7,24 +7,30 @@
 
 package io.vlingo.xoom.starter.task.docker.steps;
 
-import io.vlingo.xoom.starter.task.docker.DockerCommandException;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.docker.DockerCommandException;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.terminal.Terminal;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
-public class DockerPackageCommandResolverStep extends CommandResolverStep {
+public class DockerPackageCommandResolverStep extends CommandExecutionStep {
 
-    private static final String COMMAND_PATTERN = "%s && mvn clean package && docker build ./ -t %s:%s";
+  private static final String COMMAND_PATTERN = "%s && mvn clean package && docker build ./ -t %s:%s";
 
-    @Override
+  public DockerPackageCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+    super(commandExecutionProcess);
+  }
+
+  @Override
     protected String formatCommands(final TaskExecutionContext context) {
         final String tag = context.optionValueOf(TAG);
         final String image = context.propertyOf(DOCKER_IMAGE);
         final String projectDirectoryCommand =
-                resolveDirectoryChangeCommand(context.optionValueOf(CURRENT_DIRECTORY));
+                Terminal.supported().resolveDirectoryChangeCommand(context.optionValueOf(CURRENT_DIRECTORY));
 
         if(image == null) {
             throw new DockerCommandException("Please set the docker.image property in vlingo-xoom.properties");

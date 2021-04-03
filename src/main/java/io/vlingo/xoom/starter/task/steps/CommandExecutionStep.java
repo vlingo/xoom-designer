@@ -8,20 +8,37 @@
 package io.vlingo.xoom.starter.task.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.TaskExecutionException;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.terminal.Terminal;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
-public class CommandExecutionStep implements TaskExecutionStep {
+public abstract class CommandExecutionStep implements TaskExecutionStep {
 
-    public void process(final TaskExecutionContext context) {
-        try {
-            context.followProcess(
-                Runtime.getRuntime().exec(context.commands())
-            );
-        } catch (final IOException e) {
-            e.printStackTrace();
-            throw new TaskExecutionException(e);
-        }
-    }
+  private final CommandExecutionProcess commandExecutionProcess;
+
+  protected CommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
+    this.commandExecutionProcess = commandExecutionProcess;
+  }
+
+  public void process(final TaskExecutionContext context) {
+    grantPermissions();
+    final String commands = formatCommands(context);
+    System.out.println("Executing commands from " + this.getClass().getCanonicalName());
+    commandExecutionProcess.handle(commands);
+  }
+
+  protected abstract String formatCommands(final TaskExecutionContext context);
+
+  protected List<File> executableFiles() {
+    return Collections.emptyList();
+  }
+
+  protected void grantPermissions() {
+    executableFiles().forEach(file -> Terminal.grantAllPermissions(file));
+  }
+
+
 }

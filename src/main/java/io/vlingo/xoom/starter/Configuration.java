@@ -16,14 +16,15 @@ import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.*;
-import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.task.steps.LoggingStep;
-import io.vlingo.xoom.starter.task.steps.StatusHandlingStep;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.terminal.DefaultCommandExecutionProcess;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+
+import static io.vlingo.xoom.starter.ComponentRegistry.withType;
 
 public class Configuration {
 
@@ -32,16 +33,17 @@ public class Configuration {
   private static final String XOOM_VERSION_PLACEHOLDER = "1.6.1-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_STARTER_HOME";
 
+  static {
+    ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
+  }
+
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
           new ResourcesLocationStep(),
           new CodeGenerationParametersLoadStep(),
           new CodeGenerationParameterValidationStep(),
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
-          new ArchetypeCommandResolverStep(),
-          new CommandExecutionStep(),
-          new LoggingStep(),
-          new StatusHandlingStep(),
+          new ArchetypeCommandResolverStep(withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
           new ArchetypeFolderCleanUpStep(),
           new MavenWrapperInstallationStep(),
@@ -66,8 +68,7 @@ public class Configuration {
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
           new ResourcesLocationStep(), new UserInterfaceBootstrapStep(),
-          new BrowserLaunchCommandResolverStep(), new CommandExecutionStep(),
-          new LoggingStep(), new StatusHandlingStep()
+          new BrowserLaunchCommandResolverStep(withType(CommandExecutionProcess.class))
   );
 
   public static String resolveDefaultXoomVersion() {

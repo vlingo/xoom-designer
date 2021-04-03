@@ -7,9 +7,14 @@
 package io.vlingo.xoom.starter.task.gloo.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
-public class GlooInitCommandResolverStep extends CommandResolverStep {
+public class GlooInitCommandResolverStep extends CommandExecutionStep {
+
+    public GlooInitCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+        super(commandExecutionProcess);
+    }
 
     @Override
     protected String formatCommands(TaskExecutionContext context) {

@@ -7,15 +7,19 @@
 package io.vlingo.xoom.starter.task.k8s.steps;
 
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
 import java.nio.file.Paths;
 
-public class KubernetesPushCommandResolverStep extends CommandResolverStep {
+public class KubernetesPushCommandResolverStep extends CommandExecutionStep {
 
     private static final String COMMAND_PATTERN = "kubectl apply -f %s";
 
-    @Override
+  public KubernetesPushCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+    super(commandExecutionProcess);
+  }
+  @Override
     protected String formatCommands(final TaskExecutionContext context) {
         return String.format(COMMAND_PATTERN, Paths.get("deployment", "k8s"));
     }

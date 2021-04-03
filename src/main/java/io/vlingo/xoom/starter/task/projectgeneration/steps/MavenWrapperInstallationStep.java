@@ -10,8 +10,8 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.starter.terminal.Terminal;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

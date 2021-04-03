@@ -9,12 +9,17 @@ package io.vlingo.xoom.starter.task.projectgeneration.gui.steps;
 
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
+import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.terminal.Terminal;
 
-public class BrowserLaunchCommandResolverStep extends CommandResolverStep {
+public class BrowserLaunchCommandResolverStep extends CommandExecutionStep {
 
-    @Override
+  public BrowserLaunchCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+    super(commandExecutionProcess);
+  }
+
+  @Override
     protected String formatCommands(final TaskExecutionContext context) {
         final String browserLaunchCommand = Terminal.supported().browserLaunchCommand();
         return String.format("%s %s", browserLaunchCommand, Infrastructure.UserInterface.rootContext());

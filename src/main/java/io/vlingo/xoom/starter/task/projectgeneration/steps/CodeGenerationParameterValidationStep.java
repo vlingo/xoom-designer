@@ -11,14 +11,12 @@ import io.vlingo.xoom.codegen.parameter.Label;
 import io.vlingo.xoom.codegen.template.projections.ProjectionType;
 import io.vlingo.xoom.codegen.template.storage.DatabaseType;
 import io.vlingo.xoom.codegen.template.storage.StorageType;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.SupportedTypes;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
 
 public class CodeGenerationParameterValidationStep implements TaskExecutionStep {
 

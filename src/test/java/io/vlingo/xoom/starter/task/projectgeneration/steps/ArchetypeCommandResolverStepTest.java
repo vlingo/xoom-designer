@@ -4,7 +4,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
+import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.starter.task.projectgeneration.Terminal.*;
+import static io.vlingo.xoom.starter.terminal.Terminal.*;
 
 public class ArchetypeCommandResolverStepTest {
 
