@@ -7,7 +7,8 @@
 
 package io.vlingo.xoom.starter.infrastructure;
 
-import static io.vlingo.xoom.starter.task.Property.STARTER_SERVER_PORT;
+import io.vlingo.xoom.starter.Profile;
+import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import io.vlingo.xoom.starter.Configuration;
-import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
+import static io.vlingo.xoom.starter.task.Property.STARTER_SERVER_PORT;
 
 public class Infrastructure {
 
@@ -184,7 +184,7 @@ public class Infrastructure {
     }
 
     private Path buildPath(final ExternalDirectory externalDirectory) {
-      final String subFolder = Configuration.isTestProfileEnabled() ? "test" : "main";
+      final String subFolder = Profile.isTestProfileEnabled() ? "test" : "main";
       return Paths.get(externalDirectory.path, "src", subFolder, "resources", "vlingo-xoom.properties");
     }
   }

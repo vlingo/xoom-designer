@@ -1,20 +1,19 @@
 package io.vlingo.xoom.starter.infrastructure;
 
-import java.nio.file.Paths;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterProperties;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterServer;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.UserInterface;
 import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class InfrastructureTest {
+import java.nio.file.Paths;
+
+public class InfrastructureResourcesTest {
 
     private static final String BASE_PATH = System.getProperty("user.dir");
     private static final String ROOT_FOLDER = Paths.get(BASE_PATH, "dist", "starter").toString();
@@ -40,13 +39,13 @@ public class InfrastructureTest {
 
     @BeforeEach
     public void setUp() {
-        Configuration.enableTestProfile();
+        Profile.enableTestProfile();
         Infrastructure.clear();
     }
 
     @AfterAll
     public static void clear() {
-        Configuration.disableTestProfile();
+        Profile.disableTestProfile();
         Infrastructure.clear();
     }
 }

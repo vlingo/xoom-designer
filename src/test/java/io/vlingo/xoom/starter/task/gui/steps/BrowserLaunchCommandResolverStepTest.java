@@ -1,16 +1,15 @@
 package io.vlingo.xoom.starter.task.gui.steps;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BrowserLaunchCommandResolverStepTest {
 
@@ -48,12 +47,12 @@ public class BrowserLaunchCommandResolverStepTest {
     public void setUp() {
         Terminal.disable();
         Infrastructure.clear();
-        Configuration.enableTestProfile();
+        Profile.enableTestProfile();
         Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     }
 
     @AfterAll
     public static void clear() {
-        Configuration.disableTestProfile();
+        Profile.disableTestProfile();
     }
 }

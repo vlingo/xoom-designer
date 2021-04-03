@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.infrastructure.ResourceLoadException;
 import io.vlingo.xoom.starter.task.Property;
@@ -56,13 +56,12 @@ public class XoomPropertiesLoadStepTest {
 
     @BeforeEach
     public void setUp() {
-        Configuration.enableTestProfile();
+        Profile.enableTestProfile();
         Infrastructure.clear();
     }
 
     @BeforeEach
     public void clear() {
-        Configuration.disableTestProfile();
-        Infrastructure.clear();
+        Profile.disableTestProfile();
     }
 }

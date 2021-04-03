@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.gui.steps;
 
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
@@ -22,12 +22,12 @@ public class UserInterfaceBootstrapStepTest {
     @BeforeEach
     public void setUp() {
         Infrastructure.clear();
-        Configuration.enableTestProfile();
+        Profile.enableTestProfile();
         Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     }
 
     @AfterAll
     public static void clear() {
-        Configuration.disableTestProfile();
+        Profile.disableTestProfile();
     }
 }

@@ -1,6 +1,6 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.StarterProperties;
@@ -27,14 +27,14 @@ public class ResourceLocationStepTest {
     @BeforeEach
     public void setUp() {
         Infrastructure.clear();
-        Configuration.enableTestProfile();
+        Profile.enableTestProfile();
         this.context = TaskExecutionContext.withoutOptions();
         this.resourcesLocationStep = new ResourcesLocationStep();
     }
 
     @AfterAll
     public static void clear() {
-        Configuration.disableTestProfile();
+        Profile.disableTestProfile();
     }
 
 }

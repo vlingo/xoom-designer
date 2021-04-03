@@ -27,7 +27,6 @@ import java.util.List;
 
 public class Configuration {
 
-  private static boolean TEST_PROFILE_ENABLED = false;
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.6.0";
   private static final String XOOM_VERSION_PLACEHOLDER = "1.6.1-SNAPSHOT";
@@ -81,21 +80,10 @@ public class Configuration {
   }
 
   public static String resolveHomePath() {
-    if(isTestProfileEnabled()) {
+    if(Profile.isTestProfileEnabled()) {
       return Paths.get(System.getProperty("user.dir"), "dist", "starter").toString();
     }
     return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);
   }
 
-  public static void enableTestProfile() {
-    TEST_PROFILE_ENABLED = true;
-  }
-
-  public static void disableTestProfile() {
-    TEST_PROFILE_ENABLED = false;
-  }
-
-  public static boolean isTestProfileEnabled() {
-    return TEST_PROFILE_ENABLED;
-  }
 }
