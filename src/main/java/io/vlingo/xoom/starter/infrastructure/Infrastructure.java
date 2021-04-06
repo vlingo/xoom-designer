@@ -229,7 +229,7 @@ public class Infrastructure {
 
     public static boolean isInstalled() {
       if(instance == null) {
-        throw new IllegalStateException("Unresolved Angular CLI");
+        resolve();
       }
       return instance.installed;
     }

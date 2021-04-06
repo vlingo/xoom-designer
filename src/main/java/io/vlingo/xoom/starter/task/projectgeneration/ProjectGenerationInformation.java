@@ -19,7 +19,6 @@ public class ProjectGenerationInformation {
   public boolean angularCLI;
 
   public static ProjectGenerationInformation load() {
-
     return new ProjectGenerationInformation();
   }
 
