@@ -1,11 +1,12 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.Agent;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 
-public class DockerPackageCommandResolverStepTest {
+public class DockerPackageCommandExecutionStepTest {
 
     private static final String EXPECTED_COMMAND = "cd /home/projects/xoom-app && mvn clean package && docker build ./ -t xoom-app:latest";
 
@@ -37,11 +38,14 @@ public class DockerPackageCommandResolverStepTest {
 
         context.onProperties(properties);
 
-        new DockerPackageCommandResolverStep().process(context);
+        final CommandRetainer commandRetainer = new CommandRetainer();
 
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
-        Assertions.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
+        new DockerPackageCommandExecutionStep(commandRetainer).process(context);
+
+        final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandsSequence[1]);
+        Assertions.assertEquals(EXPECTED_COMMAND, commandsSequence[2]);
     }
 
     @Test
@@ -58,7 +62,7 @@ public class DockerPackageCommandResolverStepTest {
         context.onProperties(new Properties());
 
         Assertions.assertThrows(DockerCommandException.class, () ->{
-            new DockerPackageCommandResolverStep().process(context);
+            new DockerPackageCommandExecutionStep(new CommandRetainer()).process(context);
         });
     }
 

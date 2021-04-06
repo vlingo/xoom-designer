@@ -4,9 +4,8 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.starter.terminal;
+package io.vlingo.xoom.starter.infrastructure.terminal;
 
-import io.vlingo.xoom.starter.task.TaskExecutionException;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 
 import java.io.BufferedReader;
@@ -22,18 +21,20 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
   private static final String SUCCESS_MESSAGE = "Done!";
   private static final String FAILURE_MESSAGE = "Failed.";
 
+  private Process process;
+
   @Override
-  protected Process execute(final String[] commands) {
+  protected void execute(final String[] commandSequence) {
     try {
-      return Runtime.getRuntime().exec(commands);
+      this.process = Runtime.getRuntime().exec(commandSequence);
     } catch (final IOException e) {
       e.printStackTrace();
-      throw new TaskExecutionException(e);
+      throw new CommandExecutionException(e);
     }
   }
 
   @Override
-  protected void log(final Process process) {
+  protected void log() {
     final ExecutorService executor =
             Executors.newSingleThreadExecutor();
 
@@ -48,11 +49,17 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
   }
 
   @Override
-  protected void handleCommandExecutionStatus(final int commandExecutionStatus) {
-    if(commandExecutionStatus == 0) {
-      System.out.println(SUCCESS_MESSAGE);
-    } else {
-      throw new ProjectGenerationException(FAILURE_MESSAGE);
+  protected void handleCommandExecutionStatus() {
+    try {
+      final int commandExecutionStatus = process.waitFor();
+      if(commandExecutionStatus == 0) {
+        System.out.println(SUCCESS_MESSAGE);
+      } else {
+        throw new ProjectGenerationException(FAILURE_MESSAGE);
+      }
+    } catch (final InterruptedException e) {
+      e.printStackTrace();
+      throw new CommandExecutionException(e);
     }
   }
 }

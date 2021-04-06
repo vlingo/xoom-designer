@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.starter.task.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.starter.terminal.Terminal;
 
 import java.io.File;
 import java.util.Collections;

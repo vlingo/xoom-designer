@@ -23,8 +23,6 @@ import static io.vlingo.xoom.codegen.parameter.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
-    private Process process;
-    private String[] commands;
     private Properties properties;
     private final CodeGenerationParameters parameters;
     private final List<String> args = new ArrayList<>();
@@ -42,10 +40,6 @@ public class TaskExecutionContext {
     private TaskExecutionContext(final Agent agent) {
         this.agent = agent;
         this.parameters = CodeGenerationParameters.empty();
-    }
-
-    public void followProcess(final Process process) {
-        this.process = process;
     }
 
     public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
@@ -68,16 +62,8 @@ public class TaskExecutionContext {
         return this;
     }
 
-    public void withCommands(final String[] commands) {
-        this.commands = commands;
-    }
-
     public void addArgs(final List<String> args) {
         this.args.addAll(args);
-    }
-
-    public Process process() {
-        return process;
     }
 
     public Properties properties() {
@@ -113,10 +99,6 @@ public class TaskExecutionContext {
 
     public boolean hasOption(final OptionName optionName) {
         return optionValues.stream().anyMatch(optionValue -> optionValue.hasName(optionName));
-    }
-
-    public String[] commands() {
-        return commands;
     }
 
     public List<String> args() {

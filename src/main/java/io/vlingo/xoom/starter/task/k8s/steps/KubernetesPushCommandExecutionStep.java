@@ -6,17 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.k8s.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
 import java.nio.file.Paths;
 
-public class KubernetesPushCommandResolverStep extends CommandExecutionStep {
+public class KubernetesPushCommandExecutionStep extends CommandExecutionStep {
 
     private static final String COMMAND_PATTERN = "kubectl apply -f %s";
 
-  public KubernetesPushCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+  public KubernetesPushCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
   @Override

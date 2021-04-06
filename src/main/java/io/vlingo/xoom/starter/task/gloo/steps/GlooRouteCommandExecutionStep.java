@@ -6,22 +6,22 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.gloo.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskExecutionException;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GlooRouteCommandResolverStep extends CommandExecutionStep {
+public class GlooRouteCommandExecutionStep extends CommandExecutionStep {
 
     private static final String RESOURCE_PREFIX = "gloo.resource.";
     private static final String GATEWAY_PREFIX = "gloo.gateway.";
     private static final String COMMAND_PATTERN = "glooctl add route --path-exact /%s --dest-name %s --prefix-rewrite /%s";
 
-  public GlooRouteCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+  public GlooRouteCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
 

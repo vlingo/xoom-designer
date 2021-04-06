@@ -6,13 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.gloo.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
 
-public class GlooInitCommandResolverStep extends CommandExecutionStep {
+public class GlooInitCommandExecutionStep extends CommandExecutionStep {
 
-    public GlooInitCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+    public GlooInitCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
         super(commandExecutionProcess);
     }
 

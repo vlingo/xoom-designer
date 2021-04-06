@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.starter.terminal;
+package io.vlingo.xoom.starter.infrastructure.terminal;
 
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 

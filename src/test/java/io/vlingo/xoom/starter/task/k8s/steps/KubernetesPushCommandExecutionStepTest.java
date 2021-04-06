@@ -7,12 +7,13 @@
 
 package io.vlingo.xoom.starter.task.k8s.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class KubernetesPushCommandResolverStepTest {
+public class KubernetesPushCommandExecutionStepTest {
 
     private static final String LINUX_EXPECT_COMMAND = "kubectl apply -f deployment/k8s";
     private static final String WINDOWS_EXPECT_COMMAND = "kubectl apply -f deployment\\k8s";
@@ -27,11 +28,14 @@ public class KubernetesPushCommandResolverStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        new KubernetesPushCommandResolverStep().process(context);
+        final CommandRetainer commandRetainer = new CommandRetainer();
 
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
-        Assertions.assertEquals(expectedCommand, context.commands()[2]);
+        new KubernetesPushCommandExecutionStep(commandRetainer).process(context);
+
+        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
+        Assertions.assertEquals(expectedCommand, commandSequence[2]);
     }
 
 }

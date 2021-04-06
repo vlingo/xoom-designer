@@ -6,15 +6,16 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.gloo.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.Property;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
 
-public class GlooRouteCommandResolverStepTest {
+public class GlooRouteCommandExecutionStepTest {
 
     private static final String EXPECTED_COMMAND =
             "glooctl add route --path-exact /account/type --dest-name default-banking-8080 --prefix-rewrite /v1/account/type && " +
@@ -37,10 +38,12 @@ public class GlooRouteCommandResolverStepTest {
 
         context.onProperties(properties);
 
-        new GlooRouteCommandResolverStep().process(context);
+        final CommandRetainer commandRetainer = new CommandRetainer();
+        new GlooRouteCommandExecutionStep(commandRetainer).process(context);
 
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
-        Assertions.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
+        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
+        Assertions.assertEquals(EXPECTED_COMMAND, commandSequence[2]);
     }
 }

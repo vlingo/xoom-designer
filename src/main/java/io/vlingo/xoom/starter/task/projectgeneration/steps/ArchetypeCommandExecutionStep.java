@@ -8,19 +8,19 @@
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
 import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.archetype.Archetype;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.starter.terminal.Terminal;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public final class ArchetypeCommandResolverStep extends CommandExecutionStep {
+public final class ArchetypeCommandExecutionStep extends CommandExecutionStep {
 
-  public ArchetypeCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+  public ArchetypeCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
   @Override

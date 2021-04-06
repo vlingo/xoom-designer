@@ -3,8 +3,9 @@ package io.vlingo.xoom.starter.task.projectgeneration.steps;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +15,11 @@ import java.io.File;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
-import static io.vlingo.xoom.starter.terminal.Terminal.*;
+import static io.vlingo.xoom.starter.infrastructure.terminal.Terminal.*;
 
-public class ArchetypeCommandResolverStepTest {
+public class ArchetypeCommandExecutionStepTest {
 
     private TaskExecutionContext context;
-    private ArchetypeCommandResolverStep archetypeCommandResolverStep;
 
     private static final String WINDOWS_ROOT_FOLDER = Paths.get("D:", "tools", "starter").toString();
 
@@ -58,11 +58,12 @@ public class ArchetypeCommandResolverStepTest {
         Terminal.enable(WINDOWS);
         Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
         context.with(loadGenerationParameters("E:\\projects"));
-        archetypeCommandResolverStep.process(context);
-        final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
-        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND_ON_WINDOWS, commands[2]);
+        final CommandRetainer commandRetainer = new CommandRetainer();
+        new ArchetypeCommandExecutionStep(commandRetainer).process(context);
+        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
+        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND_ON_WINDOWS, commandSequence[2]);
     }
 
     @Test
@@ -70,11 +71,12 @@ public class ArchetypeCommandResolverStepTest {
         Terminal.enable(LINUX);
         Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
-        archetypeCommandResolverStep.process(context);
-        final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
-        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND, commands[2]);
+        final CommandRetainer commandRetainer = new CommandRetainer();
+        new ArchetypeCommandExecutionStep(commandRetainer).process(context);
+        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
+        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND, commandSequence[2]);
     }
 
     @Test
@@ -82,11 +84,12 @@ public class ArchetypeCommandResolverStepTest {
         Terminal.enable(MAC_OS);
         Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
-        archetypeCommandResolverStep.process(context);
-        final String[] commands = context.commands();
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
-        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND, commands[2]);
+        final CommandRetainer commandRetainer = new CommandRetainer();
+        new ArchetypeCommandExecutionStep(commandRetainer).process(context);
+        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
+        Assertions.assertEquals(EXPECTED_ARCHETYPE_COMMAND, commandSequence[2]);
     }
 
     private CodeGenerationParameters loadGenerationParameters(final String targetFolder) {
@@ -101,7 +104,6 @@ public class ArchetypeCommandResolverStepTest {
     @BeforeEach
     public void setUp() {
         Infrastructure.clear();
-        this.archetypeCommandResolverStep = new ArchetypeCommandResolverStep();
         this.context = TaskExecutionContext.withoutOptions();
     }
 

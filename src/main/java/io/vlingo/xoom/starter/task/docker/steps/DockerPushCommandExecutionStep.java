@@ -1,23 +1,23 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.starter.terminal.Terminal;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 import static io.vlingo.xoom.starter.task.Property.DOCKER_REPOSITORY;
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
-public class DockerPushCommandResolverStep extends CommandExecutionStep {
+public class DockerPushCommandExecutionStep extends CommandExecutionStep {
 
     private static final String LOCAL = "LOCAL";
     private static final String REMOTE = "REMOTE";
     private static final String COMMAND_PATTERN = "%s && docker tag %s:%s %s:%s && docker push %s:%s";
 
-  public DockerPushCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+  public DockerPushCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
 

@@ -1,10 +1,11 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ import static io.vlingo.xoom.starter.task.Agent.TERMINAL;
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 import static io.vlingo.xoom.starter.task.Property.DOCKER_REPOSITORY;
 
-public class DockerPushCommandResolverStepTest {
+public class DockerPushCommandExecutionStepTest {
 
     private static final String EXPECTED_COMMAND = "cd /home/projects/xoom-app && docker tag xoom-app:1.0.0 vlingo/xoom-app:latest && docker push vlingo/xoom-app:latest";
 
@@ -40,11 +41,14 @@ public class DockerPushCommandResolverStepTest {
 
         context.onProperties(properties);
 
-        new DockerPushCommandResolverStep().process(context);
+        final CommandRetainer commandRetainer = new CommandRetainer();
 
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
-        Assertions.assertEquals(EXPECTED_COMMAND, context.commands()[2]);
+        new DockerPushCommandExecutionStep(commandRetainer).process(context);
+
+        final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandsSequence[1]);
+        Assertions.assertEquals(EXPECTED_COMMAND, commandsSequence[2]);
     }
 
     @Test
@@ -64,7 +68,7 @@ public class DockerPushCommandResolverStepTest {
         context.onProperties(properties);
 
         Assertions.assertThrows(DockerCommandException.class, () -> {
-            new DockerPushCommandResolverStep().process(context);
+            new DockerPushCommandExecutionStep(new CommandRetainer()).process(context);
         });
     }
 

@@ -3,15 +3,16 @@ package io.vlingo.xoom.starter.task.gui.steps;
 import io.vlingo.xoom.starter.Profile;
 import io.vlingo.xoom.starter.infrastructure.HomeDirectory;
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
-import io.vlingo.xoom.starter.terminal.Terminal;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class BrowserLaunchCommandResolverStepTest {
+public class BrowserLaunchCommandExecutionStepTest {
 
     // "xoom-designer": This will not work until a resource for it is created.
     // private static final String EXPECTED_URL = "http://localhost:19090/xoom-designer";
@@ -22,8 +23,11 @@ public class BrowserLaunchCommandResolverStepTest {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        new BrowserLaunchCommandResolverStep().process(context);
-        final String[] commands = context.commands();
+        final CommandRetainer commandRetainer = new CommandRetainer();
+
+        new BrowserLaunchCommandExecutionStep(commandRetainer).process(context);
+
+        final String[] commands = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
         Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);
         Assertions.assertEquals(expectedLaunchCommand(), commands[2]);

@@ -8,14 +8,14 @@
 package io.vlingo.xoom.starter.task.projectgeneration.gui.steps;
 
 import io.vlingo.xoom.starter.infrastructure.Infrastructure;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.starter.terminal.Terminal;
 
-public class BrowserLaunchCommandResolverStep extends CommandExecutionStep {
+public class BrowserLaunchCommandExecutionStep extends CommandExecutionStep {
 
-  public BrowserLaunchCommandResolverStep(final CommandExecutionProcess commandExecutionProcess) {
+  public BrowserLaunchCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
 

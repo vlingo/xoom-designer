@@ -10,6 +10,7 @@ package io.vlingo.xoom.starter;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class ComponentRegistry {
 
   private static final Map<String, Object> COMPONENTS = new HashMap<>();

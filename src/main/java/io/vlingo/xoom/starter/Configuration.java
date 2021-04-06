@@ -13,12 +13,12 @@ import io.vlingo.xoom.codegen.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.codegen.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.codegen.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandResolverStep;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
 import io.vlingo.xoom.starter.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.*;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.starter.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.starter.terminal.DefaultCommandExecutionProcess;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class Configuration {
           new CodeGenerationParameterValidationStep(),
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
-          new ArchetypeCommandResolverStep(withType(CommandExecutionProcess.class)),
+          new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
           new ArchetypeFolderCleanUpStep(),
           new MavenWrapperInstallationStep(),
@@ -68,7 +68,7 @@ public class Configuration {
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
           new ResourcesLocationStep(), new UserInterfaceBootstrapStep(),
-          new BrowserLaunchCommandResolverStep(withType(CommandExecutionProcess.class))
+          new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
   );
 
   public static String resolveDefaultXoomVersion() {

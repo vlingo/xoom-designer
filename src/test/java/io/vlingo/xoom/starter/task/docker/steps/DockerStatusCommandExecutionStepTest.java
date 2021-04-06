@@ -1,8 +1,9 @@
 package io.vlingo.xoom.starter.task.docker.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.docker.DockerCommandException;
-import io.vlingo.xoom.starter.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,9 @@ import java.util.Properties;
 
 import static io.vlingo.xoom.starter.task.Property.DOCKER_IMAGE;
 
-public class DockerStatusCommandResolverStepTest {
+public class DockerStatusCommandExecutionStepTest {
 
-    private static final String EXPECT_COMMAND = "docker ps --filter ancestor=xoom-app";
+    private static final String EXPECTED_COMMAND = "docker ps --filter ancestor=xoom-app";
 
     @Test
     public void testDockerStatusCommandResolution() {
@@ -24,11 +25,14 @@ public class DockerStatusCommandResolverStepTest {
 
         context.onProperties(properties);
 
-        new DockerStatusCommandResolverStep().process(context);
+        final CommandRetainer commandRetainer = new CommandRetainer();
 
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), context.commands()[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), context.commands()[1]);
-        Assertions.assertEquals(EXPECT_COMMAND, context.commands()[2]);
+        new DockerStatusCommandExecutionStep(commandRetainer).process(context);
+
+        final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
+        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);
+        Assertions.assertEquals(Terminal.supported().parameter(), commandsSequence[1]);
+        Assertions.assertEquals(EXPECTED_COMMAND, commandsSequence[2]);
     }
 
     @Test
@@ -42,7 +46,7 @@ public class DockerStatusCommandResolverStepTest {
         context.onProperties(new Properties());
 
         Assertions.assertThrows(DockerCommandException.class, () -> {
-            new DockerStatusCommandResolverStep().process(context);
+            new DockerStatusCommandExecutionStep(new CommandRetainer()).process(context);
         });
     }
 }
