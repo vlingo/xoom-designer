@@ -1,6 +1,5 @@
 package io.vlingo.xoom.starter;
 
-import com.google.common.collect.Maps;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.template.autodispatch.AutoDispatchMappingGenerationStep;
@@ -45,7 +44,7 @@ public class Configuration {
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
           new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
-          new AngularSchematicExecutionStep(),
+          new AngularSchematicExecutionStep(withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
           new ArchetypeFolderCleanUpStep(),
           new MavenWrapperInstallationStep(),
