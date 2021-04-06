@@ -52,7 +52,7 @@ public class BrowserLaunchCommandExecutionStepTest {
         Terminal.disable();
         Infrastructure.clear();
         Profile.enableTestProfile();
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+        Infrastructure.resolvePrimaryResources(HomeDirectory.fromEnvironment());
     }
 
     @AfterAll

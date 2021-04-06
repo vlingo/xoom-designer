@@ -56,7 +56,7 @@ public class ArchetypeCommandExecutionStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
         Terminal.enable(WINDOWS);
-        Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
+        Infrastructure.resolvePrimaryResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
         context.with(loadGenerationParameters("E:\\projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
         new ArchetypeCommandExecutionStep(commandRetainer).process(context);
@@ -69,7 +69,7 @@ public class ArchetypeCommandExecutionStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnLinux() {
         Terminal.enable(LINUX);
-        Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
+        Infrastructure.resolvePrimaryResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
         new ArchetypeCommandExecutionStep(commandRetainer).process(context);
@@ -82,7 +82,7 @@ public class ArchetypeCommandExecutionStepTest {
     @Test
     public void testCommandPreparationWithKubernetesArchetypeOnMac() {
         Terminal.enable(MAC_OS);
-        Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
+        Infrastructure.resolvePrimaryResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
         new ArchetypeCommandExecutionStep(commandRetainer).process(context);

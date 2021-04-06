@@ -7,6 +7,7 @@
 package io.vlingo.xoom.starter.task.projectgeneration;
 
 import io.vlingo.xoom.starter.Configuration;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 
 import java.io.File;
 
@@ -15,8 +16,10 @@ public class ProjectGenerationInformation {
   public final String userHomePath;
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
+  public boolean angularCLI;
 
   public static ProjectGenerationInformation load() {
+
     return new ProjectGenerationInformation();
   }
 
@@ -24,5 +27,7 @@ public class ProjectGenerationInformation {
     this.pathSeparator = File.separator;
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
+    this.angularCLI = Infrastructure.AngularCLI.isInstalled();
   }
+
 }

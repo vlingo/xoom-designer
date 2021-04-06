@@ -20,7 +20,7 @@ public class InfrastructureResourcesTest {
 
     @Test
     public void testInfraResourcesAreResolved() {
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+        Infrastructure.resolvePrimaryResources(HomeDirectory.fromEnvironment());
         Infrastructure.resolveExternalResources(ExternalDirectory.from(BASE_PATH));
         Assertions.assertEquals(Paths.get(ROOT_FOLDER, "resources", "archetypes"), ArchetypesFolder.path());
         Assertions.assertEquals(19090, StarterProperties.retrieveServerPort(1));
@@ -33,7 +33,7 @@ public class InfrastructureResourcesTest {
     @Test
     public void testNullPathUpdate() {
         Assertions.assertThrows(InvalidResourcesPathException.class, () -> {
-            Infrastructure.resolveInternalResources(HomeDirectory.from(null));
+            Infrastructure.resolvePrimaryResources(HomeDirectory.from(null));
         });
     }
 

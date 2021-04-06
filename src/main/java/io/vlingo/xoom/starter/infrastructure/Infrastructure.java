@@ -8,6 +8,8 @@
 package io.vlingo.xoom.starter.infrastructure;
 
 import io.vlingo.xoom.starter.Profile;
+import io.vlingo.xoom.starter.infrastructure.terminal.ObservableCommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.ObservableCommandExecutionProcess.CommandExecutionObserver;
 import io.vlingo.xoom.starter.task.projectgeneration.InvalidResourcesPathException;
 
 import java.io.File;
@@ -23,7 +25,7 @@ import static io.vlingo.xoom.starter.task.Property.STARTER_SERVER_PORT;
 
 public class Infrastructure {
 
-  public static void resolveInternalResources(final HomeDirectory homeDirectory) {
+  public static void resolvePrimaryResources(final HomeDirectory homeDirectory) {
     if (!homeDirectory.isValid()) {
       throw new InvalidResourcesPathException();
     }
@@ -31,6 +33,7 @@ public class Infrastructure {
     StarterProperties.resolve(homeDirectory);
     StarterServer.resolve();
     UserInterface.resolve();
+    AngularCLI.resolve();
   }
 
   public static void resolveExternalResources(final ExternalDirectory externalDirectory) {
@@ -187,5 +190,46 @@ public class Infrastructure {
       final String subFolder = Profile.isTestProfileEnabled() ? "test" : "main";
       return Paths.get(externalDirectory.path, "src", subFolder, "resources", "vlingo-xoom.properties");
     }
+  }
+
+  public static class AngularCLI {
+    private static AngularCLI instance;
+    private boolean installed = false;
+
+    public static void resolve() {
+      if(instance == null) {
+        instance = new AngularCLI();
+      }
+    }
+
+    private AngularCLI() {
+      checkInstallation();
+    }
+
+    private void checkInstallation() {
+      new ObservableCommandExecutionProcess(angularCliCommandObserver()).handle("ng version");
+    }
+
+    private CommandExecutionObserver angularCliCommandObserver() {
+      return new CommandExecutionObserver() {
+        @Override
+        public void onSuccess() {
+          installed = true;
+        }
+
+        @Override
+        public void onFailure() {
+          installed = false;
+        }
+      };
+    }
+
+    public static boolean isInstalled() {
+      if(instance == null) {
+        throw new IllegalStateException("Unresolved Angular CLI");
+      }
+      return instance.installed;
+    }
+
   }
 }

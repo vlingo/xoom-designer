@@ -23,7 +23,7 @@ public class UserInterfaceBootstrapStepTest {
     public void setUp() {
         Infrastructure.clear();
         Profile.enableTestProfile();
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+        Infrastructure.resolvePrimaryResources(HomeDirectory.fromEnvironment());
     }
 
     @AfterAll
