@@ -25,9 +25,8 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
 
   public void process(final TaskExecutionContext context) {
     grantPermissions();
-    final String commands = formatCommands(context);
     System.out.println("Executing commands from " + this.getClass().getCanonicalName());
-    commandExecutionProcess.handle(commands);
+    commandExecutionProcess.handle(formatCommands(context));
   }
 
   protected abstract String formatCommands(final TaskExecutionContext context);
