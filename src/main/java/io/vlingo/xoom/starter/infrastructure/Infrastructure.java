@@ -107,6 +107,9 @@ public class Infrastructure {
     }
 
     public static URL url() {
+      if(instance == null) {
+        throw new IllegalStateException("Unresolved Starter Server");
+      }
       return instance.url;
     }
   }
