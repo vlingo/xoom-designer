@@ -19,7 +19,7 @@ public enum Profile {
   }
 
   public static void disableTestProfile() {
-    active = TEST;
+    active = PRODUCTION;
   }
 
   public static boolean isTestProfileEnabled() {
