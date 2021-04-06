@@ -8,7 +8,7 @@
 package io.vlingo.xoom.starter.task.projectgeneration.archetype;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 
 import java.io.File;
 import java.util.ArrayList;

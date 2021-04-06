@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
@@ -40,7 +37,7 @@ public class TaskExecutionContextMapperTest {
         Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
         Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
         Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-        Assertions.assertEquals("1.5.3-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+        Assertions.assertEquals("1.6.1-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
         Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
         Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
         Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));

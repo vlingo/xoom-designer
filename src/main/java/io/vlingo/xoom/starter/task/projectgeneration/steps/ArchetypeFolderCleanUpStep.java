@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.starter.task.projectgeneration.archetype.Archetype;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static io.vlingo.xoom.starter.Configuration.MAVEN_WRAPPER_DIRECTORY;
-import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
 
 public class ArchetypeFolderCleanUpStep implements TaskExecutionStep {
 
@@ -34,7 +34,7 @@ public class ArchetypeFolderCleanUpStep implements TaskExecutionStep {
     @Override
     public void process(final TaskExecutionContext context) {
         try {
-            final Path archetypesFolder = Paths.get(ARCHETYPES_FOLDER.path());
+            final Path archetypesFolder = ArchetypesFolder.path();
             Files.list(archetypesFolder).filter(Files::isDirectory)
                     .filter(LEFTOVERS).forEach(this::removeDirectory);
         } catch (final IOException e) {

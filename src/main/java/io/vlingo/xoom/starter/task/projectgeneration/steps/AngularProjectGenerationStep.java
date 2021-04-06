@@ -7,17 +7,21 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
 
-public class AngularProjectGenerationStep extends CommandResolverStep {
+public class AngularProjectGenerationStep extends CommandExecutionStep {
 
+  public AngularProjectGenerationStep(final CommandExecutionProcess commandExecutionProcess) {
+    super(commandExecutionProcess);
+  }
   private static final String PROJECT_GENERATION_COMMAND = "ng new user-interface --routing=true --style=css --skip-git=true --skip-install=true";
 
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
-    final String temporaryProjectPath = context.temporaryProjectPath();
-    final String projectFolderCommand = resolveDirectoryChangeCommand(temporaryProjectPath);
+    final String projectFolderCommand = Terminal.supported().resolveDirectoryChangeCommand(context.temporaryProjectPath());
     return projectFolderCommand + " && " + PROJECT_GENERATION_COMMAND;
   }
 

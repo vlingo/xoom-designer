@@ -4,6 +4,7 @@
 	import CreateButton from "./CreateButton.svelte";
 	import { classNameRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+  import FillFieldsNote from './FillFieldsNote.svelte';
 
   export let events;
   export let stateFields;
@@ -46,5 +47,8 @@
       </div>
     </div>
   {/each}
+  {#if events.filter(event => requireRule(event.name) || classNameRule(event.name) || isPropertyUniqueRule(event.name, events, 'name') || event.fields.length < 1).length > 0}
+    <FillFieldsNote />
+  {/if}
   <CreateButton title="Add Event" on:click={addEvent}/>
 </fieldset>

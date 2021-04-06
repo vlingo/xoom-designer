@@ -39,4 +39,7 @@ export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte',
 export const settingsInfo = createLocalStore('settingsInfo', {});
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
-export const generationSettings = createLocalStore('generationSettings', {});
+export const generationSettings = createLocalStore('generationSettings', {
+	useAnnotations: true,
+	useAutoDispatch: true
+});

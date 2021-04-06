@@ -7,13 +7,14 @@
 
 package io.vlingo.xoom.starter.task;
 
-import io.vlingo.xoom.starter.task.docker.steps.DockerPackageCommandResolverStep;
-import io.vlingo.xoom.starter.task.docker.steps.DockerPushCommandResolverStep;
-import io.vlingo.xoom.starter.task.docker.steps.DockerStatusCommandResolverStep;
-import io.vlingo.xoom.starter.task.gloo.steps.GlooInitCommandResolverStep;
-import io.vlingo.xoom.starter.task.gloo.steps.GlooRouteCommandResolverStep;
-import io.vlingo.xoom.starter.task.gloo.steps.GlooSuspendCommandResolverStep;
-import io.vlingo.xoom.starter.task.k8s.steps.KubernetesPushCommandResolverStep;
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.task.docker.steps.DockerPackageCommandExecutionStep;
+import io.vlingo.xoom.starter.task.docker.steps.DockerPushCommandExecutionStep;
+import io.vlingo.xoom.starter.task.docker.steps.DockerStatusCommandExecutionStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooInitCommandExecutionStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooRouteCommandExecutionStep;
+import io.vlingo.xoom.starter.task.gloo.steps.GlooSuspendCommandExecutionStep;
+import io.vlingo.xoom.starter.task.k8s.steps.KubernetesPushCommandExecutionStep;
 import io.vlingo.xoom.starter.task.option.Option;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
@@ -22,38 +23,39 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.starter.ComponentRegistry.withType;
 import static io.vlingo.xoom.starter.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.starter.task.option.OptionName.TAG;
 
 public enum SubTask {
 
     DOCKER_STATUS(Task.DOCKER, "status",
-            new DockerStatusCommandResolverStep(),
+            new DockerStatusCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     DOCKER_PACKAGE(Task.DOCKER, "package",
-            new DockerPackageCommandResolverStep(),
+            new DockerPackageCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     DOCKER_PUSH(Task.DOCKER, "push",
-            new DockerPushCommandResolverStep(),
+            new DockerPushCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     K8S_PUSH(Task.K8S, "push",
-            new KubernetesPushCommandResolverStep()),
+            new KubernetesPushCommandExecutionStep(withType(CommandExecutionProcess.class))),
 
     GLOO_INIT(Task.GLOO, "init",
-            new GlooInitCommandResolverStep(),
+            new GlooInitCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_ROUTE(Task.GLOO, "route",
-            new GlooRouteCommandResolverStep(),
+            new GlooRouteCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_SUSPEND(Task.GLOO, "suspend",
-            new GlooSuspendCommandResolverStep(),
+            new GlooSuspendCommandExecutionStep(withType(CommandExecutionProcess.class)),
             Option.required(CURRENT_DIRECTORY));
 
     private final Task parentTask;

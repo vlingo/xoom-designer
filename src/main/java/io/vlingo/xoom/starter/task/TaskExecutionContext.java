@@ -8,26 +8,25 @@
 package io.vlingo.xoom.starter.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.starter.Resource;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure;
 import io.vlingo.xoom.starter.task.option.OptionName;
 import io.vlingo.xoom.starter.task.option.OptionValue;
 import io.vlingo.xoom.starter.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.function.Function;
 
 import static io.vlingo.xoom.codegen.parameter.Label.*;
 
 public class TaskExecutionContext {
 
-    private Process process;
-    private String[] commands;
     private Properties properties;
     private final CodeGenerationParameters parameters;
     private final List<String> args = new ArrayList<>();
     private final List<OptionValue> optionValues = new ArrayList<>();
-    private final Map<String, String> configuration = new HashMap<>();
     private final Agent agent;
 
     public static TaskExecutionContext executedFrom(final Agent agent) {
@@ -41,10 +40,6 @@ public class TaskExecutionContext {
     private TaskExecutionContext(final Agent agent) {
         this.agent = agent;
         this.parameters = CodeGenerationParameters.empty();
-    }
-
-    public void followProcess(final Process process) {
-        this.process = process;
     }
 
     public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
@@ -62,26 +57,13 @@ public class TaskExecutionContext {
         return this;
     }
 
-    public TaskExecutionContext onConfiguration(final Map<String, String> configurations) {
-        this.configuration.putAll(configurations);
-        return this;
-    }
-
     public TaskExecutionContext onProperties(final Properties properties) {
         this.properties = properties;
         return this;
     }
 
-    public void withCommands(final String[] commands) {
-        this.commands = commands;
-    }
-
     public void addArgs(final List<String> args) {
         this.args.addAll(args);
-    }
-
-    public Process process() {
-        return process;
     }
 
     public Properties properties() {
@@ -90,10 +72,6 @@ public class TaskExecutionContext {
 
     public Agent agent() {
         return agent;
-    }
-
-    public String configurationOf(final String key) {
-        return this.configuration.get(key);
     }
 
     public <T> T propertyOf(final Property property) {
@@ -119,8 +97,8 @@ public class TaskExecutionContext {
                 .map(optionValue -> optionValue.value()).findFirst().get();
     }
 
-    public String[] commands() {
-        return commands;
+    public boolean hasOption(final OptionName optionName) {
+        return optionValues.stream().anyMatch(optionValue -> optionValue.hasName(optionName));
     }
 
     public List<String> args() {
@@ -140,9 +118,8 @@ public class TaskExecutionContext {
     }
 
     public String temporaryProjectPath() {
-        final String archetypeFolder = Resource.ARCHETYPES_FOLDER.path();
         final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
-        return Paths.get(archetypeFolder, artifactId).toString();
+        return Infrastructure.ArchetypesFolder.path().resolve(artifactId).toString();
     }
 
 }
