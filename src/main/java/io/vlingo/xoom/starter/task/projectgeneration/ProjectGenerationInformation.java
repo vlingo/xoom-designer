@@ -16,7 +16,7 @@ public class ProjectGenerationInformation {
   public final String userHomePath;
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
-  public boolean angularCLI;
+  public final boolean angularCLI;
 
   public static ProjectGenerationInformation load() {
     return new ProjectGenerationInformation();
