@@ -42,14 +42,10 @@
 			New Aggregate
 		</div>
 	</Button>
-	<div class="d-flex">
-		<SlideGroup activeClass="white-text">
-			<SlideItem>
-				{#each $aggregateSettings as aggregate}
-					<AggregateCard {aggregate} on:edit={() => edit(aggregate)} on:remove={() => remove(aggregate)}/>
-				{/each}
-			</SlideItem>
-		</SlideGroup>
+	<div class="d-flex" style="overflow-x: auto; flex-wrap:nowrap">
+		{#each $aggregateSettings as aggregate}
+			<AggregateCard {aggregate} on:edit={() => edit(aggregate)} on:remove={() => remove(aggregate)}/>
+		{/each}
 	</div>
 </CardForm>
 

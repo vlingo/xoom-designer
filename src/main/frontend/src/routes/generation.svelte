@@ -36,7 +36,9 @@
 
   function checkPath() {
     isLoading = true;
-    Repository.post('/generation-paths', $generationSettings.projectDirectory)
+    Repository.post('/generation-paths', {
+      path: $generationSettings.projectDirectory
+    })
 			.then(response => {
         if(response.status === 201) {
           generate();

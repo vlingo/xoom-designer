@@ -7,9 +7,12 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
-import static io.vlingo.xoom.starter.Configuration.MAVEN_WRAPPER_DIRECTORY;
-import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import io.vlingo.xoom.starter.infrastructure.Infrastructure.ArchetypesFolder;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.starter.task.TaskExecutionContext;
+import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
+import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +22,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import io.vlingo.xoom.starter.task.projectgeneration.Terminal;
-import org.apache.commons.io.FileUtils;
-
-import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.starter.task.steps.TaskExecutionStep;
+import static io.vlingo.xoom.starter.Configuration.MAVEN_WRAPPER_DIRECTORY;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class MavenWrapperInstallationStep implements TaskExecutionStep {
 
@@ -40,7 +39,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
     private void copyMavenWrapperFiles(final Path projectPath) {
         MAVEN_WRAPPER_FILES.forEach(filename -> {
             try {
-                final Path source = Paths.get(ARCHETYPES_FOLDER.path(), filename);
+                final Path source = ArchetypesFolder.path().resolve(filename);
                 final Path destination = projectPath.resolve(filename);
                 Files.copy(source, destination, REPLACE_EXISTING);
                 final File file = destination.toFile();
@@ -53,7 +52,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
 
     private void copyMavenWrapperDirectory(final Path projectPath) {
         try {
-            final Path source = Paths.get(ARCHETYPES_FOLDER.path(), MAVEN_WRAPPER_DIRECTORY);
+            final Path source = ArchetypesFolder.path().resolve(MAVEN_WRAPPER_DIRECTORY);
             final Path destination = projectPath.resolve(MAVEN_WRAPPER_DIRECTORY);
             FileUtils.copyDirectory(source.toFile(), destination.toFile());
         } catch (final IOException e) {

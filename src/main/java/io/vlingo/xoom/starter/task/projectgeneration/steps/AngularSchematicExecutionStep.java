@@ -7,19 +7,26 @@
 
 package io.vlingo.xoom.starter.task.projectgeneration.steps;
 
+import io.vlingo.xoom.starter.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.starter.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
-import io.vlingo.xoom.starter.task.steps.CommandResolverStep;
+import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
 
-import static io.vlingo.xoom.starter.Resource.ARCHETYPES_FOLDER;
+public class AngularSchematicExecutionStep extends CommandExecutionStep {
 
-public class AngularSchematicExecutionStep extends CommandResolverStep {
+  public AngularSchematicExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
+    super(commandExecutionProcess);
+  }
 
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
-    final String schematicCommand = "ng schematic";
-    final String temporaryProjectPath = context.temporaryProjectPath();
-    final String projectFolderCommand = resolveDirectoryChangeCommand(temporaryProjectPath);
-    return projectFolderCommand + " && " + schematicCommand;
+    final String temporaryProjectPath =
+            context.temporaryProjectPath();
+
+    final String projectFolderCommand =
+            Terminal.supported().resolveDirectoryChangeCommand(temporaryProjectPath);
+
+    return projectFolderCommand + " && ng schematic";
   }
 
 }

@@ -9,9 +9,6 @@ package io.vlingo.xoom.starter.task.k8s;
 import io.vlingo.xoom.starter.task.SubTask;
 import io.vlingo.xoom.starter.task.TaskExecutionContext;
 import io.vlingo.xoom.starter.task.TaskManager;
-import io.vlingo.xoom.starter.task.steps.CommandExecutionStep;
-import io.vlingo.xoom.starter.task.steps.LoggingStep;
-import io.vlingo.xoom.starter.task.steps.StatusHandlingStep;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,8 +27,7 @@ public class KubernetesCommandManager implements TaskManager<List<String>> {
         final TaskExecutionContext context =
                 TaskExecutionContext.withoutOptions();
 
-        Arrays.asList(subTask.commandResolverStep(), new CommandExecutionStep(),
-                new LoggingStep(), new StatusHandlingStep())
+        Arrays.asList(subTask.commandResolverStep())
                 .forEach(step -> step.process(context));
     }
 }
