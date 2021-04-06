@@ -36,8 +36,7 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
   }
 
   protected void grantPermissions() {
-    executableFiles().forEach(file -> Terminal.grantAllPermissions(file));
+    executableFiles().forEach(Terminal::grantAllPermissions);
   }
-
 
 }
