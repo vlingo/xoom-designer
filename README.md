@@ -14,7 +14,7 @@ The VLINGO XOOM platform SDK was created to help developers who face such challe
 
 The next section show you how to run and use the VLINGO XOOM Designer in your local environment. Let's get started!
 
-## Installation 
+## [Installation](#installation)
 
 The installation process is short. Before you start, just check if you have these tools already installed:
 
@@ -52,6 +52,18 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
  $ ./xoom -version
  1.6.0
 ```
+
+### SNAPSHOT Builds
+
+You can get the latest snapshot builds from [GitHub Actions](https://github.com/vlingo/vlingo-xoom-starter/actions) by navigating through the daily build. It's not obvious how to reach it, but it is also not difficult. Here is the best way to get there:
+
+- Navigate to [GitHub Actions for XOOM Designer](https://github.com/vlingo/vlingo-xoom-starter/actions)
+- One that page, find the build step **Publish the starter archive as a separate artifact** and click it
+  - Use *Find on page* because there are a number of build steps to scan through
+- On that page there are two artifacts; click the one that says **starter** and it will download
+- Follow the above [Installaiton](#Installation) steps
+
+To build from daily snapshots, see the next section.
 
 ### Note for Developers
 
