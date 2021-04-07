@@ -17,9 +17,7 @@
   </developers>
 
   <properties>
-    <jdk.version>1.8</jdk.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <jdk.version>8</jdk.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
@@ -80,6 +78,22 @@
   </dependencies>
 
   <profiles>
+    <profile>
+      <id>jdk11</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <release>${maven.compiler.target}</release>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>deployment</id>
       <build>
@@ -336,8 +350,10 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.8.1</version>
           <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
             <compilerArgs>
               <arg>-parameters</arg>
             </compilerArgs>
