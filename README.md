@@ -55,15 +55,23 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ### SNAPSHOT Builds
 
-You can get the latest snapshot builds from [GitHub Actions](https://github.com/vlingo/vlingo-xoom-starter/actions) by navigating through the daily build. It's not obvious how to reach it, but it is also not difficult. Here is the best way to get there:
+You can get the latest snapshot build of the XOOM Designer from [GitHub Actions](https://github.com/vlingo/vlingo-xoom-starter/actions) on the most recent daily build link. It's not obvious how to reach it, but it is also not difficult. Here is the best way to get there:
 
 - Navigate to [GitHub Actions for XOOM Designer](https://github.com/vlingo/vlingo-xoom-starter/actions)
-- One that page, find the build step **Publish the starter archive as a separate artifact** and click it
-  - Use *Find on page* because there are a number of build steps to scan through
-- On that page there are two artifacts; click the one that says **starter** and it will download
+- On that page, the most recent scheduled build (the build number will be higher than this example) is listed. Click on that link:
+```
+        Build
+        Build #306: Scheduled
+```
+- On the specific build page there are two artifacts listed:
+```
+        JARs
+        starter
+```
+- Click the link that says **starter** and it will start a download
 - Follow the above [Installaiton](#Installation) steps
 
-To build from daily snapshots, see the next section.
+To build your own Designer from daily snapshots, see the next section.
 
 ### Note for Developers
 
