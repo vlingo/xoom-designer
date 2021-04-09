@@ -1,7 +1,7 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
-	import XoomStarterRepository from "../api/XoomStarterRepository";
+	import XoomDesignerRepository from "../api/XoomDesignerRepository";
 	import { requireRule } from "../validators";
   import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
@@ -59,14 +59,14 @@
     if(!valid) return;
     processing = true;
     dialogActive = false;
-		XoomStarterRepository.postGenerationSettings(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+		XoomDesignerRepository.postGenerationSettings(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
 		  .then(s => {
         success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
         status = s;
         $projectGenerationIndex = Number($projectGenerationIndex) + 1;
         $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
       }).catch(e => {
-        failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/vlingo-xoom-starter/issues"];
+        failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"];
         status = e;
       }).finally(() => {
         processing = false;
@@ -100,7 +100,7 @@
     <Icon class="green-text" path={mdiCheckBold}/> {success[0]+success[1]}
   {:else if status === "FAILED"}
     <Icon class="red-text" path={mdiCloseThick}/> {failure[0]}
-    <a href="https://github.com/vlingo/vlingo-xoom-starter/issues" rel="noopener" target="_blank">{failure[1]}</a>
+    <a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failure[1]}</a>
   {/if}
 </CardForm>
 

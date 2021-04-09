@@ -8,7 +8,7 @@ target/
 build/
 .metadata/
 .factorypath
-dist/starter/resources/archetypes/members/
+dist/designer/resources/archetypes/members/
 
 # Intellij
 .idea/
@@ -26,6 +26,6 @@ dependency-reduced-pom.xml
 .vscode/
 
 # bin
-vlingo-xoom-starter-dist.jar
-starter.tar
-starter.zip
+xoom-designer-dist.jar
+designer.tar
+designer.zip
