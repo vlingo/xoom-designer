@@ -1,10 +1,10 @@
 # XOOM Designer
 
-[![Build](https://github.com/vlingo/vlingo-xoom-starter/workflows/Build/badge.svg)](https://github.com/vlingo/vlingo-xoom-starter/actions?query=workflow%3ABuild)
+[![Build](https://github.com/vlingo/xoom-designer/workflows/Build/badge.svg)](https://github.com/vlingo/xoom-designer/actions?query=workflow%3ABuild)
 
 The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code Reactive, Event-Driven Microservices and Applications using DOMA, DDD, and other approaches.
 
-Docs: https://docs.vlingo.io/vlingo-xoom/xoom-starter
+Docs: https://docs.vlingo.io/xoom-turbo/xoom-designer
 
 ## Introduction
 
@@ -22,22 +22,22 @@ The installation process is short. Before you start, just check if you have thes
 * Maven 3.x.x
 * Docker Desktop 18.x
 
-Download the `vlingo-xoom-starter` compressed distribution file via `curl`:
+Download the `xoom-designer` compressed distribution file via `curl`:
 
-* `zip` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.zip`
-* `tar` file: `curl -L -O https://github.com/vlingo/vlingo-xoom-starter/releases/latest/download/starter.tar`
+* `zip` file: `curl -L -O https://github.com/vlingo/xoom-designer/releases/latest/download/designer.zip`
+* `tar` file: `curl -L -O https://github.com/vlingo/xoom-designer/releases/latest/download/designer.tar`
 
-Extract the file content, then set an environment variable named `VLINGO_XOOM_STARTER_HOME` indicating the absolute path of the uncompressed folder; that is, the installation folder. Using a *nix shell, such as `bash`, do this:
+Extract the file content, then set an environment variable named `VLINGO_XOOM_DESIGNER_HOME` indicating the absolute path of the uncompressed folder; that is, the installation folder. Using a *nix shell, such as `bash`, do this:
 
 ```
- $ VLINGO_XOOM_STARTER_HOME=[installation-path]
- $ export VLINGO_XOOM_STARTER_HOME
+ $ VLINGO_XOOM_DESIGNER_HOME=[installation-path]
+ $ export VLINGO_XOOM_DESIGNER_HOME
 ```
 
 On Windows you can use the _System Properties > Advanced > Environment Variables..._ to set the property permanently. For a one-time setting before running the design tool you can use the command line:
 
 ```
- C:\> set VLINGO_XOOM_STARTER_HOME=[installation-path]
+ C:\> set VLINGO_XOOM_DESIGNER_HOME=[installation-path]
 ```
 
 Additionally, on *nix systems, it is necessary to set _read_ and _execute_ access on executable script, placed under the root folder, as following:
@@ -46,7 +46,7 @@ Additionally, on *nix systems, it is necessary to set _read_ and _execute_ acces
  $ chmod 755 xoom
 ```
 
-Ensure it's all set by verifying the `vlingo-xoom-starter` version:
+Ensure it's all set by verifying the `xoom-designer` version:
 
 ``` 
  $ ./xoom -version
@@ -55,9 +55,9 @@ Ensure it's all set by verifying the `vlingo-xoom-starter` version:
 
 ### SNAPSHOT Builds
 
-You can get the latest snapshot build of the XOOM Designer from [GitHub Actions](https://github.com/vlingo/vlingo-xoom-starter/actions) on the most recent daily build link. It's not obvious how to reach it, but it is also not difficult. Here is the best way to get there:
+You can get the latest snapshot build of the XOOM Designer from [GitHub Actions](https://github.com/vlingo/xoom-designer/actions) on the most recent daily build link. It's not obvious how to reach it, but it is also not difficult. Here is the best way to get there:
 
-- Navigate to [GitHub Actions for XOOM Designer](https://github.com/vlingo/vlingo-xoom-starter/actions)
+- Navigate to [GitHub Actions for XOOM Designer](https://github.com/vlingo/xoom-designer/actions)
 - On that page, the most recent scheduled build (the build number will be higher than this example) is listed. Click on that link:
 ```
         Build
@@ -66,48 +66,48 @@ You can get the latest snapshot build of the XOOM Designer from [GitHub Actions]
 - On the specific build page there are two artifacts listed:
 ```
         JARs
-        starter
+        designer
 ```
-- Click the link that says **starter** and it will start a download
+- Click the link that says **designer** and it will start a download
 - Follow the above [Installaiton](#Installation) steps
 
 To build your own Designer from daily snapshots, see the next section.
 
 ### Note for Developers
 
-If developing on the `vlingo-xoom-start` project, the `VLINGO_XOOM_STARTER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as `bash`, do this:
+If developing on the `xoom-designer` project, the `VLINGO_XOOM_DESIGNER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as `bash`, do this:
 
 ```
-$ VLINGO_XOOM_STARTER_HOME=[git-clone-path]/dist/starter
-$ export VLINGO_XOOM_STARTER_HOME
+$ VLINGO_XOOM_DESIGNER_HOME=[git-clone-path]/dist/designer
+$ export VLINGO_XOOM_DESIGNER_HOME
 ```
 
 On Windows you can use the *System Properties > Advanced > Environment Variables...* to set the property permanently. For a one-time setting before running the design tool you can use the command line:
 
 ```
-C:\> set VLINGO_XOOM_STARTER_HOME=[git-clone-path]\dist\starter
+C:\> set VLINGO_XOOM_DESIGNER_HOME=[git-clone-path]\dist\designer
 ```
 
-After making changes, from the root project directory build and run the starter. On *nix do this:
+After making changes, from the root project directory build and run the designer. On *nix do this:
 
 ```
 $ mvn clean package -P frontend
 ...
-$ java -jar target/vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+$ java -jar target/xoom-designer-1.6.1-SNAPSHOT.jar gui
 ```
 On Windows, do this:
 
 ```
 C:\[git-clone-path]> mvn clean package -P frontend
 ...
-C:\[git-clone-path]> java -jar target\vlingo-xoom-starter-1.6.1-SNAPSHOT.jar gui
+C:\[git-clone-path]> java -jar target\xoom-designer-1.6.1-SNAPSHOT.jar gui
 ```
 
 We look forward to your VLINGO XOOM contribution!
 
 ### Application Generation
 
-In addition to the command-line interface (see below), `vlingo-xoom-starter` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Starter.
+In addition to the command-line interface (see below), `xoom-designer` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Designer.
 
 ``` 
  $ ./xoom gui
@@ -147,7 +147,7 @@ The third step is used to define the persistence, and if CQRS is in used, both c
 
 ![screen-sample-image](https://gblobscdn.gitbook.com/assets%2F-LLB-V2sJmANuWISDmBf%2F-MM1IvPWmZlz3V0QdMPM%2F-MM1OXroZiao0hr-lz0m%2Fimage.png)
 
-This step displays persistence preferences. Configuration selections include the [storage type](https://docs.vlingo.io/vlingo-symbio), CQRS usage, specific database mechanisms, and when applicable, how events are projected to the query model.
+This step displays persistence preferences. Configuration selections include the [storage type](https://docs.vlingo.io/xoom-symbio), CQRS usage, specific database mechanisms, and when applicable, how events are projected to the query model.
 
 **Deployment Step**
 
@@ -169,7 +169,7 @@ Once the five definition steps are completed and the service project is generate
      
 ### CLI
 
-Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/vlingo-xoom-starter/blob/master/dist/starter/vlingo-xoom-starter.properties">properties file</a> under the <code>vlingo-xoom-starter</code> folder. 
+Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/xoom-designer/blob/master/dist/designer/xoom-designer.properties">properties file</a> under the <code>xoom-designer</code> folder. 
 See a commented properties file sample below:    
 
 <pre>
@@ -213,7 +213,7 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ### Docker Commands
 
-`vlingo-xoom-starter` provides cool shortcuts for interacting with Docker, from the project root folder, as follows:
+`xoom-designer` provides cool shortcuts for interacting with Docker, from the project root folder, as follows:
 
 <table>
     <thead>
@@ -256,8 +256,8 @@ Executing `xoom gen` causes the application generation based on the settings abo
        </tr>
        <tr>
             <td align="center">xoom gloo route</td>
-            <td align="left">Create routes, on Gloo Gateway API, for endpoints declared in <em>vlingo-xoom.properties</em></td>
-            <td align="center">In <em>vlingo-xoom.properties</em> , define the options described below: 
+            <td align="left">Create routes, on Gloo Gateway API, for endpoints declared in <em>xoom-turbo.properties</em></td>
+            <td align="center">In <em>xoom-turbo.properties</em> , define the options described below: 
              <p><b>gloo.upstream</b>: a Gloo upstream name for the app's service running on K8s. Example: <em>gloo.upstream = default-myxoomapp-8080</em></p>
              <p><b>gloo.resource.[resource-name]</b>: an endpoint for an application resource identified by resource-name. Example: <em>gloo.resource.balance = v1/balance</em></p>
              <p><b>gloo.gateway.[resource-name]</b>: a gateway route corresponding to a mapped endpoint identified by resource-name. Example: <em>gloo.gateway.balance= balance</em></p>
@@ -269,7 +269,7 @@ Executing `xoom gen` causes the application generation based on the settings abo
 
 ## Collaboration
 
-Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/vlingo-xoom-starter/blob/master/DEV-GUIDE.md).
+Our team really appreciates collaboration, not only because it boosts VLINGO to greater value, but also for the fact that the more viewpoints we have the more competent and mature the VLINGO community will become. If you want to be a catalyst for moving the platform forward, take a tour of our [development guide](https://github.com/vlingo/xoom-designer/blob/master/DEV-GUIDE.md).
 
 License (See LICENSE file for full license)
 -------------------------------------------

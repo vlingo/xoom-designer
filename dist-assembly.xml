@@ -6,7 +6,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>dist/starter</directory>
+            <directory>dist/designer</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>

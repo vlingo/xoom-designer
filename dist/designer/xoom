@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar $VLINGO_XOOM_DESIGNER_HOME/bin/xoom-designer-dist.jar $@ --currentDirectory ${PWD}
