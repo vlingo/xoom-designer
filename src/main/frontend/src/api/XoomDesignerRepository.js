@@ -25,9 +25,16 @@ async function repoPost(path, body) {
 }
 
 export default {
-	postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
+	postGenerationSettings(context, model, deployment, generationSettings) {
+		const { projectDirectory, useAnnotations, useAutoDispatch, generationTarget } = generationSettings;
 		return repoPost(resources.generation, {
-			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
+			context,
+			model,
+			deployment,
+			useAnnotations,
+			useAutoDispatch,
+			generationTarget,
+			projectDirectory,
 		});
 	},
 }
