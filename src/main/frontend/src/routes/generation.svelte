@@ -102,7 +102,7 @@
     <TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
   {:else if $generationSettings.generationTarget === 'zip-download'}
     <div class="mb-6" style="color: var(--theme-text-primary); font-size: 14px;">
-        When ready click Generate and your project will download as a zip file.
+      <b>Note:</b> When ready click Generate and your project will download as a zip file.
     </div>
   {/if}
   <Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
