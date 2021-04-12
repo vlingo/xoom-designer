@@ -3,7 +3,7 @@
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
 	import { requireRule } from "../validators";
-  import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
+  import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
     Button,
     Switch,
@@ -59,7 +59,7 @@
     if(!valid) return;
     processing = true;
     dialogActive = false;
-		XoomDesignerRepository.postGenerationSettings(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+		XoomDesignerRepository.postGenerationSettings(context, model, deployment, $generationSettings)
 		  .then(s => {
         success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
         status = s;
@@ -81,6 +81,9 @@
 
 	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
   $: valid = $generationSettings.projectDirectory && context && model && model.aggregateSettings && model.persistenceSettings && deployment
+
+  let value = $generationSettings.generationTarget && $generationSettings.generationTarget === 'zip-download';
+  $: $generationSettings.generationTarget = value ? 'zip-download' : 'filesystem';
 </script>
 
 <svelte:head>
@@ -89,8 +92,20 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
-	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
-	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
+  <div class="vl-switch d-flex justify-center mb-8 mt-8">
+    <b>Filesystem</b>
+    <Switch class="mr-4 ml-8" bind:checked={value} inset></Switch>
+    <b>Zip Download</b>
+  </div>
+
+  {#if $generationSettings.generationTarget === 'filesystem'}
+    <TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+  {:else if $generationSettings.generationTarget === 'zip-download'}
+    <div class="mb-6" style="color: var(--theme-text-primary); font-size: 14px;">
+        When ready click Generate and your project will download as a zip file.
+    </div>
+  {/if}
+  <Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
 
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>Generate</Button>
@@ -142,3 +157,14 @@
 		</Card>
 	</Dialog>
 </Portal>
+
+<style global lang="scss">
+	.vl-switch {
+		.s-switch, .s-switch__wrapper.inset, .s-switch__wrapper.inset .s-switch__track {
+			width: 100px;
+		}
+		.s-switch__wrapper>input:checked~.s-switch__thumb {
+			transform: translate(72px);
+		}
+	}
+</style> 
