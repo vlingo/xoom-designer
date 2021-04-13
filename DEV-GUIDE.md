@@ -10,7 +10,7 @@ The following diagram gives us an `Application Generation` overview showing the 
     <img src="https://github.com/vlingo/xoom-designer/blob/master/docs/raw-proj-gen-diagram.png" height="400" />
 </p>
 
-As illustrated above, `Application Generation` can be run by [two commands](https://github.com/vlingo/xoom-designer/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `VLINGO/XOOM`, having exactly the same parameters list. The only difference is that the latter reads parameters from a properties file, while the first consumes parameters from a web-based UI.
+As illustrated above, `Application Generation` can be run by [two commands](https://github.com/vlingo/xoom-designer/blob/documentation/README.md#application-generation): `xoom gen` or `xoom gui`. Both are alternative ways for a quick start with `VLINGO XOOM`, having exactly the same parameters list. The only difference is that the latter reads parameters from a properties file, while the first consumes parameters from a web-based UI.
 
 The second half of the diagram shows some tools that perform core actions. [Maven Archetypes](https://maven.apache.org/guides/introduction/introduction-to-archetypes.html) creates the project structure, dynamically organizing the directory hierarchy, Maven configuration, also handling deployment resources as Dockerfile and K8s manifest file. Further, [Apache FreeMarker](https://freemarker.apache.org/) takes care of classes generation by processing preexisting code templates. That said, let's see how to add templates at code level.
 

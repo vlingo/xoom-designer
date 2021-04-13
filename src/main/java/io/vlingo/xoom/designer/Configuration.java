@@ -74,7 +74,7 @@ public class Configuration {
   public static String resolveDefaultXoomVersion() {
     final String version = Configuration.class.getPackage().getImplementationVersion();
     if(version == null) {
-      System.out.println("Unable to find default VLINGO/XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
+      System.out.println("Unable to find default VLINGO XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
       return XOOM_VERSION_PLACEHOLDER;
     }
     return version;
