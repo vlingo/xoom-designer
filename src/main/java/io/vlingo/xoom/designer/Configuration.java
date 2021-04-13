@@ -1,5 +1,11 @@
 package io.vlingo.xoom.designer;
 
+import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
+import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.turbo.codegen.template.autodispatch.AutoDispatchMappingGenerationStep;
@@ -13,12 +19,7 @@ import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionGenerationSte
 import io.vlingo.xoom.turbo.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -63,6 +64,7 @@ public class Configuration {
           new SchemataGenerationStep(),
           new BootstrapGenerationStep(),
           new ProjectSettingsGenerationStep(),
+          new QueriesUnitTestGenerationStep(),
           new ContentCreationStep()
   );
 
