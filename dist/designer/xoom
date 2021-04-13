@@ -1,2 +1,3 @@
 #!/bin/bash
+export VLINGO_XOOM_DESIGNER_HOME=${VLINGO_XOOM_DESIGNER_HOME:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"}
 java -jar $VLINGO_XOOM_DESIGNER_HOME/bin/xoom-designer-dist.jar $@ --currentDirectory ${PWD}
