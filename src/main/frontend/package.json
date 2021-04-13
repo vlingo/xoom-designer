@@ -2,7 +2,7 @@
   "name": "xoom-designer-ui",
   "version": "0.0.1",
   "private": true,
-  "description": "The UI of the quick designer project generator of the vlingo/platform.",
+  "description": "The UI of the quick designer project generator of the VLINGO XOOM Platform.",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",

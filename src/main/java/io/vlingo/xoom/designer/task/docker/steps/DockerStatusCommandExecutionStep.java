@@ -19,7 +19,7 @@ public class DockerStatusCommandExecutionStep extends CommandExecutionStep {
     protected String formatCommands(final TaskExecutionContext context) {
         final String image = context.propertyOf(DOCKER_IMAGE);
         if(image == null) {
-            throw new DockerCommandException("Please set the docker.image property in vlingo-xoom.properties");
+            throw new DockerCommandException("Please set the docker.image property in xoom-turbo.properties");
         }
         return String.format(COMMAND_PATTERN, image);
     }

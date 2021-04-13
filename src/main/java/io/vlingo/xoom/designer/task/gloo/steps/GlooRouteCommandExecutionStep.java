@@ -28,14 +28,14 @@ public class GlooRouteCommandExecutionStep extends CommandExecutionStep {
   @Override
     protected String formatCommands(final TaskExecutionContext context) {
         if(!context.hasProperty(Property.GLOO_UPSTREAM)) {
-            throw new TaskExecutionException("Please set the Gloo upstream in vlingo-xoom.properties");
+            throw new TaskExecutionException("Please set the Gloo upstream in xoom-turbo.properties");
         }
 
         final Set<String> resources = filterResources(context);
         final String upstream = context.propertyOf(Property.GLOO_UPSTREAM);
 
         if(resources.isEmpty()) {
-            throw new TaskExecutionException("Please check if the Gloo routes are properly mapped in vlingo-xoom.properties");
+            throw new TaskExecutionException("Please check if the Gloo routes are properly mapped in xoom-turbo.properties");
         }
 
         return resources.stream()
