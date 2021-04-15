@@ -19,156 +19,156 @@ import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class TaskExecutionContextMapperTest {
 
-    @Test
-    public void testThatTaskExecutionContextIsMapped() {
-        final GenerationSettingsData data =
-                new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                        deploymentSettingsData(), "/home/projects", true, false);
+  @Test
+  public void testThatTaskExecutionContextIsMapped() {
+    final GenerationSettingsData data =
+            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+                    deploymentSettingsData(), "/home/projects", true, false);
 
-        final CodeGenerationParameters codeGenerationParameters =
-                TaskExecutionContextMapper.from(data).codeGenerationParameters();
+    final CodeGenerationParameters codeGenerationParameters =
+            TaskExecutionContextMapper.from(data).codeGenerationParameters();
 
-        assertStructuralOptions(codeGenerationParameters);
-        assertPersistenceParameters(codeGenerationParameters);
-        assertModelParameters(codeGenerationParameters);
-    }
+    assertStructuralOptions(codeGenerationParameters);
+    assertPersistenceParameters(codeGenerationParameters);
+    assertModelParameters(codeGenerationParameters);
+  }
 
-    private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
-        Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
-        Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
-        Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-        Assertions.assertEquals("1.7.0", codeGenerationParameters.retrieveValue(XOOM_VERSION));
-        Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
-        Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
-        Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
-        Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
-        Assertions.assertNotNull(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD));
-        Assertions.assertTrue(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
-    }
+  private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
+    Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
+    Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
+    Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
+    Assertions.assertEquals("1.7.1-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
+    Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
+    Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
+    Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
+    Assertions.assertNotNull(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD));
+    Assertions.assertTrue(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
+  }
 
-    private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {
-        Assertions.assertEquals("true", codeGenerationParameters.retrieveValue(CQRS));
-        Assertions.assertEquals("IN_MEMORY", codeGenerationParameters.retrieveValue(DATABASE));
-        Assertions.assertEquals("EVENT_BASED", codeGenerationParameters.retrieveValue(PROJECTION_TYPE));
-        Assertions.assertEquals("STATE_STORE", codeGenerationParameters.retrieveValue(STORAGE_TYPE));
-        Assertions.assertEquals("POSTGRES", codeGenerationParameters.retrieveValue(COMMAND_MODEL_DATABASE));
-        Assertions.assertEquals("MYSQL", codeGenerationParameters.retrieveValue(QUERY_MODEL_DATABASE));
-    }
+  private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {
+    Assertions.assertEquals("true", codeGenerationParameters.retrieveValue(CQRS));
+    Assertions.assertEquals("IN_MEMORY", codeGenerationParameters.retrieveValue(DATABASE));
+    Assertions.assertEquals("EVENT_BASED", codeGenerationParameters.retrieveValue(PROJECTION_TYPE));
+    Assertions.assertEquals("STATE_STORE", codeGenerationParameters.retrieveValue(STORAGE_TYPE));
+    Assertions.assertEquals("POSTGRES", codeGenerationParameters.retrieveValue(COMMAND_MODEL_DATABASE));
+    Assertions.assertEquals("MYSQL", codeGenerationParameters.retrieveValue(QUERY_MODEL_DATABASE));
+  }
 
-    private void assertModelParameters(final CodeGenerationParameters codeGenerationParameters) {
-        Assertions.assertEquals(2, codeGenerationParameters.retrieveAll(VALUE_OBJECT).count());
+  private void assertModelParameters(final CodeGenerationParameters codeGenerationParameters) {
+    Assertions.assertEquals(2, codeGenerationParameters.retrieveAll(VALUE_OBJECT).count());
 
-        final CodeGenerationParameter classificationValueObject =
-                codeGenerationParameters.retrieveAll(VALUE_OBJECT)
-                        .filter(vo -> vo.value.equals("Classification")).findFirst().get();
+    final CodeGenerationParameter classificationValueObject =
+            codeGenerationParameters.retrieveAll(VALUE_OBJECT)
+                    .filter(vo -> vo.value.equals("Classification")).findFirst().get();
 
-        Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
-                .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+    Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
 
-        Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
-                .anyMatch(field -> field.value.equals("rank") && field.retrieveRelatedValue(FIELD_TYPE).equals("Rank")));
+    Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+            .anyMatch(field -> field.value.equals("rank") && field.retrieveRelatedValue(FIELD_TYPE).equals("Rank")));
 
-        final CodeGenerationParameter personAggregateParameter =
-                codeGenerationParameters.retrieveAll(AGGREGATE)
-                        .filter(aggregate -> aggregate.value.equals("Person"))
-                        .findFirst().get();
+    final CodeGenerationParameter personAggregateParameter =
+            codeGenerationParameters.retrieveAll(AGGREGATE)
+                    .filter(aggregate -> aggregate.value.equals("Person"))
+                    .findFirst().get();
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-                .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")));
+    Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
+            .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-                .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+    Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
+            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
-                .anyMatch(method -> method.value.equals("defineWith") &&
-                        method.retrieveRelatedValue(FACTORY_METHOD).equals("true") &&
-                        method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonDefined") &&
-                        method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
+    Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
+            .anyMatch(method -> method.value.equals("defineWith") &&
+                    method.retrieveRelatedValue(FACTORY_METHOD).equals("true") &&
+                    method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonDefined") &&
+                    method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
-                .anyMatch(method -> method.value.equals("changeName") &&
-                        method.retrieveRelatedValue(FACTORY_METHOD).equals("false") &&
-                        method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonNameChanged") &&
-                        method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
+    Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
+            .anyMatch(method -> method.value.equals("changeName") &&
+                    method.retrieveRelatedValue(FACTORY_METHOD).equals("false") &&
+                    method.retrieveRelatedValue(DOMAIN_EVENT).equals("PersonNameChanged") &&
+                    method.retrieveAllRelated(METHOD_PARAMETER).allMatch(param -> param.value.equals("name"))));
 
-        Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
-                .anyMatch(routeSignature -> routeSignature.value.equals("defineWith") &&
-                        routeSignature.retrieveRelatedValue(ROUTE_METHOD).equals("POST") &&
-                        routeSignature.retrieveRelatedValue(ROUTE_PATH).equals("/persons/") &&
-                        routeSignature.retrieveRelatedValue(REQUIRE_ENTITY_LOADING).equals("false")));
+    Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(ROUTE_SIGNATURE)
+            .anyMatch(routeSignature -> routeSignature.value.equals("defineWith") &&
+                    routeSignature.retrieveRelatedValue(ROUTE_METHOD).equals("POST") &&
+                    routeSignature.retrieveRelatedValue(ROUTE_PATH).equals("/persons/") &&
+                    routeSignature.retrieveRelatedValue(REQUIRE_ENTITY_LOADING).equals("false")));
 
-        Assertions.assertEquals("/persons/", personAggregateParameter.retrieveRelatedValue(URI_ROOT));
-    }
+    Assertions.assertEquals("/persons/", personAggregateParameter.retrieveRelatedValue(URI_ROOT));
+  }
 
-    private ContextSettingsData contextSettingsData() {
-        return new ContextSettingsData("io.vlingo", "xoomapp",
-                "1.0", "io.vlingo.xoomapp", "1.3.4-SNAPSHOT");
-    }
+  private ContextSettingsData contextSettingsData() {
+    return new ContextSettingsData("io.vlingo", "xoomapp",
+            "1.0", "io.vlingo.xoomapp", "1.3.4-SNAPSHOT");
+  }
 
-    private ModelSettingsData modelSettingsData() {
-        return new ModelSettingsData(persistenceData(),
-                Arrays.asList(personAggregateData(), profileAggregateData()),
-                valueObjects());
-    }
+  private ModelSettingsData modelSettingsData() {
+    return new ModelSettingsData(persistenceData(),
+            Arrays.asList(personAggregateData(), profileAggregateData()),
+            valueObjects());
+  }
 
-    private PersistenceData persistenceData() {
-        return new PersistenceData("STATE_STORE", true, "EVENT_BASED",
-                "IN_MEMORY", "POSTGRES", "MYSQL");
-    }
+  private PersistenceData persistenceData() {
+    return new PersistenceData("STATE_STORE", true, "EVENT_BASED",
+            "IN_MEMORY", "POSTGRES", "MYSQL");
+  }
 
-    private AggregateData personAggregateData() {
-        final List<StateFieldData> statesFields =
-                Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
+  private AggregateData personAggregateData() {
+    final List<StateFieldData> statesFields =
+            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
 
-        final List<AggregateMethodData> methods =
-                Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
-                        new AggregateMethodData("changeName", Arrays.asList("name"), false, "PersonNameChanged"));
+    final List<AggregateMethodData> methods =
+            Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
+                    new AggregateMethodData("changeName", Arrays.asList("name"), false, "PersonNameChanged"));
 
-        final List<DomainEventData> events =
-                Arrays.asList(new DomainEventData("PersonDefined", Arrays.asList("id", "name")),
-                        new DomainEventData("PersonNameChanged", Arrays.asList("name")));
+    final List<DomainEventData> events =
+            Arrays.asList(new DomainEventData("PersonDefined", Arrays.asList("id", "name")),
+                    new DomainEventData("PersonNameChanged", Arrays.asList("name")));
 
-        final APIData apiData = new APIData("/persons/",
-                Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
-                        new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
+    final APIData apiData = new APIData("/persons/",
+            Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
+                    new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
 
-        return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
-    }
+    return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+  }
 
-    private AggregateData profileAggregateData() {
-        final List<StateFieldData> statesFields =
-                Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
+  private AggregateData profileAggregateData() {
+    final List<StateFieldData> statesFields =
+            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
 
-        final List<AggregateMethodData> methods =
-                Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
-                        new AggregateMethodData("changeStatus", Arrays.asList("status"), false, "ProfileStatusChanged"));
+    final List<AggregateMethodData> methods =
+            Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
+                    new AggregateMethodData("changeStatus", Arrays.asList("status"), false, "ProfileStatusChanged"));
 
-        final List<DomainEventData> events =
-                Arrays.asList(new DomainEventData("ProfilePublished", Arrays.asList("id", "status")),
-                        new DomainEventData("ProfilePublished", Arrays.asList("status")));
+    final List<DomainEventData> events =
+            Arrays.asList(new DomainEventData("ProfilePublished", Arrays.asList("id", "status")),
+                    new DomainEventData("ProfilePublished", Arrays.asList("status")));
 
-        final APIData apiData = new APIData("/profiles/",
-                Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
-                        new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
+    final APIData apiData = new APIData("/profiles/",
+            Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
+                    new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
 
-        return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
-    }
+    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+  }
 
-    private List<ValueObjectData> valueObjects() {
-        final ValueObjectData classification =
-                new ValueObjectData("Classification",
-                        Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
+  private List<ValueObjectData> valueObjects() {
+    final ValueObjectData classification =
+            new ValueObjectData("Classification",
+                    Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
 
-        return Arrays.asList(rankValueObjectData(), classification);
-    }
+    return Arrays.asList(rankValueObjectData(), classification);
+  }
 
-    private ValueObjectData rankValueObjectData() {
-        return new ValueObjectData("Rank",
-                Arrays.asList(new ValueObjectFieldData("points", "int")));
-    }
+  private ValueObjectData rankValueObjectData() {
+    return new ValueObjectData("Rank",
+            Arrays.asList(new ValueObjectFieldData("points", "int")));
+  }
 
-    private DeploymentSettingsData deploymentSettingsData() {
-        return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
-    }
+  private DeploymentSettingsData deploymentSettingsData() {
+    return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
+  }
 
 }

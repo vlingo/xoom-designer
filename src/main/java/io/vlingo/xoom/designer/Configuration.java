@@ -41,7 +41,7 @@ public class Configuration {
 
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.0";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.0";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.1-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
 
   public static final String XOOM_DESIGNER_GENERATION_TARGET = "XOOM_DESIGNER_GENERATION_TARGET";
