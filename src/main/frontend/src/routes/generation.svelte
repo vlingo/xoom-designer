@@ -90,8 +90,8 @@
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
 	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
-	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO/XOOM annotations</Switch>
-  <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO/XOOM auto dispatch</Switch>
+	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
+  <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
 
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>Generate</Button>
   {#if processing}

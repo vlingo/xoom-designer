@@ -29,7 +29,7 @@ public class DockerPushCommandExecutionStep extends CommandExecutionStep {
                 Terminal.supported().resolveDirectoryChangeCommand(context.optionValueOf(CURRENT_DIRECTORY));
 
         if(image == null || repo == null) {
-            throw new DockerCommandException("Please set Docker properties in vlingo-xoom.properties");
+            throw new DockerCommandException("Please set Docker properties in xoom-turbo.properties");
         }
 
         return String.format(COMMAND_PATTERN, projectDirectoryCommand, image,

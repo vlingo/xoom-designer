@@ -6,12 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.Configuration;
-
 import java.io.File;
+
+import io.vlingo.xoom.designer.Configuration;
 
 public class ProjectGenerationInformation {
 
+  public final String generationTarget;
   public final String userHomePath;
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
@@ -21,6 +22,7 @@ public class ProjectGenerationInformation {
   }
 
   private ProjectGenerationInformation() {
+    this.generationTarget = "filesystem"; // or: zip-download
     this.pathSeparator = File.separator;
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
