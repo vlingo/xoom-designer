@@ -1,10 +1,25 @@
 package io.vlingo.xoom.designer;
 
+import static io.vlingo.xoom.designer.ComponentRegistry.withType;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.ArchetypeCommandExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.ArchetypeFolderCleanUpStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationExecutionerStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationParameterValidationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationParametersLoadStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.ContentPurgerStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.MainClassResolverStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.MavenWrapperInstallationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.ProjectInstallationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.ResourcesLocationStep;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
@@ -22,18 +37,16 @@ import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
 
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
-import static io.vlingo.xoom.designer.ComponentRegistry.withType;
-
 public class Configuration {
 
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.6.0";
   private static final String XOOM_VERSION_PLACEHOLDER = "1.6.1-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
+
+  public static final String XOOM_DESIGNER_GENERATION_TARGET = "XOOM_DESIGNER_GENERATION_TARGET";
+  public static final String XOOM_DESIGNER_GENERATION_TARGET_FS = "filesystem";
+  public static final String XOOM_DESIGNER_GENERATION_TARGET_ZIP = "zip-download";
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());

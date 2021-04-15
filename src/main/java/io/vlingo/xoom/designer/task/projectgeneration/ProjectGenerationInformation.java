@@ -22,7 +22,7 @@ public class ProjectGenerationInformation {
   }
 
   private ProjectGenerationInformation() {
-    this.generationTarget = "filesystem"; // or: zip-download
+    this.generationTarget = System.getProperty(Configuration.XOOM_DESIGNER_GENERATION_TARGET, Configuration.XOOM_DESIGNER_GENERATION_TARGET_FS);
     this.pathSeparator = File.separator;
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
