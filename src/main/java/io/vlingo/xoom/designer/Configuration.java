@@ -19,6 +19,7 @@ import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionGenerationSte
 import io.vlingo.xoom.turbo.codegen.template.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
+import io.vlingo.xoom.turbo.codegen.template.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
 
 import java.nio.file.Paths;
@@ -64,6 +65,7 @@ public class Configuration {
           new SchemataGenerationStep(),
           new BootstrapGenerationStep(),
           new ProjectSettingsGenerationStep(),
+          new EntityUnitTestGenerationStep(),
           new QueriesUnitTestGenerationStep(),
           new ContentCreationStep()
   );
