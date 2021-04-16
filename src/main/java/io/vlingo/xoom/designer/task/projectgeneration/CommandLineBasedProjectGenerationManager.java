@@ -7,17 +7,14 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-
 import java.util.List;
-
-import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
 
 public class CommandLineBasedProjectGenerationManager extends ProjectGenerationManager<List<String>> {
 
-    @Override
-    public void run(final List<String> args) {
-        processSteps(TaskExecutionContext.executedFrom(TERMINAL).withArgs(args));
-    }
+  @Override
+  public void run(final List<String> args) {
+    throw new UnsupportedOperationException("The CLI project generation is unavailable");
+    //processSteps(TaskExecutionContext.executedFrom(TERMINAL).withArgs(args));
+  }
 
 }
