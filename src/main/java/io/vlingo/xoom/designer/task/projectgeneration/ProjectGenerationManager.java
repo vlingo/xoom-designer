@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskManager;
+import io.vlingo.xoom.designer.task.TaskStatus;
 
 public abstract class ProjectGenerationManager<S> implements TaskManager<S> {
 
@@ -17,6 +18,8 @@ public abstract class ProjectGenerationManager<S> implements TaskManager<S> {
         Configuration.PROJECT_GENERATION_STEPS.stream()
                 .filter(step -> step.shouldProcess(context))
                 .forEach(step -> step.process(context));
+
+        context.changeStatus(TaskStatus.SUCCESSFUL);
     }
 
 }

@@ -1,3 +1,4 @@
+import FileSaver from 'file-saver';
 import Repository from './Repository'
 
 const resources = Object.freeze({
@@ -11,6 +12,7 @@ function ensure(response, status) {
 	if (response.status !== status) {
 		throw Error(`HTTP ${response.status}: ${response.statusText}.`);
 	}
+	response.blob().then(blob => FileSaver.saveAs(blob, "project.zip", {type: "application/octet-stream"}));
 	return response;
 }
 

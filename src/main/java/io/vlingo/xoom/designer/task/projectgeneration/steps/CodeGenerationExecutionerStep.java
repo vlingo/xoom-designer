@@ -7,9 +7,11 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.codegen.parameter.Label;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
 
@@ -17,6 +19,7 @@ public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext execution) {
+        execution.codeGenerationParameters().add(Label.TARGET_FOLDER, execution.temporaryProjectPath());
         final CodeGenerationContext generation = CodeGenerationContext.with(execution.codeGenerationParameters());
         CODE_GENERATION_STEPS.stream().filter(step -> step.shouldProcess(generation)).forEach(step -> step.process(generation));
     }

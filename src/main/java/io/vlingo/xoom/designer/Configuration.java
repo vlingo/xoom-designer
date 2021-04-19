@@ -10,16 +10,7 @@ import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.ArchetypeCommandExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.ArchetypeFolderCleanUpStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationExecutionerStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationParameterValidationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.CodeGenerationParametersLoadStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.ContentPurgerStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.MainClassResolverStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.MavenWrapperInstallationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.ProjectInstallationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.ResourcesLocationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
@@ -60,10 +51,11 @@ public class Configuration {
           new ArchetypeFolderCleanUpStep(),
           new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
-          new ArchetypeFolderCleanUpStep(),
           new MavenWrapperInstallationStep(),
           new CodeGenerationExecutionerStep(),
-          new ContentPurgerStep()
+          new ContentPurgerStep(),
+          new ProjectCompressionStep(),
+          new ArchetypeFolderCleanUpStep()
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(

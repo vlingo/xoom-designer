@@ -13,9 +13,9 @@ public interface TaskManager<T> {
 
     void run(final T args);
 
-    default TaskStatus manage(final T args) {
+    default T manage(final T args) {
         run(args);
-        return TaskStatus.SUCCESSFUL;
+        return args;
     }
 
     default boolean support(final Object args) {
