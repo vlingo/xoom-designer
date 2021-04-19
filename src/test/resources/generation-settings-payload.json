@@ -72,17 +72,17 @@
           "receivers": [
             {
               "aggregateMethod":"open",
-              "schema":"vlingo:xoom:io.vlingo.otherapp:OtherAggregateDefined:0.0.1"
+              "schema":"vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"
             },
             {
               "aggregateMethod": "updateCreditLimit",
-              "schema":"vlingo:xoom:io.vlingo.otherapp:OtherAggregateUpdated:0.0.2"
+              "schema":"vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"
             }
           ]
         },
         "producerExchange": {
           "exchangeName": "second-exchange",
-          "schemaGroup": "vlingo:xoom:io.vlingo.banking",
+          "schemaGroup": "vlingo:xoom:io.vlingo.xoom.banking",
           "outgoingEvents": [
             "AccountOpened",
             "CreditLimitChanged"
@@ -101,10 +101,10 @@
   },
   "context":{
     "xoomVersion":"1.4.4-SNAPSHOT",
-    "groupId":"io.vlingo",
+    "groupId":"io.vlingo.xoom",
     "artifactId":"banking",
     "artifactVersion":"1.0.0",
-    "packageName":"io.vlingo.banking"
+    "packageName":"io.vlingo.xoom.banking"
   },
   "deployment":{
     "type":"KUBERNETES",

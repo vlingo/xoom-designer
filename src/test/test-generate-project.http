@@ -89,10 +89,10 @@ Content-Type: application/json
   },
   "context": {
     "xoomVersion": "1.4.1-SNAPSHOT",
-    "groupId": "io.vlingo",
+    "groupId": "io.vlingo.xoom",
     "artifactId": "banking",
     "artifactVersion": "1.0.0",
-    "packageName": "io.vlingo.banking"
+    "packageName": "io.vlingo.xoom.banking"
   },
   "deployment": {
     "type": "NONE",
