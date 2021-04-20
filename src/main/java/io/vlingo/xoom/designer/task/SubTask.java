@@ -76,10 +76,7 @@ public enum SubTask {
     }
 
     public List<OptionValue> findOptionValues(final List<String> args) {
-        return this.options.stream().map(option -> {
-            final String value = option.findValue(args);
-            return OptionValue.with(option.name(), value);
-        }).collect(Collectors.toList());
+        return OptionValue.resolveValues(this.options, args);
     }
 
     public TaskExecutionStep commandResolverStep() {

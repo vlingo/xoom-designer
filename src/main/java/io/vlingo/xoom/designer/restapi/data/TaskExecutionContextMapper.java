@@ -8,16 +8,18 @@
 package io.vlingo.xoom.designer.restapi.data;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole;
-import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.designer.task.Agent.WEB;
+import static io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver.TargetFolderType.DEFINITIVE;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class TaskExecutionContextMapper {
 
@@ -168,7 +170,7 @@ public class TaskExecutionContextMapper {
                 .add(DOCKER_IMAGE, data.deployment.dockerImage)
                 .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
                 .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
-                .add(TARGET_FOLDER, data.projectDirectory)
+                .add(TARGET_FOLDER, TargetFolderResolver.resolve(DEFINITIVE, data.context.artifactId, data.projectDirectory))
                 .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
     }
 }

@@ -26,6 +26,10 @@ public class Option {
         this.required = required;
     }
 
+    public static final Option of(final OptionName name) {
+        return new Option(name, "", false);
+    }
+
     public static final Option of(final OptionName name, final String defaultValue) {
         return new Option(name, defaultValue, false);
     }

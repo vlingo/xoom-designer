@@ -36,7 +36,6 @@ public class ArchetypeFolderCleanUpStep implements TaskExecutionStep {
         try {
             final Path archetypesFolder = ArchetypesFolder.path();
             Files.list(archetypesFolder).filter(Files::isDirectory).filter(LEFTOVERS).forEach(this::removeDirectory);
-            Files.list(archetypesFolder).filter(path -> path.endsWith(".zip")).forEach(this::removeFile);
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }
@@ -45,14 +44,6 @@ public class ArchetypeFolderCleanUpStep implements TaskExecutionStep {
     private void removeDirectory(final Path directory) {
         try {
             FileUtils.deleteDirectory(directory.toFile());
-        } catch (final IOException e) {
-            throw new ProjectGenerationException(e);
-        }
-    }
-
-    private void removeFile(final Path path) {
-        try {
-            FileUtils.forceDelete(path.toFile());
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }

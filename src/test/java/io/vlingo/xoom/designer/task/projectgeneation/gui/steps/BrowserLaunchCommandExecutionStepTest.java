@@ -1,4 +1,4 @@
-package io.vlingo.xoom.designer.task.gui.steps;
+package io.vlingo.xoom.designer.task.projectgeneation.gui.steps;
 
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;

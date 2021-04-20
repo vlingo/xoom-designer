@@ -7,16 +7,17 @@
 
 package io.vlingo.xoom.designer.task;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.option.OptionName;
 import io.vlingo.xoom.designer.task.option.OptionValue;
+import io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver.TargetFolderType.TEMPORARY;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class TaskExecutionContext {
@@ -83,11 +84,14 @@ public class TaskExecutionContext {
     this.taskStatus = taskStatus;
   }
 
-  public void addOutput(final Output output, final byte[] content) {
+  public void addOutput(final Output output, final Object content) {
     this.taskOutput.put(output, content);
   }
 
-  public <T> T output(final Output output) {
+  public <T> T retrieveOutput(final Output output) {
+    if(!taskOutput.containsKey(output)) {
+      return null;
+    }
     return (T) taskOutput.get(output);
   }
 
@@ -113,13 +117,12 @@ public class TaskExecutionContext {
     return DeploymentType.valueOf(parameters.retrieveValue(DEPLOYMENT));
   }
 
-  public String projectPath() {
+  public String targetFolder() {
     return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
   }
 
-  public String temporaryProjectPath() {
-    final String artifactId = parameters.retrieveValue(ARTIFACT_ID);
-    return Infrastructure.ArchetypesFolder.path().resolve(artifactId).toString();
+  public String temporaryTargetFolder() {
+    return TargetFolderResolver.resolve(TEMPORARY, parameters.retrieveValue(ARTIFACT_ID));
   }
 
   public TaskStatus status() {

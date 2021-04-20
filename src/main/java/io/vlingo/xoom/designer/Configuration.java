@@ -8,7 +8,9 @@ import java.util.List;
 
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTargetResolverStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
@@ -50,11 +52,11 @@ public class Configuration {
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
           new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
-          new ProjectInstallationStep(),
+          new ProjectInstallationStep(ProjectGenerationInformation.load()),
           new MavenWrapperInstallationStep(),
           new CodeGenerationExecutionerStep(),
           new ContentPurgerStep(),
-          new ProjectCompressionStep(),
+          new ProjectCompressionStep(ProjectGenerationInformation.load()),
           new ArchetypeFolderCleanUpStep()
   );
 
@@ -76,13 +78,13 @@ public class Configuration {
   );
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-          new ResourcesLocationStep(), new UserInterfaceBootstrapStep(),
+          new ResourcesLocationStep(), new GenerationTargetResolverStep(), new UserInterfaceBootstrapStep(),
           new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
   );
 
   public static String resolveDefaultXoomVersion() {
     final String version = Configuration.class.getPackage().getImplementationVersion();
-    if(version == null) {
+    if (version == null) {
       System.out.println("Unable to find default VLINGO XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
       return XOOM_VERSION_PLACEHOLDER;
     }
@@ -90,7 +92,7 @@ public class Configuration {
   }
 
   public static String resolveHomePath() {
-    if(Profile.isTestProfileEnabled()) {
+    if (Profile.isTestProfileEnabled()) {
       return Paths.get(System.getProperty("user.dir"), "dist", "designer").toString();
     }
     return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);

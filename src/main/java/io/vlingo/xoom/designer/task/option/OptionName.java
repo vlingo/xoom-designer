@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.option;
 public enum OptionName {
 
     TAG("tag"),
+    TARGET("target"),
     CURRENT_DIRECTORY("currentDirectory"),
     PUBLISHER("publisher");
 

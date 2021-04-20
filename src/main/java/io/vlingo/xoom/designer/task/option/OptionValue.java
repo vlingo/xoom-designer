@@ -7,10 +7,21 @@
 
 package io.vlingo.xoom.designer.task.option;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OptionValue {
 
     private final OptionName name;
     private final String value;
+
+    public static List<OptionValue> resolveValues(final List<Option> options,
+                                                  final List<String> args) {
+        return options.stream().map(option -> {
+            final String value = option.findValue(args);
+            return OptionValue.with(option.name(), value);
+        }).collect(Collectors.toList());
+    }
 
     public static OptionValue with(final OptionName name, final String value) {
         return new OptionValue(name, value);

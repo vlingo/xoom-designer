@@ -45,7 +45,7 @@ public enum ContentAvailability {
     }
 
     public String resolvePath(final TaskExecutionContext context) {
-        return Paths.get(context.projectPath(), relativePath).toString();
+        return Paths.get(context.targetFolder(), relativePath).toString();
     }
 
     public static List<ContentAvailability> availabilities() {

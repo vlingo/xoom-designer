@@ -10,6 +10,8 @@ import java.io.File;
 
 import io.vlingo.xoom.designer.Configuration;
 
+import static io.vlingo.xoom.designer.Configuration.*;
+
 public class ProjectGenerationInformation {
 
   public final String generationTarget;
@@ -17,14 +19,27 @@ public class ProjectGenerationInformation {
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
 
+  private static ProjectGenerationInformation instance = null;
+
   public static ProjectGenerationInformation load() {
-    return new ProjectGenerationInformation();
+    if(instance == null) {
+      instance = new ProjectGenerationInformation();
+    }
+    return instance;
   }
 
   private ProjectGenerationInformation() {
-    this.generationTarget = System.getProperty(Configuration.XOOM_DESIGNER_GENERATION_TARGET, Configuration.XOOM_DESIGNER_GENERATION_TARGET_FS);
     this.pathSeparator = File.separator;
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
+    this.generationTarget = System.getProperty(XOOM_DESIGNER_GENERATION_TARGET, XOOM_DESIGNER_GENERATION_TARGET_FS);
+  }
+
+  public boolean requiresCompression() {
+    return generationTarget.equalsIgnoreCase(XOOM_DESIGNER_GENERATION_TARGET_ZIP);
+  }
+
+  public static void reset() {
+    instance = null;
   }
 }

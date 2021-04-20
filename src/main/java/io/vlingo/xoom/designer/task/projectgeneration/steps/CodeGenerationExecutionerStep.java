@@ -19,7 +19,6 @@ public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext execution) {
-        execution.codeGenerationParameters().add(Label.TARGET_FOLDER, execution.temporaryProjectPath());
         final CodeGenerationContext generation = CodeGenerationContext.with(execution.codeGenerationParameters());
         CODE_GENERATION_STEPS.stream().filter(step -> step.shouldProcess(generation)).forEach(step -> step.process(generation));
     }

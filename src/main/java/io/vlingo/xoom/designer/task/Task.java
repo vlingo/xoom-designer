@@ -9,16 +9,21 @@ package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
+import io.vlingo.xoom.designer.task.option.Option;
+import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.CommandLineBasedProjectGenerationManager;
 import io.vlingo.xoom.designer.task.projectgeneration.WebBasedProjectGenerationManager;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.designer.Configuration.XOOM_DESIGNER_GENERATION_TARGET_FS;
+import static io.vlingo.xoom.designer.task.option.OptionName.TARGET;
 
 public enum Task {
 
@@ -27,16 +32,19 @@ public enum Task {
     DOCKER("docker", new DockerCommandManager()),
     K8S("k8s", new KubernetesCommandManager()),
     GLOO("gloo", new GlooCommandManager()),
-    GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager()),
+    GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
     VERSION("-version", new VersionDisplayManager());
 
     public final String command;
     private final TaskManager manager;
+    private final List<Option> options;
 
     Task(final String command,
-         final TaskManager manager) {
+         final TaskManager manager,
+         final Option...options) {
         this.command = command;
         this.manager = manager;
+        this.options = Arrays.asList(options);
     }
 
     public static <T> TaskManager<T> of(final String command, final T args) {
@@ -59,6 +67,10 @@ public enum Task {
     private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
         return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
                 .findFirst().orElseThrow(() -> new UnknownCommandException(args));
+    }
+
+    public List<OptionValue> findOptionValues(final List<String> args) {
+        return OptionValue.resolveValues(this.options, args);
     }
 
     public String command() {
