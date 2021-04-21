@@ -1,16 +1,9 @@
 package io.vlingo.xoom.designer;
 
-import static io.vlingo.xoom.designer.ComponentRegistry.withType;
-
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTargetResolverStep;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTargetRegistrationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
@@ -30,16 +23,18 @@ import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
 
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
+import static io.vlingo.xoom.designer.ComponentRegistry.withType;
+
 public class Configuration {
 
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.0";
   private static final String XOOM_VERSION_PLACEHOLDER = "1.7.1-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
-
-  public static final String XOOM_DESIGNER_GENERATION_TARGET = "XOOM_DESIGNER_GENERATION_TARGET";
-  public static final String XOOM_DESIGNER_GENERATION_TARGET_FS = "filesystem";
-  public static final String XOOM_DESIGNER_GENERATION_TARGET_ZIP = "zip-download";
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
@@ -52,11 +47,11 @@ public class Configuration {
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
           new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
-          new ProjectInstallationStep(ProjectGenerationInformation.load()),
+          new ProjectInstallationStep(),
           new MavenWrapperInstallationStep(),
           new CodeGenerationExecutionerStep(),
           new ContentPurgerStep(),
-          new ProjectCompressionStep(ProjectGenerationInformation.load()),
+          new ProjectCompressionStep(),
           new ArchetypeFolderCleanUpStep()
   );
 
@@ -78,7 +73,7 @@ public class Configuration {
   );
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-          new ResourcesLocationStep(), new GenerationTargetResolverStep(), new UserInterfaceBootstrapStep(),
+          new ResourcesLocationStep(), new GenerationTargetRegistrationStep(), new UserInterfaceBootstrapStep(),
           new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
   );
 

@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.designer.task.option.OptionName;
 import io.vlingo.xoom.designer.task.option.OptionValue;
-import io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 
@@ -17,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.TargetFolderResolver.TargetFolderType.TEMPORARY;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.DEPLOYMENT;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
@@ -119,10 +118,6 @@ public class TaskExecutionContext {
 
   public String targetFolder() {
     return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
-  }
-
-  public String temporaryTargetFolder() {
-    return TargetFolderResolver.resolve(TEMPORARY, parameters.retrieveValue(ARTIFACT_ID));
   }
 
   public TaskStatus status() {

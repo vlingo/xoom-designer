@@ -6,10 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectCompressor;
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 
 import java.io.IOException;
@@ -18,16 +19,10 @@ import static io.vlingo.xoom.designer.task.Output.COMPRESSED_PROJECT;
 
 public class ProjectCompressionStep implements TaskExecutionStep {
 
-  private final ProjectGenerationInformation projectGenerationInformation;
-
-  public ProjectCompressionStep(final ProjectGenerationInformation projectGenerationInformation) {
-    this.projectGenerationInformation = projectGenerationInformation;
-  }
-
   @Override
   public void process(final TaskExecutionContext context) {
     try {
-      context.addOutput(COMPRESSED_PROJECT, ProjectCompressor.compress(context.temporaryTargetFolder()));
+      context.addOutput(COMPRESSED_PROJECT, ProjectCompressor.compress(context.targetFolder()));
     } catch (final IOException e) {
       throw new TaskExecutionException(e);
     }
@@ -35,6 +30,10 @@ public class ProjectCompressionStep implements TaskExecutionStep {
 
   @Override
   public boolean shouldProcess(final TaskExecutionContext context) {
-    return projectGenerationInformation.requiresCompression();
+    return generationTarget().supportDownload();
+  }
+
+  private GenerationTarget generationTarget() {
+    return ComponentRegistry.withType(GenerationTarget.class);
   }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.Configuration.XOOM_DESIGNER_GENERATION_TARGET_FS;
 import static io.vlingo.xoom.designer.task.option.OptionName.TARGET;
 
 public enum Task {

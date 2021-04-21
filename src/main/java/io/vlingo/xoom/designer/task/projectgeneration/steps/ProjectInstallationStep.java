@@ -7,10 +7,11 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import org.apache.commons.io.FileUtils;
 
@@ -22,12 +23,6 @@ import java.nio.file.Paths;
 import static io.vlingo.xoom.turbo.codegen.parameter.Label.ARTIFACT_ID;
 
 public final class ProjectInstallationStep implements TaskExecutionStep {
-
-  private final ProjectGenerationInformation projectGenerationInformation;
-
-  public ProjectInstallationStep(final ProjectGenerationInformation projectGenerationInformation) {
-    this.projectGenerationInformation = projectGenerationInformation;
-  }
 
   @Override
   public void process(final TaskExecutionContext context) {
@@ -55,6 +50,6 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
 
   @Override
   public boolean shouldProcess(final TaskExecutionContext context) {
-    return !projectGenerationInformation.requiresCompression();
+    return ComponentRegistry.withType(GenerationTarget.class).requiresLocalInstallation();
   }
 }

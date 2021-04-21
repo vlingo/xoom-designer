@@ -6,40 +6,26 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import java.io.File;
-
 import io.vlingo.xoom.designer.Configuration;
 
-import static io.vlingo.xoom.designer.Configuration.*;
+import java.io.File;
 
 public class ProjectGenerationInformation {
 
-  public final String generationTarget;
   public final String userHomePath;
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
+  public final String generationTarget;
 
-  private static ProjectGenerationInformation instance = null;
-
-  public static ProjectGenerationInformation load() {
-    if(instance == null) {
-      instance = new ProjectGenerationInformation();
-    }
-    return instance;
+  public static ProjectGenerationInformation from(final GenerationTarget generationTarget) {
+    return new ProjectGenerationInformation(generationTarget);
   }
 
-  private ProjectGenerationInformation() {
+  private ProjectGenerationInformation(final GenerationTarget generationTarget) {
     this.pathSeparator = File.separator;
+    this.generationTarget = generationTarget.key();
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
-    this.generationTarget = System.getProperty(XOOM_DESIGNER_GENERATION_TARGET, XOOM_DESIGNER_GENERATION_TARGET_FS);
   }
 
-  public boolean requiresCompression() {
-    return generationTarget.equalsIgnoreCase(XOOM_DESIGNER_GENERATION_TARGET_ZIP);
-  }
-
-  public static void reset() {
-    instance = null;
-  }
 }

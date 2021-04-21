@@ -9,12 +9,14 @@ package io.vlingo.xoom.designer.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.restapi.data.GenerationPath;
 import io.vlingo.xoom.designer.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.designer.task.Task;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
@@ -32,8 +34,11 @@ import static io.vlingo.xoom.http.resource.ResourceBuilder.*;
 
 public class GenerationSettingsResource extends DynamicResourceHandler {
 
+  private final ProjectGenerationInformation generationInformation;
+
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
+    this.generationInformation = ProjectGenerationInformation.from(ComponentRegistry.withType(GenerationTarget.class));
   }
 
   public Completes<Response> startGeneration(final GenerationSettingsData settings) {
@@ -48,8 +53,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> queryGenerationSettingsInformation() {
-    final ProjectGenerationInformation information = ProjectGenerationInformation.load();
-    return Completes.withSuccess(Response.of(Ok, serialized(information)));
+    return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
@@ -90,9 +94,8 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
   }
 
   private Completes<Response> buildResponse(final TaskExecutionContext context) {
-    final ProjectGenerationInformation information = ProjectGenerationInformation.load();
     final Response.Status responseStatus = context.status().failed() ? InternalServerError : Ok;
-    return Completes.withSuccess(Response.of(responseStatus, serialized(ProjectGenerationReport.from(context, information))));
+    return Completes.withSuccess(Response.of(responseStatus, serialized(ProjectGenerationReport.from(context, generationInformation))));
   }
 
   private String validate(final GenerationSettingsData settings) {
