@@ -11,12 +11,12 @@ import io.vlingo.xoom.designer.task.TaskExecutionException;
 
 public class ProjectGenerationException extends TaskExecutionException {
 
-    public ProjectGenerationException(final Exception exception) {
-        super(exception);
-    }
+  public ProjectGenerationException(final Exception exception) {
+    super(exception);
+  }
 
-    public ProjectGenerationException(final String message) {
-        super(message);
-    }
+  public ProjectGenerationException(final String message) {
+    super(message);
+  }
 
 }
