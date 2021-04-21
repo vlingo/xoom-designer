@@ -7,17 +7,17 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.gui;
 
-import io.vlingo.xoom.actors.Grid;
-import io.vlingo.xoom.http.resource.Configuration;
-import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
-import io.vlingo.xoom.turbo.XoomInitializationAware;
-import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
-import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+import io.vlingo.xoom.designer.infrastructure.Infrastructure;
+import io.vlingo.xoom.http.resource.Configuration;
+import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
+import io.vlingo.xoom.lattice.grid.Grid;
+import io.vlingo.xoom.turbo.XoomInitializationAware;
+import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
+import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
 
 @Xoom(name = "xoom-designer")
 @ResourceHandlers(packages = "io.vlingo.xoom.designer.restapi")
