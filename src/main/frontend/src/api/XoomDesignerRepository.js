@@ -2,6 +2,7 @@ import Repository from './Repository'
 
 const resources = Object.freeze({
 	generation: '/generation-settings',
+	settingsFile: '/generation-settings/file'
 })
 
 function ensure(response, status) {
@@ -31,4 +32,10 @@ export default {
 			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
 		});
 	},
+
+	downloadSettingsFile(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
+		return repoPost(resources.settingsFile, {
+			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
+		});
+	}
 }

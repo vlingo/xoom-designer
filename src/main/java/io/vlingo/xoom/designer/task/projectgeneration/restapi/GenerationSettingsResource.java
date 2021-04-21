@@ -10,14 +10,14 @@ package io.vlingo.xoom.designer.task.projectgeneration.restapi;
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.ComponentRegistry;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.designer.task.Task;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
@@ -76,6 +76,15 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     return Completes.withSuccess(Response.of(Created, headers(of(Location, path.path)), serializedPath));
   }
 
+  public Completes<Response> downloadSettingsFile(final GenerationSettingsData settingsData) {
+    try {
+      final GenerationSettingsFile settingsFile = GenerationSettingsFile.from(settingsData);
+      return Completes.withSuccess(Response.of(Ok, serialized(settingsFile)));
+    } catch (final GenerationSettingFileException exception) {
+      return Completes.withSuccess(Response.of(InternalServerError));
+    }
+  }
+
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
     try {
       return Completes.withSuccess(TaskExecutionContextMapper.from(settings, generationTarget));
@@ -112,6 +121,9 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
             post("/api/generation-settings")
                     .body(GenerationSettingsData.class)
                     .handle(this::startGeneration),
+            post("/api/generation-settings/file")
+                    .body(GenerationSettingsData.class)
+                    .handle(this::downloadSettingsFile),
             get("/api/generation-settings/info")
                     .handle(this::queryGenerationSettingsInformation),
             post("/api/generation-paths")

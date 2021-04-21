@@ -1,0 +1,93 @@
+{
+  "context": {
+    "groupId": "com.egc.digital",
+    "artifactId": "modern-commerce",
+    "artifactVersion": "1.0.0",
+    "packageName": "com.egc.digital.hypercommerce",
+    "xoomVersion": "1.4.1-SNAPSHOT"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "STATE_STORE",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/products",
+          "routes": [
+            {
+              "path": "/",
+              "httpMethod": "POST",
+              "aggregateMethod": "register",
+              "requireEntityLoad": false
+            }
+          ]
+        },
+        "aggregateName": "Product",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "price",
+            "type": "Price"
+          }
+        ],
+        "methods": [
+          {
+            "name": "register",
+            "parameters": [
+              "price"
+            ],
+            "useFactory": true,
+            "event": "ProductRegistered"
+          }
+        ],
+        "events": [
+          {
+            "name": "ProductRegistered",
+            "fields": [
+              "price"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "",
+          "receivers": []
+        },
+        "producerExchange": {
+          "exchangeName": "",
+          "schemaGroup": "",
+          "outgoingEvents": []
+        }
+      }
+    ],
+    "valueObjectSettings": [
+      {
+        "name": "Price",
+        "fields": [
+          {
+            "name": "value",
+            "type": "double"
+          }
+        ]
+      }
+    ]
+  },
+  "deployment": {
+    "clusterNodes": 3,
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": ""
+  },
+  "projectDirectory": "C:\\Users\\danil\\VLINGO-XOOM\\com.egc.digital\\modern-commerce1",
+  "useAnnotations": true,
+  "useAutoDispatch": true
+}

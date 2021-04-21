@@ -2,7 +2,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
-  import ProjectFile from "../util/ProjectFile";
+  import DownloadDialog from "../util/DownloadDialog";
 	import { requireRule } from "../validators";
   import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
@@ -21,6 +21,10 @@
   import Portal from "svelte-portal/src/Portal.svelte";
 	import Repository from '../api/Repository';
 
+  const RESPONSE_STATUS = {
+    SUCCESSFUL: "SUCCESSFUL",
+    FAILED: "FAILED"
+  }
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
@@ -34,8 +38,8 @@
   let dialogActive = false;
   let dialogStatus;
   let isLoading = false;
-  let generateButtonLabel = requiresCompression() ? "Download" : "Generate";
-
+  let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
+  
   function checkPath() {
     if(requiresCompression()){
       generate();
@@ -61,8 +65,22 @@
     }
   }
 
-  function requiresCompression() {
-    return $settingsInfo.generationTarget === "zip-download";
+  function downloadSettingsFile() {
+    if(!valid) return;
+    processing = true;
+    dialogActive = false;
+    XoomDesignerRepository.downloadSettingsFile(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+    	.then(settingsFile => {
+        status = RESPONSE_STATUS.SUCCESSFUL;
+        success = ["Settings file generated. ", ""];
+        DownloadDialog.forJsonFile("settings.json", settingsFile.encoded);
+      }).catch(generationReport => {
+        failure = ["Download failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"];
+        status = RESPONSE_STATUS.FAILED;
+      }).finally(() => {
+        processing = false;
+        snackbar = true;
+      })
   }
 
 	const generate = () => {
@@ -74,7 +92,7 @@
         if(requiresCompression()) {
           status = generationReport.status;
           success = ["Project generated. ", ""];
-          ProjectFile.download(generationReport.compressedProject);
+          DownloadDialog.forZipFile("project.zip", generationReport.compressedProject);
         } else {
           success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
           status = generationReport.status;
@@ -95,6 +113,10 @@
     isLoading = false;
   }
 
+  function requiresCompression() {
+    return $settingsInfo.generationTarget === "zip-download";
+  }
+
 	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
   $: valid = (requiresCompression() || $generationSettings.projectDirectory) && context && model && model.aggregateSettings && model.persistenceSettings && deployment
 </script>
@@ -112,11 +134,12 @@
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
 
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
+  <Button class="mt-4 mr-4" on:click={downloadSettingsFile} disabled={!valid || processing || isLoading}>Download Settings File</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
-  {:else if status === "SUCCESSFUL"}
+  {:else if status === RESPONSE_STATUS.SUCCESSFUL}
     <Icon class="green-text" path={mdiCheckBold}/> {success[0]+success[1]}
-  {:else if status === "FAILED"}
+  {:else if status === RESPONSE_STATUS.FAILED}
     <Icon class="red-text" path={mdiCloseThick}/> {failure[0]}
     <a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failure[1]}</a>
   {/if}
