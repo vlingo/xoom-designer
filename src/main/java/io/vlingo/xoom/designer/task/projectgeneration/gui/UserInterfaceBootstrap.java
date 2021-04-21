@@ -7,10 +7,6 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.gui;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.http.resource.Configuration;
 import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
@@ -19,8 +15,12 @@ import io.vlingo.xoom.turbo.XoomInitializationAware;
 import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
 import io.vlingo.xoom.turbo.annotation.initializer.Xoom;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+
 @Xoom(name = "xoom-designer")
-@ResourceHandlers(packages = "io.vlingo.xoom.designer.restapi")
+@ResourceHandlers(packages = "io.vlingo.xoom.designer.task.projectgeneration.restapi")
 public class UserInterfaceBootstrap implements XoomInitializationAware {
 
   @Override

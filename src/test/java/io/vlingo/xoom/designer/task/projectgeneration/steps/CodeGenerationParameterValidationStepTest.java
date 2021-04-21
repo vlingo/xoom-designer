@@ -1,8 +1,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.designer.restapi.data.*;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
