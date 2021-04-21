@@ -8,7 +8,6 @@
 package io.vlingo.xoom.designer.restapi.data;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
@@ -27,8 +26,9 @@ public class TaskExecutionContextMapper {
     private final GenerationTarget generationTarget;
     private final CodeGenerationParameters parameters;
 
-    public static TaskExecutionContext from(final GenerationSettingsData data) {
-        return new TaskExecutionContextMapper(data, ComponentRegistry.withType(GenerationTarget.class)).map();
+    public static TaskExecutionContext from(final GenerationSettingsData data,
+                                            final GenerationTarget generationTarget) {
+        return new TaskExecutionContextMapper(data, generationTarget).map();
     }
 
     private TaskExecutionContextMapper(final GenerationSettingsData data, final GenerationTarget generationTarget) {

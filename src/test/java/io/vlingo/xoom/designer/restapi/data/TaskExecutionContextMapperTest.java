@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.restapi.data;
 
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ public class TaskExecutionContextMapperTest {
                     deploymentSettingsData(), "/home/projects", true, false);
 
     final CodeGenerationParameters codeGenerationParameters =
-            TaskExecutionContextMapper.from(data).codeGenerationParameters();
+            TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
 
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);
@@ -170,5 +171,4 @@ public class TaskExecutionContextMapperTest {
   private DeploymentSettingsData deploymentSettingsData() {
     return new DeploymentSettingsData(0, "DOCKER", "xoom-app", "", "");
   }
-
 }

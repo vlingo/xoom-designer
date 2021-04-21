@@ -34,11 +34,13 @@ import static io.vlingo.xoom.http.resource.ResourceBuilder.*;
 
 public class GenerationSettingsResource extends DynamicResourceHandler {
 
+  private final GenerationTarget generationTarget;
   private final ProjectGenerationInformation generationInformation;
 
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
-    this.generationInformation = ProjectGenerationInformation.from(ComponentRegistry.withType(GenerationTarget.class));
+    this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
+    this.generationInformation = ProjectGenerationInformation.from(generationTarget);
   }
 
   public Completes<Response> startGeneration(final GenerationSettingsData settings) {
@@ -76,7 +78,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
     try {
-      return Completes.withSuccess(TaskExecutionContextMapper.from(settings));
+      return Completes.withSuccess(TaskExecutionContextMapper.from(settings, generationTarget));
     } catch (final Exception exception) {
       exception.printStackTrace();
       return Completes.withFailure(TaskExecutionContext.withoutOptions());
