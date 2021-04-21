@@ -2,6 +2,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
+  import ProjectFile from "../util/ProjectFile";
 	import { requireRule } from "../validators";
   import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
@@ -33,26 +34,35 @@
   let dialogActive = false;
   let dialogStatus;
   let isLoading = false;
+  let generateButtonLabel = requiresCompression() ? "Download" : "Generate";
 
   function checkPath() {
-    isLoading = true;
-    Repository.post('/generation-paths', {
-      path: $generationSettings.projectDirectory
-    })
-			.then(response => {
-        if(response.status === 201) {
-          generate();
-        } else if (response.status === 403) {
-          dialogStatus = 'Forbidden';
-          dialogActive = true;
-        } else if (response.status === 409) {
-          dialogStatus = 'Conflict';
-          dialogActive = true;
-        }
+    if(requiresCompression()){
+      generate();
+    } else {
+      isLoading = true;
+      Repository.post('/generation-paths', {
+        path: $generationSettings.projectDirectory
       })
-      .finally(() => {
-        isLoading = false;
-      })
+        .then(response => {
+          if(response.status === 201) {
+            generate();
+          } else if (response.status === 403) {
+            dialogStatus = 'Forbidden';
+            dialogActive = true;
+          } else if (response.status === 409) {
+            dialogStatus = 'Conflict';
+            dialogActive = true;
+          }
+        })
+        .finally(() => {
+          isLoading = false;
+        })
+    }
+  }
+
+  function requiresCompression() {
+    return $settingsInfo.generationTarget === "zip-download";
   }
 
 	const generate = () => {
@@ -60,14 +70,20 @@
     processing = true;
     dialogActive = false;
 		XoomDesignerRepository.postGenerationSettings(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
-		  .then(s => {
-        success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
-        status = s;
-        $projectGenerationIndex = Number($projectGenerationIndex) + 1;
-        $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
-      }).catch(e => {
+		  .then(generationReport => {
+        if(requiresCompression()) {
+          status = generationReport.status;
+          success = ["Project generated. ", ""];
+          ProjectFile.download(generationReport.compressedProject);
+        } else {
+          success = ["Project generated. ","Please check folder: " + $generationSettings.projectDirectory];
+          status = generationReport.status;
+          $projectGenerationIndex = Number($projectGenerationIndex) + 1;
+          $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
+        }
+      }).catch(generationReport => {
         failure = ["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"];
-        status = e;
+        status = generationReport.status;
       }).finally(() => {
         processing = false;
         snackbar = true;
@@ -80,7 +96,7 @@
   }
 
 	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
-  $: valid = $generationSettings.projectDirectory && context && model && model.aggregateSettings && model.persistenceSettings && deployment
+  $: valid = (requiresCompression() || $generationSettings.projectDirectory) && context && model && model.aggregateSettings && model.persistenceSettings && deployment
 </script>
 
 <svelte:head>
@@ -89,11 +105,13 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
+  {#if !requiresCompression()}
 	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+  {/if}
 	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
 
-  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>Generate</Button>
+  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if status === "SUCCESSFUL"}

@@ -35,8 +35,7 @@ public class ArchetypeFolderCleanUpStep implements TaskExecutionStep {
     public void process(final TaskExecutionContext context) {
         try {
             final Path archetypesFolder = ArchetypesFolder.path();
-            Files.list(archetypesFolder).filter(Files::isDirectory)
-                    .filter(LEFTOVERS).forEach(this::removeDirectory);
+            Files.list(archetypesFolder).filter(Files::isDirectory).filter(LEFTOVERS).forEach(this::removeDirectory);
         } catch (final IOException e) {
             throw new ProjectGenerationException(e);
         }

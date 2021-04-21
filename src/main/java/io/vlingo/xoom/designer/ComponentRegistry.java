@@ -24,11 +24,15 @@ public class ComponentRegistry {
   }
 
   public static <T> T withType(final Class<T> componentClass) {
-    return withName(componentClass.getCanonicalName());
+    return (T) withName(componentClass.getCanonicalName());
   }
 
   public static <T> T withName(final String name) {
     return (T) COMPONENTS.get(name);
+  }
+
+  public static void clear() {
+    COMPONENTS.clear();
   }
 
 }

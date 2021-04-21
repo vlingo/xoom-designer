@@ -8,28 +8,32 @@
 package io.vlingo.xoom.designer.restapi.data;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.turbo.codegen.parameter.Label;
 import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole;
-import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.designer.task.Agent.WEB;
+import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 
 public class TaskExecutionContextMapper {
 
     private final GenerationSettingsData data;
+    private final GenerationTarget generationTarget;
     private final CodeGenerationParameters parameters;
 
-    public static TaskExecutionContext from(final GenerationSettingsData data) {
-        return new TaskExecutionContextMapper(data).map();
+    public static TaskExecutionContext from(final GenerationSettingsData data,
+                                            final GenerationTarget generationTarget) {
+        return new TaskExecutionContextMapper(data, generationTarget).map();
     }
 
-    private TaskExecutionContextMapper(final GenerationSettingsData data) {
+    private TaskExecutionContextMapper(final GenerationSettingsData data, final GenerationTarget generationTarget) {
         this.data = data;
+        this.generationTarget = generationTarget;
         this.parameters = CodeGenerationParameters.from(LANGUAGE, Language.JAVA);
         mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
     }
@@ -168,7 +172,7 @@ public class TaskExecutionContextMapper {
                 .add(DOCKER_IMAGE, data.deployment.dockerImage)
                 .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
                 .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
-                .add(TARGET_FOLDER, data.projectDirectory)
+                .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(data.context.artifactId, data.projectDirectory))
                 .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
     }
 }

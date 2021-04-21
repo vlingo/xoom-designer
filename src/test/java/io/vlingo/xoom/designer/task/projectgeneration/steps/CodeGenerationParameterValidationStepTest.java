@@ -2,8 +2,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.designer.restapi.data.*;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +19,8 @@ public class CodeGenerationParameterValidationStepTest {
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), "/home/projects", true, false);
 
-    TaskExecutionContext context = TaskExecutionContextMapper.from(data);
+    final TaskExecutionContext context =
+            TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM);
 
     assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
   }

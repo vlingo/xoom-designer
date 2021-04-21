@@ -31,7 +31,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
 
     @Override
     public void process(final TaskExecutionContext context) {
-        final Path projectPath = Paths.get(context.projectPath());
+        final Path projectPath = Paths.get(context.targetFolder());
         copyMavenWrapperFiles(projectPath);
         copyMavenWrapperDirectory(projectPath);
     }
