@@ -5,14 +5,14 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.restapi;
+package io.vlingo.xoom.designer.task.projectgeneration.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.ComponentRegistry;
-import io.vlingo.xoom.designer.restapi.data.GenerationPath;
-import io.vlingo.xoom.designer.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.restapi.data.TaskExecutionContextMapper;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.designer.task.Task;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;

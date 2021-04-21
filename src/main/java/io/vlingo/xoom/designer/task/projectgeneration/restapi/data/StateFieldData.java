@@ -5,25 +5,24 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.restapi.data;
+package io.vlingo.xoom.designer.task.projectgeneration.restapi.data;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DomainEventData {
+public class StateFieldData {
 
     public final String name;
-    public final List<String> fields = new ArrayList<>();
+    public final String type;
 
-    public DomainEventData(final String name,
-                           final List<String> fields) {
+    public StateFieldData(final String name,
+                          final String type) {
         this.name = name;
-        this.fields.addAll(fields);
+        this.type = type;
     }
 
     public List<String> validate(List<String> errorStrings) {
-        if(name==null) errorStrings.add("DomainEventData.name is null");
-        if(fields==null) errorStrings.add("DomainEventData.fields is null");
+        if(name==null) errorStrings.add("StateFieldData.name is null");
+        if(type==null) errorStrings.add("StateFieldData.type is null");
         return errorStrings;
     }
 }
