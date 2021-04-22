@@ -31,7 +31,7 @@ export default {
 	},
 
 	downloadExportationFile(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
-		return repoPoRepository.post(resources.exportationFile, {
+		return Repository.post(resources.exportationFile, {
 			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
 		}).then(ensureOk).then(res => res.json());
 	},
