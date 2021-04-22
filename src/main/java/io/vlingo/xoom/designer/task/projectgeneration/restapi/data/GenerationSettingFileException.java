@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.task.projectgeneration.restapi;
+package io.vlingo.xoom.designer.task.projectgeneration.restapi.data;
 
 public class GenerationSettingFileException extends RuntimeException {
 

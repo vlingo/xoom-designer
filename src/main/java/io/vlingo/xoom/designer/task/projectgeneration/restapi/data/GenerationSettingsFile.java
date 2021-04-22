@@ -4,14 +4,13 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.restapi;
+package io.vlingo.xoom.designer.task.projectgeneration.restapi.data;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.task.projectgeneration.ByteArraySupplier;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
