@@ -1,9 +1,16 @@
 import Repository from './Repository'
 
 const resources = Object.freeze({
-	generation: '/generation-settings',
-	settingsFile: '/generation-settings/file'
+	projectGeneration: '/generation-settings',
+	exportationFile: '/generation-settings/exportation-file',
+	importationFile: '/generation-settings/importation-file',
+	pathValidation: '/generation-settings/paths',
+	generationInfo: '/generation-settings/info',
 })
+
+function ensureOk(response) {
+	return ensure(response, 200);
+}
 
 function ensure(response, status) {
 	if(response.status === 500) {
@@ -16,38 +23,33 @@ function ensure(response, status) {
 }
 
 
-function ensureOk(response) {
-	return ensure(response, 200);
-}
-
-async function repoPost(path, body) {
-	return Repository.post(path, body)
-	.then(ensureOk)
-	.then(res => res.json());
-}
-
-async function repoPatch(path, body) {
-	return Repository.patch(path, body)
-	.then(ensureOk)
-	.then(res => res.json());
-}
-
 export default {
-	postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
-		return repoPost(resources.generation, {
+	generateProject(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
+		return Repository.post(resources.projectGeneration, {
 			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
-		});
+		}).then(ensureOk).then(res => res.json());
 	},
 
-	downloadSettingsFile(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
-		return repoPost(resources.settingsFile, {
+	downloadExportationFile(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
+		return repoPoRepository.post(resources.exportationFile, {
 			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
-		});
+		}).then(ensureOk).then(res => res.json());
 	},
 
-	uploadSettingsFile(encodedFile) {
-		return repoPatch(resources.settingsFile, {
+	processImportFile(encodedFile) {
+		return Repository.post(resources.importationFile, {
 			"encoded": encodedFile
+		}).then(ensureOk).then(res => res.json());
+	},
+
+	checkPath(projectDirectory) {
+		return Repository.post(resources.pathValidation, {
+			path: projectDirectory
 		});
 	},
+
+	queryInfo() {
+		return Repository.get(resources.generationInfo)
+			.then(ensureOk).then(res => res.json());
+	}
 }

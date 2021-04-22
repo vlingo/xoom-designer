@@ -9,7 +9,6 @@ export const deploymentSettings = writable(getLocalStorage("deploymentSettings")
 /*
 * checking process.browser simply means that only run code snippet in client side.
 */
-
 export function getLocalStorage(key) {
 	if(process.browser) {
 		return JSON.parse(localStorage.getItem(key)) || undefined;
@@ -43,3 +42,36 @@ export const generationSettings = createLocalStore('generationSettings', {
 	useAnnotations: true,
 	useAutoDispatch: true
 });
+
+export const EDITION_STATUS = {
+	NEW: "new",
+	CHANGED: "changed"
+};
+
+var persistenceSettingsStatus = getLocalStorage('persistenceSettingsStatus') || EDITION_STATUS.NEW;
+var deploymentSettingsStatus = getLocalStorage('deploymentSettingsStatus') || EDITION_STATUS.NEW;
+var generationSettingsStatus = getLocalStorage('generationSettingsStatus') || EDITION_STATUS.NEW;
+
+export function onPersistenceSettingsChange() {
+	persistenceSettingsStatus = EDITION_STATUS.CHANGED;
+	setLocalStorage('persistenceSettingsStatus', EDITION_STATUS.CHANGED);
+}
+export function isPersistenceSettingsChanged() {
+	return persistenceSettingsStatus === EDITION_STATUS.CHANGED;
+}
+export function onDeploymentSettingsChange() {
+	deploymentSettingsStatus = EDITION_STATUS.CHANGED;
+	setLocalStorage('deploymentSettingsStatus', EDITION_STATUS.CHANGED);
+}
+export function isDeploymentSettingsChanged() {
+	return deploymentSettingsStatus === EDITION_STATUS.CHANGED;
+}
+export function onGenerationSettingsChange() {
+	generationSettingsStatus = EDITION_STATUS.CHANGED;
+	setLocalStorage('generationSettingsStatus', EDITION_STATUS.CHANGED);
+}
+export function isGenerationSettingsChanged() {
+	return generationSettingsStatus === EDITION_STATUS.CHANGED;
+}
+
+

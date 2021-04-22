@@ -129,17 +129,17 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
             post("/api/generation-settings")
                     .body(GenerationSettingsData.class)
                     .handle(this::startGeneration),
-            post("/api/generation-settings/file")
+            post("/api/generation-settings/exportation-file")
                     .body(GenerationSettingsData.class)
                     .handle(this::downloadSettingsFile),
-            patch("/api/generation-settings/file")
+            post("/api/generation-settings/importation-file")
                     .body(GenerationSettingsFile.class)
                     .handle(this::processSettingsFile),
-            get("/api/generation-settings/info")
-                    .handle(this::queryGenerationSettingsInformation),
-            post("/api/generation-paths")
+            post("/api/generation-settings/paths")
                     .body(GenerationPath.class)
-                    .handle(this::makeGenerationPath));
+                    .handle(this::makeGenerationPath),
+            get("/api/generation-settings/info")
+                    .handle(this::queryGenerationSettingsInformation));
   }
 
 }

@@ -15,18 +15,15 @@ public class ContextSettingsData {
     public final String artifactId;
     public final String artifactVersion;
     public final String packageName;
-    public final String xoomVersion;
 
     public ContextSettingsData(final String groupId,
                                final String artifactId,
                                final String artifactVersion,
-                               final String packageName,
-                               final String xoomVersion) {
+                               final String packageName) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.artifactVersion = artifactVersion;
         this.packageName = packageName;
-        this.xoomVersion = xoomVersion;
     }
 
     public List<String> validate(List<String> errorStrings) {
@@ -34,7 +31,6 @@ public class ContextSettingsData {
         if(artifactId==null) errorStrings.add("ContextSettingsData.artifactId is null");
         if(artifactVersion==null) errorStrings.add("ContextSettingsData.artifactVersion is null");
         if(packageName==null) errorStrings.add("ContextSettingsData.packageName is null");
-        if(xoomVersion==null) errorStrings.add("ContextSettingsData.xoomVersion is null");
         return errorStrings;
     }
 

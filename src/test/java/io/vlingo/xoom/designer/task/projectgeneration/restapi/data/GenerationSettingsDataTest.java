@@ -37,7 +37,7 @@ public class GenerationSettingsDataTest {
 
   private ContextSettingsData contextSettingsData() {
     return new ContextSettingsData("io.vlingo", "xoomapp",
-            "1.0.0", "io.vlingo.xoomapp", "1.3.4-SNAPSHOT");
+            "1.0.0", "io.vlingo.xoomapp");
   }
 
   private ModelSettingsData modelSettingsData() {

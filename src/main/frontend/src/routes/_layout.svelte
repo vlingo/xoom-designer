@@ -5,7 +5,7 @@
 	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	export let segment;
-	import Repository from '../api/Repository';
+	import XoomDesignerRepository from "../api/XoomDesignerRepository";
 
 	let sidenav = false;
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
@@ -13,8 +13,7 @@
 
 	onMount(() => {
 		isMobile.check();
-		Repository.get('/generation-settings/info')
-			.then(response => response.json())
+		XoomDesignerRepository.queryInfo()
 			.then(data => {
 				if ($settingsInfo && $settingsInfo.xoomDesignerFileVersion && data && data.xoomDesignerFileVersion && $settingsInfo.xoomDesignerFileVersion !== data.xoomDesignerFileVersion) {
 					const tempProjectGenerationIndex = Number($projectGenerationIndex);
