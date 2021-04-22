@@ -54,10 +54,6 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     return mapContext(settings).andThen(this::runProjectGeneration).andThenTo(this::buildResponse);
   }
 
-  public Completes<Response> queryGenerationSettingsInformation() {
-    return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
-  }
-
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
     final File generationPath = new File(path.path);
 
@@ -83,6 +79,18 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     } catch (final GenerationSettingFileException exception) {
       return Completes.withSuccess(Response.of(InternalServerError));
     }
+  }
+
+  public Completes<Response> processSettingsFile(final GenerationSettingsFile generationSettingsFile) {
+    try {
+      return Completes.withSuccess(Response.of(Ok, serialized(generationSettingsFile.mapData())));
+    } catch (final GenerationSettingFileException exception) {
+      return Completes.withSuccess(Response.of(InternalServerError));
+    }
+  }
+
+  public Completes<Response> queryGenerationSettingsInformation() {
+    return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
   }
 
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
@@ -124,6 +132,9 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
             post("/api/generation-settings/file")
                     .body(GenerationSettingsData.class)
                     .handle(this::downloadSettingsFile),
+            patch("/api/generation-settings/file")
+                    .body(GenerationSettingsFile.class)
+                    .handle(this::processSettingsFile),
             get("/api/generation-settings/info")
                     .handle(this::queryGenerationSettingsInformation),
             post("/api/generation-paths")

@@ -10,8 +10,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.designer.task.projectgeneration.ByteArraySupplier;
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,6 +50,19 @@ public class GenerationSettingsFile {
   private String format(final String generationSettings) {
     final JsonElement parsed = new JsonParser().parse(generationSettings);
     return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
+  }
+
+  public GenerationSettingsData mapData() {
+    try {
+      final ByteArraySupplier byteArraySupplier = ByteArraySupplier.empty();
+      try (final ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream(); ) {
+        byteArraySupplier.stream(byteArrayStream);
+        byteArrayStream.write(Base64.getDecoder().decode(encoded));
+      }
+      return JsonSerialization.deserialized(new String(byteArraySupplier.get()), GenerationSettingsData.class);
+    } catch (final IOException exception) {
+      throw new GenerationSettingFileException("Unable to map data from encoded file", exception);
+    }
   }
 
 }

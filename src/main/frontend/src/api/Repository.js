@@ -28,7 +28,7 @@ export async function patch(path, body) {
 	const res = await fetch(root + path, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json; charset=utf-8'},
-		body: body,
+		body: JSON.stringify(body),
 	});
 	return res;
 }

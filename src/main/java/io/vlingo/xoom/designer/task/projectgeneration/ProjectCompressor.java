@@ -55,22 +55,4 @@ public class ProjectCompressor {
     }
   }
 
-  private static class ByteArraySupplier {
-    private ByteArrayOutputStream stream;
-
-    static ByteArraySupplier empty() {
-      return new ByteArraySupplier();
-    }
-
-    void stream(final ByteArrayOutputStream stream) {
-      this.stream = stream;
-    }
-
-    byte[] get() {
-      if(stream == null) {
-        return new byte[0];
-      }
-      return stream.toByteArray();
-    }
-  }
 }

@@ -26,6 +26,12 @@ async function repoPost(path, body) {
 	.then(res => res.json());
 }
 
+async function repoPatch(path, body) {
+	return Repository.patch(path, body)
+	.then(ensureOk)
+	.then(res => res.json());
+}
+
 export default {
 	postGenerationSettings(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
 		return repoPost(resources.generation, {
@@ -37,5 +43,11 @@ export default {
 		return repoPost(resources.settingsFile, {
 			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
 		});
-	}
+	},
+
+	uploadSettingsFile(encodedFile) {
+		return repoPatch(resources.settingsFile, {
+			"encoded": encodedFile
+		});
+	},
 }
