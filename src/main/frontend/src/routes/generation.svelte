@@ -1,6 +1,6 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, onGenerationSettingsChange, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths} from "../stores";
+	import { importedSettings, contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, onGenerationSettingsChange, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths} from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
   import DownloadDialog from "../util/DownloadDialog";
 	import { requireRule } from "../validators";
@@ -24,14 +24,22 @@
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
   let deployment  = $deploymentSettings;
-  $: $generationSettings.projectDirectory = $contextSettings ? `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${$contextSettings.groupId}${$settingsInfo.pathSeparator}${$contextSettings.artifactId}${Number($projectGenerationIndex)}` : `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   let processing = false;
   let snackbar = false;
   let dialogActive = false;
   let isLoading = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
   let dialogStatus, succeded, failed, successMessage, failureMessage;
+  $: $generationSettings.projectDirectory = $contextSettings ? `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${$contextSettings.groupId}${$settingsInfo.pathSeparator}${$contextSettings.artifactId}${Number($projectGenerationIndex)}` : `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   
+  function importSettings() {
+    onGenerationSettingsChange()
+    $generationSettings.useAnnotations = $importedSettings.useAnnotations == undefined ? true : $importedSettings.useAnnotations;
+    $generationSettings.useAutoDispatch = $importedSettings.useAutoDispatch == undefined ? true : $importedSettings.useAnnotations;
+    $generationSettings.projectDirectory = $importedSettings.projectDirectory == undefined ? $generationSettings.projectDirectory : $importedSettings.projectDirectory;		 
+		setLocalStorage("generationSetings", $generationSettings);
+	}
+
   function checkPath() {
     if(requiresCompression()){
       generate();
@@ -55,22 +63,6 @@
     }
   }
 
-  function downloadExportationFile() {
-    if(!valid) return;
-    processing = true;
-    dialogActive = false;
-    XoomDesignerRepository.downloadExportationFile(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
-    	.then(settingsFile => {
-        succeed(["Settings exported. ", ""]);
-        DownloadDialog.forJsonFile("settings.json", settingsFile.encoded);
-      }).catch(generationReport => {
-        failed(["Settings exportation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
-      }).finally(() => {
-        processing = false;
-        snackbar = true;
-      })
-  }
-
 	const generate = () => {
     if(!valid) return;
     processing = true;
@@ -84,8 +76,7 @@
           succeed(["Project generated. ","Please check folder: " + $generationSettings.projectDirectory]);
           $projectGenerationIndex = Number($projectGenerationIndex) + 1;
           $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
-        }
-        
+        }        
       }).catch(generationReport => {
         fail(["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
       }).finally(() => {
@@ -115,8 +106,16 @@
     return $settingsInfo.generationTarget === "zip-download";
   }
 
+  function validatePreviousSteps() {
+    let context = $contextSettings;
+    return context && context.groupId && context.artifactId &&  context.packageName && 
+           context.artifactVersion && $aggregateSettings && $aggregateSettings.length > 0 && 
+           $persistenceSettings && $deploymentSettings;
+  }
+
+  $: $importedSettings && importSettings()
 	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
-  $: valid = (requiresCompression() || $generationSettings.projectDirectory) && context && model && model.aggregateSettings && model.persistenceSettings && deployment
+  $: valid = (requiresCompression() || $generationSettings.projectDirectory) && validatePreviousSteps();
   $: onGenerationSettingsChange();		
 </script>
 
@@ -131,9 +130,8 @@
   {/if}
 	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations} on:change={onGenerationSettingsChange}>Use VLINGO XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations} on:change={onGenerationSettingsChange}>Use VLINGO XOOM auto dispatch</Switch>
-
+  
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
-  <Button class="mt-4 mr-4" on:click={downloadExportationFile} disabled={!valid || processing || isLoading}>Export Settings</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
   {:else if succeded}

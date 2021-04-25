@@ -1,15 +1,115 @@
 <script>
 	import { onMount } from 'svelte';
-	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from '../stores';
-	import { Button, Icon, MaterialApp, AppBar, Container } from "svelte-materialify/src";
-	import { mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
+	import Base64 from "../util/Base64";
+	import MenuSurface from '@smui/menu-surface';
+	import { Button, Icon, MaterialApp, AppBar, Container, Dialog, Card, CardTitle, CardActions, CardText, Snackbar } from "svelte-materialify/src";
+	import { reset, clearStatuses, theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, importedSettings, contextSettings, aggregateSettings, valueObjectSettings, persistenceSettings, deploymentSettings, generationSettings, isContextSettingsChanged, isPersistenceSettingsChanged, isDeploymentSettingsChanged, isGenerationSettingsChanged } from '../stores';
+	import { mdiCheckBold, mdiCloseThick, mdiDotsVertical, mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
+	import Portal from "svelte-portal/src/Portal.svelte";
+	import List, { Item, Text } from '@smui/list';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
-	export let segment;
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
+	import DownloadDialog from "../util/DownloadDialog";
+	export let segment;
 
 	let sidenav = false;
+	let snackbar = false;
+	let importDialogActive = false;
+	let settingsResetDialog = false;
+	let menu, succeded, failed, successMessage, failureMessage;
+
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
 	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
+
+	function openMenu() {
+		menu.setOpen(true);
+	}
+
+	function importSettings() {
+		if(isEdited()) {
+			importDialogActive = true;
+		} else {
+			openFileExplorer();
+		}
+	}
+
+	function handleUpload() {
+		if(this.files.length == 0) {
+			return;
+		}
+		Base64.encode(this.files[0]).then(encodedFile => {
+			XoomDesignerRepository.processImportFile(encodedFile)
+			.then(imported => {
+				$importedSettings = imported;
+				succeed("Settings imported.");
+			}).catch(() => {
+				fail(["Settings importation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
+			}).finally(() => {
+				snackbar = true;
+				this.form.reset();
+			})
+		});
+	}
+
+	function exportSettings() {
+		let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
+		XoomDesignerRepository.downloadExportationFile($contextSettings, model, $deploymentSettings, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+			.then(settingsFile => {
+					succeed("Settings exported.");
+					DownloadDialog.forJsonFile("settings.json", settingsFile.encoded);
+				}).catch(generationReport => {
+					failed(["Settings exportation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
+				}).finally(() => {
+					snackbar = true;
+				})
+	}
+
+	function openSettingsResetDialog() {
+		if(isEdited()) {
+			settingsResetDialog = true;
+		} else{ 
+			resetSettings();
+		}
+	}
+
+	function closeResetDialog() {
+		settingsResetDialog = false;
+	}
+
+	function resetSettings() {
+		succeed("Settings reset.");
+		$importedSettings = {};
+		closeResetDialog();
+		snackbar = true;
+		reset().then(() => clearStatuses());
+	}
+
+	function succeed(message) {
+		successMessage = message;
+		succeded = true;
+		failed = false;
+	}
+
+	function fail(messages) {
+		failureMessage = messages;
+		succeded = false;
+		failed = true;
+	}
+
+	function openFileExplorer() {
+		closeImportDialog();
+		document.getElementById("fileImport").click();
+	}
+
+	function closeImportDialog() {
+		importDialogActive = false;
+	}
+
+	function isEdited() {
+		let aggregateSettingsChanged = ($aggregateSettings && $aggregateSettings.length > 0);
+		return isContextSettingsChanged() || aggregateSettingsChanged ||  isPersistenceSettingsChanged() || 
+		isDeploymentSettingsChanged() || isGenerationSettingsChanged();
+	}
 
 	onMount(() => {
 		isMobile.check();
@@ -27,6 +127,7 @@
 				$settingsInfo = data;			
 			});
 	})
+
 </script>
 
 <svelte:window on:resize={isMobile.check} />
@@ -52,14 +153,89 @@
     	    {#if !mobile}GitHub{/if}
     	  </Button>
     	</a> -->
+		<div style="min-width: 100px;">
+			<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
+				<List class="demo-list"> 
+					<Item on:SMUI:action={importSettings}>
+						<Text>Import Settings</Text>
+					</Item>
+					<Item on:SMUI:action={exportSettings}>
+						<Text>Export Settings</Text>
+					</Item>
+					<Item on:SMUI:action={openSettingsResetDialog}>
+						<Text>Reset Settings</Text>
+					</Item>
+				</List>
+			</MenuSurface>
+		</div>
+
     	<Button fab text on:click={toggleTheme} aria-label="Toggle Theme">
     		<Icon path={$theme === "light" ? mdiWeatherNight : mdiWeatherSunny}/>
     	</Button>
+		
+		<Button fab text on:click={openMenu} aria-label="Open Menu">
+    		<Icon path={mdiDotsVertical}/>
+    	</Button>
+		
 	</AppBar>
 
+	<form><input id="fileImport" type="file" hidden={true} on:change={handleUpload} accept="application/json"></form>
+
+	<Snackbar class="justify-space-between" bind:active={snackbar} top right>
+		{#if succeded}
+			<Icon class="green-text" path={mdiCheckBold}/> {successMessage}
+		{:else if failed}
+			<Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
+		{/if}
+		<Button text on:click={() => snackbar = false}>
+			Dismiss
+		</Button>
+	</Snackbar>
+
+	<Portal target=".s-app">
+		<Dialog persistent bind:active={importDialogActive}>
+			<Card class="pa-3">
+				<div class="d-flex flex-column">
+					<CardTitle class="error-text">
+						Be Careful!
+					</CardTitle>
+					<CardText>
+						This action will overwrite the fields already filled in.
+					</CardText>
+					<CardActions style="margin-top: auto" class="justify-space-around">
+						<Button on:click={closeImportDialog}>Cancel</Button>
+						<Button class="primary-color" on:click={openFileExplorer}>Continue</Button>
+					</CardActions>
+				</div>
+			</Card>
+		</Dialog>
+		<Dialog persistent bind:active={settingsResetDialog}>
+			<Card class="pa-3">
+				<div class="d-flex flex-column">
+					<CardTitle class="error-text">
+						Be Careful!
+					</CardTitle>
+					<CardText>
+						This will clear your browser's storage of the current XOOM Designer model. You can download and save your model definition first for back up. Are you sure?
+					</CardText>
+					<CardActions style="margin-top: auto" class="justify-space-around">
+						<Button on:click={closeResetDialog}>Cancel</Button>
+						<Button class="primary-color" on:click={resetSettings}>Continue</Button>
+					</CardActions>
+				</div>
+			</Card>
+		</Dialog>
+	</Portal>
+			
 	<SiteNavigation {segment} bind:mobile={$isMobile} bind:sidenav />
 
 	<main class:navigation-enabled={!$isMobile}>
+		<section align="end">
+			{#if failed}
+				<Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
+				<a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failureMessage[1]}</a>
+			{/if}
+		</section>
 		<Container>
     	<!-- {#if ...}
     		<Loading />
@@ -67,7 +243,9 @@
 		<slot />
 		</Container>
   	</main>
-		<div id="portal">
+		
+	<div id="portal"></div>
+
 </MaterialApp>
 </div>
 
@@ -84,4 +262,5 @@
 			color: inherit;
 		}
 	}
+
 </style>

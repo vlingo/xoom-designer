@@ -1,10 +1,12 @@
 import { writable } from 'svelte/store';
 import { isMobileStore, createLocalStore } from './utils';
 
+export let importedSettings = writable();
 export const contextSettings = writable(getLocalStorage("contextSettings"));
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const aggregateSettings = writable(getLocalStorage("aggregateSettings") || []);
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
+
 
 /*
 * checking process.browser simply means that only run code snippet in client side.
@@ -22,18 +24,20 @@ export function setLocalStorage(key, value) {
 	}
 }
 
-export const isMobile = isMobileStore();
-export const theme = createLocalStore('theme', 'light')
-export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
-export const valueObjectSettings = createLocalStore('valueObjectSettings', [])
-export const persistenceSettings = createLocalStore('persistenceSettings', {
+export const persistenceSettingsInitialValue = {
 	storageType: 'STATE_STORE',
 	useCQRS: false,
 	projections: 'NONE',
 	database: 'IN_MEMORY',
 	commandModelDatabase: 'IN_MEMORY',
 	queryModelDatabase: 'IN_MEMORY',
-})
+};
+
+export const isMobile = isMobileStore();
+export const theme = createLocalStore('theme', 'light')
+export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
+export const valueObjectSettings = createLocalStore('valueObjectSettings', [])
+export const persistenceSettings = createLocalStore('persistenceSettings', persistenceSettingsInitialValue);
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
 export const settingsInfo = createLocalStore('settingsInfo', {});
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
@@ -48,30 +52,53 @@ export const EDITION_STATUS = {
 	CHANGED: "changed"
 };
 
-var persistenceSettingsStatus = getLocalStorage('persistenceSettingsStatus') || EDITION_STATUS.NEW;
-var deploymentSettingsStatus = getLocalStorage('deploymentSettingsStatus') || EDITION_STATUS.NEW;
-var generationSettingsStatus = getLocalStorage('generationSettingsStatus') || EDITION_STATUS.NEW;
+export const STEP_STATUS = {
+	CONTEXT: "contextSettingsStatus",
+	PERSISTENCE: "persistenceSettingsStatus",
+	DEPLOYMENT: "deploymentSettingsStatus",
+	GENERATION: "generationSettingsStatus"
+}
 
+export function onContextSettingsChange() {
+	setLocalStorage(STEP_STATUS.CONTEXT, EDITION_STATUS.CHANGED);
+}
+export function isContextSettingsChanged() {
+	return isChanged(STEP_STATUS.CONTEXT);
+}
 export function onPersistenceSettingsChange() {
-	persistenceSettingsStatus = EDITION_STATUS.CHANGED;
-	setLocalStorage('persistenceSettingsStatus', EDITION_STATUS.CHANGED);
+	setLocalStorage(STEP_STATUS.PERSISTENCE, EDITION_STATUS.CHANGED);
 }
 export function isPersistenceSettingsChanged() {
-	return persistenceSettingsStatus === EDITION_STATUS.CHANGED;
+	return isChanged(STEP_STATUS.PERSISTENCE);
 }
 export function onDeploymentSettingsChange() {
-	deploymentSettingsStatus = EDITION_STATUS.CHANGED;
-	setLocalStorage('deploymentSettingsStatus', EDITION_STATUS.CHANGED);
+	setLocalStorage(STEP_STATUS.DEPLOYMENT, EDITION_STATUS.CHANGED);
 }
 export function isDeploymentSettingsChanged() {
-	return deploymentSettingsStatus === EDITION_STATUS.CHANGED;
+	return isChanged(STEP_STATUS.DEPLOYMENT);
 }
 export function onGenerationSettingsChange() {
-	generationSettingsStatus = EDITION_STATUS.CHANGED;
-	setLocalStorage('generationSettingsStatus', EDITION_STATUS.CHANGED);
+	setLocalStorage(STEP_STATUS.GENERATION, EDITION_STATUS.CHANGED);
 }
 export function isGenerationSettingsChanged() {
-	return generationSettingsStatus === EDITION_STATUS.CHANGED;
+	return isChanged(STEP_STATUS.GENERATION);
 }
 
+function isChanged(key) {
+	let status = getLocalStorage(key);
+	if(!status) {
+		return EDITION_STATUS.NEW;
+	}
+	return status === EDITION_STATUS.CHANGED;
+}
+
+export async function reset() {
+	localStorage.clear();
+}
+
+export async function clearStatuses() {
+	for (let key of Object.keys(STEP_STATUS)) {
+		setLocalStorage(STEP_STATUS[key], EDITION_STATUS.NEW);
+	}
+}
 

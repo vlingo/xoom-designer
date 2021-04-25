@@ -1,7 +1,7 @@
 <script>
 	import CardForm from "../components/CardForm.svelte";
 	import VlSelect from "../components/VlSelect.svelte";
-	import { persistenceSettings, onPersistenceSettingsChange } from "../stores";
+	import { importedSettings, persistenceSettings, persistenceSettingsInitialValue, onPersistenceSettingsChange, setLocalStorage } from "../stores";
 	import { storageTypes, projectionsTypes, databaseTypes } from '../stores/persistence';
 	import { Select, Switch } from "svelte-materialify/src";
 
@@ -9,11 +9,25 @@
 	const projectionFormat = (val) => $projectionsTypes.find(t => t.value === val).name;
 	const databaseFormat = (val) => $databaseTypes.find(t => t.value === val).name;
 
+	function importSettings() {
+		if($importedSettings.model && $importedSettings.model.persistenceSettings) {
+			$persistenceSettings = $importedSettings.model.persistenceSettings;
+		} else {
+			$persistenceSettings = persistenceSettingsInitialValue;
+		}
+		save();
+	}
+
 	function onStorageTypeChange(value) {
 		if (value.detail === 'JOURNAL') {
 			$persistenceSettings = { ...$persistenceSettings, useCQRS: true, projections: 'EVENT_BASED' }
 		}
 		onPersistenceSettingsChange();
+	}
+
+	function save() {
+		onPersistenceSettingsChange();
+		setLocalStorage("persistenceSettings", $persistenceSettings);
 	}
 
 	$: {
@@ -37,6 +51,8 @@
 		}
 	}
 
+	$: $importedSettings && importSettings()
+	$: save();
 </script>
 
 <svelte:head>

@@ -14,6 +14,7 @@
     "compression": "^1.7.1",
     "polka": "next",
     "sirv": "^1.0.0",
+    "svelte-material-ui": "^4.0.0",
     "svelte-portal": "^2.1.1"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.3.4",
     "@rollup/plugin-url": "^5.0.0",
+    "@smui/menu-surface": "^4.0.0",
     "http-proxy-middleware": "^1.0.6",
     "postcss": "^8.1.7",
     "rollup": "^2.33.3",

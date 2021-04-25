@@ -2,7 +2,7 @@
 	import CardForm from "../components/CardForm.svelte";
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
-	import { aggregateSettings, getLocalStorage, setLocalStorage } from "../stores";
+	import { importedSettings, aggregateSettings, valueObjectSettings, getLocalStorage, setLocalStorage } from "../stores";
 	import { SlideGroup, SlideItem, Icon } from "svelte-materialify/src";
 	import { mdiPlus } from "@mdi/js";
 	import Button from "svelte-materialify/src/components/Button";
@@ -27,7 +27,24 @@
 		$aggregateSettings = $aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(aggregate));
 	}
 
-	$: setLocalStorage("aggregateSettings", $aggregateSettings)
+	function importSettings() {
+		if(!$importedSettings.model || !$importedSettings.model.aggregateSettings || !$importedSettings.model.aggregateSettings.length) {
+			$aggregateSettings = [];
+			$valueObjectSettings = [];
+		} else {
+			$aggregateSettings = $importedSettings.model.aggregateSettings;
+			$valueObjectSettings = $importedSettings.model.valueObjectSettings;
+		}
+		save();
+	}
+
+	function save() {
+		setLocalStorage("aggregateSettings", $aggregateSettings);
+		setLocalStorage("valueObjectSettings", $valueObjectSettings);
+	}
+	
+	$: $importedSettings && importSettings()
+	$: save();
 </script>
 
 <svelte:head>

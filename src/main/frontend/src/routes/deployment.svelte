@@ -1,23 +1,48 @@
 <script>
 	import { Radio, TextField } from "svelte-materialify/src";
 	import CardForm from "../components/CardForm.svelte";
-	import { deploymentSettings, onDeploymentSettingsChange, setLocalStorage, EDITION_STATUS } from "../stores";
+	import { importedSettings, deploymentSettings, onDeploymentSettingsChange, setLocalStorage, EDITION_STATUS } from "../stores";
 	import { requireRule } from '../validators';
 	import { deploymentTypes } from '../stores/deployment.js';
 
-	// [{ name: "id", type: "String" }];
-	let clusterNodes = $deploymentSettings ? $deploymentSettings.clusterNodes : 3;
-    let type = $deploymentSettings ? $deploymentSettings.type : "NONE";
-    let dockerImage = $deploymentSettings ? $deploymentSettings.dockerImage : "";
-    let kubernetesImage = $deploymentSettings ? $deploymentSettings.kubernetesImage : "";
-	let kubernetesPod = $deploymentSettings ? $deploymentSettings.kubernetesPod : "";
+	let clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod;
 
-	$: valid = clusterNodes >= 0 && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));
-	$: if(valid) {
-		$deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod };
-		setLocalStorage("deploymentSettings", $deploymentSettings)
+	load($deploymentSettings);
+
+	function importSettings() {
+		load($importedSettings.deployment);
+		save();
 	}
-	$: onDeploymentSettingsChange();
+
+	function load(settings) {
+		if(settings) {
+			type = settings.type;
+			clusterNodes = settings.clusterNodes;
+			dockerImage = settings.dockerImage;
+    		kubernetesImage = settings.kubernetesImage;
+			kubernetesPod = settings.kubernetesPod;
+		} else {
+			reset();
+		}
+	}
+
+	function reset() {
+		type = "NONE";
+		clusterNodes = 3;
+		dockerImage = "";
+		kubernetesImage = "";
+		kubernetesPod = "";
+	}
+
+	function save() {
+		onDeploymentSettingsChange();
+		$deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod };
+		setLocalStorage("deploymentSettings", $deploymentSettings);
+	}
+
+	$: $importedSettings && importSettings()
+	$: valid = clusterNodes >= 0 && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));		
+	$: clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod, save();
 </script>
 
 <svelte:head>
