@@ -6,6 +6,8 @@ The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code
 
 Docs: https://docs.vlingo.io/xoom-turbo/xoom-designer
 
+[XOOM Designer](https://vlingo.io/wp-content/uploads/2021/04/xoom-designer-scrn.png)
+
 ## Introduction
 
 A common reality of unfamiliarity exists for many developers when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications and services, or to implement DOMA and DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar approaches, frameworks, and tools that have rarely worked out well in the long run.
