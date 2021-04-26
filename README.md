@@ -4,8 +4,9 @@
 
 The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code Reactive, Event-Driven Microservices and Applications using DOMA, DDD, and other approaches.
 
-Docs: https://docs.vlingo.io/xoom-turbo/xoom-designer
+Docs: https://docs.vlingo.io/xoom-designer
 
+### Features
 <img src="https://vlingo.io/wp-content/uploads/2021/04/xoom-designer-scrn.png" width="70%" height="70%">
 
 ## Introduction
