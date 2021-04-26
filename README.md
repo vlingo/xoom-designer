@@ -6,7 +6,8 @@ The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code
 
 Docs: https://docs.vlingo.io/xoom-turbo/xoom-designer
 
-[![XOOM Designer](https://vlingo.io/wp-content/uploads/2021/04/xoom-designer-scrn.png)(https://vlingo.io)
+![XOOM Designer]
+(https://vlingo.io/wp-content/uploads/2021/04/xoom-designer-scrn.png | width=60% height=60%)
 
 ## Introduction
 
