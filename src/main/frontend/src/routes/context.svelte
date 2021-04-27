@@ -4,9 +4,7 @@
 	import { importedSettings, contextSettings, setLocalStorage, onContextSettingsChange } from '../stores';
 	import { artifactRule, packageRule, requireRule, versionRule } from '../validators';
 
-	let dialogActive = false;
 	let groupId, artifactId, artifactVersion, packageName;
-	let files, succeded, failed, successMessage, failureMessage;
 	
 	loadSettings($contextSettings);
 

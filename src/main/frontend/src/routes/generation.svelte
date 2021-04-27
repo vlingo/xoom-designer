@@ -3,8 +3,9 @@
 	import { importedSettings, contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, onGenerationSettingsChange, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths} from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
   import DownloadDialog from "../util/DownloadDialog";
+  import Formatter from "../util/Formatter";
 	import { requireRule } from "../validators";
-  import { mdiAlert, mdiCheckBold, mdiCloseThick } from "@mdi/js";
+  import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
   import {
     Button,
     Switch,
@@ -19,7 +20,6 @@
     CardText,
   } from 'svelte-materialify/src';
   import Portal from "svelte-portal/src/Portal.svelte";
-	import Repository from '../api/Repository';
 
 	let context = $contextSettings;
   let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
@@ -71,13 +71,13 @@
 		  .then(generationReport => {
         if(requiresCompression()) {
           succeed(["Project generated. ", ""]);
-          DownloadDialog.forZipFile("project.zip", generationReport.compressedProject);
+          DownloadDialog.forZipFile(Formatter.buildSettingsFullname(context), generationReport.compressedProject);
         } else {
           succeed(["Project generated. ","Please check folder: " + $generationSettings.projectDirectory]);
           $projectGenerationIndex = Number($projectGenerationIndex) + 1;
           $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
         }        
-      }).catch(generationReport => {
+      }).catch(() => {
         fail(["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
       }).finally(() => {
         processing = false;

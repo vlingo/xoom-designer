@@ -1,10 +1,10 @@
 export default {
 	forZipFile(filename, base64) {
-		open(filename, base64, "application/zip");
+		open(filename + ".zip", base64, "application/zip");
 	},
 
 	forJsonFile(filename, base64) {
-		open(filename, base64, "text/json");
+		open(filename + ".json", base64, "text/json");
 	},
 }
 
