@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte';
 	import Base64 from "../util/Base64";
 	import MenuSurface from '@smui/menu-surface';
-	import { Button, Icon, MaterialApp, AppBar, Container, Dialog, Card, CardTitle, CardActions, CardText, Snackbar } from "svelte-materialify/src";
+	import { Button, Icon, MaterialApp, Divider, AppBar, Container, Dialog, Card, CardTitle, CardActions, CardText, Snackbar } from "svelte-materialify/src";
 	import { reset, clearStatuses, theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, importedSettings, contextSettings, aggregateSettings, valueObjectSettings, persistenceSettings, deploymentSettings, generationSettings, isContextSettingsChanged, isPersistenceSettingsChanged, isDeploymentSettingsChanged, isGenerationSettingsChanged } from '../stores';
-	import { mdiCheckBold, mdiCloseThick, mdiDotsVertical, mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
+	import { mdiCheckBold, mdiCloseThick, mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import Portal from "svelte-portal/src/Portal.svelte";
 	import List, { Item, Text } from '@smui/list';
 	import SiteNavigation from '../components/SiteNavigation.svelte';
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
 	import DownloadDialog from "../util/DownloadDialog";
+	import Formatter from "../util/Formatter";
 	export let segment;
 
 	let sidenav = false;
@@ -52,12 +53,12 @@
 	}
 
 	function exportSettings() {
-		let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
-		XoomDesignerRepository.downloadExportationFile($contextSettings, model, $deploymentSettings, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+		const filename = Formatter.buildSettingsFullname($settings) + ".json";
+		XoomDesignerRepository.downloadExportationFile($settings)
 			.then(settingsFile => {
-					succeed("Settings exported.");
-					DownloadDialog.forJsonFile("settings.json", settingsFile.encoded);
-				}).catch(generationReport => {
+					succeed("Settings exported.");					
+					DownloadDialog.forJsonFile(Formatter.buildSettingsFullname($contextSettings), settingsFile.encoded);
+				}).catch(() => {
 					failed(["Settings exportation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
 				}).finally(() => {
 					snackbar = true;
@@ -67,7 +68,7 @@
 	function openSettingsResetDialog() {
 		if(isEdited()) {
 			settingsResetDialog = true;
-		} else{ 
+		} else { 
 			resetSettings();
 		}
 	}
@@ -97,8 +98,8 @@
 	}
 
 	function openFileExplorer() {
-		closeImportDialog();
 		document.getElementById("fileImport").click();
+		closeImportDialog();
 	}
 
 	function closeImportDialog() {
@@ -107,7 +108,7 @@
 
 	function isEdited() {
 		let aggregateSettingsChanged = ($aggregateSettings && $aggregateSettings.length > 0);
-		return isContextSettingsChanged() || aggregateSettingsChanged ||  isPersistenceSettingsChanged() || 
+		return isContextSettingsChanged() || aggregateSettingsChanged ||  isPersistenceSettingsChanged() ||
 		isDeploymentSettingsChanged() || isGenerationSettingsChanged();
 	}
 
@@ -143,6 +144,27 @@
     	  {/if}
 		</div>
 		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO XOOM Designer </span></a>
+		<Divider vertical inset class="ml-4 mr-4" />
+
+		<div style="min-width: 100px;">
+			<Button on:click={openMenu} aria-label="Open Menu">
+				<Text class="ml-2">Model</Text>
+			</Button>
+			<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
+				<List class="demo-list"> 
+					<Item on:SMUI:action={exportSettings}>
+						<Text>Export</Text>
+					</Item>
+					<Item on:SMUI:action={openSettingsImportationDialog}>
+						<Text>Import</Text>
+					</Item>
+					<Item on:SMUI:action={openSettingsResetDialog}>
+						<Text>Reset</Text>
+					</Item>
+				</List>
+			</MenuSurface>
+		</div>
+
 		<div style="flex-grow:1" />
     	<!-- <a
     	  href="https://github.com/TheComputerM/svelte-materialify"
@@ -153,29 +175,13 @@
     	    {#if !mobile}GitHub{/if}
     	  </Button>
     	</a> -->
-		<div style="min-width: 100px;">
-			<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
-				<List class="demo-list"> 
-					<Item on:SMUI:action={importSettings}>
-						<Text>Import Settings</Text>
-					</Item>
-					<Item on:SMUI:action={exportSettings}>
-						<Text>Export Settings</Text>
-					</Item>
-					<Item on:SMUI:action={openSettingsResetDialog}>
-						<Text>Reset Settings</Text>
-					</Item>
-				</List>
-			</MenuSurface>
-		</div>
+
 
     	<Button fab text on:click={toggleTheme} aria-label="Toggle Theme">
     		<Icon path={$theme === "light" ? mdiWeatherNight : mdiWeatherSunny}/>
     	</Button>
 		
-		<Button fab text on:click={openMenu} aria-label="Open Menu">
-    		<Icon path={mdiDotsVertical}/>
-    	</Button>
+
 		
 	</AppBar>
 
