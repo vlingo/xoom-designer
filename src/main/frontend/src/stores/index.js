@@ -7,7 +7,6 @@ export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const aggregateSettings = writable(getLocalStorage("aggregateSettings") || []);
 export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
 
-
 /*
 * checking process.browser simply means that only run code snippet in client side.
 */

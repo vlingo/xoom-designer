@@ -26,7 +26,7 @@
 		menu.setOpen(true);
 	}
 
-	function importSettings() {
+	function openSettingsImportationDialog() {
 		if(isEdited()) {
 			importDialogActive = true;
 		} else {
@@ -53,8 +53,7 @@
 	}
 
 	function exportSettings() {
-		const filename = Formatter.buildSettingsFullname($settings) + ".json";
-		XoomDesignerRepository.downloadExportationFile($settings)
+		XoomDesignerRepository.downloadExportationFile($contextSettings, { aggregateSettings: $aggregateSettings, valueObjectSettings: $valueObjectSettings, persitenceSettings: $persistenceSettings } , $deploymentSettings, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
 			.then(settingsFile => {
 					succeed("Settings exported.");					
 					DownloadDialog.forJsonFile(Formatter.buildSettingsFullname($contextSettings), settingsFile.encoded);
