@@ -1,0 +1,1 @@
+export const defaultContext = {groupId: "", artifactId: "", artifactVersion: "", packageName: ""};
