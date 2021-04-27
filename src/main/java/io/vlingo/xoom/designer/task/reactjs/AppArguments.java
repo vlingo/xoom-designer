@@ -11,12 +11,4 @@ public class AppArguments implements TemplateArguments {
     public AppArguments(List<AggregateData> aggregates) {
         this.aggregates = aggregates;
     }
-
-    public String makePlural(String word){
-        if (word.endsWith("y")){
-            return word.substring(0, word.length()-1) + "ies";
-        }else{
-            return word + "s";
-        }
-    }
 }

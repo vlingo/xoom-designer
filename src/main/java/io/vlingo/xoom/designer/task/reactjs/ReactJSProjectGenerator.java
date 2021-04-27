@@ -1,9 +1,7 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.TemplateException;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateMethodData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +9,10 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ReactJSProjectGenerator {
 
@@ -29,6 +31,11 @@ public class ReactJSProjectGenerator {
 
     public void generate() throws IOException, TemplateException {
         long startTime = System.currentTimeMillis();
+
+        final Map<String, List<ValueObjectFieldData>> valueObjectDataMap = Collections.unmodifiableMap(
+                settings.model.valueObjectSettings.stream()
+                        .collect(Collectors.toMap(valueObjectData -> valueObjectData.name, o -> o.fields))
+        );
 
         final Path outputRootDir = Paths.get(settings.projectDirectory).resolve("frontend");
         final Path publicDir = outputRootDir.resolve("public");
@@ -63,13 +70,13 @@ public class ReactJSProjectGenerator {
             );
             writeFile(
                     "AggregateList",
-                    new AggregateListArguments(aggregateData),
+                    new AggregateListArguments(aggregateData, valueObjectDataMap),
                     aggregateItemRootDir.resolve(pluralAggregateName+".js")
             );
             for (AggregateMethodData methodData : aggregateData.methods) {
                 writeFile(
                     "AggregateMethod",
-                    new AggregateMethodArguments(methodData, aggregateData),
+                    new AggregateMethodArguments(methodData, aggregateData, valueObjectDataMap),
                     aggregateItemRootDir.resolve(capitalizedAggregateName + fns.capitalize(methodData.name) + ".js")
                 );
             }
