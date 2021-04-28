@@ -1,19 +1,27 @@
 <script>
 	export let mobile;
 	export let sidenav;
-	import { NavigationDrawer, List, Overlay } from 'svelte-materialify/src';
-	import NavItem from './NavItem.svelte';
+	import { NavigationDrawer, Overlay, Icon } from 'svelte-materialify/src';
 	import routes from '../util/routes';
+	import List, {
+    Item,
+    Text,
+  } from '@smui/list';
+	import { goto } from '@sapper/app';
 
 	export let segment;
 </script>
   
 <NavigationDrawer active={!mobile || sidenav} style="height:100vh;" fixed clipped borderless>
-	<!-- <br /> -->
-	<!-- <ListGroup eager {offset} active={expanded}></ListGroup> maybe needed around all nav-items -->
 	<List nav dense>
 		{#each routes as item}
-			<NavItem {item} {segment}/>
+			<Item
+				on:SMUI:action={() => goto(item.href)}
+				selected={segment === item.href}
+			>
+				<Icon path={segment === item.href ? item.openIcon : item.icon} />
+				<Text class="ml-3">{item.text}</Text>
+			</Item>
 		{/each}
 	</List>
 </NavigationDrawer>
