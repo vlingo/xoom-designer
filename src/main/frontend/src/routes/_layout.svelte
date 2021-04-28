@@ -3,7 +3,7 @@
 	import Base64 from "../util/Base64";
 	import MenuSurface from '@smui/menu-surface';
 	import { Button, Icon, MaterialApp, Divider, AppBar, Container, Dialog, Card, CardTitle, CardActions, CardText, Snackbar } from "svelte-materialify/src";
-	import { reset, clearStatuses, theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, importedSettings, contextSettings, aggregateSettings, valueObjectSettings, persistenceSettings, deploymentSettings, generationSettings, isContextSettingsChanged, isPersistenceSettingsChanged, isDeploymentSettingsChanged, isGenerationSettingsChanged } from '../stores';
+	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, settings, clearSettings, isSettingsEdited, updateSettings } from '../stores';
 	import { mdiCheckBold, mdiCloseThick, mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import Portal from "svelte-portal/src/Portal.svelte";
 	import List, { Item, Text } from '@smui/list';
@@ -27,7 +27,7 @@
 	}
 
 	function openSettingsImportationDialog() {
-		if(isEdited()) {
+		if(isSettingsEdited()) {
 			importDialogActive = true;
 		} else {
 			openFileExplorer();
@@ -40,8 +40,8 @@
 		}
 		Base64.encode(this.files[0]).then(encodedFile => {
 			XoomDesignerRepository.processImportFile(encodedFile)
-			.then(imported => {
-				$importedSettings = imported;
+			.then(importedSettings => {
+				updateSettings(importedSettings);
 				succeed("Settings imported.");
 			}).catch(() => {
 				fail(["Settings importation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
@@ -53,10 +53,10 @@
 	}
 
 	function exportSettings() {
-		XoomDesignerRepository.downloadExportationFile($contextSettings, { aggregateSettings: $aggregateSettings, valueObjectSettings: $valueObjectSettings, persitenceSettings: $persistenceSettings } , $deploymentSettings, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+		XoomDesignerRepository.downloadExportationFile($settings)
 			.then(settingsFile => {
-					succeed("Settings exported.");					
-					DownloadDialog.forJsonFile(Formatter.buildSettingsFullname($contextSettings), settingsFile.encoded);
+					succeed("Settings exported.");
+					DownloadDialog.forJsonFile(Formatter.buildSettingsFullname($settings.context), settingsFile.encoded);
 				}).catch(() => {
 					failed(["Settings exportation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
 				}).finally(() => {
@@ -65,9 +65,9 @@
 	}
 
 	function openSettingsResetDialog() {
-		if(isEdited()) {
+		if(isSettingsEdited()) {
 			settingsResetDialog = true;
-		} else { 
+		} else {
 			resetSettings();
 		}
 	}
@@ -78,10 +78,9 @@
 
 	function resetSettings() {
 		succeed("Settings reset.");
-		$importedSettings = {};
 		closeResetDialog();
+		clearSettings();
 		snackbar = true;
-		reset().then(() => clearStatuses());
 	}
 
 	function succeed(message) {
@@ -103,12 +102,6 @@
 
 	function closeImportDialog() {
 		importDialogActive = false;
-	}
-
-	function isEdited() {
-		let aggregateSettingsChanged = ($aggregateSettings && $aggregateSettings.length > 0);
-		return isContextSettingsChanged() || aggregateSettingsChanged ||  isPersistenceSettingsChanged() ||
-		isDeploymentSettingsChanged() || isGenerationSettingsChanged();
 	}
 
 	onMount(() => {
@@ -150,7 +143,7 @@
 				<Text class="ml-2">Model</Text>
 			</Button>
 			<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
-				<List class="demo-list"> 
+				<List class="demo-list">
 					<Item on:SMUI:action={exportSettings}>
 						<Text>Export</Text>
 					</Item>
@@ -233,7 +226,6 @@
 	</Portal>
 			
 	<SiteNavigation {segment} bind:mobile={$isMobile} bind:sidenav />
-
 	<main class:navigation-enabled={!$isMobile}>
 		<section align="end">
 			{#if failed}
@@ -241,12 +233,14 @@
 				<a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failureMessage[1]}</a>
 			{/if}
 		</section>
+
 		<Container>
     	<!-- {#if ...}
     		<Loading />
     	{/if} -->
 		<slot />
 		</Container>
+
   	</main>
 		
 	<div id="portal"></div>

@@ -4,17 +4,17 @@
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
-	import { valueObjectSettings, simpleTypes } from '../../stores';
+	import { settings, simpleTypes } from '../../stores';
   import FillFieldsNote from './FillFieldsNote.svelte';
 
   export let stateFields;
 
-  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$valueObjectSettings.map(type => type.name)]);
+  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)]);
   $: if (stateFieldsTypes) {
     stateFields = stateFields.map(f => {
       return {
         ...f,
-        type: [...simpleTypes, ...$valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
+        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
       }
     })
   }

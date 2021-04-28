@@ -1,5 +1,5 @@
 <script>
-	import { valueObjectSettings, simpleTypes } from "../../stores";
+	import { settings, simpleTypes } from "../../stores";
 	import { Button, Dialog, Icon, CardActions, TextField, Select, Row, Col, Menu, List, ListItem } from "svelte-materialify/src";
 	import { mdiPlus, mdiDelete } from "@mdi/js";
 	import { requireRule } from "../../validators";
@@ -34,12 +34,12 @@
     dialogActive = true;
   }
   function add() {
-    $valueObjectSettings = [...$valueObjectSettings, valueObjectForm];
+    $settings.model.valueObjectSettings = [...$settings.model.valueObjectSettings, valueObjectForm];
     dialogActive = false;
   }
   function remove() {
-		$valueObjectSettings.splice($valueObjectSettings.findIndex(item => item.name == selectedValueObjectForDelete.name), 1);
-		$valueObjectSettings = $valueObjectSettings;
+		$settings.model.valueObjectSettings.splice($settings.model.valueObjectSettings.findIndex(item => item.name == selectedValueObjectForDelete.name), 1);
+		$settings.model.valueObjectSettings = $settings.model.valueObjectSettings;
     deleteDialogActive = false;
   }
   function showDeleteDialog(valueObject) {
@@ -47,9 +47,9 @@
     deleteDialogActive = true;
   }
   function update() {
-    const i = $valueObjectSettings.findIndex(valueObject => valueObject.name === updateValueName)
-    $valueObjectSettings.splice(i, 1, valueObjectForm);
-		$valueObjectSettings = $valueObjectSettings;
+    const i = $settings.model.valueObjectSettings.findIndex(valueObject => valueObject.name === updateValueName)
+    $settings.model.valueObjectSettings.splice(i, 1, valueObjectForm);
+		$settings.model.valueObjectSettings = $settings.model.valueObjectSettings;
     dialogActive = false;
   }
   function edit(value) {
@@ -66,7 +66,7 @@
   }
   const isObjectFieldNameUnique = (value) => {
     if (updateValueName === value) return undefined;
-    return $valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
+    return $settings.model.valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
   };
 
   const isFieldUnique = (value) => {
@@ -74,7 +74,7 @@
   }
 
   const getFieldsFromObjectValuesSettings = () => {
-    const objectValueNames = $valueObjectSettings.map(item => {
+    const objectValueNames = $settings.model.valueObjectSettings.map(item => {
       if (valueObjectForm.name !== item.name) {
         return item.name;
       }
@@ -84,7 +84,7 @@
 
   $: valid = !!valueObjectForm.name
     && valueObjectForm.fields.every((field) => !!field.name && !!field.type)
-    && $valueObjectSettings.every((item) => !isObjectFieldNameUnique(valueObjectForm.name))
+    && $settings.model.valueObjectSettings.every((item) => !isObjectFieldNameUnique(valueObjectForm.name))
     && valueObjectForm.fields.every((field) => !isFieldUnique(field.name));
 </script>
 
@@ -95,13 +95,13 @@
       New Value Object
     </div>
   </Button>
-  {#if $valueObjectSettings.length > 0}
+  {#if $settings.model.valueObjectSettings.length > 0}
     <Menu>
       <div slot="activator">
         <Button class="success-color">Edit Value Object</Button>
       </div>
       <List>
-        {#each $valueObjectSettings as valueObject, id (id)}
+        {#each $settings.model.valueObjectSettings as valueObject, id (id)}
           <ListItem>
             <div class="d-flex align-center">
               <div style="flex:1;" class="mr-4" on:click={() => edit(valueObject)}>{valueObject.name}</div>

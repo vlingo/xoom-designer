@@ -1,11 +1,105 @@
 import { writable } from 'svelte/store';
+import { defaultContext } from './context';
 import { isMobileStore, createLocalStore } from './utils';
+import { defaultPersistenceSettings } from './persistence';
+import { defaultSettings, defaultGenerationSettings } from './generation';
+import { defaultDeploymentSettings } from './deployment';
+import Validation from '../util/Validation';
 
-export let importedSettings = writable();
-export const contextSettings = writable(getLocalStorage("contextSettings"));
+export const isMobile = isMobileStore();
+export const updatedSettings = writable();
+export const theme = createLocalStore('theme', 'light');
+export const settingsInfo = createLocalStore('settingsInfo', {});
+export const EDITION_STATUS = { NEW: "new", CHANGED: "changed" };
+export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
-export const aggregateSettings = writable(getLocalStorage("aggregateSettings") || []);
-export const deploymentSettings = writable(getLocalStorage("deploymentSettings"));
+export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
+export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
+export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
+export const settings = createWritable('settings', defaultSettings, onSettingsChange);
+
+export function updateSettings(newSettings) {
+	let emptySettings = {context: {}, model: {persistenceSettings: {}}, deployment: {}};
+	updateContext(emptySettings, newSettings);
+	updateAggregates(emptySettings, newSettings);
+	updatePersistence(emptySettings, newSettings);
+	updateDeployment(emptySettings, newSettings);
+	updateGeneration(emptySettings, newSettings);
+	settings.set(emptySettings);
+}
+
+function onSettingsChange(changedSettings) {
+	setLocalStorage('settings', changedSettings);
+	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
+}
+
+function updateContext(currentSettings, updatedSettings) {
+	let updatedContext = updatedSettings.context ? updatedSettings.context : defaultContext;
+	currentSettings.context.groupId = updatedContext.groupId;
+	currentSettings.context.artifactId = updatedContext.artifactId;
+	currentSettings.context.packageName = updatedContext.packageName;
+	currentSettings.context.artifactVersion = updatedContext.artifactVersion;
+}
+
+function updateAggregates(currentSettings, updatedSettings) {
+	if(!updatedSettings.model ||
+		!updatedSettings.model.aggregateSettings ||
+		!updatedSettings.model.aggregateSettings.length) {
+		currentSettings.model.aggregateSettings = [];
+		currentSettings.model.valueObjectSettings = [];
+	} else {
+		currentSettings.model.aggregateSettings = updatedSettings.model.aggregateSettings;
+		currentSettings.model.valueObjectSettings = updatedSettings.model.valueObjectSettings;
+	}
+}
+
+function updatePersistence(currentSettings, updatedSettings) {
+	let importedPersistenceSettings;
+	if(!updatedSettings.model || !updatedSettings.model.persistenceSettings) {
+		importedPersistenceSettings = defaultPersistenceSettings;
+	}  else {
+		importedPersistenceSettings = updatedSettings.model.persistenceSettings;
+	}
+	currentSettings.model.persistenceSettings.storageType = importedPersistenceSettings.storageType;
+	currentSettings.model.persistenceSettings.useCQRS = importedPersistenceSettings.useCQRS;
+	currentSettings.model.persistenceSettings.projections = importedPersistenceSettings.projections;
+	currentSettings.model.persistenceSettings.database = importedPersistenceSettings.database;
+	currentSettings.model.persistenceSettings.commandModelDatabase = importedPersistenceSettings.commandModelDatabase;
+	currentSettings.model.persistenceSettings.queryModelDatabase = importedPersistenceSettings.queryModelDatabase;
+}
+
+function updateDeployment(currentSettings, updatedSettings) {
+	updatedSettings = updatedSettings ? updatedSettings : defaultDeploymentSettings;
+	currentSettings.deployment.type = updatedSettings.deployment.type;
+	currentSettings.deployment.clusterNodes = updatedSettings.deployment.clusterNodes;
+	currentSettings.deployment.dockerImage = updatedSettings.deployment.dockerImage;
+	currentSettings.deployment.kubernetesImage = updatedSettings.deployment.kubernetesImage;
+	currentSettings.deployment.kubernetesPod = updatedSettings.deployment.kubernetesPod;
+}
+
+function updateGeneration(currentSettings, updatedSettings) {
+	currentSettings.useAnnotations = updatedSettings.useAnnotations != undefined ? updatedSettings.useAnnotations : defaultGenerationSettings.useAnnotations;
+	currentSettings.useAutoDispatch = updatedSettings.useAutoDispatch != undefined ? updatedSettings.useAutoDispatch : defaultGenerationSettings.useAutoDispatch;
+	currentSettings.projectDirectory = updatedSettings.projectDirectory;
+}
+
+export function isSettingsComplete(currentSettings) {
+	return currentSettings.context && currentSettings.context.groupId && currentSettings.context.artifactId &&
+			currentSettings.context.packageName && currentSettings.context.artifactVersion &&
+			Validation.validateContext(currentSettings) && currentSettings.model &&
+			currentSettings.model.aggregateSettings && currentSettings.model.aggregateSettings.length > 0 &&
+			currentSettings.model.persistenceSettings && Validation.validateDeployment(currentSettings)
+			&& currentSettings.projectDirectory;
+}
+
+export function isSettingsEdited() {
+	return getLocalStorage("settingsEditionStatus") === EDITION_STATUS.CHANGED;
+}
+
+export async function clearSettings() {
+	updateSettings(defaultSettings);
+	setLocalStorage("settingsEditionStatus", EDITION_STATUS.NEW);
+}
 
 /*
 * checking process.browser simply means that only run code snippet in client side.
@@ -23,64 +117,22 @@ export function setLocalStorage(key, value) {
 	}
 }
 
-export const persistenceSettingsInitialValue = {
-	storageType: 'STATE_STORE',
-	useCQRS: false,
-	projections: 'NONE',
-	database: 'IN_MEMORY',
-	commandModelDatabase: 'IN_MEMORY',
-	queryModelDatabase: 'IN_MEMORY',
-};
-
-export const isMobile = isMobileStore();
-export const theme = createLocalStore('theme', 'light')
-export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
-export const valueObjectSettings = createLocalStore('valueObjectSettings', [])
-export const persistenceSettings = createLocalStore('persistenceSettings', persistenceSettingsInitialValue);
-export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
-export const settingsInfo = createLocalStore('settingsInfo', {});
-export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
-export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
-export const generationSettings = createLocalStore('generationSettings', {
-	useAnnotations: true,
-	useAutoDispatch: true
-});
-
-export const EDITION_STATUS = {
-	NEW: "new",
-	CHANGED: "changed"
-};
-
-export const STEP_STATUS = {
-	CONTEXT: "contextSettingsStatus",
-	PERSISTENCE: "persistenceSettingsStatus",
-	DEPLOYMENT: "deploymentSettingsStatus",
-	GENERATION: "generationSettingsStatus"
+function resolveLocalStorage(key, value) {
+	if(process.browser) {
+		let stored = JSON.parse(localStorage.getItem(key));
+		if(stored) {
+			return stored;
+		}
+		setLocalStorage(key, value);
+		return value;
+	}
+	return undefined;
 }
 
-export function onContextSettingsChange() {
-	setLocalStorage(STEP_STATUS.CONTEXT, EDITION_STATUS.CHANGED);
-}
-export function isContextSettingsChanged() {
-	return isChanged(STEP_STATUS.CONTEXT);
-}
-export function onPersistenceSettingsChange() {
-	setLocalStorage(STEP_STATUS.PERSISTENCE, EDITION_STATUS.CHANGED);
-}
-export function isPersistenceSettingsChanged() {
-	return isChanged(STEP_STATUS.PERSISTENCE);
-}
-export function onDeploymentSettingsChange() {
-	setLocalStorage(STEP_STATUS.DEPLOYMENT, EDITION_STATUS.CHANGED);
-}
-export function isDeploymentSettingsChanged() {
-	return isChanged(STEP_STATUS.DEPLOYMENT);
-}
-export function onGenerationSettingsChange() {
-	setLocalStorage(STEP_STATUS.GENERATION, EDITION_STATUS.CHANGED);
-}
-export function isGenerationSettingsChanged() {
-	return isChanged(STEP_STATUS.GENERATION);
+function createWritable(key, value, subscriber) {
+	const newWritable = writable(resolveLocalStorage(key, value));
+	newWritable.subscribe(subscriber);
+	return newWritable;
 }
 
 function isChanged(key) {
@@ -91,13 +143,4 @@ function isChanged(key) {
 	return status === EDITION_STATUS.CHANGED;
 }
 
-export async function reset() {
-	localStorage.clear();
-}
-
-export async function clearStatuses() {
-	for (let key of Object.keys(STEP_STATUS)) {
-		setLocalStorage(STEP_STATUS[key], EDITION_STATUS.NEW);
-	}
-}
 

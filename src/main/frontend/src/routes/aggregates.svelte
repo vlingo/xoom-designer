@@ -2,14 +2,13 @@
 	import CardForm from "../components/CardForm.svelte";
 	import AggregateCard from "../components/aggregates/AggregateCard.svelte";
 	import AggregateDialog from "../components/aggregates/AggregateDialog.svelte";
-	import { importedSettings, aggregateSettings, valueObjectSettings, getLocalStorage, setLocalStorage } from "../stores";
-	import { SlideGroup, SlideItem, Icon } from "svelte-materialify/src";
+	import { settings, getLocalStorage } from "../stores";
+	import { Icon } from "svelte-materialify/src";
 	import { mdiPlus } from "@mdi/js";
 	import Button from "svelte-materialify/src/components/Button";
 
-	let dialogActive = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").dialogActive : false;
 	let editMode = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").editMode : false;
-
+	let dialogActive = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").dialogActive : false;
 	let oldAggregate = getLocalStorage("aggregateDialogState") ? getLocalStorage("aggregateDialogState").oldAggregate : undefined;
 
 	const newAggregate = () => {
@@ -24,27 +23,8 @@
 	}
 
 	const remove = (aggregate) => {
-		$aggregateSettings = $aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(aggregate));
+		$settings.model.aggregateSettings = $settings.model.aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(aggregate));
 	}
-
-	function importSettings() {
-		if(!$importedSettings.model || !$importedSettings.model.aggregateSettings || !$importedSettings.model.aggregateSettings.length) {
-			$aggregateSettings = [];
-			$valueObjectSettings = [];
-		} else {
-			$aggregateSettings = $importedSettings.model.aggregateSettings;
-			$valueObjectSettings = $importedSettings.model.valueObjectSettings;
-		}
-		save();
-	}
-
-	function save() {
-		setLocalStorage("aggregateSettings", $aggregateSettings);
-		setLocalStorage("valueObjectSettings", $valueObjectSettings);
-	}
-	
-	$: $importedSettings && importSettings()
-	$: save();
 </script>
 
 <svelte:head>
@@ -60,7 +40,7 @@
 		</div>
 	</Button>
 	<div class="d-flex" style="overflow-x: auto; flex-wrap:nowrap">
-		{#each $aggregateSettings as aggregate}
+		{#each $settings.model.aggregateSettings as aggregate}
 			<AggregateCard {aggregate} on:edit={() => edit(aggregate)} on:remove={() => remove(aggregate)}/>
 		{/each}
 	</div>
