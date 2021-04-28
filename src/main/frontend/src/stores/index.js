@@ -134,3 +134,9 @@ function onSettingsChange(changedSettings) {
 	setLocalStorage('settings', changedSettings);
 	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
 }
+
+export const isValid = writable({
+	context: false,
+	aggregates: false,
+	deployment: false,
+})
