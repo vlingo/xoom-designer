@@ -86,7 +86,7 @@ public class ReactJSProjectGenerator {
         System.out.println("Front-End ReactJS Application generated in " + (endTime - startTime)/1000D + " seconds");
     }
 
-    private void writeFile(String templatePath, TemplateArguments argument, Path outputPath) throws IOException, TemplateException {
+    private void writeFile(String templatePath, Object argument, Path outputPath) throws IOException, TemplateException {
         try(Writer writer = openFileWriter(outputPath)){
             codeGenerator.generateWith(templatePath, argument, writer);
         }

@@ -2,7 +2,7 @@ package io.vlingo.xoom.designer.task.reactjs;
 
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ContextSettingsData;
 
-public class IndexPageArguments implements TemplateArguments {
+public class IndexPageArguments {
 
     public final ContextSettingsData context;
 

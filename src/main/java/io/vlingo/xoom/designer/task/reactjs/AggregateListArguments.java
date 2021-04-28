@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AggregateListArguments implements TemplateArguments {
+public class AggregateListArguments {
 
     public final AggregateData aggregate;
     public final AggregateMethodData creatorMethod;

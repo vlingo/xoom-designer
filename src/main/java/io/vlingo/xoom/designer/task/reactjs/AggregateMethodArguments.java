@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class AggregateMethodArguments implements TemplateArguments {
+public class AggregateMethodArguments {
 
     public final AggregateMethodData method;
     public final AggregateData aggregate;

@@ -31,9 +31,8 @@ public class ReactJSCodeGenerator {
         }
     }
 
-    public void generateWith(String templatePath, TemplateArguments arguments, Writer output) throws IOException, TemplateException {
+    public void generateWith(String templatePath, Object arguments, Writer output) throws IOException, TemplateException {
         Template template = configuration.getTemplate(templatePath + ".ftl");
-        Map<String, Object> argsMap = arguments != null ? arguments.toMap() : null;
-        template.process(argsMap, output);
+        template.process(arguments, output);
     }
 }

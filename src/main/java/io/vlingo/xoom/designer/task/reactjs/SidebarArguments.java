@@ -4,7 +4,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateData
 
 import java.util.List;
 
-public class SidebarArguments implements TemplateArguments {
+public class SidebarArguments {
 
     public final List<AggregateData> aggregates;
 

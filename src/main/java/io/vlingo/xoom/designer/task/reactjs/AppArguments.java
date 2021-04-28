@@ -4,7 +4,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateData
 
 import java.util.List;
 
-public class AppArguments implements TemplateArguments {
+public class AppArguments {
 
     public final List<AggregateData> aggregates;
 
