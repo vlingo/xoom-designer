@@ -28,11 +28,6 @@ export function updateSettings(newSettings) {
 	settings.set(emptySettings);
 }
 
-function onSettingsChange(changedSettings) {
-	setLocalStorage('settings', changedSettings);
-	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
-}
-
 function updateContext(currentSettings, updatedSettings) {
 	let updatedContext = updatedSettings.context ? updatedSettings.context : defaultContext;
 	currentSettings.context.groupId = updatedContext.groupId;
@@ -117,6 +112,12 @@ export function setLocalStorage(key, value) {
 	}
 }
 
+function createWritable(key, value, subscriber) {
+	const newWritable = writable(resolveLocalStorage(key, value));
+	newWritable.subscribe(subscriber);
+	return newWritable;
+}
+
 function resolveLocalStorage(key, value) {
 	if(process.browser) {
 		let stored = JSON.parse(localStorage.getItem(key));
@@ -129,18 +130,7 @@ function resolveLocalStorage(key, value) {
 	return undefined;
 }
 
-function createWritable(key, value, subscriber) {
-	const newWritable = writable(resolveLocalStorage(key, value));
-	newWritable.subscribe(subscriber);
-	return newWritable;
+function onSettingsChange(changedSettings) {
+	setLocalStorage('settings', changedSettings);
+	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
 }
-
-function isChanged(key) {
-	let status = getLocalStorage(key);
-	if(!status) {
-		return EDITION_STATUS.NEW;
-	}
-	return status === EDITION_STATUS.CHANGED;
-}
-
-
