@@ -238,7 +238,9 @@
     	<!-- {#if ...}
     		<Loading />
     	{/if} -->
-		<slot />
+			{#if $settings}
+				<slot />
+			{/if}
 		</Container>
 
   	</main>
