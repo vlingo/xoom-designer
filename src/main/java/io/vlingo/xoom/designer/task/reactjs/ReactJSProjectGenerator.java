@@ -2,6 +2,7 @@ package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.TemplateException;
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
+import io.vlingo.xoom.turbo.codegen.CodeGenerationException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class ReactJSProjectGenerator {
         }
     }
 
-    public void generate() throws IOException, TemplateException {
+    public void generate() {
         long startTime = System.currentTimeMillis();
 
         final Map<String, List<ValueObjectFieldData>> valueObjectDataMap = Collections.unmodifiableMap(
@@ -43,43 +44,47 @@ public class ReactJSProjectGenerator {
         final Path componentsDir = srcDir.resolve("components");
         final Path utilsDir = srcDir.resolve("utils");
 
-        writeFile("gitignore", null, outputRootDir.resolve(".gitignore"));
-        writeFile("package.json", new IndexPageArguments(settings.context), outputRootDir.resolve("package.json"));
-        writeFile("index.html", new IndexPageArguments(settings.context), publicDir.resolve("index.html"));
+        try{
+            writeFile("gitignore", null, outputRootDir.resolve(".gitignore"));
+            writeFile("package.json", new IndexPageArguments(settings.context), outputRootDir.resolve("package.json"));
+            writeFile("index.html", new IndexPageArguments(settings.context), publicDir.resolve("index.html"));
 
-        writeFile("index", null, srcDir.resolve("index.js"));
-        writeFile("index.css", null, srcDir.resolve("index.css"));
-        writeFile("App", new AppArguments(settings.model.aggregateSettings), srcDir.resolve("App.js"));
+            writeFile("index", null, srcDir.resolve("index.js"));
+            writeFile("index.css", null, srcDir.resolve("index.css"));
+            writeFile("App", new AppArguments(settings.model.aggregateSettings), srcDir.resolve("App.js"));
 
-        writeFile("FormHandler", null, utilsDir.resolve("FormHandler.js"));
-        writeFile("Header", new HeaderArguments(settings.context), componentsDir.resolve("Header.js"));
-        writeFile("Sidebar", new SidebarArguments(settings.model.aggregateSettings), componentsDir.resolve("Sidebar.js"));
-        writeFile("Home", null, componentsDir.resolve("Home.js"));
-        writeFile("FormModal", null, componentsDir.resolve("FormModal.js"));
-        writeFile("LoadingOrFailed", null, componentsDir.resolve("LoadingOrFailed.js"));
+            writeFile("FormHandler", null, utilsDir.resolve("FormHandler.js"));
+            writeFile("Header", new HeaderArguments(settings.context), componentsDir.resolve("Header.js"));
+            writeFile("Sidebar", new SidebarArguments(settings.model.aggregateSettings), componentsDir.resolve("Sidebar.js"));
+            writeFile("Home", null, componentsDir.resolve("Home.js"));
+            writeFile("FormModal", null, componentsDir.resolve("FormModal.js"));
+            writeFile("LoadingOrFailed", null, componentsDir.resolve("LoadingOrFailed.js"));
 
-        for (AggregateData aggregateData : settings.model.aggregateSettings) {
-            final String pluralAggregateName = fns.makePlural(aggregateData.aggregateName);
-            final String capitalizedAggregateName = fns.capitalize(aggregateData.aggregateName);
-            final Path aggregateItemRootDir = componentsDir.resolve(fns.decapitalize(pluralAggregateName));
+            for (AggregateData aggregateData : settings.model.aggregateSettings) {
+                final String pluralAggregateName = fns.makePlural(aggregateData.aggregateName);
+                final String capitalizedAggregateName = fns.capitalize(aggregateData.aggregateName);
+                final Path aggregateItemRootDir = componentsDir.resolve(fns.decapitalize(pluralAggregateName));
 
-            writeFile(
-                    "AggregateDetail",
-                    new AggregateDetailArguments(aggregateData),
-                    aggregateItemRootDir.resolve(capitalizedAggregateName+".js")
-            );
-            writeFile(
-                    "AggregateList",
-                    new AggregateListArguments(aggregateData, valueObjectDataMap),
-                    aggregateItemRootDir.resolve(pluralAggregateName+".js")
-            );
-            for (AggregateMethodData methodData : aggregateData.methods) {
                 writeFile(
-                    "AggregateMethod",
-                    new AggregateMethodArguments(methodData, aggregateData, valueObjectDataMap),
-                    aggregateItemRootDir.resolve(capitalizedAggregateName + fns.capitalize(methodData.name) + ".js")
+                        "AggregateDetail",
+                        new AggregateDetailArguments(aggregateData),
+                        aggregateItemRootDir.resolve(capitalizedAggregateName+".js")
                 );
+                writeFile(
+                        "AggregateList",
+                        new AggregateListArguments(aggregateData, valueObjectDataMap),
+                        aggregateItemRootDir.resolve(pluralAggregateName+".js")
+                );
+                for (AggregateMethodData methodData : aggregateData.methods) {
+                    writeFile(
+                            "AggregateMethod",
+                            new AggregateMethodArguments(methodData, aggregateData, valueObjectDataMap),
+                            aggregateItemRootDir.resolve(capitalizedAggregateName + fns.capitalize(methodData.name) + ".js")
+                    );
+                }
             }
+        }catch (IOException | TemplateException e){
+            throw new CodeGenerationException(e);
         }
 
         long endTime = System.currentTimeMillis();
