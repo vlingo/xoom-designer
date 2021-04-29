@@ -22,3 +22,12 @@ export const databaseTypes = readable(null, function start(set) {
     {name: "YugaByte", value: "YUGA_BYTE"}
   ]);
 });
+
+export const defaultPersistenceSettings = {
+	storageType: 'STATE_STORE',
+	useCQRS: false,
+	projections: 'NONE',
+	database: 'IN_MEMORY',
+	commandModelDatabase: 'IN_MEMORY',
+	queryModelDatabase: 'IN_MEMORY',
+};

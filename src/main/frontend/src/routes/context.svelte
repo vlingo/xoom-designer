@@ -1,45 +1,11 @@
 <script>
+	import Validation from '../util/Validation';
+	import { settings, isValid } from '../stores';
 	import { TextField } from "svelte-materialify/src";
 	import CardForm from "../components/CardForm.svelte";
-	import { importedSettings, contextSettings, setLocalStorage, onContextSettingsChange } from '../stores';
 	import { artifactRule, packageRule, requireRule, versionRule } from '../validators';
 
-	let groupId, artifactId, artifactVersion, packageName;
-	
-	loadSettings($contextSettings);
-
-	function loadSettings(context) {
-		if(context) {
-			groupId = context.groupId;
-			artifactId = context.artifactId;
-			artifactVersion = context.artifactVersion;
-			packageName = context.packageName;
-		} else {
-			clear();
-		}
-	}
-
-    function importSettings() {
-		loadSettings($importedSettings.context);
-		save();
-	}
-
-	function clear() {
-		groupId = "";
-		artifactId = "";
-		artifactVersion = "";
-		packageName = "";
-	}
-
-	function save() {
-		$contextSettings = { groupId, artifactId, artifactVersion, packageName };
-		setLocalStorage("contextSettings", $contextSettings);
-		onContextSettingsChange();
-	}
-
-	$: $importedSettings && importSettings()
-	$: valid = !packageRule(groupId) && !artifactRule(artifactId) && !versionRule(artifactVersion) && !packageRule(packageName);
-	$: groupId , artifactId , artifactVersion , packageName , save();
+	$: $isValid.context = Validation.validateContext($settings);
 </script>
 
 <svelte:head>
@@ -47,9 +13,10 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Context" next="aggregates" bind:valid>
-	<TextField class="mb-4 pb-4" placeholder="com.example" bind:value={groupId} rules={[requireRule, packageRule]} validateOnBlur={!groupId}>Group Id</TextField>
-	<TextField class="mb-4 pb-4" placeholder="demo" bind:value={artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!artifactId}>Artifact Id</TextField>
-	<TextField class="mb-4 pb-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
-	<TextField class="mb-4 pb-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule, packageRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
+
+<CardForm title="Context" next="aggregates" bind:valid={$isValid.context}>
+	<TextField class="mb-4 pb-4" placeholder="com.example" bind:value={$settings.context.groupId} rules={[requireRule, packageRule]} validateOnBlur={!$settings.context.groupId}>Group Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="demo" bind:value={$settings.context.artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!$settings.context.artifactId}>Artifact Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="1.0.0" bind:value={$settings.context.artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!$settings.context.artifactVersion}>Artifact Version</TextField>
+	<TextField class="mb-4 pb-4" placeholder="com.example.demo" bind:value={$settings.context.packageName} rules={[requireRule, packageRule]} validateOnBlur={!$settings.context.packageName}>Base Package Name</TextField>
 </CardForm>

@@ -22,24 +22,17 @@ function ensure(response, status) {
 	return response;
 }
 
-
 export default {
-	generateProject(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
-		return Repository.post(resources.projectGeneration, {
-			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
-		}).then(ensureOk).then(res => res.json());
+	generateProject(settings) {
+		return Repository.post(resources.projectGeneration, settings).then(ensureOk).then(res => res.json());
 	},
 
-	downloadExportationFile(context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch) {
-		return Repository.post(resources.exportationFile, {
-			context, model, deployment, projectDirectory, useAnnotations, useAutoDispatch
-		}).then(ensureOk).then(res => res.json());
+	downloadExportationFile(settings) {
+		return Repository.post(resources.exportationFile, settings).then(ensureOk).then(res => res.json());
 	},
 
 	processImportFile(encodedFile) {
-		return Repository.post(resources.importationFile, {
-			"encoded": encodedFile
-		}).then(ensureOk).then(res => res.json());
+		return Repository.post(resources.importationFile, {"encoded": encodedFile}).then(ensureOk).then(res => res.json());
 	},
 
 	checkPath(projectDirectory) {
@@ -47,7 +40,6 @@ export default {
 			path: projectDirectory
 		});
 	},
-
 	queryInfo() {
 		return Repository.get(resources.generationInfo)
 			.then(ensureOk).then(res => res.json());

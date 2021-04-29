@@ -1,6 +1,7 @@
 <script>
+  import { TARGET } from "../stores/generation"
 	import CardForm from "../components/CardForm.svelte";
-	import { importedSettings, contextSettings, aggregateSettings, persistenceSettings, deploymentSettings, generationSettings, onGenerationSettingsChange, setLocalStorage, valueObjectSettings, settingsInfo, projectGenerationIndex, generatedProjectsPaths} from "../stores";
+	import { settings, isSettingsComplete, settingsInfo, projectGenerationIndex, generatedProjectsPaths } from "../stores";
 	import XoomDesignerRepository from "../api/XoomDesignerRepository";
   import DownloadDialog from "../util/DownloadDialog";
   import Formatter from "../util/Formatter";
@@ -21,31 +22,19 @@
   } from 'svelte-materialify/src';
   import Portal from "svelte-portal/src/Portal.svelte";
 
-	let context = $contextSettings;
-  let model = { aggregateSettings: $aggregateSettings, persistenceSettings: $persistenceSettings, valueObjectSettings: $valueObjectSettings };
-  let deployment  = $deploymentSettings;
-  let processing = false;
   let snackbar = false;
-  let dialogActive = false;
   let isLoading = false;
+  let processing = false;
+  let dialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
   let dialogStatus, succeded, failed, successMessage, failureMessage;
-  $: $generationSettings.projectDirectory = $contextSettings ? `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${$contextSettings.groupId}${$settingsInfo.pathSeparator}${$contextSettings.artifactId}${Number($projectGenerationIndex)}` : `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
-  
-  function importSettings() {
-    onGenerationSettingsChange()
-    $generationSettings.useAnnotations = $importedSettings.useAnnotations == undefined ? true : $importedSettings.useAnnotations;
-    $generationSettings.useAutoDispatch = $importedSettings.useAutoDispatch == undefined ? true : $importedSettings.useAnnotations;
-    $generationSettings.projectDirectory = $importedSettings.projectDirectory == undefined ? $generationSettings.projectDirectory : $importedSettings.projectDirectory;		 
-		setLocalStorage("generationSetings", $generationSettings);
-	}
 
   function checkPath() {
     if(requiresCompression()){
       generate();
     } else {
       isLoading = true;
-      XoomDesignerRepository.checkPath($generationSettings.projectDirectory)
+      XoomDesignerRepository.checkPath($settings.projectDirectory)
         .then(response => {
           if(response.status === 201) {
             generate();
@@ -67,15 +56,15 @@
     if(!valid) return;
     processing = true;
     dialogActive = false;
-		XoomDesignerRepository.generateProject(context, model, deployment, $generationSettings.projectDirectory, $generationSettings.useAnnotations, $generationSettings.useAutoDispatch)
+		XoomDesignerRepository.generateProject($settings)
 		  .then(generationReport => {
         if(requiresCompression()) {
           succeed(["Project generated. ", ""]);
-          DownloadDialog.forZipFile(Formatter.buildSettingsFullname(context), generationReport.compressedProject);
+          DownloadDialog.forZipFile(Formatter.buildSettingsFullname($settings.context), generationReport.compressedProject);
         } else {
-          succeed(["Project generated. ","Please check folder: " + $generationSettings.projectDirectory]);
+          succeed(["Project generated. ","Please check folder: " + $settings.projectDirectory]);
           $projectGenerationIndex = Number($projectGenerationIndex) + 1;
-          $generatedProjectsPaths = [...$generatedProjectsPaths, $generationSettings.projectDirectory];
+          $generatedProjectsPaths = [...$generatedProjectsPaths, $settings.projectDirectory];
         }        
       }).catch(() => {
         fail(["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
@@ -103,20 +92,20 @@
   }
 
   function requiresCompression() {
-    return $settingsInfo.generationTarget === "zip-download";
+    return $settingsInfo.generationTarget === TARGET.ZIP_DOWNLOAD;
   }
 
-  function validatePreviousSteps() {
-    let context = $contextSettings;
-    return context && context.groupId && context.artifactId &&  context.packageName && 
-           context.artifactVersion && $aggregateSettings && $aggregateSettings.length > 0 && 
-           $persistenceSettings && $deploymentSettings;
+  function buildProjectDirectory() {
+    let context = $settings.context;
+    if(context) {
+      return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${context.groupId}${$settingsInfo.pathSeparator}${context.artifactId}${Number($projectGenerationIndex)}`;
+    }
+    return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   }
 
-  $: $importedSettings && importSettings()
-	$: if(!$generationSettings.useAnnotations) $generationSettings.useAutoDispatch = false;
-  $: valid = (requiresCompression() || $generationSettings.projectDirectory) && validatePreviousSteps();
-  $: onGenerationSettingsChange();		
+  $: $settings.projectDirectory = buildProjectDirectory();
+	$: if(!$settings.useAnnotations) $settings.useAutoDispatch = false;
+  $: valid = (requiresCompression() || $settings.projectDirectory) && isSettingsComplete($settings);
 </script>
 
 <svelte:head>
@@ -126,10 +115,10 @@
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
   {#if !requiresCompression()}
-	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$generationSettings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$settings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
   {/if}
-	<Switch class="mb-4" bind:checked={$generationSettings.useAnnotations} on:change={onGenerationSettingsChange}>Use VLINGO XOOM annotations</Switch>
-  <Switch class="mb-4" bind:checked={$generationSettings.useAutoDispatch} disabled={!$generationSettings.useAnnotations} on:change={onGenerationSettingsChange}>Use VLINGO XOOM auto dispatch</Switch>
+	<Switch class="mb-4" bind:checked={$settings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
+  <Switch class="mb-4" bind:checked={$settings.useAutoDispatch} disabled={!$settings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
   
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}

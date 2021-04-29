@@ -1,6 +1,6 @@
 <script>
 	import { Button, TextField, Dialog, CardActions } from 'svelte-materialify/src';
-	import { aggregateSettings, getLocalStorage, setLocalStorage } from "../../stores";
+	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
@@ -17,7 +17,7 @@
 	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
 
 
-	const retrieveSchemaGroup = () => $aggregateSettings.length > 0 ? $aggregateSettings[0].producerExchange.schemaGroup : "";
+	const retrieveSchemaGroup = () => $settings.model.aggregateSettings.length > 0 ? $settings.model.aggregateSettings[0].producerExchange.schemaGroup : "";
 	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
 	const initialAggregate = {
 		aggregateName: "",
@@ -42,14 +42,14 @@
 
 	const add = () => {
 		if(!valid) return;
-		$aggregateSettings = [...$aggregateSettings, newAggregate];
+		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, newAggregate];
 		closeDialog();
 	}
 
 	const update = () => {
 		if(!valid) return;
-		$aggregateSettings = $aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate));
-		$aggregateSettings = [...$aggregateSettings, newAggregate];
+		$settings.model.aggregateSettings = $settings.model.aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate));
+		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, newAggregate];
 		closeDialog();
 	}
 
@@ -89,7 +89,7 @@
 	}
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
-	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $aggregateSettings);
+	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings);
 	
 	$: if(valid) {
 		newAggregate = {
@@ -109,7 +109,7 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
 	<ValueObjects />
 	<StateFields bind:stateFields />
 	<Events bind:events  bind:stateFields />
