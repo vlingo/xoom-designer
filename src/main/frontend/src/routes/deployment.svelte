@@ -1,12 +1,12 @@
 <script>
 	import { requireRule } from '../validators';
 	import Validation from '../util/Validation';
-	import { settings } from "../stores";
+	import { settings, isValid } from "../stores";
 	import CardForm from "../components/CardForm.svelte";
 	import { Radio, TextField } from "svelte-materialify/src";
 	import { deploymentTypes } from '../stores/deployment.js';
 
-	$: valid = Validation.validateDeployment($settings);
+	$: $isValid.deployment = Validation.validateDeployment($settings);
 </script>
 
 <svelte:head>
@@ -14,7 +14,7 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Deployment" previous="persistence" next="generation" bind:valid>
+<CardForm title="Deployment" previous="persistence" next="generation" bind:valid={$isValid.deployment}>
 	<div class="d-flex justify-center pb-4 mb-4 mt-4">
 		{#each $deploymentTypes as {label, value}}
 			<Radio bind:group={$settings.deployment.type} value={value}>{label}</Radio>

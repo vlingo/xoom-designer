@@ -12,6 +12,7 @@
 	import DownloadDialog from "../util/DownloadDialog";
 	import Formatter from "../util/Formatter";
 	export let segment;
+	import { goto } from '@sapper/app';
 
 	let sidenav = false;
 	let snackbar = false;
@@ -81,6 +82,7 @@
 		closeResetDialog();
 		clearSettings();
 		snackbar = true;
+		goto('/context');
 	}
 
 	function succeed(message) {
@@ -238,7 +240,9 @@
     	<!-- {#if ...}
     		<Loading />
     	{/if} -->
-		<slot />
+			{#if $settings}
+				<slot />
+			{/if}
 		</Container>
 
   	</main>

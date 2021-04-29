@@ -10,5 +10,8 @@ export default {
         let kubernetesValidity = settings.deployment.kubernetesImage && settings.deployment.kubernetesPod;
         let deploymentTypeValidity = (settings.deployment.type === "NONE" ? true : settings.deployment.dockerImage && (settings.deployment.type === "DOCKER" ? true : kubernetesValidity));
         return clusterNodesValidity && settings.deployment.type && deploymentTypeValidity;		
+    },
+    validateAggregates({ model: { aggregateSettings: aggregates }}) {
+        return aggregates && aggregates.length > 0;
     }
 }

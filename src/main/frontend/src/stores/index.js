@@ -30,21 +30,20 @@ export function updateSettings(newSettings) {
 
 function updateContext(currentSettings, updatedSettings) {
 	let updatedContext = updatedSettings.context ? updatedSettings.context : defaultContext;
-	currentSettings.context.groupId = updatedContext.groupId;
-	currentSettings.context.artifactId = updatedContext.artifactId;
-	currentSettings.context.packageName = updatedContext.packageName;
-	currentSettings.context.artifactVersion = updatedContext.artifactVersion;
+	currentSettings.context = { ...currentSettings.context, ...updatedContext };
 }
 
 function updateAggregates(currentSettings, updatedSettings) {
 	if(!updatedSettings.model ||
 		!updatedSettings.model.aggregateSettings ||
 		!updatedSettings.model.aggregateSettings.length) {
-		currentSettings.model.aggregateSettings = [];
-		currentSettings.model.valueObjectSettings = [];
+		currentSettings.model = {
+			...currentSettings.model,
+			aggregateSettings: [],
+			valueObjectSettings: []
+		}
 	} else {
-		currentSettings.model.aggregateSettings = updatedSettings.model.aggregateSettings;
-		currentSettings.model.valueObjectSettings = updatedSettings.model.valueObjectSettings;
+		currentSettings.model = { ...currentSettings.model, ...updatedSettings.model }
 	}
 }
 
@@ -54,22 +53,15 @@ function updatePersistence(currentSettings, updatedSettings) {
 		importedPersistenceSettings = defaultPersistenceSettings;
 	}  else {
 		importedPersistenceSettings = updatedSettings.model.persistenceSettings;
+	}currentSettings.model.persistenceSettings = {
+		...currentSettings.model.persistenceSettings,
+		...importedPersistenceSettings
 	}
-	currentSettings.model.persistenceSettings.storageType = importedPersistenceSettings.storageType;
-	currentSettings.model.persistenceSettings.useCQRS = importedPersistenceSettings.useCQRS;
-	currentSettings.model.persistenceSettings.projections = importedPersistenceSettings.projections;
-	currentSettings.model.persistenceSettings.database = importedPersistenceSettings.database;
-	currentSettings.model.persistenceSettings.commandModelDatabase = importedPersistenceSettings.commandModelDatabase;
-	currentSettings.model.persistenceSettings.queryModelDatabase = importedPersistenceSettings.queryModelDatabase;
 }
 
 function updateDeployment(currentSettings, updatedSettings) {
 	updatedSettings = updatedSettings ? updatedSettings : defaultDeploymentSettings;
-	currentSettings.deployment.type = updatedSettings.deployment.type;
-	currentSettings.deployment.clusterNodes = updatedSettings.deployment.clusterNodes;
-	currentSettings.deployment.dockerImage = updatedSettings.deployment.dockerImage;
-	currentSettings.deployment.kubernetesImage = updatedSettings.deployment.kubernetesImage;
-	currentSettings.deployment.kubernetesPod = updatedSettings.deployment.kubernetesPod;
+	currentSettings.deployment = { ...currentSettings.deployment, ...updatedSettings.deployment }
 }
 
 function updateGeneration(currentSettings, updatedSettings) {
@@ -134,3 +126,9 @@ function onSettingsChange(changedSettings) {
 	setLocalStorage('settings', changedSettings);
 	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
 }
+
+export const isValid = writable({
+	context: false,
+	aggregates: false,
+	deployment: false,
+})
