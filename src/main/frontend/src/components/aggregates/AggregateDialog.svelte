@@ -77,10 +77,9 @@
 
 	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
-	const validMethod = (m) => !identifierRule(m.name) && m.parameters.length > 0 && m.event && !isPropertyUniqueRule(m.name, methods, 'name');
+	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
 
-	
 	$: {
 		const storageState = getLocalStorage("aggregateDialogState");
 		if(storageState && storageState.newAggregate) initFieldsWith(storageState.newAggregate);
