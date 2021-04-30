@@ -15,12 +15,17 @@
 		}
 	}
 
+	function isEventSourced() {
+		return $settings.model.persistenceSettings.storageType === "JOURNAL";
+	}
+
 	$: {
 		if($settings.model.persistenceSettings.storageType === "JOURNAL") {
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
 				{name: 'Event-based', value: 'EVENT_BASED'},
 			];
+			$settings.model.persistenceSettings.useCQRS = true;
 		} else {
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
@@ -44,7 +49,7 @@
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
 	<VlSelect class="pb-4" mandatory items={$storageTypes} bind:value={$settings.model.persistenceSettings.storageType} format={(val) => storageFormat(val)} on:change={onStorageTypeChange}>Storage Type</VlSelect>
-	<Switch class="mb-4 pb-4" bind:checked={$settings.model.persistenceSettings.useCQRS}>Use CQRS</Switch>
+	<Switch disabled={isEventSourced()} class="mb-4 pb-4" bind:checked={$settings.model.persistenceSettings.useCQRS}>Use CQRS</Switch>
 	<Select disabled={!$settings.model.persistenceSettings.useCQRS} class="mb-4 pb-4" mandatory items={$projectionsTypes} bind:value={$settings.model.persistenceSettings.projections} format={(val) => projectionFormat(val)} on:change={onStorageTypeChange}>Projections</Select>
 	{#if $settings.model.persistenceSettings.useCQRS}
 		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={$settings.model.persistenceSettings.commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
