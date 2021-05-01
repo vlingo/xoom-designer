@@ -1,5 +1,5 @@
 <script>
-	import { Select, Switch, TextField } from 'svelte-materialify/src';
+	import { Icon, Select, Switch, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
 	import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
@@ -50,10 +50,10 @@
             <TextField bind:value={method.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, methods, 'name')]} validateOnBlur={!method.name}>Name</TextField>
           </div>
           <div class="mb-1 pb-1 mr-4" style="flex: 1;">
-            <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
+            <Select disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters} placeholder="None">Parameters</Select>
           </div>
           <div class="mb-1 pb-1 " style="flex: 1;">
-            <Select mandatory disabled={!events.length} items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
+            <Select disabled={!events.length} items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event} placeholder="None">Event</Select>
           </div>
         </div>
         <div class="mb-3 pb-3 " style="flex: 1;">
