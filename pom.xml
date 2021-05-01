@@ -27,6 +27,7 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <jar.path>${basedir}\target\xoom-designer-${project.version}.jar</jar.path>
+    <graalvm.version>21.1.0</graalvm.version>
   </properties>
 
   <dependencies>
@@ -323,6 +324,46 @@
             <argument>-Dcom.sun.management.jmxremote</argument>
             <argument>${exec.mainClass}</argument>
           </arguments>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.graalvm.nativeimage</groupId>
+        <artifactId>native-image-maven-plugin</artifactId>
+        <version>${graalvm.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>native-image</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <imageName>${project.name}</imageName>
+          <mainClass>${exec.mainClass}</mainClass>
+          <buildArgs>
+            --no-fallback --no-server --enable-url-protocols=http -H:+AllowIncompleteClasspath -cp config:.
+            --initialize-at-run-time=io.netty -Dio.netty.noUnsafe=true
+            --initialize-at-run-time=io.vlingo.xoom.common.identity.IdentityGeneratorType
+            --initialize-at-build-time=com.google.common.jimfs.SystemJimfsFileSystemProvider
+            --initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder
+            --initialize-at-build-time=org.slf4j.LoggerFactory
+            --initialize-at-build-time=ch.qos.logback.classic.Logger
+            --initialize-at-build-time=ch.qos.logback.core.spi.AppenderAttachableImpl
+            --initialize-at-build-time=ch.qos.logback.core.status.StatusBase
+            --initialize-at-build-time=ch.qos.logback.classic.Level
+            --initialize-at-build-time=ch.qos.logback.core.status.InfoStatus
+            --initialize-at-build-time=ch.qos.logback.classic.PatternLayout
+            --initialize-at-build-time=ch.qos.logback.core.CoreConstants
+            --initialize-at-build-time=ch.qos.logback.core.pattern.parser.Parser
+            --initialize-at-build-time=ch.qos.logback.core.util.Loader
+            --initialize-at-build-time=ch.qos.logback.core.pattern.parser.TokenStream$1
+            --report-unsupported-elements-at-runtime
+            --initialize-at-build-time=javax.xml.parsers.FactoryFinder
+            --initialize-at-build-time=jdk.xml.internal.SecuritySupport
+            -jar xoom-designer-1.7.1-SNAPSHOT.jar
+          </buildArgs>
         </configuration>
       </plugin>
     </plugins>
