@@ -36,7 +36,7 @@
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
   <legend>
-    <h6 class="ma-0 pl-3 pr-3">Methods</h6>
+    <h6 class="ma-0 pl-3 pr-3">Command Methods</h6>
   </legend>
   {#if methods.length < 1}
     <div class="text-center">There is no method! Add One.</div>
