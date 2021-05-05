@@ -49,7 +49,7 @@ public enum TemplateParameter implements ParameterKey {
   REQUIRE_ADAPTERS("requireAdapters"),
   RESOURCE_FILE("resourceFile"),
   SCHEMATA_FILE("schemataFile"),
-  PRODUCTION_CODE("sourceCode"),
+  PRODUCTION_CODE("productionCode"),
   PROJECTIONS("projections"),
   PROJECTION_NAME("projectionName"),
   PROJECTION_TYPE("projectionType"),
