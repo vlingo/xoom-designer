@@ -38,7 +38,7 @@ public class ReactJSProjectGenerator {
                         .collect(Collectors.toMap(valueObjectData -> valueObjectData.name, o -> o.fields))
         );
 
-        final Path outputRootDir = Paths.get(settings.projectDirectory).resolve("frontend");
+        final Path outputRootDir = Paths.get(settings.projectDirectory).resolve(Paths.get("src", "main", "frontend"));
         final Path publicDir = outputRootDir.resolve("public");
         final Path srcDir = outputRootDir.resolve("src");
         final Path componentsDir = srcDir.resolve("components");

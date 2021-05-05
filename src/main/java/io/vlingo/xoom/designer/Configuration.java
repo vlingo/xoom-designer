@@ -65,6 +65,7 @@ public class Configuration {
           new ProjectionGenerationStep(),
           new StorageGenerationStep(),
           new RestResourceGenerationStep(),
+          new RestUiResourceGenerationStep(),
           new AutoDispatchMappingGenerationStep(),
           new ExchangeGenerationStep(),
           new SchemataGenerationStep(),
