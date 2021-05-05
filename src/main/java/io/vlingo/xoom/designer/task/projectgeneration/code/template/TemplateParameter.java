@@ -9,6 +9,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
 import io.vlingo.xoom.turbo.codegen.template.ParameterKey;
 
+import static io.vlingo.xoom.turbo.codegen.template.TemplateParameters.PRODUCTION_CODE_KEY;
+
 public enum TemplateParameter implements ParameterKey {
 
   BASE_PACKAGE("basePackage"),
@@ -49,7 +51,7 @@ public enum TemplateParameter implements ParameterKey {
   REQUIRE_ADAPTERS("requireAdapters"),
   RESOURCE_FILE("resourceFile"),
   SCHEMATA_FILE("schemataFile"),
-  PRODUCTION_CODE("productionCode"),
+  PRODUCTION_CODE(PRODUCTION_CODE_KEY),
   PROJECTIONS("projections"),
   PROJECTION_NAME("projectionName"),
   PROJECTION_TYPE("projectionType"),
