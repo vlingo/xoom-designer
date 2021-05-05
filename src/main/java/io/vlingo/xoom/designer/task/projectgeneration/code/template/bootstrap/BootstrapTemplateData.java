@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.CQRS;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.PACKAGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public abstract class BootstrapTemplateData extends TemplateData {
 

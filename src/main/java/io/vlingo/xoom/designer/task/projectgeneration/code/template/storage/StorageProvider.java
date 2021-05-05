@@ -14,7 +14,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class StorageProvider {
 

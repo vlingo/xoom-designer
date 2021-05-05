@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.QUERIES;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class Queries {
 

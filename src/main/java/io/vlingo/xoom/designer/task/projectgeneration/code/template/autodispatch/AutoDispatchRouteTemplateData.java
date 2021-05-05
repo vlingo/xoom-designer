@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DATA_OBJECT;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class AutoDispatchRouteTemplateData extends TemplateData {
 

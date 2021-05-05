@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.projections;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
 public class ProjectionSourceTypesDetail {

@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.turbo.codegen.template.Template.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Template.*;
 
 public class CodeGenerationSetup {
 
@@ -32,7 +32,6 @@ public class CodeGenerationSetup {
   public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
-                    //put(StorageType.OBJECT_STORE, OBJECT_ENTITY.filename);
                     put(StorageType.STATE_STORE, STATEFUL_ENTITY.filename);
                     put(StorageType.JOURNAL, EVENT_SOURCE_ENTITY.filename);
                   }}

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.EXCHANGE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class ExchangePropertiesTemplateData extends TemplateData {
 

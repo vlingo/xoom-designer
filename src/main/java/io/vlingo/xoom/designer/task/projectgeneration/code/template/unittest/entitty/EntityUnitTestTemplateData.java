@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.qualifiedNameOf;
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toSet;
 
 public class EntityUnitTestTemplateData extends TemplateData {

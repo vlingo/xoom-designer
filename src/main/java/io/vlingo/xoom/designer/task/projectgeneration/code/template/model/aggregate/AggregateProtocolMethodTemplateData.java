@@ -25,8 +25,8 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.For
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.AGGREGATE_METHOD;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateProtocolMethodTemplateData extends TemplateData {

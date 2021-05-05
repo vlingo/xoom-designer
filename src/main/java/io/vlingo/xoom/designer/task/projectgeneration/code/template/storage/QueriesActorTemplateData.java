@@ -12,7 +12,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.QUERIES_ACTOR;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES_ACTOR_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.QUERIES_ACTOR_NAME;
 
 public class QueriesActorTemplateData extends TemplateData {
 

@@ -8,15 +8,15 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.storage;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.Map;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PRODUCTION_CODE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.RESOURCE_FILE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PRODUCTION_CODE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.RESOURCE_FILE;
 
 public class DatabasePropertiesTemplateData extends TemplateData {
 

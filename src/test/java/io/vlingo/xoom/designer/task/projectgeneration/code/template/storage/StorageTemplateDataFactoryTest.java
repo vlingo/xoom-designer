@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType.JOURNAL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class StorageTemplateDataFactoryTest {
 

@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.CQRS;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 

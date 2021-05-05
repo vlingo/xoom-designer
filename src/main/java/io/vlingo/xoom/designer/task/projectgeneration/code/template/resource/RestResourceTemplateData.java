@@ -28,9 +28,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.QUERIES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findFullyQualifiedClassName;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.QUERIES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class RestResourceTemplateData extends TemplateData {
 

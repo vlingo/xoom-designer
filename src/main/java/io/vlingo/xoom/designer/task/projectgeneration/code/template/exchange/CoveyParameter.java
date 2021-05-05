@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.EXCHANGE_ROLE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.EXCHANGE_ROLE;
 
 public class CoveyParameter {
 

@@ -26,7 +26,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Desig
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.EXCHANGE_BOOTSTRAP;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.EXCHANGE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROLE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class ExchangeBootstrapTemplateData extends TemplateData {
 

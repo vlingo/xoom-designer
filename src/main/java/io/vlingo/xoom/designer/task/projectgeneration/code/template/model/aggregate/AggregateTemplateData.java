@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ID_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.ID_TYPE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class AggregateTemplateData extends TemplateData {
 

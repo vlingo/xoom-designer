@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model.QUERY;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType.STATE_STORE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class ProjectionTemplateData extends TemplateData {
 

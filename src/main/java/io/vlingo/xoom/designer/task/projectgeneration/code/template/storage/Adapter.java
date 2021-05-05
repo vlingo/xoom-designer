@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.ADAPTER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.ADAPTER_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.SOURCE_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.ADAPTER_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.SOURCE_NAME;
 
 public class Adapter {
 

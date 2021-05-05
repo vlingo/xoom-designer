@@ -24,9 +24,9 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Desig
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.EXCHANGE_MAPPER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.EXCHANGE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROLE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole.CONSUMER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole.PRODUCER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
 
 public class ExchangeMapperTemplateData extends TemplateData {
 

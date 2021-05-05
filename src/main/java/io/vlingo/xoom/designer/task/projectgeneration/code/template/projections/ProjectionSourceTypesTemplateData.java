@@ -18,7 +18,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.PROJECTION_SOURCE_TYPES;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class ProjectionSourceTypesTemplateData extends TemplateData {
 

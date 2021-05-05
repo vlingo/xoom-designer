@@ -11,7 +11,7 @@ import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.REST_RESOURCE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.USE_ANNOTATIONS;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.REST_RESOURCE_PACKAGE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.REST_RESOURCE_PACKAGE;
 
 public class AnnotatedBootstrapTemplateData extends BootstrapTemplateData {
 

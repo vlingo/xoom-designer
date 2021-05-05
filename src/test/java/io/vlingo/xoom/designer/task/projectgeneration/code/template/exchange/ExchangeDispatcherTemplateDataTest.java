@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PRODUCER_EXCHANGES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PRODUCER_EXCHANGES;
 
 public class ExchangeDispatcherTemplateDataTest {
 

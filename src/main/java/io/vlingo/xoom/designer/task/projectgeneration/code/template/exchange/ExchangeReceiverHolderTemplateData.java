@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.EXCHANGE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROLE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {
 

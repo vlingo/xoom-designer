@@ -21,8 +21,8 @@ import java.util.List;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodTemplateData extends TemplateData {

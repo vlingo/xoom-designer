@@ -26,7 +26,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.For
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Fields.Style.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.STATE_FIELD;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class AggregateStateTemplateData extends TemplateData {
 

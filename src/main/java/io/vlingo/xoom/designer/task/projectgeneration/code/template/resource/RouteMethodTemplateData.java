@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.INTERNAL_ROUTE_HANDLER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class RouteMethodTemplateData extends TemplateData {
 

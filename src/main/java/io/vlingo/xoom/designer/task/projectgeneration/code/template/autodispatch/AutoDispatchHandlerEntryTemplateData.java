@@ -27,7 +27,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Desig
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.READ_ONLY;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 

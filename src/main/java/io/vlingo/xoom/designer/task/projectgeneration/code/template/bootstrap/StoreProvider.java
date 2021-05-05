@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.STORE_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.MODEL;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.STORAGE_TYPE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.MODEL;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.STORAGE_TYPE;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 

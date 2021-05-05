@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.EXCHANGE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROLE;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PRODUCER_EXCHANGES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PRODUCER_EXCHANGES;
 import static java.util.stream.Collectors.toList;
 
 public class ExchangeDispatcherTemplateData extends TemplateData {

@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup.EVENT_SCHEMA_CATEGORY;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
 public class DomainEventSpecificationTemplateData extends TemplateData {

@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DOMAIN_EVENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.PROJECTION_DISPATCHER_PROVIDER;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PACKAGE_NAME;
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PACKAGE_NAME;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.PROJECTION_TO_DESCRIPTION;
 
 public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
