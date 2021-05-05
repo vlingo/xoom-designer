@@ -62,3 +62,36 @@ jobs:
 
       - name: Cleanup
         run: rm -rf ~/.m2/repository/io/vlingo
+
+  publish-designer:
+    runs-on: ubuntu-latest
+    name: Publish Designer
+    needs: build
+    if: github.event_name == 'release'
+    steps:
+      -   uses: actions/download-artifact@v1
+          with:
+            name: designer.tar
+            path: .
+      -   uses: actions/download-artifact@v1
+          with:
+            name: designer.zip
+            path: .
+      -   name: Upload designer.tar
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ github.event.release.upload_url }}
+            asset_path: ./designer.tar
+            asset_name: designer.tar
+            asset_content_type: application/x-tar
+      -   name: Upload designer.zip
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ github.event.release.upload_url }}
+            asset_path: ./designer.zip
+            asset_name: designer.zip
+            asset_content_type: application/zip
