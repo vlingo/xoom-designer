@@ -37,11 +37,17 @@ jobs:
           name: JARs
           path: target/*.jar
 
-      - name: Publish designer
+      - name: Publish designer (tar)
         uses: actions/upload-artifact@v2
         with:
           name: designer
-          path: dist/designer
+          path: dist/designer.tar
+
+      - name: Publish designer (zip)
+        uses: actions/upload-artifact@v2
+        with:
+          name: designer
+          path: dist/designer.zip
 
       - name: Notify slack
         if: always() && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && github.repository_owner == 'vlingo'
