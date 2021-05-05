@@ -40,13 +40,13 @@ jobs:
       - name: Publish designer (tar)
         uses: actions/upload-artifact@v2
         with:
-          name: designer
+          name: designer.tar
           path: dist/designer.tar
 
       - name: Publish designer (zip)
         uses: actions/upload-artifact@v2
         with:
-          name: designer
+          name: designer.zip
           path: dist/designer.zip
 
       - name: Notify slack
