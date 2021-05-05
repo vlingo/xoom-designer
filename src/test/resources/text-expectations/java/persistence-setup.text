@@ -1,0 +1,37 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence;
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
+import io.vlingo.xoom.turbo.annotation.persistence.Projections;
+import io.vlingo.xoom.turbo.annotation.persistence.Projection;
+import io.vlingo.xoom.turbo.annotation.persistence.ProjectionType;
+import io.vlingo.xoom.turbo.annotation.persistence.Adapters;
+import io.vlingo.xoom.turbo.annotation.persistence.EnableQueries;
+import io.vlingo.xoom.turbo.annotation.persistence.QueriesEntry;
+import io.vlingo.xoom.turbo.annotation.persistence.DataObjects;
+import io.vlingo.xoomapp.model.book.BookRented;
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoomapp.infrastructure.BookData;
+import io.vlingo.xoomapp.model.author.AuthorState;
+import io.vlingo.xoomapp.model.book.BookPurchased;
+import io.vlingo.xoomapp.model.book.BookState;
+
+@SuppressWarnings("unused")
+@Persistence(basePackage = "io.vlingo", storageType = StorageType.STATE_STORE, cqrs = true)
+@Projections(value = {
+  @Projection(actor = AuthorProjectionActor.class, becauseOf = {}),
+  @Projection(actor = BookProjectionActor.class, becauseOf = {BookRented.class, BookPurchased.class})
+}, type = ProjectionType.EVENT_BASED)
+@Adapters({
+  BookState.class,
+  AuthorState.class
+})
+@EnableQueries({
+  @QueriesEntry(protocol = BookQueries.class, actor = BookQueriesActor.class),
+  @QueriesEntry(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class),
+})
+@DataObjects({AuthorData.class, BookData.class})
+public class PersistenceSetup {
+
+
+}

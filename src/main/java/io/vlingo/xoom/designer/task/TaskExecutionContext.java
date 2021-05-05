@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.DEPLOYMENT;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.DEPLOYMENT;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 

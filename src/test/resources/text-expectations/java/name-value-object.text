@@ -1,0 +1,17 @@
+package io.vlingo.xoomapp.model;
+
+public final class Name {
+
+  public final String firstName;
+  public final String lastName;
+
+  public static Name from(final String firstName, final String lastName) {
+    return new Name(firstName, lastName);
+  }
+
+  private Name (final String firstName, final String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+}

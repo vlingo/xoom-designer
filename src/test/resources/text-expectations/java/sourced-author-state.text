@@ -1,0 +1,36 @@
+package io.vlingo.xoomapp.model.author;
+
+import io.vlingo.xoomapp.model.*;
+
+public final class AuthorState {
+
+  public final String id;
+  public final Name name;
+  public final Rank rank;
+
+  public static AuthorState identifiedBy(final String id) {
+    return new AuthorState(id, null, null);
+  }
+
+  public AuthorState (final String id, final Name name, final Rank rank) {
+    this.id = id;
+    this.name = name;
+    this.rank = rank;
+  }
+
+  public AuthorState withName(final Name name) {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, name, this.rank);
+  }
+
+  public AuthorState changeRank(final Rank rank) {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, rank);
+  }
+
+  public AuthorState hide() {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, this.rank);
+  }
+
+}

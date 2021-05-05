@@ -1,0 +1,35 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import io.vlingo.xoomapp.model.book.BookState;
+
+@SuppressWarnings("all")
+public class BookData {
+  public final String id;
+  public final String title;
+  public final String publisher;
+
+  public static BookData from(final BookState bookState) {
+    return from(bookState.id, bookState.title, bookState.publisher);
+  }
+
+  public static BookData from(final String id, final String title, final String publisher) {
+    return new BookData(id, title, publisher);
+  }
+
+  public static List<BookData> from(final List<BookState> states) {
+    return states.stream().map(BookData::from).collect(Collectors.toList());
+  }
+
+  public static BookData empty() {
+    return from(BookState.identifiedBy(""));
+  }
+
+  private BookData (final String id, final String title, final String publisher) {
+    this.id = id;
+    this.title = title;
+    this.publisher = publisher;
+  }
+
+}

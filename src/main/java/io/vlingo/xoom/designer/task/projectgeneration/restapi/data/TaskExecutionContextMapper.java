@@ -11,14 +11,14 @@ import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class TaskExecutionContextMapper {
 

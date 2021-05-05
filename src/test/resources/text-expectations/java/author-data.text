@@ -1,0 +1,39 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import io.vlingo.xoomapp.model.author.AuthorState;
+
+@SuppressWarnings("all")
+public class AuthorData {
+  public final String id;
+  public final NameData name;
+  public final RankData rank;
+  public final boolean status;
+
+  public static AuthorData from(final AuthorState authorState) {
+    final NameData name = authorState.name != null ? NameData.from(authorState.name) : null;
+    final RankData rank = authorState.rank != null ? RankData.from(authorState.rank) : null;
+    return from(authorState.id, name, rank, authorState.status);
+  }
+
+  public static AuthorData from(final String id, final NameData name, final RankData rank, final boolean status) {
+    return new AuthorData(id, name, rank, status);
+  }
+
+  public static List<AuthorData> from(final List<AuthorState> states) {
+    return states.stream().map(AuthorData::from).collect(Collectors.toList());
+  }
+
+  public static AuthorData empty() {
+    return from(AuthorState.identifiedBy(""));
+  }
+
+  private AuthorData (final String id, final NameData name, final RankData rank, final boolean status) {
+    this.id = id;
+    this.name = name;
+    this.rank = rank;
+    this.status = status;
+  }
+
+}

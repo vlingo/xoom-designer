@@ -1,0 +1,15 @@
+database=IN_MEMORY
+database.name=xoomapp-command
+database.driver=
+database.url=
+database.username=
+database.password=
+database.originator=
+
+query.database=IN_MEMORY
+query.database.name=xoomapp-query
+query.database.driver=
+query.database.url=
+query.database.username=
+query.database.password=
+query.database.originator=

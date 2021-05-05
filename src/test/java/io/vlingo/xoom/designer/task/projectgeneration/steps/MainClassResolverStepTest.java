@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.Agent;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class MainClassResolverStepTest {
 

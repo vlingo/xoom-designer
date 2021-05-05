@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class TaskExecutionContextMapperTest {
 

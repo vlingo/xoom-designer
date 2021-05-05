@@ -1,0 +1,15 @@
+database=POSTGRES
+database.name=xoomapp-command
+database.driver=org.postgresql.Driver
+database.url=jdbc:postgresql://localhost/
+database.username=postgres
+database.password=
+database.originator=main
+
+query.database=POSTGRES
+query.database.name=xoomapp-query
+query.database.driver=org.postgresql.Driver
+query.database.url=jdbc:postgresql://localhost/
+query.database.username=postgres
+query.database.password=
+query.database.originator=main

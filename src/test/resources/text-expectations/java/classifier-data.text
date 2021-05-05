@@ -1,0 +1,21 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import io.vlingo.xoomapp.model.Classifier;
+
+public class ClassifierData {
+
+  public final String name;
+
+  public static ClassifierData from(final Classifier classifier) {
+    return from(classifier.name);
+  }
+
+  public static ClassifierData from(final String name) {
+    return new ClassifierData(name);
+  }
+
+  private ClassifierData (final String name) {
+    this.name = name;
+  }
+
+}

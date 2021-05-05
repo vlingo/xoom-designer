@@ -7,11 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class MainClassResolverStep implements TaskExecutionStep {
 
@@ -32,8 +33,8 @@ public class MainClassResolverStep implements TaskExecutionStep {
     }
 
     private String resolveClassName(final Boolean useAnnotations) {
-        return useAnnotations ? TemplateStandard.XOOM_INITIALIZER.resolveClassname() :
-                TemplateStandard.BOOTSTRAP.resolveClassname();
+        return useAnnotations ? AnnotationBasedTemplateStandard.XOOM_INITIALIZER.resolveClassname() :
+                DesignerTemplateStandard.BOOTSTRAP.resolveClassname();
     }
 
 }

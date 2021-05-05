@@ -1,0 +1,108 @@
+package io.vlingo.xoomapp.infrastructure.persistence;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.common.Outcome;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.symbio.Source;
+import io.vlingo.xoom.symbio.store.Result;
+import io.vlingo.xoom.symbio.store.StorageException;
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import io.vlingo.xoomapp.infrastructure.*;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class AuthorQueriesTest {
+
+  private World world;
+  private StateStore stateStore;
+  private AuthorQueries queries;
+
+  @BeforeEach
+  public void setUp(){
+    world = World.startWithDefaults("test-state-store-query");
+    stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(new NoOpDispatcher()));
+    StatefulTypeRegistry.registerAll(world, stateStore, AuthorData.class);
+    queries = world.actorFor(AuthorQueries.class, AuthorQueriesActor.class, stateStore);
+  }
+
+  private static final AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", ClassifierData.from("first-author-rank-classification-classifier-name"))), true);
+  private static final AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), RankData.from(1, ClassificationData.from("second-author-rank-classification-label", ClassifierData.from("second-author-rank-classification-classifier-name"))), true);
+
+  @Test
+  public void queryById() {
+    stateStore.write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+    stateStore.write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+
+    final AuthorData firstData = queries.authorOf("1").await();
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertEquals(firstData.rank.classification.classifier.name, "first-author-rank-classification-classifier-name");
+    assertEquals(firstData.status, true);
+
+    final AuthorData secondData = queries.authorOf("2").await();
+
+    assertEquals(secondData.id, "2");
+    assertEquals(secondData.name.firstName, "second-author-name-firstName");
+    assertEquals(secondData.name.lastName, "second-author-name-lastName");
+    assertEquals(secondData.rank.points, 1);
+    assertEquals(secondData.rank.classification.label, "second-author-rank-classification-label");
+    assertEquals(secondData.rank.classification.classifier.name, "second-author-rank-classification-classifier-name");
+    assertEquals(secondData.status, true);
+  }
+
+  private static final AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", ClassifierData.from("first-author-rank-classification-classifier-name"))), true);
+  private static final AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), RankData.from(1, ClassificationData.from("second-author-rank-classification-label", ClassifierData.from("second-author-rank-classification-classifier-name"))), true);
+
+  @Test
+  public void queryAll() {
+    stateStore.write("1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+    stateStore.write("2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+
+    final Collection<AuthorData> results = queries.authors().await();
+    final AuthorData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertEquals(firstData.rank.classification.classifier.name, "first-author-rank-classification-classifier-name");
+    assertEquals(firstData.status, true);
+
+    final AuthorData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
+
+    assertEquals(secondData.id, "2");
+    assertEquals(secondData.name.firstName, "second-author-name-firstName");
+    assertEquals(secondData.name.lastName, "second-author-name-lastName");
+    assertEquals(secondData.rank.points, 1);
+    assertEquals(secondData.rank.classification.label, "second-author-rank-classification-label");
+    assertEquals(secondData.rank.classification.classifier.name, "second-author-rank-classification-classifier-name");
+    assertEquals(secondData.status, true);
+  }
+
+  @Test
+  public void authorOfEmptyResult(){
+    final AuthorData result = queries.authorOf("1").await();
+    assertEquals("", result.id);
+  }
+
+  private static final StateStore.WriteResultInterest NOOP_WRITER = new StateStore.WriteResultInterest() {
+    @Override
+    public <S, C> void writeResultedIn(Outcome<StorageException, Result> outcome, String s, S s1, int i, List<Source<C>> list, Object o) {
+
+    }
+  };
+
+}

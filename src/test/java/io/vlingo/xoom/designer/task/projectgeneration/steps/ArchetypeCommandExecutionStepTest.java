@@ -1,11 +1,11 @@
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.designer.infrastructure.terminal.Terminal.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class ArchetypeCommandExecutionStepTest {
 

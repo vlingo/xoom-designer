@@ -1,0 +1,38 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoomapp.model.author.AuthorState;
+
+import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.symbio.Metadata;
+import io.vlingo.xoom.symbio.State.TextState;
+import io.vlingo.xoom.symbio.StateAdapter;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateadapter-and-stateadapterprovider">
+ *   StateAdapter and StateAdapterProvider
+ * </a>
+ */
+public final class AuthorStateAdapter implements StateAdapter<AuthorState,TextState> {
+
+  @Override
+  public int typeVersion() {
+    return 1;
+  }
+
+  @Override
+  public AuthorState fromRawState(final TextState raw) {
+    return JsonSerialization.deserialized(raw.data, raw.typed());
+  }
+
+  @Override
+  public <ST> ST fromRawState(final TextState raw, final Class<ST> stateType) {
+    return JsonSerialization.deserialized(raw.data, stateType);
+  }
+
+  @Override
+  public TextState toRawState(final String id, final AuthorState state, final int stateVersion, final Metadata metadata) {
+    final String serialization = JsonSerialization.serialized(state);
+    return new TextState(id, AuthorState.class, typeVersion(), serialization, stateVersion, metadata);
+  }
+}
