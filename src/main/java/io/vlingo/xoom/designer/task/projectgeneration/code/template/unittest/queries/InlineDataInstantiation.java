@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.qu
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.NumberFormat;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -65,6 +66,9 @@ public class InlineDataInstantiation {
     final String currentFieldPath = fieldPath.isEmpty() ? field.value : fieldPath + "." + field.value;
     if (ValueObjectDetail.isValueObject(field)) {
       generateValueObjectAssignment(currentFieldPath, field);
+    } else if(FieldDetail.isCollection(field) || FieldDetail.isDateTime(field)) {
+      final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
+      valuesAssignmentExpression.append(defaultValue).append(", ");
     } else {
       valuesAssignmentExpression.append(testDataValues.retrieve(dataIndex, currentFieldPath)).append(", ");
     }

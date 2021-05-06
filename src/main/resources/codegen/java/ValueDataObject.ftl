@@ -27,4 +27,11 @@ public class ${dataValueObjectName} {
     </#list>
   }
 
+  public ${valueObjectName} to${valueObjectName}() {
+    <#list valueObjectTranslations as translation>
+    ${translation}
+    </#list>
+    return ${valueObjectName}.from(${valueObjectFields});
+  }
+
 }

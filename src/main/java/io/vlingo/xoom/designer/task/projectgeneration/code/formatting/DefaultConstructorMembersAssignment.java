@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<
                              final Stream<CodeGenerationParameter> fields) {
     return fields.map(field -> {
       final String valueRetrievalExpression = resolveValueRetrieval(field);
+      if(FieldDetail.isCollection(field)) {
+        return String.format("this.%s.addAll(%s);", field.value, valueRetrievalExpression);
+      }
       return String.format("this.%s = %s;", field.value, valueRetrievalExpression);
     }).collect(toList());
   }

@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.QueriesDetail;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
@@ -59,6 +60,7 @@ public class QueriesUnitTestTemplateData extends TemplateData {
                     .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregate.value))
                     .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
                     .addImport(resolveImport(dataObjectName, contents))
+                    .addImports(AggregateDetail.resolveImports(aggregate))
                     .and(PRODUCTION_CODE, false)
                     .and(UNIT_TEST, true);
   }

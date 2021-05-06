@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.en
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.PersistenceDetail;
@@ -92,8 +93,16 @@ public class EntityUnitTestTemplateData extends TemplateData {
                     .and(PRODUCTION_CODE, false).and(UNIT_TEST, true)
                     .addImport(resolveBaseEntryImport(projectionType))
                     .addImport(resolveMockDispatcherImport(basePackage))
+                    .addImports(resolveMethodParameterImports(aggregate))
                     .addImport(resolveValueObjectImports(aggregate, contents))
                     .addImports(resolveAdapterImports(basePackage, storageType, aggregate));
+  }
+
+  private Set<String> resolveMethodParameterImports(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .map(method -> AggregateDetail.findInvolvedStateFields(aggregate, method.value))
+            .map(involvedFields -> AggregateDetail.resolveImports(involvedFields))
+            .flatMap(Set::stream).collect(Collectors.toSet());
   }
 
   private String resolveBaseEntryImport(final ProjectionType projectionType) {

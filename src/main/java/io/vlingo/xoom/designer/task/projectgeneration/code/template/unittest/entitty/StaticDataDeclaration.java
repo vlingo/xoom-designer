@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator.TestDataValues;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -37,7 +38,7 @@ public class StaticDataDeclaration {
 
     return AggregateDetail.findInvolvedStateFields(aggregate, method.value).map(stateField -> {
       final String stateFieldType =
-              stateField.retrieveRelatedValue(Label.FIELD_TYPE);
+              FieldDetail.typeOf(aggregate, stateField.value);
 
       final String testDataVariableName =
               TestDataFormatter.formatStaticVariableName(method, stateField);

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -41,7 +42,7 @@ public class DataObjectConstructorInvocation implements Formatters.Arguments {
   private String resolveParameterName(final String carrierName,
                                       final CodeGenerationParameter field,
                                       final MethodScope scope) {
-    if (scope.isInstance() || ValueObjectDetail.isValueObject(field)) {
+    if (scope.isInstance() || ValueObjectDetail.isValueObject(field) || FieldDetail.isCollection(field)) {
       return field.value;
     }
     return carrierName + "." + field.value;

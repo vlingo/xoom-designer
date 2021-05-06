@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
@@ -19,6 +19,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.stateFieldWithName;
 import static io.vlingo.xoom.turbo.codegen.language.Language.JAVA;
 import static io.vlingo.xoom.turbo.codegen.language.Language.KOTLIN;
 
@@ -43,23 +45,37 @@ public class Member extends Formatters.Fields<List<String>> {
   public List<String> format(final CodeGenerationParameter parent,
                              final Stream<CodeGenerationParameter> fields) {
     return fields.map(field -> {
-      if (!field.hasAny(Label.FIELD_TYPE)) {
-        return AggregateDetail.stateFieldWithName(field.parent(Label.AGGREGATE), field.value);
+      if(field.isLabeled(VALUE_OBJECT_FIELD)) {
+        return field;
       }
-      return field;
+      return stateFieldWithName(field.parent(AGGREGATE), field.value);
     }).map(field -> {
       final String fieldType = resolveFieldType(field);
-      return declarationResolver.apply(fieldType, field.value);
+      final String fieldInstantiation = resolveInstantiation(field);
+      return declarationResolver.apply(fieldType, fieldInstantiation);
     }).collect(Collectors.toList());
   }
 
   private String resolveFieldType(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
-
-    if (FieldDetail.isScalar(field)) {
-      return fieldType;
+    if (FieldDetail.isCollection(field)) {
+      final String collectionType = FieldDetail.resolveCollectionType(field);
+      if(DataObjectDetail.isValidSuffix(valueObjectTypeSuffix))  {
+        return DataObjectDetail.adaptCollectionGenericsType(collectionType);
+      }
+      return collectionType;
     }
-    return fieldType + valueObjectTypeSuffix;
+    if (ValueObjectDetail.isValueObject(field)) {
+      return fieldType + valueObjectTypeSuffix;
+    }
+    return fieldType;
+  }
+
+  private String resolveInstantiation(final CodeGenerationParameter field) {
+    if (FieldDetail.requireImmediateInstantiation(field)) {
+      return String.format("%s = %s", field.value, FieldDetail.resolveDefaultValue(field.parent(), field.value));
+    }
+    return field.value;
   }
 
   @SuppressWarnings("serial")

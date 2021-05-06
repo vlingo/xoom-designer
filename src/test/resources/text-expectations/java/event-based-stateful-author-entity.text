@@ -1,5 +1,6 @@
 package io.vlingo.xoomapp.model.author;
 
+import java.util.*;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoomapp.model.*;
 
@@ -26,7 +27,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
   }
 
   @Override
-  public Completes<AuthorState> changeRank(final Rank rank) {
+  public Completes<AuthorState> changeRank(final List<Rank> rank) {
     /**
      * TODO: Implement command logic. See {@link AuthorState#changeRank()}
      */

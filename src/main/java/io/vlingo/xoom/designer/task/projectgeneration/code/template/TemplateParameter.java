@@ -88,6 +88,7 @@ public enum TemplateParameter implements ParameterKey {
   MEMBERS("members"),
   MEMBERS_ASSIGNMENT("membersAssignment"),
   VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
+  VALUE_OBJECT_TRANSLATIONS("valueObjectTranslations"),
   METHODS("methods"),
   METHOD_NAME("methodName"),
   METHOD_SCOPE("methodScope"),
@@ -142,7 +143,9 @@ public enum TemplateParameter implements ParameterKey {
   UNIT_TEST("unitTest"),
   ENTITY_UNIT_TEST_NAME("entityUnitTestName"),
   DISPATCHER_NAME("dispatcherName"),
-  AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation");
+  AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
+  STATE_FIELDS("stateFields"),
+  VALUE_OBJECT_FIELDS("valueObjectFields");
 
   public final String key;
 

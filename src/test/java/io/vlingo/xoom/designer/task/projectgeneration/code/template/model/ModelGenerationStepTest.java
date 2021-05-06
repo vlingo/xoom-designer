@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.COLLECTION_TYPE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.PACKAGE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType.EVENT_BASED;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType.OPERATION_BASED;
@@ -248,12 +249,23 @@ public class ModelGenerationStepTest {
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "Rank");
+                        .relate(Label.FIELD_TYPE, "Rank")
+                        .relate(Label.COLLECTION_TYPE, "List");
+
+        final CodeGenerationParameter availableOnField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
+                        .relate(Label.FIELD_TYPE, "LocalDate");
+
+        final CodeGenerationParameter relatedAuthors =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                        .relate(Label.FIELD_TYPE, "String")
+                        .relate(Label.COLLECTION_TYPE, "Set");
 
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
                         .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "name"));
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "name"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn"));
 
         final CodeGenerationParameter authorRankedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
@@ -275,8 +287,8 @@ public class ModelGenerationStepTest {
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "hide");
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                .relate(idField).relate(nameField).relate(rankField)
-                .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
+                .relate(idField).relate(nameField).relate(rankField).relate(relatedAuthors)
+                .relate(availableOnField).relate(factoryMethod).relate(rankMethod).relate(hideMethod)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
     }
 
@@ -293,7 +305,7 @@ public class ModelGenerationStepTest {
                         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
                                 .relate(Label.FIELD_TYPE, "int"))
                         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                                .relate(Label.FIELD_TYPE, "String"));
+                                .relate(Label.FIELD_TYPE, "String").relate(COLLECTION_TYPE, "Set"));
     }
 
     private Content[] contents() {

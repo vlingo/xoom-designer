@@ -1,5 +1,6 @@
 package io.vlingo.xoomapp.model;
 
+
 public final class Rank {
 
   public final int points;

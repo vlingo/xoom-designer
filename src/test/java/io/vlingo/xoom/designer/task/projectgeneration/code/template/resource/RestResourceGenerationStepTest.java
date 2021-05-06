@@ -105,6 +105,10 @@ public class RestResourceGenerationStepTest {
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
                         .relate(Label.FIELD_TYPE, "Rank");
 
+        final CodeGenerationParameter availableOnField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
+                        .relate(Label.FIELD_TYPE, "LocalDate");
+
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
                         .relate(idField).relate(nameField);
@@ -116,6 +120,7 @@ public class RestResourceGenerationStepTest {
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
                         .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(METHOD_PARAMETER, "availableOn")
                         .relate(FACTORY_METHOD, "true")
                         .relate(authorRegisteredEvent);
 
@@ -138,7 +143,7 @@ public class RestResourceGenerationStepTest {
 
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                 .relate(URI_ROOT, "/authors").relate(idField)
-                .relate(nameField).relate(rankField).relate(factoryMethod)
+                .relate(nameField).relate(rankField).relate(availableOnField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent);
     }
@@ -163,8 +168,8 @@ public class RestResourceGenerationStepTest {
         return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
                 .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
                         .relate(Label.FIELD_TYPE, "String"))
-                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
-                        .relate(Label.FIELD_TYPE, "Classifier"));
+                .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
+                        .relate(Label.FIELD_TYPE, "Classifier").relate(COLLECTION_TYPE, "Set"));
     }
 
     private CodeGenerationParameter classifierValueObject() {

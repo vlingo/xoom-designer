@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.DataObjectDetail.DATA_OBJECT_NAME_SUFFIX;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class Formatters {
@@ -64,13 +65,14 @@ public class Formatters {
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
     public enum Style {
-      VALUE_OBJECT_INITIALIZER, EVENT_BASED_DATA_OBJECT_INITIALIZER, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT
+      VALUE_OBJECT_INITIALIZER, DATA_TO_VALUE_OBJECT_TRANSLATION, EVENT_BASED_DATA_OBJECT_INITIALIZER, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT
     }
 
     @SuppressWarnings("serial")
     private static Map<Style, Function<Language, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
             new HashMap<Style, Function<Language, Variables<?>>>() {{
-              put(Variables.Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer("data"));
+              put(Variables.Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer(DATA_OBJECT_NAME_SUFFIX.toLowerCase()));
+              put(Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, lang -> new ValueObjectInitializer("this"));
               put(Variables.Style.EVENT_BASED_DATA_OBJECT_INITIALIZER, lang -> new EventBasedDataObjectInitializer("typedEvent"));
               put(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, language -> new DataObjectStaticFactoryMethodAssignment());
             }});
@@ -110,7 +112,7 @@ public class Formatters {
             new HashMap<Style, Function<Language, Fields<?>>>() {{
               put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
               put(Style.MEMBER_DECLARATION, lang -> new Member(lang));
-              put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, "Data"));
+              put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, DATA_OBJECT_NAME_SUFFIX));
               put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
               put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
               put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());

@@ -1,8 +1,10 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.*;
 import io.vlingo.xoomapp.model.author.AuthorState;
+import java.time.LocalDateTime;
+import io.vlingo.xoomapp.model.*;
 
 @SuppressWarnings("all")
 public class AuthorData {
@@ -10,15 +12,18 @@ public class AuthorData {
   public final NameData name;
   public final RankData rank;
   public final boolean status;
+  public final List<Integer> bookIds = new ArrayList<>();
+  public final LocalDateTime updatedOn;
 
   public static AuthorData from(final AuthorState authorState) {
     final NameData name = authorState.name != null ? NameData.from(authorState.name) : null;
     final RankData rank = authorState.rank != null ? RankData.from(authorState.rank) : null;
-    return from(authorState.id, name, rank, authorState.status);
+    final List<Integer> bookIds = authorState.bookIds != null ? authorState.bookIds : new ArrayList<>();
+    return from(authorState.id, name, rank, authorState.status, bookIds, authorState.updatedOn);
   }
 
-  public static AuthorData from(final String id, final NameData name, final RankData rank, final boolean status) {
-    return new AuthorData(id, name, rank, status);
+  public static AuthorData from(final String id, final NameData name, final RankData rank, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
+    return new AuthorData(id, name, rank, status, bookIds, updatedOn);
   }
 
   public static List<AuthorData> from(final List<AuthorState> states) {
@@ -29,11 +34,20 @@ public class AuthorData {
     return from(AuthorState.identifiedBy(""));
   }
 
-  private AuthorData (final String id, final NameData name, final RankData rank, final boolean status) {
+  private AuthorData (final String id, final NameData name, final RankData rank, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
     this.id = id;
     this.name = name;
     this.rank = rank;
     this.status = status;
+    this.bookIds.addAll(bookIds);
+    this.updatedOn = updatedOn;
+  }
+
+  public AuthorState toAuthorState() {
+    final Name name = Name.from(this.name.firstName, this.name.lastName);
+    final Classification classification = Classification.from(this.rank.classification.label, this.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+    final Rank rank = Rank.from(this.rank.points, classification);
+    return AuthorState.from(id, name, rank, status, bookIds, updatedOn);
   }
 
 }

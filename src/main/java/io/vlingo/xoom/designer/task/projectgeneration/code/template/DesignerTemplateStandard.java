@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
+import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.DataObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
@@ -54,7 +55,7 @@ public enum DesignerTemplateStandard implements TemplateStandard {
 
   DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ?
   Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
-          (name, parameters) -> name + "Data"),
+          (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),
 
   REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
           (name, parameters) -> name + "Resource"),

@@ -15,6 +15,8 @@ import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
@@ -45,7 +47,7 @@ public class AggregateDetail {
   public static String stateFieldType(final CodeGenerationParameter aggregate,
                                       final String fieldPath,
                                       final List<CodeGenerationParameter> valueObjects) {
-    return stateFieldAtPath(0, aggregate, fieldPath.split("."), valueObjects);
+    return stateFieldAtPath(1, aggregate, fieldPath.split("\\."), valueObjects);
   }
 
   private static String stateFieldAtPath(final int pathIndex,
@@ -57,7 +59,7 @@ public class AggregateDetail {
             parent.isLabeled(AGGREGATE) ? stateFieldWithName(parent, fieldName) :
                     ValueObjectDetail.valueObjectFieldWithName(parent, fieldName);
 
-    final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
+    final String fieldType = field.hasAny(COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(FIELD_TYPE);
 
     if (pathIndex == fieldPathParts.length - 1) {
       return fieldType;
@@ -69,9 +71,12 @@ public class AggregateDetail {
     return stateFieldAtPath(pathIndex + 1, valueObject, fieldPathParts, valueObjects);
   }
 
-  public static List<String> resolveFieldsPaths(final CodeGenerationParameter aggregate,
-                                                final List<CodeGenerationParameter> valueObjects) {
-    return resolveFieldsPaths("", aggregate.retrieveAllRelated(STATE_FIELD), valueObjects);
+  public static Set<String> resolveImports(final CodeGenerationParameter aggregate) {
+    return resolveImports(aggregate.retrieveAllRelated(STATE_FIELD));
+  }
+
+  public static Set<String> resolveImports(final Stream<CodeGenerationParameter> stateFields) {
+    return stateFields.map(field -> FieldDetail.resolveImportForType(field)).collect(Collectors.toSet());
   }
 
   public static List<String> resolveFieldsPaths(final String variableName,
@@ -95,9 +100,7 @@ public class AggregateDetail {
     final String currentRelativePath =
             relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
 
-    if (FieldDetail.isScalar(field)) {
-      paths.add(currentRelativePath);
-    } else if (ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       final String valueObjectType =
               field.retrieveRelatedValue(FIELD_TYPE);
 
@@ -106,6 +109,8 @@ public class AggregateDetail {
 
       valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
               .forEach(voField -> resolveFieldPath(currentRelativePath, voField, valueObjects, paths));
+    } else {
+      paths.add(currentRelativePath);
     }
   }
 

@@ -36,15 +36,14 @@ public class AuthorResource extends DynamicResourceHandler {
 
   public Completes<Response> withName(final AuthorData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
-    return Author.withName(grid, name)
+    return Author.withName(grid, name, data.availableOn)
       .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
       .otherwise(arg -> Response.of(NotFound))
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
   public Completes<Response> changeRank(final String id, final AuthorData data) {
-    final Classifier classifier = Classifier.from(data.rank.classification.classifier.name);
-    final Classification classification = Classification.from(data.rank.classification.label, classifier);
+    final Classification classification = Classification.from(data.rank.classification.label, data.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
     final Rank rank = Rank.from(data.rank.points, classification);
     return resolve(id)
             .andThenTo(author -> author.changeRank(rank))

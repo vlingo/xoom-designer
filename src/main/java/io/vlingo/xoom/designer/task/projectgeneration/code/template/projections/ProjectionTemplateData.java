@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.projections;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
@@ -76,19 +77,23 @@ public class ProjectionTemplateData extends TemplateData {
             .and(PROJECTION_TYPE, projectionType).and(PROJECTION_SOURCES, projectionSources)
             .andResolve(PROJECTION_SOURCE_TYPES_NAME, param -> PROJECTION_SOURCE_TYPES.resolveClassname(param))
             .andResolve(STORE_PROVIDER_NAME, param -> STORE_PROVIDER.resolveClassname(param))
-            .addImports(resolveImports(dataObjectName, contents));
+            .addImports(resolveImports(dataObjectName, projectionSources, contents));
   }
 
   private Set<String> resolveImports(final String dataObjectName,
+                                     final List<ProjectionSource> projectionSources,
                                      final List<Content> contents) {
-    final String aggregatePackage =
-            ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents);
+    final Stream<String> defaultImports =
+            Stream.of(ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents),
+                    ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents));
 
-    final String dataObjectPackage =
-            ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents);
+    final Stream<String> specialTypesImports =
+            projectionSources.stream()
+                    .map(ProjectionSource::getMergeParameters)
+                    .map(mergeParameters -> CodeGenerationSetup.SPECIAL_TYPES.entrySet().stream().filter(entry -> mergeParameters.contains(entry.getKey())))
+                    .flatMap(s -> s).map(involvedSpecialTypes -> involvedSpecialTypes.getValue());
 
-    return Stream.of(CodeElementFormatter.importAllFrom(aggregatePackage),
-            CodeElementFormatter.importAllFrom(dataObjectPackage)).collect(Collectors.toSet());
+    return Stream.of(defaultImports, specialTypesImports).flatMap(s -> s).collect(Collectors.toSet());
   }
 
   @SuppressWarnings("unused")

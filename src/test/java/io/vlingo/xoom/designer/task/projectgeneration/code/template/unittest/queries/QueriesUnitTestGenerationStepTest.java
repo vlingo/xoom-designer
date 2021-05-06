@@ -80,14 +80,19 @@ public class QueriesUnitTestGenerationStepTest {
 
     final CodeGenerationParameter rankField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                    .relate(Label.FIELD_TYPE, "Rank");
+                    .relate(Label.FIELD_TYPE, "Rank")
+                    .relate(Label.COLLECTION_TYPE, "List");
 
     final CodeGenerationParameter statusField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "status")
                     .relate(Label.FIELD_TYPE, "boolean");
 
+    final CodeGenerationParameter availableOnField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
+                    .relate(Label.FIELD_TYPE, "LocalDate");
+
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-            .relate(idField).relate(nameField).relate(rankField).relate(statusField);
+            .relate(idField).relate(nameField).relate(rankField).relate(statusField).relate(availableOnField);
   }
 
   private CodeGenerationParameter bookAggregate() {

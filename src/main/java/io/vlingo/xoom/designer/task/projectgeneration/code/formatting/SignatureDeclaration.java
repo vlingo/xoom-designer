@@ -72,9 +72,9 @@ public class SignatureDeclaration implements Formatters.Arguments {
   }
 
   private List<String> formatValueObjectFields(final CodeGenerationParameter valueObject) {
-    return valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(param -> {
-      final String fieldType = param.retrieveRelatedValue(FIELD_TYPE);
-      return String.format(SIGNATURE_PATTERN, fieldType, param.value);
+    return valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(field -> {
+      final String fieldType = FieldDetail.typeOf(valueObject, field.value);
+      return String.format(SIGNATURE_PATTERN, fieldType, field.value);
     }).collect(Collectors.toList());
   }
 

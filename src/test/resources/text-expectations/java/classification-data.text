@@ -1,24 +1,30 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoomapp.model.Classification;
+import java.util.*;
+import io.vlingo.xoomapp.model.*;
 
 public class ClassificationData {
 
   public final String label;
-  public final ClassifierData classifier;
+  public final Set<ClassifierData> classifier = new HashSet<>();
 
   public static ClassificationData from(final Classification classification) {
-    final ClassifierData classifier = classification.classifier != null ? ClassifierData.from(classification.classifier) : null;
+    final Set<ClassifierData> classifier = classification.classifier != null ? classification.classifier.stream().map(ClassifierData::from).collect(java.util.stream.Collectors.toSet()) : new HashSet<>();
     return from(classification.label, classifier);
   }
 
-  public static ClassificationData from(final String label, final ClassifierData classifier) {
+  public static ClassificationData from(final String label, final Set<ClassifierData> classifier) {
     return new ClassificationData(label, classifier);
   }
 
-  private ClassificationData (final String label, final ClassifierData classifier) {
+  private ClassificationData (final String label, final Set<ClassifierData> classifier) {
     this.label = label;
-    this.classifier = classifier;
+    this.classifier.addAll(classifier);
+  }
+
+  public Classification toClassification() {
+    final Classifier classifier = Classifier.from(this.classifier.name);
+    return Classification.from(label, classifier);
   }
 
 }

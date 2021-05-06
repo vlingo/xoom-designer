@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.eventWithName;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.stateFieldType;
 
 public class ValueObjectDetail {
 
@@ -31,9 +32,9 @@ public class ValueObjectDetail {
   public static Set<String> resolveImports(final List<Content> contents,
                                            final Stream<CodeGenerationParameter> arguments) {
     final Optional<String> anyQualifiedName =
-            arguments.filter(ValueObjectDetail::isValueObject)
+            arguments.filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field))
                     .map(arg -> arg.retrieveRelatedValue(FIELD_TYPE))
-                    .map(valueObjectName -> resolveImport(valueObjectName, contents))
+                    .map(valueObjectName -> resolveTypeImport(valueObjectName, contents))
                     .findAny();
 
     if (anyQualifiedName.isPresent()) {
@@ -44,8 +45,8 @@ public class ValueObjectDetail {
     return Collections.emptySet();
   }
 
-  public static String resolveImport(final String valueObjectName,
-                                     final List<Content> contents) {
+  public static String resolveTypeImport(final String valueObjectName,
+                                         final List<Content> contents) {
     return ContentQuery.findFullyQualifiedClassName(VALUE_OBJECT, valueObjectName, contents);
   }
 
@@ -111,7 +112,15 @@ public class ValueObjectDetail {
   }
 
   public static boolean isValueObject(final CodeGenerationParameter field) {
-    return !FieldDetail.isScalar(field);
+    return !FieldDetail.isScalar(field) && !FieldDetail.isCollection(field) && !FieldDetail.isDateTime(field);
+  }
+
+  public static Set<String> resolveFieldsImports(final CodeGenerationParameter valueObject) {
+    final Set<String> imports = new HashSet<>();
+    valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).forEach(field -> {
+      imports.add(FieldDetail.resolveImportForType(field));
+    });
+    return imports;
   }
 
   public static CodeGenerationParameter valueObjectFieldWithName(final CodeGenerationParameter parent,

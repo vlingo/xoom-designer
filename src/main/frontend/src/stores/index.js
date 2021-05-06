@@ -8,6 +8,7 @@ import Validation from '../util/Validation';
 
 export const isMobile = isMobileStore();
 export const updatedSettings = writable();
+export const collectionTypes = [{name: "Set"}, {name: "List"}];
 export const theme = createLocalStore('theme', 'light');
 export const settingsInfo = createLocalStore('settingsInfo', {});
 export const EDITION_STATUS = { NEW: "new", CHANGED: "changed" };
@@ -15,7 +16,7 @@ export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
-export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char'];
+export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime'];
 export const settings = createWritable('settings', defaultSettings, onSettingsChange);
 
 export function updateSettings(newSettings) {
@@ -122,7 +123,7 @@ function resolveLocalStorage(key, value) {
 	return undefined;
 }
 
-function onSettingsChange(changedSettings) {
+export function onSettingsChange(changedSettings) {
 	setLocalStorage('settings', changedSettings);
 	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
 }

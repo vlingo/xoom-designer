@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoomapp.model.Name;
+import io.vlingo.xoomapp.model.*;
 
 public class NameData {
 
@@ -18,6 +18,10 @@ public class NameData {
   private NameData (final String firstName, final String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  public Name toName() {
+    return Name.from(firstName, lastName);
   }
 
 }

@@ -11,6 +11,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.content.Content;
 import io.vlingo.xoom.turbo.codegen.language.Language;
@@ -50,13 +51,16 @@ public class DomainEventTemplateData extends TemplateData {
                                   final CodeGenerationParameter event,
                                   final CodeGenerationParameter aggregate,
                                   final List<Content> contents) {
+    final List<CodeGenerationParameter> involvedStateFields =
+            DomainEventDetail.findInvolvedStateFields(event).collect(Collectors.toList());
+
     this.name = event.value;
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                     .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                     .and(DEFAULT_SCHEMA_VERSION, CodeGenerationSetup.DEFAULT_SCHEMA_VERSION)
-                    .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
-                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, event.retrieveAllRelated(STATE_FIELD)))
+                    .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, language, aggregate, involvedStateFields.stream()))
+                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(STATE_BASED_ASSIGNMENT, language, aggregate, involvedStateFields.stream()))
                     .addImports(resolveImports(aggregate, event, contents));
   }
 
@@ -66,10 +70,14 @@ public class DomainEventTemplateData extends TemplateData {
     final Set<String> eventFields =
             event.retrieveAllRelated(STATE_FIELD).map(field -> field.value).collect(toSet());
 
-    final Stream<CodeGenerationParameter> stateFields =
-            aggregate.retrieveAllRelated(STATE_FIELD).filter(field -> eventFields.contains(field.value));
+    final List<CodeGenerationParameter> stateFields =
+            aggregate.retrieveAllRelated(STATE_FIELD)
+                    .filter(field -> eventFields.contains(field.value))
+                    .collect(Collectors.toList());
 
-    return ValueObjectDetail.resolveImports(contents, stateFields);
+    return Stream.of(ValueObjectDetail.resolveImports(contents, stateFields.stream()),
+            AggregateDetail.resolveImports(stateFields.stream()))
+            .flatMap(Set::stream).collect(Collectors.toSet());
   }
 
   @Override

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -28,7 +29,13 @@ public class Assertions {
             AggregateDetail.resolveFieldsPaths(variableName, aggregate, valueObjects);
 
     final Function<String, String> mapper =
-            fieldPath -> String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
+            fieldPath -> {
+              final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
+              if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
+                return String.format("assertNotNull(%s);", fieldPath);
+              }
+              return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
+            };
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
   }

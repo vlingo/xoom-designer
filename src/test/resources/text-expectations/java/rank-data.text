@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoomapp.model.Rank;
+import io.vlingo.xoomapp.model.*;
 
 public class RankData {
 
@@ -19,6 +19,11 @@ public class RankData {
   private RankData (final int points, final ClassificationData classification) {
     this.points = points;
     this.classification = classification;
+  }
+
+  public Rank toRank() {
+    final Classification classification = Classification.from(this.classification.label, this.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+    return Rank.from(points, classification);
   }
 
 }

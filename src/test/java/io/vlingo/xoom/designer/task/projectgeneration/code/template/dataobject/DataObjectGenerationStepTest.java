@@ -74,8 +74,18 @@ public class DataObjectGenerationStepTest {
             CodeGenerationParameter.of(Label.STATE_FIELD, "status")
                     .relate(Label.FIELD_TYPE, "boolean");
 
+    final CodeGenerationParameter bookIds =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "bookIds")
+                    .relate(Label.FIELD_TYPE, "int")
+                    .relate(Label.COLLECTION_TYPE, "List");
+
+    final CodeGenerationParameter updatedOn =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "updatedOn")
+                    .relate(Label.FIELD_TYPE, "LocalDateTime");
+
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-            .relate(idField).relate(nameField).relate(rankField).relate(statusField);
+            .relate(idField).relate(nameField).relate(rankField)
+            .relate(statusField).relate(bookIds).relate(updatedOn);
   }
 
   private CodeGenerationParameter bookAggregate() {
@@ -91,8 +101,12 @@ public class DataObjectGenerationStepTest {
             CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
                     .relate(Label.FIELD_TYPE, "String");
 
+    final CodeGenerationParameter publicationDate =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "publicationDate")
+                    .relate(Label.FIELD_TYPE, "LocalDate");
+
     return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
-            .relate(idField).relate(nameField).relate(rankField);
+            .relate(idField).relate(nameField).relate(rankField).relate(publicationDate);
   }
 
   private CodeGenerationParameter nameValueObject() {
@@ -116,7 +130,7 @@ public class DataObjectGenerationStepTest {
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
                     .relate(Label.FIELD_TYPE, "String"))
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
-                    .relate(Label.FIELD_TYPE, "Classifier"));
+                    .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
   }
 
   private CodeGenerationParameter classifierValueObject() {

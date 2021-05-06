@@ -24,6 +24,7 @@ public enum Label implements ParameterLabel {
   AGGREGATE_METHOD("aggregateMethod"),
   METHOD_PARAMETER("methodParameter"),
   FACTORY_METHOD("factoryMethod"),
+  COLLECTION_TYPE("collectionType"),
   REQUIRE_ENTITY_LOADING("requireEntityLoad"),
   STORAGE_TYPE("storage.type"),
   CQRS("cqrs"),

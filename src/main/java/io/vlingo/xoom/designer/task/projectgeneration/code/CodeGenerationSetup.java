@@ -23,11 +23,32 @@ public class CodeGenerationSetup {
   public static final String EVENT_SCHEMA_CATEGORY = "event";
   public static final String DEFAULT_SCHEMA_VERSION = "1.0.0";
 
+  public static final List<String> DATE_TIME_TYPES = Arrays.asList("LocalDate", "LocalDateTime");
   public static final List<String> KOTLIN_RESERVED_WORDS = Arrays.asList("object", "public", "get", "set");
-  public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double");
+  public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double", "integer");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", "string"))
           .flatMap(List::stream).collect(Collectors.toList());
 
+  @SuppressWarnings("serial")
+  public static final Map<String, String> SPECIAL_TYPES =
+          Collections.unmodifiableMap(
+                  new HashMap<String, String>() {{
+                    put("LocalDate", "java.time.LocalDate");
+                    put("LocalDateTime", "java.time.LocalDateTime");
+                    put("List", "java.util.*");
+                    put("Set", "java.util.*");
+                    put("ArrayList", "java.util.*");
+                    put("HashSet", "java.util.*");
+                  }}
+          );
+
+  public static final Map<String, String> FIELD_TYPE_TRANSLATION =
+          Collections.unmodifiableMap(
+                  new HashMap<String, String>() {{
+                    put("Date", "LocalDate");
+                    put("DateTime", "LocalDateTime");
+                  }}
+          );
   @SuppressWarnings("serial")
   public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
           Collections.unmodifiableMap(

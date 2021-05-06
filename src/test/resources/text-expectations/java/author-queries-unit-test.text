@@ -11,13 +11,15 @@ import io.vlingo.xoom.symbio.store.state.StateStore;
 import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
 import io.vlingo.xoomapp.infrastructure.*;
+import java.util.*;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthorQueriesTest {
 
@@ -33,8 +35,8 @@ public class AuthorQueriesTest {
     queries = world.actorFor(AuthorQueries.class, AuthorQueriesActor.class, stateStore);
   }
 
-  private static final AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", ClassifierData.from("first-author-rank-classification-classifier-name"))), true);
-  private static final AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), RankData.from(1, ClassificationData.from("second-author-rank-classification-label", ClassifierData.from("second-author-rank-classification-classifier-name"))), true);
+  private static final AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
 
   @Test
   public void queryById() {
@@ -46,24 +48,22 @@ public class AuthorQueriesTest {
     assertEquals(firstData.id, "1");
     assertEquals(firstData.name.firstName, "first-author-name-firstName");
     assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertEquals(firstData.rank.classification.classifier.name, "first-author-rank-classification-classifier-name");
+    assertNotNull(firstData.rank);
     assertEquals(firstData.status, true);
+    assertNotNull(firstData.availableOn);
 
     final AuthorData secondData = queries.authorOf("2").await();
 
     assertEquals(secondData.id, "2");
     assertEquals(secondData.name.firstName, "second-author-name-firstName");
     assertEquals(secondData.name.lastName, "second-author-name-lastName");
-    assertEquals(secondData.rank.points, 1);
-    assertEquals(secondData.rank.classification.label, "second-author-rank-classification-label");
-    assertEquals(secondData.rank.classification.classifier.name, "second-author-rank-classification-classifier-name");
+    assertNotNull(secondData.rank);
     assertEquals(secondData.status, true);
+    assertNotNull(secondData.availableOn);
   }
 
-  private static final AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", ClassifierData.from("first-author-rank-classification-classifier-name"))), true);
-  private static final AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), RankData.from(1, ClassificationData.from("second-author-rank-classification-label", ClassifierData.from("second-author-rank-classification-classifier-name"))), true);
+  private static final AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
 
   @Test
   public void queryAll() {
@@ -76,20 +76,18 @@ public class AuthorQueriesTest {
     assertEquals(firstData.id, "1");
     assertEquals(firstData.name.firstName, "first-author-name-firstName");
     assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertEquals(firstData.rank.classification.classifier.name, "first-author-rank-classification-classifier-name");
+    assertNotNull(firstData.rank);
     assertEquals(firstData.status, true);
+    assertNotNull(firstData.availableOn);
 
     final AuthorData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
 
     assertEquals(secondData.id, "2");
     assertEquals(secondData.name.firstName, "second-author-name-firstName");
     assertEquals(secondData.name.lastName, "second-author-name-lastName");
-    assertEquals(secondData.rank.points, 1);
-    assertEquals(secondData.rank.classification.label, "second-author-rank-classification-label");
-    assertEquals(secondData.rank.classification.classifier.name, "second-author-rank-classification-classifier-name");
+    assertNotNull(secondData.rank);
     assertEquals(secondData.status, true);
+    assertNotNull(secondData.availableOn);
   }
 
   @Test

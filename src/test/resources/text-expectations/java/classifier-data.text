@@ -1,6 +1,6 @@
 package io.vlingo.xoomapp.infrastructure;
 
-import io.vlingo.xoomapp.model.Classifier;
+import io.vlingo.xoomapp.model.*;
 
 public class ClassifierData {
 
@@ -16,6 +16,10 @@ public class ClassifierData {
 
   private ClassifierData (final String name) {
     this.name = name;
+  }
+
+  public Classifier toClassifier() {
+    return Classifier.from(name);
   }
 
 }

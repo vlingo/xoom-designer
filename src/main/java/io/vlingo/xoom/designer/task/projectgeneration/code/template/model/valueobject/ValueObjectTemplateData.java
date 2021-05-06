@@ -46,7 +46,8 @@ public class ValueObjectTemplateData extends TemplateData {
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
                     .and(CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.MEMBER_DECLARATION, language, valueObject))
-                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.ASSIGNMENT, language, valueObject));
+                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.ASSIGNMENT, language, valueObject))
+                    .addImports(ValueObjectDetail.resolveFieldsImports(valueObject));
   }
 
   @Override

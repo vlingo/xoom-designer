@@ -52,6 +52,10 @@ public class InlineDataInstantiationFormatter {
   }
 
   public String formatComplexTypedField() {
+    if(FieldDetail.isCollection(stateField) || FieldDetail.isDateTime(stateField)) {
+      return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
+    }
+
     final String valueObjectType =
             stateField.retrieveRelatedValue(FIELD_TYPE);
 

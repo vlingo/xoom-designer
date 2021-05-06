@@ -7,7 +7,9 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
 
@@ -24,7 +26,8 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
   @Override
   public List<String> format(final CodeGenerationParameter carrier,
                              final Stream<CodeGenerationParameter> fields) {
-    return carrier.retrieveAllRelated(resolveFieldLabel(carrier)).filter(ValueObjectDetail::isValueObject)
+    return carrier.retrieveAllRelated(resolveFieldLabel(carrier))
+            .filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isCollection(field))
             .map(field -> formatAssignment(carrier, field)).collect(toList());
   }
 
@@ -32,14 +35,43 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
     final String dataObjectName =
             resolveDataObjectName(field);
 
-    final String variableName =
-            Introspector.decapitalize(field.value);
-
     final String fieldAccessExpression =
             resolveFieldAccessExpression(carrier, field);
 
-    return String.format("final %s %s = %s != null ? %s.from(%s) : null;",
-            dataObjectName, variableName, fieldAccessExpression, dataObjectName, fieldAccessExpression);
+    final String variableDeclaration =
+            resolveVariableDeclaration(field, dataObjectName);
+
+    final String alternativeStatements =
+            resolveAlternativeStatements(field, dataObjectName, fieldAccessExpression);
+
+    return String.format("%s = %s != null ? %s;", variableDeclaration, fieldAccessExpression, alternativeStatements);
+  }
+
+  private String resolveVariableDeclaration(final CodeGenerationParameter field,
+                                            final String dataObjectName) {
+    final String variableName =
+            CodeElementFormatter.simpleNameToAttribute(field.value);
+
+    final String variableType =
+            FieldDetail.isCollection(field) ? DataObjectDetail.resolveCollectionType(field) : dataObjectName;
+
+    return String.format("final %s %s", variableType, variableName);
+  }
+
+  private String resolveAlternativeStatements(final CodeGenerationParameter field,
+                                              final String dataObjectName,
+                                              final String fieldAccessExpression) {
+    if(FieldDetail.isCollection(field)) {
+      final String collectionType = field.retrieveRelatedValue(COLLECTION_TYPE);
+      final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
+      if(FieldDetail.isValueObjectCollection(field)) {
+        return String.format("%s.stream().map(%s::from).collect(java.util.stream.Collectors.to%s()) : %s",
+                fieldAccessExpression, dataObjectName, collectionType, defaultValue);
+      } else {
+        return String.format("%s : %s", fieldAccessExpression, defaultValue);
+      }
+    }
+    return String.format("%s.from(%s) : null", dataObjectName, fieldAccessExpression);
   }
 
   private String resolveFieldAccessExpression(final CodeGenerationParameter carrier, final CodeGenerationParameter field) {

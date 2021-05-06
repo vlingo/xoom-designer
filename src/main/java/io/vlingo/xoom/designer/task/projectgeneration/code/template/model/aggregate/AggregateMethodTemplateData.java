@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionSourceTypesDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
@@ -17,6 +18,9 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
@@ -29,15 +33,17 @@ public class AggregateMethodTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public static List<TemplateData> from(final CodeGenerationParameter aggregate,
+  public static List<TemplateData> from(final TemplateParameters parentParameters,
+                                        final CodeGenerationParameter aggregate,
                                         final StorageType storageType,
                                         final ProjectionType projectionType) {
     return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
-            .map(method -> new AggregateMethodTemplateData(method, storageType, projectionType))
+            .map(method -> new AggregateMethodTemplateData(parentParameters, method, storageType, projectionType))
             .collect(toList());
   }
 
-  private AggregateMethodTemplateData(final CodeGenerationParameter method,
+  private AggregateMethodTemplateData(final TemplateParameters parentParameters,
+                                      final CodeGenerationParameter method,
                                       final StorageType storageType,
                                       final ProjectionType projectionType) {
     this.parameters =
@@ -49,6 +55,15 @@ public class AggregateMethodTemplateData extends TemplateData {
                     .and(OPERATION_BASED, projectionType.isOperationBased())
                     .and(PROJECTION_SOURCE_TYPES_NAME, resolveProjectionSourceTypesName(projectionType))
                     .and(STATE_NAME, DesignerTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(AGGREGATE).value));
+
+    parentParameters.addImports(resolveImports(method));
+  }
+
+  private Set<String> resolveImports(final CodeGenerationParameter method) {
+    final Stream<CodeGenerationParameter> involvedStateFields =
+            AggregateDetail.findInvolvedStateFields(method.parent(), method.value);
+
+    return AggregateDetail.resolveImports(involvedStateFields);
   }
 
   private String resolveProjectionSourceTypesName(final ProjectionType projectionType) {

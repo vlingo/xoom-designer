@@ -20,6 +20,7 @@ import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
@@ -57,7 +58,8 @@ public class AggregateStateTemplateData extends TemplateData {
   }
 
   private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
-    return ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD));
+    return Stream.of(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD)),
+            AggregateDetail.resolveImports(aggregate)).flatMap(Set::stream).collect(Collectors.toSet());
   }
 
   private String resolveIdBasedConstructorParameters(final Language language, final CodeGenerationParameter aggregate) {

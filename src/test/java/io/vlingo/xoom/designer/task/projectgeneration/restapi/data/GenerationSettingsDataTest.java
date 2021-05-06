@@ -57,7 +57,7 @@ public class GenerationSettingsDataTest {
 
   private AggregateData personAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("name", "String", ""));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
@@ -76,7 +76,7 @@ public class GenerationSettingsDataTest {
 
   private AggregateData profileAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("status", "String", ""));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
@@ -96,14 +96,14 @@ public class GenerationSettingsDataTest {
   private List<ValueObjectData> recursiveValueObjectData() {
     final ValueObjectData classification =
             new ValueObjectData("Classification",
-                    Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
+                    Arrays.asList(new ValueObjectFieldData("name", "String", ""), new ValueObjectFieldData("rank", "Rank", "")));
 
     return Arrays.asList(rankValueObjectData(), classification);
   }
 
   private ValueObjectData rankValueObjectData() {
     return new ValueObjectData("Rank",
-                    Arrays.asList(new ValueObjectFieldData("points", "int"), new ValueObjectFieldData("classification", "Classification")));
+                    Arrays.asList(new ValueObjectFieldData("points", "int", ""), new ValueObjectFieldData("classification", "Classification", "")));
   }
 
   private DeploymentSettingsData deploymentSettingsData() {

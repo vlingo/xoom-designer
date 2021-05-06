@@ -125,22 +125,6 @@ public class EntityUnitTestGenerationStepTest {
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onJava().read("operation-based-mock-dispatcher")));
   }
 
-  @Test
-  public void testThatQueriesUnitTestGenerationShouldProcess() {
-    final CodeGenerationContext context =
-            CodeGenerationContext.with(CodeGenerationParameters.from(Label.CQRS, true));
-
-    Assertions.assertTrue(new QueriesUnitTestGenerationStep().shouldProcess(context));
-  }
-
-  @Test
-  public void testThatQueriesUnitTestGenerationShouldNotProcess() {
-    final CodeGenerationContext context =
-            CodeGenerationContext.with(CodeGenerationParameters.from(Label.CQRS, false));
-
-    Assertions.assertFalse(new QueriesUnitTestGenerationStep().shouldProcess(context));
-  }
-
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter authorRegisteredEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
@@ -155,6 +139,7 @@ public class EntityUnitTestGenerationStepTest {
     final CodeGenerationParameter factoryMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
                     .relate(Label.METHOD_PARAMETER, "name")
+                    .relate(Label.METHOD_PARAMETER, "availableOn")
                     .relate(FACTORY_METHOD, "true")
                     .relate(authorRegisteredEvent);
 
@@ -163,6 +148,15 @@ public class EntityUnitTestGenerationStepTest {
                     .relate(Label.METHOD_PARAMETER, "rank")
                     .relate(FACTORY_METHOD, "false")
                     .relate(authorRankedEvent);
+
+    final CodeGenerationParameter availableOnField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
+                    .relate(Label.FIELD_TYPE, "LocalDate");
+
+    final CodeGenerationParameter relatedAuthors =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                    .relate(Label.FIELD_TYPE, "String")
+                    .relate(Label.COLLECTION_TYPE, "Set");
 
     final CodeGenerationParameter idField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "id")
@@ -174,7 +168,8 @@ public class EntityUnitTestGenerationStepTest {
 
     final CodeGenerationParameter rankField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                    .relate(Label.FIELD_TYPE, "Rank");
+                    .relate(Label.FIELD_TYPE, "Rank")
+                    .relate(Label.COLLECTION_TYPE, "List");
 
     final CodeGenerationParameter statusField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "status")
@@ -182,7 +177,8 @@ public class EntityUnitTestGenerationStepTest {
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
             .relate(factoryMethod).relate(rankMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
-            .relate(idField).relate(nameField).relate(rankField).relate(statusField);
+            .relate(idField).relate(nameField).relate(rankField).relate(relatedAuthors)
+            .relate(statusField).relate(availableOnField);
   }
 
   private CodeGenerationParameter bookAggregate() {

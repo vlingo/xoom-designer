@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class DataObjectConstructorAssignment extends Formatters.Fields<List<Stri
   }
 
   private String formatAssignment(final CodeGenerationParameter field) {
+    if(FieldDetail.isCollection(field)) {
+      return String.format("this.%s.addAll(%s);", field.value, field.value);
+    }
     return String.format("this.%s = %s;", field.value, field.value);
   }
 

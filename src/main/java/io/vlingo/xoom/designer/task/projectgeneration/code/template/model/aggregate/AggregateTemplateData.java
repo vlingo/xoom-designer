@@ -59,7 +59,7 @@ public class AggregateTemplateData extends TemplateData {
             .and(STORAGE_TYPE, storageType)
             .and(USE_CQRS, useCQRS);
 
-    this.dependOn(AggregateMethodTemplateData.from(aggregate, storageType, projectionType));
+    this.dependOn(AggregateMethodTemplateData.from(parameters, aggregate, storageType, projectionType));
   }
 
   private Set<String> resolveImports(final String basePackage,

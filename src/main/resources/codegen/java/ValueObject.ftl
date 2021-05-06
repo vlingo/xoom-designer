@@ -1,5 +1,11 @@
 package ${packageName};
 
+<#if imports?has_content>
+<#list imports as import>
+import ${import.qualifiedClassName};
+</#list>
+</#if>
+
 public final class ${valueObjectName} {
 
   <#list members as member>

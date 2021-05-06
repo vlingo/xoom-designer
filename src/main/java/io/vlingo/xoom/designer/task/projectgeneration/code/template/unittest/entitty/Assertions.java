@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator.TestDataValues;
@@ -74,7 +75,7 @@ public class Assertions {
     final Stream<CodeGenerationParameter> stateFields =
             AggregateDetail.findInvolvedStateFields(aggregate, method.value);
 
-    return formatAssertions(stateFields, valueObjects, testDataValues);
+    return formatAssertions(aggregate, stateFields, valueObjects, testDataValues);
   }
 
   private static List<String> mergeEntityFieldAssertions(final String defaultFactoryMethod,
@@ -93,23 +94,30 @@ public class Assertions {
             filterExclusiveFactoryMethodFields(factoryMethodFields, updateMethodFields);
 
     final List<String> factoryMethodAssertions =
-            formatAssertions(exclusiveFactoryMethodFields, valueObjects, initialTestDataValues);
+            formatAssertions(aggregate, exclusiveFactoryMethodFields, valueObjects, initialTestDataValues);
 
     final List<String> updateMethodAssertions =
-            formatAssertions(updateMethodFields.stream(), valueObjects, updatedTestDataValues);
+            formatAssertions(aggregate, updateMethodFields.stream(), valueObjects, updatedTestDataValues);
 
     return Stream.of(factoryMethodAssertions, updateMethodAssertions)
             .flatMap(List::stream).collect(Collectors.toList());
   }
 
-  private static List<String> formatAssertions(final Stream<CodeGenerationParameter> stateFields,
+  private static List<String> formatAssertions(final CodeGenerationParameter aggregate,
+                                               final Stream<CodeGenerationParameter> stateFields,
                                                final List<CodeGenerationParameter> valueObjects,
                                                final TestDataValues testDataValues) {
     final List<String> fieldPaths =
             AggregateDetail.resolveFieldsPaths("state", stateFields, valueObjects);
 
     final Function<String, String> mapper =
-            fieldPath -> String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve("state", fieldPath));
+            fieldPath -> {
+              final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
+              if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
+                return String.format("assertNotNull(%s);", fieldPath);
+              }
+              return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve("state", fieldPath));
+            };
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
   }

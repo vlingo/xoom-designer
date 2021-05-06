@@ -62,13 +62,17 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
                     .and(AGGREGATE_PROTOCOL_VARIABLE, simpleNameToAttribute(method.parent().value))
                     .and(AGGREGATE_PROTOCOL_NAME, method.parent().value);
 
-    parentParameters.addImports(resolveImports(methodScope));
+    parentParameters.addImports(resolveImports(method, methodScope));
   }
 
-  private Set<String> resolveImports(final MethodScope methodScope) {
-    return Stream.of(methodScope.requiredClasses)
-            .map(clazz -> clazz.getCanonicalName())
-            .collect(Collectors.toSet());
+  private Set<String> resolveImports(final CodeGenerationParameter method,
+                                     final MethodScope methodScope) {
+    final Stream<CodeGenerationParameter> involvedStateFields =
+            AggregateDetail.findInvolvedStateFields(method.parent(), method.value);
+
+    return Stream.of(AggregateDetail.resolveImports(involvedStateFields).stream(),
+            Stream.of(methodScope.requiredClasses).map(clazz -> clazz.getCanonicalName()))
+            .flatMap(s -> s).collect(Collectors.toSet());
   }
 
   @Override

@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
@@ -53,7 +54,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     final CodeGenerationParameter stateField =
             AggregateDetail.stateFieldWithName(parameter.parent(AGGREGATE), parameter.value);
 
-    if (carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField)) {
+    if (carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField) || FieldDetail.isValueObjectCollection(stateField)) {
       return parameter.value;
     }
     return String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);

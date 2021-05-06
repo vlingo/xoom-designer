@@ -11,18 +11,21 @@ import java.util.List;
 
 public class ValueObjectFieldData {
 
-    public final String name;
-    public final String type;
+  public final String name;
+  public final String type;
+  public final String collectionType;
 
-    public ValueObjectFieldData(final String name,
-                                final String type) {
-        this.name = name;
-        this.type = type;
-    }
+  public ValueObjectFieldData(final String name,
+                              final String type,
+                              final String collectionType) {
+    this.name = name;
+    this.type = type;
+    this.collectionType = collectionType;
+  }
 
-    public List<String> validate(List<String> errorStrings) {
-        if(name==null) errorStrings.add("ValueObjectFieldData.name is null");
-        if(type==null) errorStrings.add("ValueObjectFieldData.type is null");
-        return errorStrings;
-    }
+  public List<String> validate(final List<String> errorStrings) {
+    if(name==null) errorStrings.add("ValueObjectFieldData.name is null");
+    if(type==null) errorStrings.add("ValueObjectFieldData.type is null");
+    return errorStrings;
+  }
 }

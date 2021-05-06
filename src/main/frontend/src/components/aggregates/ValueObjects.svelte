@@ -1,5 +1,5 @@
 <script>
-	import { settings, simpleTypes } from "../../stores";
+	import { settings, simpleTypes, collectionTypes } from "../../stores";
 	import { Button, Dialog, Icon, CardActions, TextField, Select, Row, Col, Menu, List, ListItem } from "svelte-materialify/src";
 	import { mdiPlus, mdiDelete } from "@mdi/js";
 	import { requireRule } from "../../validators";
@@ -58,7 +58,7 @@
     dialogActive = true;
   }
   function newField() {
-    valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '' }]
+    valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '', collectionType: '' }]
   }
   function removeField(i) {
 		valueObjectForm.fields.splice(i, 1);
@@ -137,6 +137,9 @@
         </Col>
         <Col>
           <Select mandatory items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])} bind:value={field.type}>Type</Select>
+        </Col>
+        <Col>
+          <Select items={formatArrayForSelect(collectionTypes.map(f => f.name))} bind:value={field.collectionType} placeholder="(bare)">Collection</Select>
         </Col>
         {#if valueObjectForm.fields.length > 1}
           <Col cols="auto">

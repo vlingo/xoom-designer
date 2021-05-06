@@ -1,6 +1,5 @@
 package ${packageName};
 
-import java.util.List;
 import java.util.stream.Collectors;
 <#if imports?has_content>
 <#list imports as import>
@@ -35,6 +34,13 @@ public class ${dataName} {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>
+  }
+
+  public ${stateName} to${stateName}() {
+    <#list valueObjectTranslations as translation>
+    ${translation}
+    </#list>
+    return ${stateName}.from(${stateFields});
   }
 
 }

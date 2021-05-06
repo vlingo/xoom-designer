@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
@@ -37,6 +38,9 @@ public class DataObjectConstructor implements Formatters.Arguments {
 
   private String resolveFieldType(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
+    if (FieldDetail.isCollection(field)) {
+      return DataObjectDetail.resolveCollectionType(field);
+    }
     if (ValueObjectDetail.isValueObject(field)) {
       return DesignerTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
     }
