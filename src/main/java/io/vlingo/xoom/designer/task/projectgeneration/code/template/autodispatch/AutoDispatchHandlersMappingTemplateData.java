@@ -58,6 +58,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                     .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateName))
                     .andResolve(QUERY_ALL_INDEX_NAME, params -> staticConstant(params.find(QUERY_ALL_METHOD_NAME)))
                     .andResolve(QUERY_BY_ID_INDEX_NAME, params -> staticConstant(params.find(QUERY_BY_ID_METHOD_NAME)))
+                    .addImport(CodeElementFormatter.importAllFrom(ContentQuery.findPackage(DATA_OBJECT, contents)))
                     .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                     .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                     .and(HANDLER_ENTRIES, new ArrayList<String>())
@@ -90,6 +91,9 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
               try {
                 final String className = entry.getValue();
                 final TemplateStandard standard = entry.getKey();
+                if(className.isEmpty()) {
+                  return CodeElementFormatter.importAllFrom(ContentQuery.findPackage(standard, contents));
+                }
                 return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
               } catch (final IllegalArgumentException exception) {
                 return null;
@@ -108,7 +112,6 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
       put(AGGREGATE_PROTOCOL, aggregateName);
       put(AGGREGATE_STATE, AGGREGATE_STATE.resolveClassname(aggregateName));
       put(QUERIES, QUERIES.resolveClassname(aggregateName));
-      put(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName));
     }};
   }
 

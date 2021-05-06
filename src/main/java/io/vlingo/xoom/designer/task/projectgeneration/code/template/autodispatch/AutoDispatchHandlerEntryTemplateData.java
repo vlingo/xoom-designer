@@ -65,7 +65,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
   private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
     final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-    return new AggregateMethodInvocation("$stage", "data").format(method, methodScope);
+    return AggregateMethodInvocation.handlingDataObject("$stage").format(method, methodScope);
   }
 
   @Override

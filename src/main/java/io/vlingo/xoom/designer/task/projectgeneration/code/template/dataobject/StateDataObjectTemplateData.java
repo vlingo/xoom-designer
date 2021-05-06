@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject;
 
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Fields.Style;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
@@ -80,20 +81,28 @@ public class StateDataObjectTemplateData extends TemplateData {
     final List<String> valueObjectTranslations =
             Formatters.Variables.format(DATA_TO_VALUE_OBJECT_TRANSLATION, language, aggregate, valueObjects.stream());
 
-    final String stateFields =
-            aggregate.retrieveAllRelated(STATE_FIELD).map(field -> field.value).collect(Collectors.joining(", "));
-
     return TemplateParameters.with(PACKAGE_NAME, packageName)
             .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
             .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(aggregate))
             .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
-            .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(STATE_FIELDS, stateFields)
+            .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(STATE_FIELDS, joinStateFields(aggregate))
             .and(DATA_OBJECT_QUALIFIED_NAME, CodeElementFormatter.qualifiedNameOf(packageName, dataName))
             .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
             .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(STATE_FIELD)))
             .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents))
             .addImport(CodeElementFormatter.importAllFrom("java.util"))
             .addImports(AggregateDetail.resolveImports(aggregate));
+  }
+
+  private String joinStateFields(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(STATE_FIELD)
+            .map(field -> {
+              if (FieldDetail.isValueObjectCollection(field)) {
+                return ValueObjectDetail.translateDataObjectCollection(field.value, field);
+              } else {
+                return field.value;
+              }
+            }).collect(Collectors.joining(", "));
   }
 
   private String resolvePackage(final String basePackage) {

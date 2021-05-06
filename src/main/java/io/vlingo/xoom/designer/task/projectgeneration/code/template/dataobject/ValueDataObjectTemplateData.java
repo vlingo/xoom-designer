@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Fields.Style;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
@@ -52,9 +53,6 @@ public class ValueDataObjectTemplateData extends TemplateData {
                                       final List<Content> contents) {
     this.valueObjectName = valueObject.value;
 
-    final String valueObjectFields =
-            valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(field -> field.value).collect(Collectors.joining(", "));
-
     final List<String> valueObjectTranslations =
             Formatters.Variables.format(DATA_TO_VALUE_OBJECT_TRANSLATION, language, valueObject, valueObjects.stream());
 
@@ -62,12 +60,24 @@ public class ValueDataObjectTemplateData extends TemplateData {
             TemplateParameters.with(PACKAGE_NAME, packageName).and(VALUE_OBJECT_NAME, valueObjectName)
                     .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(valueObject))
                     .and(DATA_VALUE_OBJECT_NAME, standard().resolveClassname(valueObjectName))
-                    .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(VALUE_OBJECT_FIELDS, valueObjectFields)
+                    .and(VALUE_OBJECT_FIELDS, joinValueObjectFields(valueObject))
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
                     .addImport(CodeElementFormatter.importAllFrom(ContentQuery.findPackage(VALUE_OBJECT, contents)))
-                    .addImports(ValueObjectDetail.resolveFieldsImports(valueObject));
+                    .addImports(ValueObjectDetail.resolveFieldsImports(valueObject))
+                    .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations);
+  }
+
+  private String joinValueObjectFields(final CodeGenerationParameter valueObject) {
+    return valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
+            .map(field -> {
+              if (FieldDetail.isValueObjectCollection(field)) {
+                return ValueObjectDetail.translateDataObjectCollection(field.value, field);
+              } else {
+                return field.value;
+              }
+            }).collect(Collectors.joining(", "));
   }
 
   @Override

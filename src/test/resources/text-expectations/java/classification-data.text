@@ -23,8 +23,7 @@ public class ClassificationData {
   }
 
   public Classification toClassification() {
-    final Classifier classifier = Classifier.from(this.classifier.name);
-    return Classification.from(label, classifier);
+    return Classification.from(label, classifier.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
   }
 
 }

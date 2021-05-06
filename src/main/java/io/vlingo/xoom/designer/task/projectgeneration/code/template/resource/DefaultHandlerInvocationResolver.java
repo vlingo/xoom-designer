@@ -42,7 +42,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
 
   private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
-    final Formatters.Arguments argumentsFormat = new AggregateMethodInvocation("grid", "data");
+    final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.handlingDataObject("grid");
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
     final Boolean factoryMethod = method.retrieveRelatedValue(FACTORY_METHOD, Boolean::valueOf);
     final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;

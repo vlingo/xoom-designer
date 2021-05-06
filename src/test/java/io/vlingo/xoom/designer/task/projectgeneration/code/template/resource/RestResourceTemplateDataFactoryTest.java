@@ -57,7 +57,7 @@ public class RestResourceTemplateDataFactoryTest {
 
         Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
         Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
-        Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.*"));
         Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
         Assertions.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));
@@ -111,7 +111,7 @@ public class RestResourceTemplateDataFactoryTest {
 
         Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.Author"));
         Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.model.author.AuthorEntity"));
-        Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.AuthorData"));
+        Assertions.assertTrue(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.*"));
         Assertions.assertFalse(templateParameters.hasImport("io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries"));
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.resource", templateParameters.find(TemplateParameter.PACKAGE_NAME));
         Assertions.assertEquals("AuthorResource", templateParameters.find(TemplateParameter.REST_RESOURCE_NAME));

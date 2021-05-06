@@ -18,10 +18,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.VALUE_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.eventWithName;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.stateFieldType;
 
 public class ValueObjectDetail {
 
@@ -108,8 +108,10 @@ public class ValueObjectDetail {
   }
 
   public static boolean useValueObject(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(STATE_FIELD).anyMatch(ValueObjectDetail::isValueObject);
+    return aggregate.retrieveAllRelated(STATE_FIELD)
+            .anyMatch(field -> FieldDetail.isValueObjectCollection(field) || ValueObjectDetail.isValueObject(field));
   }
+
 
   public static boolean isValueObject(final CodeGenerationParameter field) {
     return !FieldDetail.isScalar(field) && !FieldDetail.isCollection(field) && !FieldDetail.isDateTime(field);
@@ -128,5 +130,13 @@ public class ValueObjectDetail {
     return parent.retrieveAllRelated(VALUE_OBJECT_FIELD)
             .filter(field -> field.value.equals(fieldName))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find " + fieldName));
+  }
+
+  public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField) {
+    final String fieldType = valueObjectField.retrieveRelatedValue(FIELD_TYPE);
+    final String collectionType = valueObjectField.retrieveRelatedValue(COLLECTION_TYPE);
+    final String dataObjectName = DATA_OBJECT.resolveClassname(fieldType);
+    return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())",
+            fieldPath, dataObjectName, fieldType, collectionType);
   }
 }

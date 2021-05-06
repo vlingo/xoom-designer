@@ -36,7 +36,7 @@ public class BookData {
   }
 
   public BookState toBookState() {
-    return BookState.from(id, title, publisher, publicationDate);
+    return new BookState(id, title, publisher, publicationDate);
   }
 
 }

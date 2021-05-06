@@ -85,7 +85,8 @@ public class ProjectionTemplateData extends TemplateData {
                                      final List<Content> contents) {
     final Stream<String> defaultImports =
             Stream.of(ContentQuery.findPackage(AGGREGATE_PROTOCOL, protocolName, contents),
-                    ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents));
+                    ContentQuery.findPackage(DATA_OBJECT, dataObjectName, contents))
+                    .map(CodeElementFormatter::importAllFrom);
 
     final Stream<String> specialTypesImports =
             projectionSources.stream()

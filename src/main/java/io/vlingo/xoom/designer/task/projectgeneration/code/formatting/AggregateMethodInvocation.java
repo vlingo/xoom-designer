@@ -18,23 +18,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.AGGREGATE;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.METHOD_PARAMETER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DATA_OBJECT;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private final String carrier;
   private final String stageVariableName;
+  private final boolean dataObjectHandling;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
-  public AggregateMethodInvocation(final String stageVariableName) {
-    this(stageVariableName, "");
+  public static AggregateMethodInvocation handlingDataObject(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, "data", true);
   }
 
-  public AggregateMethodInvocation(final String stageVariableName, final String carrier) {
+  public AggregateMethodInvocation(final String stageVariableName) {
+    this(stageVariableName, "", false);
+  }
+
+  public AggregateMethodInvocation(final String stageVariableName,
+                                   final String carrier,
+                                   final boolean dataObjectHandling) {
     this.carrier = carrier;
     this.stageVariableName = stageVariableName;
+    this.dataObjectHandling = dataObjectHandling;
   }
 
   @Override
@@ -54,10 +62,16 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     final CodeGenerationParameter stateField =
             AggregateDetail.stateFieldWithName(parameter.parent(AGGREGATE), parameter.value);
 
-    if (carrier.isEmpty() || ValueObjectDetail.isValueObject(stateField) || FieldDetail.isValueObjectCollection(stateField)) {
-      return parameter.value;
+    final String fieldPath =
+            carrier.isEmpty() ? parameter.value : String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);
+
+    if(dataObjectHandling && FieldDetail.isValueObjectCollection(stateField)) {
+      return ValueObjectDetail.translateDataObjectCollection(fieldPath, stateField);
     }
-    return String.format(FIELD_ACCESS_PATTERN, carrier, parameter.value);
+    if(ValueObjectDetail.isValueObject(stateField)) {
+      return stateField.value;
+    }
+    return fieldPath;
   }
 
 }

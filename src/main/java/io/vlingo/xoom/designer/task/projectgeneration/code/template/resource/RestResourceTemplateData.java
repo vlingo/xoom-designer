@@ -13,7 +13,9 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueo
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Queries;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
+import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.turbo.codegen.content.Content;
+import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.template.TemplateData;
@@ -31,6 +33,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Desig
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
 import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findFullyQualifiedClassName;
+import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findPackage;
 
 public class RestResourceTemplateData extends TemplateData {
 
@@ -88,11 +91,11 @@ public class RestResourceTemplateData extends TemplateData {
       final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
       imports.add(findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
       imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
-      imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
+      imports.add(CodeElementFormatter.importAllFrom(findPackage(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents)));
     }
     if (RouteDetail.requireModelFactory(aggregate)) {
       imports.add(findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
-      imports.add(findFullyQualifiedClassName(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents));
+      imports.add(CodeElementFormatter.importAllFrom(findPackage(DATA_OBJECT, DATA_OBJECT.resolveClassname(aggregateName), contents)));
     }
     if (useCQRS) {
       final String queriesName = DesignerTemplateStandard.QUERIES.resolveClassname(aggregateName);

@@ -47,7 +47,7 @@ public class AuthorData {
     final Name name = Name.from(this.name.firstName, this.name.lastName);
     final Classification classification = Classification.from(this.rank.classification.label, this.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
     final Rank rank = Rank.from(this.rank.points, classification);
-    return AuthorState.from(id, name, rank, status, bookIds, updatedOn);
+    return new AuthorState(id, name, rank, status, bookIds, updatedOn);
   }
 
 }

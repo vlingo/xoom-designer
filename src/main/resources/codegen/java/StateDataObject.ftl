@@ -40,7 +40,7 @@ public class ${dataName} {
     <#list valueObjectTranslations as translation>
     ${translation}
     </#list>
-    return ${stateName}.from(${stateFields});
+    return new ${stateName}(${stateFields});
   }
 
 }

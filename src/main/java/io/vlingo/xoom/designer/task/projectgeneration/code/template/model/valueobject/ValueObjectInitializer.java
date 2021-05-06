@@ -32,8 +32,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
   public List<String> format(final CodeGenerationParameter parent,
                              final Stream<CodeGenerationParameter> valueObjectsStream) {
     final List<CodeGenerationParameter> valueObjects = valueObjectsStream.collect(Collectors.toList());
-    return findInvolvedFields(parent)
-            .filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field))
+    return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
             .flatMap(field -> buildExpressions(field, valueObjects).stream())
             .collect(Collectors.toList());
   }
@@ -89,7 +88,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
     if(ValueObjectDetail.isValueObject(valueObjectField)) {
       return valueObjectField.value;
     }
-    if(FieldDetail.isValueObjectCollection(valueObjectField) && !FieldDetail.isScalar(fieldType)) {
+    if(FieldDetail.isValueObjectCollection(valueObjectField)) {
       final String dataObjectName = DesignerTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
       final String collectionType = valueObjectField.retrieveRelatedValue(COLLECTION_TYPE);
       return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
