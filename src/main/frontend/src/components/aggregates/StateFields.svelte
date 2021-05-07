@@ -16,7 +16,7 @@
       return {
         ...f,
         type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : '',
-        collectionType: f.collectionType === null || f.collectionType instanceof String ? f.collectionType : null
+        collectionType: f.collectionType === null || typeof f.collectionType === "string" ? f.collectionType : null
       }
     })
   }
