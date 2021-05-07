@@ -85,6 +85,15 @@
     return objectValueNames;
   }
 
+  $: if (valueObjectForm.fields) {
+    valueObjectForm.fields = valueObjectForm.fields.map(f => {
+      return {
+        ...f,
+        collectionType: f.collectionType === null || f.collectionType instanceof String ? f.collectionType : null
+      }
+    })
+  }
+
   $: valid = !!valueObjectForm.name
     && valueObjectForm.fields.every((field) => !!field.name && !!field.type)
     && $settings.model.valueObjectSettings.every((item) => !isObjectFieldNameUnique(valueObjectForm.name))
