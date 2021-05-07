@@ -89,7 +89,7 @@
     valueObjectForm.fields = valueObjectForm.fields.map(f => {
       return {
         ...f,
-        collectionType: f.collectionType === null || f.collectionType instanceof String ? f.collectionType : null
+        collectionType: f.collectionType === null || typeof f.collectionType === "string" ? f.collectionType : null
       }
     })
   }
