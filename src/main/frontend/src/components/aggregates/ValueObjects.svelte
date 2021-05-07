@@ -5,6 +5,7 @@
 	import { requireRule } from "../../validators";
   import { formatArrayForSelect } from "../../utils";
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
+  import FieldTypeSelect from './FieldTypeSelect.svelte';
 
 	let dialogActive = false;
   let deleteDialogActive = false;
@@ -16,6 +17,7 @@
       {
         name: '',
         type: '',
+        collectionType: ''
       }
     ]
   }
@@ -28,6 +30,7 @@
         {
           name: '',
           type: '',
+          collectionType: ''
         }
       ]
     }
@@ -136,7 +139,14 @@
           <TextField class="mb-4" bind:value={field.name} rules={[requireRule, isFieldUnique]}>Field Name</TextField>
         </Col>
         <Col>
-          <Select mandatory items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])} bind:value={field.type}>Type</Select>
+          <FieldTypeSelect
+            mandatory
+            items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])}
+            bind:value={field.type}
+            collectionType={field.collectionType}
+          >
+            Type
+          </FieldTypeSelect>
         </Col>
         <Col>
           <Select items={formatArrayForSelect(collectionTypes.map(f => f.name))} bind:value={field.collectionType} placeholder="(bare)">Collection</Select>
