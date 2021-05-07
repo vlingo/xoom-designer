@@ -1,19 +1,25 @@
-FROM alpine:3.13
+FROM alpine:3.13 as jvm
 
 LABEL maintainer="VLINGO XOOM Team <info@vlingo.io>"
 
+ARG XOOM_HOME=/designer
+ARG XOOM_PROJECTS_DIR=VLINGO-XOOM
 ENV JAVA_HOME=/usr/lib/jvm/default-jvm/
-ENV PATH=${JAVA_HOME}/bin:$PATH:/designer:/designer/bin
-ENV VLINGO_XOOM_DESIGNER_HOME=/designer
+ENV PATH=${JAVA_HOME}/bin:$PATH:$XOOM_HOME:$XOOM_HOME/bin
+ENV VLINGO_XOOM_DESIGNER_HOME=$XOOM_HOME
 
-ADD dist/designer.tar /
+RUN addgroup -S xoom && adduser -S -D -s /sbin/nologin -h $XOOM_HOME -G xoom xoom \
+ && apk add --no-cache bash openjdk8
 
-RUN addgroup -S xoom && adduser -S -D -s /sbin/nologin -h /designer -G xoom xoom \
- && apk add --no-cache bash openjdk8 \
- && mkdir -p /designer/VLINGO-XOOM \
- && chmod +x /designer/xoom && find /designer -iname mvnw | xargs chmod +x && chown -R xoom:xoom /designer
+WORKDIR $XOOM_HOME
 
-WORKDIR /designer
-VOLUME /designer/VLINGO-XOOM
-CMD /designer/xoom gui
+FROM jvm as designer
+COPY dist/designer.tar /designer.tar
+RUN tar -xf /designer.tar -C / \
+ && chmod +x /designer/xoom && find /designer -iname mvnw | xargs chmod +x
+
+FROM jvm
 USER xoom
+VOLUME $XOOM_HOME/$XOOM_PROJECTS_DIR
+COPY --from=designer --chown=xoom:xoom /designer $XOOM_HOME
+CMD xoom gui
