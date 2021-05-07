@@ -17,7 +17,7 @@ public class CodeGenerationParameterValidationStepTest {
   public void testThatParametersAreValidated() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false);
+                    deploymentSettingsData(), "/home/projects", true, false, "NONE");
 
     final TaskExecutionContext context =
             TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM);

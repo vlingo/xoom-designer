@@ -14,6 +14,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ValueO
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projectgenerationsettings.ProjectSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestResourceGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestUiResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.EntityUnitTestGenerationStep;
