@@ -6,6 +6,7 @@
   import { formatArrayForSelect } from '../../utils';
 	import { settings, simpleTypes, collectionTypes } from '../../stores';
   import FillFieldsNote from './FillFieldsNote.svelte';
+  import FieldTypeSelect from './FieldTypeSelect.svelte';
 
   export let stateFields;
 
@@ -33,7 +34,16 @@
         <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-        <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+        <FieldTypeSelect
+          mandatory
+          disabled={i === 0}
+          items={stateFieldsTypes}
+          bind:value={stateField.type}
+          collectionType={stateField.collectionType}
+        >
+          Type
+        </FieldTypeSelect>
+        <!-- <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select> -->
       </div>
       <div style="flex: 1;" class="mb-3 pb-4">
         <Select disabled={i === 0} items={formatArrayForSelect(collectionTypes.map(f => f.name))}  bind:value={stateField.collectionType} placeholder="(bare)">Collection</Select>
