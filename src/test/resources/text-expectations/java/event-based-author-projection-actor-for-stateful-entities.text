@@ -1,0 +1,67 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.author.*;
+
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.Source;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData> {
+
+  private static final AuthorData Empty = AuthorData.empty();
+
+  public AuthorProjectionActor() {
+    this(QueryModelStateStoreProvider.instance().store);
+  }
+
+  public AuthorProjectionActor(final StateStore stateStore) {
+    super(stateStore);
+  }
+
+  @Override
+  protected AuthorData currentDataFor(final Projectable projectable) {
+    return Empty;
+  }
+
+  @Override
+  protected AuthorData merge(final AuthorData previousData, final int previousVersion, final AuthorData currentData, final int currentVersion) {
+
+    if (previousVersion == currentVersion) return currentData;
+
+    AuthorData merged = previousData;
+
+    for (final Source<?> event : sources()) {
+      switch (Events.valueOf(event.typeName())) {
+        case AuthorRegistered: {
+          final AuthorRegistered typedEvent = typed(event);
+          final NameData name = NameData.from(typedEvent.name.firstName, typedEvent.name.lastName);
+          merged = AuthorData.from(typedEvent.id, name, null);
+          break;
+        }
+
+        case AuthorRanked: {
+          final AuthorRanked typedEvent = typed(event);
+          final ClassifierData classifier = ClassifierData.from(typedEvent.rank.classification.classifier.name);
+          final ClassificationData classification = ClassificationData.from(typedEvent.rank.classification.label, classifier);
+          final RankData rank = RankData.from(typedEvent.rank.points, classification);
+          merged = AuthorData.from(typedEvent.id, previousData.name, rank);
+          break;
+        }
+
+        default:
+          logger().warn("Event of type " + event.typeName() + " was not matched.");
+          break;
+      }
+    }
+
+    return merged;
+  }
+}

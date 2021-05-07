@@ -1,0 +1,4 @@
+event BookPurchased {
+  version semanticVersion
+  int rank
+}

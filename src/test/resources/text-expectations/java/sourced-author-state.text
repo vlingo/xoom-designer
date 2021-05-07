@@ -1,0 +1,42 @@
+package io.vlingo.xoomapp.model.author;
+
+import java.time.LocalDate;
+import java.util.*;
+import io.vlingo.xoomapp.model.*;
+
+public final class AuthorState {
+
+  public final String id;
+  public final Name name;
+  public final List<Rank> rank = new ArrayList<>();
+  public final Set<String> relatedAuthors = new HashSet<>();
+  public final LocalDate availableOn;
+
+  public static AuthorState identifiedBy(final String id) {
+    return new AuthorState(id, null, new ArrayList<>(), new HashSet<>(), LocalDate.now());
+  }
+
+  public AuthorState (final String id, final Name name, final List<Rank> rank, final Set<String> relatedAuthors, final LocalDate availableOn) {
+    this.id = id;
+    this.name = name;
+    this.rank.addAll(rank);
+    this.relatedAuthors.addAll(relatedAuthors);
+    this.availableOn = availableOn;
+  }
+
+  public AuthorState withName(final Name name) {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, name, this.rank, this.relatedAuthors, this.availableOn);
+  }
+
+  public AuthorState changeRank(final List<Rank> rank) {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, rank, this.relatedAuthors, this.availableOn);
+  }
+
+  public AuthorState hide() {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, this.rank, this.relatedAuthors, this.availableOn);
+  }
+
+}

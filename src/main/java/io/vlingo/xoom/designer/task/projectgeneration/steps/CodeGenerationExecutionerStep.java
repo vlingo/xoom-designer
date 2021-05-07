@@ -7,20 +7,40 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.ExternalFileLocationResolver;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
+import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
+import io.vlingo.xoom.turbo.codegen.template.OutputFile;
+import io.vlingo.xoom.turbo.codegen.template.OutputFileInstantiator;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.OFFSET;
 
 public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
-    @Override
-    public void process(final TaskExecutionContext execution) {
-        final CodeGenerationContext generation = CodeGenerationContext.with(execution.codeGenerationParameters());
-        CODE_GENERATION_STEPS.stream().filter(step -> step.shouldProcess(generation)).forEach(step -> step.process(generation));
-    }
+  @Override
+  public void process(final TaskExecutionContext execution) {
+    final CodeGenerationContext generation =
+            CodeGenerationContext.with(execution.codeGenerationParameters())
+                    .fileLocationResolver(new ExternalFileLocationResolver())
+                    .outputFileInstantiator(outputFileInstantiator());
 
+    CODE_GENERATION_STEPS.stream().filter(step -> step.shouldProcess(generation)).forEach(step -> step.process(generation));
+  }
+
+  private OutputFileInstantiator outputFileInstantiator() {
+    return (context, data, language) -> {
+      final String absolutePath =
+              context.fileLocationResolver().resolve(context, data);
+
+      final String fileName =
+              language.formatFilename(data.filename());
+
+      final String offset =
+              data.parameters().find(OFFSET);
+
+      return new OutputFile(absolutePath, fileName, offset, data.isPlaceholder());
+    };
+  }
 }

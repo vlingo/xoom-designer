@@ -42,7 +42,7 @@ public class CodeGenerationParameterValidationStepTest {
 
   private AggregateData personAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("name", "String", ""));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
@@ -61,7 +61,7 @@ public class CodeGenerationParameterValidationStepTest {
 
   private AggregateData profileAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("status", "String", ""));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),

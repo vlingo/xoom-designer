@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class TaskExecutionContextMapperTest {
 
@@ -38,7 +38,7 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-    Assertions.assertEquals("1.7.6-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.7.7-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
     Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
@@ -64,10 +64,12 @@ public class TaskExecutionContextMapperTest {
                     .filter(vo -> vo.value.equals("Classification")).findFirst().get();
 
     Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
-            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")
+                    && !field.hasAny(COLLECTION_TYPE)));
 
     Assertions.assertTrue(classificationValueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
-            .anyMatch(field -> field.value.equals("rank") && field.retrieveRelatedValue(FIELD_TYPE).equals("Rank")));
+            .anyMatch(field -> field.value.equals("rank") && field.retrieveRelatedValue(FIELD_TYPE).equals("Rank")
+                    && field.retrieveRelatedValue(COLLECTION_TYPE).equals("Set")));
 
     final CodeGenerationParameter personAggregateParameter =
             codeGenerationParameters.retrieveAll(AGGREGATE)
@@ -75,10 +77,12 @@ public class TaskExecutionContextMapperTest {
                     .findFirst().get();
 
     Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-            .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")));
+            .anyMatch(field -> field.value.equals("id") && field.retrieveRelatedValue(FIELD_TYPE).equals("Long")
+                    && !field.hasAny(COLLECTION_TYPE)));
 
     Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(STATE_FIELD)
-            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")));
+            .anyMatch(field -> field.value.equals("name") && field.retrieveRelatedValue(FIELD_TYPE).equals("String")
+            && field.retrieveRelatedValue(COLLECTION_TYPE).equals("List")));
 
     Assertions.assertTrue(personAggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
             .anyMatch(method -> method.value.equals("defineWith") &&
@@ -119,7 +123,7 @@ public class TaskExecutionContextMapperTest {
 
   private AggregateData personAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("name", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("name", "String", "List"));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
@@ -138,7 +142,7 @@ public class TaskExecutionContextMapperTest {
 
   private AggregateData profileAggregateData() {
     final List<StateFieldData> statesFields =
-            Arrays.asList(new StateFieldData("id", "Long"), new StateFieldData("status", "String"));
+            Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("status", "String", ""));
 
     final List<AggregateMethodData> methods =
             Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
@@ -158,14 +162,14 @@ public class TaskExecutionContextMapperTest {
   private List<ValueObjectData> valueObjects() {
     final ValueObjectData classification =
             new ValueObjectData("Classification",
-                    Arrays.asList(new ValueObjectFieldData("name", "String"), new ValueObjectFieldData("rank", "Rank")));
+                    Arrays.asList(new ValueObjectFieldData("name", "String", ""), new ValueObjectFieldData("rank", "Rank", "Set")));
 
     return Arrays.asList(rankValueObjectData(), classification);
   }
 
   private ValueObjectData rankValueObjectData() {
     return new ValueObjectData("Rank",
-            Arrays.asList(new ValueObjectFieldData("points", "int")));
+            Arrays.asList(new ValueObjectFieldData("points", "int", "")));
   }
 
   private DeploymentSettingsData deploymentSettingsData() {

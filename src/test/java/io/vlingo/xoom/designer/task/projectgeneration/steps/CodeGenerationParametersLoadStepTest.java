@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
 import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
 import static io.vlingo.xoom.designer.task.Agent.WEB;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class CodeGenerationParametersLoadStepTest {
 

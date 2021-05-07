@@ -1,0 +1,65 @@
+package io.vlingo.infrastructure.persistence;
+
+import java.util.Arrays;
+import java.util.List;
+
+import io.vlingo.xoomapp.model.author.AuthorEntity;
+import io.vlingo.xoomapp.model.book.BookRented;
+import io.vlingo.xoomapp.model.book.BookPurchased;
+import io.vlingo.xoomapp.model.book.BookEntity;
+
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
+import io.vlingo.xoom.symbio.EntryAdapterProvider;
+import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl;
+import io.vlingo.xoom.symbio.store.dispatch.Dispatchable;
+import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.turbo.actors.Settings;
+import io.vlingo.xoom.turbo.storage.Model;
+import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
+import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
+
+@SuppressWarnings("all")
+public class CommandModelJournalProvider  {
+  private static CommandModelJournalProvider instance;
+
+  public final Journal<String> journal;
+
+  public static CommandModelJournalProvider  instance() {
+    return instance;
+  }
+
+  public static CommandModelJournalProvider using(final Stage stage, final SourcedTypeRegistry registry) {
+    return using(stage, registry, new NoOpDispatcher());
+ }
+
+  public static CommandModelJournalProvider using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher ...dispatchers) {
+    if (instance != null) {
+      return instance;
+    }
+
+    final EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(stage.world());
+
+    entryAdapterProvider.registerAdapter(BookRented.class, new BookRentedAdapter());
+    entryAdapterProvider.registerAdapter(BookPurchased.class, new BookPurchasedAdapter());
+
+    final Journal<String> journal =
+              StoreActorBuilder.from(stage, Model.COMMAND, Arrays.asList(dispatchers), StorageType.JOURNAL, Settings.properties(), true);
+
+    registry.register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));
+    registry.register(new Info(journal, AuthorEntity.class, AuthorEntity.class.getSimpleName()));
+
+    instance = new CommandModelJournalProvider(journal);
+
+    return instance;
+  }
+
+  private CommandModelJournalProvider(final Journal<String> journal) {
+    this.journal = journal;
+  }
+
+}

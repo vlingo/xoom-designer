@@ -62,7 +62,7 @@
 			<Divider />
 			<CardText>
 				{#each aggregate.stateFields as field}
-					<div>{field.name}: {field.type}</div>
+					<div>{field.name}: {field.collectionType ? `${field.collectionType}<${field.type}>` : field.type}</div>
 				{/each}
 				<Divider />
 				{#each aggregate.methods as method}

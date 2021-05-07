@@ -13,11 +13,14 @@ public class StateFieldData {
 
     public final String name;
     public final String type;
+    public final String collectionType;
 
     public StateFieldData(final String name,
-                          final String type) {
+                          final String type,
+                          final String collectionType) {
         this.name = name;
         this.type = type;
+        this.collectionType = collectionType;
     }
 
     public List<String> validate(List<String> errorStrings) {

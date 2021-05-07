@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.ARTIFACT_ID;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ARTIFACT_ID;
 
 public final class ProjectInstallationStep implements TaskExecutionStep {
 

@@ -1,10 +1,11 @@
 <script>
-	import { settings, simpleTypes } from "../../stores";
+	import { settings, simpleTypes, collectionTypes } from "../../stores";
 	import { Button, Dialog, Icon, CardActions, TextField, Select, Row, Col, Menu, List, ListItem } from "svelte-materialify/src";
 	import { mdiPlus, mdiDelete } from "@mdi/js";
 	import { requireRule } from "../../validators";
   import { formatArrayForSelect } from "../../utils";
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
+  import FieldTypeSelect from './FieldTypeSelect.svelte';
 
 	let dialogActive = false;
   let deleteDialogActive = false;
@@ -16,6 +17,7 @@
       {
         name: '',
         type: '',
+        collectionType: ''
       }
     ]
   }
@@ -28,6 +30,7 @@
         {
           name: '',
           type: '',
+          collectionType: ''
         }
       ]
     }
@@ -58,7 +61,7 @@
     dialogActive = true;
   }
   function newField() {
-    valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '' }]
+    valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '', collectionType: '' }]
   }
   function removeField(i) {
 		valueObjectForm.fields.splice(i, 1);
@@ -80,6 +83,15 @@
       }
     });
     return objectValueNames;
+  }
+
+  $: if (valueObjectForm.fields) {
+    valueObjectForm.fields = valueObjectForm.fields.map(f => {
+      return {
+        ...f,
+        collectionType: f.collectionType === null || typeof f.collectionType === "string" ? f.collectionType : null
+      }
+    })
   }
 
   $: valid = !!valueObjectForm.name
@@ -136,7 +148,17 @@
           <TextField class="mb-4" bind:value={field.name} rules={[requireRule, isFieldUnique]}>Field Name</TextField>
         </Col>
         <Col>
-          <Select mandatory items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])} bind:value={field.type}>Type</Select>
+          <FieldTypeSelect
+            mandatory
+            items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])}
+            bind:value={field.type}
+            collectionType={field.collectionType}
+          >
+            Type
+          </FieldTypeSelect>
+        </Col>
+        <Col>
+          <Select items={formatArrayForSelect(collectionTypes.map(f => f.name))} bind:value={field.collectionType} placeholder="(bare)">Collection</Select>
         </Col>
         {#if valueObjectForm.fields.length > 1}
           <Col cols="auto">

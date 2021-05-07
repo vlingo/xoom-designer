@@ -1,0 +1,5 @@
+data Rank {
+  version semanticVersion
+  int points
+  vlingo:xoom:io.vlingo.xoomapp:Classification:1.0.0 classification
+}

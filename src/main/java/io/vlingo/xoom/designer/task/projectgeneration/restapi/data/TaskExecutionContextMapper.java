@@ -11,14 +11,16 @@ import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole;
 import io.vlingo.xoom.turbo.codegen.language.Language;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeRole;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
-import static io.vlingo.xoom.turbo.codegen.parameter.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup.FIELD_TYPE_TRANSLATION;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class TaskExecutionContextMapper {
 
@@ -65,7 +67,8 @@ public class TaskExecutionContextMapper {
       valueObject.fields.forEach(field -> {
         final CodeGenerationParameter fieldParameter =
                 CodeGenerationParameter.of(VALUE_OBJECT_FIELD, field.name)
-                        .relate(FIELD_TYPE, field.type);
+                        .relate(FIELD_TYPE, FIELD_TYPE_TRANSLATION.getOrDefault(field.type, field.type))
+                        .relate(COLLECTION_TYPE, field.collectionType);
 
         valueObjectParameter.relate(fieldParameter);
       });
@@ -79,7 +82,8 @@ public class TaskExecutionContextMapper {
     aggregateData.stateFields.forEach(stateField -> {
       aggregateParameter.relate(
               CodeGenerationParameter.of(STATE_FIELD, stateField.name)
-                      .relate(FIELD_TYPE, stateField.type));
+                      .relate(FIELD_TYPE, FIELD_TYPE_TRANSLATION.getOrDefault(stateField.type, stateField.type))
+                      .relate(COLLECTION_TYPE, stateField.collectionType));
     });
   }
 
@@ -149,6 +153,8 @@ public class TaskExecutionContextMapper {
       aggregateParameter.relate(producerExchange);
     }
   }
+
+
 
   private void mapPersistence() {
     parameters.add(CQRS, data.model.persistenceSettings.useCQRS)

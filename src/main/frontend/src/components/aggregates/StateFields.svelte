@@ -4,8 +4,9 @@
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
-	import { settings, simpleTypes } from '../../stores';
+	import { settings, simpleTypes, collectionTypes } from '../../stores';
   import FillFieldsNote from './FillFieldsNote.svelte';
+  import FieldTypeSelect from './FieldTypeSelect.svelte';
 
   export let stateFields;
 
@@ -14,12 +15,13 @@
     stateFields = stateFields.map(f => {
       return {
         ...f,
-        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
+        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : '',
+        collectionType: f.collectionType === null || typeof f.collectionType === "string" ? f.collectionType : null
       }
     })
   }
 
-	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "" });
+	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "", collectionType: "" });
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
 </script>
 
@@ -32,8 +34,20 @@
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
         <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}>Name</TextField>
       </div>
+      <div style="flex: 1;" class="mb-3 pb-4 mr-4">
+        <FieldTypeSelect
+          mandatory
+          disabled={i === 0}
+          items={stateFieldsTypes}
+          bind:value={stateField.type}
+          collectionType={stateField.collectionType}
+        >
+          Type
+        </FieldTypeSelect>
+        <!-- <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select> -->
+      </div>
       <div style="flex: 1;" class="mb-3 pb-4">
-        <Select mandatory disabled={i === 0} items={stateFieldsTypes} bind:value={stateField.type}>Type</Select>
+        <Select disabled={i === 0} items={formatArrayForSelect(collectionTypes.map(f => f.name))}  bind:value={stateField.collectionType} placeholder="(bare)">Collection</Select>
       </div>
       <div style="{stateFields.length > 1 ? 'width: 36px;' : ''}">
         {#if i !== 0}

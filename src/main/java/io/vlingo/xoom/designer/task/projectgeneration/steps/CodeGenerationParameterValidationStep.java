@@ -6,19 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.DatabaseType;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
+import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.turbo.codegen.parameter.Label;
-import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionType;
-import io.vlingo.xoom.turbo.codegen.template.storage.DatabaseType;
-import io.vlingo.xoom.turbo.codegen.template.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.SupportedTypes;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 
 public class CodeGenerationParameterValidationStep implements TaskExecutionStep {
 

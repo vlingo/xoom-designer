@@ -1,0 +1,42 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.util.*;
+import io.vlingo.xoomapp.model.book.BookState;
+
+@SuppressWarnings("all")
+public class BookData {
+  public final String id;
+  public final String title;
+  public final String publisher;
+  public final LocalDate publicationDate;
+
+  public static BookData from(final BookState bookState) {
+    return from(bookState.id, bookState.title, bookState.publisher, bookState.publicationDate);
+  }
+
+  public static BookData from(final String id, final String title, final String publisher, final LocalDate publicationDate) {
+    return new BookData(id, title, publisher, publicationDate);
+  }
+
+  public static List<BookData> from(final List<BookState> states) {
+    return states.stream().map(BookData::from).collect(Collectors.toList());
+  }
+
+  public static BookData empty() {
+    return from(BookState.identifiedBy(""));
+  }
+
+  private BookData (final String id, final String title, final String publisher, final LocalDate publicationDate) {
+    this.id = id;
+    this.title = title;
+    this.publisher = publisher;
+    this.publicationDate = publicationDate;
+  }
+
+  public BookState toBookState() {
+    return new BookState(id, title, publisher, publicationDate);
+  }
+
+}

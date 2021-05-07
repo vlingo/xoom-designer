@@ -21,7 +21,7 @@
 	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
 	const initialAggregate = {
 		aggregateName: "",
-		stateFields: [{ name: "id", type: "String" }],
+		stateFields: [{ name: "id", type: "String", collectionType: null }],
 		events: [],
 		methods: [],
 		api: {

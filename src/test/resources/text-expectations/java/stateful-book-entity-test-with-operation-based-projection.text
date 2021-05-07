@@ -1,0 +1,51 @@
+package io.vlingo.xoomapp.model.book;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.actors.testkit.AccessSafely;
+import io.vlingo.xoomapp.infrastructure.persistence.BookStateAdapter;
+import io.vlingo.xoomapp.infrastructure.persistence.MockDispatcher;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry.Info;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
+import io.vlingo.xoom.symbio.StateAdapterProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BookEntityTest {
+
+  private World world;
+  private StateStore store;
+  private MockDispatcher dispatcher;
+  private Book book;
+
+  @BeforeEach
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void setUp(){
+    dispatcher = new MockDispatcher();
+    world = World.startWithDefaults("test-stateful");
+    new StateAdapterProvider(world).registerAdapter(BookState.class, new BookStateAdapter());
+    store = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
+    new StatefulTypeRegistry(world).register(new Info(store, BookState.class, BookState.class.getSimpleName()));
+    book = world.actorFor(Book.class, BookEntity.class, "#1");
+  }
+
+  private static final String TITLE_FOR_CATALOG_TEST = "updated-book-title";
+  private static final String PUBLISHER_FOR_CATALOG_TEST = "updated-book-publisher";
+
+  @Test
+  public void catalog() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final BookState state = book.catalog(TITLE_FOR_CATALOG_TEST, PUBLISHER_FOR_CATALOG_TEST).await();
+
+    assertEquals(state.title, "book-title");
+    assertEquals(state.publisher, "book-publisher");
+    assertEquals(1, (int) dispatcherAccess.readFrom("storeCount"));
+    assertEquals(BookState.class.getName(), dispatcherAccess.readFrom("storedAt", 0));
+  }
+
+}

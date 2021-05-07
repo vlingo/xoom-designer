@@ -2,6 +2,19 @@ package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.autodispatch.AutoDispatchMappingGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap.BootstrapGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject.DataObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ModelGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ValueObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.projectgenerationsettings.ProjectSettingsGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestResourceGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata.SchemataGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.EntityUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries.QueriesUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTargetRegistrationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
@@ -9,19 +22,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
 import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
-import io.vlingo.xoom.turbo.codegen.template.autodispatch.AutoDispatchMappingGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.bootstrap.BootstrapGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.dataobject.DataObjectGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.exchange.ExchangeGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.model.ModelGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.model.ValueObjectGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.projectgenerationsettings.ProjectSettingsGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.projections.ProjectionGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.resource.RestResourceGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.schemata.SchemataGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.unittest.entity.EntityUnitTestGenerationStep;
-import io.vlingo.xoom.turbo.codegen.template.unittest.queries.QueriesUnitTestGenerationStep;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -32,8 +32,8 @@ import static io.vlingo.xoom.designer.ComponentRegistry.withType;
 public class Configuration {
 
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
-  public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.0";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.6-SNAPSHOT";
+  public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.6";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.7-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
 
   static {
