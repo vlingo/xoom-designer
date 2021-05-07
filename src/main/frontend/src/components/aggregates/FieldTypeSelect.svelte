@@ -10,7 +10,7 @@
   let innerValue = value;
   let innerItems = [];
 
-  $: innerItems = collectionType && !collectionType instanceof Object ? items.map(item => ({
+  $: innerItems = collectionType ? items.map(item => ({
     name: `${collectionType}<${item.value}>`,
     value: item.value
   })) : [...items];

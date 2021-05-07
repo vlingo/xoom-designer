@@ -15,7 +15,8 @@
     stateFields = stateFields.map(f => {
       return {
         ...f,
-        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : ''
+        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : '',
+        collectionType: f.collectionType === null || f.collectionType instanceof String ? f.collectionType : null
       }
     })
   }
