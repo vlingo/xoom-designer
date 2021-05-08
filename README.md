@@ -36,6 +36,8 @@ To run with `docker` on Windows, use this command:
  C:\> docker run -it --rm -p '19090:19090' -v C:/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
 ```
 
+The Docker image cannot automatically open your preferred browser on the XOOM Designer URL. You will have to navigate manually using: [http://localhost:19090/context](http://localhost:19090/context)
+
 ## [Installation](#installation)
 
 The installation process is short. Before you start, just check if you have these tools already installed:
