@@ -17,15 +17,23 @@ The VLINGO XOOM platform SDK was created to help developers who face such challe
 
 The next section show you how to run and use the VLINGO XOOM Designer in your local environment. Let's get started!
 
-## [Docker image](#docker-image)
+## [Docker Image](#docker-image)
 
-The quickest way to run XOOM Designer is to use the [docker image](https://hub.docker.com/r/vlingo/xoom-designer)
-published by the VLINGO XOOM Team.
+The quickest way to run XOOM Designer is to use the [Docker image](https://hub.docker.com/r/vlingo/xoom-designer)
+published by the VLINGO XOOM team.
 
-Remember to expose the `19090` port and mount the volume for your projects to `/designer/VLINGO-XOOM`:
+Remember to expose the `19090` port and mount the volume for your projects to `/designer/VLINGO-XOOM`.
+
+To run with `docker` on \*nix, use the following command:
 
 ```bash
-docker run -it --rm -p '19090:19090' -v $(pwd)/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
+ $ docker run -it --rm -p '19090:19090' -v $(pwd)/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
+```
+
+To run with `docker` on Windows, use this command:
+
+```Windows
+ C:\> docker run -it --rm -p '19090:19090' -v C:/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
 ```
 
 ## [Installation](#installation)
