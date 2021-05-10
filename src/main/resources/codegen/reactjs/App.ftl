@@ -29,10 +29,10 @@ function App() {
           <Switch>
             <Route path="/" exact={true}><Home /></Route>
             <#list aggregates as aggregate>
-              <#assign pluralCapitalized=fns.makePlural("${aggregate.aggregateName}"?capitalize) />
-              <#assign capitalized="${aggregate.aggregateName?capitalize}" />
-              <Route path="${aggregate.api.rootPath}" exact={true}><${pluralCapitalized} /></Route>
-              <Route path="${aggregate.api.rootPath}/:id"><${capitalized} /></Route>
+              <#assign pluralCapitalized=fns.makePlural("${fns.capitalize(aggregate.aggregateName)}") />
+              <#assign capitalized="${fns.capitalize(aggregate.aggregateName)}" />
+              <Route path="/app${aggregate.api.rootPath}" exact={true}><${pluralCapitalized} /></Route>
+              <Route path="/app${aggregate.api.rootPath}/:id"><${capitalized} /></Route>
             </#list>
           </Switch>
           </main>

@@ -2,6 +2,8 @@
   "name": "${context.groupId}.${context.artifactId}",
   "version": "${context.artifactVersion}",
   "private": true,
+  "homepage": "./",
+  "publicPath": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",

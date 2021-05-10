@@ -41,8 +41,9 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
   const ${method.name} = useCallback((e) => {
     console.log('showing ${method.name} modal');
     const form = {
+      id: item.id,
       <#list method.parameters as p>
-        ${p}: item.${p}<#if p?has_next>,</#if>
+      ${p}: item.${p}<#if p?has_next>,</#if>
       </#list>
     };
     setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(method.name)} id={id} defaultForm={form} complete={onModalActionComplete}/>);

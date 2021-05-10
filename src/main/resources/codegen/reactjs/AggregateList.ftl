@@ -92,7 +92,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <tbody>
         {items.map(item => (
         <tr key={item.id}>
-          <td> <Link to={"${aggregate.api.rootPath}/"+item.id}>{item.id} </Link> </td>
+          <td> <Link to={"/app${aggregate.api.rootPath}/"+item.id}>{item.id} </Link> </td>
           <#list aggregate.stateFields as field>
             <#if field_index != 0>
               <@printTableCell "${field.name}" "${field.type}" />

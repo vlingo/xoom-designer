@@ -24,6 +24,13 @@ public class AggregateMethodArguments {
         this.valueTypes = valueObjectData;
         this.route = aggregate.api.routes.stream()
                 .filter(routeData -> routeData.aggregateMethod.equals(method.name))
+                .map(route -> {
+                    // Workaround solution. Because currently our path input don't allow empty text
+                    if (route.path.equals("/")){
+                        return new RouteData("", route.httpMethod, route.aggregateMethod, route.requireEntityLoad);
+                    }
+                    return route;
+                })
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Can't find " + method.name + "'s API data"));
 

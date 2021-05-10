@@ -15,13 +15,17 @@ import axios from "axios";
     </#if>
 </#macro>
 
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
 const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} = ({id = null, defaultForm, complete}) => {
 
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    <#assign submitPath><#if route.requireEntityLoad>'${aggregate.api.rootPath}/'+id+'/${route.path}'<#else>'${aggregate.api.rootPath}/${route.path}'</#if></#assign>
-    axios.${route.httpMethod?lower_case}(${submitPath}, form)
+    const url = applyData('${aggregate.api.rootPath}${route.path}', form);
+    axios.${route.httpMethod?lower_case}(url, form)
     .then(res => res.data)
     .then(data => {
       complete(data);
