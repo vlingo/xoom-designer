@@ -30,7 +30,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.
   </@compress>
 </#macro>
 
-const EMPTY_FORM = <@printJSON aggregate.stateFields />;
+const EMPTY_FORM = <@printJSON creatorStateFields />;
 
 const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 

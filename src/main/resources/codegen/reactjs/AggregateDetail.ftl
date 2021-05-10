@@ -3,8 +3,19 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import LoadingOrFailed from "../LoadingOrFailed";
 <#list aggregate.methods as method>
+  <#if !method.useFactory >
 import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)}";
+  </#if>
 </#list>
+<#macro printTableRow name type label>
+    <#if valueTypes[type]??>
+        <#list valueTypes[type] as subType>
+            <@printTableRow "${name}?.${subType.name}" subType.type "${name} ${subType.name}"/>
+        </#list>
+    <#else>
+            <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{item?.${name}}</td></tr>
+    </#if>
+</#macro>
 
 const ${fns.capitalize(aggregate.aggregateName)} = () => {
 
@@ -38,6 +49,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
   }, []);
 
   <#list aggregate.methods as method>
+    <#if !method.useFactory >
   const ${method.name} = useCallback((e) => {
     console.log('showing ${method.name} modal');
     const form = {
@@ -47,8 +59,8 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
       </#list>
     };
     setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(method.name)} id={id} defaultForm={form} complete={onModalActionComplete}/>);
-  }, [item, onModalActionComplete]);
-
+  }, [id, item, onModalActionComplete]);
+    </#if>
   </#list>
 
   useEffect(() => {
@@ -78,7 +90,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
         <table className={'table'}>
           <tbody>
           <#list aggregate.stateFields as field>
-              <tr><td>${fns.capitalize(field.name)}</td><td>{item.${field.name}}</td></tr> <#--TODO: check field is value typed or not-->
+              <@printTableRow "${field.name}" "${field.type}" "${field.name}"/>
           </#list>
           </tbody>
         </table>

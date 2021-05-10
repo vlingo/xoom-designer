@@ -28,11 +28,13 @@ function App() {
           <main className={'col-md-9 ms-sm-auto col-lg-10 px-md-4'}>
           <Switch>
             <Route path="/" exact={true}><Home /></Route>
+            <Route path="/app" exact={true}><Home /></Route>
+            <Route path="/app/" exact={true}><Home /></Route>
             <#list aggregates as aggregate>
               <#assign pluralCapitalized=fns.makePlural("${fns.capitalize(aggregate.aggregateName)}") />
               <#assign capitalized="${fns.capitalize(aggregate.aggregateName)}" />
-              <Route path="/app${aggregate.api.rootPath}" exact={true}><${pluralCapitalized} /></Route>
-              <Route path="/app${aggregate.api.rootPath}/:id"><${capitalized} /></Route>
+            <Route path="/app${aggregate.api.rootPath}" exact={true}><${pluralCapitalized} /></Route>
+            <Route path="/app${aggregate.api.rootPath}/:id"><${capitalized} /></Route>
             </#list>
           </Switch>
           </main>

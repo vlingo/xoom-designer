@@ -12,6 +12,7 @@ public class AggregateListArguments {
     public final AggregateData aggregate;
     public final AggregateMethodData creatorMethod;
     public final RouteData creatorRoute;
+    public final List<StateFieldData> creatorStateFields;
     public final Map<String, List<ValueObjectFieldData>> valueTypes;
     public final Map<String, String> fieldTypes;
 
@@ -34,6 +35,10 @@ public class AggregateListArguments {
                 .filter(routeData -> !routeData.requireEntityLoad)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Can't find creator route"));
+
+        creatorStateFields = aggregate.stateFields.stream()
+                .filter(stateFieldData -> creatorMethod.parameters.contains(stateFieldData.name))
+                .collect(Collectors.toList());
 
         fieldTypes = aggregate.stateFields.stream()
                 .collect(Collectors.toMap(

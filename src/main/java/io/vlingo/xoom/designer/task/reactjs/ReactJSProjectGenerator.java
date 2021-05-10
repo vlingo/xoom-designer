@@ -67,7 +67,7 @@ public class ReactJSProjectGenerator {
 
                 writeFile(
                         "AggregateDetail",
-                        new AggregateDetailArguments(aggregateData),
+                        new AggregateDetailArguments(aggregateData, valueObjectDataMap),
                         aggregateItemRootDir.resolve(capitalizedAggregateName+".js")
                 );
                 writeFile(
