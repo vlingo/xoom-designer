@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.List;
 import java.util.Set;
@@ -20,13 +20,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.AGGREGATE_METHOD_INVOCATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Arguments.SIGNATURE_DECLARATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.AGGREGATE_METHOD;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateProtocolMethodTemplateData extends TemplateData {

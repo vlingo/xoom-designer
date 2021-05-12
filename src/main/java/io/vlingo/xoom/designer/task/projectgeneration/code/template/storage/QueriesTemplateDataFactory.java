@@ -7,11 +7,11 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 
 import java.util.Arrays;
 import java.util.Collections;

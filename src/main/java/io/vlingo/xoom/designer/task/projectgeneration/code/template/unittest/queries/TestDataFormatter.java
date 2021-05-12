@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.NumberFormat;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
 
 public class TestDataFormatter {
 

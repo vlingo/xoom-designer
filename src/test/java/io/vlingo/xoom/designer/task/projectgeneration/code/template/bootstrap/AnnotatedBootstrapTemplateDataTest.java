@@ -7,15 +7,15 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.parameter.ImportParameter;
+import io.vlingo.xoom.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.codegen.template.OutputFile;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.parameter.ImportParameter;
-import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
-import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

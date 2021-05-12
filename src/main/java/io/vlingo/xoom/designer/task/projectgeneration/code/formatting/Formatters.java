@@ -6,11 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject.EventBasedDataObjectInitializer;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectInitializer;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.Collections;
 import java.util.HashMap;

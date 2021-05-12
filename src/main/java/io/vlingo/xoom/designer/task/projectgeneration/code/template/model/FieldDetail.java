@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.model;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 import org.apache.commons.lang3.StringUtils;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup.SCALAR_NUMERIC_TYPES;

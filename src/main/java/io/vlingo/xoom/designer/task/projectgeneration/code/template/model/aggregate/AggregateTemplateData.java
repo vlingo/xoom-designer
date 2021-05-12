@@ -7,6 +7,11 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate;
 
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
@@ -14,11 +19,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueo
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionSourceTypesDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.ArrayList;
 import java.util.HashSet;

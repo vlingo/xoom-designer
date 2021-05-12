@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator.TestDataValues;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.ArrayList;
 import java.util.List;

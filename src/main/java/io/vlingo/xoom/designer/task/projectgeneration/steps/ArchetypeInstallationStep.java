@@ -15,24 +15,27 @@ import io.vlingo.xoom.designer.task.projectgeneration.archetype.Archetype;
 import io.vlingo.xoom.designer.task.steps.CommandExecutionStep;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-public final class ArchetypeCommandExecutionStep extends CommandExecutionStep {
+public class ArchetypeInstallationStep extends CommandExecutionStep {
 
-  public ArchetypeCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
+  private final Archetype archetype;
+
+  public ArchetypeInstallationStep(final Archetype archetype,
+                                   final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
+    this.archetype = archetype;
   }
 
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
     final Terminal terminal = Terminal.supported();
-    final Archetype defaultArchetype = Archetype.findDefault();
-    final String archetypeFolderCommand = terminal.resolveDirectoryChangeCommand(ArchetypesFolder.path().toString());
-    final String archetypeOptions = defaultArchetype.formatOptions(context.codeGenerationParameters());
-    return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
-            archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
-            terminal.mavenCommand(), archetypeOptions);
+    final Path archetypeFolderPath = ArchetypesFolder.path();
+    final String archetypeFolderCommand = terminal.resolveDirectoryChangeCommand(archetypeFolderPath);
+    return String.format("%s && %s -f %s clean install",
+            archetypeFolderCommand, terminal.mavenCommand(), archetype.resolvePomPath());
   }
 
   @Override
@@ -40,4 +43,8 @@ public final class ArchetypeCommandExecutionStep extends CommandExecutionStep {
     return Arrays.asList(Terminal.supported().executableMavenFileLocation());
   }
 
+  @Override
+  public boolean shouldProcess(final TaskExecutionContext context) {
+    return !archetype.jarPath(ArchetypesFolder.path()).toFile().exists();
+  }
 }

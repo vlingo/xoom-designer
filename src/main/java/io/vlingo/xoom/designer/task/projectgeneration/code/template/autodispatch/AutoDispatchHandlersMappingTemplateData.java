@@ -7,29 +7,29 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.autodispatch;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RouteDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.QueriesDetail;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.staticConstant;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.QUERIES;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.staticConstant;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 

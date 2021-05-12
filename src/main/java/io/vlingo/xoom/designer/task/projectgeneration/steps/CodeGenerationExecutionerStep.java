@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.template.OutputFile;
+import io.vlingo.xoom.codegen.template.OutputFileInstantiator;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.code.ExternalFileLocationResolver;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.template.OutputFile;
-import io.vlingo.xoom.turbo.codegen.template.OutputFileInstantiator;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.OFFSET;

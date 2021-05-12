@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
-import io.vlingo.xoom.turbo.codegen.template.ParameterKey;
+import io.vlingo.xoom.codegen.template.ParameterKey;
 
-import static io.vlingo.xoom.turbo.codegen.template.TemplateParameters.PRODUCTION_CODE_KEY;
+import static io.vlingo.xoom.codegen.template.TemplateParameters.PRODUCTION_CODE_KEY;
 
 public enum TemplateParameter implements ParameterKey {
 

@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
 
 import java.util.Set;
 

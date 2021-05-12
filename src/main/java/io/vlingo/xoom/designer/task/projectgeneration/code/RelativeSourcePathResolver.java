@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code;
 
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.template.TemplateData;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.stream.Stream;

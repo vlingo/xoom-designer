@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.QUERIES_ACTOR;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.QUERIES_ACTOR_NAME;

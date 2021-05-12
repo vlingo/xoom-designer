@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.resource;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROUTE_PATH;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.URI_ROOT;

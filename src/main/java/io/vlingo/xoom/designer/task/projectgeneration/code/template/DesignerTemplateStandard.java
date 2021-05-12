@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.DataObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole;
@@ -14,8 +16,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
 import io.vlingo.xoom.http.Method;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

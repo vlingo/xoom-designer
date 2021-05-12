@@ -9,8 +9,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.template.model;
 
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.stream.Stream;
 

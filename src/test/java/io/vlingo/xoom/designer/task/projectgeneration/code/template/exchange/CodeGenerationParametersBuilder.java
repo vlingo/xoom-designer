@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange;
 
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.stream.Stream;
 

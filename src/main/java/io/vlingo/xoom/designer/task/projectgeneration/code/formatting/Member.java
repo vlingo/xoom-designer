@@ -6,11 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +19,11 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
+import static io.vlingo.xoom.codegen.language.Language.JAVA;
+import static io.vlingo.xoom.codegen.language.Language.KOTLIN;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.AGGREGATE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.VALUE_OBJECT_FIELD;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail.stateFieldWithName;
-import static io.vlingo.xoom.turbo.codegen.language.Language.JAVA;
-import static io.vlingo.xoom.turbo.codegen.language.Language.KOTLIN;
 
 public class Member extends Formatters.Fields<List<String>> {
 

@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.TextExpectation;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.TextExpectation;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.template.OutputFile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

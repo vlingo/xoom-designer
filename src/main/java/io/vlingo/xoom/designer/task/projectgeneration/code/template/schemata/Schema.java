@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
 

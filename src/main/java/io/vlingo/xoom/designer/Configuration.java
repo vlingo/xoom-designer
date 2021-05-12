@@ -1,7 +1,10 @@
 package io.vlingo.xoom.designer;
 
+import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.designer.task.projectgeneration.archetype.Archetype;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject.DataObjectGenerationStep;
@@ -20,8 +23,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTarget
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationStep;
-import io.vlingo.xoom.turbo.codegen.content.ContentCreationStep;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -46,7 +47,9 @@ public class Configuration {
           new CodeGenerationParameterValidationStep(),
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
-          new ArchetypeCommandExecutionStep(withType(CommandExecutionProcess.class)),
+          new TemporaryTaskFolderCreationStep(),
+          new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
+          new ArchetypeGenerationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
           new MavenWrapperInstallationStep(),
           new CodeGenerationExecutionerStep(),

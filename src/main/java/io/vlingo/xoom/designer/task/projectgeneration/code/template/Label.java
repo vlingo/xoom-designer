@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
-import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.codegen.parameter.ParameterLabel;
 
 public enum Label implements ParameterLabel {
 

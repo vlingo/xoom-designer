@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code;
 
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.FileLocationResolver;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.FileLocationResolver;
+import io.vlingo.xoom.codegen.template.TemplateData;
 
 import java.nio.file.Paths;
 

@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.formatting;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 public class DataObjectDetail {
 

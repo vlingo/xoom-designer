@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.storage;
 
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 
 import java.util.List;
 import java.util.Set;

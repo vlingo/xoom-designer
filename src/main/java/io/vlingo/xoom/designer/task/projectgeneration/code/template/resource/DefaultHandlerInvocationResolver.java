@@ -7,17 +7,17 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.resource;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.http.Method;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
