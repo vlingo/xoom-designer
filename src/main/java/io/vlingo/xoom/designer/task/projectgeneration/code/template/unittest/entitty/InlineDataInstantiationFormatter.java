@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.FIELD_TYPE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail.isCollectionOrDate;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.model.FieldDetail.resolveDefaultValue;
 
 public class InlineDataInstantiationFormatter {
 
@@ -47,13 +49,13 @@ public class InlineDataInstantiationFormatter {
     return formatComplexTypedField();
   }
 
-  public String formatScalarTypedField() {
+  private String formatScalarTypedField() {
     return testDataValues.retrieve(stateField.value);
   }
 
-  public String formatComplexTypedField() {
-    if(FieldDetail.isCollection(stateField) || FieldDetail.isDateTime(stateField)) {
-      return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
+  private String formatComplexTypedField() {
+    if(isCollectionOrDate(stateField)) {
+      return resolveDefaultValue(stateField.parent(), stateField.value);
     }
 
     final String valueObjectType =
@@ -69,7 +71,9 @@ public class InlineDataInstantiationFormatter {
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {
     final String currentFieldPath = path + "." + field.value;
-    if (ValueObjectDetail.isValueObject(field)) {
+    if(isCollectionOrDate(stateField)) {
+      valuesAssignmentExpression.append(resolveDefaultValue(stateField.parent(), stateField.value)).append(", ");
+    } else if (ValueObjectDetail.isValueObject(field)) {
       generateComplexTypeAssignment(currentFieldPath, field);
     } else {
       generateScalarTypeAssignment(currentFieldPath);

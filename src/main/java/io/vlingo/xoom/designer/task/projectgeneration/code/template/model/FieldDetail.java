@@ -114,6 +114,10 @@ public class FieldDetail {
     return isList(fieldType) || isSet(fieldType);
   }
 
+  public static boolean isCollectionOrDate(final CodeGenerationParameter field) {
+    return isCollection(field) || isDateTime(field);
+  }
+
   public static boolean isValueObjectCollection(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(FIELD_TYPE);
     return isCollection(field) && !isScalar(fieldType) && !isDateTime(fieldType);
