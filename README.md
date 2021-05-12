@@ -38,6 +38,15 @@ To run with `docker` on Windows, use this command:
 
 The Docker image cannot automatically open your preferred browser on the XOOM Designer URL. You will have to navigate manually using: [http://localhost:19090/context](http://localhost:19090/context)
 
+#### GraalVM Build
+```bash
+mvn clean package -Pfrontend -Pnative-image
+```
+```bash
+./target/xoom-designer gui
+```
+More details [GraalVM](GraalVM.md)
+
 ## [Installation](#installation)
 
 The installation process is short. Before you start, just check if you have these tools already installed:
