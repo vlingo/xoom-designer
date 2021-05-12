@@ -21,6 +21,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label
 
 public class TaskExecutionContext {
 
+  public final UUID executionId;
   private Properties properties;
   private TaskStatus taskStatus;
   private final CodeGenerationParameters parameters;
@@ -39,6 +40,7 @@ public class TaskExecutionContext {
 
   private TaskExecutionContext(final Agent agent) {
     this.agent = agent;
+    this.executionId = UUID.randomUUID();
     this.parameters = CodeGenerationParameters.empty();
   }
 

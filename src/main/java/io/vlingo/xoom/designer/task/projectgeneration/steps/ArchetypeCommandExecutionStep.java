@@ -23,20 +23,21 @@ public final class ArchetypeCommandExecutionStep extends CommandExecutionStep {
   public ArchetypeCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
-  @Override
-    protected String formatCommands(final TaskExecutionContext context) {
-        final Terminal terminal = Terminal.supported();
-        final Archetype defaultArchetype = Archetype.findDefault();
-        final String archetypeFolderCommand = terminal.resolveDirectoryChangeCommand(ArchetypesFolder.path().toString());
-        final String archetypeOptions = defaultArchetype.formatOptions(context.codeGenerationParameters());
-        return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
-                archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
-                terminal.mavenCommand(), archetypeOptions);
-    }
 
-    @Override
-    protected List<File> executableFiles() {
-        return Arrays.asList(Terminal.supported().executableMavenFileLocation());
-    }
+  @Override
+  protected String formatCommands(final TaskExecutionContext context) {
+    final Terminal terminal = Terminal.supported();
+    final Archetype defaultArchetype = Archetype.findDefault();
+    final String archetypeFolderCommand = terminal.resolveDirectoryChangeCommand(ArchetypesFolder.path().toString());
+    final String archetypeOptions = defaultArchetype.formatOptions(context.codeGenerationParameters());
+    return String.format("%s && %s -f %s clean install && %s archetype:generate -B -DarchetypeCatalog=internal %s",
+            archetypeFolderCommand, terminal.mavenCommand(), defaultArchetype.resolvePomPath(),
+            terminal.mavenCommand(), archetypeOptions);
+  }
+
+  @Override
+  protected List<File> executableFiles() {
+    return Arrays.asList(Terminal.supported().executableMavenFileLocation());
+  }
 
 }
