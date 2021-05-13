@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.resource;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.autodispatch.AutoDispatchHandlerInvocationResolver;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 public interface HandlerInvocationResolver {
 

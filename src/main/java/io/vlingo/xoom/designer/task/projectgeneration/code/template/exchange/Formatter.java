@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 public class Formatter {
 

@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap;
 
+import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
 
 import java.util.Collections;
 import java.util.List;

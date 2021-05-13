@@ -24,7 +24,6 @@ public class CodeGenerationSetup {
   public static final String DEFAULT_SCHEMA_VERSION = "1.0.0";
 
   public static final List<String> DATE_TIME_TYPES = Arrays.asList("LocalDate", "LocalDateTime");
-  public static final List<String> KOTLIN_RESERVED_WORDS = Arrays.asList("object", "public", "get", "set");
   public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double", "integer");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", "string"))
           .flatMap(List::stream).collect(Collectors.toList());

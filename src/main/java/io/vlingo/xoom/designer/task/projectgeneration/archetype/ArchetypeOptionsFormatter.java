@@ -8,8 +8,8 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.archetype;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 
 import java.util.stream.Collectors;
 

@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject;
 
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Variables;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
 
 import java.beans.Introspector;
 import java.util.ArrayList;

@@ -6,8 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap;
 
-import io.vlingo.xoom.turbo.codegen.CodeGenerationContext;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.REST_RESOURCE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.USE_ANNOTATIONS;

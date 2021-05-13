@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.option.OptionName;
 import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -21,6 +21,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label
 
 public class TaskExecutionContext {
 
+  public final String executionId;
   private Properties properties;
   private TaskStatus taskStatus;
   private final CodeGenerationParameters parameters;
@@ -39,6 +40,7 @@ public class TaskExecutionContext {
 
   private TaskExecutionContext(final Agent agent) {
     this.agent = agent;
+    this.executionId = UUID.randomUUID().toString();
     this.parameters = CodeGenerationParameters.empty();
   }
 

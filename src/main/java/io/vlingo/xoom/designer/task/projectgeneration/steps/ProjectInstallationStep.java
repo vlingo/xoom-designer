@@ -27,7 +27,7 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
   @Override
   public void process(final TaskExecutionContext context) {
     final String artifactId = context.codeGenerationParameters().retrieveValue(ARTIFACT_ID);
-    final Path source = ArchetypesFolder.path().resolve(artifactId);
+    final Path source = ArchetypesFolder.path().resolve(context.executionId).resolve(artifactId);
     final Path destination = Paths.get(context.targetFolder());
     this.installProject(source.toFile(), destination.toFile());
   }

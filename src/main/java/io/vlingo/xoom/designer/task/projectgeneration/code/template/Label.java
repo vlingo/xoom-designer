@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template;
 
-import io.vlingo.xoom.turbo.codegen.parameter.ParameterLabel;
+import io.vlingo.xoom.codegen.parameter.ParameterLabel;
 
 public enum Label implements ParameterLabel {
 
@@ -40,7 +40,6 @@ public enum Label implements ParameterLabel {
   XOOM_INITIALIZER_NAME("xoom.initialization.classname"),
   COMMAND_MODEL_DATABASE("command.model.database"),
   QUERY_MODEL_DATABASE("query.model.database"),
-  GENERATION_LOCATION("generation.location"),
   AUTO_DISPATCH_NAME("autoDispatchName"),
   HANDLERS_CONFIG_NAME("handlersConfigName"),
   MODEL_PROTOCOL("modelProtocol"),

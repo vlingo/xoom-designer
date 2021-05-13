@@ -7,6 +7,13 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.AggregateDetail;
@@ -17,13 +24,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Stor
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.TestDataValueGenerator.TestDataValues;
 import io.vlingo.xoom.symbio.BaseEntry;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,10 +32,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.qualifiedNameOf;
+import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.qualifiedNameOf;
-import static io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static java.util.stream.Collectors.toSet;
 
 public class EntityUnitTestTemplateData extends TemplateData {

@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.storage;
 
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
 
 import java.util.ArrayList;
 import java.util.List;

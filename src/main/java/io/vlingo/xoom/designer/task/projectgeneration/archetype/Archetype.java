@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.archetype;
 
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,14 +43,14 @@ public enum Archetype {
     }
 
     public static Archetype findDefault() {
-        //TODO: Optimize by creating lighter archetype that fits exactly a set of project generation parameters
+        //TODO: Optimize by creating lighter archetype according to the set of generation parameters
         return KUBERNETES;
     }
 
     public String resolvePomPath() {
         final Terminal terminal = Terminal.supported();
-        final String relativePathPrefix = terminal.isWindows() ? "" : "." + File.separator;
-        return String.format("%s%s%spom.xml", relativePathPrefix, label, File.separator);
+        final String relativePathPrefix = terminal.isWindows() ? "" : "." + terminal.pathSeparator();
+        return String.format("%s%s%spom.xml", relativePathPrefix, label, terminal.pathSeparator());
     }
 
     public String formatOptions(final CodeGenerationParameters parameters) {
@@ -59,6 +59,11 @@ public enum Archetype {
 
     public String label() {
         return label;
+    }
+
+    public Path jarPath(final Path archetypesFolderPath) {
+        return archetypesFolderPath.resolve(label).resolve("target")
+                .resolve(String.format("%s-%s.jar", artifactId, version));
     }
 
     String artifactId() {
@@ -76,5 +81,7 @@ public enum Archetype {
     List<ArchetypeOption> archetypeOptions() {
         return archetypeOptions;
     }
+
+
 
 }

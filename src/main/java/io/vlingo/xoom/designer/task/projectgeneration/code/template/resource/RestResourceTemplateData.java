@@ -7,20 +7,19 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.template.resource;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.language.Language;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Queries;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
-import io.vlingo.xoom.turbo.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.turbo.codegen.content.Content;
-import io.vlingo.xoom.turbo.codegen.content.ContentQuery;
-import io.vlingo.xoom.turbo.codegen.language.Language;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.turbo.codegen.template.TemplateData;
-import io.vlingo.xoom.turbo.codegen.template.TemplateParameters;
-import io.vlingo.xoom.turbo.codegen.template.TemplateStandard;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,11 +28,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassName;
+import static io.vlingo.xoom.codegen.content.ContentQuery.findPackage;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.QUERIES;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.*;
-import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findFullyQualifiedClassName;
-import static io.vlingo.xoom.turbo.codegen.content.ContentQuery.findPackage;
 
 public class RestResourceTemplateData extends TemplateData {
 

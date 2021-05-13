@@ -7,12 +7,12 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.task.Property;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
-import io.vlingo.xoom.turbo.codegen.parameter.CodeGenerationParameters;
 
 import java.util.HashMap;
 import java.util.Map;
