@@ -11,10 +11,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.designer.infrastructure.terminal.Terminal.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
 
 public class ArchetypeGenerationStepTest {
@@ -22,8 +23,8 @@ public class ArchetypeGenerationStepTest {
     private TaskExecutionContext context;
 
     @Test
+    @EnabledOnOs({OS.WINDOWS})
     public void testCommandPreparationWithKubernetesArchetypeOnWindows() {
-        Terminal.enable(WINDOWS);
         Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
         context.with(loadGenerationParameters("E:\\projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
@@ -35,25 +36,12 @@ public class ArchetypeGenerationStepTest {
     }
 
     @Test
-    public void testCommandPreparationWithKubernetesArchetypeOnLinux() {
-        Terminal.enable(LINUX);
+    @EnabledOnOs({OS.MAC, OS.LINUX})
+    public void testCommandPreparationWithKubernetesArchetypeOnUnixBased() {
         Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
          new ArchetypeGenerationStep(Archetype.KUBERNETES,commandRetainer).process(context);
-        final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
-        Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
-        Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
-        Assertions.assertEquals(String.format(EXPECTED_ARCHETYPE_COMMAND, context.executionId), commandSequence[2]);
-    }
-
-    @Test
-    public void testCommandPreparationWithKubernetesArchetypeOnMac() {
-        Terminal.enable(MAC_OS);
-        Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
-        context.with(loadGenerationParameters("/home/projects"));
-        final CommandRetainer commandRetainer = new CommandRetainer();
-        new ArchetypeGenerationStep(Archetype.KUBERNETES, commandRetainer).process(context);
         final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
         Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -100,7 +88,7 @@ public class ArchetypeGenerationStepTest {
                     "-Dk8sImage=designer-example-image ";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
-            "cd " + DEFAULT_ARCHETYPE_PATH + "\\%s && .././mvnw archetype:generate -B -DarchetypeCatalog=internal " +
+            "cd " + DEFAULT_ARCHETYPE_PATH + "/ && .././mvnw archetype:generate -B -DarchetypeCatalog=internal " +
                     "-DarchetypeGroupId=io.vlingo.xoom -DarchetypeArtifactId=xoom-turbo-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo -DartifactId=designer-example " +
                     "-DmainClass=io.vlingo.designerexample.infrastructure.Bootstrap " +
