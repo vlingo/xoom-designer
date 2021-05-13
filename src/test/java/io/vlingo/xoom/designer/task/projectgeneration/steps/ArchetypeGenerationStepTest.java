@@ -37,7 +37,7 @@ public class ArchetypeGenerationStepTest {
 
     @Test
     @EnabledOnOs({OS.MAC, OS.LINUX})
-    public void testCommandPreparationWithKubernetesArchetypeOnUnixBased() {
+    public void testCommandPreparationWithKubernetesArchetypeOnUnixBasedOS() {
         Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
         context.with(loadGenerationParameters("/home/projects"));
         final CommandRetainer commandRetainer = new CommandRetainer();
