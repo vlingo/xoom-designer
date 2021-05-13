@@ -88,7 +88,7 @@ public class ArchetypeGenerationStepTest {
                     "-Dk8sImage=designer-example-image ";
 
     private static final String EXPECTED_ARCHETYPE_COMMAND =
-            "cd " + DEFAULT_ARCHETYPE_PATH + "/ && .././mvnw archetype:generate -B -DarchetypeCatalog=internal " +
+            "cd " + DEFAULT_ARCHETYPE_PATH + "/%s && .././mvnw archetype:generate -B -DarchetypeCatalog=internal " +
                     "-DarchetypeGroupId=io.vlingo.xoom -DarchetypeArtifactId=xoom-turbo-kubernetes-archetype " +
                     "-DarchetypeVersion=1.0 -Dversion=1.0 -DgroupId=io.vlingo -DartifactId=designer-example " +
                     "-DmainClass=io.vlingo.designerexample.infrastructure.Bootstrap " +
