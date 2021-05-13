@@ -1,7 +1,7 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.*;
-import io.vlingo.xoom.turbo.codegen.template.TemplateProcessorConfiguration;
+import io.vlingo.xoom.codegen.template.TemplateProcessorConfiguration;
 
 import java.io.IOException;
 import java.io.Writer;

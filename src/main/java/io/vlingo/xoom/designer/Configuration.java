@@ -14,7 +14,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ValueO
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projectgenerationsettings.ProjectSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestResourceGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestUiResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.EntityUnitTestGenerationStep;
@@ -35,7 +34,7 @@ public class Configuration {
 
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.6";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.7-SNAPSHOT";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.8-SNAPSHOT";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
 
   static {
@@ -66,7 +65,6 @@ public class Configuration {
           new ProjectionGenerationStep(),
           new StorageGenerationStep(),
           new RestResourceGenerationStep(),
-          new RestUiResourceGenerationStep(),
           new AutoDispatchMappingGenerationStep(),
           new ExchangeGenerationStep(),
           new SchemataGenerationStep(),

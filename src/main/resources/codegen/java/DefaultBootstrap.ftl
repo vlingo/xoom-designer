@@ -9,6 +9,7 @@ import io.vlingo.xoom.http.resource.Configuration.Sizing;
 import io.vlingo.xoom.http.resource.Configuration.Timing;
 import io.vlingo.xoom.http.resource.Resources;
 import io.vlingo.xoom.http.resource.Server;
+import io.vlingo.xoom.http.resource.SinglePageApplicationResource;
 import io.vlingo.xoom.lattice.grid.Grid;
 <#if hasExchange>
 import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
@@ -45,12 +46,9 @@ public class Bootstrap {
         //Include Rest Resources routes here
     </#if>
     <#list restResources as restResource>
-        <#if restResource.last>
-        ${restResource.objectName}.routes()
-        <#else>
         ${restResource.objectName}.routes(),
-        </#if>
     </#list>
+        new SinglePageApplicationResource("/frontend", "/app").routes()
     );
 
     server = Server.startWith(grid.world().stage(), allResources, Boot.serverPort(), Sizing.define(), Timing.define());

@@ -2,7 +2,7 @@ package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.TemplateException;
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
-import io.vlingo.xoom.turbo.codegen.CodeGenerationException;
+import io.vlingo.xoom.codegen.CodeGenerationException;
 
 import java.io.FileWriter;
 import java.io.IOException;
