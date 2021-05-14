@@ -13,7 +13,7 @@ public class CommandLineBasedProjectGenerationManager extends ProjectGenerationM
 
   @Override
   public void run(final List<String> args) {
-    throw new UnsupportedOperationException("The CLI project generation is unavailable");
+    throw new UnsupportedOperationException("The CLI project generation is temporarily unavailable");
     //processSteps(TaskExecutionContext.executedFrom(TERMINAL).withArgs(args));
   }
 

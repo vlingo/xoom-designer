@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-designer</artifactId>
@@ -39,17 +39,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>29.0-jre</version>
-    </dependency>
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>1.26</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
@@ -67,50 +56,6 @@
       <version>5.5.2</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>jakarta.activation</groupId>
-      <artifactId>jakarta.activation-api</artifactId>
-      <version>1.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.activation</groupId>
-      <artifactId>javax.activation</artifactId>
-      <version>1.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.jimfs</groupId>
-      <artifactId>jimfs</artifactId>
-      <version>1.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.graalvm.sdk</groupId>
-      <artifactId>graal-sdk</artifactId>
-      <version>${graalvm.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js</artifactId>
-      <version>${graalvm.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.js</groupId>
-      <artifactId>js-scriptengine</artifactId>
-      <version>${graalvm.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.tools</groupId>
-      <artifactId>profiler</artifactId>
-      <version>${graalvm.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.graalvm.tools</groupId>
-      <artifactId>chromeinspector</artifactId>
-      <version>${graalvm.version}</version>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
 
   <profiles>
@@ -121,7 +66,6 @@
       </activation>
       <build>
         <plugins>
-
           <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.22.1</version>
@@ -247,8 +191,7 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <copy file="${jar.path}"
-                          tofile="${basedir}\dist\designer\bin\xoom-designer-dist.jar"/>
+                    <copy file="${jar.path}" tofile="${basedir}\dist\designer\bin\xoom-designer-dist.jar"/>
                   </tasks>
                 </configuration>
               </execution>
@@ -260,10 +203,8 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <copy file="${basedir}\target\designer-dist.tar"
-                          tofile="${basedir}\dist\designer.tar"/>
-                    <copy file="${basedir}\target\designer-dist.zip"
-                          tofile="${basedir}\dist\designer.zip"/>
+                    <copy file="${basedir}\target\designer-dist.tar" tofile="${basedir}\dist\designer.tar"/>
+                    <copy file="${basedir}\target\designer-dist.zip" tofile="${basedir}\dist\designer.zip"/>
                   </tasks>
                 </configuration>
               </execution>
@@ -411,6 +352,7 @@
       </build>
     </profile>
   </profiles>
+
   <build>
     <plugins>
       <plugin>
@@ -438,22 +380,17 @@
             </goals>
             <configuration>
               <transformers>
-                <transformer
-                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>${exec.mainClass}</mainClass>
                 </transformer>
-                <transformer
-                    implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer
-                    implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                   <resource>.SF</resource>
                 </transformer>
-                <transformer
-                    implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                   <resource>.DSA</resource>
                 </transformer>
-                <transformer
-                    implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                   <resource>.RSA</resource>
                 </transformer>
               </transformers>
@@ -490,11 +427,8 @@
         <configuration>
           <executable>java</executable>
           <arguments>
-            <argument>
-              -agentlib:native-image-agent=config-output-dir=./src/main/resources/META-INF/native-image/
-            </argument>
             <argument>-classpath</argument>
-            <classpath/>
+            <classpath />
             <argument>-noverify</argument>
             <argument>-XX:TieredStopAtLevel=1</argument>
             <argument>-Dcom.sun.management.jmxremote</argument>
@@ -576,12 +510,8 @@
     <repository>
       <id>ossrh-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
 

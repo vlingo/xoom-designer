@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 
 public class KubernetesPushCommandExecutionStep extends CommandExecutionStep {
 
-    private static final String COMMAND_PATTERN = "kubectl apply -f %s";
+  private static final String COMMAND_PATTERN = "kubectl apply -f %s";
 
   public KubernetesPushCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);

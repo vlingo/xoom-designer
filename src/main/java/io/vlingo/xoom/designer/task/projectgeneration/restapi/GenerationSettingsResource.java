@@ -63,7 +63,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
     try {
       generationPath.mkdirs();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return Completes.withSuccess(Response.of(Forbidden, serializedPath));
     }
 
