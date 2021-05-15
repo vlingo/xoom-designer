@@ -78,7 +78,8 @@ public enum Label implements ParameterLabel {
   ROLE("role"),
   LANGUAGE("language"),
   VALUE_OBJECT("valueObject"),
-  VALUE_OBJECT_FIELD("valueObjectField");
+  VALUE_OBJECT_FIELD("valueObjectField"),
+  UI_TYPE("uiType");
 
   @SuppressWarnings("unused")
   private final String key;
