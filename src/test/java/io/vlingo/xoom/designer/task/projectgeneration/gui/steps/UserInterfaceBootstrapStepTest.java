@@ -1,12 +1,12 @@
 package io.vlingo.xoom.designer.task.projectgeneration.gui.steps;
 
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutor;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

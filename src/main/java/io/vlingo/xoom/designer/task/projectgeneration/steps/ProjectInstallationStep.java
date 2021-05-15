@@ -7,12 +7,11 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
-import io.vlingo.xoom.designer.ComponentRegistry;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -27,7 +26,7 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
   @Override
   public void process(final TaskExecutionContext context) {
     final String artifactId = context.codeGenerationParameters().retrieveValue(ARTIFACT_ID);
-    final Path source = ArchetypesFolder.path().resolve(context.executionId).resolve(artifactId);
+    final Path source = generationTarget().temporaryFolderFor(context.executionId, artifactId);
     final Path destination = Paths.get(context.targetFolder());
     this.installProject(source.toFile(), destination.toFile());
   }
@@ -50,6 +49,10 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
 
   @Override
   public boolean shouldProcess(final TaskExecutionContext context) {
-    return ComponentRegistry.withType(GenerationTarget.class).requiresLocalInstallation();
+    return generationTarget().requiresLocalInstallation();
+  }
+
+  private GenerationTarget generationTarget() {
+    return ComponentRegistry.withType(GenerationTarget.class);
   }
 }

@@ -7,8 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public enum GenerationTarget {
@@ -43,15 +45,15 @@ public enum GenerationTarget {
     return !supportDownload;
   }
 
-  public String definitiveFolderFor(final String artifactName, final String suggestedFolder) {
+  public Path definitiveFolderFor(final String executionId, final String artifactName, final String suggestedFolder) {
     if(supportDownload) {
-      return temporaryFolderFor(artifactName);
+      return temporaryFolderFor(executionId, artifactName);
     }
-    return suggestedFolder;
+    return Paths.get(suggestedFolder);
   }
 
-  public String temporaryFolderFor(final String artifactName) {
-    return Infrastructure.ArchetypesFolder.path().resolve(artifactName).toString();
+  public Path temporaryFolderFor(final String executionId, final String artifactName) {
+    return ArchetypesFolder.path().resolve(executionId).resolve(artifactName);
   }
 
 }

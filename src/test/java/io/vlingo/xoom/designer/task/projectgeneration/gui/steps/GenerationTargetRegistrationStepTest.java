@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.gui.steps;
 
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
