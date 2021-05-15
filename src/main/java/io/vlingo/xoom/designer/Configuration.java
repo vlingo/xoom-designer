@@ -105,7 +105,7 @@ public class Configuration {
 
   public static Environment resolveEnvironment() {
     final String environment = System.getenv(ENVIRONMENT_TYPE_VARIABLE);
-    return environment == null ? Environment.LOCAL : Environment.CLOUD;
+    return environment == null ? Environment.LOCAL : Environment.valueOf(environment);
   }
 
   public static int resolveProjectGenerationRequestLimit() {

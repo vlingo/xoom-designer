@@ -24,7 +24,8 @@ public class UserInterfaceManager implements TaskManager<List<String>> {
                 TaskExecutionContext.executedFrom(TERMINAL)
                         .withOptions(Task.GRAPHICAL_USER_INTERFACE.findOptionValues(args));
 
-        Configuration.GUI_STEPS.forEach(step -> step.process(context));
+        Configuration.GUI_STEPS.stream().filter(step -> step.shouldProcess(context))
+                .forEach(step -> step.process(context));
     }
 
 }
