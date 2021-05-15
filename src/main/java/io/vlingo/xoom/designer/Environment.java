@@ -8,9 +8,14 @@ package io.vlingo.xoom.designer;
 
 public enum Environment {
   LOCAL,
+  CONTAINER,
   CLOUD;
 
   public boolean isCloud() {
     return equals(CLOUD);
+  }
+
+  public boolean isLocal() {
+    return equals(LOCAL);
   }
 }

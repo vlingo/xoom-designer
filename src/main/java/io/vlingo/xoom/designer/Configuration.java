@@ -23,13 +23,14 @@ import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTarget
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.ComponentRegistry.withType;
+import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
 public class Configuration {
 

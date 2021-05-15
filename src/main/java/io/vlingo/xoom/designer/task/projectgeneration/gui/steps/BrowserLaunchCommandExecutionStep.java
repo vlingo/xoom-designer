@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.gui.steps;
 
+import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
@@ -20,9 +21,13 @@ public class BrowserLaunchCommandExecutionStep extends CommandExecutionStep {
   }
 
   @Override
-    protected String formatCommands(final TaskExecutionContext context) {
-        final String browserLaunchCommand = Terminal.supported().browserLaunchCommand();
-        return String.format("%s %s", browserLaunchCommand, Infrastructure.UserInterface.rootContext());
-    }
+  protected String formatCommands(final TaskExecutionContext context) {
+      final String browserLaunchCommand = Terminal.supported().browserLaunchCommand();
+      return String.format("%s %s", browserLaunchCommand, Infrastructure.UserInterface.rootContext());
+  }
 
+  @Override
+  public boolean shouldProcess(final TaskExecutionContext context) {
+    return Configuration.resolveEnvironment().isLocal();
+  }
 }

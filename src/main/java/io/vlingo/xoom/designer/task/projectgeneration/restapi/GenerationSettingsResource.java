@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.task.projectgeneration.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.task.Task;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;
@@ -20,6 +19,7 @@ import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.http.resource.serialization.JsonSerialization;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.File;
 import java.util.List;
