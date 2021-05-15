@@ -34,6 +34,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   private final GenerationTarget generationTarget;
   private final ProjectGenerationInformation generationInformation;
+  public static final String REFUSE_REQUEST_URI = "/api/generation-settings/request-refusal";
 
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
@@ -91,6 +92,10 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
   }
 
+  public Completes<Response> refuseRequest() {
+    return Completes.withFailure(Response.of(TooManyRequests, serialized(generationInformation)));
+  }
+
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
     try {
       return Completes.withSuccess(TaskExecutionContextMapper.from(settings, generationTarget));
@@ -123,7 +128,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   @Override
   public Resource<?> routes() {
-    return resource("Generation Settings Resource",
+    return resource("Generation Settings Resource", this,
             post("/api/generation-settings")
                     .body(GenerationSettingsData.class)
                     .handle(this::startGeneration),
@@ -137,7 +142,9 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
                     .body(GenerationPath.class)
                     .handle(this::makeGenerationPath),
             get("/api/generation-settings/info")
-                    .handle(this::queryGenerationSettingsInformation));
+                    .handle(this::queryGenerationSettingsInformation),
+            get(REFUSE_REQUEST_URI)
+                    .handle(this::refuseRequest));
   }
 
 }
