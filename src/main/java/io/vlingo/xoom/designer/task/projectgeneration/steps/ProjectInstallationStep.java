@@ -23,16 +23,10 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label
 
 public final class ProjectInstallationStep implements TaskExecutionStep {
 
-  private final GenerationTarget generationTarget;
-
-  public ProjectInstallationStep() {
-    this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
-  }
-
   @Override
   public void process(final TaskExecutionContext context) {
     final String artifactId = context.codeGenerationParameters().retrieveValue(ARTIFACT_ID);
-    final Path source = generationTarget.temporaryFolderFor(context.executionId, artifactId);
+    final Path source = generationTarget().temporaryFolderFor(context.executionId, artifactId);
     final Path destination = Paths.get(context.targetFolder());
     this.installProject(source.toFile(), destination.toFile());
   }
@@ -55,6 +49,10 @@ public final class ProjectInstallationStep implements TaskExecutionStep {
 
   @Override
   public boolean shouldProcess(final TaskExecutionContext context) {
-    return generationTarget.requiresLocalInstallation();
+    return generationTarget().requiresLocalInstallation();
+  }
+
+  private GenerationTarget generationTarget() {
+    return ComponentRegistry.withType(GenerationTarget.class);
   }
 }
