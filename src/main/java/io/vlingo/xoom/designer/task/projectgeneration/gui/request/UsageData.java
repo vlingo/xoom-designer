@@ -27,7 +27,7 @@ public class UsageData {
     return new UsageData(request.uri.toString(), request.headers.headerOf(XForwardedFor).value);
   }
 
-  private UsageData(final String ipAddress, final String uri) {
+  private UsageData(final String uri, final String ipAddress) {
     this.id = UUID.randomUUID().toString();
     this.timestamp = LocalDateTime.now(UTC).format(ISO_DATE_TIME);
     this.ipAddress = ipAddress;
