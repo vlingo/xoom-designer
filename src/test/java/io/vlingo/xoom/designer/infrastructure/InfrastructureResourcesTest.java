@@ -23,7 +23,7 @@ public class InfrastructureResourcesTest {
         Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
         Infrastructure.resolveExternalResources(ExternalDirectory.from(BASE_PATH));
         Assertions.assertEquals(Paths.get(ROOT_FOLDER, "resources", "archetypes"), ArchetypesFolder.path());
-        Assertions.assertEquals(19090, DesignerProperties.retrieveServerPort(1));
+        Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
         Assertions.assertEquals("http://localhost:19090", DesignerServer.url().toString());
         // "xoom-designer": This will not work until a resource for it is created.
         Assertions.assertEquals("http://localhost:19090/context", UserInterface.rootContext());

@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.task.projectgeneration.InvalidResourcesPathException;
+import io.vlingo.xoom.turbo.ApplicationProperty;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -150,8 +151,10 @@ public class Infrastructure {
       if(instance == null) {
         throw new IllegalStateException("Unresolved Designer Properties");
       }
-      final Object port = instance.properties.getOrDefault(DESIGNER_SERVER_PORT.literal(), defaultPort);
-      return Integer.valueOf(port.toString());
+      final String port =
+              ApplicationProperty.readValue(DESIGNER_SERVER_PORT.literal(), instance.properties);
+
+      return port == null ? defaultPort : Integer.valueOf(port);
     }
 
     public static Properties properties() {

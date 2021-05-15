@@ -20,7 +20,7 @@ public class ResourceLocationStepTest {
     @Test
     public void testResourceLocationStepWithAlreadyExistingPaths() {
         resourcesLocationStep.process(context);
-        Assertions.assertEquals(19090, DesignerProperties.retrieveServerPort(1));
+        Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
         Assertions.assertEquals(Paths.get(System.getProperty("user.dir"), "dist", "designer", "resources", "archetypes"), ArchetypesFolder.path());
     }
 
