@@ -10,7 +10,7 @@
 	<TextField bind:value={path} rules={[requireRule]} validateOnBlur={!path}>Path</TextField>
 	<ErrorWarningTooltip
 		type='warning'
-		messages={['Requires {id}?']}
+		messages={[path.includes('{id}') ? '' : 'Requires {id}?']}
 		names={['']}
 	/>
 </div>
