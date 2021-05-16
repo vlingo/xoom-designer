@@ -2,6 +2,7 @@
 	import { TextField } from 'svelte-materialify/src';
   import { requireRule, routeRule } from "../../validators";
 	import CreateButton from "./CreateButton.svelte";
+import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import FillFieldsNote from './FillFieldsNote.svelte';
 
   import Route from "./Route.svelte";
@@ -22,7 +23,13 @@
     <h6 class="ma-0 pl-3 pr-3">API</h6>
   </legend>
 
-  <TextField class="mb-3 pb-3" bind:value={rootPath} rules={[requireRule, routeRule]} validateOnBlur={!rootPath}>Root Path</TextField>
+  <div>
+    <TextField class="mb-3 pb-3" bind:value={rootPath} rules={[requireRule, routeRule]} validateOnBlur={!rootPath}>Root Path</TextField>
+    <ErrorWarningTooltip
+      names={['Root path', 'Root path']}
+      messages={[requireRule(rootPath), routeRule(rootPath)]}
+    />
+  </div>
 
   {#each routes as route, i}
     <Route bind:route bind:methods on:delete={() => deleteRoute(i)}/>
