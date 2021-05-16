@@ -1,10 +1,10 @@
 const errors = Object.freeze({
-	EMPTY: "May not be empty",
+	EMPTY: "may not be empty",
 	VERSION: "Must be a semantic version number (major.minor.patch, e.g. 1.6.12)",
-	CLASSNAME: "Must be initial cap (e.g. SomethingDefined)",
+	CLASSNAME: "must be initial cap (e.g. SomethingDefined)",
 	NAMESPACE: "Must be namespace syntax (e.g. com.example.demo)",
 	ARTIFACT: "Must consist of lowercase letters and hyphens",
-	FIELDNAME: "Must follow java identifier pattern",
+	FIELDNAME: "must follow java identifier pattern",
 	ROUTEPATH: "Must follow route path pattern",
 	XOOMVERSION: "Must be either 1.4.1-SNAPSHOT or 1.4.0",
 	SCHEMAGROUP: "Must consist of organization, unit and context separated by colon",
@@ -25,6 +25,6 @@ export const routeRule = (value) => /^[a-zA-Z_$/?%-]+$/.test(value) ? undefined 
 export const xoomVersionRule = (value) => ["1.4.1-SNAPSHOT", "1.4.0"].some(v => v == value) ? undefined : errors.XOOMVERSION;
 export const schemaGroupRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+$/.test(value) ? undefined : errors.SCHEMAGROUP;
 export const schemaRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+\:[A-Za-z]+\:\d+\.\d+\.\d+$/.test(value) ? undefined : errors.SCHEMA;
-export const isPropertyUniqueRule = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 1 ? undefined : `${prop.charAt(0).toUpperCase() + prop.slice(1)} must be unique`;
+export const isPropertyUniqueRule = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 1 ? undefined : 'must be unique';
 export const isAggregateUniqueRule = (oldAggregate, aggregateName, aggregateSettings) => aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate) && a.aggregateName === aggregateName).length === 0 ? undefined : `Aggregate name must be unique`;
 export const pathShouldHaveId = (v) => /\{id\}/.test(v) ? undefined : 'Must have {id}';

@@ -6,6 +6,7 @@
   import { formatArrayForSelect } from "../../utils";
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
   import FieldTypeSelect from './FieldTypeSelect.svelte';
+  import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
 	let dialogActive = false;
   let deleteDialogActive = false;
@@ -141,7 +142,13 @@
 
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
-    <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Value Object Name</TextField>
+    <div class="d-flex">
+      <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Value Object Name</TextField>
+      <ErrorWarningTooltip
+        names={['Value Object Name']}
+        messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
+      />
+    </div>
     {#each valueObjectForm.fields as field, i (i)}
       <Row>
         <Col>
@@ -159,6 +166,12 @@
         </Col>
         <Col>
           <Select items={formatArrayForSelect(collectionTypes.map(f => f.name))} bind:value={field.collectionType} placeholder="(bare)">Collection</Select>
+        </Col>
+        <Col cols="auto" class="pl-0 col-auto {valueObjectForm.fields && valueObjectForm.fields.length > 1 ? 'pr-0' : ''}">
+          <ErrorWarningTooltip
+            names={['Field Name', 'Field Name', 'Field Type']}
+            messages={[requireRule(field.name), isFieldUnique(field.name), requireRule(field.type)]}
+          />
         </Col>
         {#if valueObjectForm.fields.length > 1}
           <Col cols="auto">
