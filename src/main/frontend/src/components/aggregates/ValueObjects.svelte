@@ -143,7 +143,7 @@
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
     <div class="d-flex">
-      <TextField class="mb-4" bind:value={valueObjectForm.name}>Value Object Name</TextField>
+      <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Value Object Name</TextField>
       <ErrorWarningTooltip
         names={['Value Object Name']}
         messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
