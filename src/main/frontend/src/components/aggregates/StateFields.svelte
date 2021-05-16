@@ -5,7 +5,6 @@
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
 	import { settings, simpleTypes, collectionTypes } from '../../stores';
-  import FillFieldsNote from './FillFieldsNote.svelte';
   import FieldTypeSelect from './FieldTypeSelect.svelte';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
@@ -65,8 +64,5 @@
       </div>
     </div>
   {/each}
-  {#if stateFields.filter(field => requireRule(field.name) || identifierRule(field.name) || isPropertyUniqueRule(field.name, stateFields, 'name') || requireRule(field.type)).length > 0}
-    <FillFieldsNote />
-  {/if}
   <CreateButton title="Add State Field" on:click={addStateField}/>
 </fieldset>

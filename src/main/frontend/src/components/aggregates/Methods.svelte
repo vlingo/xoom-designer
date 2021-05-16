@@ -1,8 +1,6 @@
 <script>
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
-	import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
-  import FillFieldsNote from './FillFieldsNote.svelte';
   import MethodForm from './MethodForm.svelte';
 
   export let methods;

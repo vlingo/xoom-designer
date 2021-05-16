@@ -2,8 +2,7 @@
 	import { TextField } from 'svelte-materialify/src';
   import { requireRule, routeRule } from "../../validators";
 	import CreateButton from "./CreateButton.svelte";
-import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
-  import FillFieldsNote from './FillFieldsNote.svelte';
+  import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
   import Route from "./Route.svelte";
   export let rootPath;
@@ -34,9 +33,5 @@ import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   {#each routes as route, i}
     <Route bind:route bind:methods on:delete={() => deleteRoute(i)}/>
   {/each}
-
-  {#if routes.filter(route => requireRule(route.path) || !route.aggregateMethod).length > 0 || routeRule(rootPath)}
-    <FillFieldsNote />
-  {/if}
   <CreateButton title="Add Route" on:click={addRoute}/>
 </fieldset>
