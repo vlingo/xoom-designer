@@ -43,9 +43,7 @@
   {/if}
   {#each methods as method, id (id)}
     <div class="d-flex align-center">
-      <div style="flex: 1;">
-        <MethodForm {stateFields} {events} {methods} bind:method />
-      </div>
+      <MethodForm {stateFields} {events} {methods} bind:method />
       <div style="align-self: flex-start; width: 32px;">
         <DeleteWithDialog type="Method" on:click={() => deleteMethod(id)}>
           <b>{method.name}</b> might be in use at API and Consumer Exchange sections.
