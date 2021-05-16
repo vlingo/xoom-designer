@@ -9,6 +9,7 @@
 	import ProducerExchange from './ProducerExchange.svelte';
 	import ConsumerExchange from './ConsumerExchange.svelte';
 	import ValueObjects from './ValueObjects.svelte';
+import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
 	export let dialogActive;
 	export let editMode;
@@ -108,7 +109,13 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<div class="d-flex">
+		<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+		<ErrorWarningTooltip
+			messages={[requireRule(aggregateName), classNameRule(aggregateName), isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings)]}
+			names={['Aggregate Name', 'Aggregate Name', 'Aggregate Name']}
+		/>
+	</div>
 	<ValueObjects />
 	<StateFields bind:stateFields />
 	<Events bind:events  bind:stateFields />
