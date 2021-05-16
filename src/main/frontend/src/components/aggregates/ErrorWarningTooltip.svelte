@@ -38,7 +38,8 @@
     color: orange !important;
   }
   :global(.mdc-tooltip__surface) {
-    background-color: lightgray!important;
+    background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     color: inherit !important;
   }
 </style>
