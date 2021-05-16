@@ -3,14 +3,12 @@
   export let type = 'error';
   export let messages;
   export let names;
-  console.log(names, messages, type);
   $: internalMessages = messages.reduce((acc, cur, index) => {
     if (cur) {
       acc.push(`${names[index]} ${cur}`)
     }
     return acc;
   }, []);
-  $: console.log(internalMessages)
 </script>
 
 {#if internalMessages.length > 0}
