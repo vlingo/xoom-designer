@@ -5,6 +5,7 @@
 	import { classNameRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
   import FillFieldsNote from './FillFieldsNote.svelte';
+  import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
   export let events;
   export let stateFields;
@@ -39,6 +40,12 @@
       </div>
       <div style="flex: 1;" class="mb-3 pb-3">
         <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
+      </div>
+      <div>
+        <ErrorWarningTooltip
+          names={['Name', 'Name', 'Name']}
+          messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name')]}
+        />
       </div>
       <div style="width: 36px;">
         <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>
