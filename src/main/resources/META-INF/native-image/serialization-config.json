@@ -1,38 +1,5 @@
 [
   {
-    "name": "java.sql.Timestamp"
-  },
-  {
-    "name": "java.lang.Object"
-  },
-  {
-    "name": "java.lang.Boolean"
-  },
-  {
-    "name": "java.lang.Character"
-  },
-  {
-    "name": "java.lang.Double"
-  },
-  {
-    "name": "java.lang.Float"
-  },
-  {
-    "name": "java.lang.Long"
-  },
-  {
-    "name": "java.lang.Integer"
-  },
-  {
-    "name": "java.lang.Short"
-  },
-  {
-    "name": "java.lang.Byte"
-  },
-  {
-    "name": "java.lang.String"
-  },
-  {
   "name":"java.text.Format"
   },
   {

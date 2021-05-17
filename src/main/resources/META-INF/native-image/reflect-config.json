@@ -738,6 +738,12 @@
     "allPublicConstructors": true
   },
   {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeReceiver",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ProducerExchange",
     "allPublicFields": true,
     "allPublicMethods": true,
@@ -1281,6 +1287,14 @@
     "allPublicConstructors": true
   },
   {
+    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControl$Inbound",
+    "allPublicMethods": true
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControl$Outbound",
+    "allPublicMethods": true
+  },
+  {
     "name": "io.vlingo.xoom.lattice.grid.application.GridActorControlInbound__Proxy",
     "methods": [
       {
@@ -1303,6 +1317,10 @@
         ]
       }
     ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.util.HardRefHolder",
+    "allPublicMethods": true
   },
   {
     "name": "io.vlingo.xoom.lattice.util.HardRefHolder__Proxy",
@@ -1809,6 +1827,9 @@
         "parameterTypes": []
       }
     ]
+  },
+  {
+    "name": "java.lang.Object[]"
   },
   {
     "name": "java.lang.Package",

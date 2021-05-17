@@ -4,6 +4,8 @@
     {"pattern":"\\QMETA-INF/mime.types\\E"}, 
     {"pattern":"\\QMETA-INF/mimetypes.default\\E"}, 
     {"pattern":"\\QMETA-INF/native/libnetty_transport_native_kqueue_x86_64.jnilib\\E"}, 
+    {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/javax.annotation.processing.Processor\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocol.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolInstanceMethod.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolStaticMethod.ftl\\E"}, 
@@ -13,6 +15,8 @@
     {"pattern":"\\Qcodegen/java/AutoDispatchHandlersMapping.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AutoDispatchMapping.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AutoDispatchRoute.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/java/ConsumerExchangeAdapter.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/java/ConsumerExchangeMapper.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/DatabaseProperties.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/DomainEvent.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/EntryAdapter.ftl\\E"}, 
@@ -24,6 +28,7 @@
     {"pattern":"\\Qcodegen/java/ExchangeBootstrap.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ExchangeDispatcher.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ExchangeProperties.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/java/ExchangeReceiverHolder.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/PersistenceSetup.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ProducerExchangeAdapter.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ProducerExchangeMapper.ftl\\E"}, 
@@ -39,6 +44,19 @@
     {"pattern":"\\Qcodegen/java/StateStoreProvider.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ValueDataObject.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/ValueObject.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/AggregateDetail.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/App.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/FormHandler.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/FormModal.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/Header.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/Home.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/LoadingOrFailed.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/Sidebar.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/gitignore.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/index.css.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/index.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/index.html.ftl\\E"}, 
+    {"pattern":"\\Qcodegen/reactjs/package.json.ftl\\E"}, 
     {"pattern":"\\Qcom/ibm/icu/ICUConfig.properties\\E"}, 
     {"pattern":"\\Qcom/ibm/icu/impl/data/icudt62b/curr/en.res\\E"}, 
     {"pattern":"\\Qcom/ibm/icu/impl/data/icudt62b/curr/pool.res\\E"}, 
@@ -75,7 +93,11 @@
     {"pattern":"\\Qfrontend/service-worker-index.html\\E"},
     {"pattern":"\\Qfrontend/service-worker.js\\E"},
     {"pattern":"\\Qlogback.xml\\E"}, 
-    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
+    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}, 
+    {"pattern":"\\Qxoom-actors.properties\\E"}
   ]},
-  "bundles":[]
+  "bundles":[
+    {"name":"com.sun.tools.javac.resources.compiler"}, 
+    {"name":"com.sun.tools.javac.resources.javac"}
+  ]
 }
