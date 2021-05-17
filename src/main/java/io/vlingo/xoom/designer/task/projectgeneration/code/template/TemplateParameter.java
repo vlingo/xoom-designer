@@ -145,7 +145,8 @@ public enum TemplateParameter implements ParameterKey {
   DISPATCHER_NAME("dispatcherName"),
   AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
   STATE_FIELDS("stateFields"),
-  VALUE_OBJECT_FIELDS("valueObjectFields");
+  VALUE_OBJECT_FIELDS("valueObjectFields"),
+  UI_TYPE("uiType");
 
   public final String key;
 

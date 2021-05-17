@@ -24,6 +24,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label
 public class TaskExecutionContextMapper {
 
   private final GenerationSettingsData data;
+  private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
 
@@ -35,12 +36,13 @@ public class TaskExecutionContextMapper {
   private TaskExecutionContextMapper(final GenerationSettingsData data, final GenerationTarget generationTarget) {
     this.data = data;
     this.generationTarget = generationTarget;
+    this.context = TaskExecutionContext.executedFrom(WEB);
     this.parameters = CodeGenerationParameters.from(LANGUAGE, Language.JAVA);
     mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
   }
 
   private TaskExecutionContext map() {
-    return TaskExecutionContext.executedFrom(WEB).with(parameters);
+    return context.with(parameters);
   }
 
   private void mapAggregates() {
@@ -177,7 +179,7 @@ public class TaskExecutionContextMapper {
             .add(DOCKER_IMAGE, data.deployment.dockerImage)
             .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
             .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
-            .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(data.context.artifactId, data.projectDirectory))
+            .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory))
             .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
   }
 }

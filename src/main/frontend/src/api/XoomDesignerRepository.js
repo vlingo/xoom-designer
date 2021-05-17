@@ -16,6 +16,9 @@ function ensure(response, status) {
 	if(response.status === 500) {
 		return response.json().then(json => Promise.reject(json));
 	}
+	if (response.status === 429) {
+		throw Error("Your request could not be processed. Please try again later.");
+	}
 	if (response.status !== status) {
 		throw Error(`HTTP ${response.status}: ${response.statusText}.`);
 	}

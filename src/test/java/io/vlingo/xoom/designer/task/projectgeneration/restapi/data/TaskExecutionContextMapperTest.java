@@ -24,7 +24,7 @@ public class TaskExecutionContextMapperTest {
   public void testThatTaskExecutionContextIsMapped() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false);
+                    deploymentSettingsData(), "/home/projects", true, false, "NONE");
 
     final CodeGenerationParameters codeGenerationParameters =
             TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
@@ -38,7 +38,7 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-    Assertions.assertEquals("1.7.7-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.7.8-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
     Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));

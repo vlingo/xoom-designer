@@ -21,13 +21,10 @@ import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.designer.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.designer.task.option.OptionName.TAG;
-import static io.vlingo.xoom.designer.ComponentRegistry.withType;
-import static io.vlingo.xoom.designer.task.option.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.designer.task.option.OptionName.TAG;
+import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
 public enum SubTask {
 

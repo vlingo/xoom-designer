@@ -6,11 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.gui.steps;
 
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.option.OptionName;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class GenerationTargetRegistrationStep implements TaskExecutionStep {
 

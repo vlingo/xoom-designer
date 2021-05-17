@@ -4,6 +4,8 @@
 	import PathField from "./PathField.svelte";
 	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
+import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+import { requireRule } from '../../validators';
 	const httpMethods = formatArrayForSelect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']);
 
 	export let methods;
@@ -45,6 +47,12 @@
 	</div>
 	<div class="mb-3 pb-3" style="flex: 1;">
 		<Select mandatory items={formatArrayForSelect(methods.map(m => m.name))} bind:value={route.aggregateMethod}>Aggregate Method</Select>
+	</div>
+	<div>
+    <ErrorWarningTooltip
+      names={['Root path', 'Http Request Method', 'Aggregate Method']}
+      messages={[requireRule(route.path), requireRule(route.httpMethod), requireRule(route.aggregateMethod)]}
+    />
 	</div>
 	<!-- <Switch class="ma-2" bind:checked={route.requireEntityLoad}>Require Entity Load</Switch> -->
 	<div style="width: 36px;">

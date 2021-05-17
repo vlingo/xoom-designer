@@ -9,17 +9,18 @@ package io.vlingo.xoom.designer.task.projectgeneration.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.ComponentRegistry;
 import io.vlingo.xoom.designer.task.Task;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
+import io.vlingo.xoom.designer.task.reactjs.ReactJSProjectGenerator;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.http.resource.serialization.JsonSerialization;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.File;
 import java.util.List;
@@ -34,6 +35,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   private final GenerationTarget generationTarget;
   private final ProjectGenerationInformation generationInformation;
+  public static final String REFUSE_REQUEST_URI = "/api/generation-settings/request-refusal";
 
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
@@ -49,7 +51,14 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
       return Completes.withFailure(Response.of(Conflict, serialized(validationMessage)));
     }
 
-    return mapContext(settings).andThen(this::runProjectGeneration).andThenTo(this::buildResponse);
+    return mapContext(settings)
+            .andThen(this::runProjectGeneration)
+            .andThenTo(this::buildResponse)
+            .andThenTo((response) -> {
+              new ReactJSProjectGenerator(settings).generate();
+              return Completes.withSuccess(response);
+            })
+            .recoverFrom(throwable -> Response.of(InternalServerError));
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
@@ -91,6 +100,10 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
   }
 
+  public Completes<Response> refuseRequest() {
+    return Completes.withFailure(Response.of(TooManyRequests, serialized(generationInformation)));
+  }
+
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
     try {
       return Completes.withSuccess(TaskExecutionContextMapper.from(settings, generationTarget));
@@ -123,7 +136,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   @Override
   public Resource<?> routes() {
-    return resource("Generation Settings Resource",
+    return resource("Generation Settings Resource", this,
             post("/api/generation-settings")
                     .body(GenerationSettingsData.class)
                     .handle(this::startGeneration),
@@ -137,7 +150,9 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
                     .body(GenerationPath.class)
                     .handle(this::makeGenerationPath),
             get("/api/generation-settings/info")
-                    .handle(this::queryGenerationSettingsInformation));
+                    .handle(this::queryGenerationSettingsInformation),
+            get(REFUSE_REQUEST_URI)
+                    .handle(this::refuseRequest));
   }
 
 }

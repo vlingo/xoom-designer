@@ -44,12 +44,10 @@ public class ProjectCompressor {
     zipStream.putNextEntry(new ZipEntry(parentFolder + "/" + file.getName()));
     try (final FileInputStream fileStream = new FileInputStream(file);
          final BufferedInputStream bufferedStream = new BufferedInputStream(fileStream)) {
-      long bytesRead = 0;
+      int read;
       byte[] bytesIn = new byte[BUFFER_SIZE];
-      int read = 0;
       while ((read = bufferedStream.read(bytesIn)) != -1) {
         zipStream.write(bytesIn, 0, read);
-        bytesRead += read;
       }
       zipStream.closeEntry();
     }

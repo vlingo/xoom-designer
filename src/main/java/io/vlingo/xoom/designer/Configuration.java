@@ -23,19 +23,26 @@ import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTarget
 import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.ComponentRegistry.withType;
+import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
 public class Configuration {
 
+  private static final int DEFAULT_REQUEST_LIMIT = 10;
+  public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
-  public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.6";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.7-SNAPSHOT";
+  public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.8";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.7.8-SNAPSHOT";
+  public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
+  private static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
+  private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
@@ -94,6 +101,21 @@ public class Configuration {
       return Paths.get(System.getProperty("user.dir"), "dist", "designer").toString();
     }
     return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);
+  }
+
+  public static Environment resolveEnvironment() {
+    final String environment = System.getenv(ENVIRONMENT_TYPE_VARIABLE);
+    return environment == null ? Environment.LOCAL : Environment.valueOf(environment);
+  }
+
+  public static int resolveProjectGenerationRequestLimit() {
+    final String requestLimit = System.getenv(REQUEST_LIMIT);
+    return requestLimit != null ? Integer.valueOf(requestLimit) : DEFAULT_REQUEST_LIMIT;
+  }
+
+  public static Duration resolveProjectGenerationRequestCountExpiration() {
+    final String expirationSeconds = System.getenv(REQUEST_COUNT_EXPIRATION);
+    return expirationSeconds != null ? Duration.ofSeconds(Long.valueOf(expirationSeconds)) : DEFAULT_REQUEST_COUNT_EXPIRATION;
   }
 
 }

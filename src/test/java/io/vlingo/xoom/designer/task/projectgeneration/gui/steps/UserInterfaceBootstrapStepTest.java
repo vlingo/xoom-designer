@@ -7,12 +7,15 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutor;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
 
 public class UserInterfaceBootstrapStepTest {
 
     @Test
-    @Disabled
     public void testThatUserInterfaceBootstrapStepIsProcessed() {
         new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
         Assertions.assertFalse(TaskExecutor.shouldExit());
