@@ -58,7 +58,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
     setCurrentModal(null);
   }, [loadItems]);
 
-  const ${creatorMethod.name} = useCallback((e) => {
+  const _${creatorMethod.name} = useCallback((e) => {
     console.log('showing ${creatorMethod.name} modal');
     setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(creatorMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
   }, [onModalActionComplete]);
@@ -74,7 +74,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <h1 className="h2">${fns.makePlural(aggregate.aggregateName)}</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={${creatorMethod.name}}>${fns.capitalize(creatorMethod.name)}</button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${creatorMethod.name}}>${fns.capitalize(creatorMethod.name)}</button>
           </div>
         </div>
       </div>
