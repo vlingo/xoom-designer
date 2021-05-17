@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-designer</artifactId>
@@ -28,7 +28,6 @@
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <jar.path>${basedir}\target\xoom-designer-${project.version}.jar</jar.path>
     <graalvm.version>21.1.0</graalvm.version>
-    <compiler.dir>${project.build.directory}/compiler</compiler.dir>
   </properties>
 
   <dependencies>
@@ -56,6 +55,12 @@
       <version>5.5.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>4.3.20.RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <profiles>
@@ -67,108 +72,9 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.22.1</version>
+            <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-              <argLine>-XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI --module-path=${compiler.dir} --upgrade-module-path=${compiler.dir}/compiler.jar:${compiler.dir}/compiler-management.jar</argLine>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.10</version>
-            <executions>
-              <execution>
-                <id>copy</id>
-                <phase>process-test-classes</phase>
-                <goals>
-                  <goal>copy</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.graalvm.compiler</groupId>
-                      <artifactId>compiler</artifactId>
-                      <version>${graalvm.version}</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <destFileName>compiler.jar</destFileName>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.graalvm.compiler</groupId>
-                      <artifactId>compiler-management</artifactId>
-                      <version>${graalvm.version}</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <destFileName>compiler-management.jar</destFileName>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.graalvm.truffle</groupId>
-                      <artifactId>truffle-api</artifactId>
-                      <version>${graalvm.version}</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <destFileName>truffle-api.jar</destFileName>
-                    </artifactItem>
-                    <artifactItem>
-                      <groupId>org.graalvm.sdk</groupId>
-                      <artifactId>graal-sdk</artifactId>
-                      <version>${graalvm.version}</version>
-                      <type>jar</type>
-                      <overWrite>true</overWrite>
-                      <destFileName>graal-sdk.jar</destFileName>
-                    </artifactItem>
-                  </artifactItems>
-                  <outputDirectory>${compiler.dir}</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.6.0</version>
-            <executions>
-              <execution>
-                <id>default-cli</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <arguments>
-                    <argument>--module-path</argument>
-                    <!-- automatically creates the modulepath using all project dependencies, also adding the project build directory -->
-                    <modulepath/>
-                    <argument>-classpath</argument>
-                    <!-- automatically creates the classpath using all project dependencies, also adding the project build directory -->
-                    <classpath/>
-                    <argument>-XX:+UnlockExperimentalVMOptions</argument>
-                    <argument>-XX:+EnableJVMCI</argument>
-                    <argument>--upgrade-module-path=${compiler.dir}/compiler.jar:${compiler.dir}/compiler-management.jar</argument>
-                    <argument>${exec.mainClass}</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>nograal</id>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <arguments>
-                    <argument>--module-path</argument>
-                    <!-- automatically creates the modulepath using all project dependencies, also adding the project build directory -->
-                    <modulepath/>
-                    <argument>-classpath</argument>
-                    <!-- automatically creates the classpath using all project dependencies, also adding the project build directory -->
-                    <classpath/>
-                    <argument>${exec.mainClass}</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-            <configuration>
-              <executable>${JAVA_HOME}/bin/java</executable>
+              <release>${maven.compiler.target}</release>
             </configuration>
           </plugin>
         </plugins>
@@ -339,7 +245,6 @@
                 -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflect-config.json
                 -H:ResourceConfigurationFiles=classes/META-INF/native-image/resource-config.json
                 -H:SerializationConfigurationFiles=classes/META-INF/native-image/serialization-config.json
-                -H:Log=registerResource
                 --initialize-at-build-time=com.google.common.jimfs.SystemJimfsFileSystemProvider
                 --initialize-at-run-time=io.netty
                 --initialize-at-run-time=io.vlingo.xoom.common.identity.IdentityGeneratorType
@@ -383,7 +288,7 @@
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>${exec.mainClass}</mainClass>
                 </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
                   <resource>.SF</resource>
                 </transformer>
@@ -428,7 +333,7 @@
           <executable>java</executable>
           <arguments>
             <argument>-classpath</argument>
-            <classpath />
+            <classpath/>
             <argument>-noverify</argument>
             <argument>-XX:TieredStopAtLevel=1</argument>
             <argument>-Dcom.sun.management.jmxremote</argument>
@@ -510,8 +415,12 @@
     <repository>
       <id>ossrh-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-      <releases><enabled>false</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 

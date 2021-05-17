@@ -1,13 +1,5 @@
 [
   {
-    "name": "java.lang.Object[]",
-    "customTargetConstructorClass": "java.lang.Object"
-  },
-  {
-    "name": "[Ljava.lang.Object;",
-    "customTargetConstructorClass": "java.lang.Object"
-  },
-  {
     "name": "java.sql.Timestamp"
   },
   {
