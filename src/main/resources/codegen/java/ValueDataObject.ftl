@@ -48,14 +48,14 @@ public class ${dataValueObjectName} {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this){
+  public boolean equals(Object other) {
+    if (other == this){
       return true;
     }
-    if (!(obj instanceof ${valueObjectName})){
+    if (other == null || getClass() != other.getClass()){
       return false;
     }
-    ${valueObjectName} another = (${valueObjectName}) obj;
+    ${valueObjectName} another = (${valueObjectName}) other;
     return new EqualsBuilder()
               <#list memberNames as member>
               .append(this.${member}, another.${member})

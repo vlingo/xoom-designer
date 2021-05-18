@@ -28,14 +28,14 @@ public final class Name {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this){
+  public boolean equals(Object other) {
+    if (other == this){
       return true;
     }
-    if (!(obj instanceof Name)){
+    if (other == null || getClass() != other.getClass()){
       return false;
     }
-    Name another = (Name) obj;
+    Name another = (Name) other;
     return new EqualsBuilder()
               .append(this.firstName, another.firstName)
               .append(this.lastName, another.lastName)

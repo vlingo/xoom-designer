@@ -34,14 +34,14 @@ public class ClassifierData {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this){
+  public boolean equals(Object other) {
+    if (other == this){
       return true;
     }
-    if (!(obj instanceof Classifier)){
+    if (other == null || getClass() != other.getClass()){
       return false;
     }
-    Classifier another = (Classifier) obj;
+    Classifier another = (Classifier) other;
     return new EqualsBuilder()
               .append(this.name, another.name)
               .isEquals();

@@ -39,14 +39,14 @@ public class ClassificationData {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this){
+  public boolean equals(Object other) {
+    if (other == this){
       return true;
     }
-    if (!(obj instanceof Classification)){
+    if (other == null || getClass() != other.getClass()){
       return false;
     }
-    Classification another = (Classification) obj;
+    Classification another = (Classification) other;
     return new EqualsBuilder()
               .append(this.label, another.label)
               .append(this.classifier, another.classifier)

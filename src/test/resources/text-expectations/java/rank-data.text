@@ -39,14 +39,14 @@ public class RankData {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this){
+  public boolean equals(Object other) {
+    if (other == this){
       return true;
     }
-    if (!(obj instanceof Rank)){
+    if (other == null || getClass() != other.getClass()){
       return false;
     }
-    Rank another = (Rank) obj;
+    Rank another = (Rank) other;
     return new EqualsBuilder()
               .append(this.points, another.points)
               .append(this.classification, another.classification)
