@@ -4,8 +4,6 @@
     {"pattern":"\\QMETA-INF/mime.types\\E"}, 
     {"pattern":"\\QMETA-INF/mimetypes.default\\E"}, 
     {"pattern":"\\QMETA-INF/native/libnetty_transport_native_kqueue_x86_64.jnilib\\E"}, 
-    {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"}, 
-    {"pattern":"\\QMETA-INF/services/javax.annotation.processing.Processor\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocol.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolInstanceMethod.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolStaticMethod.ftl\\E"}, 
@@ -70,20 +68,20 @@
     {"pattern":"\\Qcom/ibm/icu/impl/data/icudt62b/root.res\\E"}, 
     {"pattern":"\\Qfreemarker/ext/beans/DefaultMemberAccessPolicy-rules\\E"}, 
     {"pattern":"\\Qfreemarker/version.properties\\E"},
-    {"pattern":"\\Qfrontend/client/CardForm.959cf5ba.js\\E"},
-    {"pattern":"\\Qfrontend/client/Select.81674232.js\\E"},
-    {"pattern":"\\Qfrontend/client/Switch.3bc7750b.js\\E"},
+    {"pattern":"\\Qfrontend/client/CardForm.1071bfea.js\\E"},
+    {"pattern":"\\Qfrontend/client/Select.aec4ee14.js\\E"},
+    {"pattern":"\\Qfrontend/client/Switch.985151f8.js\\E"},
     {"pattern":"\\Qfrontend/client/aggregates-5d6b6b99.css\\E"},
-    {"pattern":"\\Qfrontend/client/aggregates.11c00e70.js\\E"},
+    {"pattern":"\\Qfrontend/client/aggregates.2c950ca0.js\\E"},
     {"pattern":"\\Qfrontend/client/breakpoints.4bff75a2.js\\E"},
     {"pattern":"\\Qfrontend/client/client-04e66c3d.css\\E"},
-    {"pattern":"\\Qfrontend/client/client.71c6402c.js\\E"},
-    {"pattern":"\\Qfrontend/client/context.8754fe47.js\\E"},
+    {"pattern":"\\Qfrontend/client/client.f1ec6793.js\\E"},
+    {"pattern":"\\Qfrontend/client/context.17a4f5ed.js\\E"},
     {"pattern":"\\Qfrontend/client/deployment-5973acbb.css\\E"},
-    {"pattern":"\\Qfrontend/client/deployment.43e30c94.js\\E"},
-    {"pattern":"\\Qfrontend/client/generation.7d3ec4df.js\\E"},
+    {"pattern":"\\Qfrontend/client/deployment.7ec15a0c.js\\E"},
+    {"pattern":"\\Qfrontend/client/generation.92cb3e2c.js\\E"},
     {"pattern":"\\Qfrontend/client/inject_styles.5607aec6.js\\E"},
-    {"pattern":"\\Qfrontend/client/persistence.48fb1764.js\\E"},
+    {"pattern":"\\Qfrontend/client/persistence.51d273fb.js\\E"},
     {"pattern":"\\Qfrontend/context/index.html\\E"},
     {"pattern":"\\Qfrontend/context\\E"},
     {"pattern":"\\Qfrontend/favicon-16x16.png\\E"},
@@ -93,11 +91,7 @@
     {"pattern":"\\Qfrontend/service-worker-index.html\\E"},
     {"pattern":"\\Qfrontend/service-worker.js\\E"},
     {"pattern":"\\Qlogback.xml\\E"}, 
-    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}, 
-    {"pattern":"\\Qxoom-actors.properties\\E"}
+    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
   ]},
-  "bundles":[
-    {"name":"com.sun.tools.javac.resources.compiler"}, 
-    {"name":"com.sun.tools.javac.resources.javac"}
-  ]
+  "bundles":[]
 }

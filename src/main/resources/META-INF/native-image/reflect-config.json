@@ -110,6 +110,14 @@
     ]
   },
   {
+    "name": "char[]",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "char[][]",
+    "allDeclaredFields": true
+  },
+  {
     "name": "com.ibm.icu.impl.ICUCurrencyDisplayInfoProvider",
     "methods": [
       {
@@ -834,6 +842,24 @@
     "allPublicConstructors": true
   },
   {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.gui.persistence.TotalRequestsByIPProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.gui.persistence.TotalRequestsByMonthProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.APIData",
     "allPublicFields": true,
     "allPublicMethods": true,
@@ -995,12 +1021,9 @@
   },
   {
     "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath",
-    "allDeclaredConstructors": true,
-    "allPublicConstructors": true,
-    "allDeclaredMethods": true,
+    "allPublicFields": true,
     "allPublicMethods": true,
-    "allDeclaredClasses": true,
-    "allPublicClasses": true,
+    "allPublicConstructors": true,
     "fields": [
       {
         "name": "path",
@@ -1233,6 +1256,42 @@
     ]
   },
   {
+    "name": "io.vlingo.xoom.designer.task.reactjs.AggregateDetailArguments",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.reactjs.AppArguments",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.reactjs.HeaderArguments",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.reactjs.IndexPageArguments",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.reactjs.SidebarArguments",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.reactjs.TemplateCustomFunctions",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "io.vlingo.xoom.http.resource.Dispatcher__Proxy",
     "methods": [
       {
@@ -1319,6 +1378,62 @@
     ]
   },
   {
+    "name": "io.vlingo.xoom.lattice.model.projection.MultiConfirmingProjectionControlActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.MultiConfirming__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.ProjectionControl__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.Projection__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor",
+    "allPublicConstructors": true
+  },
+  {
     "name": "io.vlingo.xoom.lattice.util.HardRefHolder",
     "allPublicMethods": true
   },
@@ -1333,6 +1448,88 @@
         ]
       }
     ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.ConfirmDispatchedResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.DispatcherControl__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.Dispatcher__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStoreReadResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStoreWriteResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStore__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.turbo.codegen.parameter.ImportParameter",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
   },
   {
     "name": "io.vlingo.xoom.wire.fdx.bidirectional.ServerRequestResponseChannel__Proxy",
@@ -3039,6 +3236,65 @@
         ]
       }
     ]
+  },
+  {
+    "name": "java.nio.file.Files",
+    "methods": [
+      {
+        "name": "createSymbolicLink",
+        "parameterTypes": [
+          "java.nio.file.Path",
+          "java.nio.file.Path",
+          "java.nio.file.attribute.FileAttribute[]"
+        ]
+      },
+      {
+        "name": "delete",
+        "parameterTypes": [
+          "java.nio.file.Path"
+        ]
+      },
+      {
+        "name": "exists",
+        "parameterTypes": [
+          "java.nio.file.Path",
+          "java.nio.file.LinkOption[]"
+        ]
+      },
+      {
+        "name": "isSymbolicLink",
+        "parameterTypes": [
+          "java.nio.file.Path"
+        ]
+      },
+      {
+        "name": "readSymbolicLink",
+        "parameterTypes": [
+          "java.nio.file.Path"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.nio.file.LinkOption"
+  },
+  {
+    "name": "java.nio.file.LinkOption[]"
+  },
+  {
+    "name": "java.nio.file.Path",
+    "methods": [
+      {
+        "name": "toFile",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.nio.file.attribute.FileAttribute"
+  },
+  {
+    "name": "java.nio.file.attribute.FileAttribute[]"
   },
   {
     "name": "java.security.AllPermission"
