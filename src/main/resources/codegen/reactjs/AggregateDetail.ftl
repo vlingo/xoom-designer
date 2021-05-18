@@ -50,7 +50,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
 
   <#list aggregate.methods as method>
     <#if !method.useFactory >
-  const ${method.name} = useCallback((e) => {
+  const _${method.name} = useCallback((e) => {
     console.log('showing ${method.name} modal');
     const form = {
       id: item.id,
@@ -80,7 +80,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
           <div className="btn-group me-2">
             <#list aggregate.methods as method>
               <#if !method.useFactory >
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={${method.name}}>${fns.capitalize(method.name)}</button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${method.name}}>${fns.capitalize(method.name)}</button>
               </#if>
             </#list>
           </div>

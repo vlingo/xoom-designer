@@ -46,10 +46,10 @@ public class AggregateDetailTest extends BaseTemplateTest{
         assertTrue(result.contains("import PetRename from \"./PetRename\";"));
         assertTrue(result.contains("const Pet = () => {"));
         assertTrue(result.contains("axios.get('/pets/'+id)"));
-        assertTrue(result.contains("const rename = useCallback((e) => {"));
+        assertTrue(result.contains("const _rename = useCallback((e) => {"));
         assertTrue(result.contains("setCurrentModal(<PetRename "));
         assertTrue(result.contains("<h1 className=\"h2\">Pet</h1>"));
-        assertTrue(result.contains("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick={rename}>Rename</button>"));
+        assertTrue(result.contains("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick={_rename}>Rename</button>"));
         assertTrue(containsPattern(Pattern.compile("<tbody>\\s*<tr><td>Id</td><td>\\{item\\?\\.id}</td></tr>\\s*<tr><td>Name</td><td>\\{item\\?\\.name}</td></tr>\\s*</tbody>"), result));
         assertTrue(result.contains("export default Pet;"));
     }

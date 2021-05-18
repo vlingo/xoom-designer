@@ -43,9 +43,9 @@ public class AggregateListTest extends BaseTemplateTest {
         assertTrue(result.contains("import PetRegister from \"./PetRegister\";"));
         assertTrue(result.contains("const EMPTY_FORM = { name: '' };"));
         assertTrue(result.contains("const Pets = () => {"));
-        assertTrue(containsPattern(Pattern.compile("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick=\\{register}>Register</button>"), result));
+        assertTrue(containsPattern(Pattern.compile("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick=\\{_register}>Register</button>"), result));
         assertTrue(result.contains("axios.get('/pets')"));
-        assertTrue(result.contains("const register = useCallback((e) => {"));
+        assertTrue(result.contains("const _register = useCallback((e) => {"));
         assertTrue(result.contains("setCurrentModal(<PetRegister "));
         assertTrue(result.contains("<h1 className=\"h2\">Pets</h1>"));
         assertTrue(containsPattern(Pattern.compile("<tr>\\s*<th>Id</th>\\s*<th>Name</th>\\s*</tr>"), result));
@@ -96,9 +96,9 @@ public class AggregateListTest extends BaseTemplateTest {
         assertTrue(result.contains("import CustomerRegister from \"./CustomerRegister\";"));
         assertTrue(result.contains("const EMPTY_FORM = { name: '', contact: { phone: '', address: '' } };"));
         assertTrue(result.contains("const Customers = () => {"));
-        assertTrue(containsPattern(Pattern.compile("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick=\\{register}>Register</button>"), result));
+        assertTrue(containsPattern(Pattern.compile("<button type=\"button\" className=\"btn btn-sm btn-outline-secondary\" onClick=\\{_register}>Register</button>"), result));
         assertTrue(result.contains("axios.get('/customers')"));
-        assertTrue(result.contains("const register = useCallback((e) => {"));
+        assertTrue(result.contains("const _register = useCallback((e) => {"));
         assertTrue(result.contains("setCurrentModal(<CustomerRegister "));
         assertTrue(result.contains("<h1 className=\"h2\">Customers</h1>"));
         assertTrue(containsPattern(Pattern.compile("<tr>\\s*<th>Id</th>\\s*<th>Name</th>\\s*<th>Contact Phone</th>\\s*<th>Contact Address</th>\\s*</tr>"), result));
