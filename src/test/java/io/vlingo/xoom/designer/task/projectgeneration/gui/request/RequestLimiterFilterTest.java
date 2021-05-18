@@ -55,7 +55,7 @@ public class RequestLimiterFilterTest {
   }
 
   @Test
-  public void testThatRequestCountIsReset() throws InterruptedException {
+  public void testThatRequestCountIsReset() throws Exception {
     final Headers requestHeader =
             Headers.of(RequestHeader.of(XForwardedFor, "127.0.0.1"));
 

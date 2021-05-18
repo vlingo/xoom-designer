@@ -9,37 +9,39 @@ package io.vlingo.xoom.designer.task.projectgeneration.gui.request;
 
 import io.vlingo.xoom.actors.World;
 import io.vlingo.xoom.actors.testkit.AccessSafely;
+import io.vlingo.xoom.designer.task.projectgeneration.gui.infrastructure.persistence.RequestHistoryStateAdapter;
 import io.vlingo.xoom.http.*;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.symbio.StateAdapterProvider;
 import io.vlingo.xoom.symbio.store.state.StateStore;
-import io.vlingo.xoom.symbio.store.state.StateTypeStateStoreMap;
-import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
-import java.util.Properties;
+import java.util.Collections;
 
 import static io.vlingo.xoom.http.Body.Empty;
 import static io.vlingo.xoom.http.RequestHeader.XForwardedFor;
-import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.STATE_STORE;
-import static io.vlingo.xoom.turbo.storage.Model.QUERY;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UsageDataFilterTest {
+public class RequestPreservationFilterTest {
 
   private World world;
+  private StateStore store;
   private MockDispatcher dispatcher;
 
   @BeforeEach
   private void setUp() {
     dispatcher = new MockDispatcher();
-    world = World.startWithDefaults("usage-storage-test");
-    StateTypeStateStoreMap.stateTypeToStoreName(UsageData.class, UsageData.class.getSimpleName());
+    world = World.startWithDefaults("request-preservation-filter-test");
+    new StateAdapterProvider(world).registerAdapter(RequestHistoryState.class, new RequestHistoryStateAdapter());
+    store = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
+    new StatefulTypeRegistry(world).register(new StatefulTypeRegistry.Info(store, RequestHistoryState.class, RequestHistoryState.class.getSimpleName()));
   }
 
   @Test
-  public void testThatUsageDataIsStored() {
+  public void testThatRequestIsFilteredAndPreserved() {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
 
     final Header.Headers requestHeader =
@@ -48,18 +50,9 @@ public class UsageDataFilterTest {
     final Request request =
             Request.from(Method.POST, URI.create("/resources"), Version.Http1_1, requestHeader, Empty);
 
-    final StateStore stateStore =
-            StoreActorBuilder.from(world.stage(), QUERY, singletonList(dispatcher),
-                    STATE_STORE, loadDatabaseProperties(), true);
-
-    UsageDataFilter.with(stateStore, world.defaultLogger()).filter(request);
+    RequestPreservationFilter.with(world.stage()).filter(request);
 
     assertEquals(1, (int) dispatcherAccess.readFrom("dispatched"));
   }
 
-  private Properties loadDatabaseProperties() {
-    final Properties properties = new Properties();
-    properties.put("query.database", "IN_MEMORY");
-    return properties;
-  }
 }
