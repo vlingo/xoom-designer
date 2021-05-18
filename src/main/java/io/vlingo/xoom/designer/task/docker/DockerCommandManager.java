@@ -7,10 +7,13 @@
 
 package io.vlingo.xoom.designer.task.docker;
 
+import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.*;
 import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.steps.XoomPropertiesLoadStep;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +29,7 @@ public class DockerCommandManager implements TaskManager<List<String>> {
         validateArgs(args);
         final String command = args.get(SUB_TASK_INDEX);
         final SubTask subTask = DOCKER.subTaskOf(command);
+        ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
         runSteps(subTask, args);
     }
 

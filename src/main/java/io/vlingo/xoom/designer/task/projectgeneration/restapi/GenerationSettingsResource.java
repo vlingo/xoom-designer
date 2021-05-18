@@ -57,8 +57,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
             .andThenTo((response) -> {
               new ReactJSProjectGenerator(settings).generate();
               return Completes.withSuccess(response);
-            })
-            .recoverFrom(throwable -> Response.of(InternalServerError));
+            });
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
