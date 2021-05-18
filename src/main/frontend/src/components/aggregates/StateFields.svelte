@@ -45,7 +45,7 @@
       <div
         class="handle pa-2"
         class:disabled={i === 0}
-        style="width: 42px; cursor: move;"
+        style="width: 42px; cursor: {i === 0 ? 'not-allowed' : 'move'};"
       >
         <Icon path={i === 0 ? mdiArrowVerticalLock : mdiArrowUpDown}/>
       </div>
