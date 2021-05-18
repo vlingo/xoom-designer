@@ -66,6 +66,6 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
             RequestLimiter.of(resolveProjectGenerationRequestLimit(),
                     resolveProjectGenerationRequestCountExpiration());
 
-    return Arrays.asList(RequestLimiterFilter.with(requestLimiter), RequestPreservationFilter.with(grid));
+    return Arrays.asList(RequestLimiterFilter.with(requestLimiter), RequestPreservationFilter.with(grid.world().stage()));
   }
 }
