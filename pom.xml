@@ -61,6 +61,12 @@
       <version>4.3.20.RELEASE</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.graalvm.sdk</groupId>
+      <artifactId>graal-sdk</artifactId>
+      <version>${graalvm.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <profiles>
