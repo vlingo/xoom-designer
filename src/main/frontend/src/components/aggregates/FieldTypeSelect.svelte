@@ -15,6 +15,8 @@
     value: item.value
   })) : [...items];
 
+  $: innerValue = value;
+
   function update(e) {
     value = e.detail;
   }
