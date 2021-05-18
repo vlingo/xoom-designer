@@ -15,10 +15,13 @@
 	const dispatch = createEventDispatcher();
 
 	export let aggregate;
-
 	const methodParameters = (parameters) => {
 		return parameters.reduce((acc, cur) => {
-			const field = aggregate.stateFields.find(sf => sf.name === cur);
+			const field = aggregate.stateFields.find(sf => {
+				const replace = `^${sf.name}$|^${sf.name} [>*#+-]$`;
+				const re = new RegExp(replace);
+				return cur.search(re) > -1;
+			});
 			if (field) acc.push(`${field.name}: ${field.type}`);
 			return acc;
 		}, []).join(', ');
