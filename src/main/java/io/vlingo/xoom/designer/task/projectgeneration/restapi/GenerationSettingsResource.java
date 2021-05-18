@@ -53,11 +53,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
     return mapContext(settings)
             .andThen(this::runProjectGeneration)
-            .andThenTo(this::buildResponse)
-            .andThenTo((response) -> {
-              new ReactJSProjectGenerator(settings).generate();
-              return Completes.withSuccess(response);
-            });
+            .andThenTo(this::buildResponse);
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
