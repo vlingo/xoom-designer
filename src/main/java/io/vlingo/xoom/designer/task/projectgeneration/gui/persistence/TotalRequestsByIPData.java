@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class TotalRequestsByIPData {
 
-  public final String id;
+  public final String ipAddress;
   public final long totalRequests;
   public final LocalDateTime lastOccurredOn;
 
@@ -30,7 +30,7 @@ public class TotalRequestsByIPData {
   private TotalRequestsByIPData(final String ipAddress,
                                 final long totalRequests,
                                 final LocalDateTime lastOccurredOn) {
-    this.id = ipAddress;
+    this.ipAddress = ipAddress;
     this.totalRequests = totalRequests;
     this.lastOccurredOn = lastOccurredOn;
   }

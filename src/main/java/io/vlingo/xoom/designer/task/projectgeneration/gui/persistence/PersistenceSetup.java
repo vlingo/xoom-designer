@@ -15,10 +15,11 @@ import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageTyp
 
 @Persistence(basePackage = "io.vlingo.xoom.designer.task.projectgeneration.gui", storageType = STATE_STORE, cqrs = true)
 @Projections(type = ProjectionType.OPERATION_BASED, value = {
-  @Projection(actor = TotalRequestsByIPProjectionActor.class, becauseOf = RequestHistoryPreserved.class)
+        @Projection(actor = TotalRequestsByIPProjectionActor.class, becauseOf = RequestHistoryPreserved.class),
+        @Projection(actor = TotalRequestsByMonthProjectionActor.class, becauseOf = RequestHistoryPreserved.class)
 })
 @Adapters(RequestHistoryState.class)
-@DataObjects({TotalRequestsByIPData.class})
+@DataObjects({TotalRequestsByIPData.class, TotalRequestsByMonthData.class})
 public class PersistenceSetup {
 
 }

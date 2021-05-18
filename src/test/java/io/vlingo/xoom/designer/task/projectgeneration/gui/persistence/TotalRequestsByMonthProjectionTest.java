@@ -25,17 +25,20 @@ import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.time.ZoneOffset.UTC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TotalRequestsByIPProjectionTest {
+public class TotalRequestsByMonthProjectionTest {
 
   private World world;
   private StateStore stateStore;
   private Projection projection;
+  private DateTimeFormatter monthOfYearFormat;
   private Map<String, List<String>> valueToProjectionId;
 
   @BeforeEach
@@ -43,23 +46,11 @@ public class TotalRequestsByIPProjectionTest {
     world = World.startWithDefaults("projection-test");
     NoOpDispatcher dispatcher = new NoOpDispatcher();
     valueToProjectionId = new ConcurrentHashMap<>();
+    monthOfYearFormat = DateTimeFormatter.ofPattern("yyyyMM").withZone(UTC);
     stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
-    StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, TotalRequestsByIPData.class);
+    StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, TotalRequestsByMonthData.class);
     QueryModelStateStoreProvider.using(world.stage(), statefulTypeRegistry);
-    projection = world.actorFor(Projection.class, TotalRequestsByIPProjectionActor.class, stateStore);
-  }
-
-  private Projectable createProjectable(final RequestHistoryState requestHistoryState, final int version) {
-    final String projectionId = UUID.randomUUID().toString();
-
-    final Metadata metadata = Metadata.with(requestHistoryState, "", RequestHistoryPreserved.name());
-
-    final State.TextState rawState =
-            new RequestHistoryStateAdapter().toRawState(requestHistoryState.id, requestHistoryState, version, metadata);
-
-    valueToProjectionId.computeIfAbsent(requestHistoryState.ipAddress, s -> new ArrayList<>()).add(projectionId);
-
-    return new TextProjectable(rawState, Collections.emptyList(), projectionId);
+    projection = world.actorFor(Projection.class, TotalRequestsByMonthProjectionActor.class, stateStore);
   }
 
   private Projectable createProjectable(final RequestHistoryState requestHistoryState) {
@@ -70,7 +61,9 @@ public class TotalRequestsByIPProjectionTest {
     final State.TextState rawState =
             new RequestHistoryStateAdapter().toRawState(requestHistoryState.id, requestHistoryState, 1, metadata);
 
-    valueToProjectionId.computeIfAbsent(requestHistoryState.ipAddress, s -> new ArrayList<>()).add(projectionId);
+    final String monthOfYear = requestHistoryState.occurredOn.format(monthOfYearFormat);
+
+    valueToProjectionId.computeIfAbsent(monthOfYear, s -> new ArrayList<>()).add(projectionId);
 
     return new TextProjectable(rawState, Collections.emptyList(), projectionId);
   }
@@ -98,17 +91,18 @@ public class TotalRequestsByIPProjectionTest {
 
     final Map<String,Integer> confirmations = access.readFrom("confirmations");
 
+    final String monthOfYear =
+            thirdState.occurredOn.format(monthOfYearFormat);
+
     assertEquals(3, confirmations.size());
-    assertEquals(1, valueOfProjectionIdFor(anIpAddress, confirmations));
-    assertEquals(2, valueOfProjectionIdFor(otherIpAddress, confirmations));
+    assertEquals(3, valueOfProjectionIdFor(monthOfYear, confirmations));
 
     CountingReadResultInterest interest = new CountingReadResultInterest();
     AccessSafely interestAccess = interest.afterCompleting(1);
-    stateStore.read(otherIpAddress, TotalRequestsByIPData.class, interest);
-    TotalRequestsByIPData data = interestAccess.readFrom("item", otherIpAddress);
-    assertEquals(otherIpAddress, data.ipAddress);
-    assertEquals(thirdState.occurredOn.withNano(0), data.lastOccurredOn.withNano(0));
-    assertEquals(2l, data.totalRequests);
+    stateStore.read(monthOfYear, TotalRequestsByMonthData.class, interest);
+    TotalRequestsByMonthData data = interestAccess.readFrom("item", monthOfYear);
+    assertEquals(monthOfYear, data.monthOfYear);
+    assertEquals(3, data.totalRequests);
   }
 
   private int valueOfProjectionIdFor(final String valueText, final Map<String,Integer> confirmations) {

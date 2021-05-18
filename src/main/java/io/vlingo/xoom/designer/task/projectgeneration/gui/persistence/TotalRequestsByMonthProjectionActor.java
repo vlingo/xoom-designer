@@ -14,30 +14,36 @@ import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;
 
-public class TotalRequestsByIPProjectionActor extends StateStoreProjectionActor<TotalRequestsByIPData> {
+import java.time.format.DateTimeFormatter;
+
+import static java.time.ZoneOffset.UTC;
+
+public class TotalRequestsByMonthProjectionActor extends StateStoreProjectionActor<TotalRequestsByMonthData> {
 
   private String becauseOf;
+  private final DateTimeFormatter monthOfYearFormat;
 
-  public TotalRequestsByIPProjectionActor() {
+  public TotalRequestsByMonthProjectionActor() {
     this(QueryModelStateStoreProvider.instance().store);
   }
 
-  public TotalRequestsByIPProjectionActor(final StateStore stateStore) {
+  public TotalRequestsByMonthProjectionActor(final StateStore stateStore) {
     super(stateStore);
+    this.monthOfYearFormat = DateTimeFormatter.ofPattern("yyyyMM").withZone(UTC);
   }
 
   @Override
-  protected TotalRequestsByIPData merge(final TotalRequestsByIPData previousData,
-                                        final int previousVersion,
-                                        final TotalRequestsByIPData currentData,
-                                        final int currentVersion) {
+  protected TotalRequestsByMonthData merge(final TotalRequestsByMonthData previousData,
+                                           final int previousVersion,
+                                           final TotalRequestsByMonthData currentData,
+                                           final int currentVersion) {
     if (previousVersion == currentVersion) return currentData;
 
-    TotalRequestsByIPData merged = previousData;
+    TotalRequestsByMonthData merged = previousData;
 
     if(RequestHistoryPreserved.matchName(becauseOf)) {
       if(previousData != null) {
-        merged = TotalRequestsByIPData.from(previousData.ipAddress, previousData.totalRequests+1, currentData.lastOccurredOn);
+        merged = TotalRequestsByMonthData.from(previousData.monthOfYear, previousData.totalRequests+1);
       } else {
         merged = currentData;
       }
@@ -49,15 +55,15 @@ public class TotalRequestsByIPProjectionActor extends StateStoreProjectionActor<
   }
 
   @Override
-  protected TotalRequestsByIPData currentDataFor(final Projectable projectable) {
+  protected TotalRequestsByMonthData currentDataFor(final Projectable projectable) {
     becauseOf = projectable.becauseOf()[0];
     final RequestHistoryState requestHistoryState = projectable.object();
-    return TotalRequestsByIPData.from(requestHistoryState.ipAddress, requestHistoryState.occurredOn);
+    return TotalRequestsByMonthData.from(requestHistoryState.occurredOn.format(monthOfYearFormat));
   }
 
   @Override
-  protected String dataIdFor(Projectable projectable) {
-    return ((RequestHistoryState) projectable.object()).ipAddress;
+  protected String dataIdFor(final Projectable projectable) {
+    return ((RequestHistoryState) projectable.object()).occurredOn.format(monthOfYearFormat);
   }
 
   @Override
