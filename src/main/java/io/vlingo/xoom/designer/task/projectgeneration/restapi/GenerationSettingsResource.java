@@ -15,6 +15,7 @@ import io.vlingo.xoom.designer.task.TaskStatus;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
+import io.vlingo.xoom.designer.task.reactjs.ReactJSProjectGenerator;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
@@ -50,7 +51,14 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
       return Completes.withFailure(Response.of(Conflict, serialized(validationMessage)));
     }
 
-    return mapContext(settings).andThen(this::runProjectGeneration).andThenTo(this::buildResponse);
+    return mapContext(settings)
+            .andThen(this::runProjectGeneration)
+            .andThenTo(this::buildResponse)
+            .andThenTo((response) -> {
+              new ReactJSProjectGenerator(settings).generate();
+              return Completes.withSuccess(response);
+            })
+            .recoverFrom(throwable -> Response.of(InternalServerError));
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {

@@ -20,6 +20,7 @@ public class GenerationSettingsData {
     public final String projectDirectory;
     public final Boolean useAnnotations;
     public final Boolean useAutoDispatch;
+    public final String uiType;
     public final String fileVersion;
 
     public GenerationSettingsData(final ContextSettingsData context,
@@ -27,13 +28,15 @@ public class GenerationSettingsData {
                                   final DeploymentSettingsData deployment,
                                   final String projectDirectory,
                                   final Boolean useAnnotations,
-                                  final Boolean useAutoDispatch) {
+                                  final Boolean useAutoDispatch,
+                                  final String uiType) {
         this.context = context;
         this.model = model;
         this.deployment = deployment;
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
         this.useAutoDispatch = useAutoDispatch;
+        this.uiType = uiType == null ? "REACT" : uiType;
         this.fileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
     }
 

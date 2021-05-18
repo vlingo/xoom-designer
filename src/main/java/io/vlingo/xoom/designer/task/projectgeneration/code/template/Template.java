@@ -29,6 +29,7 @@ public enum Template {
   ENTRY_ADAPTER("EntryAdapter"),
   STATE_ADAPTER("StateAdapter"),
   REST_RESOURCE("RestResource"),
+  REST_UI_RESOURCE("UiResource"),
   AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
   AUTO_DISPATCH_ROUTE("AutoDispatchRoute"),
   AUTO_DISPATCH_HANDLERS_MAPPING("AutoDispatchHandlersMapping"),

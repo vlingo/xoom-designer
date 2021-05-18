@@ -27,8 +27,8 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
     final Set<String> qualifiedNames =
             ContentQuery.findFullyQualifiedClassNames(context.contents(),
-                    STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE,
-                    AUTO_DISPATCH_RESOURCE_HANDLER, EXCHANGE_BOOTSTRAP);
+                    STORE_PROVIDER, PROJECTION_DISPATCHER_PROVIDER, REST_RESOURCE, REST_UI_RESOURCE,
+                    AUTO_DISPATCH_RESOURCE_HANDLER, AUTO_DISPATCH_RESOURCE_UI_HANDLER, EXCHANGE_BOOTSTRAP);
 
     parameters().and(REST_RESOURCES, RestResource.from(context.contents()))
             .and(EXCHANGE_BOOTSTRAP_NAME, EXCHANGE_BOOTSTRAP.resolveClassname())

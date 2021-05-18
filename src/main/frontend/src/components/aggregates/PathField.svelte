@@ -1,8 +1,16 @@
 <script>
 	import { TextField } from "svelte-materialify/src";
 	import { requireRule } from "../../validators";
+	import ErrorWarningTooltip from "./ErrorWarningTooltip.svelte";
 
 	export let path = "";
 </script>
 
-<TextField bind:value={path} hint="Requires {'{id}'}?" rules={[requireRule]} validateOnBlur={!path}>Path</TextField>
+<div class="d-flex">
+	<TextField bind:value={path} rules={[requireRule]} validateOnBlur={!path}>Path</TextField>
+	<ErrorWarningTooltip
+		type='warning'
+		messages={[path.includes('{id}') ? '' : 'Requires {id}?']}
+		names={['']}
+	/>
+</div>

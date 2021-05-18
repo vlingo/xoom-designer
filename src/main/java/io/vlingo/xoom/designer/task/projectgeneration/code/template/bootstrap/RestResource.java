@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.REST_RESOURCE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard.*;
 import static java.util.stream.Collectors.toList;
 
 public class RestResource {
@@ -28,8 +27,8 @@ public class RestResource {
 
   public static List<RestResource> from(final List<Content> contents) {
     final Set<String> classNames =
-            ContentQuery.findClassNames(contents, REST_RESOURCE,
-                    AUTO_DISPATCH_RESOURCE_HANDLER);
+            ContentQuery.findClassNames(contents, REST_RESOURCE, REST_UI_RESOURCE,
+                    AUTO_DISPATCH_RESOURCE_HANDLER, AUTO_DISPATCH_RESOURCE_UI_HANDLER);
 
     final Iterator<String> iterator = classNames.iterator();
 
