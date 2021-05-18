@@ -14,6 +14,7 @@
     "compression": "^1.7.1",
     "polka": "next",
     "sirv": "^1.0.0",
+    "sortablejs": "^1.13.0",
     "svelte-material-ui": "^4.0.0",
     "svelte-portal": "^2.1.1"
   },

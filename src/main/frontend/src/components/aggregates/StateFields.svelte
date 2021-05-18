@@ -1,12 +1,14 @@
 <script>
-  import { Select, TextField } from 'svelte-materialify/src';
+  import { Select, TextField, Icon } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
+  import { formatArrayForSelect, uuid } from '../../utils';
 	import { settings, simpleTypes, collectionTypes } from '../../stores';
   import FieldTypeSelect from './FieldTypeSelect.svelte';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+  import Sortable from '../Sortable.svelte';
+  import { mdiArrowUpDown, mdiArrowVerticalLock } from '@mdi/js';
 
   export let stateFields;
 
@@ -21,7 +23,7 @@
     })
   }
 
-	const addStateField = () => stateFields = stateFields.concat({ name: "", type: "", collectionType: "" });
+	const addStateField = () => stateFields = [...stateFields, { name: "", type: "", collectionType: "", uid: uuid() }];
   const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
 </script>
 
@@ -29,8 +31,24 @@
   <legend>
     <h6 class="ma-0 pl-3 pr-3">State Fields</h6>
   </legend>
-  {#each stateFields as stateField, i (i)}
+  <Sortable
+    options={{
+			onSort: (d) => {
+        const [field] = stateFields.splice(d.oldIndex, 1);
+        stateFields.splice(d.newIndex === 0 ? 1 : d.newIndex, 0, field);
+        stateFields = stateFields;
+			},
+    }}
+  >
+  {#each stateFields as stateField, i (stateField.uid)}
     <div class="d-flex">
+      <div
+        class="handle pa-2"
+        class:disabled={i === 0}
+        style="width: 42px; cursor: {i === 0 ? 'not-allowed' : 'move'};"
+      >
+        <Icon path={i === 0 ? mdiArrowVerticalLock : mdiArrowUpDown}/>
+      </div>
       <div style="flex: 1;" class="mb-3 pb-4 mr-4">
         <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}>Name</TextField>
       </div>
@@ -64,5 +82,6 @@
       </div>
     </div>
   {/each}
+  </Sortable>
   <CreateButton title="Add State Field" on:click={addStateField}/>
 </fieldset>

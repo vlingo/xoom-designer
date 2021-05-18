@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task;
 
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.docker.steps.DockerPackageCommandExecutionStep;
 import io.vlingo.xoom.designer.task.docker.steps.DockerPushCommandExecutionStep;
 import io.vlingo.xoom.designer.task.docker.steps.DockerStatusCommandExecutionStep;
@@ -24,37 +24,36 @@ import java.util.List;
 
 import static io.vlingo.xoom.designer.task.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.designer.task.option.OptionName.TAG;
-import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
 public enum SubTask {
 
     DOCKER_STATUS(Task.DOCKER, "status",
-            new DockerStatusCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new DockerStatusCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY)),
 
     DOCKER_PACKAGE(Task.DOCKER, "package",
-            new DockerPackageCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new DockerPackageCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     DOCKER_PUSH(Task.DOCKER, "push",
-            new DockerPushCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new DockerPushCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY),
             Option.of(TAG, "latest")),
 
     K8S_PUSH(Task.K8S, "push",
-            new KubernetesPushCommandExecutionStep(withType(CommandExecutionProcess.class))),
+            new KubernetesPushCommandExecutionStep(new DefaultCommandExecutionProcess())),
 
     GLOO_INIT(Task.GLOO, "init",
-            new GlooInitCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new GlooInitCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_ROUTE(Task.GLOO, "route",
-            new GlooRouteCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new GlooRouteCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY)),
 
     GLOO_SUSPEND(Task.GLOO, "suspend",
-            new GlooSuspendCommandExecutionStep(withType(CommandExecutionProcess.class)),
+            new GlooSuspendCommandExecutionStep(new DefaultCommandExecutionProcess()),
             Option.required(CURRENT_DIRECTORY));
 
     private final Task parentTask;
