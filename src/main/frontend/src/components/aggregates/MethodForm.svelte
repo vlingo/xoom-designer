@@ -28,7 +28,7 @@
     selectedEvent = method.event ? [method.event] : [];
   }
 
-  function updateParamaters(name, symbol) {
+  function updateParamaters(name, symbol = undefined) {
     const nameWithOrWithoutSymbol = symbol ? `${name} ${symbol}` : name;
     const indexOfAlreadyExists = method.parameters.findIndex(p => p === nameWithOrWithoutSymbol)
     if (indexOfAlreadyExists > -1) {
@@ -36,7 +36,7 @@
       method.parameters = method.parameters
       return;
     }
-    var replace = `^${name}$|^${name} [>*#+-]$`;
+    var replace = `^${name}$|^${name} [*#+-]$`;
     var re = new RegExp(replace);
     const indexOfAnyExists = method.parameters.findIndex(p => {
       const a = p.search(re);
@@ -50,8 +50,17 @@
     }
   }
 
-  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
+  function updateParamatersWithSymbol(fName, symbol) {
+    const pName = `${fName} ${symbol}`
+    if (method.parameters.includes(pName)) {
+      method.parameters = []
+    } else {
+      method.parameters = [pName]
+    }
+  }
 
+  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
+  $: isAnyCollectionParameterSelected = method.parameters.some(p => p.search(/ [*#+-]?/) > -1)
 </script>
 
 <div style="flex: 1;">
@@ -98,10 +107,13 @@
           {#each stateFields as field}
             <Item
               class="pa-0"
-              on:SMUI:action={() => updateParamaters(field.name, field.collectionType ? '>' : '')}
+              on:SMUI:action={() => !field.collectionType && updateParamaters(field.name)}
               selected={method.parameters.includes(field.collectionType ? `${field.name} >` : field.name)}
+              disabled={isAnyCollectionParameterSelected}
             >
               <Checkbox
+                style="visibility: {field.collectionType ? 'hidden' : 'visible'}"
+                disabled={isAnyCollectionParameterSelected || field.collectionType}
                 checked={method.parameters.includes(field.collectionType ? `${field.name} >` : field.name)}
                 value={field.collectionType ? `${field.name} >` : field.name} />
               <Label>{field.name} {field.collectionType ? '>' : ''}</Label>
@@ -111,7 +123,7 @@
                 {#each symbols as symbol}
                   <Item
                     class="pa-0 pl-10"
-                    on:SMUI:action={() => updateParamaters(field.name, symbol)}
+                    on:SMUI:action={() => updateParamatersWithSymbol(field.name, symbol)}
                     selected={method.parameters.includes(`${field.name} ${symbol}`)}
                   >
                     <Checkbox

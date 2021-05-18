@@ -18,7 +18,7 @@
 	const methodParameters = (parameters) => {
 		return parameters.reduce((acc, cur) => {
 			const field = aggregate.stateFields.find(sf => {
-				const replace = `^${sf.name}$|^${sf.name} [>*#+-]$`;
+				const replace = `^${sf.name}$|^${sf.name} [*#+-]$`;
 				const re = new RegExp(replace);
 				return cur.search(re) > -1;
 			});

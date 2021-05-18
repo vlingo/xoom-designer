@@ -15,7 +15,7 @@
 			return {
 				...method,
 				parameters: stateFields.reduce((acc, cur) => {
-          const replace = `^${cur.name}$|^${cur.name} [>*#+-]$`;
+          const replace = `^${cur.name}$|^${cur.name} [*#+-]$`;
           const re = new RegExp(replace);
           const pa = method.parameters.find(p => {
             return p.search(re) > -1;
