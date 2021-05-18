@@ -9,7 +9,8 @@
 	import ProducerExchange from './ProducerExchange.svelte';
 	import ConsumerExchange from './ConsumerExchange.svelte';
 	import ValueObjects from './ValueObjects.svelte';
-import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+	import { uuid } from '../../utils';
 
 	export let dialogActive;
 	export let editMode;
@@ -22,7 +23,7 @@ import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
 	const initialAggregate = {
 		aggregateName: "",
-		stateFields: [{ name: "id", type: "String", collectionType: null }],
+		stateFields: [{ name: "id", type: "String", collectionType: null, uid: uuid() }],
 		events: [],
 		methods: [],
 		api: {
@@ -43,15 +44,23 @@ import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
 	const add = () => {
 		if(!valid) return;
-		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, newAggregate];
+		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, removeUIDsFromStateFields(newAggregate)];
 		closeDialog();
 	}
 
 	const update = () => {
 		if(!valid) return;
 		$settings.model.aggregateSettings = $settings.model.aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate));
-		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, newAggregate];
+		$settings.model.aggregateSettings = [...$settings.model.aggregateSettings, removeUIDsFromStateFields(newAggregate)];
 		closeDialog();
+	}
+
+	function removeUIDsFromStateFields(aggregate) {
+		const agg = { ...aggregate }
+		if (aggregate.stateFields) {
+			agg.stateFields = aggregate.stateFields && aggregate.stateFields.map(({ uid, ...f }) => (f))
+		}
+		return agg;
 	}
 
 	const closeDialog = () => {
@@ -62,7 +71,7 @@ import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
 	const initFieldsWith = (aggregate) => {
 		aggregateName = aggregate.aggregateName;
-		stateFields = aggregate.stateFields;
+		stateFields = aggregate.stateFields && aggregate.stateFields.map((f) => ({ ...f, uid: uuid() }));
 		events = aggregate.events;
 		methods = aggregate.methods;
 		rootPath = aggregate.api.rootPath;
