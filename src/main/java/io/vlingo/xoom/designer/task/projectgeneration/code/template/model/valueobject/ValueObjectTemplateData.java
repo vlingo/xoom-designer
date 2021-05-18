@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.formatting.Formatters.Fields.Style;
 import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
 
 import java.util.List;
 import java.util.function.Function;
@@ -46,6 +47,7 @@ public class ValueObjectTemplateData extends TemplateData {
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
                     .and(CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.MEMBER_DECLARATION, language, valueObject))
+                    .and(MEMBER_NAMES, valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList()))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.ASSIGNMENT, language, valueObject))
                     .addImports(ValueObjectDetail.resolveFieldsImports(valueObject));
   }
