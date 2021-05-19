@@ -7,6 +7,7 @@ ARG XOOM_PROJECTS_DIR=VLINGO-XOOM
 ENV JAVA_HOME=/usr/lib/jvm/default-jvm/
 ENV PATH=${JAVA_HOME}/bin:$PATH:$XOOM_HOME:$XOOM_HOME/bin
 ENV VLINGO_XOOM_DESIGNER_HOME=$XOOM_HOME
+ENV VLINGO_XOOM_DESIGNER_ENV=CONTAINER
 
 RUN addgroup -S xoom && adduser -S -D -s /sbin/nologin -h $XOOM_HOME -G xoom xoom \
  && apk add --no-cache bash openjdk8
