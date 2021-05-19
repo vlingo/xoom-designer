@@ -86,6 +86,7 @@ public enum TemplateParameter implements ParameterKey {
   MODEL("model"),
   URI_ROOT("uriRoot"),
   MEMBERS("members"),
+  MEMBER_NAMES("memberNames"),
   MEMBERS_ASSIGNMENT("membersAssignment"),
   VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
   VALUE_OBJECT_TRANSLATIONS("valueObjectTranslations"),

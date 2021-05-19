@@ -63,6 +63,7 @@ public class ValueDataObjectTemplateData extends TemplateData {
                     .and(VALUE_OBJECT_FIELDS, joinValueObjectFields(valueObject))
                     .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(valueObject))
                     .and(MEMBERS, Formatters.Fields.format(Style.DATA_OBJECT_MEMBER_DECLARATION, language, valueObject))
+                    .and(MEMBER_NAMES, valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList()))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Style.DATA_VALUE_OBJECT_ASSIGNMENT, language, valueObject))
                     .addImport(CodeElementFormatter.importAllFrom(ContentQuery.findPackage(VALUE_OBJECT, contents)))
                     .addImports(ValueObjectDetail.resolveFieldsImports(valueObject))

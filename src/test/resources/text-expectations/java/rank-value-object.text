@@ -1,5 +1,9 @@
 package io.vlingo.xoomapp.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public final class Rank {
 
@@ -15,4 +19,34 @@ public final class Rank {
     this.classification = classification;
   }
 
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(31, 17)
+              .append(points)
+              .append(classification)
+              .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this){
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()){
+      return false;
+    }
+    Rank another = (Rank) other;
+    return new EqualsBuilder()
+              .append(this.points, another.points)
+              .append(this.classification, another.classification)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("points", points)
+              .append("classification", classification)
+              .toString();
+  }
 }

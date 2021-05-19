@@ -1,5 +1,9 @@
 package io.vlingo.xoomapp.infrastructure;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import io.vlingo.xoomapp.model.*;
 
 public class NameData {
@@ -24,4 +28,34 @@ public class NameData {
     return Name.from(firstName, lastName);
   }
 
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(31, 17)
+              .append(firstName)
+              .append(lastName)
+              .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this){
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()){
+      return false;
+    }
+    Name another = (Name) other;
+    return new EqualsBuilder()
+              .append(this.firstName, another.firstName)
+              .append(this.lastName, another.lastName)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("firstName", firstName)
+              .append("lastName", lastName)
+              .toString();
+  }
 }
