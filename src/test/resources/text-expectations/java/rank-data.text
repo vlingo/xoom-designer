@@ -32,7 +32,7 @@ public class RankData {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
+    return new HashCodeBuilder(31, 17)
               .append(points)
               .append(classification)
               .toHashCode();

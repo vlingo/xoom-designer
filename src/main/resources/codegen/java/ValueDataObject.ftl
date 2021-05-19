@@ -40,7 +40,7 @@ public class ${dataValueObjectName} {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
+    return new HashCodeBuilder(31, 17)
               <#list memberNames as member>
               .append(${member})
               </#list>

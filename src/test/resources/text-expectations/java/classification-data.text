@@ -32,7 +32,7 @@ public class ClassificationData {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
+    return new HashCodeBuilder(31, 17)
               .append(label)
               .append(classifier)
               .toHashCode();

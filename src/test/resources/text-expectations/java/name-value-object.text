@@ -21,7 +21,7 @@ public final class Name {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
+    return new HashCodeBuilder(31, 17)
               .append(firstName)
               .append(lastName)
               .toHashCode();
