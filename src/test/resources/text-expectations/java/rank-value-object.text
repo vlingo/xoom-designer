@@ -29,10 +29,10 @@ public final class Rank {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this){
+    if (other == this) {
       return true;
     }
-    if (other == null || getClass() != other.getClass()){
+    if (other == null || getClass() != other.getClass()) {
       return false;
     }
     Rank another = (Rank) other;

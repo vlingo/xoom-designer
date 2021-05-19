@@ -49,10 +49,10 @@ public class ${dataValueObjectName} {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this){
+    if (other == this) {
       return true;
     }
-    if (other == null || getClass() != other.getClass()){
+    if (other == null || getClass() != other.getClass()) {
       return false;
     }
     ${valueObjectName} another = (${valueObjectName}) other;

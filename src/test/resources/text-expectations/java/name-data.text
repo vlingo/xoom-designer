@@ -38,10 +38,10 @@ public class NameData {
 
   @Override
   public boolean equals(Object other) {
-    if (other == this){
+    if (other == this) {
       return true;
     }
-    if (other == null || getClass() != other.getClass()){
+    if (other == null || getClass() != other.getClass()) {
       return false;
     }
     Name another = (Name) other;
