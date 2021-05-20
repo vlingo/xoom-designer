@@ -1,21 +1,61 @@
 <script>
 	import { Switch, Radio } from "svelte-materialify/src";
 	import CardForm from "../components/CardForm.svelte";
-	import { platformSettings, setLocalStorage } from "../stores";
+	import { settings } from "../stores";
 
-	let value = $platformSettings && $platformSettings.platform === ".NET";
-  let lang = $platformSettings && $platformSettings.lang;
+	const platforms = [
+		{
+			name: 'JVM',
+			options: [
+				{
+					name: 'Java',
+					disabled: false,
+				},
+				{
+					name: 'Kotlin',
+					disabled: true
+				}
+			],
+			default: 'Java',
+		},
+		{
+			name: '.NET',
+			options: [
+				{
+					name: 'C#',
+					disabled: false
+				},
+				{
+					name: 'F#',
+					disabled: true
+				}
+			],
+			default: 'C#'
+		}
+	]
 
-	const DotNetOptions = ['C#', 'F#'];
-	const JvmOptions = ['Java', 'Kotlin'];
+	let value = $settings.platformSettings && $settings.platformSettings.platform === ".NET";
+  let lang = $settings.platformSettings && $settings.platformSettings.lang;
+	let options = platforms.reduce((acc, cur) => {
+		if ($settings.platformSettings && $settings.platformSettings.platform === cur.name) acc = [...cur.options]
+		return acc;
+	}, []);
 
-	$: $platformSettings = {
+	$: $settings.platformSettings = {
 		platform: value ? '.NET' : 'JVM',
 		lang
 	};
-	$: setLocalStorage("platformSettings", $platformSettings);
-	$: options = value ? DotNetOptions : JvmOptions;
-	$: valid = ($platformSettings.platform === ".NET" && DotNetOptions.includes($platformSettings.lang)) || ($platformSettings.platform === 'JVM' && JvmOptions.includes($platformSettings.lang))
+
+	function updateOptions() {
+		const v = value ? '.NET' : 'JVM';
+		const platform = platforms.find(p => p.name === v)
+		if (platform) {
+			options = platform.options
+			lang = platform.options.some(o => o.name === lang) ? lang : platform.default 
+		}
+	}
+
+	$: value, updateOptions()
 </script>
 
 <svelte:head>
@@ -23,17 +63,17 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Platform" next="context" bind:valid>
+<CardForm title="Platform" next="context">
   <div class="vl-switch d-flex justify-center mb-8 mt-8">
     <b>JVM</b>
-    <Switch class="mr-4 ml-8" bind:checked={value} inset></Switch>
-    <b>.NET</b>
+    <!-- <Switch class="mr-4 ml-8" bind:checked={value} inset></Switch>
+    <b>.NET</b> -->
   </div>
 
   <div class="d-flex justify-center mb-8">
     {#each options as option (option)}
       <div class="ml-6 mr-6">
-				<Radio bind:group={lang} value={option}>{option}</Radio>
+				<Radio bind:group={lang} disabled={option.disabled} value={option.name}>{option.name}</Radio>
 			</div>
     {/each}
   </div>
@@ -46,11 +86,6 @@
 		}
 		.s-switch__wrapper>input:checked~.s-switch__thumb {
 			transform: translate(72px);
-		}
-
-		.s-switch__wrapper.primary-text {
-			color: rgba(255, 255, 255, 0.3) !important;
-    	caret-color: rgba(255, 255, 255, 0.3) !important;
 		}
 	}
 </style>
