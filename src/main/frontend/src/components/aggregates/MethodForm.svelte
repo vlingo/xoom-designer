@@ -8,6 +8,7 @@
   import Checkbox from '@smui/checkbox';
   import Menu, { SelectionGroup } from '@smui/menu';
   import { Anchor } from '@smui/menu-surface';
+  import pluralize from 'pluralize';
 
   export let method;
   export let stateFields;
@@ -15,7 +16,19 @@
   export let methods;
 
   let selectedEvent = method.event ? [method.event] : [];
-  const symbols = ['*', '#', '+', '-']
+  const symbols = [{
+    sign: '*',
+    isPlural: true,
+  }, {
+    sign: '#',
+    isPlural: true,
+  }, {
+    sign: '+',
+    isPlural: false,
+  }, {
+    sign: '-',
+    isPlural: false,
+  }];
   let menu;
   let anchor;
   let anchorClasses = {};
@@ -60,7 +73,7 @@
   }
 
   $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
-  $: isAnyCollectionParameterSelected = method.parameters.some(p => p.search(/ [*#+-]?/) > -1)
+  $: isAnyCollectionParameterSelected = method.parameters.some(p => p.search(/ [*#+-]$/) > -1)
 </script>
 
 <div style="flex: 1;">
@@ -123,13 +136,13 @@
                 {#each symbols as symbol}
                   <Item
                     class="pa-0 pl-10"
-                    on:SMUI:action={() => updateParamatersWithSymbol(field.name, symbol)}
-                    selected={method.parameters.includes(`${field.name} ${symbol}`)}
+                    on:SMUI:action={() => updateParamatersWithSymbol(symbol.isPlural ? field.name : pluralize.singular(field.name), symbol.sign)}
+                    selected={method.parameters.includes(`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`)}
                   >
                     <Checkbox
-                      checked={method.parameters.includes(`${field.name} ${symbol}`)}
-                      value={`${field.name} ${symbol}`} />
-                    <Label>{field.name} {symbol}</Label>
+                      checked={method.parameters.includes(`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`)}
+                      value={`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`} />
+                    <Label>{symbol.isPlural ? field.name : pluralize.singular(field.name)} {symbol.sign}</Label>
                   </Item>
                 {/each}
               </div>

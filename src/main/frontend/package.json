@@ -12,6 +12,7 @@
   "dependencies": {
     "@mdi/js": "^5.8.55",
     "compression": "^1.7.1",
+    "pluralize": "^8.0.0",
     "polka": "next",
     "sirv": "^1.0.0",
     "sortablejs": "^1.13.0",
