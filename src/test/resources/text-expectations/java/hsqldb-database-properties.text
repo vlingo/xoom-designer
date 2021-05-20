@@ -1,0 +1,8 @@
+database=HSQLDB
+database.name=xoomapp
+database.driver=org.hsqldb.jdbc.JDBCDriver
+database.url=jdbc:hsqldb:mem:
+database.username=sa
+database.password=
+database.originator=main
+

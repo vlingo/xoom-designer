@@ -1,0 +1,58 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.author.*;
+
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData> {
+  private String becauseOf;
+
+  public AuthorProjectionActor() {
+    this(QueryModelStateStoreProvider.instance().store);
+  }
+
+  public AuthorProjectionActor(final StateStore stateStore) {
+    super(stateStore);
+  }
+
+  @Override
+  protected AuthorData currentDataFor(Projectable projectable) {
+    becauseOf = projectable.becauseOf()[0];
+    final AuthorState state = projectable.object();
+    return AuthorData.from(state);
+  }
+
+  @Override
+  protected AuthorData merge(final AuthorData previousData, final int previousVersion, final AuthorData currentData, final int currentVersion) {
+    if (previousVersion == currentVersion) return currentData;
+
+    AuthorData merged = previousData;
+
+    switch (Operations.valueOf(becauseOf)) {
+      case AuthorRegistered: {
+        merged = AuthorData.from(currentData.id, currentData.name, currentData.rank);
+        break;
+      }
+
+      case AuthorRanked: {
+        merged = AuthorData.from(currentData.id, previousData.name, currentData.rank);
+        break;
+      }
+
+      default:
+        logger().warn("Operation of type " + becauseOf + " was not matched.");
+        break;
+    }
+
+    return merged;
+  }
+}

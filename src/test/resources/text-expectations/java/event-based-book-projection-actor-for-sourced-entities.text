@@ -1,0 +1,57 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.book.*;
+
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.Source;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   StateStoreProjectionActor
+ * </a>
+ */
+public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
+
+  private static final BookData Empty = BookData.empty();
+
+  public BookProjectionActor() {
+    this(QueryModelStateStoreProvider.instance().store);
+  }
+
+  public BookProjectionActor(final StateStore stateStore) {
+    super(stateStore);
+  }
+
+  @Override
+  protected BookData currentDataFor(final Projectable projectable) {
+    return Empty;
+  }
+
+  @Override
+  protected BookData merge(final BookData previousData, final int previousVersion, final BookData currentData, final int currentVersion) {
+
+    if (previousVersion == currentVersion) return currentData;
+
+    BookData merged = previousData;
+
+    for (final Source<?> event : sources()) {
+      switch (Events.valueOf(event.typeName())) {
+        case BookCataloged: {
+          final BookCataloged typedEvent = typed(event);
+          merged = BookData.from(typedEvent.id, typedEvent.title, typedEvent.publisher);
+          break;
+        }
+
+        default:
+          logger().warn("Event of type " + event.typeName() + " was not matched.");
+          break;
+      }
+    }
+
+    return merged;
+  }
+}

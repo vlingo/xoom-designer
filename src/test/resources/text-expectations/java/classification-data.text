@@ -1,0 +1,63 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.*;
+import io.vlingo.xoomapp.model.*;
+
+public class ClassificationData {
+
+  public final String label;
+  public final Set<ClassifierData> classifier = new HashSet<>();
+
+  public static ClassificationData from(final Classification classification) {
+    final Set<ClassifierData> classifier = classification.classifier != null ? classification.classifier.stream().map(ClassifierData::from).collect(java.util.stream.Collectors.toSet()) : new HashSet<>();
+    return from(classification.label, classifier);
+  }
+
+  public static ClassificationData from(final String label, final Set<ClassifierData> classifier) {
+    return new ClassificationData(label, classifier);
+  }
+
+  private ClassificationData (final String label, final Set<ClassifierData> classifier) {
+    this.label = label;
+    this.classifier.addAll(classifier);
+  }
+
+  public Classification toClassification() {
+    return Classification.from(label, classifier.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(31, 17)
+              .append(label)
+              .append(classifier)
+              .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    Classification another = (Classification) other;
+    return new EqualsBuilder()
+              .append(this.label, another.label)
+              .append(this.classifier, another.classifier)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("label", label)
+              .append("classifier", classifier)
+              .toString();
+  }
+}

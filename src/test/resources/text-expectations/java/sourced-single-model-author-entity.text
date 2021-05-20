@@ -1,0 +1,95 @@
+package io.vlingo.xoomapp.model.author;
+
+import java.util.*;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.xoom.lattice.model.sourcing.EventSourced;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
+public final class AuthorEntity extends EventSourced implements Author {
+  private AuthorState state;
+
+  public AuthorEntity(final String id) {
+    super(id);
+    this.state = AuthorState.identifiedBy(id);
+  }
+
+  static {
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRegistered.class, AuthorEntity::applyAuthorRegistered);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRanked.class, AuthorEntity::applyAuthorRanked);
+  }
+
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<AuthorState>}
+   */
+  public Completes<AuthorState> currentState() {
+    return Completes.withSuccess(state);
+  }
+
+  @Override
+  public Completes<AuthorState> withName(final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#withName()}
+     */
+    final AuthorState stateArg = state.withName(name);
+    return apply(new AuthorRegistered(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> changeRank(final List<Rank> rank) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#changeRank()}
+     */
+    final AuthorState stateArg = state.changeRank(rank);
+    return apply(new AuthorRanked(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> hide() {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#hide()}
+     */
+    final AuthorState stateArg = state.hide();
+    return Completes.withSuccess(stateArg);
+  }
+
+  private void applyAuthorRegistered(final AuthorRegistered event) {
+    state = state.withName(event.name);
+  }
+
+  private void applyAuthorRanked(final AuthorRanked event) {
+    state = state.changeRank(event.rank);
+  }
+
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code AuthorState} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  @Override
+  @SuppressWarnings("hiding")
+  protected <AuthorState> void restoreSnapshot(final AuthorState snapshot, final int currentVersion) {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code AuthorState} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return AuthorState
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected AuthorState snapshot() {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+    return null;
+  }
+}

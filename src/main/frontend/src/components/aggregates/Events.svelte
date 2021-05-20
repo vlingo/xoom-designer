@@ -2,8 +2,9 @@
   import { Select, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
-	import { classNameRule, requireRule, isPropertyUnique } from "../../validators";
+	import { classNameRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+  import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
   export let events;
   export let stateFields;
@@ -34,10 +35,16 @@
   {#each events as event, i (i)}
     <div class="d-flex">
       <div style="flex: 1;" class="mb-3 pb-3 mr-4">
-        <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUnique(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
+        <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUniqueRule(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
       </div>
       <div style="flex: 1;" class="mb-3 pb-3">
-        <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={event.fields}>Fields</Select>
+        <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
+      </div>
+      <div>
+        <ErrorWarningTooltip
+          names={['Name', 'Name', 'Name']}
+          messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name')]}
+        />
       </div>
       <div style="width: 36px;">
         <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>

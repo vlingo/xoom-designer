@@ -9,7 +9,7 @@ export async function get(path) {
 export async function post(path, body) {
 	const res = await fetch(root + path, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json'},
+		headers: { 'Content-Type': 'application/json; charset=utf-8'},
 		body: JSON.stringify(body)
 	});
 	return res;
@@ -18,7 +18,7 @@ export async function post(path, body) {
 export async function put(path, body) {
 	const res = await fetch(root + path, {
 		method: 'PUT',
-		headers: { 'Content-Type': 'application/json'},
+		headers: { 'Content-Type': 'application/json; charset=utf-8'},
 		body: JSON.stringify(body)
 	});
 	return res;
@@ -27,8 +27,8 @@ export async function put(path, body) {
 export async function patch(path, body) {
 	const res = await fetch(root + path, {
 		method: 'PATCH',
-		headers: { 'Content-Type': 'application/json'},
-		body: body,
+		headers: { 'Content-Type': 'application/json; charset=utf-8'},
+		body: JSON.stringify(body),
 	});
 	return res;
 }

@@ -1,7 +1,7 @@
 <script>
 	import { TextField, Checkbox, Select } from "svelte-materialify/src";
 	import CardForm from "../components/CardForm.svelte";
-	import { contextSettings, platformSettings, setLocalStorage } from '../stores';
+	import { contextSettings, platformSettings, setLocalStorage, settings, isValid } from '../stores';
 	import { artifactRule, packageRule, requireRule, versionRule, xoomVersionRule, projectNameRule, frameworkRule } from '../validators';
 	
 	let groupId = $contextSettings ? $contextSettings.groupId : "";
@@ -27,6 +27,10 @@
 		$contextSettings = $platformSettings.platform === 'JVM' ? { groupId, artifactId, artifactVersion, packageName, xoomVersion } : { projectName, outputDirectory, solutionFile, projectPath, isSameDirectoryActive, framework, sdk };
 		setLocalStorage("contextSettings", $contextSettings)
 	}
+
+	import Validation from '../util/Validation';
+
+	$: $isValid.context = Validation.validateContext($settings);
 </script>
 
 <svelte:head>
@@ -34,7 +38,7 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Context" previous="platform" next="aggregates" bind:valid>
+<!-- <CardForm title="Context" previous="platform" next="aggregates" bind:valid>
 	{#if $platformSettings && $platformSettings.platform === '.NET'}
 		<TextField class="mb-4 pb-4" bind:value={solutionFile} rules={[requireRule, projectNameRule]}>Solution Name</TextField>
 		<TextField class="mb-4 pb-4" placeholder="MyCompany.MyTechnology.FirstFeature" bind:value={projectName} rules={[requireRule, projectNameRule]}>Project Name</TextField>
@@ -49,4 +53,11 @@
 		<TextField class="mb-4 pb-4" placeholder="1.0.0" bind:value={artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!artifactVersion}>Artifact Version</TextField>
 		<TextField class="mb-4 pb-4" placeholder="com.example.demo" bind:value={packageName} rules={[requireRule, packageRule]} validateOnBlur={!packageName}>Base Package Name</TextField>
 	{/if}
+</CardForm> -->
+
+<CardForm title="Context" next="aggregates" bind:valid={$isValid.context}>
+	<TextField class="mb-4 pb-4" placeholder="com.example" bind:value={$settings.context.groupId} rules={[requireRule, packageRule]} validateOnBlur={!$settings.context.groupId}>Group Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="demo" bind:value={$settings.context.artifactId} rules={[requireRule, artifactRule]} validateOnBlur={!$settings.context.artifactId}>Artifact Id</TextField>
+	<TextField class="mb-4 pb-4" placeholder="1.0.0" bind:value={$settings.context.artifactVersion} rules={[requireRule, versionRule]} validateOnBlur={!$settings.context.artifactVersion}>Artifact Version</TextField>
+	<TextField class="mb-4 pb-4" placeholder="com.example.demo" bind:value={$settings.context.packageName} rules={[requireRule, packageRule]} validateOnBlur={!$settings.context.packageName}>Base Package Name</TextField>
 </CardForm>

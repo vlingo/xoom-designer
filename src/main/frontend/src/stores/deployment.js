@@ -1,4 +1,5 @@
 import { readable } from 'svelte/store';
+
 export const deploymentTypes = readable(null, function start(set) {
 	set([
     { label: "None", value: "NONE" },
@@ -6,3 +7,11 @@ export const deploymentTypes = readable(null, function start(set) {
 		{ label: "Kubernetes", value: "KUBERNETES" },
   ]);
 });
+
+export const defaultDeploymentSettings = {
+	type: "NONE",
+	clusterNodes: 3,
+	dockerImage: "",
+	kubernetesImage: "",
+	kubernetesPod: ""
+}

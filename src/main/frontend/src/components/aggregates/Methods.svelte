@@ -1,9 +1,7 @@
 <script>
-	import { Select, Switch, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
-	import { identifierRule, requireRule, isPropertyUnique } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
+  import MethodForm from './MethodForm.svelte';
 
   export let methods;
   export let stateFields;
@@ -36,29 +34,14 @@
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
   <legend>
-    <h6 class="ma-0 pl-3 pr-3">Methods</h6>
+    <h6 class="ma-0 pl-3 pr-3">Command Methods</h6>
   </legend>
   {#if methods.length < 1}
     <div class="text-center">There is no method! Add One.</div>
   {/if}
   {#each methods as method, id (id)}
     <div class="d-flex align-center">
-      <div style="flex: 1;">
-        <div class="d-flex">
-          <div class="mb-1 pb-1 mr-4" style="flex: 1;">
-            <TextField bind:value={method.name} rules={[requireRule, identifierRule, (v) => isPropertyUnique(v, methods, 'name')]} validateOnBlur={!method.name}>Name</TextField>
-          </div>
-          <div class="mb-1 pb-1 mr-4" style="flex: 1;">
-            <Select id="method-parameter" mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name))} bind:value={method.parameters}>Parameters</Select>
-          </div>
-          <div class="mb-1 pb-1 " style="flex: 1;">
-            <Select mandatory disabled={!events.length} items={formatArrayForSelect(events.map(e => e.name))} bind:value={method.event}>Event</Select>
-          </div>
-        </div>
-        <div class="mb-3 pb-3 " style="flex: 1;">
-          <Switch bind:checked={method.useFactory}>Involves creation of entity?</Switch>
-        </div>
-      </div>
+      <MethodForm {stateFields} {events} {methods} bind:method />
       <div style="align-self: flex-start; width: 32px;">
         <DeleteWithDialog type="Method" on:click={() => deleteMethod(id)}>
           <b>{method.name}</b> might be in use at API and Consumer Exchange sections.

@@ -1,0 +1,53 @@
+package io.vlingo.infrastructure.persistence;
+
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.book.*;
+
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
+public class BookProjectionActor extends StateStoreProjectionActor<BookData> {
+  private String becauseOf;
+
+  public BookProjectionActor() {
+    this(QueryModelStateStoreProvider.instance().store);
+  }
+
+  public BookProjectionActor(final StateStore stateStore) {
+    super(stateStore);
+  }
+
+  @Override
+  protected BookData currentDataFor(Projectable projectable) {
+    becauseOf = projectable.becauseOf()[0];
+    final BookState state = projectable.object();
+    return BookData.from(state);
+  }
+
+  @Override
+  protected BookData merge(final BookData previousData, final int previousVersion, final BookData currentData, final int currentVersion) {
+    if (previousVersion == currentVersion) return currentData;
+
+    BookData merged = previousData;
+
+    switch (Operations.valueOf(becauseOf)) {
+      case BookCataloged: {
+        merged = BookData.from(currentData.id, currentData.title, currentData.publisher);
+        break;
+      }
+
+      default:
+        logger().warn("Operation of type " + becauseOf + " was not matched.");
+        break;
+    }
+
+    return merged;
+  }
+}

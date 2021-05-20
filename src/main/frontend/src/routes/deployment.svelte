@@ -1,22 +1,12 @@
 <script>
-	import { Radio, TextField } from "svelte-materialify/src";
-	import CardForm from "../components/CardForm.svelte";
-	import { deploymentSettings, setLocalStorage } from "../stores";
 	import { requireRule } from '../validators';
+	import Validation from '../util/Validation';
+	import { settings, isValid } from "../stores";
+	import CardForm from "../components/CardForm.svelte";
+	import { Radio, TextField } from "svelte-materialify/src";
 	import { deploymentTypes } from '../stores/deployment.js';
 
-	// [{ name: "id", type: "String" }];
-	let clusterNodes = $deploymentSettings ? $deploymentSettings.clusterNodes : 3;
-    let type = $deploymentSettings ? $deploymentSettings.type : "NONE";
-    let dockerImage = $deploymentSettings ? $deploymentSettings.dockerImage : "";
-    let kubernetesImage = $deploymentSettings ? $deploymentSettings.kubernetesImage : "";
-	let kubernetesPod = $deploymentSettings ? $deploymentSettings.kubernetesPod : "";
-
-	$: valid = clusterNodes >= 0 && type && (type === "NONE" ? true : dockerImage && (type === "DOCKER" ? true : kubernetesImage && kubernetesPod));
-	$: if(valid) {
-		$deploymentSettings = { clusterNodes, type, dockerImage, kubernetesImage, kubernetesPod };
-		setLocalStorage("deploymentSettings", $deploymentSettings)
-	}
+	$: $isValid.deployment = Validation.validateDeployment($settings);
 </script>
 
 <svelte:head>
@@ -24,18 +14,18 @@
 </svelte:head>
 
 <!-- add newbie tooltips -->
-<CardForm title="Deployment" previous="persistence" next="generation" bind:valid>
+<CardForm title="Deployment" previous="persistence" next="generation" bind:valid={$isValid.deployment}>
 	<div class="d-flex justify-center pb-4 mb-4 mt-4">
 		{#each $deploymentTypes as {label, value}}
-			<Radio bind:group={type} value={value}>{label}</Radio>
+			<Radio bind:group={$settings.deployment.type} value={value}>{label}</Radio>
 		{/each}
 	</div>
-	{#if type === "DOCKER" || type === "KUBERNETES"}
-		<TextField class="mb-4 pb-4" placeholder="demo-app" bind:value={dockerImage} rules={[requireRule]} validateOnBlur={!dockerImage}>Local Docker Image</TextField>
+	{#if $settings.deployment.type === "DOCKER" || $settings.deployment.type === "KUBERNETES"}
+		<TextField class="mb-4 pb-4" placeholder="demo-app" bind:value={$settings.deployment.dockerImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.dockerImage}>Local Docker Image</TextField>
 	{/if}
-	{#if type === "KUBERNETES"}
-		<TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={kubernetesImage} rules={[requireRule]} validateOnBlur={!kubernetesImage}>Published Docker Image</TextField>
-		<TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={kubernetesPod} rules={[requireRule]} validateOnBlur={!kubernetesPod}>Kubernetes POD</TextField>
+	{#if $settings.deployment.type === "KUBERNETES"}
+		<TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={$settings.deployment.kubernetesImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesImage}>Published Docker Image</TextField>
+		<TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={$settings.deployment.kubernetesPod} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesPod}>Kubernetes POD</TextField>
 	{/if}
 </CardForm>
 

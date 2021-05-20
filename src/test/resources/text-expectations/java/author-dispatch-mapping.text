@@ -1,0 +1,34 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.turbo.annotation.autodispatch.*;
+import io.vlingo.xoom.http.Response;
+
+import io.vlingo.xoomapp.model.author.AuthorEntity;
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoomapp.model.author.Author;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor;
+
+import static io.vlingo.xoom.http.Method.*;
+
+@AutoDispatch(path="/authors", handlers=AuthorResourceHandlers.class)
+@Queries(protocol = AuthorQueries.class, actor = AuthorQueriesActor.class)
+@Model(protocol = Author.class, actor = AuthorEntity.class, data = AuthorData.class)
+public interface AuthorResource {
+
+  @Route(method = POST, handler = AuthorResourceHandlers.WITH_NAME)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> withName(@Body final AuthorData data);
+
+  @Route(method = PATCH, path = "/{id}/rank", handler = AuthorResourceHandlers.CHANGE_RANK)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> changeRank(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = GET, handler = AuthorResourceHandlers.AUTHORS)
+  Completes<Response> authors();
+
+  @Route(method = GET, path = "/{id}", handler = AuthorResourceHandlers.AUTHOR_OF)
+  Completes<Response> authorOf(final String id);
+
+}

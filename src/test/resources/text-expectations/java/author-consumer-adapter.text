@@ -1,0 +1,41 @@
+package io.vlingo.xoomapp.infrastructure.exchange;
+
+import io.vlingo.xoom.lattice.exchange.ExchangeAdapter;
+import io.vlingo.xoom.lattice.exchange.MessageParameters;
+import io.vlingo.xoom.lattice.exchange.MessageParameters.DeliveryMode;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
+
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
+public class AuthorConsumerAdapter implements ExchangeAdapter<AuthorData, String, Message> {
+
+  private final String supportedSchemaName;
+
+  public AuthorConsumerAdapter(final String supportedSchemaName) {
+    this.supportedSchemaName = supportedSchemaName;
+  }
+
+  @Override
+  public AuthorData fromExchange(final Message exchangeMessage) {
+    return new AuthorDataMapper().externalToLocal(exchangeMessage.payloadAsText());
+  }
+
+  @Override
+  public Message toExchange(final AuthorData local) {
+    final String messagePayload = new AuthorDataMapper().localToExternal(local);
+    return new Message(messagePayload, MessageParameters.bare().deliveryMode(DeliveryMode.Durable));
+  }
+
+  @Override
+  public boolean supports(final Object exchangeMessage) {
+    if(!exchangeMessage.getClass().equals(Message.class)) {
+      return false;
+    }
+    final String schemaName = ((Message) exchangeMessage).messageParameters.typeName();
+    return supportedSchemaName.equalsIgnoreCase(schemaName);
+  }
+
+}

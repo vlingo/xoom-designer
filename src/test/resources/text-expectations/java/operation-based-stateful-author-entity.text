@@ -1,0 +1,67 @@
+package io.vlingo.xoomapp.model.author;
+
+import java.util.*;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoomapp.infrastructure.Operations;
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.xoom.lattice.model.stateful.StatefulEntity;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateful">StatefulEntity</a>
+ */
+public final class AuthorEntity extends StatefulEntity<AuthorState> implements Author {
+  private AuthorState state;
+
+  public AuthorEntity(final String id) {
+    super(id);
+    this.state = AuthorState.identifiedBy(id);
+  }
+
+  @Override
+  public Completes<AuthorState> withName(final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#withName()}
+     */
+    final AuthorState stateArg = state.withName(name);
+    return apply(stateArg, Operations.AuthorRegistered.name(), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> changeRank(final List<Rank> rank) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#changeRank()}
+     */
+    final AuthorState stateArg = state.changeRank(rank);
+    return apply(stateArg, Operations.AuthorRanked.name(), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> hide() {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#hide()}
+     */
+    final AuthorState stateArg = state.hide();
+    return apply(stateArg, () -> state);
+  }
+
+  /*
+   * Received when my current state has been applied and restored.
+   *
+   * @param state the AuthorState
+   */
+  @Override
+  protected void state(final AuthorState state) {
+    this.state = state;
+  }
+
+  /*
+   * Received when I must provide my state type.
+   *
+   * @return {@code Class<AuthorState>}
+   */
+  @Override
+  protected Class<AuthorState> stateType() {
+    return AuthorState.class;
+  }
+}

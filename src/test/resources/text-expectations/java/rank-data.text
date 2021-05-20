@@ -1,0 +1,63 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import io.vlingo.xoomapp.model.*;
+
+public class RankData {
+
+  public final int points;
+  public final ClassificationData classification;
+
+  public static RankData from(final Rank rank) {
+    final ClassificationData classification = rank.classification != null ? ClassificationData.from(rank.classification) : null;
+    return from(rank.points, classification);
+  }
+
+  public static RankData from(final int points, final ClassificationData classification) {
+    return new RankData(points, classification);
+  }
+
+  private RankData (final int points, final ClassificationData classification) {
+    this.points = points;
+    this.classification = classification;
+  }
+
+  public Rank toRank() {
+    final Classification classification = Classification.from(this.classification.label, this.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+    return Rank.from(points, classification);
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(31, 17)
+              .append(points)
+              .append(classification)
+              .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    Rank another = (Rank) other;
+    return new EqualsBuilder()
+              .append(this.points, another.points)
+              .append(this.classification, another.classification)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("points", points)
+              .append("classification", classification)
+              .toString();
+  }
+}

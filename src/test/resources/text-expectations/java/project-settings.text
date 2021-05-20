@@ -1,0 +1,18 @@
+{
+  "context": {
+    "groupId": "io.vlingo",
+    "artifactId": "xoom-app",
+    "artifactVersion": "1.0.0",
+    "packageName": "io.vlingo.xoom-app"
+  },
+  "deployment": {
+    "clusterNodes": 3,
+    "type": "NONE",
+    "dockerImage": "xoom-app",
+    "kubernetesImage": "vlingo/xoom-app",
+    "kubernetesPod": "xoom-app"
+  },
+  "projectDirectory": "/projects/",
+  "useAnnotations": false,
+  "useAutoDispatch": false
+}

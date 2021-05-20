@@ -40,8 +40,8 @@
 	const remove = () => dispatch("remove");
 </script>
 
-<Card class="pa-3 ma-3" style="min-width: 15rem; min-height: 20rem">
-	<div class="d-flex flex-column" style="height: 100%">
+<Card class="pa-3 ma-3" style="min-width: max-content;height:fit-content;">
+	<div class="" style="min-width: 10rem;">
 	<div class="mb-2">
 		{#each aggregate.api.routes as route}
 			<Card class="command mb-1">
@@ -62,7 +62,7 @@
 			<Divider />
 			<CardText>
 				{#each aggregate.stateFields as field}
-					<div>{field.name}: {field.type}</div>
+					<div>{field.name}: {field.collectionType ? `${field.collectionType}<${field.type}>` : field.type}</div>
 				{/each}
 				<Divider />
 				{#each aggregate.methods as method}

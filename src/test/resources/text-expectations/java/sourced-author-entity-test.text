@@ -1,0 +1,87 @@
+package io.vlingo.xoomapp.model.author;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.actors.testkit.AccessSafely;
+import java.time.LocalDate;
+import io.vlingo.xoom.symbio.BaseEntry;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorRegisteredAdapter;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorRankedAdapter;
+import io.vlingo.xoomapp.infrastructure.persistence.MockDispatcher;
+import java.util.*;
+import io.vlingo.xoomapp.model.*;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
+import io.vlingo.xoom.symbio.EntryAdapterProvider;
+import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.symbio.store.journal.inmemory.InMemoryJournalActor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AuthorEntityTest {
+
+  private World world;
+  private Journal<String> journal;
+  private MockDispatcher dispatcher;
+  private Author author;
+
+  @BeforeEach
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void setUp(){
+    world = World.startWithDefaults("test-es");
+
+    dispatcher = new MockDispatcher();
+
+    EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(world);
+
+    entryAdapterProvider.registerAdapter(AuthorRegistered.class, new AuthorRegisteredAdapter());
+    entryAdapterProvider.registerAdapter(AuthorRanked.class, new AuthorRankedAdapter());
+
+    journal = world.actorFor(Journal.class, InMemoryJournalActor.class, Collections.singletonList(dispatcher));
+
+    new SourcedTypeRegistry(world).register(new Info(journal, AuthorEntity.class, AuthorEntity.class.getSimpleName()));
+
+    author = world.actorFor(Author.class, AuthorEntity.class, "#1");
+  }
+
+  private static final Name NAME_FOR_WITH_NAME_TEST = Name.from("author-name-firstName", "author-name-lastName");
+  private static final LocalDate AVAILABLE_ON_FOR_WITH_NAME_TEST = LocalDate.now();
+
+  @Test
+  public void withName() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.withName(NAME_FOR_WITH_NAME_TEST, AVAILABLE_ON_FOR_WITH_NAME_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertEquals(1, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRegistered.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 0)).typeName());
+  }
+
+  private static final List<Rank> RANK_FOR_CHANGE_RANK_TEST = new ArrayList<>();
+
+  @Test
+  public void changeRank() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.changeRank(RANK_FOR_CHANGE_RANK_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.rank);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRanked.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final Name NAME_FOR_ENTITY_CREATION = Name.from("author-name-firstName", "author-name-lastName");
+  private static final LocalDate AVAILABLE_ON_FOR_ENTITY_CREATION = LocalDate.now();
+
+  private void _createEntity() {
+    author.withName(NAME_FOR_ENTITY_CREATION, AVAILABLE_ON_FOR_ENTITY_CREATION).await();
+  }
+}
