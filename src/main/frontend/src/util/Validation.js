@@ -13,5 +13,8 @@ export default {
     },
     validateAggregates({ model: { aggregateSettings: aggregates }}) {
         return aggregates && aggregates.length > 0;
+    },
+    validatePlatformWithContext(settings, context) {
+        return !!settings.platformSettings && ((settings.platformSettings.platform === 'JVM' && !packageRule(context.groupId) && !artifactRule(context.artifactId) && !versionRule(context.artifactVersion) && !packageRule(context.packageName)) || (settings.platformSettings.platform === '.NET' && context.projectName && !!context.outputDirectory && !!context.solutionFile && !!context.projectPath && !!context.framework && !!context.sdk && !projectNameRule(context.solutionFile) && !projectNameRule(context.projectName) && !frameworkRule(context.framework)))
     }
 }
