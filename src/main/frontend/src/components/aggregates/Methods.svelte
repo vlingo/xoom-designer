@@ -2,6 +2,7 @@
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
 	import CreateButton from "./CreateButton.svelte";
   import MethodForm from './MethodForm.svelte';
+  import pluralize from "pluralize";
 
   export let methods;
   export let stateFields;
@@ -10,20 +11,19 @@
 	const addMethod = () => methods = methods.concat({ name: "", useFactory: false, parameters: [], event: "" });
 	const deleteMethod = (index) => { methods.splice(index, 1); methods = methods; }
   
-  //The items selected in the "event-fields" combo, which are binded in the "events.fields" array, 
-  //have to follow the same order of "stateFields" items.
-  //the items can be matched by name (eg: "eventField.name == stateField.name").
-
-  /* There was no on:change function emitted from svelte-materialify Select component,
-  *  so function would not be called at any moment, instead I used this piece of code to achive what you described in your comment
-  */
-
 	$: {
 		methods = methods.map((method) => {
 			return {
 				...method,
 				parameters: stateFields.reduce((acc, cur) => {
-					if (method.parameters && method.parameters.includes(cur.name) && acc.findIndex(a => a === cur.name) < 0) acc.push(cur.name);
+          const replace = `^${cur.name}$|^${cur.name} [*#+-]$|^${pluralize.singular(cur.name)} [*#+-]$`;
+          const re = new RegExp(replace);
+          const pa = method.parameters.find(p => {
+            return p.search(re) > -1;
+          })
+					if (method.parameters && pa && acc.findIndex(a => a === cur.name) < 0) {
+            acc.push(pa)
+          };
 					return acc;
         }, []),
         event: events.some((e) => e.name === method.event) ? method.event : undefined
