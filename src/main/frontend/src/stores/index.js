@@ -19,8 +19,6 @@ export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths',
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime'];
 export const settings = createWritable('settings', defaultSettings, onSettingsChange);
 
-export const platformSettings = writable(getLocalStorage("platformSettings"));
-
 export function updateSettings(newSettings) {
 	let emptySettings = {context: {}, model: {persistenceSettings: {}}, deployment: {}};
 	updateContext(emptySettings, newSettings);
