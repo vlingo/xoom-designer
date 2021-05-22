@@ -1,13 +1,5 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-import io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData;
-import io.vlingo.xoom.designer.task.reactjs.HeaderArguments;
-import org.junit.jupiter.api.Test;
-
-import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class HeaderTest extends BaseTemplateTest {
 
 //    @Test

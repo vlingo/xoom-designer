@@ -1,18 +1,5 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-import freemarker.template.TemplateException;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
-import io.vlingo.xoom.designer.task.reactjs.AggregateDetailArguments;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Collections;
-import java.util.regex.Pattern;
-
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
-
 public class AggregateDetailTest {
 
 //    @Test

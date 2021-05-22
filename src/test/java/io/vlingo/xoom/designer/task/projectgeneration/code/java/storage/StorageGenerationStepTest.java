@@ -11,8 +11,8 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
@@ -104,7 +104,7 @@ public class StorageGenerationStepTest {
     final Content persistenceSetup =
             context.findContent(JavaTemplateStandard.PERSISTENCE_SETUP, "PersistenceSetup");
 
-    Assertions.assertEquals(20, context.contents().size());
+    Assertions.assertEquals(18, context.contents().size());
     Assertions.assertTrue(persistenceSetup.contains(TextExpectation.onJava().read("persistence-setup")));
   }
 
