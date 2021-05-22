@@ -8,11 +8,11 @@
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.DesignerTemplateStandard;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
 public class MainClassResolverStep implements TaskExecutionStep {
 
@@ -34,7 +34,7 @@ public class MainClassResolverStep implements TaskExecutionStep {
 
     private String resolveClassName(final Boolean useAnnotations) {
         return useAnnotations ? AnnotationBasedTemplateStandard.XOOM_INITIALIZER.resolveClassname() :
-                DesignerTemplateStandard.BOOTSTRAP.resolveClassname();
+                JavaTemplateStandard.BOOTSTRAP.resolveClassname();
     }
 
 }

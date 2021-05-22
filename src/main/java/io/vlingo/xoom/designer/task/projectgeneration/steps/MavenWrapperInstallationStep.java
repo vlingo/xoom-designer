@@ -11,7 +11,7 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

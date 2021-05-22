@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 
 import java.nio.file.Paths;
 import java.util.Arrays;

@@ -8,7 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
 
 import java.io.File;

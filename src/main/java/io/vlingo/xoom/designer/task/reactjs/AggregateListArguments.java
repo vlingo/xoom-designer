@@ -1,6 +1,6 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +11,6 @@ public class AggregateListArguments {
 
     public final AggregateData aggregate;
     public final AggregateMethodData creatorMethod;
-    public final RouteData creatorRoute;
     public final List<StateFieldData> creatorStateFields;
     public final Map<String, List<ValueObjectFieldData>> valueTypes;
     public final Map<String, String> fieldTypes;
@@ -30,11 +29,6 @@ public class AggregateListArguments {
                 .filter(a -> a.name.equals(creatorMethodName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Can't find creator method"));
-
-        creatorRoute = aggregate.api.routes.stream()
-                .filter(routeData -> !routeData.requireEntityLoad)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Can't find creator route"));
 
         creatorStateFields = aggregate.stateFields.stream()
                 .filter(stateFieldData -> creatorMethod.parameters.contains(stateFieldData.name))

@@ -11,8 +11,8 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.archetype.Archetype;
-import io.vlingo.xoom.designer.task.steps.CommandExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
+import io.vlingo.xoom.designer.task.CommandExecutionStep;
 
 import java.nio.file.Path;
 

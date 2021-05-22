@@ -8,22 +8,19 @@
 package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.task.docker.steps.DockerPackageCommandExecutionStep;
-import io.vlingo.xoom.designer.task.docker.steps.DockerPushCommandExecutionStep;
-import io.vlingo.xoom.designer.task.docker.steps.DockerStatusCommandExecutionStep;
-import io.vlingo.xoom.designer.task.gloo.steps.GlooInitCommandExecutionStep;
-import io.vlingo.xoom.designer.task.gloo.steps.GlooRouteCommandExecutionStep;
-import io.vlingo.xoom.designer.task.gloo.steps.GlooSuspendCommandExecutionStep;
-import io.vlingo.xoom.designer.task.k8s.steps.KubernetesPushCommandExecutionStep;
-import io.vlingo.xoom.designer.task.option.Option;
-import io.vlingo.xoom.designer.task.option.OptionValue;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.docker.DockerPackageCommandExecutionStep;
+import io.vlingo.xoom.designer.task.docker.DockerPushCommandExecutionStep;
+import io.vlingo.xoom.designer.task.docker.DockerStatusCommandExecutionStep;
+import io.vlingo.xoom.designer.task.gloo.GlooInitCommandExecutionStep;
+import io.vlingo.xoom.designer.task.gloo.GlooRouteCommandExecutionStep;
+import io.vlingo.xoom.designer.task.gloo.GlooSuspendCommandExecutionStep;
+import io.vlingo.xoom.designer.task.k8s.KubernetesPushCommandExecutionStep;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.task.option.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.designer.task.option.OptionName.TAG;
+import static io.vlingo.xoom.designer.task.OptionName.CURRENT_DIRECTORY;
+import static io.vlingo.xoom.designer.task.OptionName.TAG;
 
 public enum SubTask {
 

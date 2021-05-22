@@ -11,11 +11,11 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.OutputFileInstantiator;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.ExternalFileLocationResolver;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.ExternalFileLocationResolver;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.TemplateParameter.OFFSET;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.OFFSET;
 
 public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
@@ -30,12 +30,12 @@ public class CodeGenerationExecutionerStep implements TaskExecutionStep {
   }
 
   private OutputFileInstantiator outputFileInstantiator() {
-    return (context, data, language) -> {
+    return (context, data, dialect) -> {
       final String absolutePath =
-              context.fileLocationResolver().resolve(context, data);
+              context.fileLocationResolver().resolve(context, dialect, data);
 
       final String fileName =
-              language.formatFilename(data.filename());
+              dialect.formatFilename(data.filename());
 
       final String offset =
               data.parameters().find(OFFSET);

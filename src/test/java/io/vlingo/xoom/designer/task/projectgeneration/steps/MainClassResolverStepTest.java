@@ -13,7 +13,7 @@ import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
 public class MainClassResolverStepTest {
 

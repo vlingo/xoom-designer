@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import LoadingOrFailed from "../LoadingOrFailed";
-import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.name)}";
+import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.creatorMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.creatorMethod.name)}";
 <#macro printTableHeaderCell name type>
     <#if valueTypes[type]??>
         <#list valueTypes[type] as subType>
@@ -30,7 +30,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(creatorMethod.
   </@compress>
 </#macro>
 
-const EMPTY_FORM = <@printJSON creatorStateFields />;
+const EMPTY_FORM = <@printJSON aggregate.creatorMethodStateFields />;
 
 const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 
@@ -39,7 +39,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
   const [currentModal, setCurrentModal] = useState(null);
 
   const loadItems = useCallback(() => {
-    axios.get('${aggregate.api.rootPath}')
+    axios.get('${aggregate.apiRootPath}')
       .then(res => res.data)
       .then(data => {
         console.log('${aggregate.aggregateName} axios success', data);
@@ -58,9 +58,9 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
     setCurrentModal(null);
   }, [loadItems]);
 
-  const _${creatorMethod.name} = useCallback((e) => {
-    console.log('showing ${creatorMethod.name} modal');
-    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(creatorMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
+  const _${aggregate.creatorMethod.name} = useCallback((e) => {
+    console.log('showing ${aggregate.creatorMethod.name} modal');
+    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(aggregate.creatorMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
   }, [onModalActionComplete]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <h1 className="h2">${fns.makePlural(aggregate.aggregateName)}</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${creatorMethod.name}}>${fns.capitalize(creatorMethod.name)}</button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${aggregate.creatorMethod.name}}>${fns.capitalize(aggregate.creatorMethod.name)}</button>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <tbody>
         {items.map(item => (
         <tr key={item.id}>
-          <td> <Link to={"/app${aggregate.api.rootPath}/"+item.id}>{item.id} </Link> </td>
+          <td> <Link to={"/app${aggregate.apiRootPath}/"+item.id}>{item.id} </Link> </td>
           <#list aggregate.stateFields as field>
             <#if field_index != 0>
               <@printTableCell "${field.name}" "${field.type}" />
