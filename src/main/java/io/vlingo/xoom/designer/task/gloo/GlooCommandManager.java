@@ -7,8 +7,7 @@
 package io.vlingo.xoom.designer.task.gloo;
 
 import io.vlingo.xoom.designer.task.*;
-import io.vlingo.xoom.designer.task.option.OptionValue;
-import io.vlingo.xoom.designer.task.steps.*;
+import io.vlingo.xoom.designer.task.OptionValue;
 
 import java.util.Arrays;
 import java.util.List;

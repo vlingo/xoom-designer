@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.io.FileUtils;
 
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.ARTIFACT_ID;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.ARTIFACT_ID;
 
 public final class ProjectInstallationStep implements TaskExecutionStep {
 

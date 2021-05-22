@@ -1,6 +1,9 @@
 package io.vlingo.xoom.designer.task.option;
 
 
+import io.vlingo.xoom.designer.task.Option;
+import io.vlingo.xoom.designer.task.OptionName;
+import io.vlingo.xoom.designer.task.RequiredOptionNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

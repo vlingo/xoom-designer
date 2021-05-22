@@ -8,11 +8,11 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionType;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.DatabaseType;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageType;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.DatabaseType;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -24,7 +24,7 @@ const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} =
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    const url = applyData('${aggregate.api.rootPath}${route.path}', form);
+    const url = applyData('${aggregate.apiRootPath}${route.path}', form);
     axios.${route.httpMethod?lower_case}(url, form)
     .then(res => res.data)
     .then(data => {

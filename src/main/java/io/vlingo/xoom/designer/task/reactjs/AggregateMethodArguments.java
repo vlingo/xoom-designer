@@ -1,9 +1,9 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateMethodData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.RouteData;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ValueObjectFieldData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateMethodData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.RouteData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectFieldData;
 
 import java.util.LinkedHashMap;
 import java.util.List;

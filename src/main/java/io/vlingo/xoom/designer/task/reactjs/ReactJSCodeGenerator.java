@@ -1,6 +1,7 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.*;
+import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.codegen.template.TemplateProcessorConfiguration;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class ReactJSCodeGenerator {
     public ReactJSCodeGenerator() throws IOException {
         // TODO move into xoom-turbo module
         try{
-            configuration.setSharedVariable("fns", new TemplateCustomFunctions());
+            configuration.setSharedVariable("fns", TemplateCustomFunctions.instance());
         }catch (TemplateException e){
             throw new RuntimeException("can't add fns functions", e);
         }

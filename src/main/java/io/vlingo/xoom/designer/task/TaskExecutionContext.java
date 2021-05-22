@@ -8,16 +8,14 @@
 package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.task.option.OptionName;
-import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.DEPLOYMENT;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.TARGET_FOLDER;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 

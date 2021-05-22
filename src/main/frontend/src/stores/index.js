@@ -132,4 +132,5 @@ export const isValid = writable({
 	context: false,
 	aggregates: false,
 	deployment: false,
+	contextWithPlatform: false,
 })

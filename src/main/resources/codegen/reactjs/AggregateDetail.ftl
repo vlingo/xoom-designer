@@ -25,7 +25,7 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
   const [currentModal, setCurrentModal] = useState(null);
 
   const loadItem = useCallback((id) => {
-    axios.get('${aggregate.api.rootPath}/'+id)
+    axios.get('${aggregate.apiRootPath}/'+id)
       .then(res => res.data)
       .then(data => {
         console.log('${aggregate.aggregateName} axios success', data);

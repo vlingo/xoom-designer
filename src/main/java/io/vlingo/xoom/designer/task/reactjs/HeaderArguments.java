@@ -1,6 +1,6 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ContextSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData;
 
 public class HeaderArguments {
 

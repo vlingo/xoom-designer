@@ -11,15 +11,22 @@
 	import { mdiPencil } from "@mdi/js";
 	import { createEventDispatcher } from "svelte";
 	import DeleteWithDialog from "./DeleteWithDialog.svelte";
+	import pluralize from 'pluralize';
 
 	const dispatch = createEventDispatcher();
 
 	export let aggregate;
-
 	const methodParameters = (parameters) => {
 		return parameters.reduce((acc, cur) => {
-			const field = aggregate.stateFields.find(sf => sf.name === cur);
-			if (field) acc.push(`${field.name}: ${field.type}`);
+			const field = aggregate.stateFields.find(sf => {
+				const replace = `^${sf.name}$|^${sf.name} [*#+-]$|^${pluralize.singular(sf.name)} [*#+-]$`;
+				const re = new RegExp(replace);
+				return cur.search(re) > -1;
+			});
+			if (field) {
+				const bool = cur.search(/(\+|\-)$/) > -1;
+				acc.push(`${bool ? `${pluralize.singular(field.name)}` : field.name}: ${field.collectionType && !bool ? `${field.collectionType}<${field.type}>` : field.type}`);
+			}
 			return acc;
 		}, []).join(', ');
 	};

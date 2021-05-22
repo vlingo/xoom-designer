@@ -13,7 +13,7 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.archetype.Archetype;
+import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.condition.OS;
 
 import java.nio.file.Paths;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.template.Label.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
 public class ArchetypeInstallationStepTest {
 

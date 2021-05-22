@@ -33,8 +33,8 @@ function App() {
             <#list aggregates as aggregate>
               <#assign pluralCapitalized=fns.makePlural("${fns.capitalize(aggregate.aggregateName)}") />
               <#assign capitalized="${fns.capitalize(aggregate.aggregateName)}" />
-            <Route path="/app${aggregate.api.rootPath}" exact={true}><${pluralCapitalized} /></Route>
-            <Route path="/app${aggregate.api.rootPath}/:id"><${capitalized} /></Route>
+            <Route path="/app${aggregate.apiRootPath}" exact={true}><${pluralCapitalized} /></Route>
+            <Route path="/app${aggregate.apiRootPath}/:id"><${capitalized} /></Route>
             </#list>
           </Switch>
           </main>

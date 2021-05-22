@@ -10,11 +10,9 @@ package io.vlingo.xoom.designer.task;
 import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
 import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.designer.task.option.Option;
-import io.vlingo.xoom.designer.task.option.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.CommandLineBasedProjectGenerationManager;
 import io.vlingo.xoom.designer.task.projectgeneration.WebBasedProjectGenerationManager;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.UserInterfaceManager;
+import io.vlingo.xoom.designer.gui.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
@@ -22,7 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.task.option.OptionName.TARGET;
+import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 public enum Task {
 

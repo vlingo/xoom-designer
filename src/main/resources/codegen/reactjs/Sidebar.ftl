@@ -16,7 +16,7 @@ const Sidebar = () => {
     <div className="position-sticky pt-3">
       <ul className="nav flex-column">
         <#list aggregates as aggregate>
-          <MenuItem label={'${aggregate.aggregateName}'} link={'/app${aggregate.api.rootPath}'}/>
+          <MenuItem label={'${aggregate.aggregateName}'} link={'/app${aggregate.apiRootPath}'}/>
         </#list>
       </ul>
     </div>

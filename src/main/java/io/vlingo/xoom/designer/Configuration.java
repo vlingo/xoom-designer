@@ -4,25 +4,27 @@ import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.task.projectgeneration.archetype.Archetype;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.autodispatch.AutoDispatchMappingGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.bootstrap.BootstrapGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject.DataObjectGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ModelGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.model.ValueObjectGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.projectgenerationsettings.ProjectSettingsGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.resource.RestResourceGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata.SchemataGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.StorageGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.EntityUnitTestGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries.QueriesUnitTestGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.GenerationTargetRegistrationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.gui.steps.UserInterfaceBootstrapStep;
+import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.AutoDispatchMappingGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.ProjectSettingsGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.EntityUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
+import io.vlingo.xoom.designer.gui.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
+import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.ComponentsGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.StaticFilesGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
-import io.vlingo.xoom.designer.task.steps.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Paths;
@@ -66,6 +68,7 @@ public class Configuration {
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
+          //Java
           new ValueObjectGenerationStep(),
           new ModelGenerationStep(),
           new DataObjectGenerationStep(),
@@ -79,6 +82,10 @@ public class Configuration {
           new ProjectSettingsGenerationStep(),
           new EntityUnitTestGenerationStep(),
           new QueriesUnitTestGenerationStep(),
+          //React
+          new StaticFilesGenerationStep(),
+          new ComponentsGenerationStep(),
+          //Common
           new ContentCreationStep()
   );
 

@@ -1,6 +1,6 @@
 {
-  "name": "${context.groupId}.${context.artifactId}",
-  "version": "${context.artifactVersion}",
+  "name": "${groupId}.${artifactId}",
+  "version": "${version}",
   "private": true,
   "homepage": "./",
   "publicPath": "./",

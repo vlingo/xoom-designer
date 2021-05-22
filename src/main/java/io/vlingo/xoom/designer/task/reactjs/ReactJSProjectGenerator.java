@@ -1,7 +1,11 @@
 package io.vlingo.xoom.designer.task.reactjs;
 
 import freemarker.template.TemplateException;
-import io.vlingo.xoom.designer.task.projectgeneration.restapi.data.*;
+import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateMethodData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectFieldData;
 import io.vlingo.xoom.codegen.CodeGenerationException;
 
 import java.io.FileWriter;
@@ -19,7 +23,7 @@ public class ReactJSProjectGenerator {
 
     private final ReactJSCodeGenerator codeGenerator;
     private final GenerationSettingsData settings;
-    private final TemplateCustomFunctions fns = new TemplateCustomFunctions();
+    private final TemplateCustomFunctions fns = TemplateCustomFunctions.instance();
 
     public ReactJSProjectGenerator(GenerationSettingsData settings) {
         this.settings = settings;
@@ -46,8 +50,8 @@ public class ReactJSProjectGenerator {
 
         try{
             writeFile("gitignore", null, outputRootDir.resolve(".gitignore"));
-            writeFile("package.json", new IndexPageArguments(settings.context), outputRootDir.resolve("package.json"));
-            writeFile("index.html", new IndexPageArguments(settings.context), publicDir.resolve("index.html"));
+            //writeFile("package.json", new IndexPageArguments(settings.context), outputRootDir.resolve("package.json"));
+//            writeFile("index.html", new IndexPageArguments(settings.context), publicDir.resolve("index.html"));
 
             writeFile("index", null, srcDir.resolve("index.js"));
             writeFile("index.css", null, srcDir.resolve("index.css"));
@@ -65,11 +69,11 @@ public class ReactJSProjectGenerator {
                 final String capitalizedAggregateName = fns.capitalize(aggregateData.aggregateName);
                 final Path aggregateItemRootDir = componentsDir.resolve(fns.decapitalize(pluralAggregateName));
 
-                writeFile(
-                        "AggregateDetail",
-                        new AggregateDetailArguments(aggregateData, valueObjectDataMap),
-                        aggregateItemRootDir.resolve(capitalizedAggregateName+".js")
-                );
+//                writeFile(
+//                        "AggregateDetail",
+//                        new AggregateDetailArguments(aggregateData, valueObjectDataMap),
+//                        aggregateItemRootDir.resolve(capitalizedAggregateName+".js")
+//                );
                 writeFile(
                         "AggregateList",
                         new AggregateListArguments(aggregateData, valueObjectDataMap),
