@@ -1,11 +1,5 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-import io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData;
-import io.vlingo.xoom.designer.task.reactjs.IndexPageArguments;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class PackageJsonTest extends BaseTemplateTest {
 
 //    @Test

@@ -1,14 +1,5 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
-import io.vlingo.xoom.designer.task.reactjs.AggregateMethodArguments;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
-
 public class AggregateMethodTest extends BaseTemplateTest{
 
 //    @Test
