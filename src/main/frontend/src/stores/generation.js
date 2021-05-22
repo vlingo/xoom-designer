@@ -4,6 +4,10 @@ import { defaultPersistenceSettings } from './persistence';
 
 export const TARGET = {ZIP_DOWNLOAD: "zip-download", FILESYSTEM : "filesystem"};
 export const defaultGenerationSettings = {useAnnotations: true, useAutoDispatch: true};
+export const defaultPlatformSettings = {
+	platform: "JVM",
+	lang: ["Java"]
+}
 export const defaultSettings = { context: defaultContext, 
 	deployment: defaultDeploymentSettings, 
 	model: { 
@@ -13,6 +17,7 @@ export const defaultSettings = { context: defaultContext,
 	}, 
 	useAnnotations: defaultGenerationSettings.useAnnotations, 
 	useAutoDispatch: defaultGenerationSettings.useAutoDispatch,
-	projectDirectory: defaultGenerationSettings.projectDirectory
+	projectDirectory: defaultGenerationSettings.projectDirectory,
+	platformSettings: { ...defaultGenerationSettings }
 };
 
