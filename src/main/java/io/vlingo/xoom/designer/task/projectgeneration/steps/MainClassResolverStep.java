@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
-import io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard;
+import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 

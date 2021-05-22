@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.turbo.annotation.codegen.template.AnnotationBasedTemplateStandard.ADAPTER;
+import static io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard.ADAPTER;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 
