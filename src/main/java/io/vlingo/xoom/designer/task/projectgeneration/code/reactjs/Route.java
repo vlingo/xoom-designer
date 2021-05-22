@@ -26,7 +26,7 @@ public class Route {
 
   public Route(final CodeGenerationParameter route) {
     this.path = route.retrieveRelatedValue(ROUTE_PATH);
-    this.methodName = route.retrieveRelatedValue(ROUTE_SIGNATURE);
     this.httpMethod = route.retrieveRelatedValue(ROUTE_METHOD);
+    this.methodName = route.value;
   }
 }
