@@ -246,17 +246,6 @@
             <configuration>
               <imageName>${project.name}</imageName>
               <mainClass>${exec.mainClass}</mainClass>
-              <buildArgs>
-                --language:js --no-fallback --no-server --enable-url-protocols=http -H:+AllowIncompleteClasspath
-                -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflect-config.json
-                -H:ResourceConfigurationFiles=classes/META-INF/native-image/resource-config.json
-                -H:SerializationConfigurationFiles=classes/META-INF/native-image/serialization-config.json
-                --initialize-at-build-time=com.google.common.jimfs.SystemJimfsFileSystemProvider
-                --initialize-at-run-time=io.netty
-                --initialize-at-run-time=io.vlingo.xoom.common.identity.IdentityGeneratorType
-                --report-unsupported-elements-at-runtime
-                --allow-incomplete-classpath
-              </buildArgs>
             </configuration>
           </plugin>
         </plugins>
