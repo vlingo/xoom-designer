@@ -1,7 +1,16 @@
 import { writable } from 'svelte/store';
 
+export function isJson(str) {
+  try {
+      JSON.parse(str);
+  } catch (e) {
+      return false;
+  }
+  return true;
+}
+
 function parseIfJson(val){
-	if (typeof val === 'string' && val.length > 0 && (val.charAt(0) === '{' || val.charAt(0) === '[')){
+	if (isJson(val)){
 		return JSON.parse(val);
 	}else{
 		return val;
