@@ -19,7 +19,11 @@
   }
 
 	const addStateField = () => stateFields = [...stateFields, { name: "", type: "", collectionType: "", uid: uuid() }];
-  const deleteStateField = (index) => { stateFields.splice(index, 1); stateFields = stateFields; }
+  const deleteStateField = (index) => { 
+    stateFields.splice(index, 1);
+    stateFields = stateFields;
+    console.log(stateFields);
+  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
@@ -38,7 +42,7 @@
   >
   {#each stateFields as stateField, i (stateField.uid)}
     {#if i > 0}
-      <StateField {stateFields} bind:stateField i={i+1} {stateFieldsTypes} on:delete={() => deleteStateField(i+1)} />
+      <StateField {stateFields} bind:stateField i={i} {stateFieldsTypes} on:delete={() => deleteStateField(i)} />
     {/if}
   {/each}
   </Sortable>
