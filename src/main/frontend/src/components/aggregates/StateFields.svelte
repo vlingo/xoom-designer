@@ -19,11 +19,7 @@
   }
 
 	const addStateField = () => stateFields = [...stateFields, { name: "", type: "", collectionType: "", uid: uuid() }];
-  const deleteStateField = (index) => { 
-    stateFields.splice(index, 1);
-    stateFields = stateFields;
-    console.log(stateFields);
-  }
+  const deleteStateField = (index) => {  stateFields.splice(index, 1); stateFields = stateFields; }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
