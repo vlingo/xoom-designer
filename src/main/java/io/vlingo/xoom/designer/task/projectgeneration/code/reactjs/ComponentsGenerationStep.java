@@ -16,7 +16,6 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RouteDetail;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -69,8 +68,6 @@ public class ComponentsGenerationStep extends TemplateProcessingStep {
 
   private List<TemplateData> aggregateTemplates(final List<Aggregate> aggregates,
                                                 final Map<String, List<Field>> valueObjectTypes) {
-    final String parentPackage = "src.components";
-
     final List<TemplateData> aggregateListTemplates =
             AggregateListTemplateData.from(aggregates, valueObjectTypes);
 
