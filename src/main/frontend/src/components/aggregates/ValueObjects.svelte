@@ -187,9 +187,9 @@
     <b>{selectedValueObjectForDelete.name}</b> might be in use by other Value Objects or state fields of aggregates!
     Are you sure you want to delete value object of <b>{selectedValueObjectForDelete.name}</b>?
   </div>
-  <CardActions class="d-flex justify-end">
-    <Button class="error-color mr-4" on:click={remove}>Delete</Button>
-    <Button on:click={() => deleteDialogActive = !deleteDialogActive}>Cancel</Button>
+  <CardActions class="d-flex justify-end mt-4">
+    <Button class="error-color white-text mr-4" on:click={remove}>Delete</Button>
+    <Button color="secondary" variant="raised" on:click={() => deleteDialogActive = !deleteDialogActive}>Cancel</Button>
   </CardActions>
 </Dialog>
 
@@ -251,7 +251,7 @@
     <Button style="width: 100%;" class="warning-color white-text" on:click={newField} variant="raised">New Field</Button>
   </div>
   <CardActions class="d-flex justify-space-between">
-    <Button color="{valid ? 'secondary' : ''}" variant="raised" on:click={updateValueName ? update : add} disabled={!valid}>{updateValueName ? 'Update' : 'Add'}</Button>
+    <Button color="{valid ? 'primary' : ''}" variant="raised" on:click={updateValueName ? update : add} disabled={!valid}>{updateValueName ? 'Update' : 'Add'}</Button>
     <Button class="error-color white-text" variant="raised" on:click={() => dialogActive = !dialogActive}>Cancel</Button>
   </CardActions>
 </Dialog>
