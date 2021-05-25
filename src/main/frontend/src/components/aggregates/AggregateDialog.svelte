@@ -1,5 +1,5 @@
 <script>
-	import { Button, TextField, Dialog, CardActions } from 'svelte-materialify/src';
+	import { Button, Dialog, CardActions } from 'svelte-materialify/src';
 	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
@@ -11,13 +11,19 @@
 	import ValueObjects from './ValueObjects.svelte';
 	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 	import { uuid } from '../../utils';
+	import Textfield from '@smui/textfield';
+	import { onMount } from 'svelte';
 
 	export let dialogActive;
 	export let editMode;
 	export let oldAggregate;
 	let newAggregate;
 	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
+	let aggregateNameElement;
 
+	onMount(() => {
+		aggregateNameElement.focus();
+	})
 
 	const retrieveSchemaGroup = () => $settings.model.aggregateSettings.length > 0 ? $settings.model.aggregateSettings[0].producerExchange.schemaGroup : "";
 	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
@@ -118,8 +124,16 @@
 			New Aggregate
 		{/if}
 	</h4>
-	<div class="d-flex">
-		<TextField class="mb-4" bind:value={aggregateName} rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}>Aggregate Name</TextField>
+	<div class="d-flex mb-4 align-center">
+		<Textfield
+			bind:this={aggregateNameElement}
+			style="flex: 1;"
+			label="Aggregate Name"
+			required
+			bind:value={aggregateName}
+			rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}
+		>
+		</Textfield>
 		<ErrorWarningTooltip
 			messages={[requireRule(aggregateName), classNameRule(aggregateName), isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings)]}
 			names={['Aggregate Name', 'Aggregate Name', 'Aggregate Name']}
