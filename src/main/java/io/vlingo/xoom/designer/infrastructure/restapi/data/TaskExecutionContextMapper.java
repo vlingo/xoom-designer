@@ -18,7 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.FIELD_TYPE_TRANSLATION;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
 public class TaskExecutionContextMapper {

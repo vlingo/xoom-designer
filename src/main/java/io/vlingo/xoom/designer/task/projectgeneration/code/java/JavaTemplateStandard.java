@@ -8,9 +8,9 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.DataObjectDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.DataObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model;
@@ -20,7 +20,7 @@ import io.vlingo.xoom.http.Method;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType.STATE_STORE;
@@ -97,7 +97,7 @@ public enum JavaTemplateStandard implements TemplateStandard {
   ADAPTER(parameters -> ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
           (name, parameters) -> name + "Adapter"),
 
-  PROJECTION(parameters -> CodeGenerationSetup.PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
+  PROJECTION(parameters -> CodeGenerationProperties.PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
           (name, parameters) -> name + "ProjectionActor"),
 
   PROJECTION_DISPATCHER_PROVIDER(parameters -> Template.PROJECTION_DISPATCHER_PROVIDER.filename,

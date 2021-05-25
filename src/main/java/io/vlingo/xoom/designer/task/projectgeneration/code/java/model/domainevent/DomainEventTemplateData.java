@@ -13,9 +13,9 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -54,7 +54,7 @@ public class DomainEventTemplateData extends TemplateData {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                     .and(STATE_NAME, JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value))
-                    .and(DEFAULT_SCHEMA_VERSION, CodeGenerationSetup.DEFAULT_SCHEMA_VERSION)
+                    .and(DEFAULT_SCHEMA_VERSION, CodeGenerationProperties.DEFAULT_SCHEMA_VERSION)
                     .and(MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate, involvedStateFields.stream()))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.STATE_BASED_ASSIGNMENT, dialect, aggregate, involvedStateFields.stream()))
                     .addImports(resolveImports(aggregate, event, contents));

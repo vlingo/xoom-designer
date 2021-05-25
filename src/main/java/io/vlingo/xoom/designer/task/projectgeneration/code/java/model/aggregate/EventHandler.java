@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 
 public class EventHandler {
 
-  private final String methodName;
-  private final String eventName;
-  private final String methodInvocationParameters;
-  private final List<EventMissingField> missingFields = new ArrayList<>();
+  public final String methodName;
+  public final String eventName;
+  public final String methodInvocationParameters;
+  public final List<EventMissingField> missingFields = new ArrayList<>();
 
   public static List<EventHandler> from(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(EventHandler::new)
@@ -32,22 +32,6 @@ public class EventHandler {
     this.eventName = method.retrieveRelatedValue(Label.DOMAIN_EVENT);
     this.methodInvocationParameters = Formatters.Arguments.SOURCED_STATED_METHOD_INVOCATION.format(method);
     this.missingFields.addAll(EventMissingField.from(method));
-  }
-
-  public String getMethodName() {
-    return methodName;
-  }
-
-  public String getEventName() {
-    return eventName;
-  }
-
-  public String getMethodInvocationParameters() {
-    return methodInvocationParameters;
-  }
-
-  public List<EventMissingField> getMissingFields() {
-    return missingFields;
   }
 
 }
