@@ -1,14 +1,23 @@
 <script>
-	import { settings, simpleTypes, collectionTypes } from "../../stores";
-	import { Button, Dialog, Icon, CardActions, TextField, Select, Row, Col, Menu, List, ListItem } from "svelte-materialify/src";
-	import { mdiPlus, mdiDelete } from "@mdi/js";
+	import { settings, simpleTypes } from "../../stores";
+	import { Dialog, CardActions, Row, Col } from "svelte-materialify/src";
 	import { requireRule } from "../../validators";
   import { formatArrayForSelect } from "../../utils";
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
   import FieldTypeSelect from './FieldTypeSelect.svelte';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+  import { Button } from '../ui';
+  import IconButton from '@smui/icon-button';
+  import Menu from '@smui/menu';
+  import List, { Item } from '@smui/list';
+  import { Anchor } from '@smui/menu-surface';
+  import Textfield from '@smui/textfield';
+  import CollectionTypeSelect from "./CollectionTypeSelect.svelte";
 
-	let dialogActive = false;
+  let dialogActive = false;
+  let menu;
+  let anchor;
+  let anchorClasses = {};
   let deleteDialogActive = false;
   let updateValueName = null;
   let selectedValueObjectForDelete = null;
@@ -22,6 +31,7 @@
       }
     ]
   }
+  let valueObjectNameElement;
 
   function newvalueObject() {
     updateValueName = null;
@@ -86,6 +96,12 @@
     return objectValueNames;
   }
 
+  function handleKeydown(e, vo) {
+    if (e.key === 'Delete' || e.keyCode === 46) {
+      showDeleteDialog(vo);
+    }
+  }
+
   $: if (valueObjectForm.fields) {
     valueObjectForm.fields = valueObjectForm.fields.map(f => {
       return {
@@ -95,6 +111,10 @@
     })
   }
 
+  $: if (dialogActive) {
+    valueObjectNameElement && valueObjectNameElement.focus()
+  }
+
   $: valid = !!valueObjectForm.name
     && valueObjectForm.fields.every((field) => !!field.name && !!field.type)
     && $settings.model.valueObjectSettings.every((item) => !isObjectFieldNameUnique(valueObjectForm.name))
@@ -102,30 +122,54 @@
 </script>
 
 <div class="d-flex mb-4">
-  <Button class="mr-4" hover on:click={newvalueObject}>
-    <div title="Add Aggregate" class="d-flex align-center justify-center">
-      <Icon class="black-text mr-4" path={mdiPlus}/>
-      New Value Object
-    </div>
+  <Button class="mr-4" on:click={newvalueObject}>
+    <svelte:fragment slot="appendIcon">add</svelte:fragment>
+    New Value Object
   </Button>
   {#if $settings.model.valueObjectSettings.length > 0}
-    <Menu>
-      <div slot="activator">
-        <Button class="success-color">Edit Value Object</Button>
-      </div>
-      <List>
-        {#each $settings.model.valueObjectSettings as valueObject, id (id)}
-          <ListItem>
-            <div class="d-flex align-center">
-              <div style="flex:1;" class="mr-4" on:click={() => edit(valueObject)}>{valueObject.name}</div>
-              <Button on:click={() => showDeleteDialog(valueObject)} title="Delete Value Object"  icon class="red-text">
-                <Icon class="ma-0" path={mdiDelete}/>
+    <div
+      class={Object.keys(anchorClasses).join(' ')}
+      use:Anchor={{
+        addClass: (className) => {
+          if (!anchorClasses[className]) {
+            anchorClasses[className] = true;
+          }
+        },
+        removeClass: (className) => {
+          if (anchorClasses[className]) {
+            delete anchorClasses[className];
+            anchorClasses = anchorClasses;
+          }
+        },
+      }}
+      bind:this={anchor}
+    >
+      <Button color="secondary" variant="raised" on:click={() => menu.setOpen(true)}>
+        <svelte:fragment slot="appendIcon">edit</svelte:fragment>
+        Edit Value Object
+      </Button>
+      <Menu
+        bind:this={menu}
+        anchor={false}
+        bind:anchorElement={anchor}
+        anchorCorner="BOTTOM_LEFT"
+        style="width: 100%;"
+      >
+        <List>
+          {#each $settings.model.valueObjectSettings as valueObject, id (id)}
+            <Item class="d-flex" on:SMUI:action={() => edit(valueObject)} on:keydown={(e) => handleKeydown(e, valueObject)}>
+              <Button style="flex:1; justify-content: flex-start;" on:click={() => edit(valueObject)}>
+                <svelte:fragment slot="prependIcon">edit</svelte:fragment>
+                {valueObject.name}
               </Button>
-            </div>
-          </ListItem>
-        {/each}
-      </List>
-    </Menu>
+              <div on:click|stopPropagation>
+                <IconButton class="material-icons error-text" on:click={() => showDeleteDialog(valueObject)} title="Delete Value Object" ripple={false}>delete</IconButton>
+              </div>
+            </Item>
+          {/each}
+        </List>
+      </Menu>
+    </div>
   {/if}
 </div>
 
@@ -142,54 +186,77 @@
 
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
-    <div class="d-flex">
-      <TextField class="mb-4" bind:value={valueObjectForm.name} rules={[requireRule, isObjectFieldNameUnique]}>Value Object Name</TextField>
+    <div class="d-flex align-center">
+      <Textfield
+        bind:this={valueObjectNameElement}
+        style="flex: 1;"
+        class="mb-4"
+        label="Value Object Name"
+        required
+        bind:value={valueObjectForm.name}
+        rules={[requireRule, isObjectFieldNameUnique]}>
+      </Textfield>
       <ErrorWarningTooltip
         names={['Value Object Name']}
         messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
       />
     </div>
     {#each valueObjectForm.fields as field, i (i)}
-      <Row>
+      <Row class="mb-4 align-center justify-between">
         <Col>
-          <TextField class="mb-4" bind:value={field.name} rules={[requireRule, isFieldUnique]}>Field Name</TextField>
+          <Textfield
+            style="width: 100%;"
+            bind:value={field.name}
+            label="Field Name"
+            required
+            rules={[requireRule, isFieldUnique]}>
+          </Textfield>
         </Col>
         <Col>
           <FieldTypeSelect
-            mandatory
             items={formatArrayForSelect([...simpleTypes, ...getFieldsFromObjectValuesSettings()])}
             bind:value={field.type}
             collectionType={field.collectionType}
           >
-            Type
           </FieldTypeSelect>
         </Col>
         <Col>
-          <Select items={formatArrayForSelect(collectionTypes.map(f => f.name))} bind:value={field.collectionType} placeholder="(bare)">Collection</Select>
+          <CollectionTypeSelect
+            bind:value={field.collectionType}
+          />
         </Col>
-        <Col cols="auto" class="pl-0 col-auto {valueObjectForm.fields && valueObjectForm.fields.length > 1 ? 'pr-0' : ''}">
+        <Col cols="auto" class="pa-0 col-auto {valueObjectForm.fields && valueObjectForm.fields.length > 1 ? 'pr-0' : ''}">
           <ErrorWarningTooltip
             names={['Field Name', 'Field Name', 'Field Type']}
             messages={[requireRule(field.name), isFieldUnique(field.name), requireRule(field.type)]}
           />
         </Col>
         {#if valueObjectForm.fields.length > 1}
-          <Col cols="auto">
+          <Col cols="auto pa-0">
             <DeleteWithDialog type="Object Field" on:click={() => removeField(i)} color="red"/>
           </Col>
         {/if}
       </Row>
     {/each}
-    <Button class="warning-color" on:click={newField} block>New Field</Button>
+    <Button style="width: 100%;" class="warning-color white-text" on:click={newField} variant="raised">New Field</Button>
   </div>
   <CardActions class="d-flex justify-space-between">
-    <Button class="{valid ? 'primary-color' : ''}" on:click={updateValueName ? update : add} disabled={!valid}>{updateValueName ? 'Update' : 'Add'}</Button>
-    <Button class="error-color" on:click={() => dialogActive = !dialogActive}>Cancel</Button>
+    <Button color="{valid ? 'secondary' : ''}" variant="raised" on:click={updateValueName ? update : add} disabled={!valid}>{updateValueName ? 'Update' : 'Add'}</Button>
+    <Button class="error-color white-text" variant="raised" on:click={() => dialogActive = !dialogActive}>Cancel</Button>
   </CardActions>
 </Dialog>
 
 <style global>
   .vl-dialog {
     min-height: 600px;
+    --s-dialog-width: 700px;
+  }
+
+  .mdc-select, .mdc-select__anchor {
+    width: 100%;
+  }
+
+  .mdc-select__menu {
+    max-height: 400px;
   }
 </style>
