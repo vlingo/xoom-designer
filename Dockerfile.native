@@ -1,4 +1,4 @@
-FROM ghcr.io/graalvm/graalvm-ce:ol8-java8-21.1.0 as build
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0 as build
 
 LABEL maintainer="VLINGO XOOM Team <info@vlingo.io>"
 

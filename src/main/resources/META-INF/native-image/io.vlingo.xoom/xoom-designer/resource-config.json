@@ -2,8 +2,9 @@
   "resources":{
   "includes":[
     {"pattern":"\\QMETA-INF/mime.types\\E"}, 
-    {"pattern":"\\QMETA-INF/mimetypes.default\\E"}, 
-    {"pattern":"\\QMETA-INF/native/libnetty_transport_native_kqueue_x86_64.jnilib\\E"}, 
+    {"pattern":"\\QMETA-INF/mimetypes.default\\E"},
+    {"pattern":"\\QMETA-INF/native/libnetty_transport_native_kqueue_x86_64.jnilib\\E"},
+    {"pattern":"\\QMETA-INF/native/libnetty_transport_native_epoll_x86_64.so\\E"},
     {"pattern":"\\Qcodegen/java/AggregateProtocol.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolInstanceMethod.ftl\\E"}, 
     {"pattern":"\\Qcodegen/java/AggregateProtocolStaticMethod.ftl\\E"}, 
