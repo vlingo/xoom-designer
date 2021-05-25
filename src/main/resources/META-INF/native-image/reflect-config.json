@@ -110,14 +110,6 @@
     ]
   },
   {
-    "name": "char[]",
-    "allDeclaredFields": true
-  },
-  {
-    "name": "char[][]",
-    "allDeclaredFields": true
-  },
-  {
     "name": "com.ibm.icu.impl.ICUCurrencyDisplayInfoProvider",
     "methods": [
       {
@@ -712,6 +704,11 @@
     "allPublicConstructors": true
   },
   {
+    "name": "io.vlingo.xoom.codegen.template.TemplateCustomFunctions",
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "io.vlingo.xoom.common.Scheduled__Proxy",
     "methods": [
       {
@@ -724,569 +721,205 @@
     ]
   },
   {
+    "name": "io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByIPProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByMonthProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.APIData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateMethodData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ConsumerExchangeData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.DeploymentSettingsData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.DomainEventData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ModelSettingsData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.PersistenceData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ProducerExchangeData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ProjectGenerationReport",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ReceiverData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.RouteData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.StateFieldData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectData",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectFieldData",
+    "allDeclaredFields": true
+  },
+  {
     "name": "io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation",
     "allDeclaredFields": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.dataobject.StaticFactoryMethod",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.StaticFactoryMethod",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.CoveyParameter",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CoveyParameter",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.Exchange",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.Exchange",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ExchangeReceiver",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeReceiver",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.exchange.ProducerExchange",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ProducerExchange",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.model.aggregate.EventHandler",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.EventHandler",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectToDescription",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectToDescription",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.projections.ProjectionSource",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionSource",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.schemata.Schema",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Adapter",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Adapter",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Database",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Database",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Model",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Projection",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Projection",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.storage.Queries",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Queries",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.AuxiliaryEntityCreation",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.AuxiliaryEntityCreation",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.SourcedEvent",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.SourcedEvent",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.entitty.TestCase",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.TestCase",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries.TestCase",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestCase",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.template.unittest.queries.TestStatement",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.gui.persistence.TotalRequestsByIPProjectionActor",
-    "methods": [
-      {
-        "name": "<init>",
-        "parameterTypes": []
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.gui.persistence.TotalRequestsByMonthProjectionActor",
-    "methods": [
-      {
-        "name": "<init>",
-        "parameterTypes": []
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.APIData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "rootPath",
-        "allowWrite": true
-      },
-      {
-        "name": "routes",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "api",
-        "allowWrite": true
-      },
-      {
-        "name": "aggregateName",
-        "allowWrite": true
-      },
-      {
-        "name": "stateFields",
-        "allowWrite": true
-      },
-      {
-        "name": "methods",
-        "allowWrite": true
-      },
-      {
-        "name": "events",
-        "allowWrite": true
-      },
-      {
-        "name": "consumerExchange",
-        "allowWrite": true
-      },
-      {
-        "name": "producerExchange",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.AggregateMethodData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "name",
-        "allowWrite": true
-      },
-      {
-        "name": "parameters",
-        "allowWrite": true
-      },
-      {
-        "name": "useFactory",
-        "allowWrite": true
-      },
-      {
-        "name": "event",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ConsumerExchangeData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "exchangeName",
-        "allowWrite": true
-      },
-      {
-        "name": "receivers",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ContextSettingsData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "groupId",
-        "allowWrite": true
-      },
-      {
-        "name": "artifactId",
-        "allowWrite": true
-      },
-      {
-        "name": "artifactVersion",
-        "allowWrite": true
-      },
-      {
-        "name": "packageName",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.DeploymentSettingsData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "clusterNodes",
-        "allowWrite": true
-      },
-      {
-        "name": "type",
-        "allowWrite": true
-      },
-      {
-        "name": "dockerImage",
-        "allowWrite": true
-      },
-      {
-        "name": "kubernetesImage",
-        "allowWrite": true
-      },
-      {
-        "name": "kubernetesPod",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.DomainEventData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "name",
-        "allowWrite": true
-      },
-      {
-        "name": "fields",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "path",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationSettingsData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "context",
-        "allowWrite": true
-      },
-      {
-        "name": "model",
-        "allowWrite": true
-      },
-      {
-        "name": "deployment",
-        "allowWrite": true
-      },
-      {
-        "name": "projectDirectory",
-        "allowWrite": true
-      },
-      {
-        "name": "useAnnotations",
-        "allowWrite": true
-      },
-      {
-        "name": "useAutoDispatch",
-        "allowWrite": true
-      },
-      {
-        "name": "fileVersion",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ModelSettingsData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "persistenceSettings",
-        "allowWrite": true
-      },
-      {
-        "name": "aggregateSettings",
-        "allowWrite": true
-      },
-      {
-        "name": "valueObjectSettings",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.PersistenceData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "storageType",
-        "allowWrite": true
-      },
-      {
-        "name": "useCQRS",
-        "allowWrite": true
-      },
-      {
-        "name": "projections",
-        "allowWrite": true
-      },
-      {
-        "name": "database",
-        "allowWrite": true
-      },
-      {
-        "name": "commandModelDatabase",
-        "allowWrite": true
-      },
-      {
-        "name": "queryModelDatabase",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ProducerExchangeData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "exchangeName",
-        "allowWrite": true
-      },
-      {
-        "name": "schemaGroup",
-        "allowWrite": true
-      },
-      {
-        "name": "outgoingEvents",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ProjectGenerationReport",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "status",
-        "allowWrite": true
-      },
-      {
-        "name": "target",
-        "allowWrite": true
-      },
-      {
-        "name": "compressedProject",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ReceiverData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "schema",
-        "allowWrite": true
-      },
-      {
-        "name": "aggregateMethod",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.RouteData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "path",
-        "allowWrite": true
-      },
-      {
-        "name": "httpMethod",
-        "allowWrite": true
-      },
-      {
-        "name": "aggregateMethod",
-        "allowWrite": true
-      },
-      {
-        "name": "requireEntityLoad",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.StateFieldData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "name",
-        "allowWrite": true
-      },
-      {
-        "name": "type",
-        "allowWrite": true
-      },
-      {
-        "name": "collectionType",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ValueObjectData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "name",
-        "allowWrite": true
-      },
-      {
-        "name": "fields",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.ValueObjectFieldData",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true,
-    "fields": [
-      {
-        "name": "name",
-        "allowWrite": true
-      },
-      {
-        "name": "type",
-        "allowWrite": true
-      },
-      {
-        "name": "collectionType",
-        "allowWrite": true
-      }
-    ]
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.AggregateDetailArguments",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.AppArguments",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.HeaderArguments",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.IndexPageArguments",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.SidebarArguments",
-    "allPublicFields": true,
-    "allPublicMethods": true,
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.designer.task.reactjs.TemplateCustomFunctions",
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestStatement",
     "allPublicFields": true,
     "allPublicMethods": true,
     "allPublicConstructors": true
@@ -1344,14 +977,6 @@
   {
     "name": "io.vlingo.xoom.http.resource.StaticFilesResourceDispatcher",
     "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControl$Inbound",
-    "allPublicMethods": true
-  },
-  {
-    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControl$Outbound",
-    "allPublicMethods": true
   },
   {
     "name": "io.vlingo.xoom.lattice.grid.application.GridActorControlInbound__Proxy",
@@ -1432,10 +1057,6 @@
   {
     "name": "io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor",
     "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.lattice.util.HardRefHolder",
-    "allPublicMethods": true
   },
   {
     "name": "io.vlingo.xoom.lattice.util.HardRefHolder__Proxy",
@@ -1523,12 +1144,6 @@
   },
   {
     "name": "io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor",
-    "allPublicConstructors": true
-  },
-  {
-    "name": "io.vlingo.xoom.turbo.codegen.parameter.ImportParameter",
-    "allPublicFields": true,
-    "allPublicMethods": true,
     "allPublicConstructors": true
   },
   {
@@ -2024,9 +1639,6 @@
         "parameterTypes": []
       }
     ]
-  },
-  {
-    "name": "java.lang.Object[]"
   },
   {
     "name": "java.lang.Package",
@@ -3236,65 +2848,6 @@
         ]
       }
     ]
-  },
-  {
-    "name": "java.nio.file.Files",
-    "methods": [
-      {
-        "name": "createSymbolicLink",
-        "parameterTypes": [
-          "java.nio.file.Path",
-          "java.nio.file.Path",
-          "java.nio.file.attribute.FileAttribute[]"
-        ]
-      },
-      {
-        "name": "delete",
-        "parameterTypes": [
-          "java.nio.file.Path"
-        ]
-      },
-      {
-        "name": "exists",
-        "parameterTypes": [
-          "java.nio.file.Path",
-          "java.nio.file.LinkOption[]"
-        ]
-      },
-      {
-        "name": "isSymbolicLink",
-        "parameterTypes": [
-          "java.nio.file.Path"
-        ]
-      },
-      {
-        "name": "readSymbolicLink",
-        "parameterTypes": [
-          "java.nio.file.Path"
-        ]
-      }
-    ]
-  },
-  {
-    "name": "java.nio.file.LinkOption"
-  },
-  {
-    "name": "java.nio.file.LinkOption[]"
-  },
-  {
-    "name": "java.nio.file.Path",
-    "methods": [
-      {
-        "name": "toFile",
-        "parameterTypes": []
-      }
-    ]
-  },
-  {
-    "name": "java.nio.file.attribute.FileAttribute"
-  },
-  {
-    "name": "java.nio.file.attribute.FileAttribute[]"
   },
   {
     "name": "java.security.AllPermission"
