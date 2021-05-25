@@ -5,7 +5,8 @@
         <version>1.4.4-SNAPSHOT</version>
         <executions>
           <#if hasProducerExchange>
-<execution>
+          <execution>
+            <id>push</id>
             <goals>
               <goal>push-schemata</goal>
             </goals>
@@ -29,7 +30,7 @@
           </#if>
           <#if hasConsumerExchange>
           <execution>
-            <id>pullSchemata</id>
+            <id>pull</id>
             <goals>
               <goal>pull-schemata</goal>
             </goals>
