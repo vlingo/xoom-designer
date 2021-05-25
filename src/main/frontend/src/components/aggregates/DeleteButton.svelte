@@ -1,17 +1,9 @@
 <script>
-	import { mdiDelete } from "@mdi/js";
-	import { Button, Icon} from "svelte-materialify/src";
-	
-	export let title;
-	export let color = "red";
+	import IconButton from '@smui/icon-button';
 
-	
+	export let title;
 </script>
 
-
-<Button {title} on:click icon class="{color}-text">
-	<Icon path={mdiDelete}/>
-</Button>
-
+<IconButton {title} class="material-icons-round error-text" on:click ripple={false}>delete</IconButton>
 
 
