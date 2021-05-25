@@ -13,6 +13,7 @@
   import { Anchor } from '@smui/menu-surface';
   import Textfield from '@smui/textfield';
   import CollectionTypeSelect from "./CollectionTypeSelect.svelte";
+  import { tick } from "svelte";
 
   let dialogActive = false;
   let menu;
@@ -73,10 +74,16 @@
   }
   function newField() {
     valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '', collectionType: '' }]
+    tick().then(() => {
+      document.querySelector(`#objectValueName${valueObjectForm.fields.length - 1} input`).focus();
+    })
   }
   function removeField(i) {
 		valueObjectForm.fields.splice(i, 1);
 		valueObjectForm.fields = valueObjectForm.fields;
+    tick().then(() => {
+      document.querySelector(`#objectValueName${i === 0 ? 0 : i - 1} input`).focus();
+    })
   }
   const isObjectFieldNameUnique = (value) => {
     if (updateValueName === value) return undefined;
@@ -205,6 +212,7 @@
       <Row class="mb-4 align-center justify-between">
         <Col>
           <Textfield
+            id="objectValueName{i}"
             style="width: 100%;"
             bind:value={field.name}
             label="Field Name"
