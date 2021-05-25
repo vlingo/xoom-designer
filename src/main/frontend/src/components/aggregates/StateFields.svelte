@@ -4,6 +4,7 @@
 	import { settings, simpleTypes } from '../../stores';
   import Sortable from '../Sortable.svelte';
   import StateField from './StateField.svelte';
+  import { tick } from "svelte";
 
   export let stateFields;
 
@@ -18,7 +19,12 @@
     })
   }
 
-	const addStateField = () => stateFields = [...stateFields, { name: "", type: "", collectionType: "", uid: uuid() }];
+	const addStateField = () => {
+    stateFields = [...stateFields, { name: "", type: "", collectionType: "", uid: uuid() }]
+    tick().then(() => {
+      document.querySelector(`#stateFieldName${stateFields.length - 1} input`).focus();
+    })
+  };
   const deleteStateField = (index) => {  stateFields.splice(index, 1); stateFields = stateFields; }
 </script>
 
