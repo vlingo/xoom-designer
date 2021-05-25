@@ -2,13 +2,12 @@
   import { Icon } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
-	import { collectionTypes } from '../../stores';
   import FieldTypeSelect from './FieldTypeSelect.svelte';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import { mdiArrowUpDown, mdiArrowVerticalLock } from '@mdi/js';
   import { createEventDispatcher } from 'svelte';
   import Textfield from '@smui/textfield';
-  import Select, { Option } from '@smui/select';
+  import CollectionTypeSelect from './CollectionTypeSelect.svelte';
 
   export let stateFields;
   export let stateField;
@@ -53,11 +52,7 @@
     </FieldTypeSelect>
   </div>
   <div style="flex: 1;" class="pb-4">
-    <Select disabled={i === 0} bind:value={stateField.collectionType} label="Collection{stateField.collectionType ? '' : ' (bare)'}">
-      {#each collectionTypes as type}
-        <Option value={type.name}>{type.name}</Option>
-      {/each}
-    </Select>
+    <CollectionTypeSelect disabled={i === 0} bind:value={stateField.collectionType} />
   </div>
   <div>
     <ErrorWarningTooltip
