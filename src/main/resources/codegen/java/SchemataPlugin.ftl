@@ -7,6 +7,7 @@
           <#if hasProducerExchange>
 
           <execution>
+            <id>push</id>
             <goals>
               <goal>push-schemata</goal>
             </goals>
@@ -32,7 +33,7 @@
           <#if hasConsumerExchange>
 
           <execution>
-            <id>pullSchemata</id>
+            <id>pull</id>
             <goals>
               <goal>pull-schemata</goal>
             </goals>
