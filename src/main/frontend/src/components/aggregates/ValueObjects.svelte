@@ -75,14 +75,16 @@
   function newField() {
     valueObjectForm.fields = [...valueObjectForm.fields, { name: '', type: '', collectionType: '' }]
     tick().then(() => {
-      document.querySelector(`#objectValueName${valueObjectForm.fields.length - 1} input`).focus();
+      const el = document.querySelector(`#objectValueName${valueObjectForm.fields.length - 1} input`);
+      if (el) el.focus()
     })
   }
   function removeField(i) {
 		valueObjectForm.fields.splice(i, 1);
 		valueObjectForm.fields = valueObjectForm.fields;
     tick().then(() => {
-      document.querySelector(`#objectValueName${i === 0 ? 0 : i - 1} input`).focus();
+      const el = document.querySelector(`#objectValueName${i === 0 ? 0 : i - 1} input`);
+      if (el) el.focus()
     })
   }
   const isObjectFieldNameUnique = (value) => {
@@ -129,7 +131,7 @@
 </script>
 
 <div class="d-flex mb-4">
-  <Button class="mr-4" on:click={newvalueObject}>
+  <Button color="primary" class="mr-4" on:click={newvalueObject}>
     <svelte:fragment slot="appendIcon">add</svelte:fragment>
     New Value Object
   </Button>
@@ -151,7 +153,7 @@
       }}
       bind:this={anchor}
     >
-      <Button color="secondary" variant="raised" on:click={() => menu.setOpen(true)}>
+      <Button color="primary" variant="raised" on:click={() => menu.setOpen(true)}>
         <svelte:fragment slot="appendIcon">edit</svelte:fragment>
         Edit Value Object
       </Button>
