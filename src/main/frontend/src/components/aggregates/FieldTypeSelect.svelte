@@ -1,7 +1,6 @@
 <script>
-  import { Select } from 'svelte-materialify/src';
+  import Select, { Option } from '@smui/select';
 
-  export let mandatory;
   export let disabled;
   export let items;
   export let value;
@@ -18,10 +17,21 @@
   $: innerValue = value;
 
   function update(e) {
-    value = e.detail;
+    const ind = e.detail.index;
+    if (ind > 0) {
+      value = innerItems[ind] && innerItems[ind].value;
+    }
   }
 </script>
 
-<Select {mandatory} {disabled} items={innerItems} bind:value={innerValue} on:change={(e) => update(e)}>
-  <slot />
+<Select
+  on:MDCMenu:selected={(e) => update(e)}
+  bind:value={innerValue}
+  {disabled}
+  required
+  label="Type"
+>
+  {#each innerItems as item (item.name)}
+    <Option value={item.value}>{item.name}</Option>
+  {/each}
 </Select>
