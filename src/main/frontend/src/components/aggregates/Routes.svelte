@@ -1,8 +1,8 @@
 <script>
 	import { TextField } from 'svelte-materialify/src';
   import { requireRule, routeRule } from "../../validators";
-	import CreateButton from "./CreateButton.svelte";
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+  import FieldsetBox from './FieldsetBox.svelte';
 
   import Route from "./Route.svelte";
   export let rootPath;
@@ -17,11 +17,8 @@
     routes = [...routes];
   }
 </script>
-<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
-  <legend>
-    <h6 class="ma-0 pl-3 pr-3">API</h6>
-  </legend>
 
+<FieldsetBox title="API" on:add={addRoute}>
   <div>
     <TextField class="mb-3 pb-3" bind:value={rootPath} rules={[requireRule, routeRule]} validateOnBlur={!rootPath}>Root Path</TextField>
     <ErrorWarningTooltip
@@ -33,5 +30,4 @@
   {#each routes as route, i}
     <Route bind:route bind:methods on:delete={() => deleteRoute(i)}/>
   {/each}
-  <CreateButton title="Add Route" on:click={addRoute}/>
-</fieldset>
+</FieldsetBox>

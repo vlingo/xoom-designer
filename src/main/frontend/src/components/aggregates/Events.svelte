@@ -1,10 +1,10 @@
 <script>
   import { Select, TextField } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
-	import CreateButton from "./CreateButton.svelte";
 	import { classNameRule, requireRule, isPropertyUniqueRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+  import FieldsetBox from './FieldsetBox.svelte';
 
   export let events;
   export let stateFields;
@@ -25,10 +25,7 @@
 	}
 </script>
 
-<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
-  <legend>
-    <h6 class="ma-0 pl-3 pr-3">Events</h6>
-  </legend>
+<FieldsetBox title="Events" on:add={addEvent}>
   {#if events.length < 1}
     <div class="text-center">There is no event! Add one.</div>
   {/if}
@@ -53,5 +50,4 @@
       </div>
     </div>
   {/each}
-  <CreateButton title="Add Event" on:click={addEvent}/>
-</fieldset>
+</FieldsetBox>

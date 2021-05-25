@@ -2,9 +2,9 @@
 	import { afterUpdate } from 'svelte';
 	import { Select,  TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
-	import CreateButton from "./CreateButton.svelte";
 	import { schemaRule } from "../../validators";
   import { formatArrayForSelect } from '../../utils';
+	import FieldsetBox from './FieldsetBox.svelte';
 
   export let consumerExchangeName;
   export let receivers;
@@ -32,12 +32,8 @@
 	});
 
 </script>
-<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
-  <legend>
-    <h6 class="ma-0 pl-3 pr-3">Consumer Exchange</h6>
-  </legend>
+<FieldsetBox title="Consumer Exchange" on:add={addReceiver}>
 	<TextField class="mb-3 pb-3" bind:value={consumerExchangeName}>Exchange Name</TextField>
-
 	{#each receivers as receiver, i}
 		<div class="d-flex">
 			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
@@ -51,6 +47,4 @@
 			</div>
 		</div>
 	{/each}
-	<CreateButton title="Add Schema" on:click={addReceiver}/>
-	
-</fieldset>
+</FieldsetBox>
