@@ -25,7 +25,13 @@
       document.querySelector(`#stateFieldName${stateFields.length - 1} input`).focus();
     })
   };
-  const deleteStateField = (index) => {  stateFields.splice(index, 1); stateFields = stateFields; }
+  const deleteStateField = (index) => {
+    stateFields.splice(index, 1);
+    stateFields = stateFields;
+    tick().then(() => {
+      document.querySelector(`#stateFieldName${index === 1 ? 1 : index - 1} input`).focus();
+    })
+  }
 </script>
 
 <fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
