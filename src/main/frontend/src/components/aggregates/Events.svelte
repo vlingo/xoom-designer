@@ -1,16 +1,26 @@
 <script>
-  import { Select, TextField } from 'svelte-materialify/src';
-  import DeleteWithDialog from "./DeleteWithDialog.svelte";
-	import { classNameRule, requireRule, isPropertyUniqueRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
-  import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import FieldsetBox from './FieldsetBox.svelte';
+  import { tick } from "svelte";
+  import Event from "./Event.svelte";
 
   export let events;
   export let stateFields;
 
-	const addEvent = () => events = events.concat({ name: "", fields: ["id"] });
-  const deleteEvent = (index) => { events.splice(index, 1); events = events; }
+	const addEvent = () => {
+    events = events.concat({ name: "", fields: ["id"] })
+    tick().then(() => {
+      const el = document.querySelector(`#eventName${events.length - 1} input`);
+      if (el) el.focus()
+    })
+  };
+  const deleteEvent = (index) => {
+    events.splice(index, 1);
+    events = events;
+    tick().then(() => {
+      const el = document.querySelector(`#eventName${index === 0 ? 0 : index - 1} input`);
+      if (el) el.focus()
+    })
+  }
   
   $: {
 		events = events.map((event) => {
@@ -30,24 +40,6 @@
     <div class="text-center">There is no event! Add one.</div>
   {/if}
   {#each events as event, i (i)}
-    <div class="d-flex">
-      <div style="flex: 1;" class="mb-3 pb-3 mr-4">
-        <TextField  bind:value={event.name} rules={[requireRule, classNameRule, (v) => isPropertyUniqueRule(v, events, 'name')]} validateOnBlur={!event.name}>Name</TextField>
-      </div>
-      <div style="flex: 1;" class="mb-3 pb-3">
-        <Select mandatory disabled={!stateFields.length} multiple items={formatArrayForSelect(stateFields.map(f => f.name !== 'id' && f.name))} bind:value={event.fields}>Fields</Select>
-      </div>
-      <div>
-        <ErrorWarningTooltip
-          names={['Name', 'Name', 'Name']}
-          messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name')]}
-        />
-      </div>
-      <div style="width: 36px;">
-        <DeleteWithDialog type="Event" on:click={() => deleteEvent(i)}>
-          <b>{event.name}</b> might be in use at Methods and Producer Exchange sections.
-        </DeleteWithDialog>
-      </div>
-    </div>
+    <Event bind:event {events} {i} {stateFields} on:delete={() => deleteEvent(i)} />
   {/each}
 </FieldsetBox>
