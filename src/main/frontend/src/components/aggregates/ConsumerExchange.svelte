@@ -1,10 +1,11 @@
 <script>
 	import { afterUpdate } from 'svelte';
-	import { Select,  TextField } from 'svelte-materialify/src';
   import DeleteButton from "./DeleteButton.svelte";
 	import { schemaRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
 	import FieldsetBox from './FieldsetBox.svelte';
+	import Textfield from '@smui/textfield/Textfield.svelte';
+	import Select, { Option } from '@smui/select';
+	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
   export let consumerExchangeName;
   export let receivers;
@@ -33,14 +34,37 @@
 
 </script>
 <FieldsetBox title="Consumer Exchange" on:add={addReceiver}>
-	<TextField class="mb-3 pb-3" bind:value={consumerExchangeName}>Exchange Name</TextField>
+	<Textfield
+		class="mb-4"
+		style="width: 100%;"
+		bind:value={consumerExchangeName}
+		label="Exchange Name"
+	></Textfield>
 	{#each receivers as receiver, i}
-		<div class="d-flex">
+		<div class="d-flex align-center">
 			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
-				<TextField bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
+				<Textfield
+					style="width: 100%;"
+					label="Schema Reference"
+					bind:value={receiver.schema}
+					invalid={[schemaRule(receiver.schema)].some(f => f)}
+				></Textfield>
 			</div>
 			<div style="flex: 1;" mandatory class="mb-3 pb-3">
-				<Select items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
+				<Select
+					bind:value={receiver.aggregateMethod}
+					label="Aggregate Method"
+				>
+					{#each methods.filter(f => f.name) as method}
+						<Option value={method.name}>{method.name}</Option>
+					{/each}
+				</Select>
+			</div>
+			<div>
+				<ErrorWarningTooltip
+					names={['Schema Reference']}
+					messages={[schemaRule(receiver.schema)]}
+				/>
 			</div>
 			<div style="width: 36px;">
 				<DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
