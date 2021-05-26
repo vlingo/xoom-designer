@@ -21,7 +21,7 @@
   }
 </script>
 
-<div class="d-flex">
+<div class="d-flex align-center">
   <div
     class="handle pa-2"
     class:disabled={i === 0}
@@ -36,7 +36,7 @@
       label="Name"
       required
       disabled={i === 0}
-      autocomplete="off"
+      input$autocomplete="off"
       bind:value={stateField.name}
       rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}
     >
