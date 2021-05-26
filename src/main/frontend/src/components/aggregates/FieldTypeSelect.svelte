@@ -18,7 +18,7 @@
 
   function update(e) {
     const ind = e.detail.index;
-    if (ind > 0) {
+    if (ind >= 0 ) {
       value = innerItems[ind] && innerItems[ind].value;
     }
   }
