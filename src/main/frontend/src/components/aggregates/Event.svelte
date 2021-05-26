@@ -69,7 +69,7 @@
       }}
       bind:this={anchor}
     >
-    <div on:click={() => stateFields.length && menu.setOpen(true)}>
+    <div on:click={() => stateFields.length > 1 && menu.setOpen(true)}>
       <Textfield
         style="width: 100%;"
         value={selectedFields}

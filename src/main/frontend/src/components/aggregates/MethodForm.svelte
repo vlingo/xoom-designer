@@ -112,7 +112,7 @@
       }}
       bind:this={anchor}
     >
-    <div on:click={() => stateFields.length && menu.setOpen(true)}
+    <div on:click={() => stateFields.length > 0 && menu.setOpen(true)}
     >
       <Textfield
         style="width: 100%;"
@@ -186,11 +186,11 @@
       }}
       bind:this={anchorEvent}
     >
-    <div on:click={() => stateFields.length && menuEvent.setOpen(true)}>
+    <div on:click={() => events.length > 0 && menuEvent.setOpen(true)}>
       <Textfield
         style="width: 100%;"
         value={method.event ? method.event : '(none)'}
-        disabled={!stateFields.length}
+        disabled={!events.length}
         label="Event"
         input$readonly={true}
         on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menuEvent.setOpen(true)}}
