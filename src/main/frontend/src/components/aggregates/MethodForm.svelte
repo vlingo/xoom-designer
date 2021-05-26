@@ -112,7 +112,7 @@
       }}
       bind:this={anchor}
     >
-    <div on:click={() => menu.setOpen(true)}
+    <div on:click={() => stateFields.length && menu.setOpen(true)}
     >
       <Textfield
         style="width: 100%;"
@@ -132,7 +132,7 @@
     >
       <List class="demo-list" checkList>
         <SelectionGroup>
-          {#each stateFields as field}
+          {#each stateFields.filter(f => f.name && f.type) as field}
             <Item
               class="pa-0"
               on:SMUI:action={() => !field.collectionType && updateParamaters(field.name)}
@@ -186,7 +186,7 @@
       }}
       bind:this={anchorEvent}
     >
-    <div on:click={() => menuEvent.setOpen(true)}>
+    <div on:click={() => stateFields.length && menuEvent.setOpen(true)}>
       <Textfield
         style="width: 100%;"
         value={method.event ? method.event : '(none)'}
@@ -205,7 +205,7 @@
     >
       <List class="demo-list" checkList>
         <SelectionGroup>
-          {#each events as event}
+          {#each events.filter(f => f.name) as event}
             <Item
               class="pa-0"
               on:SMUI:action={() => updateEvent(event.name)}
