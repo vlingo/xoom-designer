@@ -1,15 +1,16 @@
 <script>
 	import { afterUpdate, createEventDispatcher } from 'svelte';
-	import { Select } from "svelte-materialify/src";
 	import PathField from "./PathField.svelte";
-	import { formatArrayForSelect } from "../../utils";
 	import DeleteButton from "./DeleteButton.svelte";
-import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
-import { requireRule } from '../../validators';
-	const httpMethods = formatArrayForSelect(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']);
+	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+	import { requireRule } from '../../validators';
+	import Select, { Option } from '@smui/select';
+
+	const httpMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
 
 	export let methods;
 	export let route;
+	export let i;
 
 	let requestMethodDisabled = false;
 	$: changedMethodOrMethods(route.aggregateMethod, methods);
@@ -40,13 +41,29 @@ import { requireRule } from '../../validators';
 
 <div class="d-flex align-center">
 	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
-		<PathField bind:path={route.path} />
+		<PathField bind:path={route.path} {i} />
 	</div>
 	<div class="mb-3 pb-3 mr-4" style="flex: 1;">
-		<Select mandatory items={httpMethods} bind:value={route.httpMethod} disabled={requestMethodDisabled}>Http Request Method</Select>
+		<Select
+			bind:value={route.httpMethod}
+			required
+			label="Http Request Method"
+		>
+			{#each httpMethods as method}
+				<Option value={method}>{method}</Option>
+			{/each}
+		</Select>
 	</div>
 	<div class="mb-3 pb-3" style="flex: 1;">
-		<Select mandatory items={formatArrayForSelect(methods.map(m => m.name))} bind:value={route.aggregateMethod}>Aggregate Method</Select>
+		<Select
+			bind:value={route.aggregateMethod}
+			required
+			label="Aggregate Method"
+		>
+			{#each methods.filter(m => m.name) as method}
+				<Option value={method.name}>{method.name}</Option>
+			{/each}
+		</Select>
 	</div>
 	<div>
     <ErrorWarningTooltip
