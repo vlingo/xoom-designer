@@ -131,7 +131,7 @@
 </script>
 
 <div class="d-flex mb-4">
-  <Button color="primary" class="mr-4" on:click={newvalueObject}>
+  <Button variant="raised" color="secondary" class="mr-4" on:click={newvalueObject}>
     <svelte:fragment slot="appendIcon">add</svelte:fragment>
     New Value Object
   </Button>

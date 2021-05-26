@@ -1,5 +1,5 @@
 <script>
-	import { Button, Dialog, CardActions } from 'svelte-materialify/src';
+	import { Dialog, CardActions } from 'svelte-materialify/src';
 	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
@@ -12,6 +12,7 @@
 	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 	import { uuid } from '../../utils';
 	import Textfield from '@smui/textfield';
+	import { Button } from '../ui';
 	import { onMount } from 'svelte';
 
 	export let dialogActive;
@@ -147,13 +148,11 @@
 	<ProducerExchange bind:events bind:producerExchangeName bind:outgoingEvents bind:schemaGroup bind:disableSchemaGroup  />
 	<ConsumerExchange bind:consumerExchangeName bind:receivers bind:methods />
 	<CardActions>
-		{#if editMode}
-			<Button class="mr-3" on:click={update} disabled={!valid}>Update</Button> <!--TODO: vlingo colors: class="primary-color", right now materialify overwrites disabled state-->
-		{:else}
-			<Button class="mr-3" on:click={add} disabled={!valid}>Add</Button> <!--TODO: vlingo colors-->
-		{/if}
-		<Button outlined on:click={closeDialog}>Cancel</Button>
-		<span style="width: 100%;"></span>
-		<Button outlined class="red red-text" on:click={clearFields}>Clear Fields</Button>
+		<Button variant="raised" color="primary" on:click={editMode ? update : add}>
+			{editMode ? 'Update' : 'Add'}
+		</Button>
+		<span style="flex: 1;"></span>
+		<Button variant="outlined" color="secondary" class="mr-4" on:click={clearFields}>Clear Fields</Button>
+		<Button variant="outlined" color="secondary" on:click={closeDialog}>Cancel</Button>
 	</CardActions>
 </Dialog>
