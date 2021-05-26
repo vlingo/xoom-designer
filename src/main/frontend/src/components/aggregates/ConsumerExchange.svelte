@@ -1,5 +1,5 @@
 <script>
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, tick } from 'svelte';
   import DeleteButton from "./DeleteButton.svelte";
 	import { schemaRule } from "../../validators";
 	import FieldsetBox from './FieldsetBox.svelte';
@@ -20,8 +20,19 @@
 		} else {
 			receivers = receivers.concat({ aggregateMethod: "", schema: "" })
 		}
+		tick().then(() => {
+      const el = document.querySelector(`#schemaRefName${receivers.length - 1} input`);
+      if (el) el.focus()
+    })
 	}
-	const deleteReceiver = (index) => { receivers.splice(index, 1); receivers = receivers; }
+	const deleteReceiver = (index) => {
+		receivers.splice(index, 1);
+		receivers = receivers;
+		tick().then(() => {
+      const el = document.querySelector(`#schemaRefName${index === 0 ? 0 : index - 1} input`);
+      if (el) el.focus()
+    })
+	}
 
 	afterUpdate(() => {
 		receivers = receivers.map(receiver => {
@@ -44,6 +55,7 @@
 		<div class="d-flex align-center">
 			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
 				<Textfield
+					id="schemaRefName{i}"
 					style="width: 100%;"
 					label="Schema Reference"
 					bind:value={receiver.schema}
