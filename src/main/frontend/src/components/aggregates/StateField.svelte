@@ -38,7 +38,7 @@
       disabled={i === 0}
       input$autocomplete="off"
       bind:value={stateField.name}
-      rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}
+      invalid={[requireRule(stateField.name), identifierRule(stateField.name), isPropertyUniqueRule(stateField.name, stateFields, 'name')].some(f => f)}
     >
     </Textfield>
   </div>

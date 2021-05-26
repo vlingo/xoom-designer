@@ -167,7 +167,7 @@
         <List>
           {#each $settings.model.valueObjectSettings as valueObject, id (id)}
             <Item class="d-flex" on:SMUI:action={() => edit(valueObject)} on:keydown={(e) => handleKeydown(e, valueObject)}>
-              <Button style="flex:1; justify-content: flex-start;" on:click={() => edit(valueObject)}>
+              <Button style="flex:1; justify-content: flex-start; text-transform: none;" on:click={() => edit(valueObject)}>
                 <svelte:fragment slot="prependIcon">edit</svelte:fragment>
                 {valueObject.name}
               </Button>
@@ -203,7 +203,7 @@
         label="Value Object Name"
         required
         bind:value={valueObjectForm.name}
-        rules={[requireRule, isObjectFieldNameUnique]}>
+        invalid={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)].some(f => f)}>
       </Textfield>
       <ErrorWarningTooltip
         names={['Value Object Name']}
@@ -219,7 +219,7 @@
             bind:value={field.name}
             label="Field Name"
             required
-            rules={[requireRule, isFieldUnique]}>
+            invalid={[requireRule(field.name), isFieldUnique(field.name)].some(f => f)}>
           </Textfield>
         </Col>
         <Col>

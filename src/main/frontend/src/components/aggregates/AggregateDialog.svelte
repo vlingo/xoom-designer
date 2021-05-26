@@ -131,7 +131,7 @@
 			label="Aggregate Name"
 			required
 			bind:value={aggregateName}
-			rules={[requireRule, classNameRule, (name) => isAggregateUniqueRule(oldAggregate, name, $settings.model.aggregateSettings)]} validateOnBlur={!aggregateName}
+			invalid={[requireRule(aggregateName), classNameRule(aggregateName), isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings)].some(f => f)}
 		>
 		</Textfield>
 		<ErrorWarningTooltip

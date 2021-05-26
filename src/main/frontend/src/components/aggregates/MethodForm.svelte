@@ -90,7 +90,7 @@
       required
       input$autocomplete="off"
       bind:value={method.name}
-      rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, methods, 'name')]}
+      invalid={[requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].some(f => f)}
     >
     </Textfield>
   </div>
