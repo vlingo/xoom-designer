@@ -1,7 +1,6 @@
 <script>
-  import { TextField, Select, Switch } from "svelte-materialify/src";
+  import { Switch } from "svelte-materialify/src";
 	import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
   import ErrorWarningTooltip from "./ErrorWarningTooltip.svelte";
 
   import List, { Item, Label } from '@smui/list';
@@ -9,13 +8,14 @@
   import Menu, { SelectionGroup } from '@smui/menu';
   import { Anchor } from '@smui/menu-surface';
   import pluralize from 'pluralize';
+  import Textfield from "@smui/textfield/Textfield.svelte";
 
   export let method;
   export let stateFields;
   export let events;
   export let methods;
+  export let i;
 
-  let selectedEvent = method.event ? [method.event] : [];
   const symbols = [{
     sign: '*',
     isPlural: true,
@@ -33,13 +33,9 @@
   let anchor;
   let anchorClasses = {};
 
-  $: selectedEvent, onSelectedEventChanged();
-
-  function onSelectedEventChanged() {
-    const lengthOfSelectedEvents = selectedEvent.length;
-    method.event = lengthOfSelectedEvents > 0 ? selectedEvent[lengthOfSelectedEvents - 1] : '';
-    selectedEvent = method.event ? [method.event] : [];
-  }
+  let menuEvent;
+  let anchorEvent;
+  let anchorClassesEvent = {};
 
   function updateParamaters(name, symbol = undefined) {
     const nameWithOrWithoutSymbol = symbol ? `${name} ${symbol}` : name;
@@ -72,14 +68,31 @@
     }
   }
 
+  function updateEvent(eName) {
+    if (eName === method.event) {
+      method.event = null
+    } else {
+      method.event = eName;
+    }
+  }
+
   $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
   $: isAnyCollectionParameterSelected = method.parameters.some(p => p.search(/ [*#+-]$/) > -1)
 </script>
 
 <div style="flex: 1;">
-<div class="d-flex">
+<div class="d-flex align-center">
   <div class="mb-1 pb-1 mr-4" style="flex: 1;">
-    <TextField bind:value={method.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, methods, 'name')]} validateOnBlur={!method.name}>Name</TextField>
+    <Textfield
+      id="methodName{i}"
+      style="width: 100%;"
+      label="Name"
+      required
+      input$autocomplete="off"
+      bind:value={method.name}
+      rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, methods, 'name')]}
+    >
+    </Textfield>
   </div>
   <div class="mb-1 pb-1 mr-4" style="flex: 1;">
     <div
@@ -101,12 +114,14 @@
     >
     <div on:click={() => menu.setOpen(true)}
     >
-      <Select
+      <Textfield
+        style="width: 100%;"
         value={method.parameters && method.parameters.length > 0 ? method.parameters.join(', ') : '(none)'}
         disabled={!stateFields.length}
-      >
-        Parameters
-      </Select>
+        label="Parameters"
+        input$readonly={true}
+        on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menu.setOpen(true)}}
+      ></Textfield>
     </div>
     <Menu
       bind:this={menu}
@@ -122,7 +137,7 @@
               class="pa-0"
               on:SMUI:action={() => !field.collectionType && updateParamaters(field.name)}
               selected={method.parameters.includes(field.collectionType ? `${field.name} >` : field.name)}
-              disabled={isAnyCollectionParameterSelected}
+              disabled={isAnyCollectionParameterSelected || field.collectionType}
             >
               <Checkbox
                 style="visibility: {field.collectionType ? 'hidden' : 'visible'}"
@@ -154,7 +169,58 @@
     </div>
   </div>
   <div class="mb-1 pb-1 " style="flex: 1;">
-    <Select disabled={!events.length} multiple closeOnClick={true} items={formatArrayForSelect(events.map(e => e.name))} bind:value={selectedEvent} placeholder="(none)">Event</Select>
+    <div
+      class={Object.keys(anchorClassesEvent).join(' ')}
+      use:Anchor={{
+        addClass: (className) => {
+          if (!anchorClassesEvent[className]) {
+            anchorClassesEvent[className] = true;
+          }
+        },
+        removeClass: (className) => {
+          if (anchorClassesEvent[className]) {
+            delete anchorClassesEvent[className];
+            anchorClassesEvent = anchorClassesEvent;
+          }
+        },
+      }}
+      bind:this={anchorEvent}
+    >
+    <div on:click={() => menuEvent.setOpen(true)}>
+      <Textfield
+        style="width: 100%;"
+        value={method.event ? method.event : '(none)'}
+        disabled={!stateFields.length}
+        label="Event"
+        input$readonly={true}
+        on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menuEvent.setOpen(true)}}
+      ></Textfield>
+    </div>
+    <Menu
+      bind:this={menuEvent}
+      anchor={false}
+      bind:anchorElement={anchorEvent}
+      anchorCorner="BOTTOM_LEFT"  
+      style="width: 100%;"
+    >
+      <List class="demo-list" checkList>
+        <SelectionGroup>
+          {#each events as event}
+            <Item
+              class="pa-0"
+              on:SMUI:action={() => updateEvent(event.name)}
+              selected={method.event === event.name}
+            >
+              <Checkbox
+                checked={method.event === event.name}
+                value={event.name} />
+              <Label>{event.name}</Label>
+            </Item>
+          {/each}
+        </SelectionGroup>
+      </List>
+    </Menu>
+    </div>
   </div>
 </div>
 <div class="mb-3 pb-3 " style="flex: 1;">
@@ -164,7 +230,7 @@
 <div style="align-self: flex-start;">
   <ErrorWarningTooltip
     type={validation && validation.length > 0 ? 'error' : 'warning'}
-    messages={validation && validation.length > 0 ? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', selectedEvent && selectedEvent.length > 0 ? '' : 'is selected']}
+    messages={validation && validation.length > 0 ? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected']}
     names={validation && validation.length > 0 ? ['Name', 'Name', 'Name'] : ['No paramaters', 'No event']}
   />
 </div>
