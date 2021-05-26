@@ -2,12 +2,16 @@
       <plugin>
         <groupId>io.vlingo.xoom</groupId>
         <artifactId>xoom-build-plugins</artifactId>
-        <version>1.4.4-SNAPSHOT</version>
+        <version>${r"${vlingo.xoom.version}"}</version>
         <executions>
           <#if hasProducerExchange>
-<execution>
+          <execution>
+            <id>push</id>
+            <!-- Run to push the schema to schemata: `mvn io.vlingo.xoom:xoom-build-plugins:push-schema@push` -->
+            <!-- Uncomment the following line to automatically push the schema during `mvn deploy`: -->
+            <!-- <phase>deploy</phase> -->
             <goals>
-              <goal>push-schemata</goal>
+              <goal>push-schema</goal>
             </goals>
             <configuration>
               <srcDirectory>${r"${basedir}"}/src/main/vlingo/schemata</srcDirectory>
@@ -29,9 +33,9 @@
           </#if>
           <#if hasConsumerExchange>
           <execution>
-            <id>pullSchemata</id>
+            <id>pull</id>
             <goals>
-              <goal>pull-schemata</goal>
+              <goal>pull-schema</goal>
             </goals>
             <configuration>
               <schemataService>

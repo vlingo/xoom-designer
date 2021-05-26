@@ -17,15 +17,16 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.*;
 
-public class CodeGenerationSetup {
+public class CodeGenerationProperties {
 
   public static final String DATA_SCHEMA_CATEGORY = "data";
   public static final String EVENT_SCHEMA_CATEGORY = "event";
   public static final String DEFAULT_SCHEMA_VERSION = "1.0.0";
 
+  public static final String CHAR_TYPE = "char";
   public static final List<String> DATE_TIME_TYPES = Arrays.asList("LocalDate", "LocalDateTime");
   public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double", "integer");
-  public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", "string"))
+  public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", CHAR_TYPE, "string"))
           .flatMap(List::stream).collect(Collectors.toList());
 
   @SuppressWarnings("serial")

@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.DEFAULT_SCHEMA_VERSION;
 
 public class Schema {
 

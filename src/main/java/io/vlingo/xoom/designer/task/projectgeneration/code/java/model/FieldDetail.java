@@ -8,11 +8,11 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import org.apache.commons.lang3.StringUtils;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.SCALAR_NUMERIC_TYPES;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.SCALAR_NUMERIC_TYPES;
 
 public class FieldDetail {
 
@@ -46,6 +46,9 @@ public class FieldDetail {
     if (isDateTime(type)) {
       return type + ".now()";
     }
+    if (isChar(type)) {
+      return "'\u0000'";
+    }
     return "null";
   }
 
@@ -72,7 +75,7 @@ public class FieldDetail {
     if (fieldType == null || fieldType.isEmpty()) {
       throw new IllegalArgumentException("Unable to find field type");
     }
-    return CodeGenerationSetup.SCALAR_TYPES.contains(fieldType.toLowerCase());
+    return CodeGenerationProperties.SCALAR_TYPES.contains(fieldType.toLowerCase());
   }
 
   public static String resolveCollectionType(final CodeGenerationParameter field) {
@@ -105,6 +108,10 @@ public class FieldDetail {
     return isBoolean(field.retrieveRelatedValue(Label.FIELD_TYPE));
   }
 
+  public static boolean hasCharType(final CodeGenerationParameter field) {
+    return isChar(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
   public static boolean isCollection(final CodeGenerationParameter field) {
     return field.hasAny(Label.COLLECTION_TYPE);
   }
@@ -124,9 +131,9 @@ public class FieldDetail {
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
     if(isCollection(field)) {
-      return CodeGenerationSetup.SPECIAL_TYPES.get(field.retrieveRelatedValue(Label.COLLECTION_TYPE));
+      return CodeGenerationProperties.SPECIAL_TYPES.get(field.retrieveRelatedValue(Label.COLLECTION_TYPE));
     }
-    return CodeGenerationSetup.SPECIAL_TYPES.getOrDefault(field.retrieveRelatedValue(Label.FIELD_TYPE), "");
+    return CodeGenerationProperties.SPECIAL_TYPES.getOrDefault(field.retrieveRelatedValue(Label.FIELD_TYPE), "");
   }
 
   public static boolean isDateTime(final CodeGenerationParameter field) {
@@ -135,7 +142,7 @@ public class FieldDetail {
   }
 
   public static boolean isDateTime(final String fieldType) {
-    return CodeGenerationSetup.DATE_TIME_TYPES.contains(fieldType);
+    return CodeGenerationProperties.DATE_TIME_TYPES.contains(fieldType);
   }
 
   public static boolean isNumeric(final String fieldType) {
@@ -148,6 +155,10 @@ public class FieldDetail {
 
   public static boolean isString(final String fieldType) {
     return fieldType.equalsIgnoreCase(String.class.getSimpleName());
+  }
+
+  public static boolean isChar(final String fieldType) {
+    return fieldType.equalsIgnoreCase(CodeGenerationProperties.CHAR_TYPE);
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {

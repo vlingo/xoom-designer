@@ -10,8 +10,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.DATA_SCHEMA_CATEGORY;
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup.DEFAULT_SCHEMA_VERSION;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.DATA_SCHEMA_CATEGORY;
+import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.DEFAULT_SCHEMA_VERSION;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
+
 public class AuxiliaryEntityCreation {
 
   public static final String METHOD_NAME = "_createEntity";
@@ -99,6 +101,6 @@ public class AuxiliaryEntityCreation {
   }
 
   public static boolean isRequiredFor(final CodeGenerationParameter method, final Optional<String> defaultFactoryMethod) {
-    return !method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) && defaultFactoryMethod.isPresent();
+    return !method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) && method.hasAny(METHOD_PARAMETER) && defaultFactoryMethod.isPresent();
   }
 }

@@ -14,8 +14,8 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 import io.vlingo.xoom.turbo.OperatingSystem;
@@ -187,6 +187,7 @@ public class EntityUnitTestGenerationStepTest {
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "catalog")
                     .relate(Label.METHOD_PARAMETER, "title")
                     .relate(Label.METHOD_PARAMETER, "publisher")
+                    .relate(Label.METHOD_PARAMETER, "group")
                     .relate(Label.FACTORY_METHOD, "false")
                     .relate(bookCatalogedEvent);
 
@@ -202,9 +203,13 @@ public class EntityUnitTestGenerationStepTest {
             CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
                     .relate(Label.FIELD_TYPE, "String");
 
+    final CodeGenerationParameter groupField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "group")
+                    .relate(Label.FIELD_TYPE, "char");
+
     return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
-            .relate(bookCatalogedEvent).relate(catalogMethod)
-            .relate(idField).relate(nameField).relate(rankField);
+            .relate(bookCatalogedEvent).relate(catalogMethod).relate(idField)
+            .relate(nameField).relate(rankField).relate(groupField);
   }
 
   private CodeGenerationParameter nameValueObject() {
@@ -260,13 +265,6 @@ public class EntityUnitTestGenerationStepTest {
           Paths.get(PROJECT_PATH, "src", "main", "java",
                   "io", "vlingo", "xoomapp", "model").toString();
 
-  private static final String INFRASTRUCTURE_PACKAGE_PATH =
-          Paths.get(PROJECT_PATH, "src", "main", "java",
-                  "io", "vlingo", "xoomapp", "infrastructure").toString();
-
-  @SuppressWarnings("unused")
-  private static final String PERSISTENCE_PACKAGE_PATH =
-          Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
 
   private static final String AUTHOR_CONTENT_TEXT =
           "package io.vlingo.xoomapp.model.author; \\n" +
@@ -277,27 +275,6 @@ public class EntityUnitTestGenerationStepTest {
   private static final String BOOK_CONTENT_TEXT =
           "package io.vlingo.xoomapp.model.book; \\n" +
                   "public interface Book { \\n" +
-                  "... \\n" +
-                  "}";
-
-  @SuppressWarnings("unused")
-  private static final String AUTHOR_REGISTERED_ADAPTER_CONTENT_TEXT =
-          "package io.vlingo.xoomapp.infrastructure; \\n" +
-                  "public class AuthorRegisteredAdapter { \\n" +
-                  "... \\n" +
-                  "}";
-
-  @SuppressWarnings("unused")
-  private static final String AUTHOR_RANKED_ADAPTER_CONTENT_TEXT =
-          "package io.vlingo.xoomapp.infrastructure; \\n" +
-                  "public class AuthorRankedAdapter { \\n" +
-                  "... \\n" +
-                  "}";
-
-  @SuppressWarnings("unused")
-  private static final String BOOK_CATALOGED_ADAPTER_CONTENT_TEXT =
-          "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-                  "public interface AuthorQueries { \\n" +
                   "... \\n" +
                   "}";
 

@@ -13,9 +13,9 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationSetup;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 
 import java.util.List;
 import java.util.Set;
@@ -91,7 +91,7 @@ public class ProjectionTemplateData extends TemplateData {
     final Stream<String> specialTypesImports =
             projectionSources.stream()
                     .map(ProjectionSource::getMergeParameters)
-                    .map(mergeParameters -> CodeGenerationSetup.SPECIAL_TYPES.entrySet().stream().filter(entry -> mergeParameters.contains(entry.getKey())))
+                    .map(mergeParameters -> CodeGenerationProperties.SPECIAL_TYPES.entrySet().stream().filter(entry -> mergeParameters.contains(entry.getKey())))
                     .flatMap(s -> s).map(involvedSpecialTypes -> involvedSpecialTypes.getValue());
 
     return Stream.of(defaultImports, specialTypesImports).flatMap(s -> s).collect(Collectors.toSet());
