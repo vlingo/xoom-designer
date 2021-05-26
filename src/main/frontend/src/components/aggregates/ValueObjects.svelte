@@ -195,23 +195,26 @@
 
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
-    <div class="d-flex align-center">
-      <Textfield
-        bind:this={valueObjectNameElement}
-        style="flex: 1;"
-        class="mb-4"
-        label="Value Object Name"
-        required
-        bind:value={valueObjectForm.name}
-        invalid={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)].some(f => f)}>
-      </Textfield>
-      <ErrorWarningTooltip
-        names={['Value Object Name']}
-        messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
-      />
-    </div>
+    <Row class="align-center">
+      <Col>
+        <Textfield
+          bind:this={valueObjectNameElement}
+          style="width: 100%;"
+          label="Value Object Name"
+          required
+          bind:value={valueObjectForm.name}
+          invalid={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)].some(f => f)}>
+        </Textfield>
+      </Col>
+      <Col cols="auto" class="pa-0">
+        <ErrorWarningTooltip
+          names={['Value Object Name']}
+          messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
+        />
+      </Col>
+    </Row>
     {#each valueObjectForm.fields as field, i (i)}
-      <Row class="mb-4 align-center justify-between">
+      <Row class="align-center justify-between">
         <Col>
           <Textfield
             id="objectValueName{i}"
