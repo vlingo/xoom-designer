@@ -28,7 +28,7 @@
 </script>
 
 <FieldsetBox title="API" on:add={addRoute}>
-  <div class="mb-4">
+  <div class="mb-4 d-flex align-center">
     <Textfield
       style="width: 100%;"
       label="Root Path"
