@@ -1,7 +1,7 @@
 <script>
 	import { Dialog, CardActions } from 'svelte-materialify/src';
 	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule, schemaGroupRule, schemaRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
 	import Methods from './Methods.svelte';
@@ -96,6 +96,8 @@
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
 	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name');
 	const validRoute = (r) => r.path && r.aggregateMethod;
+	const validProducer = (name, schema, events) => (name && schema && !schemaGroupRule(schemaGroup) && events.length > 0) || (!name && !schema && events.length === 0);
+	const validConsumer = (name, receivers) => ((name || !name) && receivers.length === 0) || (name && receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
 
 	$: {
 		const storageState = getLocalStorage("aggregateDialogState");
@@ -105,8 +107,8 @@
 	}
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
-	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings);
-	
+	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(producerExchangeName, schemaGroup, outgoingEvents) && validConsumer(consumerExchangeName, receivers);
+	$: console.log(valid)
 	$: if(valid) {
 		newAggregate = {
 			aggregateName, stateFields, events, methods, api: { rootPath, routes }
@@ -148,7 +150,7 @@
 	<ProducerExchange bind:events bind:producerExchangeName bind:outgoingEvents bind:schemaGroup bind:disableSchemaGroup  />
 	<ConsumerExchange bind:consumerExchangeName bind:receivers bind:methods />
 	<CardActions>
-		<Button variant="raised" color="primary" on:click={editMode ? update : add}>
+		<Button variant="raised" color="primary" disabled={!valid} on:click={editMode ? update : add}>
 			{editMode ? 'Update' : 'Add'}
 		</Button>
 		<span style="flex: 1;"></span>
