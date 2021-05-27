@@ -108,7 +108,6 @@
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
 	&& !routeRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(producerExchangeName, schemaGroup, outgoingEvents) && validConsumer(consumerExchangeName, receivers);
-	$: console.log(valid)
 	$: if(valid) {
 		newAggregate = {
 			aggregateName, stateFields, events, methods, api: { rootPath, routes }
