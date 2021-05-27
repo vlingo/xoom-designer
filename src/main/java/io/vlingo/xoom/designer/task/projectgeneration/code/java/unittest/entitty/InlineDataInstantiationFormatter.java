@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -16,26 +17,32 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDat
 import java.util.List;
 import java.util.function.Consumer;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
+
 public class InlineDataInstantiationFormatter {
 
+  private final CodeGenerationParameter methodParameter;
   private final CodeGenerationParameter stateField;
   private final List<CodeGenerationParameter> valueObjects;
   private final StringBuilder valuesAssignmentExpression;
   private final TestDataValues testDataValues;
 
-  public static InlineDataInstantiationFormatter with(final CodeGenerationParameter stateField,
+  public static InlineDataInstantiationFormatter with(final CodeGenerationParameter methodParameter,
+                                                      final CodeGenerationParameter stateField,
                                                       final List<CodeGenerationParameter> valueObjects,
                                                       final TestDataValues testDataValues) {
-    return new InlineDataInstantiationFormatter(stateField, valueObjects, testDataValues);
+    return new InlineDataInstantiationFormatter(methodParameter, stateField, valueObjects, testDataValues);
   }
 
-  private InlineDataInstantiationFormatter(final CodeGenerationParameter stateField,
+  private InlineDataInstantiationFormatter(final CodeGenerationParameter methodParameter,
+                                           final CodeGenerationParameter stateField,
                                            final List<CodeGenerationParameter> valueObjects,
                                            final TestDataValues testDataValues) {
     this.stateField = stateField;
     this.valueObjects = valueObjects;
-    this.valuesAssignmentExpression = new StringBuilder();
     this.testDataValues = testDataValues;
+    this.methodParameter = methodParameter;
+    this.valuesAssignmentExpression = new StringBuilder();
   }
 
   public String format() {
@@ -51,7 +58,12 @@ public class InlineDataInstantiationFormatter {
 
   private String formatComplexTypedField() {
     if(FieldDetail.isCollectionOrDate(stateField)) {
-      return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
+      final CollectionMutation collectionMutation =
+              methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+
+      if(!collectionMutation.isSingleParameterBased()) {
+        return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
+      }
     }
 
     final String valueObjectType =

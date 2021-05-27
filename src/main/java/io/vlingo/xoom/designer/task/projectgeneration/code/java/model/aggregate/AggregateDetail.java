@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,9 +114,13 @@ public class AggregateDetail {
   }
 
   public static Stream<CodeGenerationParameter> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName) {
+    return findInvolvedStateFields(aggregate, methodName, (methodParameter, stateField) -> stateField);
+  }
+
+  public static <T> Stream<T> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName, final BiFunction<CodeGenerationParameter, CodeGenerationParameter, T> converter) {
     final CodeGenerationParameter method = methodWithName(aggregate, methodName);
     final Stream<CodeGenerationParameter> methodParameters = method.retrieveAllRelated(Label.METHOD_PARAMETER);
-    return methodParameters.map(parameter -> stateFieldWithName(aggregate, parameter.value));
+    return methodParameters.map(parameter -> converter.apply(parameter, stateFieldWithName(aggregate, parameter.value)));
   }
 
   private static Optional<CodeGenerationParameter> findMethod(final CodeGenerationParameter aggregate, final String methodName) {

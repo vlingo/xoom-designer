@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.model;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,6 +18,11 @@ import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationPrope
 public class FieldDetail {
 
   private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
+
+  public static String typeOf(final CodeGenerationParameter parent, final String fieldName, final CollectionMutation collectionMutation) {
+    final String type = typeOf(parent, fieldName);
+    return collectionMutation.isSingleParameterBased() ? genericTypeOf(type) : type;
+  }
 
   @SuppressWarnings("static-access")
   public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
@@ -27,6 +33,10 @@ public class FieldDetail {
               return isCollection(stateField) ? resolveCollectionType(stateField) : fieldType;
             }).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
+  }
+
+  public static String genericTypeOf(final String fieldType) {
+    return fieldType.split("<")[1].replace(">", "");
   }
 
   public static String resolveDefaultValue(final CodeGenerationParameter parent, final String stateFieldName) {

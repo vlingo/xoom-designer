@@ -7,6 +7,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.common.Tuple2;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
@@ -14,6 +16,8 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDat
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
 
 public class StaticDataDeclaration {
 
@@ -34,18 +38,26 @@ public class StaticDataDeclaration {
     final TestDataValues currentTestDataValues =
             method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) ? initialTestDataValues : updatedTestDataValues;
 
-    return AggregateDetail.findInvolvedStateFields(aggregate, method.value).map(stateField -> {
-      final String stateFieldType =
-              FieldDetail.typeOf(aggregate, stateField.value);
 
-      final String testDataVariableName =
-              TestDataFormatter.formatStaticVariableName(method, stateField);
+    return AggregateDetail.findInvolvedStateFields(aggregate, method.value, (methodParam, stateField) -> Tuple2.from(method, stateField))
+            .map(tuple -> {
+              final CodeGenerationParameter methodParameter = tuple._1;
+              final CodeGenerationParameter stateField = tuple._2;
 
-      final String dataInstantiation =
-              InlineDataInstantiationFormatter.with(stateField, valueObjects, currentTestDataValues).format();
+              final CollectionMutation collectionMutation =
+                      methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
-      return String.format(TEST_DATA_DECLARATION_PATTERN, stateFieldType, testDataVariableName, dataInstantiation);
-    }).collect(Collectors.toList());
+              final String stateFieldType =
+                      FieldDetail.typeOf(aggregate, stateField.value, collectionMutation);
+
+              final String testDataVariableName =
+                      TestDataFormatter.formatStaticVariableName(method, stateField);
+
+              final String dataInstantiation =
+                      InlineDataInstantiationFormatter.with(methodParameter, stateField, valueObjects, currentTestDataValues).format();
+
+              return String.format(TEST_DATA_DECLARATION_PATTERN, stateFieldType, testDataVariableName, dataInstantiation);
+            }).collect(Collectors.toList());
   }
 
 }
