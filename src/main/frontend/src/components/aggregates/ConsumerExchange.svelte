@@ -1,10 +1,11 @@
 <script>
-	import { afterUpdate } from 'svelte';
-	import { Select,  TextField } from 'svelte-materialify/src';
+	import { afterUpdate, tick } from 'svelte';
   import DeleteButton from "./DeleteButton.svelte";
-	import CreateButton from "./CreateButton.svelte";
 	import { schemaRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
+	import FieldsetBox from './FieldsetBox.svelte';
+	import Textfield from '@smui/textfield/Textfield.svelte';
+	import Select, { Option } from '@smui/select';
+	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
 
   export let consumerExchangeName;
   export let receivers;
@@ -19,8 +20,19 @@
 		} else {
 			receivers = receivers.concat({ aggregateMethod: "", schema: "" })
 		}
+		tick().then(() => {
+      const el = document.querySelector(`#schemaRefName${receivers.length - 1} input`);
+      if (el) el.focus()
+    })
 	}
-	const deleteReceiver = (index) => { receivers.splice(index, 1); receivers = receivers; }
+	const deleteReceiver = (index) => {
+		receivers.splice(index, 1);
+		receivers = receivers;
+		tick().then(() => {
+      const el = document.querySelector(`#schemaRefName${index === 0 ? 0 : index - 1} input`);
+      if (el) el.focus()
+    })
+	}
 
 	afterUpdate(() => {
 		receivers = receivers.map(receiver => {
@@ -32,25 +44,43 @@
 	});
 
 </script>
-<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
-  <legend>
-    <h6 class="ma-0 pl-3 pr-3">Consumer Exchange</h6>
-  </legend>
-	<TextField class="mb-3 pb-3" bind:value={consumerExchangeName}>Exchange Name</TextField>
-
+<FieldsetBox title="Consumer Exchange" on:add={addReceiver}>
+	<Textfield
+		class="mb-4"
+		style="width: 100%;"
+		bind:value={consumerExchangeName}
+		label="Exchange Name"
+	></Textfield>
 	{#each receivers as receiver, i}
-		<div class="d-flex">
+		<div class="d-flex align-center">
 			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
-				<TextField bind:value={receiver.schema} rules={[schemaRule]} validateOnBlur={!(receiver.schema)}>Schema Reference</TextField>
+				<Textfield
+					id="schemaRefName{i}"
+					style="width: 100%;"
+					label="Schema Reference"
+					bind:value={receiver.schema}
+					invalid={[schemaRule(receiver.schema)].some(f => f)}
+				></Textfield>
 			</div>
 			<div style="flex: 1;" mandatory class="mb-3 pb-3">
-				<Select items={formatArrayForSelect(methods.map(m => m.name))} bind:value={receiver.aggregateMethod}>Aggregate Method</Select>
+				<Select
+					bind:value={receiver.aggregateMethod}
+					label="Aggregate Method"
+				>
+					{#each methods.filter(f => f.name) as method}
+						<Option value={method.name}>{method.name}</Option>
+					{/each}
+				</Select>
+			</div>
+			<div>
+				<ErrorWarningTooltip
+					names={['Schema Reference']}
+					messages={[schemaRule(receiver.schema)]}
+				/>
 			</div>
 			<div style="width: 36px;">
 				<DeleteButton title="Delete Schema" on:click={() => deleteReceiver(i)}/>
 			</div>
 		</div>
 	{/each}
-	<CreateButton title="Add Schema" on:click={addReceiver}/>
-	
-</fieldset>
+</FieldsetBox>

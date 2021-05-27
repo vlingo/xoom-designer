@@ -1,8 +1,8 @@
 <script>
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
-	import CreateButton from "./CreateButton.svelte";
   import MethodForm from './MethodForm.svelte';
   import pluralize from "pluralize";
+  import FieldsetBox from "./FieldsetBox.svelte";
 
   export let methods;
   export let stateFields;
@@ -32,16 +32,13 @@
   }
 </script>
 
-<fieldset class="pa-6 pt-8 pb-8 mb-8" style="border: 1px solid rgba(0,0,0,0.15); border-radius: 10px;">
-  <legend>
-    <h6 class="ma-0 pl-3 pr-3">Command Methods</h6>
-  </legend>
+<FieldsetBox title="Command Methods" on:add={addMethod}>
   {#if methods.length < 1}
     <div class="text-center">There is no method! Add One.</div>
   {/if}
   {#each methods as method, id (id)}
     <div class="d-flex align-center">
-      <MethodForm {stateFields} {events} {methods} bind:method />
+      <MethodForm {stateFields} {events} {methods} i={id} bind:method />
       <div style="align-self: flex-start; width: 32px;">
         <DeleteWithDialog type="Method" on:click={() => deleteMethod(id)}>
           <b>{method.name}</b> might be in use at API and Consumer Exchange sections.
@@ -49,5 +46,4 @@
       </div>
     </div>
   {/each}
-  <CreateButton title="Add Method" on:click={addMethod}/>
-</fieldset>
+</FieldsetBox>

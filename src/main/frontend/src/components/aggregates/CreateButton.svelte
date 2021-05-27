@@ -1,18 +1,15 @@
 <script>
-	import { mdiPlusThick } from "@mdi/js";
-	import { Button, Icon } from "svelte-materialify/src";
+  import Fab, { Icon } from '@smui/fab';
 
 	export let title;
-	export let fab = true;
-	$: icon = !fab;
 </script>
 
 
 
 <div class="vl-btn d-flex justify-center align-center">
-	<Button {title} {fab} {icon} on:click>
-		<Icon path={mdiPlusThick}/>
-	</Button>
+	<Fab {title} color="primary" on:click>
+		<Icon class="material-icons">add</Icon>
+	</Fab>
 </div>
 
 <style>

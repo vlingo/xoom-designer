@@ -1,13 +1,13 @@
 <script>
-  import { Select, TextField, Icon } from 'svelte-materialify/src';
+  import { Icon } from 'svelte-materialify/src';
   import DeleteWithDialog from "./DeleteWithDialog.svelte";
   import { identifierRule, requireRule, isPropertyUniqueRule } from "../../validators";
-  import { formatArrayForSelect } from '../../utils';
-	import { collectionTypes } from '../../stores';
   import FieldTypeSelect from './FieldTypeSelect.svelte';
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import { mdiArrowUpDown, mdiArrowVerticalLock } from '@mdi/js';
   import { createEventDispatcher } from 'svelte';
+  import Textfield from '@smui/textfield';
+  import CollectionTypeSelect from './CollectionTypeSelect.svelte';
 
   export let stateFields;
   export let stateField;
@@ -21,7 +21,7 @@
   }
 </script>
 
-<div class="d-flex">
+<div class="d-flex align-center">
   <div
     class="handle pa-2"
     class:disabled={i === 0}
@@ -29,12 +29,21 @@
   >
     <Icon path={i === 0 ? mdiArrowVerticalLock : mdiArrowUpDown}/>
   </div>
-  <div style="flex: 1;" class="mb-3 pb-4 mr-4">
-    <TextField disabled={i === 0} autocomplete="off" bind:value={stateField.name} rules={[requireRule, identifierRule, (v) => isPropertyUniqueRule(v, stateFields, 'name') ]}>Name</TextField>
+  <div style="flex: 1;" class="pb-4 mr-4">
+    <Textfield
+      id="stateFieldName{i}"
+      style="width: 100%;"
+      label="Name"
+      required
+      disabled={i === 0}
+      input$autocomplete="off"
+      bind:value={stateField.name}
+      invalid={[requireRule(stateField.name), identifierRule(stateField.name), isPropertyUniqueRule(stateField.name, stateFields, 'name')].some(f => f)}
+    >
+    </Textfield>
   </div>
-  <div style="flex: 1;" class="mb-3 pb-4 mr-4">
+  <div style="flex: 1;" class="pb-4 mr-4">
     <FieldTypeSelect
-      mandatory
       disabled={i === 0}
       items={stateFieldsTypes}
       bind:value={stateField.type}
@@ -43,8 +52,8 @@
       Type
     </FieldTypeSelect>
   </div>
-  <div style="flex: 1;" class="mb-3 pb-4">
-    <Select disabled={i === 0} items={formatArrayForSelect(collectionTypes.map(f => f.name))}  bind:value={stateField.collectionType} placeholder="(bare)">Collection</Select>
+  <div style="flex: 1;" class="pb-4">
+    <CollectionTypeSelect disabled={i === 0} bind:value={stateField.collectionType} />
   </div>
   <div>
     <ErrorWarningTooltip
