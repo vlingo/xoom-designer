@@ -19,13 +19,13 @@
 	const methodParameters = (parameters) => {
 		return parameters.reduce((acc, cur) => {
 			const field = aggregate.stateFields.find(sf => {
-				const replace = `^${sf.name}$|^${sf.name} [*#+-]$|^${pluralize.singular(sf.name)} [*#+-]$`;
-				const re = new RegExp(replace);
-				return cur.search(re) > -1;
+				return sf.name === cur.stateField;
 			});
 			if (field) {
-				const bool = cur.search(/(\+|\-)$/) > -1;
-				acc.push(`${bool ? `${pluralize.singular(field.name)}` : field.name}: ${field.collectionType && !bool ? `${field.collectionType}<${field.type}>` : field.type}`);
+				const bool = cur && (cur.multiplicity === '+' || cur.multiplicity === '-');
+				const n = bool ? `${cur.parameterName}` : field.name
+				const t = field.collectionType && !bool ? `${field.collectionType}<${field.type}>` : field.type
+				acc.push(`${n}: ${t}`);
 			}
 			return acc;
 		}, []).join(', ');
