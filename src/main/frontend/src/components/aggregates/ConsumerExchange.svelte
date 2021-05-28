@@ -1,7 +1,7 @@
 <script>
 	import { afterUpdate, tick } from 'svelte';
   import DeleteButton from "./DeleteButton.svelte";
-	import { schemaRule } from "../../validators";
+	import { requireRule, schemaRule } from "../../validators";
 	import FieldsetBox from './FieldsetBox.svelte';
 	import Textfield from '@smui/textfield/Textfield.svelte';
 	import Select, { Option } from '@smui/select';
@@ -50,10 +50,11 @@
 		style="width: 100%;"
 		bind:value={consumerExchangeName}
 		label="Exchange Name"
+		invalid={!consumerExchangeName && receivers.length > 0}
 	></Textfield>
-	{#each receivers as receiver, i}
+	{#each receivers as receiver, i (i)}
 		<div class="d-flex align-center">
-			<div style="flex: 1;" class="mb-3 pb-3 mr-4">
+			<div style="flex: 2;" class="mb-3 pb-3 mr-4">
 				<Textfield
 					id="schemaRefName{i}"
 					style="width: 100%;"
@@ -74,8 +75,8 @@
 			</div>
 			<div>
 				<ErrorWarningTooltip
-					names={['Schema Reference']}
-					messages={[schemaRule(receiver.schema)]}
+					names={['Schema Reference', 'Schema Reference', 'Aggregate Method']}
+					messages={[requireRule(receiver.schema), schemaRule(receiver.schema), requireRule(receiver.aggregateMethod)]}
 				/>
 			</div>
 			<div style="width: 36px;">
