@@ -430,16 +430,11 @@
     ]
   },
   {
-    "name": "io.netty.channel.kqueue.KQueue"
+    "name":"io.netty.channel.epoll.Epoll"
   },
   {
-    "name": "io.netty.channel.socket.nio.NioServerSocketChannel",
-    "methods": [
-      {
-        "name": "<init>",
-        "parameterTypes": []
-      }
-    ]
+    "name":"io.netty.channel.epoll.EpollServerSocketChannel",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
   },
   {
     "name": "io.netty.util.AbstractReferenceCounted",

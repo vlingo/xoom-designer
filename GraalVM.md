@@ -20,7 +20,47 @@ mvn clean package -Pfrontend
 ```
 - Generate native image resources Configs
 ```bash
-java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image -jar target/xoom-designer-1.7.7-SNAPSHOT.jar gui
+java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/native-image/io.vlingo.xoom/xoom-designer -jar target/xoom-designer-<version>-SNAPSHOT.jar gui --target zip-download
+```
+### Tips to load more resources and reflection for the agent
+- Reload the web page from the browser
+- Test max functionality of the app
+- Adding missing serialization:
+```json
+
+  {
+    "name": "java.sql.Timestamp"
+  },
+  {
+    "name": "java.lang.Object"
+  },
+  {
+    "name": "java.lang.Boolean"
+  },
+  {
+    "name": "java.lang.Character"
+  },
+  {
+    "name": "java.lang.Double"
+  },
+  {
+    "name": "java.lang.Float"
+  },
+  {
+    "name": "java.lang.Long"
+  },
+  {
+    "name": "java.lang.Integer"
+  },
+  {
+    "name": "java.lang.Short"
+  },
+  {
+    "name": "java.lang.Byte"
+  },
+  {
+    "name": "java.lang.String"
+  },
 ```
 
 ## Native Image Maven Plugin & GraalVM SDK
@@ -92,4 +132,19 @@ mvn clean package -Pfrontend -Pnative-image
 ./target/xoom-designer gui
 ```
 - On native image runtime, an exception is always thrown, issue described here: [ISSUE](https://github.com/RuedigerMoeller/fast-serialization/issues/313)
-- WIP running frontend...
+
+## Docker build and run
+- Increase the Docker Memory Resource to +8Go.
+- First build the jar file:
+```bash
+mvn clean package -Pfrontend
+```
+- Build the docker image
+```bash
+docker build -f Dockerfile.native -t vlingo/xoom-designer .
+```
+- Run the docker image
+```bash
+docker run -it --rm -p '19090:19090' -v $(pwd)/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
+```
+- On native image runtime, a netty native transport epoll issue: [PR](https://github.com/netty/netty/pull/11163)

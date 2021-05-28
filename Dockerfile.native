@@ -3,7 +3,6 @@ FROM ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0 as build
 LABEL maintainer="VLINGO XOOM Team <info@vlingo.io>"
 
 ARG XOOM_HOME=/designer
-
 WORKDIR $XOOM_HOME
 COPY dist/designer ./dist/designer
 COPY target/xoom-designer-*.jar ./xoom-designer.jar
@@ -13,7 +12,11 @@ RUN gu install native-image
 RUN native-image -jar xoom-designer.jar
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
-ARG WORK_HOME=/work/
+
+RUN microdnf install autoconf automake libtool make tar \
+                 glibc-devel \
+                 libgcc.i686 glibc-devel.i686
+ARG WORK_HOME=/work
 ENV VLINGO_XOOM_DESIGNER_HOME=/work/designer/
 ENV VLINGO_XOOM_DESIGNER_ENV=CONTAINER
 
