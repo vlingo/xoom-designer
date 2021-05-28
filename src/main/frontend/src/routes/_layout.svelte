@@ -273,10 +273,10 @@
 		}
 	}
 	.theme--dark {
-		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line {
+		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line, .mdc-menu * {
 			color: white !important;
 		}
-		.mdc-select__menu {
+		.mdc-select__menu, .mdc-menu {
 			background-color: #212121;
 		}
 	}
