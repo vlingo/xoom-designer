@@ -133,7 +133,7 @@ java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/
 mvn clean package -Pfrontend -Pnative-image
 ```
 ```bash
-./target/xoom-designer gui
+./target/xoom-designer gui --target zip-download
 ```
 - On native image runtime, an exception is always thrown, issue described here: [ISSUE](https://github.com/RuedigerMoeller/fast-serialization/issues/313)
 
