@@ -137,7 +137,13 @@
     	    </Button>
     	  {/if}
 		</div>
-		<a href="context" slot="title" class="text--primary"><span style="color: var(--theme-text-primary);"> VLINGO XOOM Designer </span></a>
+		<a href="/platform" slot="title" class="text--primary d-flex">
+			<img
+				style="width: 256px;"
+				src="/xoom-horizontal_designer.png"
+				alt="VLINGO XOOM Designer"
+			/>
+		</a>
 		<Divider vertical inset class="ml-4 mr-4" />
 
 		<div style="min-width: 100px;">
