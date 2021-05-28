@@ -1,1448 +1,3964 @@
 [
-{
-  "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
-  "allPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.DateConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.LevelConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.LineSeparatorConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.LoggerConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.MessageConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.ThreadConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.core.ConsoleAppender",
-  "allPublicMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.core.pattern.color.CyanCompositeConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.core.pattern.color.GrayCompositeConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"ch.qos.logback.core.pattern.color.MagentaCompositeConverter",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.ibm.icu.impl.ICUCurrencyDisplayInfoProvider",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.ibm.icu.impl.ICUCurrencyMetaInfo",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"freemarker.ext.jython.JythonModel"
-},
-{
-  "name":"io.netty.bootstrap.ServerBootstrap$1"
-},
-{
-  "name":"io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor",
-  "methods":[
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
-},
-{
-  "name":"io.netty.buffer.AbstractByteBufAllocator",
-  "allDeclaredMethods":true
-},
-{
-  "name":"io.netty.buffer.AbstractReferenceCountedByteBuf",
-  "fields":[{"name":"refCnt", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.channel.ChannelInboundHandlerAdapter",
-  "methods":[
-    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
-  ]
-},
-{
-  "name":"io.netty.channel.ChannelInitializer",
-  "methods":[
-    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
-},
-{
-  "name":"io.netty.channel.DefaultChannelPipeline$HeadContext",
-  "methods":[
-    {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
-    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
-    {"name":"deregister","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"disconnect","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
-    {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"read","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }
-  ]
-},
-{
-  "name":"io.netty.channel.DefaultChannelPipeline$TailContext",
-  "methods":[
-    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
-    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
-  ]
-},
-{
-  "name":"io.netty.channel.kqueue.KQueue"
-},
-{
-  "name":"io.netty.channel.socket.nio.NioServerSocketChannel",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"io.netty.util.AbstractReferenceCounted",
-  "fields":[{"name":"refCnt", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.ReferenceCountUtil",
-  "allDeclaredMethods":true
-},
-{
-  "name":"io.netty.util.internal.NativeLibraryUtil",
-  "methods":[{"name":"loadLibrary","parameterTypes":["java.lang.String","boolean"] }]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
-  "fields":[{"name":"producerLimit", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
-  "fields":[{"name":"consumerIndex", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
-  "fields":[{"name":"producerIndex", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueConsumerIndexField",
-  "fields":[{"name":"consumerIndex", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerIndexField",
-  "fields":[{"name":"producerIndex", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerLimitField",
-  "fields":[{"name":"producerLimit", "allowUnsafeAccess":true}]
-},
-{
-  "name":"io.vlingo.xoom.actors.CompletesEventually__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.DeadLetters__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.DirectoryScanner__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.Logger__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.NoProtocol__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.Stoppable__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.Supervisor__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.actors.plugin.supervision.DefaultSupervisorOverride",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.ClusterSnapshotControl__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.ClusterSnapshot__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.application.ClusterApplication__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.attribute.AttributesAgent__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.node.LocalLiveNode__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.node.RegistryInterest__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.cluster.model.outbound.OperationalOutboundStream__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.codegen.parameter.ImportParameter",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.codegen.template.TemplateCustomFunctions",
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.common.Scheduled__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByIPProjectionActor",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByMonthProjectionActor",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.APIData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateMethodData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ConsumerExchangeData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.DeploymentSettingsData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.DomainEventData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ModelSettingsData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.PersistenceData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ProducerExchangeData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ProjectGenerationReport",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ReceiverData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.RouteData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.StateFieldData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectFieldData",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation",
-  "allDeclaredFields":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.StaticFactoryMethod",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CoveyParameter",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.Exchange",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ProducerExchange",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.EventHandler",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.EventMissingField",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectToDescription",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionSource",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Adapter",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Database",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Projection",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Queries",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.AuxiliaryEntityCreation",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.SourcedEvent",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.TestCase",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestCase",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestStatement",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Aggregate",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateMethod",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Field",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Route",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.http.resource.Dispatcher__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.http.resource.ResourceRequestHandlerActor",
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.http.resource.ResourceRequestHandler__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.http.resource.Server__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.http.resource.StaticFilesResource",
-  "allPublicConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"io.vlingo.xoom.http.resource.StaticFilesResourceDispatcher",
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.lattice.grid.application.GridActorControlInbound__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.grid.application.GridActorControlOutbound__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.MultiConfirmingProjectionControlActor",
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.MultiConfirming__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.ProjectionControl__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.Projection__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor",
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.lattice.util.HardRefHolder__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.dispatch.ConfirmDispatchedResultInterest__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.dispatch.DispatcherControl__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.dispatch.Dispatcher__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.state.StateStoreReadResultInterest__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.state.StateStoreWriteResultInterest__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.state.StateStore__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor",
-  "allPublicConstructors":true
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.bidirectional.ServerRequestResponseChannel__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.bidirectional.netty.server.NettyInboundHandler",
-  "methods":[
-    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.bidirectional.netty.server.NettyServerChannelActor$1"
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.inbound.InboundStreamInterest__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.inbound.InboundStream__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"io.vlingo.xoom.wire.fdx.outbound.ApplicationOutboundStream__Proxy",
-  "methods":[{"name":"<init>","parameterTypes":["io.vlingo.xoom.actors.Actor","io.vlingo.xoom.actors.Mailbox"] }]
-},
-{
-  "name":"java.beans.PropertyVetoException"
-},
-{
-  "name":"java.io.FilePermission"
-},
-{
-  "name":"java.lang.AbstractStringBuilder",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"coder", "allowUnsafeAccess":true}, 
-    {"name":"count", "allowUnsafeAccess":true}, 
-    {"name":"value", "allowUnsafeAccess":true}
-  ],
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.Boolean",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Byte",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Character",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Class",
-  "methods":[
-    {"name":"asSubclass","parameterTypes":["java.lang.Class"] }, 
-    {"name":"cast","parameterTypes":["java.lang.Object"] }, 
-    {"name":"desiredAssertionStatus","parameterTypes":[] }, 
-    {"name":"getAnnotatedInterfaces","parameterTypes":[] }, 
-    {"name":"getAnnotatedSuperclass","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotations","parameterTypes":[] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getCanonicalName","parameterTypes":[] }, 
-    {"name":"getClasses","parameterTypes":[] }, 
-    {"name":"getComponentType","parameterTypes":[] }, 
-    {"name":"getConstructor","parameterTypes":["java.lang.Class[]"] }, 
-    {"name":"getConstructors","parameterTypes":[] }, 
-    {"name":"getDeclaredAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaredAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredClasses","parameterTypes":[] }, 
-    {"name":"getDeclaredConstructor","parameterTypes":["java.lang.Class[]"] }, 
-    {"name":"getDeclaredConstructors","parameterTypes":[] }, 
-    {"name":"getDeclaredField","parameterTypes":["java.lang.String"] }, 
-    {"name":"getDeclaredFields","parameterTypes":[] }, 
-    {"name":"getDeclaredMethod","parameterTypes":["java.lang.String","java.lang.Class[]"] }, 
-    {"name":"getDeclaredMethods","parameterTypes":[] }, 
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getEnclosingClass","parameterTypes":[] }, 
-    {"name":"getEnclosingConstructor","parameterTypes":[] }, 
-    {"name":"getEnclosingMethod","parameterTypes":[] }, 
-    {"name":"getEnumConstants","parameterTypes":[] }, 
-    {"name":"getField","parameterTypes":["java.lang.String"] }, 
-    {"name":"getFields","parameterTypes":[] }, 
-    {"name":"getGenericInterfaces","parameterTypes":[] }, 
-    {"name":"getGenericSuperclass","parameterTypes":[] }, 
-    {"name":"getInterfaces","parameterTypes":[] }, 
-    {"name":"getMethod","parameterTypes":["java.lang.String","java.lang.Class[]"] }, 
-    {"name":"getMethods","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getNestHost","parameterTypes":[] }, 
-    {"name":"getNestMembers","parameterTypes":[] }, 
-    {"name":"getPackage","parameterTypes":[] }, 
-    {"name":"getPackageName","parameterTypes":[] }, 
-    {"name":"getProtectionDomain","parameterTypes":[] }, 
-    {"name":"getSimpleName","parameterTypes":[] }, 
-    {"name":"getSuperclass","parameterTypes":[] }, 
-    {"name":"getTypeName","parameterTypes":[] }, 
-    {"name":"getTypeParameters","parameterTypes":[] }, 
-    {"name":"isAnnotation","parameterTypes":[] }, 
-    {"name":"isAnnotationPresent","parameterTypes":["java.lang.Class"] }, 
-    {"name":"isAnonymousClass","parameterTypes":[] }, 
-    {"name":"isArray","parameterTypes":[] }, 
-    {"name":"isAssignableFrom","parameterTypes":["java.lang.Class"] }, 
-    {"name":"isEnum","parameterTypes":[] }, 
-    {"name":"isInstance","parameterTypes":["java.lang.Object"] }, 
-    {"name":"isInterface","parameterTypes":[] }, 
-    {"name":"isLocalClass","parameterTypes":[] }, 
-    {"name":"isMemberClass","parameterTypes":[] }, 
-    {"name":"isNestmateOf","parameterTypes":["java.lang.Class"] }, 
-    {"name":"isPrimitive","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"toGenericString","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.ClassLoader",
-  "methods":[{"name":"getName","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.Class[]"
-},
-{
-  "name":"java.lang.Double",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Enum",
-  "allPublicMethods":true
-},
-{
-  "name":"java.lang.Float",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Integer",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Long",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.Number",
-  "allDeclaredFields":true
-},
-{
-  "name":"java.lang.Object",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.Package",
-  "methods":[
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotations","parameterTypes":[] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaredAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getImplementationTitle","parameterTypes":[] }, 
-    {"name":"getImplementationVendor","parameterTypes":[] }, 
-    {"name":"getImplementationVersion","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getPackage","parameterTypes":["java.lang.String"] }, 
-    {"name":"getPackages","parameterTypes":[] }, 
-    {"name":"getSpecificationTitle","parameterTypes":[] }, 
-    {"name":"getSpecificationVendor","parameterTypes":[] }, 
-    {"name":"getSpecificationVersion","parameterTypes":[] }, 
-    {"name":"isAnnotationPresent","parameterTypes":["java.lang.Class"] }, 
-    {"name":"isCompatibleWith","parameterTypes":["java.lang.String"] }, 
-    {"name":"isSealed","parameterTypes":[] }, 
-    {"name":"isSealed","parameterTypes":["java.net.URL"] }
-  ]
-},
-{
-  "name":"java.lang.Runtime",
-  "methods":[
-    {"name":"availableProcessors","parameterTypes":[] }, 
-    {"name":"freeMemory","parameterTypes":[] }, 
-    {"name":"maxMemory","parameterTypes":[] }, 
-    {"name":"totalMemory","parameterTypes":[] }, 
-    {"name":"version","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.RuntimePermission"
-},
-{
-  "name":"java.lang.Short",
-  "allDeclaredFields":true,
-  "fields":[{"name":"value", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.lang.String",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"coder", "allowUnsafeAccess":true}, 
-    {"name":"hash", "allowUnsafeAccess":true}, 
-    {"name":"value", "allowUnsafeAccess":true}
-  ]
-},
-{
-  "name":"java.lang.StringBuffer",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.lang.StringBuilder",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.lang.String[]"
-},
-{
-  "name":"java.lang.System",
-  "methods":[
-    {"name":"currentTimeMillis","parameterTypes":[] }, 
-    {"name":"getProperties","parameterTypes":[] }, 
-    {"name":"getProperty","parameterTypes":["java.lang.String"] }, 
-    {"name":"getProperty","parameterTypes":["java.lang.String","java.lang.String"] }, 
-    {"name":"getenv","parameterTypes":[] }, 
-    {"name":"getenv","parameterTypes":["java.lang.String"] }, 
-    {"name":"identityHashCode","parameterTypes":["java.lang.Object"] }, 
-    {"name":"lineSeparator","parameterTypes":[] }, 
-    {"name":"mapLibraryName","parameterTypes":["java.lang.String"] }, 
-    {"name":"nanoTime","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.Thread",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"java.lang.ThreadGroup",
-  "methods":[
-    {"name":"activeCount","parameterTypes":[] }, 
-    {"name":"activeGroupCount","parameterTypes":[] }, 
-    {"name":"checkAccess","parameterTypes":[] }, 
-    {"name":"getMaxPriority","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getParent","parameterTypes":[] }, 
-    {"name":"isDaemon","parameterTypes":[] }, 
-    {"name":"isDestroyed","parameterTypes":[] }, 
-    {"name":"parentOf","parameterTypes":["java.lang.ThreadGroup"] }
-  ]
-},
-{
-  "name":"java.lang.Throwable",
-  "methods":[{"name":"initCause","parameterTypes":["java.lang.Throwable"] }]
-},
-{
-  "name":"java.lang.annotation.Annotation",
-  "methods":[{"name":"annotationType","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.management.ManagementFactory",
-  "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.management.RuntimeMXBean",
-  "methods":[
-    {"name":"getInputArguments","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.AccessibleObject",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true,
-  "fields":[{"name":"override"}]
-},
-{
-  "name":"java.lang.reflect.AnnotatedElement",
-  "methods":[
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotations","parameterTypes":[] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaredAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"isAnnotationPresent","parameterTypes":["java.lang.Class"] }
-  ]
-},
-{
-  "name":"java.lang.reflect.AnnotatedType",
-  "methods":[
-    {"name":"getAnnotatedOwnerType","parameterTypes":[] }, 
-    {"name":"getType","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Constructor",
-  "methods":[
-    {"name":"getAnnotatedReceiverType","parameterTypes":[] }, 
-    {"name":"getAnnotatedReturnType","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericParameterTypes","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getParameterAnnotations","parameterTypes":[] }, 
-    {"name":"getParameterCount","parameterTypes":[] }, 
-    {"name":"getParameterTypes","parameterTypes":[] }, 
-    {"name":"getTypeParameters","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"isVarArgs","parameterTypes":[] }, 
-    {"name":"toGenericString","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Executable",
-  "methods":[
-    {"name":"getAnnotatedExceptionTypes","parameterTypes":[] }, 
-    {"name":"getAnnotatedParameterTypes","parameterTypes":[] }, 
-    {"name":"getAnnotatedReceiverType","parameterTypes":[] }, 
-    {"name":"getAnnotatedReturnType","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericParameterTypes","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getParameterAnnotations","parameterTypes":[] }, 
-    {"name":"getParameterCount","parameterTypes":[] }, 
-    {"name":"getParameterTypes","parameterTypes":[] }, 
-    {"name":"getParameters","parameterTypes":[] }, 
-    {"name":"getTypeParameters","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"isVarArgs","parameterTypes":[] }, 
-    {"name":"toGenericString","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Field",
-  "methods":[
-    {"name":"getAnnotatedType","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getGenericType","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getType","parameterTypes":[] }, 
-    {"name":"isEnumConstant","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"toGenericString","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.GenericDeclaration",
-  "methods":[{"name":"getTypeParameters","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.reflect.Member",
-  "methods":[
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Method",
-  "methods":[
-    {"name":"getAnnotatedReturnType","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaringClass","parameterTypes":[] }, 
-    {"name":"getDefaultValue","parameterTypes":[] }, 
-    {"name":"getExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericExceptionTypes","parameterTypes":[] }, 
-    {"name":"getGenericParameterTypes","parameterTypes":[] }, 
-    {"name":"getGenericReturnType","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getParameterAnnotations","parameterTypes":[] }, 
-    {"name":"getParameterCount","parameterTypes":[] }, 
-    {"name":"getParameterTypes","parameterTypes":[] }, 
-    {"name":"getReturnType","parameterTypes":[] }, 
-    {"name":"getTypeParameters","parameterTypes":[] }, 
-    {"name":"isBridge","parameterTypes":[] }, 
-    {"name":"isDefault","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"isVarArgs","parameterTypes":[] }, 
-    {"name":"toGenericString","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Parameter",
-  "methods":[
-    {"name":"getAnnotatedType","parameterTypes":[] }, 
-    {"name":"getAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getAnnotations","parameterTypes":[] }, 
-    {"name":"getAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotation","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaredAnnotations","parameterTypes":[] }, 
-    {"name":"getDeclaredAnnotationsByType","parameterTypes":["java.lang.Class"] }, 
-    {"name":"getDeclaringExecutable","parameterTypes":[] }, 
-    {"name":"getModifiers","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }, 
-    {"name":"getParameterizedType","parameterTypes":[] }, 
-    {"name":"getType","parameterTypes":[] }, 
-    {"name":"isImplicit","parameterTypes":[] }, 
-    {"name":"isNamePresent","parameterTypes":[] }, 
-    {"name":"isSynthetic","parameterTypes":[] }, 
-    {"name":"isVarArgs","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.reflect.Type",
-  "methods":[{"name":"getTypeName","parameterTypes":[] }]
-},
-{
-  "name":"java.lang.reflect.TypeVariable",
-  "methods":[
-    {"name":"getAnnotatedBounds","parameterTypes":[] }, 
-    {"name":"getBounds","parameterTypes":[] }, 
-    {"name":"getGenericDeclaration","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.math.BigDecimal",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"intVal", "allowUnsafeAccess":true}, 
-    {"name":"scale", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.math.BigInteger",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"bitCountPlusOne", "allowUnsafeAccess":true}, 
-    {"name":"bitLengthPlusOne", "allowUnsafeAccess":true}, 
-    {"name":"firstNonzeroIntNumPlusTwo", "allowUnsafeAccess":true}, 
-    {"name":"lowestSetBitPlusTwo", "allowUnsafeAccess":true}, 
-    {"name":"mag", "allowUnsafeAccess":true}, 
-    {"name":"signum", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.net.NetPermission"
-},
-{
-  "name":"java.net.SocketPermission"
-},
-{
-  "name":"java.net.URI",
-  "methods":[
-    {"name":"compareTo","parameterTypes":["java.lang.Object"] }, 
-    {"name":"compareTo","parameterTypes":["java.net.URI"] }, 
-    {"name":"create","parameterTypes":["java.lang.String"] }, 
-    {"name":"getAuthority","parameterTypes":[] }, 
-    {"name":"getFragment","parameterTypes":[] }, 
-    {"name":"getHost","parameterTypes":[] }, 
-    {"name":"getPath","parameterTypes":[] }, 
-    {"name":"getPort","parameterTypes":[] }, 
-    {"name":"getQuery","parameterTypes":[] }, 
-    {"name":"getRawAuthority","parameterTypes":[] }, 
-    {"name":"getRawFragment","parameterTypes":[] }, 
-    {"name":"getRawPath","parameterTypes":[] }, 
-    {"name":"getRawQuery","parameterTypes":[] }, 
-    {"name":"getRawSchemeSpecificPart","parameterTypes":[] }, 
-    {"name":"getRawUserInfo","parameterTypes":[] }, 
-    {"name":"getScheme","parameterTypes":[] }, 
-    {"name":"getSchemeSpecificPart","parameterTypes":[] }, 
-    {"name":"getUserInfo","parameterTypes":[] }, 
-    {"name":"isAbsolute","parameterTypes":[] }, 
-    {"name":"isOpaque","parameterTypes":[] }, 
-    {"name":"normalize","parameterTypes":[] }, 
-    {"name":"parseServerAuthority","parameterTypes":[] }, 
-    {"name":"relativize","parameterTypes":["java.net.URI"] }, 
-    {"name":"resolve","parameterTypes":["java.lang.String"] }, 
-    {"name":"resolve","parameterTypes":["java.net.URI"] }, 
-    {"name":"toASCIIString","parameterTypes":[] }, 
-    {"name":"toURL","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.net.URL",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"authority", "allowUnsafeAccess":true}, 
-    {"name":"file", "allowUnsafeAccess":true}, 
-    {"name":"hashCode", "allowUnsafeAccess":true}, 
-    {"name":"host", "allowUnsafeAccess":true}, 
-    {"name":"port", "allowUnsafeAccess":true}, 
-    {"name":"protocol", "allowUnsafeAccess":true}, 
-    {"name":"ref", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"getAuthority","parameterTypes":[] }, 
-    {"name":"getDefaultPort","parameterTypes":[] }, 
-    {"name":"getFile","parameterTypes":[] }, 
-    {"name":"getHost","parameterTypes":[] }, 
-    {"name":"getPath","parameterTypes":[] }, 
-    {"name":"getPort","parameterTypes":[] }, 
-    {"name":"getProtocol","parameterTypes":[] }, 
-    {"name":"getQuery","parameterTypes":[] }, 
-    {"name":"getRef","parameterTypes":[] }, 
-    {"name":"getUserInfo","parameterTypes":[] }, 
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"readResolve","parameterTypes":[] }, 
-    {"name":"sameFile","parameterTypes":["java.net.URL"] }, 
-    {"name":"toExternalForm","parameterTypes":[] }, 
-    {"name":"toURI","parameterTypes":[] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.net.URLPermission",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
-},
-{
-  "name":"java.nio.Bits",
-  "fields":[{"name":"UNALIGNED"}]
-},
-{
-  "name":"java.nio.Buffer",
-  "fields":[{"name":"address", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.nio.DirectByteBuffer",
-  "methods":[{"name":"<init>","parameterTypes":["long","int"] }]
-},
-{
-  "name":"java.security.AllPermission"
-},
-{
-  "name":"java.security.MessageDigestSpi"
-},
-{
-  "name":"java.security.ProtectionDomain"
-},
-{
-  "name":"java.security.SecureRandomParameters"
-},
-{
-  "name":"java.security.SecurityPermission"
-},
-{
-  "name":"java.sql.Date",
-  "allDeclaredFields":true
-},
-{
-  "name":"java.sql.Timestamp",
-  "allDeclaredFields":true,
-  "fields":[{"name":"nanos", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.text.DateFormat",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"calendar", "allowUnsafeAccess":true}, 
-    {"name":"numberFormat", "allowUnsafeAccess":true}
-  ]
-},
-{
-  "name":"java.text.Format",
-  "allDeclaredFields":true
-},
-{
-  "name":"java.text.SimpleDateFormat",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"defaultCenturyStart", "allowUnsafeAccess":true}, 
-    {"name":"formatData", "allowUnsafeAccess":true}, 
-    {"name":"locale", "allowUnsafeAccess":true}, 
-    {"name":"pattern", "allowUnsafeAccess":true}, 
-    {"name":"serialVersionOnStream", "allowUnsafeAccess":true}
-  ],
-  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
-},
-{
-  "name":"java.util.AbstractCollection",
-  "allDeclaredFields":true
-},
-{
-  "name":"java.util.AbstractList",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.util.AbstractMap",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.util.AbstractSequentialList",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.util.AbstractSet",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.util.ArrayList",
-  "allDeclaredFields":true,
-  "fields":[{"name":"size", "allowUnsafeAccess":true}],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.BitSet",
-  "allDeclaredFields":true,
-  "fields":[{"name":"words", "allowUnsafeAccess":true}],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Calendar",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"areFieldsSet", "allowUnsafeAccess":true}, 
-    {"name":"fields", "allowUnsafeAccess":true}, 
-    {"name":"firstDayOfWeek", "allowUnsafeAccess":true}, 
-    {"name":"isSet", "allowUnsafeAccess":true}, 
-    {"name":"isTimeSet", "allowUnsafeAccess":true}, 
-    {"name":"lenient", "allowUnsafeAccess":true}, 
-    {"name":"minimalDaysInFirstWeek", "allowUnsafeAccess":true}, 
-    {"name":"nextStamp", "allowUnsafeAccess":true}, 
-    {"name":"serialVersionOnStream", "allowUnsafeAccess":true}, 
-    {"name":"time", "allowUnsafeAccess":true}, 
-    {"name":"zone", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Date",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Dictionary",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"java.util.GregorianCalendar",
-  "allDeclaredFields":true,
-  "fields":[{"name":"gregorianCutover", "allowUnsafeAccess":true}],
-  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
-},
-{
-  "name":"java.util.HashMap",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"loadFactor", "allowUnsafeAccess":true}, 
-    {"name":"threshold", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Hashtable",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"loadFactor", "allowUnsafeAccess":true}, 
-    {"name":"threshold", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.LinkedList",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Locale",
-  "allDeclaredFields":true,
-  "allDeclaredClasses":true,
-  "methods":[
-    {"name":"forLanguageTag","parameterTypes":["java.lang.String"] }, 
-    {"name":"getDefault","parameterTypes":["java.util.Locale$Category"] }, 
-    {"name":"getExtension","parameterTypes":["char"] }, 
-    {"name":"getExtensionKeys","parameterTypes":[] }, 
-    {"name":"getScript","parameterTypes":[] }, 
-    {"name":"getUnicodeLocaleAttributes","parameterTypes":[] }, 
-    {"name":"getUnicodeLocaleKeys","parameterTypes":[] }, 
-    {"name":"getUnicodeLocaleType","parameterTypes":["java.lang.String"] }, 
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"readResolve","parameterTypes":[] }, 
-    {"name":"setDefault","parameterTypes":["java.util.Locale$Category","java.util.Locale"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Locale$Category"
-},
-{
-  "name":"java.util.PropertyPermission"
-},
-{
-  "name":"java.util.Set[]"
-},
-{
-  "name":"java.util.SimpleTimeZone",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"dstSavings", "allowUnsafeAccess":true}, 
-    {"name":"endDay", "allowUnsafeAccess":true}, 
-    {"name":"endDayOfWeek", "allowUnsafeAccess":true}, 
-    {"name":"endMode", "allowUnsafeAccess":true}, 
-    {"name":"endMonth", "allowUnsafeAccess":true}, 
-    {"name":"endTime", "allowUnsafeAccess":true}, 
-    {"name":"endTimeMode", "allowUnsafeAccess":true}, 
-    {"name":"monthLength", "allowUnsafeAccess":true}, 
-    {"name":"rawOffset", "allowUnsafeAccess":true}, 
-    {"name":"serialVersionOnStream", "allowUnsafeAccess":true}, 
-    {"name":"startDay", "allowUnsafeAccess":true}, 
-    {"name":"startDayOfWeek", "allowUnsafeAccess":true}, 
-    {"name":"startMode", "allowUnsafeAccess":true}, 
-    {"name":"startMonth", "allowUnsafeAccess":true}, 
-    {"name":"startTime", "allowUnsafeAccess":true}, 
-    {"name":"startTimeMode", "allowUnsafeAccess":true}, 
-    {"name":"startYear", "allowUnsafeAccess":true}, 
-    {"name":"useDaylight", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.TimeZone",
-  "allDeclaredFields":true,
-  "fields":[{"name":"ID", "allowUnsafeAccess":true}]
-},
-{
-  "name":"java.util.TreeMap",
-  "allDeclaredFields":true,
-  "fields":[{"name":"comparator", "allowUnsafeAccess":true}],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.TreeSet",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.Vector",
-  "allDeclaredFields":true,
-  "fields":[
-    {"name":"capacityIncrement", "allowUnsafeAccess":true}, 
-    {"name":"elementCount", "allowUnsafeAccess":true}, 
-    {"name":"elementData", "allowUnsafeAccess":true}
-  ],
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.concurrent.ConcurrentHashMap",
-  "allDeclaredFields":true,
-  "methods":[
-    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
-    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
-  ]
-},
-{
-  "name":"java.util.concurrent.ConcurrentMap",
-  "methods":[{"name":"remove","parameterTypes":["java.lang.Object","java.lang.Object"] }]
-},
-{
-  "name":"javax.management.ObjectName"
-},
-{
-  "name":"jdk.internal.misc.Unsafe",
-  "methods":[{"name":"getUnsafe","parameterTypes":[] }]
-},
-{
-  "name":"reactor.netty.DisposableChannel",
-  "methods":[{"name":"address","parameterTypes":[] }]
-},
-{
-  "name":"reactor.netty.transport.ServerTransport$Acceptor",
-  "methods":[
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
-},
-{
-  "name":"reactor.netty.transport.ServerTransport$AcceptorInitializer"
-},
-{
-  "name":"sun.misc.Unsafe",
-  "fields":[{"name":"theUnsafe"}],
-  "methods":[
-    {"name":"allocateInstance","parameterTypes":["java.lang.Class"] }, 
-    {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, 
-    {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, 
-    {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, 
-    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, 
-    {"name":"objectFieldOffset","parameterTypes":["java.lang.reflect.Field"] }, 
-    {"name":"putBoolean","parameterTypes":["java.lang.Object","long","boolean"] }
-  ]
-},
-{
-  "name":"sun.nio.ch.SelectorImpl",
-  "fields":[
-    {"name":"publicSelectedKeys", "allowUnsafeAccess":true}, 
-    {"name":"selectedKeys", "allowUnsafeAccess":true}
-  ]
-},
-{
-  "name":"sun.security.provider.NativePRNG",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.provider.SHA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-}
+  {
+    "name": "ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+    "allPublicMethods": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.DateConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.LevelConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.LineSeparatorConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.LoggerConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.MessageConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.ThreadConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.core.ConsoleAppender",
+    "allPublicMethods": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.core.pattern.color.CyanCompositeConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.core.pattern.color.GrayCompositeConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "ch.qos.logback.core.pattern.color.MagentaCompositeConverter",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.ibm.icu.impl.ICUCurrencyDisplayInfoProvider",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.ibm.icu.impl.ICUCurrencyMetaInfo",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "freemarker.ext.jython.JythonModel"
+  },
+  {
+    "name": "io.netty.bootstrap.ServerBootstrap$1"
+  },
+  {
+    "name": "io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor",
+    "methods": [
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.buffer.AbstractByteBufAllocator",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "io.netty.buffer.AbstractReferenceCountedByteBuf",
+    "fields": [
+      {
+        "name": "refCnt",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.channel.ChannelInboundHandlerAdapter",
+    "methods": [
+      {
+        "name": "channelActive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelInactive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "channelReadComplete",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRegistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelUnregistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelWritabilityChanged",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "userEventTriggered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.channel.ChannelInitializer",
+    "methods": [
+      {
+        "name": "channelRegistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.channel.DefaultChannelPipeline$HeadContext",
+    "methods": [
+      {
+        "name": "bind",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.net.SocketAddress",
+          "io.netty.channel.ChannelPromise"
+        ]
+      },
+      {
+        "name": "channelActive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelInactive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "channelReadComplete",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRegistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelUnregistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelWritabilityChanged",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "close",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "io.netty.channel.ChannelPromise"
+        ]
+      },
+      {
+        "name": "connect",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.net.SocketAddress",
+          "java.net.SocketAddress",
+          "io.netty.channel.ChannelPromise"
+        ]
+      },
+      {
+        "name": "deregister",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "io.netty.channel.ChannelPromise"
+        ]
+      },
+      {
+        "name": "disconnect",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "io.netty.channel.ChannelPromise"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      },
+      {
+        "name": "flush",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "read",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "userEventTriggered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "write",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object",
+          "io.netty.channel.ChannelPromise"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.channel.DefaultChannelPipeline$TailContext",
+    "methods": [
+      {
+        "name": "channelActive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelInactive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "channelReadComplete",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRegistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelUnregistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelWritabilityChanged",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      },
+      {
+        "name": "userEventTriggered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.channel.kqueue.KQueue"
+  },
+  {
+    "name": "io.netty.channel.socket.nio.NioServerSocketChannel",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.AbstractReferenceCounted",
+    "fields": [
+      {
+        "name": "refCnt",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.ReferenceCountUtil",
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "io.netty.util.internal.NativeLibraryUtil",
+    "methods": [
+      {
+        "name": "loadLibrary",
+        "parameterTypes": [
+          "java.lang.String",
+          "boolean"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
+    "fields": [
+      {
+        "name": "producerLimit",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
+    "fields": [
+      {
+        "name": "consumerIndex",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
+    "fields": [
+      {
+        "name": "producerIndex",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueConsumerIndexField",
+    "fields": [
+      {
+        "name": "consumerIndex",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerIndexField",
+    "fields": [
+      {
+        "name": "producerIndex",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerLimitField",
+    "fields": [
+      {
+        "name": "producerLimit",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.CompletesEventually__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.DeadLetters__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.DirectoryScanner__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.Logger__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.NoProtocol__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.Stoppable__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.Supervisor__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.actors.plugin.supervision.DefaultSupervisorOverride",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.ClusterSnapshotControl__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.ClusterSnapshot__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.application.ClusterApplication__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.attribute.AttributesAgent__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.node.LocalLiveNode__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.node.RegistryInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.cluster.model.outbound.OperationalOutboundStream__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.codegen.parameter.ImportParameter",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.codegen.template.TemplateCustomFunctions",
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.common.Scheduled__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByIPProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.persistence.TotalRequestsByMonthProjectionActor",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.APIData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "rootPath",
+        "allowWrite": true
+      },
+      {
+        "name": "routes",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "api",
+        "allowWrite": true
+      },
+      {
+        "name": "aggregateName",
+        "allowWrite": true
+      },
+      {
+        "name": "stateFields",
+        "allowWrite": true
+      },
+      {
+        "name": "methods",
+        "allowWrite": true
+      },
+      {
+        "name": "events",
+        "allowWrite": true
+      },
+      {
+        "name": "consumerExchange",
+        "allowWrite": true
+      },
+      {
+        "name": "producerExchange",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.AggregateMethodData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "parameters",
+        "allowWrite": true
+      },
+      {
+        "name": "useFactory",
+        "allowWrite": true
+      },
+      {
+        "name": "event",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ConsumerExchangeData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "exchangeName",
+        "allowWrite": true
+      },
+      {
+        "name": "receivers",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ContextSettingsData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "groupId",
+        "allowWrite": true
+      },
+      {
+        "name": "artifactId",
+        "allowWrite": true
+      },
+      {
+        "name": "artifactVersion",
+        "allowWrite": true
+      },
+      {
+        "name": "packageName",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.DeploymentSettingsData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "clusterNodes",
+        "allowWrite": true
+      },
+      {
+        "name": "type",
+        "allowWrite": true
+      },
+      {
+        "name": "dockerImage",
+        "allowWrite": true
+      },
+      {
+        "name": "kubernetesImage",
+        "allowWrite": true
+      },
+      {
+        "name": "kubernetesPod",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.DomainEventData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "fields",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.restapi.data.GenerationPath",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "path",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "context",
+        "allowWrite": true
+      },
+      {
+        "name": "model",
+        "allowWrite": true
+      },
+      {
+        "name": "deployment",
+        "allowWrite": true
+      },
+      {
+        "name": "projectDirectory",
+        "allowWrite": true
+      },
+      {
+        "name": "useAnnotations",
+        "allowWrite": true
+      },
+      {
+        "name": "useAutoDispatch",
+        "allowWrite": true
+      },
+      {
+        "name": "fileVersion",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ModelSettingsData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "persistenceSettings",
+        "allowWrite": true
+      },
+      {
+        "name": "aggregateSettings",
+        "allowWrite": true
+      },
+      {
+        "name": "valueObjectSettings",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.PersistenceData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "storageType",
+        "allowWrite": true
+      },
+      {
+        "name": "useCQRS",
+        "allowWrite": true
+      },
+      {
+        "name": "projections",
+        "allowWrite": true
+      },
+      {
+        "name": "database",
+        "allowWrite": true
+      },
+      {
+        "name": "commandModelDatabase",
+        "allowWrite": true
+      },
+      {
+        "name": "queryModelDatabase",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ProducerExchangeData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "exchangeName",
+        "allowWrite": true
+      },
+      {
+        "name": "schemaGroup",
+        "allowWrite": true
+      },
+      {
+        "name": "outgoingEvents",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ProjectGenerationReport",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "status",
+        "allowWrite": true
+      },
+      {
+        "name": "target",
+        "allowWrite": true
+      },
+      {
+        "name": "compressedProject",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ReceiverData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "schema",
+        "allowWrite": true
+      },
+      {
+        "name": "aggregateMethod",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.RouteData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "path",
+        "allowWrite": true
+      },
+      {
+        "name": "httpMethod",
+        "allowWrite": true
+      },
+      {
+        "name": "aggregateMethod",
+        "allowWrite": true
+      },
+      {
+        "name": "requireEntityLoad",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.StateFieldData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "type",
+        "allowWrite": true
+      },
+      {
+        "name": "collectionType",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "fields",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.infrastructure.restapi.data.ValueObjectFieldData",
+    "allDeclaredFields": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "name",
+        "allowWrite": true
+      },
+      {
+        "name": "type",
+        "allowWrite": true
+      },
+      {
+        "name": "collectionType",
+        "allowWrite": true
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.StaticFactoryMethod",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CoveyParameter",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.Exchange",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ProducerExchange",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.EventHandler",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.EventMissingField",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectToDescription",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionSource",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Adapter",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Database",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Projection",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Queries",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.AuxiliaryEntityCreation",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.SourcedEvent",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.TestCase",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestCase",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestStatement",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Aggregate",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateMethod",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Field",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.Route",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.Dispatcher__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.ResourceRequestHandlerActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.ResourceRequestHandler__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.Server__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.StaticFilesResource",
+    "allPublicConstructors": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.http.resource.StaticFilesResourceDispatcher",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControlInbound__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.grid.application.GridActorControlOutbound__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.MultiConfirmingProjectionControlActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.MultiConfirming__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.ProjectionControl__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.Projection__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.lattice.util.HardRefHolder__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.ConfirmDispatchedResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.DispatcherControl__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.dispatch.Dispatcher__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStoreReadResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStoreWriteResultInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.StateStore__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor",
+    "allPublicConstructors": true
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.bidirectional.ServerRequestResponseChannel__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.bidirectional.netty.server.NettyInboundHandler",
+    "methods": [
+      {
+        "name": "channelActive",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "channelUnregistered",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.bidirectional.netty.server.NettyServerChannelActor$1"
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.inbound.InboundStreamInterest__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.inbound.InboundStream__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "io.vlingo.xoom.wire.fdx.outbound.ApplicationOutboundStream__Proxy",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "io.vlingo.xoom.actors.Actor",
+          "io.vlingo.xoom.actors.Mailbox"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.beans.PropertyVetoException"
+  },
+  {
+    "name": "java.io.FilePermission"
+  },
+  {
+    "name": "java.lang.AbstractStringBuilder",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "coder",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "count",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Boolean",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Byte",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Character",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Class",
+    "methods": [
+      {
+        "name": "asSubclass",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "cast",
+        "parameterTypes": [
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "desiredAssertionStatus",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedInterfaces",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedSuperclass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getCanonicalName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getClasses",
+        "parameterTypes": []
+      },
+      {
+        "name": "getComponentType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getConstructor",
+        "parameterTypes": [
+          "java.lang.Class[]"
+        ]
+      },
+      {
+        "name": "getConstructors",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredClasses",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredConstructor",
+        "parameterTypes": [
+          "java.lang.Class[]"
+        ]
+      },
+      {
+        "name": "getDeclaredConstructors",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredField",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getDeclaredFields",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredMethod",
+        "parameterTypes": [
+          "java.lang.String",
+          "java.lang.Class[]"
+        ]
+      },
+      {
+        "name": "getDeclaredMethods",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getEnclosingClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getEnclosingConstructor",
+        "parameterTypes": []
+      },
+      {
+        "name": "getEnclosingMethod",
+        "parameterTypes": []
+      },
+      {
+        "name": "getEnumConstants",
+        "parameterTypes": []
+      },
+      {
+        "name": "getField",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getFields",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericInterfaces",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericSuperclass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getInterfaces",
+        "parameterTypes": []
+      },
+      {
+        "name": "getMethod",
+        "parameterTypes": [
+          "java.lang.String",
+          "java.lang.Class[]"
+        ]
+      },
+      {
+        "name": "getMethods",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getNestHost",
+        "parameterTypes": []
+      },
+      {
+        "name": "getNestMembers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPackage",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPackageName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getProtectionDomain",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSimpleName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSuperclass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getTypeName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getTypeParameters",
+        "parameterTypes": []
+      },
+      {
+        "name": "isAnnotation",
+        "parameterTypes": []
+      },
+      {
+        "name": "isAnnotationPresent",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "isAnonymousClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "isArray",
+        "parameterTypes": []
+      },
+      {
+        "name": "isAssignableFrom",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "isEnum",
+        "parameterTypes": []
+      },
+      {
+        "name": "isInstance",
+        "parameterTypes": [
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "isInterface",
+        "parameterTypes": []
+      },
+      {
+        "name": "isLocalClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "isMemberClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "isNestmateOf",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "isPrimitive",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "toGenericString",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.ClassLoader",
+    "methods": [
+      {
+        "name": "getName",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Class[]"
+  },
+  {
+    "name": "java.lang.Double",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Enum",
+    "allPublicMethods": true
+  },
+  {
+    "name": "java.lang.Float",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Integer",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Long",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Number",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "java.lang.Object",
+    "allDeclaredFields": true,
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Package",
+    "methods": [
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getImplementationTitle",
+        "parameterTypes": []
+      },
+      {
+        "name": "getImplementationVendor",
+        "parameterTypes": []
+      },
+      {
+        "name": "getImplementationVersion",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPackage",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getPackages",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSpecificationTitle",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSpecificationVendor",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSpecificationVersion",
+        "parameterTypes": []
+      },
+      {
+        "name": "isAnnotationPresent",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "isCompatibleWith",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "isSealed",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSealed",
+        "parameterTypes": [
+          "java.net.URL"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Runtime",
+    "methods": [
+      {
+        "name": "availableProcessors",
+        "parameterTypes": []
+      },
+      {
+        "name": "freeMemory",
+        "parameterTypes": []
+      },
+      {
+        "name": "maxMemory",
+        "parameterTypes": []
+      },
+      {
+        "name": "totalMemory",
+        "parameterTypes": []
+      },
+      {
+        "name": "version",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.RuntimePermission"
+  },
+  {
+    "name": "java.lang.Short",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.String",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "coder",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "hash",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "value",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.lang.StringBuffer",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.StringBuilder",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.String[]"
+  },
+  {
+    "name": "java.lang.System",
+    "methods": [
+      {
+        "name": "currentTimeMillis",
+        "parameterTypes": []
+      },
+      {
+        "name": "getProperties",
+        "parameterTypes": []
+      },
+      {
+        "name": "getProperty",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getProperty",
+        "parameterTypes": [
+          "java.lang.String",
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getenv",
+        "parameterTypes": []
+      },
+      {
+        "name": "getenv",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "identityHashCode",
+        "parameterTypes": [
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "lineSeparator",
+        "parameterTypes": []
+      },
+      {
+        "name": "mapLibraryName",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "nanoTime",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Thread",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true
+  },
+  {
+    "name": "java.lang.ThreadGroup",
+    "methods": [
+      {
+        "name": "activeCount",
+        "parameterTypes": []
+      },
+      {
+        "name": "activeGroupCount",
+        "parameterTypes": []
+      },
+      {
+        "name": "checkAccess",
+        "parameterTypes": []
+      },
+      {
+        "name": "getMaxPriority",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParent",
+        "parameterTypes": []
+      },
+      {
+        "name": "isDaemon",
+        "parameterTypes": []
+      },
+      {
+        "name": "isDestroyed",
+        "parameterTypes": []
+      },
+      {
+        "name": "parentOf",
+        "parameterTypes": [
+          "java.lang.ThreadGroup"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.Throwable",
+    "methods": [
+      {
+        "name": "initCause",
+        "parameterTypes": [
+          "java.lang.Throwable"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.annotation.Annotation",
+    "methods": [
+      {
+        "name": "annotationType",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.management.ManagementFactory",
+    "methods": [
+      {
+        "name": "getRuntimeMXBean",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.management.RuntimeMXBean",
+    "methods": [
+      {
+        "name": "getInputArguments",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.AccessibleObject",
+    "allPublicFields": true,
+    "allPublicMethods": true,
+    "allPublicConstructors": true,
+    "fields": [
+      {
+        "name": "override"
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.AnnotatedElement",
+    "methods": [
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "isAnnotationPresent",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.AnnotatedType",
+    "methods": [
+      {
+        "name": "getAnnotatedOwnerType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getType",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Constructor",
+    "methods": [
+      {
+        "name": "getAnnotatedReceiverType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedReturnType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterCount",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getTypeParameters",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "isVarArgs",
+        "parameterTypes": []
+      },
+      {
+        "name": "toGenericString",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Executable",
+    "methods": [
+      {
+        "name": "getAnnotatedExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedReceiverType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotatedReturnType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterCount",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameters",
+        "parameterTypes": []
+      },
+      {
+        "name": "getTypeParameters",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "isVarArgs",
+        "parameterTypes": []
+      },
+      {
+        "name": "toGenericString",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Field",
+    "methods": [
+      {
+        "name": "getAnnotatedType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getType",
+        "parameterTypes": []
+      },
+      {
+        "name": "isEnumConstant",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "toGenericString",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.GenericDeclaration",
+    "methods": [
+      {
+        "name": "getTypeParameters",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Member",
+    "methods": [
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Method",
+    "methods": [
+      {
+        "name": "getAnnotatedReturnType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaringClass",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDefaultValue",
+        "parameterTypes": []
+      },
+      {
+        "name": "getExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericExceptionTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericReturnType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterCount",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterTypes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getReturnType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getTypeParameters",
+        "parameterTypes": []
+      },
+      {
+        "name": "isBridge",
+        "parameterTypes": []
+      },
+      {
+        "name": "isDefault",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "isVarArgs",
+        "parameterTypes": []
+      },
+      {
+        "name": "toGenericString",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Parameter",
+    "methods": [
+      {
+        "name": "getAnnotatedType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotation",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaredAnnotations",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDeclaredAnnotationsByType",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "getDeclaringExecutable",
+        "parameterTypes": []
+      },
+      {
+        "name": "getModifiers",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getParameterizedType",
+        "parameterTypes": []
+      },
+      {
+        "name": "getType",
+        "parameterTypes": []
+      },
+      {
+        "name": "isImplicit",
+        "parameterTypes": []
+      },
+      {
+        "name": "isNamePresent",
+        "parameterTypes": []
+      },
+      {
+        "name": "isSynthetic",
+        "parameterTypes": []
+      },
+      {
+        "name": "isVarArgs",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.Type",
+    "methods": [
+      {
+        "name": "getTypeName",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.reflect.TypeVariable",
+    "methods": [
+      {
+        "name": "getAnnotatedBounds",
+        "parameterTypes": []
+      },
+      {
+        "name": "getBounds",
+        "parameterTypes": []
+      },
+      {
+        "name": "getGenericDeclaration",
+        "parameterTypes": []
+      },
+      {
+        "name": "getName",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.math.BigDecimal",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "intVal",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "scale",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.math.BigInteger",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "bitCountPlusOne",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "bitLengthPlusOne",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "firstNonzeroIntNumPlusTwo",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "lowestSetBitPlusTwo",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "mag",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "signum",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.net.NetPermission"
+  },
+  {
+    "name": "java.net.SocketPermission"
+  },
+  {
+    "name": "java.net.URI",
+    "methods": [
+      {
+        "name": "compareTo",
+        "parameterTypes": [
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "compareTo",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      },
+      {
+        "name": "create",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getAuthority",
+        "parameterTypes": []
+      },
+      {
+        "name": "getFragment",
+        "parameterTypes": []
+      },
+      {
+        "name": "getHost",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPath",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPort",
+        "parameterTypes": []
+      },
+      {
+        "name": "getQuery",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawAuthority",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawFragment",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawPath",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawQuery",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawSchemeSpecificPart",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRawUserInfo",
+        "parameterTypes": []
+      },
+      {
+        "name": "getScheme",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSchemeSpecificPart",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUserInfo",
+        "parameterTypes": []
+      },
+      {
+        "name": "isAbsolute",
+        "parameterTypes": []
+      },
+      {
+        "name": "isOpaque",
+        "parameterTypes": []
+      },
+      {
+        "name": "normalize",
+        "parameterTypes": []
+      },
+      {
+        "name": "parseServerAuthority",
+        "parameterTypes": []
+      },
+      {
+        "name": "relativize",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      },
+      {
+        "name": "resolve",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "resolve",
+        "parameterTypes": [
+          "java.net.URI"
+        ]
+      },
+      {
+        "name": "toASCIIString",
+        "parameterTypes": []
+      },
+      {
+        "name": "toURL",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.net.URL",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "authority",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "file",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "hashCode",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "host",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "port",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "protocol",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "ref",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "getAuthority",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDefaultPort",
+        "parameterTypes": []
+      },
+      {
+        "name": "getFile",
+        "parameterTypes": []
+      },
+      {
+        "name": "getHost",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPath",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPort",
+        "parameterTypes": []
+      },
+      {
+        "name": "getProtocol",
+        "parameterTypes": []
+      },
+      {
+        "name": "getQuery",
+        "parameterTypes": []
+      },
+      {
+        "name": "getRef",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUserInfo",
+        "parameterTypes": []
+      },
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "readResolve",
+        "parameterTypes": []
+      },
+      {
+        "name": "sameFile",
+        "parameterTypes": [
+          "java.net.URL"
+        ]
+      },
+      {
+        "name": "toExternalForm",
+        "parameterTypes": []
+      },
+      {
+        "name": "toURI",
+        "parameterTypes": []
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.net.URLPermission",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "java.lang.String",
+          "java.lang.String"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.nio.Bits",
+    "fields": [
+      {
+        "name": "UNALIGNED"
+      }
+    ]
+  },
+  {
+    "name": "java.nio.Buffer",
+    "fields": [
+      {
+        "name": "address",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.nio.DirectByteBuffer",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "long",
+          "int"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.security.AllPermission"
+  },
+  {
+    "name": "java.security.MessageDigestSpi"
+  },
+  {
+    "name": "java.security.ProtectionDomain"
+  },
+  {
+    "name": "java.security.SecureRandomParameters"
+  },
+  {
+    "name": "java.security.SecurityPermission"
+  },
+  {
+    "name": "java.sql.Date",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "java.sql.Timestamp",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "nanos",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.text.DateFormat",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "calendar",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "numberFormat",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.text.Format",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "java.text.SimpleDateFormat",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "defaultCenturyStart",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "formatData",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "locale",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "pattern",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "serialVersionOnStream",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.AbstractCollection",
+    "allDeclaredFields": true
+  },
+  {
+    "name": "java.util.AbstractList",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.util.AbstractMap",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.util.AbstractSequentialList",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.util.AbstractSet",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.util.ArrayList",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "size",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.BitSet",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "words",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Calendar",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "areFieldsSet",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "fields",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "firstDayOfWeek",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "isSet",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "isTimeSet",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "lenient",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "minimalDaysInFirstWeek",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "nextStamp",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "serialVersionOnStream",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "time",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "zone",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Date",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Dictionary",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.util.GregorianCalendar",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "gregorianCutover",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.HashMap",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "loadFactor",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "threshold",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Hashtable",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "loadFactor",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "threshold",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.LinkedList",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Locale",
+    "allDeclaredFields": true,
+    "allDeclaredClasses": true,
+    "methods": [
+      {
+        "name": "forLanguageTag",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "getDefault",
+        "parameterTypes": [
+          "java.util.Locale$Category"
+        ]
+      },
+      {
+        "name": "getExtension",
+        "parameterTypes": [
+          "char"
+        ]
+      },
+      {
+        "name": "getExtensionKeys",
+        "parameterTypes": []
+      },
+      {
+        "name": "getScript",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnicodeLocaleAttributes",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnicodeLocaleKeys",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnicodeLocaleType",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "readResolve",
+        "parameterTypes": []
+      },
+      {
+        "name": "setDefault",
+        "parameterTypes": [
+          "java.util.Locale$Category",
+          "java.util.Locale"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Locale$Category"
+  },
+  {
+    "name": "java.util.PropertyPermission"
+  },
+  {
+    "name": "java.util.Set[]"
+  },
+  {
+    "name": "java.util.SimpleTimeZone",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "dstSavings",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endDay",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endDayOfWeek",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endMode",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endMonth",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endTime",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "endTimeMode",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "monthLength",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "rawOffset",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "serialVersionOnStream",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startDay",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startDayOfWeek",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startMode",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startMonth",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startTime",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startTimeMode",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "startYear",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "useDaylight",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.TimeZone",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "ID",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "java.util.TreeMap",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "comparator",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.TreeSet",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.Vector",
+    "allDeclaredFields": true,
+    "fields": [
+      {
+        "name": "capacityIncrement",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "elementCount",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "elementData",
+        "allowUnsafeAccess": true
+      }
+    ],
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.concurrent.ConcurrentHashMap",
+    "allDeclaredFields": true,
+    "methods": [
+      {
+        "name": "readObject",
+        "parameterTypes": [
+          "java.io.ObjectInputStream"
+        ]
+      },
+      {
+        "name": "writeObject",
+        "parameterTypes": [
+          "java.io.ObjectOutputStream"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "java.util.concurrent.ConcurrentMap",
+    "methods": [
+      {
+        "name": "remove",
+        "parameterTypes": [
+          "java.lang.Object",
+          "java.lang.Object"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "javax.management.ObjectName"
+  },
+  {
+    "name": "jdk.internal.misc.Unsafe",
+    "methods": [
+      {
+        "name": "getUnsafe",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "reactor.netty.DisposableChannel",
+    "methods": [
+      {
+        "name": "address",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "reactor.netty.transport.ServerTransport$Acceptor",
+    "methods": [
+      {
+        "name": "channelRead",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "exceptionCaught",
+        "parameterTypes": [
+          "io.netty.channel.ChannelHandlerContext",
+          "java.lang.Throwable"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "reactor.netty.transport.ServerTransport$AcceptorInitializer"
+  },
+  {
+    "name": "sun.misc.Unsafe",
+    "fields": [
+      {
+        "name": "theUnsafe"
+      }
+    ],
+    "methods": [
+      {
+        "name": "allocateInstance",
+        "parameterTypes": [
+          "java.lang.Class"
+        ]
+      },
+      {
+        "name": "copyMemory",
+        "parameterTypes": [
+          "java.lang.Object",
+          "long",
+          "java.lang.Object",
+          "long",
+          "long"
+        ]
+      },
+      {
+        "name": "getAndAddLong",
+        "parameterTypes": [
+          "java.lang.Object",
+          "long",
+          "long"
+        ]
+      },
+      {
+        "name": "getAndSetObject",
+        "parameterTypes": [
+          "java.lang.Object",
+          "long",
+          "java.lang.Object"
+        ]
+      },
+      {
+        "name": "invokeCleaner",
+        "parameterTypes": [
+          "java.nio.ByteBuffer"
+        ]
+      },
+      {
+        "name": "objectFieldOffset",
+        "parameterTypes": [
+          "java.lang.reflect.Field"
+        ]
+      },
+      {
+        "name": "putBoolean",
+        "parameterTypes": [
+          "java.lang.Object",
+          "long",
+          "boolean"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "sun.nio.ch.SelectorImpl",
+    "fields": [
+      {
+        "name": "publicSelectedKeys",
+        "allowUnsafeAccess": true
+      },
+      {
+        "name": "selectedKeys",
+        "allowUnsafeAccess": true
+      }
+    ]
+  },
+  {
+    "name": "sun.security.provider.NativePRNG",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "sun.security.provider.SHA",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  }
 ]
