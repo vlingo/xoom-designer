@@ -13,8 +13,8 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionSourceTypesDetail;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DOMAIN_EVENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class AggregateTemplateData extends TemplateData {
@@ -78,7 +79,9 @@ public class AggregateTemplateData extends TemplateData {
   }
 
   private List<String> resolveEventNames(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).map(event -> JavaTemplateStandard.DOMAIN_EVENT.resolveClassname(event.value))
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .filter(method -> method.hasAny(DOMAIN_EVENT))
+            .map(method -> method.retrieveRelatedValue(DOMAIN_EVENT))
             .collect(Collectors.toList());
   }
 

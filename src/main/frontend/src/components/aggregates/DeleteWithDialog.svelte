@@ -1,6 +1,5 @@
 <script>
 	import {
-		Button,
 		Card,
 		CardActions,
 		CardTitle,
@@ -9,7 +8,7 @@
 	import DeleteButton from "./DeleteButton.svelte";
 	import { createEventDispatcher } from "svelte";
 	import Portal from "svelte-portal/src/Portal.svelte";
-
+	import Button from '@smui/button';
 	const dispatch = createEventDispatcher();
 	
 	export let type;
@@ -38,9 +37,9 @@
 						<slot />
 					</div>
 				</CardTitle>
-				<CardActions style="margin-top: auto" class="justify-space-around">
-					<Button on:click={onDelete} text class="red-text">Delete</Button>
-					<Button on:click={close}>Cancel</Button>
+				<CardActions style="margin-top: auto" class="justify-end">
+					<Button class="error-color white-text mr-4" on:click={onDelete}>Delete</Button>
+					<Button color="secondary" variant="raised" on:click={close}>Cancel</Button>
 				</CardActions>
 			</div>
 		</Card>

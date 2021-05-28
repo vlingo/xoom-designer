@@ -7,8 +7,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
@@ -82,6 +82,10 @@ public class Assertions {
                                                          final List<CodeGenerationParameter> valueObjects,
                                                          final TestDataValueGenerator.TestDataValues initialTestDataValues,
                                                          final TestDataValueGenerator.TestDataValues updatedTestDataValues) {
+    if(!updateMethod.hasAny(Label.METHOD_PARAMETER)) {
+      return Collections.emptyList();
+    }
+
     final Stream<CodeGenerationParameter> factoryMethodFields =
             AggregateDetail.findInvolvedStateFields(aggregate, defaultFactoryMethod);
 

@@ -33,6 +33,7 @@ public class TestDataValueGenerator {
   private final List<CodeGenerationParameter> valueObjects = new ArrayList<>();
   private boolean currentBooleanValue;
   private int currentNumericValue;
+  private char currentCharValue;
 
   public static TestDataValueGenerator with(final CodeGenerationParameter aggregate,
                                             final List<CodeGenerationParameter> valueObjects) {
@@ -114,6 +115,9 @@ public class TestDataValueGenerator {
     } else if (FieldDetail.hasBooleanType(field)) {
       generatedValues.add(dataIndex, fieldType, currentPath, currentBooleanValue);
       alternateBooleanValue();
+    } else if (FieldDetail.hasCharType(field)) {
+      generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(currentCharValue));
+      alternateCharValue();
     } else if (FieldDetail.hasStringType(field)) {
       final String alias = valuePrefix.toLowerCase();
       final String ordinalIndex = NumberFormat.toOrdinal(dataIndex);
@@ -137,7 +141,8 @@ public class TestDataValueGenerator {
   }
 
   private String quoteValue(final Object value) {
-    return "\"" + value + "\"";
+    final String quote = Character.class.equals(value.getClass()) ? "'" : "\"";
+    return quote + value + quote;
   }
 
   private String resolvePath(final String path, final CodeGenerationParameter field) {
@@ -152,9 +157,14 @@ public class TestDataValueGenerator {
     this.currentBooleanValue = !currentBooleanValue;
   }
 
+  private void alternateCharValue() {
+    this.currentCharValue = currentCharValue++;
+  }
+
   private void resetCurrentValues() {
     this.currentNumericValue = 1;
     this.currentBooleanValue = true;
+    this.currentCharValue = '1';
   }
 
   public static class TestDataValues {
