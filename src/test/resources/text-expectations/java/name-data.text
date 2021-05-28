@@ -4,6 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.*;
 
 public class NameData {
@@ -17,6 +21,14 @@ public class NameData {
 
   public static NameData from(final String firstName, final String lastName) {
     return new NameData(firstName, lastName);
+  }
+
+  public static Set<NameData> from(final Set<Name> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(NameData::from).collect(Collectors.toSet());
+  }
+
+  public static List<NameData> from(final List<Name> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(NameData::from).collect(Collectors.toList());
   }
 
   private NameData (final String firstName, final String lastName) {

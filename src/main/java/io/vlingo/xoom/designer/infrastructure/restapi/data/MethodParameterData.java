@@ -9,20 +9,20 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 public class MethodParameterData {
 
-  public final String name;
-  public final String alias;
-  public final String collectionMutationSymbol;
+  public final String stateField;
+  public final String parameterName;
+  public final String multiplicity;
 
-  public MethodParameterData(final String name) {
-    this(name, "", "");
+  public MethodParameterData(final String stateField) {
+    this(stateField, "", "");
   }
 
-  public MethodParameterData(final String name,
-                             final String alias,
-                             final String collectionMutationSymbol) {
-    this.name = name;
-    this.alias = alias;
-    this.collectionMutationSymbol = collectionMutationSymbol;
+  public MethodParameterData(final String stateField,
+                             final String parameterName,
+                             final String multiplicity) {
+    this.stateField = stateField;
+    this.parameterName = parameterName;
+    this.multiplicity = multiplicity;
   }
 
 }

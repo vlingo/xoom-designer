@@ -102,11 +102,11 @@ public class TaskExecutionContextMapper {
 
       methodData.parameters.forEach(param -> {
         final CollectionMutation collectionMutation =
-                CollectionMutation.withSymbol(param.collectionMutationSymbol);
+                CollectionMutation.withSymbol(param.multiplicity);
 
         final CodeGenerationParameter methodParameter =
-                CodeGenerationParameter.of(METHOD_PARAMETER, param.name)
-                        .relate(ALIAS, param.alias)
+                CodeGenerationParameter.of(METHOD_PARAMETER, param.stateField)
+                        .relate(ALIAS, param.parameterName)
                         .relate(COLLECTION_MUTATION, collectionMutation);
 
         method.relate(methodParameter);

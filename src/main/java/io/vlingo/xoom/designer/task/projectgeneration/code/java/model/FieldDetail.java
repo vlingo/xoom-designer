@@ -147,9 +147,9 @@ public class FieldDetail {
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
     if(isCollection(field)) {
-      return CodeGenerationProperties.SPECIAL_TYPES.get(field.retrieveRelatedValue(Label.COLLECTION_TYPE));
+      return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.get(field.retrieveRelatedValue(Label.COLLECTION_TYPE));
     }
-    return CodeGenerationProperties.SPECIAL_TYPES.getOrDefault(field.retrieveRelatedValue(Label.FIELD_TYPE), "");
+    return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(field.retrieveRelatedValue(Label.FIELD_TYPE), "");
   }
 
   public static boolean isDateTime(final CodeGenerationParameter field) {

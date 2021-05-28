@@ -4,6 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 <#if imports?has_content>
 <#list imports as import>
 import ${import.qualifiedClassName};
@@ -25,6 +29,14 @@ public class ${dataValueObjectName} {
   }
 
   </#list>
+  public static Set<${dataValueObjectName}> from(final Set<${valueObjectName}> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(${dataValueObjectName}::from).collect(Collectors.toSet());
+  }
+
+  public static List<${dataValueObjectName}> from(final List<${valueObjectName}> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(${dataValueObjectName}::from).collect(Collectors.toList());
+  }
+
   private ${dataValueObjectName} (${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}

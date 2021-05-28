@@ -74,7 +74,7 @@ public class InlineDataInstantiationFormatter {
     if (FieldDetail.isMethodParameterAssignableToValueObject(field, methodParameter)) {
       generateComplexTypeAssignment(currentFieldPath, field);
     } else if (FieldDetail.isCollectionOrDate(field)) {
-      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value)).append(", ");
+      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(field.parent(), field.value)).append(", ");
     } else {
       generateScalarTypeAssignment(currentFieldPath);
     }

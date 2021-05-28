@@ -4,6 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.*;
 import io.vlingo.xoomapp.model.*;
 
@@ -19,6 +23,14 @@ public class ClassificationData {
 
   public static ClassificationData from(final String label, final Set<ClassifierData> classifier) {
     return new ClassificationData(label, classifier);
+  }
+
+  public static Set<ClassificationData> from(final Set<Classification> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(ClassificationData::from).collect(Collectors.toSet());
+  }
+
+  public static List<ClassificationData> from(final List<Classification> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(ClassificationData::from).collect(Collectors.toList());
   }
 
   private ClassificationData (final String label, final Set<ClassifierData> classifier) {

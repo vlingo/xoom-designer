@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.projections;
 
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
@@ -19,22 +18,29 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobjec
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DOMAIN_EVENT;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.FIELD_TYPE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.DATA_OBJECT;
 
 public class ProjectionSource {
 
-  private final String name;
-  private final String dataObjectName;
-  private final String mergeParameters;
-  private List<String> dataObjectInitializers = new ArrayList<>();
+  public final String name;
+  public final String dataObjectName;
+  public final String mergeParameters;
+  public final List<String> dataObjectInitializers = new ArrayList<>();
 
   public static List<ProjectionSource> from(final ProjectionType projectionType,
                                             final CodeGenerationParameter aggregate,
                                             final List<CodeGenerationParameter> events,
                                             final List<CodeGenerationParameter> valueObjects) {
-    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(method -> method.retrieveOneRelated(Label.DOMAIN_EVENT))
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .filter(method -> method.hasAny(DOMAIN_EVENT))
+            .map(method -> method.retrieveOneRelated(DOMAIN_EVENT))
             .map(event -> new ProjectionSource(projectionType, event, events, valueObjects))
-            .collect(Collectors.toList());
+            .distinct().collect(Collectors.toList());
   }
 
   private ProjectionSource(final ProjectionType projectionType,
@@ -43,7 +49,7 @@ public class ProjectionSource {
                            final List<CodeGenerationParameter> valueObjects) {
     this.name = event.value;
     this.mergeParameters = resolveMergeParameters(projectionType, event, events);
-    this.dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(event.parent(Label.AGGREGATE).value);
+    this.dataObjectName = DATA_OBJECT.resolveClassname(event.parent(Label.AGGREGATE).value);
     this.dataObjectInitializers.addAll(resolveDataObjectInitializers(projectionType, event, events, valueObjects));
   }
 
@@ -60,6 +66,11 @@ public class ProjectionSource {
     final CodeGenerationParameter aggregate = event.parent(Label.AGGREGATE);
     return aggregate.retrieveAllRelated(Label.STATE_FIELD).map(field -> {
       if (DomainEventDetail.hasField(event.value, field.value, events)) {
+        if(FieldDetail.isValueObjectCollection(field)) {
+          final String valueObjectType = field.retrieveRelatedValue(FIELD_TYPE);
+          final String dataObjectName = DATA_OBJECT.resolveClassname(valueObjectType);
+          return String.format("%s.from(typedEvent.%s)", dataObjectName, field.value);
+        }
         if (ValueObjectDetail.isValueObject(field)) {
           return field.value;
         }
@@ -99,19 +110,17 @@ public class ProjectionSource {
             Dialect.findDefault(), loadedEvent, valueObjects.stream());
   }
 
-  public String getName() {
-    return name;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ProjectionSource that = (ProjectionSource) o;
+    return name.equals(that.name);
   }
 
-  public String getDataObjectName() {
-    return dataObjectName;
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
   }
 
-  public String getMergeParameters() {
-    return mergeParameters;
-  }
-
-  public List<String> getDataObjectInitializers() {
-    return dataObjectInitializers;
-  }
 }
