@@ -14,8 +14,8 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
 public class RestResourceGenerationStepTest {
 
@@ -50,7 +52,7 @@ public class RestResourceGenerationStepTest {
 
         final Content authorResource = context.findContent(JavaTemplateStandard.REST_RESOURCE, "AuthorResource");
 
-        Assertions.assertEquals(10, context.contents().size());
+        Assertions.assertEquals(11, context.contents().size());
         Assertions.assertTrue(authorResource.contains(TextExpectation.onJava().read("author-rest-resource")));
     }
 
@@ -99,6 +101,16 @@ public class RestResourceGenerationStepTest {
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
                         .relate(Label.FIELD_TYPE, "Rank");
 
+        final CodeGenerationParameter tagsField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                        .relate(Label.FIELD_TYPE, "Tag")
+                        .relate(Label.COLLECTION_TYPE, "List");
+
+        final CodeGenerationParameter relatedAuthorsField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                        .relate(Label.FIELD_TYPE, "String")
+                        .relate(Label.COLLECTION_TYPE, "Set");
+
         final CodeGenerationParameter availableOnField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
                         .relate(Label.FIELD_TYPE, "LocalDate");
@@ -110,6 +122,26 @@ public class RestResourceGenerationStepTest {
         final CodeGenerationParameter authorRankedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
                         .relate(idField).relate(rankField);
+
+        final CodeGenerationParameter authorTaggedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagged")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+
+        final CodeGenerationParameter authorUntaggedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUntagged")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+
+        final CodeGenerationParameter authorRelatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+
+        final CodeGenerationParameter authorUnrelatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
 
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
@@ -135,11 +167,123 @@ public class RestResourceGenerationStepTest {
                         .relate(Label.ROUTE_PATH, "/authors/{id}/rank")
                         .relate(Label.REQUIRE_ENTITY_LOADING, "true");
 
+        final CodeGenerationParameter addTagMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTag")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
+                                .relate(Label.ALIAS, "tag")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter addTagsMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "MERGE"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter replaceTagsMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter removeTagMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
+                                .relate(Label.ALIAS, "tag")
+                                .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
+                        .relate(authorUnrelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorsMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthors")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "MERGE"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorsReplacementMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorRemovalMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
+                        .relate(authorUnrelatedEvent);
+
+        final CodeGenerationParameter addTagRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "addTag")
+                        .relate(Label.ROUTE_METHOD, "PATCH")
+                        .relate(Label.ROUTE_PATH, "/{id}/tag")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter addTagsRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "addTags")
+                        .relate(Label.ROUTE_METHOD, "PATCH")
+                        .relate(Label.ROUTE_PATH, "/{id}/tags")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter replaceTagsRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "replaceTags")
+                        .relate(Label.ROUTE_METHOD, "PUT")
+                        .relate(Label.ROUTE_PATH, "/{id}/tags")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter removeTagsRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "removeTag")
+                        .relate(Label.ROUTE_METHOD, "DELETE")
+                        .relate(Label.ROUTE_PATH, "/{id}/tags")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter relatedAuthorRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "relateAuthor")
+                        .relate(Label.ROUTE_METHOD, "PATCH")
+                        .relate(Label.ROUTE_PATH, "/{id}/related-author")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter relatedAuthorsRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "relateAuthors")
+                        .relate(Label.ROUTE_METHOD, "PATCH")
+                        .relate(Label.ROUTE_PATH, "/{id}/related-authors")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter relatedAuthorsReplacementRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "replaceAllRelatedAuthors")
+                        .relate(Label.ROUTE_METHOD, "PUT")
+                        .relate(Label.ROUTE_PATH, "/{id}/related-authors")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+        final CodeGenerationParameter relatedAuthorRemovalRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "unrelateAuthor")
+                        .relate(Label.ROUTE_METHOD, "DELETE")
+                        .relate(Label.ROUTE_PATH, "/{id}/related-author")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                 .relate(Label.URI_ROOT, "/authors").relate(idField)
-                .relate(nameField).relate(rankField).relate(availableOnField).relate(factoryMethod)
+                .relate(nameField).relate(rankField).relate(availableOnField)
+                .relate(tagsField).relate(relatedAuthorsField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
-                .relate(authorRegisteredEvent).relate(authorRankedEvent);
+                .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(addTagMethod)
+                .relate(addTagsMethod).relate(replaceTagsMethod).relate(removeTagMethod)
+                .relate(relatedAuthorRoute).relate(relatedAuthorsRoute).relate(relatedAuthorsReplacementRoute)
+                .relate(relatedAuthorRemovalRoute).relate(addTagRoute).relate(addTagsRoute)
+                .relate(replaceTagsRoute).relate(removeTagsRoute).relate(changeRankRoute)
+                .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
+                .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
+                .relate(authorTaggedEvent).relate(authorUntaggedEvent);
     }
 
     private CodeGenerationParameter nameValueObject() {
@@ -173,14 +317,14 @@ public class RestResourceGenerationStepTest {
 
     }
 
-
     private Content[] contents() {
         return new Content[] {
                 Content.with(JavaTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.AGGREGATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
-                Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
+                Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
+                Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Tag.java"), null, null, TAG_VALUE_OBJECT_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
                 Content.with(JavaTemplateStandard.QUERIES_ACTOR, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
@@ -240,6 +384,11 @@ public class RestResourceGenerationStepTest {
                     "... \\n" +
                     "}";
 
+    private static final String TAG_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Tag { \\n" +
+                    "... \\n" +
+                    "}";
 
     private static final String AUTHOR_QUERIES_CONTENT_TEXT =
             "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +

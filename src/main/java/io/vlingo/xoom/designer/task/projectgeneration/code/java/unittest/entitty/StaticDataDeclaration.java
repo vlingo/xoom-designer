@@ -39,7 +39,7 @@ public class StaticDataDeclaration {
             method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) ? initialTestDataValues : updatedTestDataValues;
 
 
-    return AggregateDetail.findInvolvedStateFields(aggregate, method.value, (methodParam, stateField) -> Tuple2.from(method, stateField))
+    return AggregateDetail.findInvolvedStateFields(aggregate, method.value, (methodParam, stateField) -> Tuple2.from(methodParam, stateField))
             .map(tuple -> {
               final CodeGenerationParameter methodParameter = tuple._1;
               final CodeGenerationParameter stateField = tuple._2;

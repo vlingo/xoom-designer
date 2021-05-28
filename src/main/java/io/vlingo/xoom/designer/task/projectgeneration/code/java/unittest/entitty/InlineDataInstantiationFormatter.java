@@ -8,7 +8,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -17,15 +16,13 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDat
 import java.util.List;
 import java.util.function.Consumer;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
-
 public class InlineDataInstantiationFormatter {
 
-  private final CodeGenerationParameter methodParameter;
   private final CodeGenerationParameter stateField;
   private final List<CodeGenerationParameter> valueObjects;
   private final StringBuilder valuesAssignmentExpression;
   private final TestDataValues testDataValues;
+  private final CodeGenerationParameter methodParameter;
 
   public static InlineDataInstantiationFormatter with(final CodeGenerationParameter methodParameter,
                                                       final CodeGenerationParameter stateField,
@@ -41,12 +38,12 @@ public class InlineDataInstantiationFormatter {
     this.stateField = stateField;
     this.valueObjects = valueObjects;
     this.testDataValues = testDataValues;
-    this.methodParameter = methodParameter;
     this.valuesAssignmentExpression = new StringBuilder();
+    this.methodParameter = methodParameter;
   }
 
   public String format() {
-    if (FieldDetail.isScalar(stateField)) {
+    if (FieldDetail.isMethodParameterAssignableToScalar(stateField, methodParameter)) {
       return formatScalarTypedField();
     }
     return formatComplexTypedField();
@@ -57,13 +54,8 @@ public class InlineDataInstantiationFormatter {
   }
 
   private String formatComplexTypedField() {
-    if(FieldDetail.isCollectionOrDate(stateField)) {
-      final CollectionMutation collectionMutation =
-              methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
-
-      if(!collectionMutation.isSingleParameterBased()) {
-        return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
-      }
+    if(!FieldDetail.isMethodParameterAssignableToValueObject(stateField, methodParameter)) {
+      return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
     }
 
     final String valueObjectType =
@@ -79,10 +71,10 @@ public class InlineDataInstantiationFormatter {
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {
     final String currentFieldPath = path + "." + field.value;
-    if(FieldDetail.isCollectionOrDate(stateField)) {
-      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value)).append(", ");
-    } else if (ValueObjectDetail.isValueObject(field)) {
+    if (FieldDetail.isMethodParameterAssignableToValueObject(field, methodParameter)) {
       generateComplexTypeAssignment(currentFieldPath, field);
+    } else if (FieldDetail.isCollectionOrDate(field)) {
+      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value)).append(", ");
     } else {
       generateScalarTypeAssignment(currentFieldPath);
     }

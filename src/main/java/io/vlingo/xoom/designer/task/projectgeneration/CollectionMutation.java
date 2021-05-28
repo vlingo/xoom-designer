@@ -49,4 +49,8 @@ public enum CollectionMutation {
   public List<String> resolveStatements(final CodeGenerationParameter methodParameter) {
     return statementsResolver.apply(methodParameter);
   }
+
+  public boolean shouldReplaceWithMethodParameter() {
+    return equals(REPLACEMENT) || equals(NONE);
+  }
 }

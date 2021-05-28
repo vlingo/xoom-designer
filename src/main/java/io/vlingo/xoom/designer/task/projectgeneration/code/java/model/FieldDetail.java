@@ -11,9 +11,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 import org.apache.commons.lang3.StringUtils;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.SCALAR_NUMERIC_TYPES;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
 
 public class FieldDetail {
 
@@ -134,6 +136,10 @@ public class FieldDetail {
     return isCollection(field) || isDateTime(field);
   }
 
+  public static boolean isScalarTypedCollection(final CodeGenerationParameter field) {
+    return isCollection(field) && !isValueObjectCollection(field);
+  }
+
   public static boolean isValueObjectCollection(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     return isCollection(field) && !isScalar(fieldType) && !isDateTime(fieldType);
@@ -179,5 +185,22 @@ public class FieldDetail {
       return Label.VALUE_OBJECT_FIELD;
     }
     throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
+  }
+
+  public static boolean isMethodParameterAssignableToScalar(final CodeGenerationParameter stateField, final CodeGenerationParameter methodParameter) {
+    final String type = typeOf(stateField.parent(), stateField.value);
+    if(isScalar(type)) {
+      return true;
+    }
+    final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+    return isScalarTypedCollection(stateField) && collectionMutation.isSingleParameterBased();
+  }
+
+  public static boolean isMethodParameterAssignableToValueObject(final CodeGenerationParameter stateField, final CodeGenerationParameter methodParameter) {
+    if(ValueObjectDetail.isValueObject(stateField)) {
+      return true;
+    }
+    final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+    return isValueObjectCollection(stateField) && collectionMutation.isSingleParameterBased();
   }
 }

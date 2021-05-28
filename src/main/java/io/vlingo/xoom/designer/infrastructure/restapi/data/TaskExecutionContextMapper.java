@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
@@ -28,6 +29,7 @@ public class TaskExecutionContextMapper {
   private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
+  private final TemplateCustomFunctions templateCustomFunctions;
 
   public static TaskExecutionContext from(final GenerationSettingsData data,
                                           final GenerationTarget generationTarget) {
@@ -38,6 +40,7 @@ public class TaskExecutionContextMapper {
     this.data = data;
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
+    this.templateCustomFunctions = TemplateCustomFunctions.instance();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
   }
@@ -103,7 +106,7 @@ public class TaskExecutionContextMapper {
 
         final CodeGenerationParameter methodParameter =
                 CodeGenerationParameter.of(METHOD_PARAMETER, param.name)
-                        .relate(ALIAS, "_" + param.alias)
+                        .relate(ALIAS, param.alias)
                         .relate(COLLECTION_MUTATION, collectionMutation);
 
         method.relate(methodParameter);

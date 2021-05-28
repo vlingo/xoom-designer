@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.ALIAS;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
@@ -29,6 +28,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   private final String stageVariableName;
   private final boolean dataObjectHandling;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
+  private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.get(0)";
 
   public static AggregateMethodInvocation handlingDataObject(final String stageVariableName) {
     return new AggregateMethodInvocation(stageVariableName, "data", true);
@@ -63,7 +63,6 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     final CodeGenerationParameter stateField =
             AggregateDetail.stateFieldWithName(methodParameter.parent(AGGREGATE), methodParameter.value);
 
-
     final String fieldPath =
             carrier.isEmpty() ? methodParameter.value : String.format(FIELD_ACCESS_PATTERN, carrier, methodParameter.value);
 
@@ -76,10 +75,10 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
     if(FieldDetail.isCollection(fieldType)) {
       final CollectionMutation collectionMutation =
-              methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withSymbol);
+              methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(collectionMutation.isSingleParameterBased()) {
-        return methodParameter.retrieveRelatedValue(ALIAS);
+        return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, carrier, methodParameter.retrieveRelatedValue(ALIAS));
       }
     }
 

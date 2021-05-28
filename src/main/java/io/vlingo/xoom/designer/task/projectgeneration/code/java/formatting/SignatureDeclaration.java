@@ -71,7 +71,7 @@ public class SignatureDeclaration implements Formatters.Arguments {
 
       if(FieldDetail.isCollection(fieldType)) {
         final CollectionMutation collectionMutation =
-                field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withSymbol);
+                field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
         if(collectionMutation.isSingleParameterBased()) {
           return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(ALIAS));

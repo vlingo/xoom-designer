@@ -20,6 +20,10 @@ public final class AuthorEntity extends EventSourced implements Author {
   static {
     EventSourced.registerConsumer(AuthorEntity.class, AuthorRegistered.class, AuthorEntity::applyAuthorRegistered);
     EventSourced.registerConsumer(AuthorEntity.class, AuthorRanked.class, AuthorEntity::applyAuthorRanked);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorUnrelated.class, AuthorEntity::applyAuthorUnrelated);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
   }
 
   /*
@@ -58,12 +62,64 @@ public final class AuthorEntity extends EventSourced implements Author {
     return Completes.withSuccess(stateArg);
   }
 
+  @Override
+  public Completes<AuthorState> relateAuthor(final String relatedAuthor) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#relateAuthor()}
+     */
+    final AuthorState stateArg = state.relateAuthor(relatedAuthor);
+    return apply(new AuthorRelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> relateAuthors(final Set<String> relatedAuthors) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#relateAuthors()}
+     */
+    final AuthorState stateArg = state.relateAuthors(relatedAuthors);
+    return apply(new AuthorRelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> unrelateAuthor(final String relatedAuthor) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#unrelateAuthor()}
+     */
+    final AuthorState stateArg = state.unrelateAuthor(relatedAuthor);
+    return apply(new AuthorUnrelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> replaceAllRelatedAuthors(final Set<String> relatedAuthors) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#replaceAllRelatedAuthors()}
+     */
+    final AuthorState stateArg = state.replaceAllRelatedAuthors(relatedAuthors);
+    return apply(new AuthorRelated(stateArg), () -> state);
+  }
+
   private void applyAuthorRegistered(final AuthorRegistered event) {
     state = state.withName(event.name);
   }
 
   private void applyAuthorRanked(final AuthorRanked event) {
     state = state.changeRank(event.rank);
+  }
+
+  private void applyAuthorRelated(final AuthorRelated event) {
+    state = state.relateAuthor(event.relatedAuthors);
+  }
+
+  private void applyAuthorRelated(final AuthorRelated event) {
+    state = state.relateAuthors(event.relatedAuthors);
+  }
+
+  private void applyAuthorUnrelated(final AuthorUnrelated event) {
+    state = state.unrelateAuthor(event.relatedAuthors);
+  }
+
+  private void applyAuthorRelated(final AuthorRelated event) {
+    state = state.replaceAllRelatedAuthors(event.relatedAuthors);
   }
 
   /*
