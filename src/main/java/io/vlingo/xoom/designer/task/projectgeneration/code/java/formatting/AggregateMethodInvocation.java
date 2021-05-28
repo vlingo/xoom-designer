@@ -26,7 +26,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private final String carrier;
   private final String stageVariableName;
-  private final boolean dataObjectHandling;
+  private final boolean supportDataObjectHandling;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
   private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.get(0)";
 
@@ -40,10 +40,10 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   public AggregateMethodInvocation(final String stageVariableName,
                                    final String carrier,
-                                   final boolean dataObjectHandling) {
+                                   final boolean supportDataObjectHandling) {
     this.carrier = carrier;
     this.stageVariableName = stageVariableName;
-    this.dataObjectHandling = dataObjectHandling;
+    this.supportDataObjectHandling = supportDataObjectHandling;
   }
 
   @Override
@@ -66,7 +66,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     final String fieldPath =
             carrier.isEmpty() ? methodParameter.value : String.format(FIELD_ACCESS_PATTERN, carrier, methodParameter.value);
 
-    if(dataObjectHandling && FieldDetail.isValueObjectCollection(stateField)) {
+    if(supportDataObjectHandling && FieldDetail.isValueObjectCollection(stateField)) {
       return ValueObjectDetail.translateDataObjectCollection(fieldPath, stateField, methodParameter);
     }
 
@@ -78,7 +78,11 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
               methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(collectionMutation.isSingleParameterBased()) {
-        return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, carrier, methodParameter.retrieveRelatedValue(ALIAS));
+        if(supportDataObjectHandling) {
+          return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, carrier, methodParameter.retrieveRelatedValue(ALIAS));
+        } else {
+          return methodParameter.retrieveRelatedValue(ALIAS);
+        }
       }
     }
 
