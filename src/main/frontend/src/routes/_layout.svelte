@@ -276,5 +276,8 @@
 		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line {
 			color: white !important;
 		}
+		.mdc-select__menu {
+			background-color: #212121;
+		}
 	}
 </style>
