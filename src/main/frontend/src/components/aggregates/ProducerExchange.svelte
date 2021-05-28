@@ -49,6 +49,7 @@
       style="flex: 1;"
       label="Exchange Name"
       bind:value={producerExchangeName}
+      invalid={!producerExchangeName && (schemaGroup || outgoingEvents.length > 0)}
     />
     <div style="flex: 1;">
       <Textfield
@@ -56,7 +57,7 @@
         label="Organization : Unit : Context"
         disabled={disableSchemaGroup}
         bind:value={schemaGroup}
-        invalid={[schemaGroupRule(schemaGroup)].some(f => f)}
+        invalid={[schemaGroupRule(schemaGroup)].some(f => f) && (producerExchangeName || outgoingEvents.length > 0)}
       >
         <HelperText persistent slot="helper">{schemaGroupRule(schemaGroup)}</HelperText>
       </Textfield>
@@ -96,6 +97,7 @@
         label="Domain Event"
         input$readonly={true}
         on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menu.setOpen(true)}}
+        invalid={outgoingEvents.length < 1 && (producerExchangeName || schemaGroup)}
       ></Textfield>
     </div>
     <Menu

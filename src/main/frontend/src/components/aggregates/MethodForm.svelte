@@ -36,35 +36,38 @@
   let menuEvent;
   let anchorEvent;
   let anchorClassesEvent = {};
-
-  function updateParamaters(name, symbol = undefined) {
-    const nameWithOrWithoutSymbol = symbol ? `${name} ${symbol}` : name;
-    const indexOfAlreadyExists = method.parameters.findIndex(p => p === nameWithOrWithoutSymbol)
+  let selectedParameters = '';
+  let isAnyCollectionParameterSelected = false;
+  function updateParamaters(name) {
+    const indexOfAlreadyExists = method.parameters.findIndex(p => p.stateField === name && !p.multiplicity)
     if (indexOfAlreadyExists > -1) {
       method.parameters.splice(indexOfAlreadyExists, 1)
       method.parameters = method.parameters
       return;
     }
-    var replace = `^${name}$|^${name} [*#+-]$`;
-    var re = new RegExp(replace);
-    const indexOfAnyExists = method.parameters.findIndex(p => {
-      const a = p.search(re);
-      return a !== -1;
-    })
-    if (indexOfAnyExists > -1) {
-      method.parameters.splice(indexOfAnyExists, 1, nameWithOrWithoutSymbol)
-      method.parameters = method.parameters
+    const param = {
+      stateField: name,
+      parameterName: name,
+      multiplicity: ''
+    }
+    if (isAnyCollectionParameterSelected) {
+      method.parameters = [param]
     } else {
-      method.parameters = [...method.parameters, nameWithOrWithoutSymbol]
+      method.parameters = [...method.parameters, param]
     }
   }
 
   function updateParamatersWithSymbol(fName, symbol) {
-    const pName = `${fName} ${symbol}`
-    if (method.parameters.includes(pName)) {
+    const param = {
+      stateField: fName,
+      parameterName: symbol.isPlural ? fName : pluralize.singular(fName),
+      multiplicity: symbol.sign
+    }
+    const p = method.parameters.find(p => p.stateField === fName && p.multiplicity === symbol.sign)
+    if (p) {
       method.parameters = []
     } else {
-      method.parameters = [pName]
+      method.parameters = [param]
     }
   }
 
@@ -77,7 +80,8 @@
   }
 
   $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
-  $: isAnyCollectionParameterSelected = method.parameters.some(p => p.search(/ [*#+-]$/) > -1)
+  $: isAnyCollectionParameterSelected = method.parameters.some(p => p.multiplicity);
+  $: selectedParameters = method.parameters && method.parameters.length > 0 ? isAnyCollectionParameterSelected ? `${method.parameters[0].parameterName} ${method.parameters[0].multiplicity}` : method.parameters.map(p => p.parameterName).join(', ') : '(none)';
 </script>
 
 <div style="flex: 1;">
@@ -116,7 +120,7 @@
     >
       <Textfield
         style="width: 100%;"
-        value={method.parameters && method.parameters.length > 0 ? method.parameters.join(', ') : '(none)'}
+        value={selectedParameters}
         disabled={!stateFields.length}
         label="Parameters"
         input$readonly={true}
@@ -136,14 +140,15 @@
             <Item
               class="pa-0"
               on:SMUI:action={() => !field.collectionType && updateParamaters(field.name)}
-              selected={method.parameters.includes(field.collectionType ? `${field.name} >` : field.name)}
+              selected={method.parameters.findIndex(p => p.stateField === field.name) > -1}
               disabled={isAnyCollectionParameterSelected || field.collectionType}
             >
               <Checkbox
                 style="visibility: {field.collectionType ? 'hidden' : 'visible'}"
                 disabled={isAnyCollectionParameterSelected || field.collectionType}
-                checked={method.parameters.includes(field.collectionType ? `${field.name} >` : field.name)}
-                value={field.collectionType ? `${field.name} >` : field.name} />
+                checked={method.parameters.some(p => p.stateField === field.name)}
+                value={field.collectionType ? `` : field.name}
+              />
               <Label>{field.name} {field.collectionType ? '>' : ''}</Label>
             </Item>
             {#if field.collectionType}
@@ -151,11 +156,11 @@
                 {#each symbols as symbol}
                   <Item
                     class="pa-0 pl-10"
-                    on:SMUI:action={() => updateParamatersWithSymbol(symbol.isPlural ? field.name : pluralize.singular(field.name), symbol.sign)}
-                    selected={method.parameters.includes(`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`)}
+                    on:SMUI:action={() => updateParamatersWithSymbol(field.name, symbol)}
+                    selected={method.parameters.some(p => p.stateField === field.name && p.multiplicity === symbol.sign)}
                   >
                     <Checkbox
-                      checked={method.parameters.includes(`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`)}
+                      checked={method.parameters.some(p => p.stateField === field.name && p.multiplicity === symbol.sign)}
                       value={`${symbol.isPlural ? field.name : pluralize.singular(field.name)} ${symbol.sign}`} />
                     <Label>{symbol.isPlural ? field.name : pluralize.singular(field.name)} {symbol.sign}</Label>
                   </Item>
