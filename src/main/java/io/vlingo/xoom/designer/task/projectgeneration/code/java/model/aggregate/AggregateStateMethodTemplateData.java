@@ -12,12 +12,16 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
@@ -36,13 +40,22 @@ public class AggregateStateMethodTemplateData extends TemplateData {
                                            final CodeGenerationParameter method) {
     this.parameters =
             TemplateParameters.with(METHOD_NAME, method.value)
+                    .and(COLLECTION_MUTATIONS, resolveCollectionMutations(method))
                     .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
                     .and(CONSTRUCTOR_PARAMETERS, resolveConstructorParameters(dialect, method))
                     .and(STATE_NAME, JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value));
   }
 
   private String resolveConstructorParameters(final Dialect dialect, final CodeGenerationParameter method) {
-    return Formatters.Fields.format(Formatters.Fields.Style.SELF_ALTERNATE_REFERENCE, dialect, method.parent(), method.retrieveAllRelated(Label.METHOD_PARAMETER));
+    return Formatters.Fields.format(Formatters.Fields.Style.SELF_ALTERNATE_REFERENCE, dialect, method.parent(), method.retrieveAllRelated(METHOD_PARAMETER));
+  }
+
+  private List<String> resolveCollectionMutations(final CodeGenerationParameter method) {
+    return method.retrieveAllRelated(METHOD_PARAMETER).flatMap(methodParameter -> {
+              final CollectionMutation collectionMutation =
+                      methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+              return collectionMutation.resolveStatements(methodParameter).stream();
+            }).collect(Collectors.toList());
   }
 
   @Override

@@ -11,12 +11,12 @@ import java.util.List;
 public class AggregateMethodData {
 
     public final String name;
-    public final List<String> parameters;
+    public final List<MethodParameterData> parameters;
     public final Boolean useFactory;
     public final String event;
 
     public AggregateMethodData(final String name,
-                               final List<String> parameters,
+                               final List<MethodParameterData> parameters,
                                final Boolean useFactory,
                                final String event) {
         this.name = name;

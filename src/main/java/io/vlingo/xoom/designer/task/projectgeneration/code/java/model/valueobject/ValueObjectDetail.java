@@ -11,8 +11,9 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 
@@ -129,11 +130,29 @@ public class ValueObjectDetail {
             .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find " + fieldName));
   }
 
-  public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField) {
+  public static String translateDataObjectCollection(final String fieldPath,
+                                                     final CodeGenerationParameter valueObjectField) {
+    return translateDataObjectCollection(fieldPath, valueObjectField, null);
+  }
+
+  public static String translateDataObjectCollection(final String fieldPath,
+                                                     final CodeGenerationParameter valueObjectField,
+                                                     final CodeGenerationParameter methodParameter) {
     final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
     final String collectionType = valueObjectField.retrieveRelatedValue(Label.COLLECTION_TYPE);
     final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
+
+    if(methodParameter != null) {
+      final CollectionMutation collectionMutation =
+              methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+
+      if(collectionMutation.isSingleParameterBased()) {
+        return String.format("%s.stream().map(%s::to%s).findFirst().get()", fieldPath, dataObjectName, fieldType);
+      }
+    }
+
     return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())",
             fieldPath, dataObjectName, fieldType, collectionType);
   }
+
 }

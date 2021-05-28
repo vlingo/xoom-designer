@@ -126,8 +126,8 @@ public class TaskExecutionContextMapperTest {
             Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("name", "String", "List"));
 
     final List<AggregateMethodData> methods =
-            Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList("name"), true, "PersonDefined"),
-                    new AggregateMethodData("changeName", Arrays.asList("name"), false, "PersonNameChanged"));
+            Arrays.asList(new AggregateMethodData("defineWith", Arrays.asList(new MethodParameterData("name")), true, "PersonDefined"),
+                    new AggregateMethodData("changeName", Arrays.asList(new MethodParameterData("name")), false, "PersonNameChanged"));
 
     final List<DomainEventData> events =
             Arrays.asList(new DomainEventData("PersonDefined", Arrays.asList("id", "name")),
@@ -145,8 +145,8 @@ public class TaskExecutionContextMapperTest {
             Arrays.asList(new StateFieldData("id", "Long", ""), new StateFieldData("status", "String", ""));
 
     final List<AggregateMethodData> methods =
-            Arrays.asList(new AggregateMethodData("publish", Arrays.asList("status"), true, "ProfilePublished"),
-                    new AggregateMethodData("changeStatus", Arrays.asList("status"), false, "ProfileStatusChanged"));
+            Arrays.asList(new AggregateMethodData("publish", Arrays.asList(new MethodParameterData("status")), true, "ProfilePublished"),
+                    new AggregateMethodData("changeStatus", Arrays.asList(new MethodParameterData("status")), false, "ProfileStatusChanged"));
 
     final List<DomainEventData> events =
             Arrays.asList(new DomainEventData("ProfilePublished", Arrays.asList("id", "status")),

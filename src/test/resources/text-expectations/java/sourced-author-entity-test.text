@@ -4,10 +4,12 @@ import io.vlingo.xoom.actors.World;
 import io.vlingo.xoom.actors.testkit.AccessSafely;
 import java.time.LocalDate;
 import io.vlingo.xoom.symbio.BaseEntry;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorUntaggedAdapter;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorRegisteredAdapter;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorRankedAdapter;
 import io.vlingo.xoomapp.infrastructure.persistence.MockDispatcher;
 import java.util.*;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorTaggedAdapter;
 import io.vlingo.xoomapp.model.*;
 import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry;
 import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
@@ -39,6 +41,8 @@ public class AuthorEntityTest {
 
     entryAdapterProvider.registerAdapter(AuthorRegistered.class, new AuthorRegisteredAdapter());
     entryAdapterProvider.registerAdapter(AuthorRanked.class, new AuthorRankedAdapter());
+    entryAdapterProvider.registerAdapter(AuthorTagged.class, new AuthorTaggedAdapter());
+    entryAdapterProvider.registerAdapter(AuthorUntagged.class, new AuthorUntaggedAdapter());
 
     journal = world.actorFor(Journal.class, InMemoryJournalActor.class, Collections.singletonList(dispatcher));
 
@@ -76,6 +80,134 @@ public class AuthorEntityTest {
     assertNotNull(state.rank);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
     assertEquals(AuthorRanked.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final Tag TAGS_FOR_ADD_TAG_TEST = Tag.from("updated-author-tags-name");
+
+  @Test
+  public void addTag() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.addTag(TAGS_FOR_ADD_TAG_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.tags);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final List<Tag> TAGS_FOR_ADD_TAGS_TEST = new ArrayList<>();
+
+  @Test
+  public void addTags() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.addTags(TAGS_FOR_ADD_TAGS_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.tags);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final List<Tag> TAGS_FOR_REPLACE_TAGS_TEST = new ArrayList<>();
+
+  @Test
+  public void replaceTags() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.replaceTags(TAGS_FOR_REPLACE_TAGS_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.tags);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final Tag TAGS_FOR_REMOVE_TAG_TEST = Tag.from("updated-author-tags-name");
+
+  @Test
+  public void removeTag() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.removeTag(TAGS_FOR_REMOVE_TAG_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.tags);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorUnrelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final String RELATED_AUTHORS_FOR_RELATE_AUTHOR_TEST = "updated-author-relatedAuthors";
+
+  @Test
+  public void relateAuthor() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.relateAuthor(RELATED_AUTHORS_FOR_RELATE_AUTHOR_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.relatedAuthors);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final Set<String> RELATED_AUTHORS_FOR_RELATE_AUTHORS_TEST = new HashSet<>();
+
+  @Test
+  public void relateAuthors() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.relateAuthors(RELATED_AUTHORS_FOR_RELATE_AUTHORS_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.relatedAuthors);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final String RELATED_AUTHORS_FOR_UNRELATE_AUTHOR_TEST = "updated-author-relatedAuthors";
+
+  @Test
+  public void unrelateAuthor() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.unrelateAuthor(RELATED_AUTHORS_FOR_UNRELATE_AUTHOR_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.relatedAuthors);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorUnrelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+  }
+
+  private static final Set<String> RELATED_AUTHORS_FOR_REPLACE_ALL_RELATED_AUTHORS_TEST = new HashSet<>();
+
+  @Test
+  public void replaceAllRelatedAuthors() {
+    _createEntity();
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorState state = author.replaceAllRelatedAuthors(RELATED_AUTHORS_FOR_REPLACE_ALL_RELATED_AUTHORS_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertNotNull(state.relatedAuthors);
+    assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final Name NAME_FOR_ENTITY_CREATION = Name.from("author-name-firstName", "author-name-lastName");

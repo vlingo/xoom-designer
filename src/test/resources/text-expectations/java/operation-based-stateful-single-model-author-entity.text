@@ -53,6 +53,42 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     return apply(stateArg, () -> state);
   }
 
+  @Override
+  public Completes<AuthorState> relateAuthor(final String relatedAuthor) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#relateAuthor()}
+     */
+    final AuthorState stateArg = state.relateAuthor(relatedAuthor);
+    return apply(stateArg, new AuthorRelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> relateAuthors(final Set<String> relatedAuthors) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#relateAuthors()}
+     */
+    final AuthorState stateArg = state.relateAuthors(relatedAuthors);
+    return apply(stateArg, new AuthorRelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> unrelateAuthor(final String relatedAuthor) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#unrelateAuthor()}
+     */
+    final AuthorState stateArg = state.unrelateAuthor(relatedAuthor);
+    return apply(stateArg, new AuthorUnrelated(stateArg), () -> state);
+  }
+
+  @Override
+  public Completes<AuthorState> replaceAllRelatedAuthors(final Set<String> relatedAuthors) {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#replaceAllRelatedAuthors()}
+     */
+    final AuthorState stateArg = state.replaceAllRelatedAuthors(relatedAuthors);
+    return apply(stateArg, new AuthorRelated(stateArg), () -> state);
+  }
+
   /*
    * Received when my current state has been applied and restored.
    *

@@ -21,6 +21,38 @@ public interface AuthorResource {
   @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
   Completes<Response> withName(@Body final AuthorData data);
 
+  @Route(method = PATCH, path = "/{id}/related-author", handler = AuthorResourceHandlers.RELATE_AUTHOR)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> relateAuthor(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = PATCH, path = "/{id}/related-authors", handler = AuthorResourceHandlers.RELATE_AUTHORS)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> relateAuthors(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = PUT, path = "/{id}/related-authors", handler = AuthorResourceHandlers.REPLACE_ALL_RELATED_AUTHORS)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> replaceAllRelatedAuthors(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = DELETE, path = "/{id}/related-author", handler = AuthorResourceHandlers.UNRELATE_AUTHOR)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> unrelateAuthor(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = PATCH, path = "/{id}/tag", handler = AuthorResourceHandlers.ADD_TAG)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> addTag(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = PATCH, path = "/{id}/tags", handler = AuthorResourceHandlers.ADD_TAGS)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> addTags(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = PUT, path = "/{id}/tags", handler = AuthorResourceHandlers.REPLACE_TAGS)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> replaceTags(@Id final String id, @Body final AuthorData data);
+
+  @Route(method = DELETE, path = "/{id}/tags", handler = AuthorResourceHandlers.REMOVE_TAG)
+  @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
+  Completes<Response> removeTag(@Id final String id, @Body final AuthorData data);
+
   @Route(method = PATCH, path = "/{id}/rank", handler = AuthorResourceHandlers.CHANGE_RANK)
   @ResponseAdapter(handler = AuthorResourceHandlers.ADAPT_STATE)
   Completes<Response> changeRank(@Id final String id, @Body final AuthorData data);

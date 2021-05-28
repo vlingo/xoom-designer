@@ -39,4 +39,28 @@ public final class AuthorState {
     return new AuthorState(this.id, this.name, this.rank, this.relatedAuthors, this.availableOn);
   }
 
+  public AuthorState relateAuthor(final String relatedAuthor) {
+    //TODO: Implement command logic.
+    this.relatedAuthors.add(relatedAuthor);
+    return new AuthorState(this.id, this.name, this.rank, this.relatedAuthors, this.availableOn);
+  }
+
+  public AuthorState relateAuthors(final Set<String> relatedAuthors) {
+    //TODO: Implement command logic.
+    this.relatedAuthors.removeAll(relatedAuthors);
+    this.relatedAuthors.addAll(relatedAuthors);
+    return new AuthorState(this.id, this.name, this.rank, this.relatedAuthors, this.availableOn);
+  }
+
+  public AuthorState unrelateAuthor(final String relatedAuthor) {
+    //TODO: Implement command logic.
+    this.relatedAuthors.remove(relatedAuthor);
+    return new AuthorState(this.id, this.name, this.rank, this.relatedAuthors, this.availableOn);
+  }
+
+  public AuthorState replaceAllRelatedAuthors(final Set<String> relatedAuthors) {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, this.rank, relatedAuthors, this.availableOn);
+  }
+
 }
