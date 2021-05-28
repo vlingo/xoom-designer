@@ -16,6 +16,7 @@ public enum TemplateParameter implements ParameterKey {
   BASE_PACKAGE("basePackage"),
   PACKAGE_NAME("packageName"),
   APPLICATION_NAME("appName"),
+  COLLECTION_MUTATIONS("collectionMutations"),
   AUTO_DISPATCH_MAPPING_NAME("autoDispatchMappingName"),
   AUTO_DISPATCH_HANDLERS_MAPPING_NAME("autoDispatchHandlersMappingName"),
   AGGREGATES("aggregates"),

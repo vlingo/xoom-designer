@@ -82,9 +82,9 @@ public class TestDataValueGenerator {
   }
 
   private void generateValue(final int dataIndex, final String path, final CodeGenerationParameter field) {
-    if (ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field)) {
       generateForValueObjectFields(dataIndex, path, field);
-    } else if(FieldDetail.isScalar(field)) {
+    } else if(FieldDetail.isScalar(field) || FieldDetail.isCollection(field)) {
       generateScalarFieldAssignment(dataIndex, path, field);
     }
   }

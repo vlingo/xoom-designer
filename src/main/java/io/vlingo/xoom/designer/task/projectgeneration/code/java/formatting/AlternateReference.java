@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 
@@ -15,22 +16,22 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
 import static java.util.stream.Collectors.toList;
 
 public class AlternateReference extends Formatters.Fields<String> {
 
-  @SuppressWarnings("unused")
-  private final String carrier;
+  private final boolean supportSelfReferencedFields;
   private final Function<CodeGenerationParameter, String> absenceHandler;
 
   private AlternateReference(final Function<CodeGenerationParameter, String> absenceHandler) {
-    this("", absenceHandler);
+    this(absenceHandler, true);
   }
 
-  private AlternateReference(final String carrier,
-                             final Function<CodeGenerationParameter, String> absenceHandler) {
-    this.carrier = carrier;
+  private AlternateReference(final Function<CodeGenerationParameter, String> absenceHandler,
+                             final boolean supportSelfReferencedFields) {
     this.absenceHandler = absenceHandler;
+    this.supportSelfReferencedFields = supportSelfReferencedFields;
   }
 
   static AlternateReference handlingSelfReferencedFields() {
@@ -54,6 +55,17 @@ public class AlternateReference extends Formatters.Fields<String> {
 
   private boolean isPresent(final CodeGenerationParameter field,
                             final List<CodeGenerationParameter> presentFields) {
-    return presentFields.stream().anyMatch(present -> present.value.equals(field.value));
+
+    return presentFields.stream().anyMatch(present -> {
+
+      final CollectionMutation collectionMutation =
+              present.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+
+      if(supportSelfReferencedFields && !collectionMutation.shouldReplaceWithMethodParameter()) {
+        return false;
+      }
+
+      return present.value.equals(field.value);
+    });
   }
 }

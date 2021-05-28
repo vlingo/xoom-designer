@@ -27,4 +27,12 @@ public interface Author {
 
   Completes<AuthorState> hide();
 
+  Completes<AuthorState> relateAuthor(final String relatedAuthor);
+
+  Completes<AuthorState> relateAuthors(final Set<String> relatedAuthors);
+
+  Completes<AuthorState> unrelateAuthor(final String relatedAuthor);
+
+  Completes<AuthorState> replaceAllRelatedAuthors(final Set<String> relatedAuthors);
+
 }

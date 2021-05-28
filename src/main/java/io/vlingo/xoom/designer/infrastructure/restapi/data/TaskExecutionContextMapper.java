@@ -10,9 +10,11 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
@@ -27,6 +29,7 @@ public class TaskExecutionContextMapper {
   private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
+  private final TemplateCustomFunctions templateCustomFunctions;
 
   public static TaskExecutionContext from(final GenerationSettingsData data,
                                           final GenerationTarget generationTarget) {
@@ -37,6 +40,7 @@ public class TaskExecutionContextMapper {
     this.data = data;
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
+    this.templateCustomFunctions = TemplateCustomFunctions.instance();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
   }
@@ -90,15 +94,25 @@ public class TaskExecutionContextMapper {
 
   private void mapMethods(final AggregateData aggregateData,
                           final CodeGenerationParameter aggregateParameter) {
-    aggregateData.methods.forEach(method -> {
-      final CodeGenerationParameter methodParameter =
-              CodeGenerationParameter.of(AGGREGATE_METHOD, method.name)
-                      .relate(FACTORY_METHOD, method.useFactory)
-                      .relate(DOMAIN_EVENT, method.event);
+    aggregateData.methods.forEach(methodData -> {
+      final CodeGenerationParameter method =
+              CodeGenerationParameter.of(AGGREGATE_METHOD, methodData.name)
+                      .relate(FACTORY_METHOD, methodData.useFactory)
+                      .relate(DOMAIN_EVENT, methodData.event);
 
-      method.parameters.forEach(param -> methodParameter.relate(METHOD_PARAMETER, param));
+      methodData.parameters.forEach(param -> {
+        final CollectionMutation collectionMutation =
+                CollectionMutation.withSymbol(param.multiplicity);
 
-      aggregateParameter.relate(methodParameter);
+        final CodeGenerationParameter methodParameter =
+                CodeGenerationParameter.of(METHOD_PARAMETER, param.stateField)
+                        .relate(ALIAS, param.parameterName)
+                        .relate(COLLECTION_MUTATION, collectionMutation);
+
+        method.relate(methodParameter);
+      });
+
+      aggregateParameter.relate(method);
     });
   }
 
@@ -180,4 +194,5 @@ public class TaskExecutionContextMapper {
             .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory))
             .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
   }
+
 }

@@ -30,7 +30,7 @@ public class CodeGenerationProperties {
           .flatMap(List::stream).collect(Collectors.toList());
 
   @SuppressWarnings("serial")
-  public static final Map<String, String> SPECIAL_TYPES =
+  public static final Map<String, String> SPECIAL_TYPES_IMPORTS =
           Collections.unmodifiableMap(
                   new HashMap<String, String>() {{
                     put("LocalDate", "java.time.LocalDate");

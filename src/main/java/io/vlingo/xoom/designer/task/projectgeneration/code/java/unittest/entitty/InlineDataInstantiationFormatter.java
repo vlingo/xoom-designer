@@ -22,24 +22,28 @@ public class InlineDataInstantiationFormatter {
   private final List<CodeGenerationParameter> valueObjects;
   private final StringBuilder valuesAssignmentExpression;
   private final TestDataValues testDataValues;
+  private final CodeGenerationParameter methodParameter;
 
-  public static InlineDataInstantiationFormatter with(final CodeGenerationParameter stateField,
+  public static InlineDataInstantiationFormatter with(final CodeGenerationParameter methodParameter,
+                                                      final CodeGenerationParameter stateField,
                                                       final List<CodeGenerationParameter> valueObjects,
                                                       final TestDataValues testDataValues) {
-    return new InlineDataInstantiationFormatter(stateField, valueObjects, testDataValues);
+    return new InlineDataInstantiationFormatter(methodParameter, stateField, valueObjects, testDataValues);
   }
 
-  private InlineDataInstantiationFormatter(final CodeGenerationParameter stateField,
+  private InlineDataInstantiationFormatter(final CodeGenerationParameter methodParameter,
+                                           final CodeGenerationParameter stateField,
                                            final List<CodeGenerationParameter> valueObjects,
                                            final TestDataValues testDataValues) {
     this.stateField = stateField;
     this.valueObjects = valueObjects;
-    this.valuesAssignmentExpression = new StringBuilder();
     this.testDataValues = testDataValues;
+    this.valuesAssignmentExpression = new StringBuilder();
+    this.methodParameter = methodParameter;
   }
 
   public String format() {
-    if (FieldDetail.isScalar(stateField)) {
+    if (FieldDetail.isMethodParameterAssignableToScalar(stateField, methodParameter)) {
       return formatScalarTypedField();
     }
     return formatComplexTypedField();
@@ -50,7 +54,7 @@ public class InlineDataInstantiationFormatter {
   }
 
   private String formatComplexTypedField() {
-    if(FieldDetail.isCollectionOrDate(stateField)) {
+    if(!FieldDetail.isMethodParameterAssignableToValueObject(stateField, methodParameter)) {
       return FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value);
     }
 
@@ -67,10 +71,10 @@ public class InlineDataInstantiationFormatter {
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {
     final String currentFieldPath = path + "." + field.value;
-    if(FieldDetail.isCollectionOrDate(stateField)) {
-      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(stateField.parent(), stateField.value)).append(", ");
-    } else if (ValueObjectDetail.isValueObject(field)) {
+    if (FieldDetail.isMethodParameterAssignableToValueObject(field, methodParameter)) {
       generateComplexTypeAssignment(currentFieldPath, field);
+    } else if (FieldDetail.isCollectionOrDate(field)) {
+      valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(field.parent(), field.value)).append(", ");
     } else {
       generateScalarTypeAssignment(currentFieldPath);
     }

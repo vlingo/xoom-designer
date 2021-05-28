@@ -4,6 +4,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import io.vlingo.xoomapp.model.*;
 
 public class RankData {
@@ -18,6 +22,14 @@ public class RankData {
 
   public static RankData from(final int points, final ClassificationData classification) {
     return new RankData(points, classification);
+  }
+
+  public static Set<RankData> from(final Set<Rank> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(RankData::from).collect(Collectors.toSet());
+  }
+
+  public static List<RankData> from(final List<Rank> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(RankData::from).collect(Collectors.toList());
   }
 
   private RankData (final int points, final ClassificationData classification) {

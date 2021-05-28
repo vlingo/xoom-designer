@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
@@ -15,15 +16,16 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDat
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TestCase {
 
-  private final String methodName;
-  private final String resultAssignmentStatement;
-  private final List<String> dataDeclarations = new ArrayList<>();
-  private final List<String> preliminaryStatements = new ArrayList<>();
-  private final List<String> assertions = new ArrayList<>();
+  public final String methodName;
+  public final String resultAssignmentStatement;
+  public final List<String> dataDeclarations = new ArrayList<>();
+  public final List<String> preliminaryStatements = new ArrayList<>();
+  public final List<String> assertions = new ArrayList<>();
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate,
                                     final List<CodeGenerationParameter> valueObjects,
@@ -65,23 +67,9 @@ public class TestCase {
     this.assertions.addAll(assertions);
   }
 
-  public String getMethodName() {
-    return methodName;
-  }
-
-  public List<String> getDataDeclarations() {
-    return dataDeclarations;
-  }
-
-  public String getResultAssignmentStatement() {
-    return resultAssignmentStatement;
-  }
-
-  public List<String> getPreliminaryStatements() {
-    return preliminaryStatements;
-  }
-
-  public List<String> getAssertions() {
-    return assertions;
+  public Set<String> involvedSpecialTypes() {
+    return CodeGenerationProperties.DATE_TIME_TYPES.stream()
+            .filter(dateTimeType -> this.dataDeclarations.stream().anyMatch(declaration -> declaration.contains(dateTimeType)))
+            .collect(Collectors.toSet());
   }
 }

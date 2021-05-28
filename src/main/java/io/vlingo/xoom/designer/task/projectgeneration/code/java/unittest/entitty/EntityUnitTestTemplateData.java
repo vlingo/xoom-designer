@@ -14,8 +14,9 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -89,6 +90,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
                     .and(TemplateParameter.SOURCED_EVENTS, SourcedEvent.from(storageType, aggregate))
                     .and(TemplateParameter.STORAGE_TYPE, storageType).and(TemplateParameter.TEST_CASES, testCases)
                     .and(TemplateParameter.PRODUCTION_CODE, false).and(TemplateParameter.UNIT_TEST, true)
+                    .addImports(resolveTestCaseImports(testCases))
                     .addImport(resolveBaseEntryImport(projectionType))
                     .addImport(resolveMockDispatcherImport(basePackage))
                     .addImports(resolveMethodParameterImports(aggregate))
@@ -97,6 +99,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
   }
 
   private Set<String> resolveMethodParameterImports(final CodeGenerationParameter aggregate) {
+
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
             .map(method -> AggregateDetail.findInvolvedStateFields(aggregate, method.value))
             .map(involvedFields -> AggregateDetail.resolveImports(involvedFields))
@@ -121,6 +124,12 @@ public class EntityUnitTestTemplateData extends TemplateData {
       return "";
     }
     return CodeElementFormatter.importAllFrom(ContentQuery.findPackage(JavaTemplateStandard.VALUE_OBJECT, contents));
+  }
+
+  private Set<String> resolveTestCaseImports(final List<TestCase> testCases) {
+    return testCases.stream().map(TestCase::involvedSpecialTypes)
+            .flatMap(Set::stream).map(specialType -> CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.get(specialType))
+            .collect(toSet());
   }
 
   private Set<String> resolveAdapterImports(final String basePackage,

@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
@@ -67,6 +68,15 @@ public class SignatureDeclaration implements Formatters.Arguments {
                                                      final Label relatedParameter) {
     return parent.retrieveAllRelated(relatedParameter).map(field -> {
       final String fieldType = FieldDetail.typeOf(field.parent(AGGREGATE), field.value);
+
+      if(FieldDetail.isCollection(fieldType)) {
+        final CollectionMutation collectionMutation =
+                field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+
+        if(collectionMutation.isSingleParameterBased()) {
+          return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(ALIAS));
+        }
+      }
       return String.format(SIGNATURE_PATTERN, fieldType, field.value);
     }).collect(Collectors.toList());
   }

@@ -22,6 +22,8 @@ public enum Label implements ParameterLabel {
   FIELD_TYPE("fieldType"),
   DOMAIN_EVENT("domainEvent"),
   AGGREGATE_METHOD("aggregateMethod"),
+  ALIAS("alias"),
+  COLLECTION_MUTATION("collectionMutation"),
   METHOD_PARAMETER("methodParameter"),
   FACTORY_METHOD("factoryMethod"),
   COLLECTION_TYPE("collectionType"),
