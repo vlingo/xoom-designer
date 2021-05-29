@@ -10,7 +10,6 @@
   import {
     Button,
     Switch,
-    TextField,
     ProgressCircular,
     Snackbar,
     Icon,
@@ -22,12 +21,20 @@
   } from 'svelte-materialify/src';
   import Portal from "svelte-portal/src/Portal.svelte";
 
+  import List, { Item, Label } from '@smui/list';
+  import Menu, { SelectionGroup } from '@smui/menu';
+  import { Anchor } from '@smui/menu-surface';
+  import Textfield from '@smui/textfield';
+
   let snackbar = false;
   let isLoading = false;
   let processing = false;
   let dialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
   let dialogStatus, succeded, failed, successMessage, failureMessage;
+  let menu;
+  let anchor;
+  let anchorClasses = {}
 
   function checkPath() {
     if(requiresCompression()){
@@ -106,6 +113,7 @@
   $: $settings.projectDirectory = buildProjectDirectory();
 	$: if(!$settings.useAnnotations) $settings.useAutoDispatch = false;
   $: valid = (requiresCompression() || $settings.projectDirectory) && isSettingsComplete($settings);
+  $: $settings.generateUI, $settings.generateUIWith = 'ReactJS';
 </script>
 
 <svelte:head>
@@ -115,11 +123,82 @@
 <!-- add newbie tooltips -->
 <CardForm title="Generation" previous="deployment">
   {#if !requiresCompression()}
-	<TextField class="mb-4" placeholder={$settingsInfo.userHomePath} bind:value={$settings.projectDirectory} rules={[requireRule]}>Absolute path where you want to generate the project</TextField>
+  <Textfield
+    class="mb-4"
+    style="width: 100%;"
+    input$placeholder={$settingsInfo.userHomePath}
+    bind:value={$settings.projectDirectory}
+    label="Absolute path where you want to generate the project"
+    invalid={[requireRule($settings.projectDirectory)].some(f => f)}
+  ></Textfield>
   {/if}
+  <div>
+    <Switch class="mb-4" bind:checked={$settings.generateUI}>Generate Web UI?</Switch>
+    {#if $settings.generateUI}
+      <div
+        class={Object.keys(anchorClasses).join(' ')}
+        use:Anchor={{
+          addClass: (className) => {
+            if (!anchorClasses[className]) {
+              anchorClasses[className] = true;
+            }
+          },
+          removeClass: (className) => {
+            if (anchorClasses[className]) {
+              delete anchorClasses[className];
+              anchorClasses = anchorClasses;
+            }
+          },
+        }}
+        bind:this={anchor}
+      >
+      <div on:click={() => menu.setOpen(true)}>
+        <Textfield
+          class="mb-4"
+          style="width: 100%;"
+          value={$settings.generateUIWith}
+          label="Generate Web UI with"
+          input$readonly={true}
+          on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menu.setOpen(true)}}
+        ></Textfield>
+        </div>
+        <Menu
+          bind:this={menu}
+          anchor={false}
+          bind:anchorElement={anchor}
+          anchorCorner="BOTTOM_LEFT"  
+          style="width: 100%;"
+        >
+          <List class="demo-list" checkList>
+            <SelectionGroup>
+              <Item
+                on:SMUI:action={() => $settings.generateUIWith = 'ReactJS'}
+                selected={$settings.generateUIWith === 'ReactJS'}
+              >
+                <Label>ReactJS</Label>
+              </Item>
+              <Item
+                on:SMUI:action={() => $settings.generateUIWith = 'VueJS'}
+                selected={$settings.generateUIWith === 'VueJS'}
+                disabled={true}
+              >
+                <Label>VueJS (coming soon)</Label>
+              </Item>
+              <Item
+                on:SMUI:action={() => $settings.generateUIWith = 'Svelte'}
+                selected={$settings.generateUIWith === 'Svelte'}
+                disabled={true}
+              >
+                <Label>Svelte (coming soon)</Label>
+              </Item>
+            </SelectionGroup>
+          </List>
+        </Menu>
+      </div>
+    {/if}
+  </div>
 	<Switch class="mb-4" bind:checked={$settings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$settings.useAutoDispatch} disabled={!$settings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
-  
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
