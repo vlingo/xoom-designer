@@ -13,6 +13,7 @@
 	import Formatter from "../util/Formatter";
 	export let segment;
 	import { goto } from '@sapper/app';
+	import logo from '../images/xoom-horizontal_designer.png';
 
 	let sidenav = false;
 	let snackbar = false;
@@ -140,7 +141,7 @@
 		<a href="/platform" slot="title" class="text--primary d-flex">
 			<img
 				style="width: 256px;"
-				src="/xoom-horizontal_designer.png"
+				src={logo}
 				alt="VLINGO XOOM Designer"
 			/>
 		</a>
@@ -271,5 +272,12 @@
 			color: inherit;
 		}
 	}
-
+	.theme--dark {
+		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line, .mdc-menu * {
+			color: white !important;
+		}
+		.mdc-select__menu, .mdc-menu {
+			background-color: #212121;
+		}
+	}
 </style>
