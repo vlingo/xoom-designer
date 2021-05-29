@@ -7,7 +7,7 @@
 	import { deploymentTypes } from '../stores/deployment.js';
 
 	$: $isValid.deployment = Validation.validateDeployment($settings);
-	const nodes = Array((49 - 3) / 2 + 1).fill().map((_, i) => i * 2 + 3);
+	const nodes = Array((49 - 1) / 2 + 1).fill().map((_, i) => i * 2 + 1);
 </script>
 
 <svelte:head>
