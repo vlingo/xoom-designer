@@ -30,8 +30,8 @@
   {/if}
 	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.httpServerPort}>HTTP Server Port (unique per service on host)</TextField>
 	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.producerExchangePort}>Producer Exchange Port (unique per host)</TextField>
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.clusterPort}>Cluster Port (start of range, unique per service)</TextField>
-	<Select class="mb-4 pb-4" bind:value={$settings.deployment.clusterTotalNodes} items={nodes}>Cluster Total Nodes (selection max not platform limit; common: 3, 5, 7, or 9)</Select>
+	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.clusterPort}>Cluster Port (start of unique range per service: start-port thru start-port + (total-nodes * 2))</TextField>
+	<Select class="mb-4 pb-4" bind:value={$settings.deployment.clusterTotalNodes} items={nodes}>Cluster Total Nodes (selection maximum is not a platform limit; common: 3, 5, 7, or 9)</Select>
 </CardForm>
 
 <style global>
