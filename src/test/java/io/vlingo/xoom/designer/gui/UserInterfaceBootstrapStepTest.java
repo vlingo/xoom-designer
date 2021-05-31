@@ -15,23 +15,23 @@ import org.junit.jupiter.api.Test;
 
 public class UserInterfaceBootstrapStepTest {
 
-    @Test
-    public void testThatUserInterfaceBootstrapStepIsProcessed() {
-        new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
-        Assertions.assertFalse(TaskExecutor.shouldExit());
-    }
+  @Test
+  public void testThatUserInterfaceBootstrapStepIsProcessed() {
+    new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
+    Assertions.assertFalse(TaskExecutor.shouldExit());
+  }
 
-    @BeforeEach
-    public void setUp() {
-        Infrastructure.clear();
-        ComponentRegistry.clear();
-        Profile.enableTestProfile();
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
-        ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
-    }
+  @BeforeEach
+  public void setUp() {
+    Infrastructure.clear();
+    ComponentRegistry.clear();
+    Profile.enableTestProfile();
+    Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+    ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
+  }
 
-    @AfterAll
-    public static void clear() {
-        Profile.disableTestProfile();
-    }
+  @AfterAll
+  public static void clear() {
+    Profile.disableTestProfile();
+  }
 }

@@ -1,0 +1,36 @@
+FROM ghcr.io/graalvm/graalvm-ce:ol8-java11-21.1.0 as build
+
+LABEL maintainer="VLINGO XOOM Team <info@vlingo.io>"
+
+ARG XOOM_HOME=/designer
+WORKDIR $XOOM_HOME
+COPY dist/designer ./dist/designer
+COPY target/xoom-designer-*.jar ./xoom-designer.jar
+COPY target/classes/META-INF/ ./classes/META-INF/
+
+RUN gu install native-image
+RUN native-image -jar xoom-designer.jar
+
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
+
+RUN microdnf install autoconf automake libtool make tar \
+                 glibc-devel \
+                 libgcc.i686 glibc-devel.i686
+ARG WORK_HOME=/work
+ENV VLINGO_XOOM_DESIGNER_HOME=/work/designer/
+ENV VLINGO_XOOM_DESIGNER_ENV=CONTAINER
+
+WORKDIR $WORK_HOME
+COPY --from=build /designer/xoom-designer /work/xoom-designer
+COPY --from=build /designer/dist/ /work/designer/dist/
+
+# set up permissions for farmer `1001`
+RUN chmod 775 /work /work/xoom-designer \
+  && chown -R 1001 /work \
+  && chmod -R "g+rwX" /work \
+  && chown -R 1001:root /work
+
+EXPOSE 19090
+USER 1001
+
+ENTRYPOINT ["./xoom-designer", "gui", "--target", "zip-download", "-Xmx68m"]
