@@ -22,11 +22,11 @@
 		{/each}
 	</div>
   {#if $settings.deployment.type === "DOCKER" || $settings.deployment.type === "KUBERNETES"}
-    <TextField class="mb-4 pb-4" placeholder="demo-app" bind:value={$settings.deployment.dockerImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.dockerImage}>Local Docker Image</TextField>
+    <TextField class="mb-4 pb-4" placeholder="docker-image-name" bind:value={$settings.deployment.dockerImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.dockerImage}>Local Docker Image</TextField>
   {/if}
   {#if $settings.deployment.type === "KUBERNETES"}
-    <TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={$settings.deployment.kubernetesImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesImage}>Published Docker Image</TextField>
-    <TextField class="mb-4 pb-4" placeholder="demo-application" bind:value={$settings.deployment.kubernetesPod} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesPod}>Kubernetes POD</TextField>
+    <TextField class="mb-4 pb-4" placeholder="published-docker-image-name" bind:value={$settings.deployment.kubernetesImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesImage}>Published Docker Image</TextField>
+    <TextField class="mb-4 pb-4" placeholder="k8s-pod-name" bind:value={$settings.deployment.kubernetesPod} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesPod}>Kubernetes POD</TextField>
   {/if}
 	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.httpServerPort}>HTTP Server Port (unique per service on host)</TextField>
 	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.producerExchangePort}>Producer Exchange Port (unique per host)</TextField>
