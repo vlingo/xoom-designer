@@ -20,8 +20,9 @@ public class GenerationSettingsData {
     public final String projectDirectory;
     public final Boolean useAnnotations;
     public final Boolean useAutoDispatch;
-    public final String uiType;
     public final String fileVersion;
+    public final String generateUIWith;
+    public final Boolean generateUI;
 
     public GenerationSettingsData(final ContextSettingsData context,
                                   final ModelSettingsData model,
@@ -29,15 +30,17 @@ public class GenerationSettingsData {
                                   final String projectDirectory,
                                   final Boolean useAnnotations,
                                   final Boolean useAutoDispatch,
-                                  final String uiType) {
+                                  final Boolean generateUI,
+                                  final String generateUIWith) {
         this.context = context;
         this.model = model;
         this.deployment = deployment;
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
         this.useAutoDispatch = useAutoDispatch;
-        this.uiType = uiType == null ? "REACT" : uiType;
         this.fileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
+        this.generateUIWith = generateUIWith;
+        this.generateUI = generateUI;
     }
 
     public List<String> validate() {

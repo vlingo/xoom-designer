@@ -10,6 +10,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.Aggregate;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.AggregateMethod;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

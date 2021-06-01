@@ -7,23 +7,19 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RouteDetail;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.PACKAGE_NAME;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.ReactJsTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.TemplateParameter.*;
 
-public class StaticFilesGenerationStep extends TemplateProcessingStep {
+public class StaticFilesGenerationStep extends ReactJsTemplateProcessingStep {
 
   private final String sourcePackage = "src";
   private final String publicPackage = "public";
@@ -43,13 +39,4 @@ public class StaticFilesGenerationStep extends TemplateProcessingStep {
             BasicTemplateData.of(PACKAGE_CONFIG, TemplateParameters.with(ARTIFACT_ID, artifactId).and(GROUP_ID, groupId).and(VERSION, artifactVersion)));
   }
 
-  @Override
-  public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.parametersOf(AGGREGATE).anyMatch(RouteDetail::requireEntityLoad);
-  }
-
-  @Override
-  protected Dialect resolveDialect(final CodeGenerationContext context) {
-    return Dialect.REACTJS;
-  }
 }

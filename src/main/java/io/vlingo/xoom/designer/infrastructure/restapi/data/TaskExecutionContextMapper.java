@@ -191,6 +191,7 @@ public class TaskExecutionContextMapper {
             .add(DOCKER_IMAGE, data.deployment.dockerImage)
             .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
             .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
+            .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "")
             .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory))
             .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
   }

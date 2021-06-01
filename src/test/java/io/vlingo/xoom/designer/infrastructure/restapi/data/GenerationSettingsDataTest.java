@@ -19,7 +19,7 @@ public class GenerationSettingsDataTest {
   public void testThatGenerationSettingsDataIsValidated() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, "NONE");
+                    deploymentSettingsData(), "/home/projects", true, false, false, "");
 
     Assertions.assertTrue(data.validate().isEmpty());
   }
@@ -28,7 +28,7 @@ public class GenerationSettingsDataTest {
   public void testThatGenerationSettingsDataValidationFailsDueToRecursiveValueObject() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), invalidModelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, "NONE");
+                    deploymentSettingsData(), "/home/projects", true, false, false, "");
 
     final List<String> errors = data.validate();
     Assertions.assertEquals(1, errors.size());

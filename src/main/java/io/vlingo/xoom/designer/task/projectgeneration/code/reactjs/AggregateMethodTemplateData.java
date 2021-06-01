@@ -10,6 +10,9 @@ import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.Aggregate;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.AggregateMethod;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.Field;
 
 import java.util.List;
 import java.util.Map;

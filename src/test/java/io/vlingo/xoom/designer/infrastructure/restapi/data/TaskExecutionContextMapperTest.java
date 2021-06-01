@@ -24,7 +24,7 @@ public class TaskExecutionContextMapperTest {
   public void testThatTaskExecutionContextIsMapped() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, "NONE");
+                    deploymentSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
             TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();

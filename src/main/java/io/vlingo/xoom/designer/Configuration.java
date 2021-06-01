@@ -2,8 +2,12 @@ package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.designer.gui.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
+import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
@@ -18,13 +22,10 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schemat
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
-import io.vlingo.xoom.designer.gui.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
-import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.ComponentsGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.StaticFilesGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.*;
-import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Paths;
@@ -84,7 +85,8 @@ public class Configuration {
           new QueriesUnitTestGenerationStep(),
           //React
           new StaticFilesGenerationStep(),
-          new ComponentsGenerationStep(),
+          new LayoutGenerationStep(),
+          new AggregateGenerationStep(),
           //Common
           new ContentCreationStep()
   );
