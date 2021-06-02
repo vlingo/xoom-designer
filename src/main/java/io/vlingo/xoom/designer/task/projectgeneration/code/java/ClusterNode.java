@@ -14,8 +14,8 @@ import java.util.stream.IntStream;
 
 public class ClusterNode {
 
-  private static final int DEFAULT_START_PORT_RANGE = 37381;
   private static final int DEFAULT_TOTAL_NODES = 1;
+  private static final int DEFAULT_START_PORT_RANGE = 49120;
 
   public final Integer id;
   public final String name;
