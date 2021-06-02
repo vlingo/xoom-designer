@@ -17,17 +17,15 @@ public class ClusterSettings {
   public final String seedNodes;
   public final List<ClusterNode> nodes;
 
-  public static ClusterSettings of(final int httpServerPort,
-                                   final int startPortRange,
-                                   final int clusterTotalNodes) {
-    return new ClusterSettings(httpServerPort, startPortRange, clusterTotalNodes);
+  public static ClusterSettings with(final int startPortRange,
+                                     final int clusterTotalNodes) {
+    return new ClusterSettings(startPortRange, clusterTotalNodes);
   }
 
-  private ClusterSettings(final int httpServerPort,
-                          final int startPortRange,
+  private ClusterSettings(final int startPortRange,
                           final int clusterTotalNodes) {
-    this.nodes = unmodifiableList(ClusterNode.from(httpServerPort, startPortRange, clusterTotalNodes));
-    this.seedNodes = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
+    this.nodes = unmodifiableList(ClusterNode.from(startPortRange, clusterTotalNodes));
+    this.seedNodes = nodes.stream().map(node -> node.name).collect(Collectors.joining(",")).replaceFirst(",", ", #");
   }
 
 }

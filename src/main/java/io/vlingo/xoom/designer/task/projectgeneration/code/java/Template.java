@@ -47,7 +47,7 @@ public enum Template {
   REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
   REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),
   QUERIES_ACTOR("QueriesActor"),
-  PROJECT_SETTINGS("ProjectSettings"),
+  DESIGNER_MODEL("DesignerModel"),
   CONSUMER_EXCHANGE_ADAPTER("ConsumerExchangeAdapter"),
   PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
   EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
@@ -64,7 +64,8 @@ public enum Template {
   OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
   EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
   EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
-  STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest");
+  STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
+  TURBO_SETTINGS("TurboSettings");
 
   public final String filename;
 

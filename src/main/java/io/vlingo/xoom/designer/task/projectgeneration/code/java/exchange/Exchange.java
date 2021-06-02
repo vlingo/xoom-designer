@@ -16,18 +16,14 @@ import java.util.stream.Collectors;
 
 public class Exchange {
 
-  private static final int DEFAULT_PORT = 5672;
-
   public final String name;
   public final String dataObjectName;
   public final String variableName;
   public final String settingsName;
   public final Set<CoveyParameter> coveys;
   public final Set<ExchangeRole> roles = new HashSet<>();
-  public int port;
 
-  public static List<Exchange> from(final int customExchangePort,
-                                    final List<CodeGenerationParameter> aggregates) {
+  public static List<Exchange> from(final List<CodeGenerationParameter> aggregates) {
 
     final Map<String, Exchange> exchanges = new HashMap<>();
 
@@ -42,15 +38,14 @@ public class Exchange {
 
         final Exchange exchange = new Exchange(aggregate.value, exchangeParam, allExchanges);
 
-        exchanges.computeIfAbsent(exchangeParam.value, e -> exchange)
-                .addRole(exchangeRole).resolvePort(customExchangePort);
+        exchanges.computeIfAbsent(exchangeParam.value, e -> exchange).addRole(exchangeRole);
       });
     });
 
     return exchanges.values().stream().collect(Collectors.toList());
   }
 
-  public Exchange(final String aggregateName,
+  private Exchange(final String aggregateName,
                   final CodeGenerationParameter exchange,
                   final List<CodeGenerationParameter> allExchangeParameters) {
     this.name = exchange.value;
@@ -72,14 +67,6 @@ public class Exchange {
   private Exchange addRole(final ExchangeRole exchangeRole) {
     this.roles.add(exchangeRole);
     return this;
-  }
-
-  private void resolvePort(final int customPort) {
-    if(this.roles.contains(ExchangeRole.PRODUCER)) {
-      this.port = customPort > 0 ? customPort : DEFAULT_PORT;
-    } else {
-      this.port = DEFAULT_PORT;
-    }
   }
 
   public boolean isProducer() {

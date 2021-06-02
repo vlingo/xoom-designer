@@ -61,5 +61,4 @@ node.node1.name = node1
 node.node1.host = localhost
 node.node1.op.port = 37381
 node.node1.app.port = 37382
-node.node1.server.port = 18080
 

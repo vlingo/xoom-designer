@@ -80,7 +80,7 @@ public interface RelativeSourcePathResolver {
 
     @Override
     public boolean shouldResolve(final TemplateData templateData) {
-      return templateData.parameters().find(PROJECT_SETTINGS, false);
+      return templateData.parameters().find(DESIGNER_MODEL, false);
     }
   }
 

@@ -43,8 +43,8 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
-    Assertions.assertNotNull(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD));
-    Assertions.assertTrue(codeGenerationParameters.retrieveValue(PROJECT_SETTINGS_PAYLOAD).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
+    Assertions.assertNotNull(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON));
+    Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
   }
 
   private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {

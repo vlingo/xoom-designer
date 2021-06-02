@@ -16,11 +16,12 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataO
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.ProjectSettingsGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateGenerationStep;
@@ -81,10 +82,11 @@ public class Configuration {
           new ExchangeGenerationStep(),
           new SchemataGenerationStep(),
           new BootstrapGenerationStep(),
-          new ProjectSettingsGenerationStep(),
-          new ClusterSettingsGenerationStep(),
           new EntityUnitTestGenerationStep(),
           new QueriesUnitTestGenerationStep(),
+          new TurboSettingsGenerationStep(),
+          new ClusterSettingsGenerationStep(),
+          new DesignerModelGenerationStep(),
           //React
           new StaticFilesGenerationStep(),
           new LayoutGenerationStep(),

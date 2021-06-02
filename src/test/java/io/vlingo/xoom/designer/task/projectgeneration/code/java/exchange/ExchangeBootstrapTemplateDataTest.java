@@ -27,7 +27,7 @@ public class ExchangeBootstrapTemplateDataTest {
 
         final TemplateData data =
                 ExchangeBootstrapTemplateData.from("io.vlingo.xoomapp.infrastructure.exchange",
-                        Exchange.from(5877, exchangesParams), Arrays.asList(ContentBuilder.authorDataObjectContent()));
+                        Exchange.from(exchangesParams), Arrays.asList(ContentBuilder.authorDataObjectContent()));
 
         final TemplateParameters parameters = data.parameters();
 

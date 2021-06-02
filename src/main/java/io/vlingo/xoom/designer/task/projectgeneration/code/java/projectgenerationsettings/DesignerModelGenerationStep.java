@@ -15,12 +15,12 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import java.util.Arrays;
 import java.util.List;
 
-public class ProjectSettingsGenerationStep extends TemplateProcessingStep {
+public class DesignerModelGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String appName = context.parameterOf(Label.APPLICATION_NAME);
-    final String generationSettings = context.parameterOf(Label.PROJECT_SETTINGS_PAYLOAD);
-    return Arrays.asList(new ProjectSettingsTemplateData(appName, generationSettings));
+    final String generationSettings = context.parameterOf(Label.DESIGNER_MODEL_JSON);
+    return Arrays.asList(new DesignerModelTemplateData(appName, generationSettings));
   }
 }

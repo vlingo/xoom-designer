@@ -10,12 +10,12 @@ exchange.otherapp-exchange.virtual.host=/
 exchange.book-exchange.hostname=localhost
 exchange.book-exchange.username=guest
 exchange.book-exchange.password=guest
-exchange.book-exchange.port=8988
+exchange.book-exchange.port=5672
 exchange.book-exchange.virtual.host=/
 
 exchange.author-exchange.hostname=localhost
 exchange.author-exchange.username=guest
 exchange.author-exchange.password=guest
-exchange.author-exchange.port=8988
+exchange.author-exchange.port=5672
 exchange.author-exchange.virtual.host=/
 

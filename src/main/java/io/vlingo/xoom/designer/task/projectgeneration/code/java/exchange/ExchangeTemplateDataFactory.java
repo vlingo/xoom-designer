@@ -16,7 +16,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -25,7 +24,6 @@ public class ExchangeTemplateDataFactory {
 
   public static List<TemplateData> build(final Dialect dialect,
                                          final String exchangePackage,
-                                         final int producerExchangePort,
                                          final List<CodeGenerationParameter> aggregates,
                                          final List<CodeGenerationParameter> valueObjects,
                                          final List<Content> contents) {
@@ -33,7 +31,7 @@ public class ExchangeTemplateDataFactory {
             aggregates.stream().filter(aggregate -> aggregate.hasAny(Label.EXCHANGE));
 
     final List<Exchange> exchanges =
-            Exchange.from(producerExchangePort, filteredAggregates.get().collect(toList()));
+            Exchange.from(filteredAggregates.get().collect(toList()));
 ;
     final List<TemplateData> mappers =
             ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);

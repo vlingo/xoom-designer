@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 
 import java.nio.file.Path;
@@ -182,12 +183,11 @@ public class TaskExecutionContextMapper {
   }
 
   private void mapStructuralOptions() {
-    final String projectSettingsPayload =
-            JsonSerialization.serialized(data);
+    final TurboSettings turboSettings =
+            TurboSettings.with(data.deployment.httpServerPort, data.deployment.producerExchangePort);
 
     final ClusterSettings clusterSettings =
-            ClusterSettings.of(data.deployment.httpServerPort,
-                    data.deployment.clusterPort, data.deployment.clusterTotalNodes);
+            ClusterSettings.with(data.deployment.clusterPort, data.deployment.clusterTotalNodes);
 
     final Path definitiveFolder =
             generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
@@ -207,8 +207,9 @@ public class TaskExecutionContextMapper {
             .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
             .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "")
             .add(CLUSTER_SETTINGS, clusterSettings)
+            .add(TURBO_SETTINGS, turboSettings)
             .add(TARGET_FOLDER, definitiveFolder.toString())
-            .add(PROJECT_SETTINGS_PAYLOAD, projectSettingsPayload);
+            .add(DESIGNER_MODEL_JSON, JsonSerialization.serialized(data));
   }
 
 }

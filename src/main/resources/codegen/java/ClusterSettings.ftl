@@ -57,11 +57,10 @@ cluster.seedNodes = ${clusterSettings.seedNodes}
 ################################
 
 <#list clusterSettings.nodes as node>
-node.${node.name}.id = ${node.id}
-node.${node.name}.name = ${node.name}
-node.${node.name}.host = localhost
-node.${node.name}.op.port = ${node.operationalPort?c}
-node.${node.name}.app.port = ${node.applicationPort?c}
-node.${node.name}.server.port = ${node.serverPort?c}
+<#if (node.id > 1)>#</#if>node.${node.name}.id = ${node.id}
+<#if (node.id > 1)>#</#if>node.${node.name}.name = ${node.name}
+<#if (node.id > 1)>#</#if>node.${node.name}.host = localhost
+<#if (node.id > 1)>#</#if>node.${node.name}.op.port = ${node.operationalPort?c}
+<#if (node.id > 1)>#</#if>node.${node.name}.app.port = ${node.applicationPort?c}
 
 </#list>

@@ -11,18 +11,18 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class ProjectSettingsGenerationStepTest {
+public class DesignerModelGenerationStepTest {
 
   @Test
   public void testThatProjectSettingsIsGenerated() throws IOException {
-    final String uglyProjectSettingsPayload =
+    final String uglyDesignerModel =
             "{\"context\":{ \"groupId\":\"io.vlingo\", \"artifactId\":\"xoom-app\", \"artifactVersion\":\"1.0.0\"," +
                     " \"packageName\":\"io.vlingo.xoom-app\" }, \"deployment\":{ \"clusterNodes\":3, \"type\":\"NONE\", " +
                     "\"dockerImage\":\"xoom-app\", \"kubernetesImage\":\"vlingo/xoom-app\", \"kubernetesPod\":\"xoom-app\" }, " +
@@ -30,16 +30,16 @@ public class ProjectSettingsGenerationStepTest {
 
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.APPLICATION_NAME, "xoom-app")
-                    .add(Label.PROJECT_SETTINGS_PAYLOAD, uglyProjectSettingsPayload);
+                    .add(Label.DESIGNER_MODEL_JSON, uglyDesignerModel);
 
     final CodeGenerationContext context =
             CodeGenerationContext.with(parameters);
 
-    new ProjectSettingsGenerationStep().process(context);
+    new DesignerModelGenerationStep().process(context);
 
-    final Content projectSettings = context.findContent(JavaTemplateStandard.PROJECT_SETTINGS, "xoom-app-generation-settings");
+    final Content projectSettings = context.findContent(JavaTemplateStandard.DESIGNER_MODEL, "xoom-app-designer-model");
 
-    Assertions.assertTrue(projectSettings.contains(TextExpectation.onJava().read("project-settings").replace("\r", "")));
+    Assertions.assertTrue(projectSettings.contains(TextExpectation.onJava().read("designer-model").replace("\r", "")));
   }
 
 

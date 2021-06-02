@@ -131,8 +131,8 @@ public enum TemplateParameter implements ParameterKey {
   SCHEMATA_SPECIFICATION_NAME("schemataSpecificationName"),
   SCHEMA_CATEGORY("schemaCategory"),
   FIELD_DECLARATIONS("fieldsDeclarations"),
-  PROJECT_SETTINGS("projectGenerationSettings"),
-  PROJECT_SETTINGS_PAYLOAD("projectSettingsPayload"),
+  DESIGNER_MODEL("projectGenerationSettings"),
+  DESIGNER_MODEL_JSON("designerModelJson"),
   POM_SECTION("pomSection"),
   OFFSET("offset"),
   PRODUCER_ORGANIZATION("producerOrganization"),
@@ -149,6 +149,7 @@ public enum TemplateParameter implements ParameterKey {
   STATE_FIELDS("stateFields"),
   VALUE_OBJECT_FIELDS("valueObjectFields"),
   CLUSTER_SETTINGS("clusterSettings"),
+  TURBO_SETTINGS("turboSettings"),
   UI_TYPE("uiType");
 
   public final String key;

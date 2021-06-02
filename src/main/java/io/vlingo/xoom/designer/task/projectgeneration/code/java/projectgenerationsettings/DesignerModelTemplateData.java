@@ -15,15 +15,15 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 
-public class ProjectSettingsTemplateData extends TemplateData {
+public class DesignerModelTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public ProjectSettingsTemplateData(final String appName,
-                                     final String generationSettings) {
+  public DesignerModelTemplateData(final String appName,
+                                   final String generationSettings) {
     this.parameters =
-            TemplateParameters.with(TemplateParameter.PROJECT_SETTINGS, true)
-                    .and(TemplateParameter.PROJECT_SETTINGS_PAYLOAD, formatJson(generationSettings))
+            TemplateParameters.with(TemplateParameter.DESIGNER_MODEL, true)
+                    .and(TemplateParameter.DESIGNER_MODEL_JSON, formatJson(generationSettings))
                     .and(TemplateParameter.APPLICATION_NAME, appName);
   }
 
@@ -39,6 +39,6 @@ public class ProjectSettingsTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return JavaTemplateStandard.PROJECT_SETTINGS;
+    return JavaTemplateStandard.DESIGNER_MODEL;
   }
 }

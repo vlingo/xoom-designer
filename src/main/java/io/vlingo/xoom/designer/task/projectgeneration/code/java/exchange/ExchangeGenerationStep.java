@@ -24,9 +24,6 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
     final Dialect dialect =
             context.parameterOf(Label.DIALECT, Dialect::valueOf);
 
-    final int producerExchangePort =
-            context.parameterOf(Label.PRODUCER_EXCHANGE_PORT, Integer::valueOf);
-
     final List<CodeGenerationParameter> valueObjects =
             context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
 
@@ -34,8 +31,7 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
             context.parametersOf(Label.AGGREGATE).filter(aggregate -> aggregate.hasAny(Label.EXCHANGE))
                     .collect(Collectors.toList());
 
-    return ExchangeTemplateDataFactory.build(dialect, resolvePackage(context), producerExchangePort,
-            aggregates, valueObjects, context.contents());
+    return ExchangeTemplateDataFactory.build(dialect, resolvePackage(context), aggregates, valueObjects, context.contents());
   }
 
   private String resolvePackage(final CodeGenerationContext context) {

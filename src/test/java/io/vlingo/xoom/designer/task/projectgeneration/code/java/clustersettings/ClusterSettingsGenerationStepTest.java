@@ -23,7 +23,7 @@ public class ClusterSettingsGenerationStepTest {
   @Test
   public void testThatCustomClusterSettingsAreGenerated() {
     final CodeGenerationParameters parameters =
-            CodeGenerationParameters.from(CLUSTER_SETTINGS, ClusterSettings.of(8081, 42333, 7));
+            CodeGenerationParameters.from(CLUSTER_SETTINGS, ClusterSettings.with(42333, 7));
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
@@ -38,7 +38,7 @@ public class ClusterSettingsGenerationStepTest {
   @Test
   public void testThatDefaultClusterSettingsAreGenerated() {
     final CodeGenerationParameters parameters =
-            CodeGenerationParameters.from(CLUSTER_SETTINGS, ClusterSettings.of(0, 0, 0));
+            CodeGenerationParameters.from(CLUSTER_SETTINGS, ClusterSettings.with(0, 0));
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
