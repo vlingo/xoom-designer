@@ -1,0 +1,107 @@
+################################
+# cluster-wide configurations
+################################
+
+# currently unsupported
+cluster.ssl = false
+
+# maximum size of single operations message (which are actually tiny, other than DIR)
+# assuming short host names 4096 would support approximately 90-99 nodes with DIR
+cluster.op.buffer.size = 4096
+
+# the interval (in ms) within which the operations inbound stream will be probed
+# for available messages
+cluster.op.incoming.probe.interval = 100
+
+# maximum size of a single cluster client (tool or application) message
+# you may be able to tune this to be much smaller depending on app messages
+cluster.app.buffer.size = 10240
+
+# the interval (in ms) within which the application inbound stream will be probed
+# for available messages
+cluster.app.incoming.probe.interval = 10
+
+# number of polled buffers for outgoing asynchronous operations messages
+cluster.op.outgoing.pooled.buffers = 20
+
+# number of polled buffers for outgoing asynchronous operations messages
+cluster.app.outgoing.pooled.buffers = 50
+
+# default charset
+cluster.msg.charset = UTF-8
+
+# classname of client/application and its stage name
+cluster.app.class = io.vlingo.lattice.grid.GridNode
+cluster.app.stage = fake.app.stage
+
+# interval at which unconfirmed attribute changes are redistributed
+cluster.attributes.redistribution.interval = 1000
+
+# the number of retries for redistributing unconfirmed attribute changes
+cluster.attributes.redistribution.retries = 20
+
+# interval at which each health check is scheduled
+cluster.health.check.interval = 2000
+
+# after this limit with no pulse from given node, it's considered dead
+cluster.live.node.timeout = 20000
+
+# after this limit with too few nodes to constitute a quorum, terminate node
+cluster.quorum.timeout = 60000
+
+# currently all active nodes must be listed as seed nodes
+cluster.seedNodes = node1,node2,node3,node4,node5,node6,node7
+
+################################
+# individual node configurations
+################################
+
+node.node1.id = 1
+node.node1.name = node1
+node.node1.host = localhost
+node.node1.op.port = 42333
+node.node1.app.port = 42334
+node.node1.server.port = 8081
+
+node.node2.id = 2
+node.node2.name = node2
+node.node2.host = localhost
+node.node2.op.port = 42335
+node.node2.app.port = 42336
+node.node2.server.port = 8081
+
+node.node3.id = 3
+node.node3.name = node3
+node.node3.host = localhost
+node.node3.op.port = 42337
+node.node3.app.port = 42338
+node.node3.server.port = 8081
+
+node.node4.id = 4
+node.node4.name = node4
+node.node4.host = localhost
+node.node4.op.port = 42339
+node.node4.app.port = 42340
+node.node4.server.port = 8081
+
+node.node5.id = 5
+node.node5.name = node5
+node.node5.host = localhost
+node.node5.op.port = 42341
+node.node5.app.port = 42342
+node.node5.server.port = 8081
+
+node.node6.id = 6
+node.node6.name = node6
+node.node6.host = localhost
+node.node6.op.port = 42343
+node.node6.app.port = 42344
+node.node6.server.port = 8081
+
+node.node7.id = 7
+node.node7.name = node7
+node.node7.host = localhost
+node.node7.op.port = 42345
+node.node7.app.port = 42346
+node.node7.server.port = 8081
+

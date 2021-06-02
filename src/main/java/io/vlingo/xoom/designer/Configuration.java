@@ -11,6 +11,7 @@ import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataObjectGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
@@ -81,6 +82,7 @@ public class Configuration {
           new SchemataGenerationStep(),
           new BootstrapGenerationStep(),
           new ProjectSettingsGenerationStep(),
+          new ClusterSettingsGenerationStep(),
           new EntityUnitTestGenerationStep(),
           new QueriesUnitTestGenerationStep(),
           //React

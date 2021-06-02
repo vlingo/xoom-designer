@@ -11,10 +11,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
 public class Formatter {
 
-  public static String formatExchangeVariableName(final CodeGenerationParameter exchange) {
-    return formatExchangeVariableName(exchange.value);
-  }
-
   public static String formatExchangeVariableName(final String exchangeName) {
     boolean shouldUpper = false;
     final StringBuilder formatted = new StringBuilder();

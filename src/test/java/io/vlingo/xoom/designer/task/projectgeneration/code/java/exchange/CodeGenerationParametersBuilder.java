@@ -18,6 +18,7 @@ public class CodeGenerationParametersBuilder {
         final CodeGenerationParameter dialect =
                 CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA);
 
+
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                         .relate(Label.FIELD_TYPE, "String");
@@ -86,6 +87,9 @@ public class CodeGenerationParametersBuilder {
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
                         .relate(Label.FIELD_TYPE, "int");
 
+        final CodeGenerationParameter producerExchangePort =
+                CodeGenerationParameter.of(Label.PRODUCER_EXCHANGE_PORT, 8988);
+
         final CodeGenerationParameter bookExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "book-exchange")
                         .relate(Label.ROLE, ExchangeRole.PRODUCER)
@@ -133,8 +137,8 @@ public class CodeGenerationParametersBuilder {
                         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
                                 .relate(Label.FIELD_TYPE, "String"));
 
-        return Stream.of(dialect, authorAggregate, bookAggregate, nameValueObject,
-                rankValueObject, classificationValueObject, classifierValueObject);
+        return Stream.of(dialect, producerExchangePort, authorAggregate, bookAggregate,
+                nameValueObject, rankValueObject, classificationValueObject, classifierValueObject);
     }
 
 

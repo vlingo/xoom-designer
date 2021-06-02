@@ -17,7 +17,10 @@ import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
+
+import java.nio.file.Path;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
@@ -170,7 +173,7 @@ public class TaskExecutionContextMapper {
   }
 
   private void mapPersistence() {
-    parameters.add(CQRS, data.model.persistenceSettings.useCQRS)
+    parameters.add(CQRS, data.model.persistenceSettings.useCQRS.toString())
             .add(DATABASE, data.model.persistenceSettings.database)
             .add(PROJECTION_TYPE, data.model.persistenceSettings.projections)
             .add(STORAGE_TYPE, data.model.persistenceSettings.storageType)
@@ -179,6 +182,16 @@ public class TaskExecutionContextMapper {
   }
 
   private void mapStructuralOptions() {
+    final String projectSettingsPayload =
+            JsonSerialization.serialized(data);
+
+    final ClusterSettings clusterSettings =
+            ClusterSettings.of(data.deployment.httpServerPort,
+                    data.deployment.clusterPort, data.deployment.clusterTotalNodes);
+
+    final Path definitiveFolder =
+            generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
+
     parameters.add(APPLICATION_NAME, data.context.artifactId)
             .add(USE_ANNOTATIONS, data.useAnnotations)
             .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
@@ -190,10 +203,12 @@ public class TaskExecutionContextMapper {
             .add(DEPLOYMENT, data.deployment.type)
             .add(DOCKER_IMAGE, data.deployment.dockerImage)
             .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
+            .add(PRODUCER_EXCHANGE_PORT, data.deployment.producerExchangePort)
             .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
             .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "")
-            .add(TARGET_FOLDER, generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory))
-            .add(PROJECT_SETTINGS_PAYLOAD, JsonSerialization.serialized(data));
+            .add(CLUSTER_SETTINGS, clusterSettings)
+            .add(TARGET_FOLDER, definitiveFolder.toString())
+            .add(PROJECT_SETTINGS_PAYLOAD, projectSettingsPayload);
   }
 
 }

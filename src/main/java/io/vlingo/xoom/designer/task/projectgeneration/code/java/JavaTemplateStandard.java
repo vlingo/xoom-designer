@@ -44,6 +44,9 @@ public enum JavaTemplateStandard implements TemplateStandard {
 
   VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
 
+  CLUSTER_SETTINGS(parameters -> Template.CLUSTER_SETTINGS.filename,
+          (name, parameters) -> "xoom-cluster.properties"),
+
   PROJECT_SETTINGS(parameters -> Template.PROJECT_SETTINGS.filename,
           (name, parameters) -> parameters.find(APPLICATION_NAME) + "-generation-settings.json"),
 

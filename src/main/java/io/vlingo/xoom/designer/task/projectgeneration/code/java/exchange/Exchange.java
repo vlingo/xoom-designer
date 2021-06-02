@@ -8,28 +8,56 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Exchange {
 
-  private final String name;
-  private final String exchangeVariableName;
-  private final Set<CoveyParameter> coveys;
+  private static final int DEFAULT_PORT = 5672;
 
-  public static List<Exchange> from(final List<CodeGenerationParameter> exchanges) {
-    return exchanges.stream().map(exchange -> exchange.value).distinct()
-            .map(exchangeName -> new Exchange(exchangeName, exchanges))
-            .collect(Collectors.toList());
+  public final String name;
+  public final String dataObjectName;
+  public final String variableName;
+  public final String settingsName;
+  public final Set<CoveyParameter> coveys;
+  public final Set<ExchangeRole> roles = new HashSet<>();
+  public int port;
+
+  public static List<Exchange> from(final int customExchangePort,
+                                    final List<CodeGenerationParameter> aggregates) {
+
+    final Map<String, Exchange> exchanges = new HashMap<>();
+
+    final List<CodeGenerationParameter> allExchanges =
+            aggregates.stream().flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
+                    .collect(Collectors.toList());
+
+    aggregates.stream().forEach(aggregate -> {
+      aggregate.retrieveAllRelated(Label.EXCHANGE).forEach(exchangeParam -> {
+        final ExchangeRole exchangeRole =
+              exchangeParam.retrieveRelatedValue(Label.ROLE, ExchangeRole::of);
+
+        final Exchange exchange = new Exchange(aggregate.value, exchangeParam, allExchanges);
+
+        exchanges.computeIfAbsent(exchangeParam.value, e -> exchange)
+                .addRole(exchangeRole).resolvePort(customExchangePort);
+      });
+    });
+
+    return exchanges.values().stream().collect(Collectors.toList());
   }
 
-  public Exchange(final String exchangeName,
+  public Exchange(final String aggregateName,
+                  final CodeGenerationParameter exchange,
                   final List<CodeGenerationParameter> allExchangeParameters) {
-    this.name = exchangeName;
-    this.exchangeVariableName = Formatter.formatExchangeVariableName(exchangeName);
-    this.coveys = resolveCoveyParameters(exchangeName, allExchangeParameters);
+    this.name = exchange.value;
+    this.coveys = resolveCoveyParameters(exchange.value, allExchangeParameters);
+    this.variableName = Formatter.formatExchangeVariableName(exchange.value);
+    this.settingsName = variableName + "Settings";
+    this.dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName);
   }
 
   private Set<CoveyParameter> resolveCoveyParameters(final String exchangeName,
@@ -41,20 +69,24 @@ public class Exchange {
     return CoveyParameter.from(relatedExchangeParameters);
   }
 
-  public String getVariableName() {
-    return exchangeVariableName;
+  private Exchange addRole(final ExchangeRole exchangeRole) {
+    this.roles.add(exchangeRole);
+    return this;
   }
 
-  public String getSettingsName() {
-    return exchangeVariableName + "Settings";
+  private void resolvePort(final int customPort) {
+    if(this.roles.contains(ExchangeRole.PRODUCER)) {
+      this.port = customPort > 0 ? customPort : DEFAULT_PORT;
+    } else {
+      this.port = DEFAULT_PORT;
+    }
   }
 
-  public Set<CoveyParameter> getCoveys() {
-    return coveys;
+  public boolean isProducer() {
+    return this.roles.contains(ExchangeRole.PRODUCER);
   }
 
-  public String getName() {
-    return name;
+  public boolean isConsumer() {
+    return this.roles.contains(ExchangeRole.CONSUMER);
   }
-
 }

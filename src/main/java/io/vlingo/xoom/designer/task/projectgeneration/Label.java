@@ -17,6 +17,8 @@ public enum Label implements ParameterLabel {
   BODY_TYPE("bodyType"),
   APPLICATION_NAME("appName"),
   WEB_UI_DIALECT("webUIDialect"),
+  CLUSTER_SETTINGS("clusterSettings"),
+  PRODUCER_EXCHANGE_PORT("producerExchangePort"),
   PACKAGE("package"),
   AGGREGATE("aggregate"),
   STATE_FIELD("stateField"),

@@ -148,6 +148,7 @@ public enum TemplateParameter implements ParameterKey {
   AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
   STATE_FIELDS("stateFields"),
   VALUE_OBJECT_FIELDS("valueObjectFields"),
+  CLUSTER_SETTINGS("clusterSettings"),
   UI_TYPE("uiType");
 
   public final String key;

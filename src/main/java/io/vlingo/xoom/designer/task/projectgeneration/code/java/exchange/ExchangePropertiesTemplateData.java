@@ -7,12 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -25,21 +23,14 @@ public class ExchangePropertiesTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public static TemplateData from(final Stream<CodeGenerationParameter> aggregates) {
-    final List<CodeGenerationParameter> exchanges =
-            aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
-                    .collect(Collectors.toList());
-
-    final Supplier<Stream<String>> exchangeNames = () ->
-            exchanges.stream().map(exchange -> exchange.value).distinct();
-
-    return new ExchangePropertiesTemplateData(exchangeNames);
+  public static TemplateData from(final List<Exchange> exchanges) {
+    return new ExchangePropertiesTemplateData(exchanges);
   }
 
-  private ExchangePropertiesTemplateData(final Supplier<Stream<String>> exchangeNames) {
+  private ExchangePropertiesTemplateData(final List<Exchange> exchanges) {
     this.parameters =
-            TemplateParameters.with(EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.toList()))
-                    .and(INLINE_EXCHANGE_NAMES, exchangeNames.get().collect(Collectors.joining(";")))
+            TemplateParameters.with(EXCHANGES, exchanges)
+                    .and(INLINE_EXCHANGE_NAMES, exchanges.stream().map(exchange -> exchange.name).collect(Collectors.joining(";")))
                     .and(RESOURCE_FILE, true);
   }
 

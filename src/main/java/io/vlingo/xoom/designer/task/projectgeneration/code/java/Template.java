@@ -58,6 +58,7 @@ public enum Template {
   EXCHANGE_DISPATCHER("ExchangeDispatcher"),
   SCHEMATA_SPECIFICATION("SchemataSpecification"),
   SCHEMATA_PLUGIN("SchemataPlugin"),
+  CLUSTER_SETTINGS("ClusterSettings"),
   VALUE_OBJECT("ValueObject"),
   QUERIES_UNIT_TEST("QueriesUnitTest"),
   OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),

@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -24,12 +25,16 @@ public class ExchangeTemplateDataFactory {
 
   public static List<TemplateData> build(final Dialect dialect,
                                          final String exchangePackage,
+                                         final int producerExchangePort,
                                          final List<CodeGenerationParameter> aggregates,
                                          final List<CodeGenerationParameter> valueObjects,
                                          final List<Content> contents) {
     final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
             aggregates.stream().filter(aggregate -> aggregate.hasAny(Label.EXCHANGE));
 
+    final List<Exchange> exchanges =
+            Exchange.from(producerExchangePort, filteredAggregates.get().collect(toList()));
+;
     final List<TemplateData> mappers =
             ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
@@ -40,13 +45,13 @@ public class ExchangeTemplateDataFactory {
             ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
 
     final List<TemplateData> properties =
-            Arrays.asList(ExchangePropertiesTemplateData.from(filteredAggregates.get()));
+            Arrays.asList(ExchangePropertiesTemplateData.from(exchanges));
 
     final List<TemplateData> dispatcher =
             Arrays.asList(ExchangeDispatcherTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
 
     final List<TemplateData> bootstrap =
-            Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, filteredAggregates.get(), contents));
+            Arrays.asList(ExchangeBootstrapTemplateData.from(exchangePackage, exchanges, contents));
 
     return Stream.of(mappers, holders, adapters, properties, dispatcher, bootstrap).flatMap(List::stream).collect(toList());
   }
