@@ -28,10 +28,11 @@
     <TextField class="mb-4 pb-4" placeholder="published-docker-image-name" bind:value={$settings.deployment.kubernetesImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesImage}>Published Docker Image</TextField>
     <TextField class="mb-4 pb-4" placeholder="k8s-pod-name" bind:value={$settings.deployment.kubernetesPod} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesPod}>Kubernetes POD</TextField>
   {/if}
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.httpServerPort}>HTTP Server Port (unique per service on host)</TextField>
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.producerExchangePort}>Producer Exchange Port (unique per host)</TextField>
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.clusterPort}>Cluster Port (start of unique range per service: start-port thru start-port + (total-nodes * 2))</TextField>
-	<Select class="mb-4 pb-4" bind:value={$settings.deployment.clusterTotalNodes} items={nodes}>Cluster Total Nodes (selection maximum is not a platform limit; common: 3, 5, 7, or 9)</Select>
+	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.httpServerPort}>HTTP Server Port: unique per service on host *</TextField>
+	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.producerExchangePort}>Producer Exchange Port: unique per host *</TextField>
+	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.clusterPort}>Cluster Port: start of unique range per service with start-port thru start-port + (total-nodes * 2) *</TextField>
+	<Select class="mb-4 pb-4" bind:value={$settings.deployment.clusterTotalNodes} items={nodes}>Cluster Total Nodes: selection maximum is not a platform limit; common: 3, 5, 7, or 9</Select>
+    <p>*XOOM reserved ports for locally installed tools: 9019, 17171-17176, 19090, 49101-49102</p>
 </CardForm>
 
 <style global>
