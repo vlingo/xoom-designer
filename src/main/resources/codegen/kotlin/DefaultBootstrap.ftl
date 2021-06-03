@@ -66,11 +66,13 @@ public class Bootstrap {
     })
   }
 
-  void stopServer() {
+  public void stopServer() {
     if (instance == null) {
-      throw IllegalStateException("Schemata server not running")
+      throw new IllegalStateException("${appName} server not running");
     }
-    instance.server.stop()
+    instance.server.stop();
+
+    instance = null;
   }
 }
 

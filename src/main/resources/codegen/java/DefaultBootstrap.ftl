@@ -70,6 +70,8 @@ public class Bootstrap {
       throw new IllegalStateException("${appName} server not running");
     }
     instance.server.stop();
+
+    instance = null;
   }
 
   public Grid grid() {
