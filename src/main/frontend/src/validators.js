@@ -67,3 +67,13 @@ export const isAggregateUniqueRule = (oldAggregate, aggregateName, aggregateSett
 export const pathShouldHaveId = (v) => /\{id\}/.test(v) ? undefined : 'Must have {id}';
 export const projectNameRule = (value) => /^([A-Z]+[A-Za-z]*.){1,2}[A-Za-z]+$/.test(value) ? undefined : errors.PROJECTNAME;
 export const frameworkRule = (v) => frameworks.includes(v) ? undefined : 'framework should match one of the available frameworks here! https://docs.microsoft.com/fr-fr/dotnet/standard/frameworks'
+export const methodParametersValidityWithSelectedEventRule = (event, events, parameters) => {
+	const e = events.find(e => e.name === event);
+	if (e) {
+		const check = parameters.every(p => {
+			return e.fields.findIndex(f => f === p.stateField) > -1;
+		})
+		return check ? undefined : 'do not match the event fields';
+	}
+	return undefined;
+};
