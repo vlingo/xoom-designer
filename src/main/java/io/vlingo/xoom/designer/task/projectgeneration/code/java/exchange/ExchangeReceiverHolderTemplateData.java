@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.dialect.Dialect;
@@ -14,8 +15,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {
@@ -62,13 +64,17 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
     final CodeGenerationParameter aggregate = exchange.parent();
 
     final List<TemplateStandard> standards =
-            Stream.of(JavaTemplateStandard.DATA_OBJECT, JavaTemplateStandard.AGGREGATE_PROTOCOL).collect(Collectors.toList());
+            Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL).collect(Collectors.toList());
 
-    if (receiversParameters.stream().anyMatch(receiver -> !receiver.isModelFactoryMethod())) {
-      standards.add(JavaTemplateStandard.AGGREGATE);
+    if (receiversParameters.stream().anyMatch(receiver -> !receiver.dispatchToFactoryMethod)) {
+      standards.add(AGGREGATE);
     }
 
     final Set<String> imports = standards.stream().map(standard -> {
+      if(standard.equals(DATA_OBJECT)) {
+        final String dataObjectPackage = ContentQuery.findPackage(DATA_OBJECT, contents);
+        return CodeElementFormatter.importAllFrom(dataObjectPackage);
+      }
       final String typeName = standard.resolveClassname(aggregate.value);
       return ContentQuery.findFullyQualifiedClassName(standard, typeName, contents);
     }).collect(Collectors.toSet());

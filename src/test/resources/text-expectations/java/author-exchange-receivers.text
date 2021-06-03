@@ -1,14 +1,13 @@
 package io.vlingo.xoomapp.infrastructure.exchange;
 
 import io.vlingo.xoom.actors.Definition;
-import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.lattice.exchange.ExchangeReceiver;
+import io.vlingo.xoom.lattice.grid.Grid;
 
 import io.vlingo.xoomapp.model.author.AuthorEntity;
-import io.vlingo.xoomapp.model.Rank;
-import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoomapp.infrastructure.*;
 import io.vlingo.xoomapp.model.author.Author;
-import io.vlingo.xoomapp.model.author.Name;
+import io.vlingo.xoomapp.model.*;
 
 public class AuthorExchangeReceivers {
 
@@ -17,9 +16,9 @@ public class AuthorExchangeReceivers {
    */
   static class OtherAggregateDefined implements ExchangeReceiver<AuthorData> {
 
-    private final Stage stage;
+    private final Grid stage;
 
-    public OtherAggregateDefined(final Stage stage) {
+    public OtherAggregateDefined(final Grid stage) {
       this.stage = stage;
     }
 
@@ -35,15 +34,17 @@ public class AuthorExchangeReceivers {
    */
   static class OtherAggregateUpdated implements ExchangeReceiver<AuthorData> {
 
-    private final Stage stage;
+    private final Grid stage;
 
-    public OtherAggregateUpdated(final Stage stage) {
+    public OtherAggregateUpdated(final Grid stage) {
       this.stage = stage;
     }
 
     @Override
     public void receive(final AuthorData data) {
-      final Rank rank = Rank.from(data.rank.points, data.rank.classification);
+      final Classifier classifier = Classifier.from(data.rank.classification.classifier.name);
+      final Classification classification = Classification.from(data.rank.classification.label, classifier);
+      final Rank rank = Rank.from(data.rank.points, classification);
       stage.actorOf(Author.class, stage.addressFactory().from(data.id), Definition.has(AuthorEntity.class, Definition.parameters(data.id)))
               .andFinallyConsume(author -> author.changeRank(rank));
     }
@@ -54,9 +55,9 @@ public class AuthorExchangeReceivers {
    */
   static class OtherAggregateRemoved implements ExchangeReceiver<AuthorData> {
 
-    private final Stage stage;
+    private final Grid stage;
 
-    public OtherAggregateRemoved(final Stage stage) {
+    public OtherAggregateRemoved(final Grid stage) {
       this.stage = stage;
     }
 

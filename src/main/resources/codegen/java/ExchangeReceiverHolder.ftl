@@ -27,7 +27,7 @@ public class ${exchangeReceiverHolderName} {
       <#list receiver.valueObjectInitializers as initializer>
       ${initializer}
       </#list>
-      <#if receiver.modelFactoryMethod>
+      <#if receiver.dispatchToFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>
       stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), Definition.has(${receiver.modelActor}.class, Definition.parameters(data.id)))
