@@ -79,7 +79,18 @@
     }
   }
 
-  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name')].filter(v => v);
+  const checkEligibilityOfParameters = () => {
+    const e = events.find(e => e.name === method.event);
+    if (e) {
+      const check = method.event && method.parameters.every(p => {
+        return e.fields.findIndex(f => f === p.stateField) > -1;
+      })
+      return check ? undefined : 'do not match the event fields';
+    }
+    return undefined;
+  }
+
+  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), checkEligibilityOfParameters()];
   $: isAnyCollectionParameterSelected = method.parameters.some(p => p.multiplicity);
   $: selectedParameters = method.parameters && method.parameters.length > 0 ? isAnyCollectionParameterSelected ? `${method.parameters[0].parameterName} ${method.parameters[0].multiplicity}` : method.parameters.map(p => p.parameterName).join(', ') : '(none)';
 </script>
@@ -236,6 +247,6 @@
   <ErrorWarningTooltip
     type={validation && validation.length > 0 ? 'error' : 'warning'}
     messages={validation && validation.length > 0 ? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected']}
-    names={validation && validation.length > 0 ? ['Name', 'Name', 'Name'] : ['No paramaters', 'No event']}
+    names={validation && validation.length > 0 ? ['Name', 'Name', 'Name', 'Parameters'] : ['No paramaters', 'No event']}
   />
 </div>
