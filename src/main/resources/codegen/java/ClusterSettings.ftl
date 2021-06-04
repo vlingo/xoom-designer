@@ -50,7 +50,15 @@ cluster.live.node.timeout = 20000
 cluster.quorum.timeout = 60000
 
 # currently all active nodes must be listed as seed nodes
-cluster.seedNodes = ${clusterSettings.seedNodes}
+<#if (clusterSettings.nodeCount > 1)>
+# -- comment the following to disable developer single-node cluster
+cluster.seedNodes = ${clusterSettings.oneSeedNode}
+
+# -- uncomment the following to enable all cluster nodes
+# cluster.seedNodes = ${clusterSettings.seedNodes}
+<#else>
+cluster.seedNodes = ${clusterSettings.oneSeedNode}
+</#if>
 
 ################################
 # individual node configurations
