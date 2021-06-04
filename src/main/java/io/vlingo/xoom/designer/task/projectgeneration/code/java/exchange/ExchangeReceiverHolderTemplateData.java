@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
+import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
@@ -63,21 +64,25 @@ public class ExchangeReceiverHolderTemplateData extends TemplateData {
                                      final List<Content> contents) {
     final CodeGenerationParameter aggregate = exchange.parent();
 
-    final List<TemplateStandard> standards =
-            Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL).collect(Collectors.toList());
+    final boolean involvesActorLoad =
+            receiversParameters.stream().anyMatch(receiver -> !receiver.dispatchToFactoryMethod);
 
-    if (receiversParameters.stream().anyMatch(receiver -> !receiver.dispatchToFactoryMethod)) {
-      standards.add(AGGREGATE);
+    final Set<String> imports =
+            Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL, AGGREGATE).map(standard -> {
+              if (standard.equals(DATA_OBJECT)) {
+                final String dataObjectPackage = ContentQuery.findPackage(DATA_OBJECT, contents);
+                return CodeElementFormatter.importAllFrom(dataObjectPackage);
+              }
+              if (!standard.equals(AGGREGATE) || involvesActorLoad) {
+                final String typeName = standard.resolveClassname(aggregate.value);
+                return ContentQuery.findFullyQualifiedClassName(standard, typeName, contents);
+              }
+              return "";
+          }).collect(Collectors.toSet());
+
+    if (involvesActorLoad) {
+      imports.add(Definition.class.getCanonicalName());
     }
-
-    final Set<String> imports = standards.stream().map(standard -> {
-      if(standard.equals(DATA_OBJECT)) {
-        final String dataObjectPackage = ContentQuery.findPackage(DATA_OBJECT, contents);
-        return CodeElementFormatter.importAllFrom(dataObjectPackage);
-      }
-      final String typeName = standard.resolveClassname(aggregate.value);
-      return ContentQuery.findFullyQualifiedClassName(standard, typeName, contents);
-    }).collect(Collectors.toSet());
 
     final Stream<CodeGenerationParameter> involvedStateFields =
             ExchangeDetail.findInvolvedStateFieldsOnReceivers(exchange);

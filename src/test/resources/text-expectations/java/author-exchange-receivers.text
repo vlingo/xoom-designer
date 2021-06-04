@@ -1,10 +1,10 @@
 package io.vlingo.xoomapp.infrastructure.exchange;
 
-import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.lattice.exchange.ExchangeReceiver;
 import io.vlingo.xoom.lattice.grid.Grid;
 
 import io.vlingo.xoomapp.model.author.AuthorEntity;
+import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoomapp.infrastructure.*;
 import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.model.*;

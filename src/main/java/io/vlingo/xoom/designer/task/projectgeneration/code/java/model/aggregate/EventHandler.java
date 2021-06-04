@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Forma
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class EventHandler {
@@ -24,7 +25,7 @@ public class EventHandler {
 
   public static List<EventHandler> from(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(EventHandler::new)
-            .collect(Collectors.toList());
+            .distinct().collect(Collectors.toList());
   }
 
   private EventHandler(final CodeGenerationParameter method) {
@@ -32,6 +33,19 @@ public class EventHandler {
     this.eventName = method.retrieveRelatedValue(Label.DOMAIN_EVENT);
     this.methodInvocationParameters = Formatters.Arguments.SOURCED_STATED_METHOD_INVOCATION.format(method);
     this.missingFields.addAll(EventMissingField.from(method));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    EventHandler that = (EventHandler) o;
+    return eventName.equals(that.eventName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(eventName);
   }
 
 }
