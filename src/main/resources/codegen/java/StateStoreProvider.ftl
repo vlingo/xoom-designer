@@ -19,6 +19,7 @@ import io.vlingo.xoom.symbio.EntryAdapterProvider;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.turbo.storage.Model;
 import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
@@ -26,24 +27,19 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("all")
 public class ${storeProviderName} {
-  private static ${storeProviderName} instance;
 
   public final StateStore store;
   <#list queries as query>
   public final ${query.protocolName} ${query.attributeName};
   </#list>
 
-  public static ${storeProviderName} instance() {
-    return instance;
-  }
-
   public static ${storeProviderName} using(final Stage stage, final StatefulTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
   }
 
   public static ${storeProviderName} using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher ...dispatchers) {
-    if (instance != null) {
-      return instance;
+    if (ComponentRegistry.has(${storeProviderName}.class)) {
+      return ComponentRegistry.withType(${storeProviderName}.class);
     }
 
 <#if requireAdapters>
@@ -68,9 +64,7 @@ public class ${storeProviderName} {
 </#list>
 </#if>
 
-    instance = new ${storeProviderName}(stage, store);
-
-    return instance;
+    return new ${storeProviderName}(stage, store);
   }
 
   private ${storeProviderName}(final Stage stage, final StateStore store) {
@@ -78,5 +72,6 @@ public class ${storeProviderName} {
     <#list queries as query>
     this.${query.attributeName} = stage.actorFor(${query.protocolName}.class, ${query.actorName}.class, store);
     </#list>
+    ComponentRegistry.register(getClass(), this);
   }
 }

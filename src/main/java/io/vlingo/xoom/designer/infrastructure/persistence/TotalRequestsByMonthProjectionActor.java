@@ -7,12 +7,13 @@
 
 package io.vlingo.xoom.designer.infrastructure.persistence;
 
-import io.vlingo.xoom.designer.gui.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.designer.gui.RequestHistoryPreserved;
 import io.vlingo.xoom.designer.gui.RequestHistoryState;
+import io.vlingo.xoom.designer.gui.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.time.format.DateTimeFormatter;
 
@@ -24,7 +25,7 @@ public class TotalRequestsByMonthProjectionActor extends StateStoreProjectionAct
   private final DateTimeFormatter monthOfYearFormat;
 
   public TotalRequestsByMonthProjectionActor() {
-    this(QueryModelStateStoreProvider.instance().store);
+    this(ComponentRegistry.withType(QueryModelStateStoreProvider.class).store);
   }
 
   public TotalRequestsByMonthProjectionActor(final StateStore stateStore) {

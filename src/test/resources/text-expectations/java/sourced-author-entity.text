@@ -101,16 +101,8 @@ public final class AuthorEntity extends EventSourced implements Author {
     state = state.relateAuthor(event.relatedAuthors);
   }
 
-  private void applyAuthorRelated(final AuthorRelated event) {
-    state = state.relateAuthors(event.relatedAuthors);
-  }
-
   private void applyAuthorUnrelated(final AuthorUnrelated event) {
     state = state.unrelateAuthor(event.relatedAuthors);
-  }
-
-  private void applyAuthorRelated(final AuthorRelated event) {
-    state = state.replaceAllRelatedAuthors(event.relatedAuthors);
   }
 
   /*

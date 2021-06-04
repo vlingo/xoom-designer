@@ -24,7 +24,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class ModelGenerationStepTest {
 
   @Test
-  public void testThatEventBasedStatefulModelIsGenerated() throws IOException {
+  public void testThatEventBasedStatefulModelIsGenerated()  {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
@@ -57,7 +57,7 @@ public class ModelGenerationStepTest {
   }
 
   @Test
-  public void testThatOperationBasedStatefulModelIsGenerated() throws IOException {
+  public void testThatOperationBasedStatefulModelIsGenerated()  {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
@@ -90,7 +90,7 @@ public class ModelGenerationStepTest {
   }
 
   @Test
-  public void testThatOperationBasedStatefulSingleModelIsGenerated() throws IOException {
+  public void testThatOperationBasedStatefulSingleModelIsGenerated()  {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
@@ -123,7 +123,7 @@ public class ModelGenerationStepTest {
   }
 
   @Test
-  public void testThatSourcedModelIsGenerated() throws IOException {
+  public void testThatSourcedModelIsGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
@@ -156,7 +156,7 @@ public class ModelGenerationStepTest {
   }
 
   @Test
-  public void testThatSourcedSingleModelIsGenerated() throws IOException {
+  public void testThatSourcedSingleModelIsGenerated()  {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
@@ -342,12 +342,6 @@ public class ModelGenerationStepTest {
                     .relate(Label.FIELD_TYPE, "int"))
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
                     .relate(Label.FIELD_TYPE, "String").relate(Label.COLLECTION_TYPE, "Set"));
-  }
-
-  private CodeGenerationParameter tagValueObject() {
-    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Tag")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
-                    .relate(Label.FIELD_TYPE, "String"));
   }
 
   private Content[] contents() {

@@ -14,6 +14,7 @@ import io.vlingo.xoom.symbio.EntryAdapterProvider;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.turbo.storage.Model;
 import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
@@ -21,21 +22,16 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("all")
 public class StateStoreProvider {
-  private static StateStoreProvider instance;
 
   public final StateStore store;
-
-  public static StateStoreProvider instance() {
-    return instance;
-  }
 
   public static StateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
   }
 
   public static StateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher ...dispatchers) {
-    if (instance != null) {
-      return instance;
+    if (ComponentRegistry.has(StateStoreProvider.class)) {
+      return ComponentRegistry.withType(StateStoreProvider.class);
     }
 
     final StateAdapterProvider stateAdapterProvider = new StateAdapterProvider(stage.world());
@@ -53,12 +49,11 @@ public class StateStoreProvider {
     registry.register(new Info(store, BookState.class, BookState.class.getSimpleName()));
     registry.register(new Info(store, AuthorState.class, AuthorState.class.getSimpleName()));
 
-    instance = new StateStoreProvider(stage, store);
-
-    return instance;
+    return new StateStoreProvider(stage, store);
   }
 
   private StateStoreProvider(final Stage stage, final StateStore store) {
     this.store = store;
+    ComponentRegistry.register(getClass(), this);
   }
 }

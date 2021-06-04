@@ -24,21 +24,16 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("all")
 public class ${storeProviderName}  {
-  private static ${storeProviderName} instance;
 
   public final Journal<String> journal;
-
-  public static ${storeProviderName}  instance() {
-    return instance;
-  }
 
   public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
  }
 
   public static ${storeProviderName} using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher ...dispatchers) {
-    if (instance != null) {
-      return instance;
+    if (ComponentRegistry.has(${storeProviderName}.class)) {
+      return ComponentRegistry.withType(${storeProviderName}.class);
     }
 
     final EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(stage.world());
@@ -54,13 +49,12 @@ public class ${storeProviderName}  {
     registry.register(new Info(journal, ${aggregate}.class, ${aggregate}.class.getSimpleName()));
 </#list>
 
-    instance = new ${storeProviderName}(journal);
-
-    return instance;
+    return new ${storeProviderName}(journal);
   }
 
   private ${storeProviderName}(final Journal<String> journal) {
     this.journal = journal;
+    ComponentRegistry.register(getClass(), this);
   }
 
 }

@@ -8,6 +8,9 @@ import io.vlingo.xoom.actors.Address;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler;
 </#if>
+<#if queries?has_content && !queries.empty>
+import io.vlingo.xoom.turbo.ComponentRegistry;
+</#if>
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;
@@ -51,7 +54,7 @@ public class ${resourceName} extends DynamicResourceHandler {
       this.grid = grid;
       </#if>
       <#if queries?has_content && !queries.empty>
-      this.$queries = ${storeProviderName}.instance().${queries.attributeName};
+      this.$queries = ComponentRegistry.withType(${storeProviderName}.class).${queries.attributeName};
       </#if>
   }
 

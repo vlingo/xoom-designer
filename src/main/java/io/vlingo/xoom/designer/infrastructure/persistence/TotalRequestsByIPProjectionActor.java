@@ -7,19 +7,20 @@
 
 package io.vlingo.xoom.designer.infrastructure.persistence;
 
-import io.vlingo.xoom.designer.gui.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.designer.gui.RequestHistoryPreserved;
 import io.vlingo.xoom.designer.gui.RequestHistoryState;
+import io.vlingo.xoom.designer.gui.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class TotalRequestsByIPProjectionActor extends StateStoreProjectionActor<TotalRequestsByIPData> {
 
   private String becauseOf;
 
   public TotalRequestsByIPProjectionActor() {
-    this(QueryModelStateStoreProvider.instance().store);
+    this(ComponentRegistry.withType(QueryModelStateStoreProvider.class).store);
   }
 
   public TotalRequestsByIPProjectionActor(final StateStore stateStore) {

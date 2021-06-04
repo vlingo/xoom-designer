@@ -10,6 +10,7 @@ import io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher;
 import io.vlingo.xoom.lattice.model.projection.ProjectionDispatcher.ProjectToDescription;
 import io.vlingo.xoom.lattice.model.projection.TextProjectionDispatcherActor;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import io.vlingo.xoomapp.model.book.BookCataloged;
 import io.vlingo.xoomapp.model.author.AuthorRanked;
@@ -17,17 +18,14 @@ import io.vlingo.xoomapp.model.author.AuthorRegistered;
 
 @SuppressWarnings("all")
 public class ProjectionDispatcherProvider {
-  private static ProjectionDispatcherProvider instance;
 
   public final ProjectionDispatcher projectionDispatcher;
   public final Dispatcher storeDispatcher;
 
-  public static ProjectionDispatcherProvider instance() {
-    return instance;
-  }
-
   public static ProjectionDispatcherProvider using(final Stage stage) {
-    if (instance != null) return instance;
+    if (ComponentRegistry.has(ProjectionDispatcherProvider.class)) {
+      return ComponentRegistry.withType(ProjectionDispatcherProvider.class);
+    }
 
     final List<ProjectToDescription> descriptions =
             Arrays.asList(
@@ -42,13 +40,12 @@ public class ProjectionDispatcherProvider {
 
     final Protocols.Two<Dispatcher, ProjectionDispatcher> dispatchers = Protocols.two(dispatcherProtocols);
 
-    instance = new ProjectionDispatcherProvider(dispatchers._1, dispatchers._2);
-
-    return instance;
+    return new ProjectionDispatcherProvider(dispatchers._1, dispatchers._2);
   }
 
   private ProjectionDispatcherProvider(final Dispatcher storeDispatcher, final ProjectionDispatcher projectionDispatcher) {
     this.storeDispatcher = storeDispatcher;
     this.projectionDispatcher = projectionDispatcher;
+    ComponentRegistry.register(getClass(), this);
   }
 }

@@ -12,6 +12,7 @@ import io.vlingo.xoom.symbio.EntryAdapterProvider;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.turbo.storage.Model;
 import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
@@ -19,23 +20,18 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("all")
 public class QueryModelStateStoreProvider {
-  private static QueryModelStateStoreProvider instance;
 
   public final StateStore store;
   public final BookQueries bookQueries;
   public final AuthorQueries authorQueries;
-
-  public static QueryModelStateStoreProvider instance() {
-    return instance;
-  }
 
   public static QueryModelStateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
   }
 
   public static QueryModelStateStoreProvider using(final Stage stage, final StatefulTypeRegistry registry, final Dispatcher ...dispatchers) {
-    if (instance != null) {
-      return instance;
+    if (ComponentRegistry.has(QueryModelStateStoreProvider.class)) {
+      return ComponentRegistry.withType(QueryModelStateStoreProvider.class);
     }
 
     new EntryAdapterProvider(stage.world()); // future use
@@ -47,14 +43,13 @@ public class QueryModelStateStoreProvider {
             StoreActorBuilder.from(stage, Model.QUERY, Arrays.asList(dispatchers), StorageType.STATE_STORE, Settings.properties(), true);
 
 
-    instance = new QueryModelStateStoreProvider(stage, store);
-
-    return instance;
+    return new QueryModelStateStoreProvider(stage, store);
   }
 
   private QueryModelStateStoreProvider(final Stage stage, final StateStore store) {
     this.store = store;
     this.bookQueries = stage.actorFor(BookQueries.class, BookQueriesActor.class, store);
     this.authorQueries = stage.actorFor(AuthorQueries.class, AuthorQueriesActor.class, store);
+    ComponentRegistry.register(getClass(), this);
   }
 }

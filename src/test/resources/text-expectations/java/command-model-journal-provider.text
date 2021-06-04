@@ -25,21 +25,16 @@ import io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType;
 
 @SuppressWarnings("all")
 public class CommandModelJournalProvider  {
-  private static CommandModelJournalProvider instance;
 
   public final Journal<String> journal;
-
-  public static CommandModelJournalProvider  instance() {
-    return instance;
-  }
 
   public static CommandModelJournalProvider using(final Stage stage, final SourcedTypeRegistry registry) {
     return using(stage, registry, new NoOpDispatcher());
  }
 
   public static CommandModelJournalProvider using(final Stage stage, final SourcedTypeRegistry registry, final Dispatcher ...dispatchers) {
-    if (instance != null) {
-      return instance;
+    if (ComponentRegistry.has(CommandModelJournalProvider.class)) {
+      return ComponentRegistry.withType(CommandModelJournalProvider.class);
     }
 
     final EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(stage.world());
@@ -53,13 +48,12 @@ public class CommandModelJournalProvider  {
     registry.register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));
     registry.register(new Info(journal, AuthorEntity.class, AuthorEntity.class.getSimpleName()));
 
-    instance = new CommandModelJournalProvider(journal);
-
-    return instance;
+    return new CommandModelJournalProvider(journal);
   }
 
   private CommandModelJournalProvider(final Journal<String> journal) {
     this.journal = journal;
+    ComponentRegistry.register(getClass(), this);
   }
 
 }

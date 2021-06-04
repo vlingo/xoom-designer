@@ -2,6 +2,7 @@ package io.vlingo.xoomapp.infrastructure.resource;
 
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Address;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.http.ContentType;
 import io.vlingo.xoom.http.Response;
@@ -31,7 +32,7 @@ public class AuthorResource extends DynamicResourceHandler {
   public AuthorResource(final Grid grid) {
       super(grid.world().stage());
       this.grid = grid;
-      this.$queries = QueryModelStateStoreProvider.instance().authorQueries;
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).authorQueries;
   }
 
   public Completes<Response> withName(final AuthorData data) {
