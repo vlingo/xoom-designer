@@ -7,6 +7,7 @@ import ${import.qualifiedClassName};
 import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 /**
  * See
@@ -18,7 +19,7 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
   private String becauseOf;
 
   public ${projectionName}() {
-    this(${storeProviderName}.instance().store);
+    this(ComponentRegistry.withType(${storeProviderName}.class).store);
   }
 
   public ${projectionName}(final StateStore stateStore) {

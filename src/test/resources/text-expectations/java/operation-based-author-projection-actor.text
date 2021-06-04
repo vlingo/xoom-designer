@@ -6,6 +6,7 @@ import io.vlingo.xoomapp.model.author.*;
 import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 /**
  * See
@@ -17,7 +18,7 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
   private String becauseOf;
 
   public AuthorProjectionActor() {
-    this(QueryModelStateStoreProvider.instance().store);
+    this(ComponentRegistry.withType(QueryModelStateStoreProvider.class).store);
   }
 
   public AuthorProjectionActor(final StateStore stateStore) {
