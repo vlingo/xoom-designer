@@ -45,7 +45,7 @@ public class Formatters {
     public static <T> T format(final Variables.Style style,
                                final Dialect dialect,
                                final CodeGenerationParameter parent) {
-      if (parent.isLabeled(Label.AGGREGATE)) {
+      if (parent.isLabeled(Label.AGGREGATE) || parent.isLabeled(Label.DOMAIN_EVENT)) {
         return format(style, dialect, parent, parent.retrieveAllRelated(Label.STATE_FIELD));
       } else if (parent.isLabeled(Label.VALUE_OBJECT)) {
         return format(style, dialect, parent, parent.retrieveAllRelated(Label.VALUE_OBJECT_FIELD));
@@ -83,7 +83,7 @@ public class Formatters {
     public static <T> T format(final Style style,
                                final Dialect dialect,
                                final CodeGenerationParameter parent) {
-      if (parent.isLabeled(Label.AGGREGATE)) {
+      if (parent.isLabeled(Label.AGGREGATE) || parent.isLabeled(Label.DOMAIN_EVENT)) {
         return format(style, dialect, parent, parent.retrieveAllRelated(Label.STATE_FIELD));
       } else if (parent.isLabeled(Label.VALUE_OBJECT)) {
         return format(style, dialect, parent, parent.retrieveAllRelated(Label.VALUE_OBJECT_FIELD));
@@ -103,8 +103,7 @@ public class Formatters {
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
     public enum Style {
-      ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, DATA_VALUE_OBJECT_ASSIGNMENT,
-      STATE_BASED_ASSIGNMENT, SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
+      ASSIGNMENT, MEMBER_DECLARATION, DATA_OBJECT_MEMBER_DECLARATION, DATA_VALUE_OBJECT_ASSIGNMENT, SELF_ALTERNATE_REFERENCE, ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE
     }
 
     @SuppressWarnings("serial")
@@ -113,7 +112,6 @@ public class Formatters {
               put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
               put(Style.MEMBER_DECLARATION, lang -> new Member(lang));
               put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, DATA_OBJECT_NAME_SUFFIX));
-              put(Style.STATE_BASED_ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment("state"));
               put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
               put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
               put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());

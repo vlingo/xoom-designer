@@ -21,7 +21,7 @@ public final class ${domainEventName} extends IdentifiedDomainEvent {
   ${member}
   </#list>
 
-  public ${domainEventName}(final ${stateName} state) {
+  public ${domainEventName}(${constructorParameters}) {
     super(SemanticVersion.from("${defaultSchemaVersion}").toValue());
     <#list membersAssignment as assignment>
     ${assignment}

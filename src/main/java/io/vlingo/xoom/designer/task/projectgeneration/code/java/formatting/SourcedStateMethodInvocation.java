@@ -16,6 +16,8 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domaineven
 
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.ALIAS;
+
 public class SourcedStateMethodInvocation implements Formatters.Arguments {
 
   @Override
@@ -32,7 +34,7 @@ public class SourcedStateMethodInvocation implements Formatters.Arguments {
                                     final CodeGenerationParameter domainEvent,
                                     final CodeGenerationParameter methodParameter) {
     if (DomainEventDetail.hasField(domainEvent, methodParameter.value)) {
-      return "event." + methodParameter.value;
+      return "event." + (methodParameter.hasAny(ALIAS) ? methodParameter.retrieveRelatedValue(ALIAS) : methodParameter.value);
     }
     return FieldDetail.resolveDefaultValue(aggregate, methodParameter.value);
   }

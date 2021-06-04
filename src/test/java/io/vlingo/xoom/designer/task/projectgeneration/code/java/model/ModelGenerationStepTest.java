@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
@@ -47,13 +46,19 @@ public class ModelGenerationStepTest {
     final Content authorState = context.findContent(JavaTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+    final Content authorRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRelated");
+    final Content authorsRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorsRelated");
+    final Content authorUnrelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorUnrelated");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onJava().read("event-based-stateful-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onJava().read("stateful-author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    Assertions.assertTrue(authorRelated.contains(TextExpectation.onJava().read("author-related")));
+    Assertions.assertTrue(authorsRelated.contains(TextExpectation.onJava().read("authors-related")));
+    Assertions.assertTrue(authorUnrelated.contains(TextExpectation.onJava().read("author-unrelated")));
   }
 
   @Test
@@ -80,13 +85,19 @@ public class ModelGenerationStepTest {
     final Content authorState = context.findContent(JavaTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+    final Content authorRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRelated");
+    final Content authorsRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorsRelated");
+    final Content authorUnrelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorUnrelated");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onJava().read("operation-based-stateful-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onJava().read("stateful-author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    Assertions.assertTrue(authorRelated.contains(TextExpectation.onJava().read("author-related")));
+    Assertions.assertTrue(authorsRelated.contains(TextExpectation.onJava().read("authors-related")));
+    Assertions.assertTrue(authorUnrelated.contains(TextExpectation.onJava().read("author-unrelated")));
   }
 
   @Test
@@ -113,13 +124,19 @@ public class ModelGenerationStepTest {
     final Content authorState = context.findContent(JavaTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+    final Content authorRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRelated");
+    final Content authorsRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorsRelated");
+    final Content authorUnrelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorUnrelated");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol-for-single-model")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onJava().read("operation-based-stateful-single-model-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onJava().read("stateful-author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    Assertions.assertTrue(authorRelated.contains(TextExpectation.onJava().read("author-related")));
+    Assertions.assertTrue(authorsRelated.contains(TextExpectation.onJava().read("authors-related")));
+    Assertions.assertTrue(authorUnrelated.contains(TextExpectation.onJava().read("author-unrelated")));
   }
 
   @Test
@@ -146,13 +163,19 @@ public class ModelGenerationStepTest {
     final Content authorState = context.findContent(JavaTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+    final Content authorRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRelated");
+    final Content authorsRelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorsRelated");
+    final Content authorUnrelated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorUnrelated");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onJava().read("sourced-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onJava().read("sourced-author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onJava().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onJava().read("author-ranked")));
+    Assertions.assertTrue(authorRelated.contains(TextExpectation.onJava().read("author-related")));
+    Assertions.assertTrue(authorsRelated.contains(TextExpectation.onJava().read("authors-related")));
+    Assertions.assertTrue(authorUnrelated.contains(TextExpectation.onJava().read("author-unrelated")));
   }
 
   @Test
@@ -180,7 +203,7 @@ public class ModelGenerationStepTest {
     final Content authorRegistered = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onJava().read("author-protocol-for-single-model")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onJava().read("sourced-single-model-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onJava().read("sourced-author-state")));
@@ -260,23 +283,39 @@ public class ModelGenerationStepTest {
     final CodeGenerationParameter authorRegisteredEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "name"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn"));
+                    .relate(nameField).relate(availableOnField);
 
     final CodeGenerationParameter authorRankedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "rank"));
+                    .relate(rankField);
 
     final CodeGenerationParameter authorRelatedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.FIELD_TYPE, "String")
+                            .relate(Label.COLLECTION_TYPE, "Set")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+    final CodeGenerationParameter authorsRelatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorsRelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.FIELD_TYPE, "String")
+                            .relate(Label.COLLECTION_TYPE, "Set")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"));
 
     final CodeGenerationParameter authorUnrelatedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.FIELD_TYPE, "String")
+                            .relate(Label.COLLECTION_TYPE, "Set")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
 
     final CodeGenerationParameter factoryMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
@@ -301,14 +340,14 @@ public class ModelGenerationStepTest {
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "MERGE"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorsRelatedEvent);
 
     final CodeGenerationParameter relatedAuthorsReplacementMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorsRelatedEvent);
 
     final CodeGenerationParameter relatedAuthorRemovalMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")
@@ -325,7 +364,7 @@ public class ModelGenerationStepTest {
             .relate(availableOnField).relate(factoryMethod).relate(rankMethod).relate(hideMethod)
             .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
             .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
-            .relate(authorRelatedEvent).relate(authorUnrelatedEvent);
+            .relate(authorRelatedEvent).relate(authorsRelatedEvent).relate(authorUnrelatedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {

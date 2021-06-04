@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting;
 
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -21,8 +22,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.dialect.Dialect.JAVA;
 import static io.vlingo.xoom.codegen.dialect.Dialect.KOTLIN;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.AGGREGATE;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.VALUE_OBJECT_FIELD;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail.stateFieldWithName;
 
 public class Member extends Formatters.Fields<List<String>> {
@@ -46,7 +46,7 @@ public class Member extends Formatters.Fields<List<String>> {
   public List<String> format(final CodeGenerationParameter parent,
                              final Stream<CodeGenerationParameter> fields) {
     return fields.map(field -> {
-      if(field.isLabeled(VALUE_OBJECT_FIELD)) {
+      if(field.isLabeled(VALUE_OBJECT_FIELD) || field.hasAny(FIELD_TYPE)) {
         return field;
       }
       return stateFieldWithName(field.parent(AGGREGATE), field.value);
@@ -58,14 +58,20 @@ public class Member extends Formatters.Fields<List<String>> {
   }
 
   private String resolveFieldType(final CodeGenerationParameter field) {
-    final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
-    if (FieldDetail.isCollection(field)) {
+    final String fieldType =
+            field.retrieveRelatedValue(Label.FIELD_TYPE);
+
+    final CollectionMutation collectionMutation =
+            field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+
+    if (!collectionMutation.isSingleParameterBased() && FieldDetail.isCollection(field)) {
       final String collectionType = FieldDetail.resolveCollectionType(field);
       if(DataObjectDetail.isValidSuffix(valueObjectTypeSuffix))  {
         return DataObjectDetail.adaptCollectionGenericsType(collectionType);
       }
       return collectionType;
     }
+
     if (ValueObjectDetail.isValueObject(field)) {
       return fieldType + valueObjectTypeSuffix;
     }
@@ -76,7 +82,7 @@ public class Member extends Formatters.Fields<List<String>> {
     if (FieldDetail.requireImmediateInstantiation(field)) {
       return String.format("%s = %s", field.value, FieldDetail.resolveDefaultValue(field.parent(), field.value));
     }
-    return field.value;
+    return field.hasAny(ALIAS) ? field.retrieveRelatedValue(ALIAS) : field.value;
   }
 
   @SuppressWarnings("serial")

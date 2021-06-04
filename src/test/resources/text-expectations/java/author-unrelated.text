@@ -3,8 +3,7 @@ package io.vlingo.xoomapp.model.author;
 import io.vlingo.xoom.common.version.SemanticVersion;
 import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
 
-import java.time.LocalDate;
-import io.vlingo.xoomapp.model.*;
+import java.util.*;
 
 /**
  * See
@@ -12,17 +11,15 @@ import io.vlingo.xoomapp.model.*;
  *   Commands, Domain Events, and Identified Domain Events
  * </a>
  */
-public final class AuthorRegistered extends IdentifiedDomainEvent {
+public final class AuthorUnrelated extends IdentifiedDomainEvent {
 
   public final String id;
-  public final Name name;
-  public final LocalDate availableOn;
+  public final String relatedAuthor;
 
-  public AuthorRegistered(final String id, final Name name, final LocalDate availableOn) {
+  public AuthorUnrelated(final String id, final String relatedAuthor) {
     super(SemanticVersion.from("1.0.0").toValue());
     this.id = id;
-    this.name = name;
-    this.availableOn = availableOn;
+    this.relatedAuthor = relatedAuthor;
   }
 
   @Override

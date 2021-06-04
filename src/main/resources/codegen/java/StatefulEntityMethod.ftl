@@ -3,14 +3,13 @@
     /**
      * TODO: Implement command logic. See {@link ${stateName}#${methodName}()}
      */
-    final ${stateName} stateArg = state.${methodName}(${methodInvocationParameters});
     <#if domainEventName?has_content>
     <#if operationBased>
-    return apply(stateArg, ${projectionSourceTypesName}.${domainEventName}.name(), () -> state);
+    return apply(state.${methodName}(${methodInvocationParameters}), ${projectionSourceTypesName}.${domainEventName}.name(), () -> state);
     <#else>
-    return apply(stateArg, new ${domainEventName}(stateArg), () -> state);
+    return apply(state.${methodName}(${methodInvocationParameters}), new ${domainEventName}(state.id<#if methodInvocationParameters?has_content>, ${methodInvocationParameters}</#if>), () -> state);
     </#if>
     <#else>
-    return apply(stateArg, () -> state);
+    return apply(state.${methodName}(${methodInvocationParameters}), () -> state);
     </#if>
   }

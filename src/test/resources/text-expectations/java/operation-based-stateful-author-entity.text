@@ -23,8 +23,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#withName()}
      */
-    final AuthorState stateArg = state.withName(name);
-    return apply(stateArg, Operations.AuthorRegistered.name(), () -> state);
+    return apply(state.withName(name), Operations.AuthorRegistered.name(), () -> state);
   }
 
   @Override
@@ -32,8 +31,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#changeRank()}
      */
-    final AuthorState stateArg = state.changeRank(rank);
-    return apply(stateArg, Operations.AuthorRanked.name(), () -> state);
+    return apply(state.changeRank(rank), Operations.AuthorRanked.name(), () -> state);
   }
 
   @Override
@@ -41,8 +39,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#hide()}
      */
-    final AuthorState stateArg = state.hide();
-    return apply(stateArg, () -> state);
+    return apply(state.hide(), () -> state);
   }
 
   @Override
@@ -50,8 +47,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#relateAuthor()}
      */
-    final AuthorState stateArg = state.relateAuthor(relatedAuthor);
-    return apply(stateArg, Operations.AuthorRelated.name(), () -> state);
+    return apply(state.relateAuthor(relatedAuthor), Operations.AuthorRelated.name(), () -> state);
   }
 
   @Override
@@ -59,8 +55,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#relateAuthors()}
      */
-    final AuthorState stateArg = state.relateAuthors(relatedAuthors);
-    return apply(stateArg, Operations.AuthorRelated.name(), () -> state);
+    return apply(state.relateAuthors(relatedAuthors), Operations.AuthorsRelated.name(), () -> state);
   }
 
   @Override
@@ -68,8 +63,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#unrelateAuthor()}
      */
-    final AuthorState stateArg = state.unrelateAuthor(relatedAuthor);
-    return apply(stateArg, Operations.AuthorUnrelated.name(), () -> state);
+    return apply(state.unrelateAuthor(relatedAuthor), Operations.AuthorUnrelated.name(), () -> state);
   }
 
   @Override
@@ -77,8 +71,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#replaceAllRelatedAuthors()}
      */
-    final AuthorState stateArg = state.replaceAllRelatedAuthors(relatedAuthors);
-    return apply(stateArg, Operations.AuthorRelated.name(), () -> state);
+    return apply(state.replaceAllRelatedAuthors(relatedAuthors), Operations.AuthorsRelated.name(), () -> state);
   }
 
   /*

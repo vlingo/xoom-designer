@@ -10,7 +10,6 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.codegen.template.TemplateCustomFunctions;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
@@ -22,6 +21,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
@@ -33,7 +33,6 @@ public class TaskExecutionContextMapper {
   private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
-  private final TemplateCustomFunctions templateCustomFunctions;
 
   public static TaskExecutionContext from(final GenerationSettingsData data,
                                           final GenerationTarget generationTarget) {
@@ -44,7 +43,6 @@ public class TaskExecutionContextMapper {
     this.data = data;
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
-    this.templateCustomFunctions = TemplateCustomFunctions.instance();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
   }
@@ -60,8 +58,8 @@ public class TaskExecutionContextMapper {
                       .relate(URI_ROOT, aggregate.api.rootPath);
 
       mapStateFields(aggregate, aggregateParameter);
-      mapDomainEvents(aggregate, aggregateParameter);
       mapMethods(aggregate, aggregateParameter);
+      mapDomainEvents(aggregate, aggregateParameter);
       mapRoutes(aggregate, aggregateParameter);
       mapExchanges(aggregate, aggregateParameter);
       parameters.add(aggregateParameter);
@@ -123,14 +121,39 @@ public class TaskExecutionContextMapper {
   private void mapDomainEvents(final AggregateData aggregateData,
                                final CodeGenerationParameter aggregateParameter) {
     aggregateData.events.forEach(event -> {
-      final CodeGenerationParameter eventParameter =
+      final CodeGenerationParameter eventCodeGenParam =
               CodeGenerationParameter.of(DOMAIN_EVENT, event.name);
 
+      final Optional<CodeGenerationParameter> emitterMethod =
+              aggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
+                      .filter(method -> method.retrieveRelatedValue(DOMAIN_EVENT).equals(event.name))
+                      .findFirst();
+
       event.fields.forEach(field -> {
-        eventParameter.relate(STATE_FIELD, field);
+        final CodeGenerationParameter correspondingStateField =
+                aggregateParameter.retrieveAllRelated(STATE_FIELD)
+                        .filter(stateField -> stateField.value.equals(field))
+                        .findFirst().get();
+
+        if(emitterMethod.isPresent()) {
+          final CodeGenerationParameter placeholderMethodParam =
+                  CodeGenerationParameter.of(METHOD_PARAMETER, field)
+                          .relate(COLLECTION_MUTATION, CollectionMutation.NONE);
+
+          final CodeGenerationParameter correspondingMethodParam =
+                  emitterMethod.get().retrieveAllRelated(METHOD_PARAMETER)
+                          .filter(methodParameter -> methodParameter.value.equals(field))
+                          .findFirst().orElse(placeholderMethodParam);
+
+          eventCodeGenParam.relate(correspondingMethodParam.retrieveOneRelated(ALIAS))
+                  .relate(correspondingMethodParam.retrieveOneRelated(COLLECTION_MUTATION));
+        }
+
+        eventCodeGenParam.relate(FIELD_TYPE, correspondingStateField.retrieveRelatedValue(FIELD_TYPE))
+                .relate(COLLECTION_TYPE, correspondingStateField.retrieveRelatedValue(COLLECTION_TYPE));
       });
 
-      aggregateParameter.relate(eventParameter);
+      aggregateParameter.relate(eventCodeGenParam);
     });
   }
 

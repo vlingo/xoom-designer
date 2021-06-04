@@ -21,9 +21,9 @@ public final class AuthorEntity extends EventSourced implements Author {
     EventSourced.registerConsumer(AuthorEntity.class, AuthorRegistered.class, AuthorEntity::applyAuthorRegistered);
     EventSourced.registerConsumer(AuthorEntity.class, AuthorRanked.class, AuthorEntity::applyAuthorRanked);
     EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
-    EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorsRelated.class, AuthorEntity::applyAuthorsRelated);
     EventSourced.registerConsumer(AuthorEntity.class, AuthorUnrelated.class, AuthorEntity::applyAuthorUnrelated);
-    EventSourced.registerConsumer(AuthorEntity.class, AuthorRelated.class, AuthorEntity::applyAuthorRelated);
+    EventSourced.registerConsumer(AuthorEntity.class, AuthorsRelated.class, AuthorEntity::applyAuthorsRelated);
   }
 
   @Override
@@ -31,8 +31,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#withName()}
      */
-    final AuthorState stateArg = state.withName(name);
-    return apply(new AuthorRegistered(stateArg), () -> state);
+    return apply(new AuthorRegistered(state.id, name), () -> state);
   }
 
   @Override
@@ -40,8 +39,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#changeRank()}
      */
-    final AuthorState stateArg = state.changeRank(rank);
-    return apply(new AuthorRanked(stateArg), () -> state);
+    return apply(new AuthorRanked(state.id, rank), () -> state);
   }
 
   @Override
@@ -49,8 +47,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#hide()}
      */
-    final AuthorState stateArg = state.hide();
-    return Completes.withSuccess(stateArg);
+    return Completes.withSuccess(state.hide());
   }
 
   @Override
@@ -58,8 +55,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#relateAuthor()}
      */
-    final AuthorState stateArg = state.relateAuthor(relatedAuthor);
-    return apply(new AuthorRelated(stateArg), () -> state);
+    return apply(new AuthorRelated(state.id, relatedAuthor), () -> state);
   }
 
   @Override
@@ -67,8 +63,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#relateAuthors()}
      */
-    final AuthorState stateArg = state.relateAuthors(relatedAuthors);
-    return apply(new AuthorRelated(stateArg), () -> state);
+    return apply(new AuthorsRelated(state.id, relatedAuthors), () -> state);
   }
 
   @Override
@@ -76,8 +71,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#unrelateAuthor()}
      */
-    final AuthorState stateArg = state.unrelateAuthor(relatedAuthor);
-    return apply(new AuthorUnrelated(stateArg), () -> state);
+    return apply(new AuthorUnrelated(state.id, relatedAuthor), () -> state);
   }
 
   @Override
@@ -85,8 +79,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#replaceAllRelatedAuthors()}
      */
-    final AuthorState stateArg = state.replaceAllRelatedAuthors(relatedAuthors);
-    return apply(new AuthorRelated(stateArg), () -> state);
+    return apply(new AuthorsRelated(state.id, relatedAuthors), () -> state);
   }
 
   private void applyAuthorRegistered(final AuthorRegistered event) {
@@ -98,11 +91,15 @@ public final class AuthorEntity extends EventSourced implements Author {
   }
 
   private void applyAuthorRelated(final AuthorRelated event) {
-    state = state.relateAuthor(event.relatedAuthors);
+    state = state.relateAuthor(event.relatedAuthor);
+  }
+
+  private void applyAuthorsRelated(final AuthorsRelated event) {
+    state = state.relateAuthors(event.relatedAuthors);
   }
 
   private void applyAuthorUnrelated(final AuthorUnrelated event) {
-    state = state.unrelateAuthor(event.relatedAuthors);
+    state = state.unrelateAuthor(event.relatedAuthor);
   }
 
   /*

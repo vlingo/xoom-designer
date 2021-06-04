@@ -40,6 +40,7 @@ public class SignatureDeclaration implements Formatters.Arguments {
   private List<String> collectMethodParameters(final CodeGenerationParameter parameter) {
     switch (Label.valueOf(parameter.label.toString())) {
       case AGGREGATE:
+      case DOMAIN_EVENT:
         return collectStateFields(parameter);
       case ROUTE_SIGNATURE:
         return formatRouteMethodParameters(parameter);

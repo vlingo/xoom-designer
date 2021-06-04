@@ -3,10 +3,9 @@
     /**
      * TODO: Implement command logic. See {@link ${stateName}#${methodName}()}
      */
-    final ${stateName} stateArg = state.${methodName}(${methodInvocationParameters});
     <#if domainEventName?has_content>
-    return apply(new ${domainEventName}(stateArg), () -> state);
+    return apply(new ${domainEventName}(state.id<#if methodInvocationParameters?has_content>, ${methodInvocationParameters}</#if>), () -> state);
     <#else>
-    return Completes.withSuccess(stateArg);
+    return Completes.withSuccess(state.${methodName}(${methodInvocationParameters}));
     </#if>
   }

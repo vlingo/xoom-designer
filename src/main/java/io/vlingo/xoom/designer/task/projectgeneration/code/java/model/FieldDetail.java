@@ -101,7 +101,10 @@ public class FieldDetail {
   }
 
   public static Boolean requireImmediateInstantiation(final CodeGenerationParameter field) {
-    return field.hasAny(Label.COLLECTION_TYPE);
+    final CollectionMutation collectionMutation =
+            field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+
+    return field.hasAny(Label.COLLECTION_TYPE) && !collectionMutation.isSingleParameterBased();
   }
 
   private static String resolveWrapperType(final String fieldType) {
@@ -178,7 +181,7 @@ public class FieldDetail {
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {
-    if (parent.isLabeled(Label.AGGREGATE)) {
+    if (parent.isLabeled(Label.AGGREGATE) || parent.isLabeled(Label.DOMAIN_EVENT)) {
       return Label.STATE_FIELD;
     }
     if (parent.isLabeled(Label.VALUE_OBJECT)) {

@@ -17,10 +17,10 @@ public final class AuthorRanked extends IdentifiedDomainEvent {
   public final String id;
   public final List<Rank> rank = new ArrayList<>();
 
-  public AuthorRanked(final AuthorState state) {
+  public AuthorRanked(final String id, final List<Rank> rank) {
     super(SemanticVersion.from("1.0.0").toValue());
-    this.id = state.id;
-    this.rank.addAll(state.rank);
+    this.id = id;
+    this.rank.addAll(rank);
   }
 
   @Override

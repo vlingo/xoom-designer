@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters.Fields.Style.ASSIGNMENT;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters.Fields.Style.MEMBER_DECLARATION;
 import static java.util.stream.Collectors.toSet;
 
 public class DomainEventTemplateData extends TemplateData {
@@ -47,16 +49,14 @@ public class DomainEventTemplateData extends TemplateData {
                                   final CodeGenerationParameter event,
                                   final CodeGenerationParameter aggregate,
                                   final List<Content> contents) {
-    final List<CodeGenerationParameter> involvedStateFields =
-            DomainEventDetail.findInvolvedStateFields(event).collect(Collectors.toList());
-
     this.name = event.value;
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, packageName).and(DOMAIN_EVENT_NAME, name)
                     .and(STATE_NAME, JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value))
                     .and(DEFAULT_SCHEMA_VERSION, CodeGenerationProperties.DEFAULT_SCHEMA_VERSION)
-                    .and(MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate, involvedStateFields.stream()))
-                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.STATE_BASED_ASSIGNMENT, dialect, aggregate, involvedStateFields.stream()))
+                    .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(event))
+                    .and(MEMBERS, Formatters.Fields.format(MEMBER_DECLARATION, dialect, event))
+                    .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(ASSIGNMENT, dialect, event))
                     .addImports(resolveImports(aggregate, event, contents));
   }
 

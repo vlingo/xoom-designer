@@ -9,10 +9,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domaineve
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class DomainEventDetail {
 
@@ -28,10 +26,6 @@ public class DomainEventDetail {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
             .filter(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
             .anyMatch(method -> method.retrieveRelatedValue(Label.DOMAIN_EVENT).equals(eventName));
-  }
-
-  public static Stream<CodeGenerationParameter> findInvolvedStateFields(final CodeGenerationParameter domainEvent) {
-    return domainEvent.retrieveAllRelated(Label.STATE_FIELD).map(field -> AggregateDetail.stateFieldWithName(domainEvent.parent(), field.value));
   }
 
 }
