@@ -206,4 +206,8 @@ public class FieldDetail {
     final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
     return isValueObjectCollection(stateField) && collectionMutation.isSingleParameterBased();
   }
+
+  public static boolean isEventFieldAssignableToValueObject(final CodeGenerationParameter eventField) {
+    return isMethodParameterAssignableToValueObject(eventField, eventField);
+  }
 }

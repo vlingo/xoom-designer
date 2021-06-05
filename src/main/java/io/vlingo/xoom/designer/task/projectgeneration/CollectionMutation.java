@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.ALIAS;
@@ -20,10 +21,10 @@ public enum CollectionMutation {
 
   NONE("", param -> Collections.emptyList()),
   REPLACEMENT("*", param -> Collections.emptyList()),
-  ADDITION("+", param -> Arrays.asList(String.format("this.%s.add(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
-  REMOVAL("-", param -> Arrays.asList(String.format("this.%s.remove(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
-  MERGE("#", param -> Arrays.asList(String.format("this.%s.removeAll(%s);", param.value, param.value),
-          String.format("this.%s.addAll(%s);", param.value, param.value)));
+  ADDITION("+", param -> Arrays.asList(String.format("%s.add(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
+  REMOVAL("-", param -> Arrays.asList(String.format("%s.remove(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
+  MERGE("#", param -> Arrays.asList(String.format("%s.removeAll(%s);", param.value, param.value),
+          String.format("%s.addAll(%s);", param.value, param.value)));
 
   private final String symbol;
   private final Function<CodeGenerationParameter, List<String>> statementsResolver;
@@ -46,8 +47,8 @@ public enum CollectionMutation {
     return equals(ADDITION) || equals(REMOVAL);
   }
 
-  public List<String> resolveStatements(final CodeGenerationParameter methodParameter) {
-    return statementsResolver.apply(methodParameter);
+  public List<String> resolveStatements(final String carrier, final CodeGenerationParameter methodParameter) {
+    return statementsResolver.apply(methodParameter).stream().map(statement -> carrier + "." + statement).collect(Collectors.toList());
   }
 
   public boolean shouldReplaceWithMethodParameter() {

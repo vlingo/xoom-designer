@@ -135,6 +135,11 @@ public class TaskExecutionContextMapper {
                         .filter(stateField -> stateField.value.equals(field))
                         .findFirst().get();
 
+        final CodeGenerationParameter eventField =
+                CodeGenerationParameter.of(STATE_FIELD, field)
+                        .relate(FIELD_TYPE, correspondingStateField.retrieveRelatedValue(FIELD_TYPE))
+                        .relate(COLLECTION_TYPE, correspondingStateField.retrieveRelatedValue(COLLECTION_TYPE));
+
         if(emitterMethod.isPresent()) {
           final CodeGenerationParameter placeholderMethodParam =
                   CodeGenerationParameter.of(METHOD_PARAMETER, field)
@@ -145,12 +150,11 @@ public class TaskExecutionContextMapper {
                           .filter(methodParameter -> methodParameter.value.equals(field))
                           .findFirst().orElse(placeholderMethodParam);
 
-          eventCodeGenParam.relate(correspondingMethodParam.retrieveOneRelated(ALIAS))
+          eventField.relate(correspondingMethodParam.retrieveOneRelated(ALIAS))
                   .relate(correspondingMethodParam.retrieveOneRelated(COLLECTION_MUTATION));
         }
 
-        eventCodeGenParam.relate(FIELD_TYPE, correspondingStateField.retrieveRelatedValue(FIELD_TYPE))
-                .relate(COLLECTION_TYPE, correspondingStateField.retrieveRelatedValue(COLLECTION_TYPE));
+        eventCodeGenParam.relate(eventField);
       });
 
       aggregateParameter.relate(eventCodeGenParam);

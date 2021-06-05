@@ -7,9 +7,11 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
+import static java.util.stream.Collectors.joining;
 
 public class EventBasedDataObjectInitializer extends Formatters.Variables<List<String>> {
 
@@ -30,11 +35,9 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
   @Override
   public List<String> format(final CodeGenerationParameter event,
                              final Stream<CodeGenerationParameter> fields) {
-    final CodeGenerationParameter aggregate = event.parent(Label.AGGREGATE);
     final List<CodeGenerationParameter> valueObjects = fields.collect(Collectors.toList());
-    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
-            .filter(ValueObjectDetail::isValueObject)
-            .filter(field -> DomainEventDetail.hasField(event, field.value))
+    return event.retrieveAllRelated(Label.STATE_FIELD)
+            .filter(FieldDetail::isEventFieldAssignableToValueObject)
             .flatMap(field -> buildExpressions(field, valueObjects).stream())
             .collect(Collectors.toList());
   }
@@ -49,16 +52,22 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
                                final CodeGenerationParameter field,
                                final List<CodeGenerationParameter> valueObjects,
                                final List<String> expressions) {
+    final String fieldAlias =
+            field.hasAny(ALIAS) ? field.retrieveRelatedValue(ALIAS) : field.value;
+
     final CodeGenerationParameter valueObject =
             ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
+
+    final CollectionMutation collectionMutation =
+            field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
     final String dataObjectName =
             JavaTemplateStandard.DATA_OBJECT.resolveClassname(valueObject.value);
 
     final String fieldReferencePath =
-            String.format("%s.%s", carrierReferencePath, field.value);
+            String.format("%s.%s", carrierReferencePath, fieldAlias);
 
-    valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+    valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
             .filter(ValueObjectDetail::isValueObject)
             .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
 
@@ -67,10 +76,11 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
                     String.format("%s.%s", fieldReferencePath, valueObjectField.value);
 
     final String args =
-            valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(pathResolver).collect(Collectors.joining(", "));
+            collectionMutation.isSingleParameterBased() ?
+                    fieldReferencePath : valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(pathResolver).collect(joining(", "));
 
     final String expression =
-            String.format("final %s %s = %s.from(%s);", dataObjectName, field.value, dataObjectName, args);
+            String.format("final %s %s = %s.from(%s);", dataObjectName, fieldAlias, dataObjectName, args);
 
     expressions.add(expression);
   }

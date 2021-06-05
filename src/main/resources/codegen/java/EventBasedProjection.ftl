@@ -48,6 +48,9 @@ public class ${projectionName} extends StateStoreProjectionActor<${dataName}> {
           <#list source.dataObjectInitializers as initializer>
           ${initializer}
           </#list>
+          <#list source.collectionMutations as collectionMutation>
+          ${collectionMutation}
+          </#list>
           merged = ${source.dataObjectName}.from(${source.mergeParameters});
           break;
         }
