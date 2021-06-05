@@ -1,7 +1,7 @@
 <script>
 	import { Dialog, CardActions } from 'svelte-materialify/src';
 	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
-	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule, schemaGroupRule, schemaRule } from "../../validators";
+	import { classNameRule, identifierRule, requireRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule, schemaGroupRule, schemaRule, methodParametersValidityWithSelectedEventRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
 	import Methods from './Methods.svelte';
@@ -94,7 +94,7 @@
 
 	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
-	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name');
+	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name') && !methodParametersValidityWithSelectedEventRule(m.event, events, m.parameters);
 	const validRoute = (r) => r.path && r.aggregateMethod;
 	const validProducer = (name, schema, events) => (name && schema && !schemaGroupRule(schemaGroup) && events.length > 0) || (!name && !schema && events.length === 0);
 	const validConsumer = (name, receivers) => ((name || !name) && receivers.length === 0) || (name && receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
