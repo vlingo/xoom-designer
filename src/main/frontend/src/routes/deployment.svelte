@@ -6,8 +6,16 @@
 	import { Radio, TextField, Select } from "svelte-materialify/src";
 	import { deploymentTypes } from '../stores/deployment.js';
 
+	let httpServerPort = $settings.deployment.httpServerPort? Number($settings.deployment.httpServerPort) : null;
+	let producerExchangePort = $settings.deployment.producerExchangePort? Number($settings.deployment.producerExchangePort) : null;
+	let clusterPort = $settings.deployment.clusterPort? Number($settings.deployment.clusterPort) : null;
+
 	$: $isValid.deployment = Validation.validateDeployment($settings);
 	const nodes = Array((49 - 3) / 2 + 1).fill().map((_, i) => i * 2 + 3);
+
+	$: $settings.deployment.httpServerPort = Number(httpServerPort);
+	$: $settings.deployment.producerExchangePort = Number(producerExchangePort);
+	$: $settings.deployment.clusterPort = Number(clusterPort);
 </script>
 
 <svelte:head>
@@ -28,9 +36,9 @@
     <TextField class="mb-4 pb-4" placeholder="published-docker-image-name" bind:value={$settings.deployment.kubernetesImage} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesImage}>Published Docker Image</TextField>
     <TextField class="mb-4 pb-4" placeholder="k8s-pod-name" bind:value={$settings.deployment.kubernetesPod} rules={[requireRule]} validateOnBlur={!$settings.deployment.kubernetesPod}>Kubernetes POD</TextField>
   {/if}
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.httpServerPort}>HTTP Server Port: unique per service on host *</TextField>
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.producerExchangePort}>Producer Exchange Port: unique per host *</TextField>
-	<TextField class="mb-4 pb-4" bind:value={$settings.deployment.clusterPort}>Cluster Port: start of unique range per service with start-port thru start-port + (total-nodes * 2) *</TextField>
+	<TextField type="number" min="0" class="mb-4 pb-4" bind:value={httpServerPort}>HTTP Server Port: unique per service on host *</TextField>
+	<TextField type="number" min="0" class="mb-4 pb-4" bind:value={producerExchangePort}>Producer Exchange Port: unique per host *</TextField>
+	<TextField type="number" min="0" class="mb-4 pb-4" bind:value={clusterPort}>Cluster Port: start of unique range per service with start-port thru start-port + (total-nodes * 2) *</TextField>
 	<Select class="mb-4 pb-4" bind:value={$settings.deployment.clusterTotalNodes} items={nodes}>Cluster Total Nodes: selection maximum is not a platform limit; common: 3, 5, 7, or 9</Select>
     <p>*XOOM reserved ports for locally installed tools: 9019, 17171-17176, 19090, 49101-49102</p>
 </CardForm>
