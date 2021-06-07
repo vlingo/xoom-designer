@@ -8,11 +8,10 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
                              final Stream<CodeGenerationParameter> fields) {
     final List<CodeGenerationParameter> valueObjects = fields.collect(Collectors.toList());
     return event.retrieveAllRelated(Label.STATE_FIELD)
-            .filter(FieldDetail::isEventFieldAssignableToValueObject)
+            .filter(FieldDetail::isAssignableToValueObject)
             .flatMap(field -> buildExpressions(field, valueObjects).stream())
             .collect(Collectors.toList());
   }

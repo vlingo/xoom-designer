@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobje
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class ValueObjectDependencyOrder {
 
   private List<CodeGenerationParameter> findDependencies(final CodeGenerationParameter valueObject) {
     return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
-            .filter(ValueObjectDetail::isValueObject)
+            .filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field))
             .map(field -> field.retrieveRelatedValue(Label.FIELD_TYPE))
             .map(type -> ValueObjectDetail.valueObjectOf(type, valueObjects.stream()))
             .collect(Collectors.toList());

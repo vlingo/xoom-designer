@@ -37,6 +37,10 @@ public class FieldDetail {
             .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
   }
 
+  public static String genericTypeOf(final CodeGenerationParameter parent, final String fieldName) {
+    return genericTypeOf(typeOf(parent, fieldName));
+  }
+
   public static String genericTypeOf(final String fieldType) {
     return fieldType.split("<")[1].replace(">", "");
   }
@@ -190,24 +194,24 @@ public class FieldDetail {
     throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
   }
 
-  public static boolean isMethodParameterAssignableToScalar(final CodeGenerationParameter stateField, final CodeGenerationParameter methodParameter) {
-    final String type = typeOf(stateField.parent(), stateField.value);
+  public static boolean isMethodParameterAssignableToScalar(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
+    final String type = typeOf(field.parent(), field.value);
     if(isScalar(type)) {
       return true;
     }
     final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
-    return isScalarTypedCollection(stateField) && collectionMutation.isSingleParameterBased();
+    return isScalarTypedCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
-  public static boolean isMethodParameterAssignableToValueObject(final CodeGenerationParameter stateField, final CodeGenerationParameter methodParameter) {
-    if(ValueObjectDetail.isValueObject(stateField)) {
+  public static boolean isMethodParameterAssignableToValueObject(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
+    if(ValueObjectDetail.isValueObject(field)) {
       return true;
     }
     final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
-    return isValueObjectCollection(stateField) && collectionMutation.isSingleParameterBased();
+    return isValueObjectCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
-  public static boolean isEventFieldAssignableToValueObject(final CodeGenerationParameter eventField) {
-    return isMethodParameterAssignableToValueObject(eventField, eventField);
+  public static boolean isAssignableToValueObject(final CodeGenerationParameter field) {
+    return isMethodParameterAssignableToValueObject(field, field);
   }
 }

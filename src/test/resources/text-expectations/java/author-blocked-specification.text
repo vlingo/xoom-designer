@@ -1,4 +1,4 @@
 event AuthorBlocked {
   version semanticVersion
-  vlingo:xoom:io.vlingo.xoomapp:Name:1.0.0 name
+  Data.Name:1.0.0 name
 }
