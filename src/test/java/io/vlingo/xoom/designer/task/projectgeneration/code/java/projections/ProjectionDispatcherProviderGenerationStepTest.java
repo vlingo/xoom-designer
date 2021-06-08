@@ -13,8 +13,8 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
 public class ProjectionDispatcherProviderGenerationStepTest {
 
@@ -133,32 +135,109 @@ public class ProjectionDispatcherProviderGenerationStepTest {
 
         final CodeGenerationParameter rankField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                        .relate(Label.FIELD_TYPE, "Rank");
+                        .relate(Label.FIELD_TYPE, "Rank")
+                        .relate(Label.COLLECTION_TYPE, "List");
+
+        final CodeGenerationParameter availableOnField =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
+                        .relate(Label.FIELD_TYPE, "LocalDate");
+
+        final CodeGenerationParameter relatedAuthors =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                        .relate(Label.FIELD_TYPE, "String")
+                        .relate(Label.COLLECTION_TYPE, "Set");
 
         final CodeGenerationParameter authorRegisteredEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-                        .relate(idField).relate(nameField);
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(nameField).relate(availableOnField);
 
         final CodeGenerationParameter authorRankedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
-                        .relate(idField).relate(rankField);
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(rankField);
+
+        final CodeGenerationParameter authorRelatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                                .relate(Label.FIELD_TYPE, "String")
+                                .relate(Label.COLLECTION_TYPE, "Set")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+        final CodeGenerationParameter authorsRelatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorsRelated")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                                .relate(Label.FIELD_TYPE, "String")
+                                .relate(Label.COLLECTION_TYPE, "Set")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "MERGE"));
+
+        final CodeGenerationParameter authorUnrelatedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                                .relate(Label.FIELD_TYPE, "String")
+                                .relate(Label.COLLECTION_TYPE, "Set")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
 
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
-                        .relate(Label.METHOD_PARAMETER, "name")
+                        .relate(METHOD_PARAMETER, "name")
                         .relate(Label.FACTORY_METHOD, "true")
                         .relate(authorRegisteredEvent);
 
         final CodeGenerationParameter rankMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
-                        .relate(Label.METHOD_PARAMETER, "rank")
+                        .relate(METHOD_PARAMETER, "rank")
                         .relate(authorRankedEvent);
+
+        final CodeGenerationParameter relatedAuthorMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+                        .relate(authorRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorsMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthors")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "MERGE"))
+                        .relate(authorsRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorsReplacementMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
+                        .relate(authorsRelatedEvent);
+
+        final CodeGenerationParameter relatedAuthorRemovalMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
+                                .relate(Label.ALIAS, "relatedAuthor")
+                                .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
+                        .relate(authorUnrelatedEvent);
+
+        final CodeGenerationParameter hideMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "hide");
 
         final CodeGenerationParameter authorAggregate =
                 CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-                        .relate(Label.URI_ROOT, "/authors").relate(idField)
-                        .relate(nameField).relate(rankField).relate(factoryMethod)
-                        .relate(rankMethod).relate(authorRegisteredEvent).relate(authorRankedEvent);
+                        .relate(idField).relate(nameField).relate(rankField).relate(relatedAuthors)
+                        .relate(availableOnField).relate(factoryMethod).relate(rankMethod).relate(hideMethod)
+                        .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
+                        .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
+                        .relate(authorRelatedEvent).relate(authorsRelatedEvent).relate(authorUnrelatedEvent);
 
         final CodeGenerationParameter titleField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "title")
