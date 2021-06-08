@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import LoadingOrFailed from "../LoadingOrFailed";
-import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.creatorMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.creatorMethod.name)}";
+import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.factoryMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.factoryMethod.name)}";
 <#macro printTableHeaderCell name type>
     <#if valueTypes[type]??>
         <#list valueTypes[type] as subType>
@@ -30,7 +30,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.crea
   </@compress>
 </#macro>
 
-const EMPTY_FORM = <@printJSON aggregate.creatorMethodStateFields />;
+const EMPTY_FORM = <@printJSON aggregate.factoryMethodStateFields />;
 
 const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 
@@ -58,9 +58,9 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
     setCurrentModal(null);
   }, [loadItems]);
 
-  const _${aggregate.creatorMethod.name} = useCallback((e) => {
-    console.log('showing ${aggregate.creatorMethod.name} modal');
-    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(aggregate.creatorMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
+  const _${aggregate.factoryMethod.name} = useCallback((e) => {
+    console.log('showing ${aggregate.factoryMethod.name} modal');
+    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(aggregate.factoryMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
   }, [onModalActionComplete]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
         <h1 className="h2">${fns.makePlural(aggregate.aggregateName)}</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group me-2">
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${aggregate.creatorMethod.name}}>${fns.capitalize(aggregate.creatorMethod.name)}</button>
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_${aggregate.factoryMethod.name}}>${fns.capitalize(aggregate.factoryMethod.name)}</button>
           </div>
         </div>
       </div>
