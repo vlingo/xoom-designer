@@ -1,5 +1,9 @@
 package io.vlingo.xoomapp.infrastructure;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 import java.util.*;
@@ -37,6 +41,33 @@ public class BookData {
 
   public BookState toBookState() {
     return new BookState(id, title, publisher, publicationDate);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    BookData another = (BookData) other;
+    return new EqualsBuilder()
+              .append(this.id, another.id)
+              .append(this.title, another.title)
+              .append(this.publisher, another.publisher)
+              .append(this.publicationDate, another.publicationDate)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("id", id)
+              .append("title", title)
+              .append("publisher", publisher)
+              .append("publicationDate", publicationDate)
+              .toString();
   }
 
 }
