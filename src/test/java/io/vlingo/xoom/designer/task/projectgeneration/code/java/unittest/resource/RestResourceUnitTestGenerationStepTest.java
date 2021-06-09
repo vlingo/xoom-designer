@@ -33,7 +33,7 @@ public class RestResourceUnitTestGenerationStepTest {
     final Content authorResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
     Assertions.assertEquals(2, context.contents().size());
-    Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-resource-unit-test")));
+    Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
@@ -349,15 +349,14 @@ public class RestResourceUnitTestGenerationStepTest {
           "}";
 
   private static final String AUTHOR_RESOURCE_HANDLER_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public class AuthorResourceHandler { \\n" +
+      "package io.vlingo.xoomapp.infrastructure.resource; \\n" +
+          "public class AuthorResourceHandlers { \\n" +
           "... \\n" +
           "}";
 
-  private static final String QUERY_MODEL_STORE_PROVIDER_CONTENT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public class QueryModelStateStoreProvider { \\n" +
+  private static final String BOOK_DATA_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.infrastructure; \\n" +
+          "public class BookData { \\n" +
           "... \\n" +
           "}";
-
 }
