@@ -21,7 +21,7 @@ import ${import.qualifiedClassName};
 
 public class ${resourceUnitTestName} {
 
-  protected int port = 18080;
+  protected int port;
   private XoomInitializer xoom;
 
   @BeforeAll

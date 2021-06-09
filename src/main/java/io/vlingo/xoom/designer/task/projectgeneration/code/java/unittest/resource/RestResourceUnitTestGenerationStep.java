@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resour
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
 import java.util.List;
 
@@ -18,10 +17,5 @@ public class RestResourceUnitTestGenerationStep extends TemplateProcessingStep {
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     return RestResourceUnitTestTemplateDataFactory.build(context.parameters(), context.contents());
-  }
-
-  @Override
-  public boolean shouldProcess(final CodeGenerationContext context) {
-    return !context.hasParameter(Label.USE_AUTO_DISPATCH) || !context.parameterOf(Label.USE_AUTO_DISPATCH, Boolean::valueOf);
   }
 }
