@@ -32,7 +32,7 @@ public class RestResourceUnitTestGenerationStepTest {
     // THEN
     final Content authorResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
-    Assertions.assertEquals(11, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-resource-unit-test")));
   }
 
@@ -285,9 +285,8 @@ public class RestResourceUnitTestGenerationStepTest {
         Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Tag.java"), null, null, TAG_VALUE_OBJECT_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.QUERIES_ACTOR, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueriesActor.java"), null, null, AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.STORE_PROVIDER, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "QueryModelStateStoreProvider.java"), null, null, QUERY_MODEL_STORE_PROVIDER_CONTENT)
+        Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH).toString(), "AuthorResource.java"), null, null, AUTHOR_RESOURCE_CONTENT_TEXT),
+        Content.with(JavaTemplateStandard.QUERIES_ACTOR, new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH).toString(), "AuthorQResourceHandler.java"), null, null, AUTHOR_RESOURCE_HANDLER_CONTENT_TEXT),
     };
   }
 
@@ -304,8 +303,8 @@ public class RestResourceUnitTestGenerationStepTest {
       Paths.get(PROJECT_PATH, "src", "main", "java",
           "io", "vlingo", "xoomapp", "infrastructure").toString();
 
-  private static final String PERSISTENCE_PACKAGE_PATH =
-      Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
+  private static final String RESOURCE_PACKAGE_PATH =
+      Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "resource").toString();
 
   private static final String AUTHOR_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model.author; \\n" +
@@ -349,15 +348,15 @@ public class RestResourceUnitTestGenerationStepTest {
           "... \\n" +
           "}";
 
-  private static final String AUTHOR_QUERIES_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public interface AuthorQueries { \\n" +
+  private static final String AUTHOR_RESOURCE_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.infrastructure.resource; \\n" +
+          "public interface AuthorResource { \\n" +
           "... \\n" +
           "}";
 
-  private static final String AUTHOR_QUERIES_ACTOR_CONTENT_TEXT =
+  private static final String AUTHOR_RESOURCE_HANDLER_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public class AuthorQueriesActor { \\n" +
+          "public class AuthorResourceHandler { \\n" +
           "... \\n" +
           "}";
 
