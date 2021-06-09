@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entitty;
+package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
@@ -66,7 +66,7 @@ public class InlineDataInstantiationFormatter {
 
     valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).forEach(field -> generateValueObjectFieldAssignment(stateField.value, field));
 
-    return String.format("%s.from(%s)", valueObjectType, valuesAssignmentExpression.toString()).replaceAll(", \\)", ")");
+    return String.format("%s.from(%s)", valueObjectType, valuesAssignmentExpression).replaceAll(", \\)", ")");
   }
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {

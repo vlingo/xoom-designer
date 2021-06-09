@@ -30,11 +30,11 @@ public class RestResourceTemplateDataFactory {
     final List<CodeGenerationParameter> valueObjects = parameters.retrieveAll(Label.VALUE_OBJECT).collect(toList());
 
     final Function<CodeGenerationParameter, TemplateData> mapper =
-            aggregateParameter -> new RestResourceTemplateData(basePackage, dialect, aggregateParameter, valueObjects, contents, useCQRS);
+        aggregateParameter -> new RestResourceTemplateData(basePackage, dialect, aggregateParameter, valueObjects, contents, useCQRS);
 
     return parameters.retrieveAll(Label.AGGREGATE)
-            .filter(aggregateParameter -> aggregateParameter.hasAny(Label.ROUTE_SIGNATURE))
-            .map(mapper).collect(Collectors.toList());
+        .filter(aggregateParameter -> aggregateParameter.hasAny(Label.ROUTE_SIGNATURE))
+        .map(mapper).collect(Collectors.toList());
   }
 
 }
