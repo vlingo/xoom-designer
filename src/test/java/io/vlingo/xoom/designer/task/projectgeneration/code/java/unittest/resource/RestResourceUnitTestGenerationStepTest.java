@@ -32,7 +32,7 @@ public class RestResourceUnitTestGenerationStepTest {
     // THEN
     final Content authorResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
-    Assertions.assertEquals(10, context.contents().size());
+    Assertions.assertEquals(2, context.contents().size());
     Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-resource-unit-test")));
   }
 
@@ -278,15 +278,7 @@ public class RestResourceUnitTestGenerationStepTest {
 
   private Content[] contents() {
     return new Content[]{
-        Content.with(JavaTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.AGGREGATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorEntity.java"), null, null, AUTHOR_AGGREGATE_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Rank.java"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Tag.java"), null, null, TAG_VALUE_OBJECT_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH).toString(), "AuthorResource.java"), null, null, AUTHOR_RESOURCE_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.QUERIES_ACTOR, new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH).toString(), "AuthorQResourceHandler.java"), null, null, AUTHOR_RESOURCE_HANDLER_CONTENT_TEXT),
+        Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
     };
   }
 
@@ -303,6 +295,8 @@ public class RestResourceUnitTestGenerationStepTest {
       Paths.get(PROJECT_PATH, "src", "main", "java",
           "io", "vlingo", "xoomapp", "infrastructure").toString();
 
+  private static final String PERSISTENCE_PACKAGE_PATH =
+      Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
   private static final String RESOURCE_PACKAGE_PATH =
       Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "resource").toString();
 
