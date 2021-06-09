@@ -140,6 +140,7 @@ public enum TemplateParameter implements ParameterKey {
   PRODUCER_SCHEMAS("producerSchemas"),
   CONSUMER_SCHEMAS("consumerSchemas"),
   STATIC_FACTORY_METHODS("staticFactoryMethods"),
+  REST_RESOURCE_UNIT_TEST_NAME("resourceUnitTestName"),
   QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
   TEST_CASES("testCases"),
   UNIT_TEST("unitTest"),

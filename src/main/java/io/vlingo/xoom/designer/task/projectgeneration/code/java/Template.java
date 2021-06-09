@@ -65,6 +65,7 @@ public enum Template {
   EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
   EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
   STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
+  REST_RESOURCE_UNIT_TEST("RestResourceUnitTest"),
   TURBO_SETTINGS("TurboSettings");
 
   public final String filename;
