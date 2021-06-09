@@ -39,7 +39,7 @@ public class Schema {
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
 
     if (FieldDetail.isAssignableToValueObject(field)) {
-      return String.format("Data.%s:%s %s", fieldType, DEFAULT_SCHEMA_VERSION, field.value);
+      return String.format("data.%s:%s %s", fieldType, DEFAULT_SCHEMA_VERSION, field.value);
     }
 
     if (FieldDetail.isCollection(field)) {
@@ -47,7 +47,7 @@ public class Schema {
       if (FieldDetail.isScalar(genericType)) {
         return String.format("%s[] %s", genericType, field.value);
       } else {
-        return String.format("Data.%s:%s[] %s", genericType, DEFAULT_SCHEMA_VERSION, field.value);
+        return String.format("data.%s:%s[] %s", genericType, DEFAULT_SCHEMA_VERSION, field.value);
       }
     }
     return fieldType.toLowerCase() + " " + field.value;

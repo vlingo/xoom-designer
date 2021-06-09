@@ -1,5 +1,5 @@
 data Classification {
   version semanticVersion
   String[] labels
-  Data.Classifier:1.0.0[] classifiers
+  data.Classifier:1.0.0[] classifiers
 }

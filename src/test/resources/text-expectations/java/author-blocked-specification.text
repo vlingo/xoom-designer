@@ -1,4 +1,4 @@
 event AuthorBlocked {
   version semanticVersion
-  Data.Name:1.0.0 name
+  data.Name:1.0.0 name
 }

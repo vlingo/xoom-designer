@@ -1,5 +1,5 @@
 data Rank {
   version semanticVersion
   int points
-  Data.Classification:1.0.0 classification
+  data.Classification:1.0.0 classification
 }
