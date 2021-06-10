@@ -46,6 +46,16 @@ public class AuthorResourceTest {
     waitServerClose();
   }
 
+  @Test
+  public void testEmptyResponse() {
+    given()
+    .when()
+    .get("/authors")
+    .then()
+    .statusCode(200)
+    .body(is(equalTo("[]")));
+  }
+
 
 
   public RequestSpecification given() {

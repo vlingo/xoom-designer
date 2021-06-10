@@ -48,6 +48,16 @@ public class ${resourceUnitTestName} {
     waitServerClose();
   }
 
+  @Test
+  public void testEmptyResponse() {
+    given()
+    .when()
+    .get("${uriRoot}")
+    .then()
+    .statusCode(200)
+    .body(is(equalTo("[]")));
+  }
+
   <#list testCases as testCase>
   <#list testCase.dataDeclarations as dataDeclaration>
   ${dataDeclaration}
