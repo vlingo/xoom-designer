@@ -22,7 +22,6 @@ import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
@@ -30,7 +29,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class EntityUnitTestGenerationStepTest {
 
   @Test
-  public void testThatSourcedEntitiesUnitTestsAreGenerated() throws IOException {
+  public void testThatSourcedEntitiesUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.DIALECT, Dialect.JAVA)
@@ -62,7 +61,7 @@ public class EntityUnitTestGenerationStepTest {
   }
 
   @Test
-  public void testThatStatefulEntitiesWithEventBasedProjectionUnitTestsAreGenerated() throws IOException {
+  public void testThatStatefulEntitiesWithEventBasedProjectionUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.DIALECT, Dialect.JAVA)
@@ -94,7 +93,7 @@ public class EntityUnitTestGenerationStepTest {
   }
 
   @Test
-  public void testThatStatefulEntitiesWithOperationBasedProjectionUnitTestsAreGenerated() throws IOException {
+  public void testThatStatefulEntitiesWithOperationBasedProjectionUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.DIALECT, Dialect.JAVA)
@@ -232,6 +231,15 @@ public class EntityUnitTestGenerationStepTest {
                     .relate(Label.FACTORY_METHOD, "false")
                     .relate(authorRankedEvent);
 
+    final CodeGenerationParameter makeAvailableOnMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "makeAvailableOn")
+                    .relate(Label.METHOD_PARAMETER, "availableOn")
+                    .relate(Label.FACTORY_METHOD, "false");
+
+    final CodeGenerationParameter deactivateMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "deactivate")
+                    .relate(Label.FACTORY_METHOD, "false");
+
     final CodeGenerationParameter availableOnField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
                     .relate(Label.FIELD_TYPE, "LocalDate");
@@ -294,9 +302,9 @@ public class EntityUnitTestGenerationStepTest {
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
             .relate(idField).relate(nameField).relate(rankField).relate(relatedAuthorsField)
-            .relate(tagsField).relate(statusField).relate(availableOnField)
-            .relate(factoryMethod).relate(rankMethod).relate(addTagMethod).relate(addTagsMethod)
-            .relate(replaceTagsMethod).relate(removeTagMethod).relate(relateAuthorMethod)
+            .relate(tagsField).relate(statusField).relate(availableOnField).relate(factoryMethod)
+            .relate(rankMethod).relate(deactivateMethod).relate(makeAvailableOnMethod).relate(addTagMethod)
+            .relate(addTagsMethod).relate(replaceTagsMethod).relate(removeTagMethod).relate(relateAuthorMethod)
             .relate(relateAuthorsMethod).relate(unrelateAuthorMethod).relate(replaceAuthorsMethod)
             .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorTaggedEvent)
             .relate(authorUntaggedEvent);
@@ -306,7 +314,7 @@ public class EntityUnitTestGenerationStepTest {
     final CodeGenerationParameter bookCatalogedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "BookCataloged")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "title"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "publicher"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "publisher"));
 
     final CodeGenerationParameter catalogMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "catalog")

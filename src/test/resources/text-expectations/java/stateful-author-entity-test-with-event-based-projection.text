@@ -69,6 +69,24 @@ public class AuthorEntityTest {
     assertEquals(AuthorRanked.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
+
+  @Test
+  public void deactivate() {
+    author.deactivate().await();
+
+  }
+
+  private static final LocalDate AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST = LocalDate.now();
+
+  @Test
+  public void makeAvailableOn() {
+    final AuthorState state = author.makeAvailableOn(AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+  }
+
   private static final Tag TAGS_FOR_ADD_TAG_TEST = Tag.from("updated-author-tags-name");
 
   @Test
