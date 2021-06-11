@@ -27,7 +27,6 @@ import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
-
 public class EntityUnitTestGenerationStepTest {
 
   @Test
@@ -167,22 +166,58 @@ public class EntityUnitTestGenerationStepTest {
     final CodeGenerationParameter authorTaggedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagged")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "tag")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+    final CodeGenerationParameter authorBulkTaggedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorBulkTagged")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"));
+
+    final CodeGenerationParameter authorTagsReplacedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagsReplacedEvent")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"));
 
     final CodeGenerationParameter authorUntaggedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUntagged")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "tag")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
 
     final CodeGenerationParameter authorRelatedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+    final CodeGenerationParameter authorsRelatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorsRelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"));
+
+    final CodeGenerationParameter relatedAuthorsReplacedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "RelatedAuthorsReplacedEvent")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"));
 
     final CodeGenerationParameter authorUnrelatedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
                     .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
 
     final CodeGenerationParameter factoryMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
@@ -206,21 +241,21 @@ public class EntityUnitTestGenerationStepTest {
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                             .relate(Label.ALIAS, "tag")
                             .relate(Label.COLLECTION_MUTATION, "ADDITION"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorTaggedEvent);
 
     final CodeGenerationParameter addTagsMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "MERGE"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorBulkTaggedEvent);
 
     final CodeGenerationParameter replaceTagsMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorTagsReplacedEvent);
 
     final CodeGenerationParameter removeTagMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
@@ -241,14 +276,14 @@ public class EntityUnitTestGenerationStepTest {
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "MERGE"))
-                    .relate(authorRelatedEvent);
+                    .relate(authorsRelatedEvent);
 
     final CodeGenerationParameter replaceAuthorsMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                             .relate(Label.ALIAS, "")
                             .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-                    .relate(authorRelatedEvent);
+                    .relate(relatedAuthorsReplacedEvent);
 
     final CodeGenerationParameter unrelateAuthorMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")

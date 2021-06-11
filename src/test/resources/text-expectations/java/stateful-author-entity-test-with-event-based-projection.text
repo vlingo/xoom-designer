@@ -82,7 +82,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(AuthorTagged.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final List<Tag> TAGS_FOR_ADD_TAGS_TEST = new ArrayList<>();
@@ -98,7 +98,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(AuthorBulkTagged.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final List<Tag> TAGS_FOR_REPLACE_TAGS_TEST = new ArrayList<>();
@@ -114,7 +114,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(AuthorTagsReplacedEvent.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final Tag TAGS_FOR_REMOVE_TAG_TEST = Tag.from("updated-author-tags-name");
@@ -162,7 +162,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(AuthorsRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final String RELATED_AUTHORS_FOR_UNRELATE_AUTHOR_TEST = "updated-author-relatedAuthors";
@@ -194,7 +194,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorRelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(RelatedAuthorsReplacedEvent.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final Name NAME_FOR_ENTITY_CREATION = Name.from("author-name-firstName", "author-name-lastName");
