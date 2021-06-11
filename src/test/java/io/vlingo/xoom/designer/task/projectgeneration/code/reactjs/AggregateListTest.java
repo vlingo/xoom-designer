@@ -1,6 +1,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-public class AggregateListTest extends BaseTemplateTest {
+public class AggregateListTest {
 
 //    @Test
 //    public void test1() throws TemplateException, IOException {

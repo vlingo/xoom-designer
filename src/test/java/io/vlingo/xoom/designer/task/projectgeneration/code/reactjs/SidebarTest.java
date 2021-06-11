@@ -1,6 +1,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-public class SidebarTest extends BaseTemplateTest {
+public class SidebarTest {
 
 //    @Test
 //    public void test1() throws Exception{

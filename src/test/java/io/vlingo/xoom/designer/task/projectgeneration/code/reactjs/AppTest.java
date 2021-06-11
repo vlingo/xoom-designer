@@ -1,6 +1,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.reactjs;
 
-public class AppTest extends BaseTemplateTest {
+public class AppTest {
 
 //    @Test
 //    public void test1() throws Exception{
