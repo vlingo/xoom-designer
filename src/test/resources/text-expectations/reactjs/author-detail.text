@@ -1,0 +1,88 @@
+import {useParams} from 'react-router-dom';
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import LoadingOrFailed from "../LoadingOrFailed";
+import AuthorChangeRank from "./AuthorChangeRank";
+
+const Author = () => {
+
+  const [loading, setLoading] = useState(false);
+  const {id} = useParams();
+  const [item, setItem] = useState(null);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItem = useCallback((id) => {
+    axios.get('/authors/'+id)
+      .then(res => res.data)
+      .then(data => {
+        console.log('Author axios success', data);
+        setItem(data);
+      })
+      .catch(e => {
+        console.error('Author axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    if (data){
+      setItem((item) => {
+        return {...item, ...data};
+      });
+    }
+    setCurrentModal(null);
+  }, []);
+
+  const _changeRank = useCallback((e) => {
+    console.log('showing changeRank modal');
+    const form = {
+      id: item.id,
+      rank: item.rank
+    };
+    setCurrentModal(<AuthorChangeRank id={id} defaultForm={form} complete={onModalActionComplete}/>);
+  }, [id, item, onModalActionComplete]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadItem(id);
+  }, [id, loadItem]);
+
+  return (
+    <div>
+      {
+      item
+      ?
+      <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Author</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_changeRank}>ChangeRank</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table className={'table'}>
+          <tbody>
+            <tr><td>Id</td><td>{item?.id}</td></tr>
+            <tr><td>Name FirstName</td><td>{item?.name?.firstName}</td></tr>
+            <tr><td>Name LastName</td><td>{item?.name?.lastName}</td></tr>
+            <tr><td>Rank Points</td><td>{item?.rank?.points}</td></tr>
+            <tr><td>Rank?.classification Label</td><td>{item?.rank?.classification?.label}</td></tr>
+            <tr><td>Rank?.classification?.classifiers Name</td><td>{item?.rank?.classification?.classifiers?.name}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </>
+    :
+    <LoadingOrFailed loading={loading}/>
+      }
+
+      {currentModal}
+    </div>
+  );
+};
+
+export default Author;

@@ -1,0 +1,51 @@
+import FormModal from "../FormModal";
+import useFormHandler from "../../utils/FormHandler";
+import {useCallback} from "react";
+import axios from "axios";
+
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
+const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
+
+  const [form, onFormValueChange] = useFormHandler(defaultForm);
+
+  const submit = useCallback((e) => {
+    const url = applyData('/authors/authors/{id}/rank', form);
+    axios.patch(url, form)
+    .then(res => res.data)
+    .then(data => {
+      complete(data);
+      console.log('AuthorChangeRank axios complete', data);
+    })
+    .catch(e => {
+      console.error('AuthorChangeRank axios failed', e);
+    });
+  }, [form, complete]);
+
+  const close = useCallback((e) => {
+    complete();
+  }, [complete]);
+
+  return (
+    <>
+      <FormModal title={"ChangeRank"} show={true} close={close} submit={submit}>
+      <div className='mb-3'>
+        <label htmlFor='rank.points' className={'form-label text-capitalize'}>Rank Points</label>
+        <input id='rank.points' name={'rank.points'} required={true} value={form.rank.points} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='rank.classification.label' className={'form-label text-capitalize'}>Rank Classification Label</label>
+        <input id='rank.classification.label' name={'rank.classification.label'} required={true} value={form.rank.classification.label} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='rank.classification.classifiers.name' className={'form-label text-capitalize'}>Rank Classification Classifiers Name</label>
+        <input id='rank.classification.classifiers.name' name={'rank.classification.classifiers.name'} required={true} value={form.rank.classification.classifiers.name} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      </FormModal>
+    </>
+  )
+};
+
+export default AuthorChangeRank;

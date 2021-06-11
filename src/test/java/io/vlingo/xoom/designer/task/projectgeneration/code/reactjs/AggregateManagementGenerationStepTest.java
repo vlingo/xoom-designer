@@ -24,7 +24,8 @@ public class AggregateManagementGenerationStepTest {
   public void testThatAggregateManagementIsGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(
-                    authorAggregate(), nameValueObject(), rankValueObject()
+                    authorAggregate(), nameValueObject(), rankValueObject(),
+                    classificationValueObject(), classifierValueObject()
             );
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
@@ -107,5 +108,19 @@ public class AggregateManagementGenerationStepTest {
                     .relate(Label.FIELD_TYPE, "int"))
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
                     .relate(Label.FIELD_TYPE, "Classification"));
+  }
+
+  private CodeGenerationParameter classificationValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+                    .relate(Label.FIELD_TYPE, "String"))
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
+                    .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
+  }
+
+  private CodeGenerationParameter classifierValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                    .relate(Label.FIELD_TYPE, "String"));
   }
 }

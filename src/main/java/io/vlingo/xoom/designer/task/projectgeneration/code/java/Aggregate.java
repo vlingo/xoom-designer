@@ -22,7 +22,7 @@ public class Aggregate {
   public final List<Route> routes = new ArrayList<>();
   public final List<Field> stateFields = new ArrayList<>();
   public final List<AggregateMethod> methods = new ArrayList<>();
-  public final List<Field> creatorMethodStateFields = new ArrayList<>();
+  public final List<Field> factoryMethodStateFields = new ArrayList<>();
   public final Map<String, String> indexedStateFields = new HashMap<>();
 
   public Aggregate(final CodeGenerationParameter aggregate) {
@@ -32,7 +32,7 @@ public class Aggregate {
     this.routes.addAll(resolveRoutes(aggregate));
     this.stateFields.addAll(resolveStateFields(aggregate));
     this.factoryMethod = resolveFactoryMethod();
-    this.creatorMethodStateFields.addAll(resolveCreatorMethodStateFields());
+    this.factoryMethodStateFields.addAll(resolveFactoryMethodStateFields());
     this.indexedStateFields.putAll(indexStateFields());
   }
 
@@ -56,7 +56,7 @@ public class Aggregate {
     return aggregate.retrieveAllRelated(ROUTE_SIGNATURE).map(Route::new).collect(Collectors.toList());
   }
 
-  private List<Field> resolveCreatorMethodStateFields() {
+  private List<Field> resolveFactoryMethodStateFields() {
     return factoryMethod.parameters.stream()
             .map(param -> stateFields.stream().filter(field -> param.equals(field.name)).findFirst().get())
             .collect(Collectors.toList());

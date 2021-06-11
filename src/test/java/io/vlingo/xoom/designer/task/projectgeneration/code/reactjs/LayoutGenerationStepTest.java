@@ -25,7 +25,8 @@ public class LayoutGenerationStepTest {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(
                     CodeGenerationParameter.of(Label.ARTIFACT_ID, "xoom-app"),
-                    authorAggregate(), nameValueObject(), rankValueObject()
+                    authorAggregate(), nameValueObject(), rankValueObject(),
+                    classificationValueObject(), classifierValueObject()
             );
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
@@ -106,6 +107,20 @@ public class LayoutGenerationStepTest {
                     .relate(Label.FIELD_TYPE, "int"))
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
                     .relate(Label.FIELD_TYPE, "Classification"));
+  }
+
+  private CodeGenerationParameter classificationValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+                    .relate(Label.FIELD_TYPE, "String"))
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
+                    .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
+  }
+
+  private CodeGenerationParameter classifierValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                    .relate(Label.FIELD_TYPE, "String"));
   }
 
 }
