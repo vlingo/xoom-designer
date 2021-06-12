@@ -50,7 +50,7 @@ public class StaticFilesGenerationStepTest {
     Assertions.assertTrue(index.contains(TextExpectation.onReactJs().read("index")));
     Assertions.assertTrue(loadingOrFailed.contains(TextExpectation.onReactJs().read("loading-or-failed")));
     Assertions.assertTrue(styleSheetIndex.contains(TextExpectation.onReactJs().read("style-sheet-index")));
-    Assertions.assertTrue(home.contains(TextExpectation.onReactJs().read("Home")));
+    Assertions.assertTrue(home.contains(TextExpectation.onReactJs().read("home")));
     Assertions.assertTrue(htmlIndex.contains(TextExpectation.onReactJs().read("html-index")));
     Assertions.assertTrue(packageConfig.contains(TextExpectation.onReactJs().read("package-config")));
   }

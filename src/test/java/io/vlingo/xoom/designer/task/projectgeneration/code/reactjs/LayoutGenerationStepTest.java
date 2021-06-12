@@ -38,8 +38,8 @@ public class LayoutGenerationStepTest {
     final Content header = context.findContent(HEADER, "Header");
 
     Assertions.assertTrue(app.contains(TextExpectation.onReactJs().read("app")));
-    Assertions.assertTrue(sidebar.contains(TextExpectation.onReactJs().read("Sidebar")));
-    Assertions.assertTrue(header.contains(TextExpectation.onReactJs().read("Header")));
+    Assertions.assertTrue(sidebar.contains(TextExpectation.onReactJs().read("sidebar")));
+    Assertions.assertTrue(header.contains(TextExpectation.onReactJs().read("header")));
   }
 
   private CodeGenerationParameter authorAggregate() {
