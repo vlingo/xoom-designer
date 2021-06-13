@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.UUID;
 
 public class GenerationSettingsFile {
 
@@ -37,7 +38,7 @@ public class GenerationSettingsFile {
   }
 
   private Path createFile(final String serializedSettingsJson) throws IOException {
-    final Path file = Paths.get("settings.json");
+    final Path file = Paths.get(UUID.randomUUID() + ".json");
     Files.write(file, format(serializedSettingsJson).getBytes());
     return file;
   }

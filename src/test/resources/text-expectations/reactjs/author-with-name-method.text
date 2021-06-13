@@ -1,0 +1,47 @@
+import FormModal from "../FormModal";
+import useFormHandler from "../../utils/FormHandler";
+import {useCallback} from "react";
+import axios from "axios";
+
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
+const AuthorWithName = ({id = null, defaultForm, complete}) => {
+
+  const [form, onFormValueChange] = useFormHandler(defaultForm);
+
+  const submit = useCallback((e) => {
+    const url = applyData('/authors/authors/', form);
+    axios.post(url, form)
+    .then(res => res.data)
+    .then(data => {
+      complete(data);
+      console.log('AuthorWithName axios complete', data);
+    })
+    .catch(e => {
+      console.error('AuthorWithName axios failed', e);
+    });
+  }, [form, complete]);
+
+  const close = useCallback((e) => {
+    complete();
+  }, [complete]);
+
+  return (
+    <>
+      <FormModal title={"WithName"} show={true} close={close} submit={submit}>
+      <div className='mb-3'>
+        <label htmlFor='name.firstName' className={'form-label text-capitalize'}>Name FirstName</label>
+        <input id='name.firstName' name={'name.firstName'} required={true} value={form.name.firstName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='name.lastName' className={'form-label text-capitalize'}>Name LastName</label>
+        <input id='name.lastName' name={'name.lastName'} required={true} value={form.name.lastName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      </FormModal>
+    </>
+  )
+};
+
+export default AuthorWithName;

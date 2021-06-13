@@ -1,5 +1,5 @@
 event AuthorRated {
   version semanticVersion
   string id
-  vlingo:xoom:io.vlingo.xoomapp:Rank:1.0.0 rank
+  data.Rank:1.0.0 rank
 }

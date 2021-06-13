@@ -68,6 +68,28 @@ public class AuthorEntityTest {
     assertEquals(AuthorState.class.getName(), dispatcherAccess.readFrom("storedAt", 1));
   }
 
+
+  @Test
+  public void deactivate() {
+    author.deactivate().await();
+
+    assertEquals(1, (int) dispatcherAccess.readFrom("storeCount"));
+    assertEquals(AuthorState.class.getName(), dispatcherAccess.readFrom("storedAt", 0));
+  }
+
+  private static final LocalDate AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST = LocalDate.now();
+
+  @Test
+  public void makeAvailableOn() {
+    final AuthorState state = author.makeAvailableOn(AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST).await();
+
+    assertEquals(state.name.firstName, "author-name-firstName");
+    assertEquals(state.name.lastName, "author-name-lastName");
+    assertNotNull(state.availableOn);
+    assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
+    assertEquals(AuthorState.class.getName(), dispatcherAccess.readFrom("storedAt", 1));
+  }
+
   private static final Tag TAGS_FOR_ADD_TAG_TEST = Tag.from("updated-author-tags-name");
 
   @Test

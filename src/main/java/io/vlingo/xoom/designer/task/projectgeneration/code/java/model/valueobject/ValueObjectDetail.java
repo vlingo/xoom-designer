@@ -62,7 +62,7 @@ public class ValueObjectDetail {
                     .map(event -> AggregateDetail.eventWithName(event.parent(Label.AGGREGATE), event.value))
                     .flatMap(event -> event.retrieveAllRelated(Label.STATE_FIELD))
                     .map(stateField -> AggregateDetail.stateFieldWithName(stateField.parent(Label.AGGREGATE), stateField.value))
-                    .filter(ValueObjectDetail::isValueObject)
+                    .filter(stateField-> ValueObjectDetail.isValueObject(stateField) || FieldDetail.isValueObjectCollection(stateField))
                     .map(field -> field.retrieveRelatedValue(Label.FIELD_TYPE))
                     .map(type -> valueObjectOf(type, valueObjects.stream()))
                     .collect(Collectors.toList());
@@ -100,7 +100,8 @@ public class ValueObjectDetail {
 
   private static Stream<CodeGenerationParameter> findRelatedValueObjects(final CodeGenerationParameter valueObject,
                                                                          final List<CodeGenerationParameter> valueObjects) {
-    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).filter(ValueObjectDetail::isValueObject)
+    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+            .filter(stateField-> ValueObjectDetail.isValueObject(stateField) || FieldDetail.isValueObjectCollection(stateField))
             .map(valueObjectField -> valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE))
             .map(valueObjectType -> valueObjectOf(valueObjectType, valueObjects.stream()));
   }

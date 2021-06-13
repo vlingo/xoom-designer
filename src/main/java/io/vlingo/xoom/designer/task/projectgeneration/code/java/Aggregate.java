@@ -18,11 +18,11 @@ public class Aggregate {
 
   public final String aggregateName;
   public final String apiRootPath;
-  public final AggregateMethod creatorMethod;
+  public final AggregateMethod factoryMethod;
   public final List<Route> routes = new ArrayList<>();
   public final List<Field> stateFields = new ArrayList<>();
   public final List<AggregateMethod> methods = new ArrayList<>();
-  public final List<Field> creatorMethodStateFields = new ArrayList<>();
+  public final List<Field> factoryMethodStateFields = new ArrayList<>();
   public final Map<String, String> indexedStateFields = new HashMap<>();
 
   public Aggregate(final CodeGenerationParameter aggregate) {
@@ -31,8 +31,8 @@ public class Aggregate {
     this.methods.addAll(resolveMethods(aggregate));
     this.routes.addAll(resolveRoutes(aggregate));
     this.stateFields.addAll(resolveStateFields(aggregate));
-    this.creatorMethod = resolveCreatorMethod();
-    this.creatorMethodStateFields.addAll(resolveCreatorMethodStateFields());
+    this.factoryMethod = resolveFactoryMethod();
+    this.factoryMethodStateFields.addAll(resolveFactoryMethodStateFields());
     this.indexedStateFields.putAll(indexStateFields());
   }
 
@@ -48,7 +48,7 @@ public class Aggregate {
     return aggregate.retrieveAllRelated(STATE_FIELD).map(Field::new).collect(Collectors.toList());
   }
 
-  private AggregateMethod resolveCreatorMethod() {
+  private AggregateMethod resolveFactoryMethod() {
     return methods.stream().filter(method -> method.useFactory).findFirst().get();
   }
 
@@ -56,8 +56,8 @@ public class Aggregate {
     return aggregate.retrieveAllRelated(ROUTE_SIGNATURE).map(Route::new).collect(Collectors.toList());
   }
 
-  private List<Field> resolveCreatorMethodStateFields() {
-    return creatorMethod.parameters.stream()
+  private List<Field> resolveFactoryMethodStateFields() {
+    return factoryMethod.parameters.stream()
             .map(param -> stateFields.stream().filter(field -> param.equals(field.name)).findFirst().get())
             .collect(Collectors.toList());
   }

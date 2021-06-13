@@ -1,5 +1,9 @@
 package io.vlingo.xoomapp.infrastructure;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.stream.Collectors;
 import java.util.*;
 import io.vlingo.xoomapp.model.author.AuthorState;
@@ -48,6 +52,37 @@ public class AuthorData {
     final Classification classification = Classification.from(this.rank.classification.label, this.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
     final Rank rank = Rank.from(this.rank.points, classification);
     return new AuthorState(id, name, rank, status, bookIds, updatedOn);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    AuthorData another = (AuthorData) other;
+    return new EqualsBuilder()
+              .append(this.id, another.id)
+              .append(this.name, another.name)
+              .append(this.rank, another.rank)
+              .append(this.status, another.status)
+              .append(this.bookIds, another.bookIds)
+              .append(this.updatedOn, another.updatedOn)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("id", id)
+              .append("name", name)
+              .append("rank", rank)
+              .append("status", status)
+              .append("bookIds", bookIds)
+              .append("updatedOn", updatedOn)
+              .toString();
   }
 
 }

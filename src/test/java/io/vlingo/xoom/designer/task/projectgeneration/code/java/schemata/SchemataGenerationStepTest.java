@@ -16,14 +16,12 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CodeGen
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static java.util.stream.Collectors.toList;
 
 public class SchemataGenerationStepTest {
 
     @Test
-    public void testThatSpecificationAndPluginConfigAreGenerated() throws IOException {
+    public void testThatSpecificationAndPluginConfigAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()));
@@ -31,6 +29,9 @@ public class SchemataGenerationStepTest {
         final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
         new SchemataGenerationStep().process(context);
+
+        final Content plugin =
+                context.findContent(JavaTemplateStandard.SCHEMATA_PLUGIN, "pom");
 
         final Content authorRatedSpecification =
                 context.findContent(JavaTemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
@@ -56,11 +57,8 @@ public class SchemataGenerationStepTest {
         final Content classifierSpecification =
                 context.findContent(JavaTemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
 
-        @SuppressWarnings("unused")
-        final Content plugin =
-                context.findContent(JavaTemplateStandard.SCHEMATA_PLUGIN, "pom");
-
         Assertions.assertEquals(9, context.contents().size());
+        Assertions.assertTrue(plugin.contains(TextExpectation.onJava().read("schemata-plugin")));
         Assertions.assertTrue(authorRatedSpecification.contains(TextExpectation.onJava().read("author-rated-specification")));
         Assertions.assertTrue(authorBlockedSpecification.contains(TextExpectation.onJava().read("author-blocked-specification")));
         Assertions.assertTrue(bookSoldOutSpecification.contains(TextExpectation.onJava().read("book-sold-out")));

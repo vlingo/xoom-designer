@@ -24,7 +24,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.VALUE_OBJECT_FIELD;
 import static java.util.stream.Collectors.toList;
 
-public class AggregateGenerationStep extends ReactJsTemplateProcessingStep {
+public class AggregateManagementGenerationStep extends ReactJsTemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {

@@ -40,12 +40,27 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
 
     switch (Operations.valueOf(becauseOf)) {
       case AuthorRegistered: {
-        merged = AuthorData.from(currentData.id, currentData.name, currentData.rank);
+        merged = AuthorData.from(currentData.id, currentData.name, currentData.rank, currentData.relatedAuthors, currentData.availableOn);
         break;
       }
 
       case AuthorRanked: {
-        merged = AuthorData.from(currentData.id, previousData.name, currentData.rank);
+        merged = AuthorData.from(currentData.id, previousData.name, currentData.rank, previousData.relatedAuthors, previousData.availableOn);
+        break;
+      }
+
+      case AuthorRelated: {
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.rank, currentData.relatedAuthors, previousData.availableOn);
+        break;
+      }
+
+      case AuthorsRelated: {
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.rank, currentData.relatedAuthors, previousData.availableOn);
+        break;
+      }
+
+      case AuthorUnrelated: {
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.rank, currentData.relatedAuthors, previousData.availableOn);
         break;
       }
 

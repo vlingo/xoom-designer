@@ -18,7 +18,6 @@ public class CodeGenerationParametersBuilder {
         final CodeGenerationParameter dialect =
                 CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA);
 
-
         final CodeGenerationParameter idField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                         .relate(Label.FIELD_TYPE, "String");
@@ -127,10 +126,12 @@ public class CodeGenerationParametersBuilder {
 
         final CodeGenerationParameter classificationValueObject =
                 CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
-                                .relate(Label.FIELD_TYPE, "String"))
-                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifier")
-                                .relate(Label.FIELD_TYPE, "Classifier"));
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "labels")
+                                .relate(Label.FIELD_TYPE, "String")
+                                .relate(Label.COLLECTION_TYPE, "Set"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
+                                .relate(Label.FIELD_TYPE, "Classifier")
+                                .relate(Label.COLLECTION_TYPE, "List"));
 
         final CodeGenerationParameter classifierValueObject =
                 CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
