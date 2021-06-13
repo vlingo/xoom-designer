@@ -90,11 +90,9 @@ public class TestDataValueGenerator {
   }
 
   private void generateForValueObjectFields(final int dataIndex, final String path, final CodeGenerationParameter field) {
-    final String fieldType =
-            field.retrieveRelatedValue(Label.FIELD_TYPE);
+    final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
 
-    final CodeGenerationParameter valueObject =
-            ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
+    final CodeGenerationParameter valueObject = ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
 
     final String currentPath = resolvePath(path, field);
 

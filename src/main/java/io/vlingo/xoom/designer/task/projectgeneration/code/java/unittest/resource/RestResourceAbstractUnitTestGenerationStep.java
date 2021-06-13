@@ -7,21 +7,16 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class RestResourceUnitTestGenerationStep extends TemplateProcessingStep {
+public class RestResourceAbstractUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-
-    final List<CodeGenerationParameter> valueObjects =
-        context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
-    return RestResourceUnitTestTemplateDataFactory.build(context.parameters(), context.contents(), valueObjects);
+    return Collections.singletonList(RestResourceUnitTestTemplateDataFactory.buildAbstract(context.parameters(), context.contents()));
   }
 }

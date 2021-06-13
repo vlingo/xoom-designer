@@ -1,50 +1,14 @@
 package io.vlingo.xoomapp.infrastructure.resource;
 
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
-import io.restassured.specification.RequestSpecification;
-import io.vlingo.xoom.turbo.ComponentRegistry;
-import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import io.vlingo.xoomapp.infrastructure.*;
 
-public class AuthorResourceTest {
-
-  protected int port;
-  private XoomInitializer xoom;
-
-  @BeforeAll
-  public static void init() {
-    RestAssured.defaultParser = Parser.JSON;
-  }
-
-  @BeforeEach
-  public void setUp() throws Exception {
-    resolvePort();
-    ComponentRegistry.clear();
-    ComponentRegistry.register(ExchangeInitializer.class, new MockExchangeInitializer());
-    XoomInitializer.main(new String[]{"-Dport=" + port});
-    xoom = XoomInitializer.instance();
-    Boolean startUpSuccess = xoom.server().startUp().await(100);
-    System.out.println("==== Test Server running on " + port);
-    assertThat(startUpSuccess, is(equalTo(true)));
-  }
-
-  @AfterEach
-  public void cleanUp() throws InterruptedException {
-    System.out.println("==== Test Server shutting down ");
-    xoom.terminateWorld();
-    waitServerClose();
-  }
+public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testEmptyResponse() {
@@ -57,23 +21,301 @@ public class AuthorResourceTest {
   }
 
 
+  @Test
+  public void testWithName() {
+    final AuthorData FIRST_WITH_NAME_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-  public RequestSpecification given() {
-    return io.restassured.RestAssured.given()
-    .filter(new RequestLoggingFilter())
-    .filter(new ResponseLoggingFilter())
-    .port(port)
-    .accept(ContentType.JSON)
-    .contentType(ContentType.JSON);
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_WITH_NAME_TEST_DATA)
+        .post("/authors/")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
   }
 
-  private void waitServerClose() throws InterruptedException {
-    while(xoom != null && xoom.server() != null && !xoom.server().isStopped()) {
-      Thread.sleep(100);
-    }
+
+  @Test
+  public void testChangeRank() {
+    final AuthorData FIRST_CHANGE_RANK_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_CHANGE_RANK_TEST_DATA)
+        .patch("/authors/"+FIRST_CHANGE_RANK_TEST_DATA.id+"/rank")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
   }
 
-  private void resolvePort() {
-    port = (int) (Math.random() * 55535) + 10000;
+
+  @Test
+  public void testRelateAuthor() {
+    final AuthorData FIRST_RELATE_AUTHOR_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_RELATE_AUTHOR_TEST_DATA)
+        .patch("/"+FIRST_RELATE_AUTHOR_TEST_DATA.id+"/related-author")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
   }
+
+
+  @Test
+  public void testRelateAuthors() {
+    final AuthorData FIRST_RELATE_AUTHORS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_RELATE_AUTHORS_TEST_DATA)
+        .patch("/"+FIRST_RELATE_AUTHORS_TEST_DATA.id+"/related-authors")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testReplaceAllRelatedAuthors() {
+    final AuthorData FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA)
+        .put("/"+FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA.id+"/related-authors")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testUnrelateAuthor() {
+    final AuthorData FIRST_UNRELATE_AUTHOR_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_UNRELATE_AUTHOR_TEST_DATA)
+        .delete("/"+FIRST_UNRELATE_AUTHOR_TEST_DATA.id+"/related-author")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testAddTag() {
+    final AuthorData FIRST_ADD_TAG_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_ADD_TAG_TEST_DATA)
+        .patch("/"+FIRST_ADD_TAG_TEST_DATA.id+"/tag")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testAddTags() {
+    final AuthorData FIRST_ADD_TAGS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_ADD_TAGS_TEST_DATA)
+        .patch("/"+FIRST_ADD_TAGS_TEST_DATA.id+"/tags")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testReplaceTags() {
+    final AuthorData FIRST_REPLACE_TAGS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_REPLACE_TAGS_TEST_DATA)
+        .put("/"+FIRST_REPLACE_TAGS_TEST_DATA.id+"/tags")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testRemoveTag() {
+    final AuthorData FIRST_REMOVE_TAG_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_REMOVE_TAG_TEST_DATA)
+        .delete("/"+FIRST_REMOVE_TAG_TEST_DATA.id+"/tags")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void testChangeRank() {
+    final AuthorData FIRST_CHANGE_RANK_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+
+      AuthorData firstData = given()
+        .when()
+        .body(FIRST_CHANGE_RANK_TEST_DATA)
+        .patch("/authors/"+FIRST_CHANGE_RANK_TEST_DATA.id+"/rank")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(AuthorData.class);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals(firstData.rank.points, 1);
+    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(firstData.rank.classification.classifiers);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
 }

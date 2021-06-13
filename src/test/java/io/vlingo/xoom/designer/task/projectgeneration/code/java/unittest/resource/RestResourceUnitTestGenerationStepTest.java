@@ -20,6 +20,23 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class RestResourceUnitTestGenerationStepTest {
 
   @Test
+  public void testThatAbstractResourcesUnitTestsAreGenerated() {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParameters();
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    // WHEN
+    new RestResourceAbstractUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content abstractRestTest =
+        context.findContent(JavaTemplateStandard.ABSTRACT_REST_RESOURCE_UNIT_TEST, "AbstractRestTest");
+    Assertions.assertEquals(2, context.contents().size());
+    Assertions.assertTrue(abstractRestTest.contains(TextExpectation.onJava().read("abstract-rest-resource-unit-test")));
+  }
+
+  @Test
   public void testThatResourcesUnitTestsAreGenerated() {
     // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters();
@@ -30,10 +47,10 @@ public class RestResourceUnitTestGenerationStepTest {
     new RestResourceUnitTestGenerationStep().process(context);
 
     // THEN
-    final Content authorResourceTest =
-        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
+    final Content authorResourceTests =
+        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTests");
     Assertions.assertEquals(2, context.contents().size());
-    Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
+    Assertions.assertTrue(authorResourceTests.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
@@ -43,6 +60,7 @@ public class RestResourceUnitTestGenerationStepTest {
         .add(authorAggregate())
         .add(nameValueObject())
         .add(rankValueObject())
+        .add(tagValueObject())
         .add(classificationValueObject())
         .add(classifierValueObject());
   }
@@ -250,6 +268,12 @@ public class RestResourceUnitTestGenerationStepTest {
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
             .relate(Label.FIELD_TYPE, "String"))
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+            .relate(Label.FIELD_TYPE, "String"));
+  }
+
+  private CodeGenerationParameter tagValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Tag")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
             .relate(Label.FIELD_TYPE, "String"));
   }
 

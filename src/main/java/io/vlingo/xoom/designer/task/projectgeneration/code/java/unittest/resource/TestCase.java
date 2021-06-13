@@ -7,48 +7,54 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.PreliminaryStatement;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.StaticDataDeclaration;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestCaseName;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.TestStatement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TestCase {
 
   public static final int TEST_DATA_SET_SIZE = 2;
 
   private final String methodName;
-  private final List<String> dataDeclarations = new ArrayList<>();
+  private final String dataDeclaration;
   private final List<TestStatement> statements = new ArrayList<>();
   private final List<String> preliminaryStatements = new ArrayList<>();
 
-  public static List<TestCase> from(final CodeGenerationParameter aggregate) {
-    return Stream.of(TestCaseName.values()).map(name -> new TestCase(name.method, aggregate))
-            .collect(Collectors.toList());
+  public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
+    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
+        .map(signature -> new TestCase(signature, aggregate, valueObjects))
+        .collect(Collectors.toList());
   }
 
-  private TestCase(final String testMethodName,
-                   final CodeGenerationParameter aggregate) {
-    final TestDataValueGenerator.TestDataValues testDataValues =
-            TestDataValueGenerator.with(TEST_DATA_SET_SIZE, "data", aggregate, new ArrayList<>()).generate();
+  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
+                   List<CodeGenerationParameter> valueObjects) {
+    final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
+        .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
-    this.methodName = testMethodName;
-    this.dataDeclarations.addAll(StaticDataDeclaration.generate(testMethodName, aggregate, new ArrayList<>(), testDataValues));
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
-    this.statements.addAll(TestStatement.with(testMethodName, aggregate, new ArrayList<>(), testDataValues));
+    final String dataObjectType =
+        JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+    this.methodName = "test" + toCamelCase(signature.value);
+    this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value, dataObjectType,
+        signature.retrieveRelatedValue(Label.ROUTE_PATH), signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT)));
+    this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
+  }
+
+  private String toCamelCase(String testMethodName) {
+    return Character.toString(testMethodName.charAt(0)).toUpperCase() + testMethodName.substring(1);
   }
 
   public String getMethodName() {
     return methodName;
   }
 
-  public List<String> getDataDeclarations() {
-    return dataDeclarations;
+  public String getDataDeclaration() {
+    return dataDeclaration;
   }
 
   public List<TestStatement> getStatements() {

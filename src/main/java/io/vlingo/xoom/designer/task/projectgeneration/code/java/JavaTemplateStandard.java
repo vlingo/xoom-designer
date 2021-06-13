@@ -181,7 +181,10 @@ public enum JavaTemplateStandard implements TemplateStandard {
   }, (name, parameters) -> name + "Test"),
 
   REST_RESOURCE_UNIT_TEST(parameters -> Template.REST_RESOURCE_UNIT_TEST.filename,
-      (name, parameters) -> name + "ResourceTest"),
+      (name, parameters) -> name + "ResourceTests"),
+
+  ABSTRACT_REST_RESOURCE_UNIT_TEST(parameters -> Template.ABSTRACT_REST_RESOURCE_UNIT_TEST.filename,
+      (name, parameters) -> "AbstractRestTest"),
 
   MOCK_DISPATCHER(parameters -> {
     final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);

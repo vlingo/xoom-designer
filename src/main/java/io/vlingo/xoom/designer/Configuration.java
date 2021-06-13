@@ -24,6 +24,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageG
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceAbstractUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateManagementGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.LayoutGenerationStep;
@@ -72,29 +73,30 @@ public class Configuration {
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
-          //Java
-          new ValueObjectGenerationStep(),
-          new ModelGenerationStep(),
-          new DataObjectGenerationStep(),
-          new ProjectionGenerationStep(),
-          new StorageGenerationStep(),
-          new RestResourceGenerationStep(),
-          new AutoDispatchMappingGenerationStep(),
-          new ExchangeGenerationStep(),
-          new SchemataGenerationStep(),
-          new BootstrapGenerationStep(),
-          new EntityUnitTestGenerationStep(),
-          new QueriesUnitTestGenerationStep(),
-          new RestResourceUnitTestGenerationStep(),
-          new TurboSettingsGenerationStep(),
-          new ClusterSettingsGenerationStep(),
-          new DesignerModelGenerationStep(),
-          //React
-          new StaticFilesGenerationStep(),
-          new LayoutGenerationStep(),
-          new AggregateManagementGenerationStep(),
-          //Common
-          new ContentCreationStep()
+      //Java
+      new ValueObjectGenerationStep(),
+      new ModelGenerationStep(),
+      new DataObjectGenerationStep(),
+      new ProjectionGenerationStep(),
+      new StorageGenerationStep(),
+      new RestResourceGenerationStep(),
+      new AutoDispatchMappingGenerationStep(),
+      new ExchangeGenerationStep(),
+      new SchemataGenerationStep(),
+      new BootstrapGenerationStep(),
+      new EntityUnitTestGenerationStep(),
+      new QueriesUnitTestGenerationStep(),
+      new RestResourceAbstractUnitTestGenerationStep(),
+      new RestResourceUnitTestGenerationStep(),
+      new TurboSettingsGenerationStep(),
+      new ClusterSettingsGenerationStep(),
+      new DesignerModelGenerationStep(),
+      //React
+      new StaticFilesGenerationStep(),
+      new LayoutGenerationStep(),
+      new AggregateManagementGenerationStep(),
+      //Common
+      new ContentCreationStep()
   );
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(

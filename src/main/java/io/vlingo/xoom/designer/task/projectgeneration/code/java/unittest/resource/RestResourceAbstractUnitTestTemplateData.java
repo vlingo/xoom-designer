@@ -7,33 +7,26 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 
 import java.util.List;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
-public class RestResourceUnitTestTemplateData extends TemplateData {
+public class RestResourceAbstractUnitTestTemplateData extends TemplateData {
   private final String packageName;
-  private final String aggregateName;
   private final TemplateParameters parameters;
 
-  public RestResourceUnitTestTemplateData(String basePackage, CodeGenerationParameter aggregateParameter,
-                                          List<Content> contents, List<CodeGenerationParameter> valueObjects) {
-    this.aggregateName = aggregateParameter.value;
+  public RestResourceAbstractUnitTestTemplateData(String basePackage, CodeGenerationParameter aggregateParameter,
+                                                  List<Content> contents) {
     this.packageName = resolvePackage(basePackage);
-    this.parameters = loadParameters(aggregateParameter, contents, valueObjects);
+    this.parameters = loadParameters(aggregateParameter, contents);
   }
 
-  private TemplateParameters loadParameters(final CodeGenerationParameter aggregate, final List<Content> contents,
-                                            List<CodeGenerationParameter> valueObjects) {
+  private TemplateParameters loadParameters(final CodeGenerationParameter aggregate, final List<Content> contents) {
     final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 
     return TemplateParameters.with(PACKAGE_NAME, packageName)
-        .and(REST_RESOURCE_UNIT_TEST_NAME, standard().resolveClassname(aggregateName))
-        .and(URI_ROOT, aggregate.retrieveRelatedValue(Label.URI_ROOT))
-        .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
         .addImport(resolveImports(dataObjectName, contents))
         .and(PRODUCTION_CODE, false)
         .and(UNIT_TEST, true);
@@ -52,7 +45,7 @@ public class RestResourceUnitTestTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return JavaTemplateStandard.REST_RESOURCE_UNIT_TEST;
+    return JavaTemplateStandard.ABSTRACT_REST_RESOURCE_UNIT_TEST;
   }
 
   @Override
@@ -62,6 +55,6 @@ public class RestResourceUnitTestTemplateData extends TemplateData {
 
   @Override
   public String filename() {
-    return standard().resolveFilename(aggregateName, parameters);
+    return "AbstractRestTest";
   }
 }
