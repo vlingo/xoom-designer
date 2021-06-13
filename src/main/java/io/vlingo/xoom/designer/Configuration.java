@@ -23,6 +23,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schemat
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity.EntityUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections.ProjectionUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceAbstractUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceUnitTestGenerationStep;
@@ -86,6 +87,7 @@ public class Configuration {
       new BootstrapGenerationStep(),
       new EntityUnitTestGenerationStep(),
       new QueriesUnitTestGenerationStep(),
+      new ProjectionUnitTestGenerationStep(),
       new RestResourceAbstractUnitTestGenerationStep(),
       new RestResourceUnitTestGenerationStep(),
       new TurboSettingsGenerationStep(),

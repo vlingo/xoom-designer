@@ -172,6 +172,9 @@ public enum JavaTemplateStandard implements TemplateStandard {
   QUERIES_UNIT_TEST(parameters -> Template.QUERIES_UNIT_TEST.filename,
       (name, parameters) -> name + "Test"),
 
+  PROJECTION_UNIT_TEST(parameters -> Template.PROJECTION_UNIT_TEST.filename,
+      (name, parameters) -> name + "Tests"),
+
   ENTITY_UNIT_TEST(parameters -> {
     final StorageType storageType = parameters.find(STORAGE_TYPE);
     if (storageType.isSourced()) {

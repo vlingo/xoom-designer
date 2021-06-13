@@ -61,6 +61,7 @@ public enum Template {
   CLUSTER_SETTINGS("ClusterSettings"),
   VALUE_OBJECT("ValueObject"),
   QUERIES_UNIT_TEST("QueriesUnitTest"),
+  PROJECTION_UNIT_TEST("ProjectionUnitTest"),
   OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
   EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
   EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),

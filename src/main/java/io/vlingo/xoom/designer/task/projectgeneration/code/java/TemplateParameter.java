@@ -142,6 +142,7 @@ public enum TemplateParameter implements ParameterKey {
   STATIC_FACTORY_METHODS("staticFactoryMethods"),
   REST_RESOURCE_UNIT_TEST_NAME("resourceUnitTestName"),
   QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),
   TEST_CASES("testCases"),
   UNIT_TEST("unitTest"),
   ENTITY_UNIT_TEST_NAME("entityUnitTestName"),
