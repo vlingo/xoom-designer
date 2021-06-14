@@ -35,9 +35,6 @@ public class ${projectionUnitTestName} {
   }
 
   <#list testCases as testCase>
-  <#list testCase.dataDeclarations as dataDeclaration>
-  ${dataDeclaration}
-  </#list>
 
   @Test
   public void ${testCase.methodName}() {

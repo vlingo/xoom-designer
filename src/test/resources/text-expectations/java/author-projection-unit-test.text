@@ -35,4 +35,164 @@ public class AuthorProjectionTests {
   }
 
 
+  @Test
+  public void withName() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void changeRank() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void addTag() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void addTags() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void replaceTags() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void removeTag() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void relateAuthor() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void relateAuthors() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void unrelateAuthor() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
+  @Test
+  public void replaceAllRelatedAuthors() {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.name.firstName, "first-author-name-firstName");
+    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertNotNull(firstData.rank);
+    assertNotNull(firstData.availableOn);
+    assertNotNull(firstData.tags);
+    assertNotNull(firstData.relatedAuthors);
+  }
+
+
 }

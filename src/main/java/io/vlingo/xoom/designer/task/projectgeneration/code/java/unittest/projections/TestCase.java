@@ -25,22 +25,22 @@ public class TestCase {
   private final List<String> preliminaryStatements = new ArrayList<>();
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
-    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
-        .map(signature -> new TestCase(signature, aggregate, valueObjects))
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .map(method -> new TestCase(method.value, aggregate, valueObjects))
         .collect(Collectors.toList());
   }
 
-  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
+  private TestCase(final String signature, final CodeGenerationParameter aggregate,
                    List<CodeGenerationParameter> valueObjects) {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
     final String dataObjectType =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-    this.methodName = signature.value;
-    this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value));
-    this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
+    this.methodName = signature;
+    this.dataDeclaration = DataDeclaration.generate(signature, aggregate, valueObjects, testDataValues);
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature));
+    this.statements.addAll(TestStatement.with(signature, aggregate, valueObjects, testDataValues));
   }
 
   public String getMethodName() {
