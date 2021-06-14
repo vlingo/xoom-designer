@@ -8,7 +8,7 @@ import Home from "./components/Home";
 import Authors from "./components/authors/Authors";
 import Author from "./components/authors/Author";
 
-axios.defaults.baseURL = 'http://localhost:18080';
+axios.defaults.baseURL = 'http://localhost:8081';
 
 function App() {
   return (

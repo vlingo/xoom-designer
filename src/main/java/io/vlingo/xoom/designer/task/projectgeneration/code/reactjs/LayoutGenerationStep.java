@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.Aggregate;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RouteDetail;
 
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.List;
 import static io.vlingo.xoom.codegen.template.ParameterKey.Defaults.PACKAGE_NAME;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.AGGREGATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.TemplateParameter.AGGREGATES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.TemplateParameter.TURBO_SETTINGS;
 import static java.util.stream.Collectors.toList;
 
 public class LayoutGenerationStep extends ReactJsTemplateProcessingStep {
@@ -27,12 +29,13 @@ public class LayoutGenerationStep extends ReactJsTemplateProcessingStep {
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String artifactId = context.parameterOf(Label.ARTIFACT_ID);
+    final TurboSettings turboSettings = context.parameterObjectOf(Label.TURBO_SETTINGS);
 
     final List<Aggregate> aggregates =
             context.parametersOf(AGGREGATE).filter(RouteDetail::requireModelFactory)
                     .map(Aggregate::new).collect(toList());
 
-    return  Arrays.asList(headerComponentTemplateData(artifactId), appComponentTemplateData(aggregates),
+    return Arrays.asList(headerComponentTemplateData(artifactId), appComponentTemplateData(turboSettings, aggregates),
             sidebarComponentTemplateData(aggregates));
   }
 
@@ -41,9 +44,10 @@ public class LayoutGenerationStep extends ReactJsTemplateProcessingStep {
             TemplateParameters.with(PACKAGE_NAME, "src.components").and(TemplateParameter.ARTIFACT_ID, artifactId));
   }
 
-  private TemplateData appComponentTemplateData(final List<Aggregate> aggregates) {
+  private TemplateData appComponentTemplateData(TurboSettings turboSettings, final List<Aggregate> aggregates) {
     return BasicTemplateData.of(ReactJsTemplateStandard.APP,
-            TemplateParameters.with(PACKAGE_NAME, "src").and(AGGREGATES, aggregates));
+            TemplateParameters.with(PACKAGE_NAME, "src").and(AGGREGATES, aggregates)
+                    .and(TURBO_SETTINGS, turboSettings));
   }
 
   private TemplateData sidebarComponentTemplateData(final List<Aggregate> aggregates) {

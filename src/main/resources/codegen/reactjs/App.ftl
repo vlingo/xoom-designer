@@ -12,7 +12,7 @@ import ${aggPlural} from "./components/${aggPluralDecap}/${aggPlural}";
 import ${aggregate.aggregateName} from "./components/${aggPluralDecap}/${aggregate.aggregateName}";
 </#list>
 
-axios.defaults.baseURL = 'http://localhost:18080';
+axios.defaults.baseURL = 'http://localhost:${turboSettings.httpServerPort?c}';
 
 function App() {
   return (

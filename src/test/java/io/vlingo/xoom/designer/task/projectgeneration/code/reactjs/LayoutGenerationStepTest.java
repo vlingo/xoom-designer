@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,8 @@ public class LayoutGenerationStepTest {
             CodeGenerationParameters.from(
                     CodeGenerationParameter.of(Label.ARTIFACT_ID, "xoom-app"),
                     authorAggregate(), nameValueObject(), rankValueObject(),
-                    classificationValueObject(), classifierValueObject()
+                    classificationValueObject(), classifierValueObject(),
+                    CodeGenerationParameter.ofObject(Label.TURBO_SETTINGS, TurboSettings.with(8081, 6754))
             );
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
