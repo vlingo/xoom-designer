@@ -32,14 +32,14 @@ public class ProjectionUnitTestGenerationStepTest {
     final Content authorProjectionTest =
         context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTests");
 
-    Assertions.assertEquals(6, context.contents().size());
+    Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-projection-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
     return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
         .add(Label.DIALECT, Dialect.JAVA)
-        .add(authorAggregate()).add(bookAggregate())
+        .add(authorAggregate())
         .add(nameValueObject()).add(rankValueObject())
         .add(classificationValueObject()).add(classifierValueObject());
   }
@@ -68,23 +68,6 @@ public class ProjectionUnitTestGenerationStepTest {
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
         .relate(idField).relate(nameField).relate(rankField).relate(statusField).relate(availableOnField);
-  }
-
-  private CodeGenerationParameter bookAggregate() {
-    final CodeGenerationParameter idField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-            .relate(Label.FIELD_TYPE, "String");
-
-    final CodeGenerationParameter nameField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "title")
-            .relate(Label.FIELD_TYPE, "String");
-
-    final CodeGenerationParameter rankField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
-            .relate(Label.FIELD_TYPE, "String");
-
-    return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
-        .relate(idField).relate(nameField).relate(rankField);
   }
 
   private CodeGenerationParameter nameValueObject() {
@@ -119,10 +102,11 @@ public class ProjectionUnitTestGenerationStepTest {
 
   private Content[] contents() {
     return new Content[]{
-        Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorQueries.java"), null, null, AUTHOR_QUERIES_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.QUERIES, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookQueries.java"), null, null, BOOK_QUERIES_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "BookData.java"), null, null, BOOK_DATA_CONTENT_TEXT),
+        Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT),
+        Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.java"), null, null, AUTHOR_RANKED_CONTENT_TEXT),
+        Content.with(JavaTemplateStandard.PROJECTION, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.java"), null, null, AUTHOR_PROJECTION_CONTENT_TEXT),
+
     };
   }
 
@@ -135,14 +119,11 @@ public class ProjectionUnitTestGenerationStepTest {
       Paths.get(PROJECT_PATH, "src", "main", "java",
           "io", "vlingo", "xoomapp", "infrastructure").toString();
 
+  private static final String MODEL_PACKAGE_PATH =
+      Paths.get(PROJECT_PATH, "src", "main", "java",
+          "io", "vlingo", "xoomapp", "model").toString();
   private static final String PERSISTENCE_PACKAGE_PATH =
       Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
-
-  private static final String AUTHOR_QUERIES_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public interface AuthorQueries { \\n" +
-          "... \\n" +
-          "}";
 
   private static final String AUTHOR_DATA_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure; \\n" +
@@ -150,15 +131,21 @@ public class ProjectionUnitTestGenerationStepTest {
           "... \\n" +
           "}";
 
-  private static final String BOOK_QUERIES_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public interface AuthorQueries { \\n" +
+  private static final String AUTHOR_REGISTERED_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.model.author; \\n" +
+          "public class AuthorRegistered extends DomainEvent { \\n" +
           "... \\n" +
           "}";
 
-  private static final String BOOK_DATA_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure; \\n" +
-          "public class BookData { \\n" +
+  private static final String AUTHOR_RANKED_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.model.author; \\n" +
+          "public class AuthorRanked extends DomainEvent { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String AUTHOR_PROJECTION_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+          "public class AuthorProjectionActor { \\n" +
           "... \\n" +
           "}";
 }

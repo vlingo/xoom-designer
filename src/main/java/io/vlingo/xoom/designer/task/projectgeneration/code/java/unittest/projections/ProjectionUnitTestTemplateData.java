@@ -17,7 +17,6 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
                                         final List<CodeGenerationParameter> aggregates,
                                         final List<CodeGenerationParameter> valueObjects) {
     final String packageName =
-        ContentQuery.findPackage(JavaTemplateStandard.QUERIES, contents);
+        ContentQuery.findPackage(JavaTemplateStandard.PROJECTION, contents);
 
     final Function<CodeGenerationParameter, TemplateData> mapper =
         aggregate -> new ProjectionUnitTestTemplateData(packageName, aggregate, contents, valueObjects);
@@ -54,7 +53,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
             .and(PROJECTION_UNIT_TEST_NAME, standard().resolveClassname(projectionName.replace("Actor", "")))
             .and(PROJECTION_NAME, projectionName)
             .and(DATA_OBJECT_NAME, dataObjectName)
-            .and(TEST_CASES, new ArrayList<>())//TestCase.from(aggregate, valueObjects))
+            .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
             .addImport(resolveImport(dataObjectName, contents))
             .addImports(AggregateDetail.resolveImports(aggregate))
             .and(PRODUCTION_CODE, false)
