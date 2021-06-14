@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.PathFormatter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class Aggregate {
 
   public Aggregate(final CodeGenerationParameter aggregate) {
     this.aggregateName = aggregate.value;
-    this.apiRootPath = aggregate.retrieveRelatedValue(URI_ROOT);
+    this.apiRootPath = PathFormatter.formatRootPath(aggregate.retrieveRelatedValue(URI_ROOT));
     this.methods.addAll(resolveMethods(aggregate));
     this.routes.addAll(resolveRoutes(aggregate));
     this.stateFields.addAll(resolveStateFields(aggregate));
