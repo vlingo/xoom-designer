@@ -144,7 +144,7 @@ public class AuthorResource extends DynamicResourceHandler {
   @Override
   public Resource<?> routes() {
      return resource("AuthorResource",
-        io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors/")
+        io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors")
             .body(AuthorData.class)
             .handle(this::withName),
         io.vlingo.xoom.http.resource.ResourceBuilder.patch("/authors/{id}/rank")
