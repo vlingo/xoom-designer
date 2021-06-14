@@ -12,7 +12,7 @@ const AuthorWithName = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    const url = applyData('/authors/authors/', form);
+    const url = applyData('/authors', form);
     axios.post(url, form)
     .then(res => res.data)
     .then(data => {

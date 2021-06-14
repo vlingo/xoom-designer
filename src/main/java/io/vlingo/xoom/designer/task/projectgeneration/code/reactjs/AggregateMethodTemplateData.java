@@ -28,8 +28,8 @@ public class AggregateMethodTemplateData extends TemplateData {
   public static List<TemplateData> from(final List<Aggregate> aggregates,
                                         final Map<String, List<Field>> valueObjectTypes) {
     return aggregates.stream()
-            .map(aggregate -> aggregate.methods.stream().map(method -> new AggregateMethodTemplateData(aggregate, method, valueObjectTypes)))
-            .flatMap(s -> s).collect(Collectors.toList());
+            .flatMap(aggregate -> aggregate.methods.stream().map(method -> new AggregateMethodTemplateData(aggregate, method, valueObjectTypes)))
+            .collect(Collectors.toList());
   }
 
   private AggregateMethodTemplateData(final Aggregate aggregate,
