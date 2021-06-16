@@ -1,19 +1,20 @@
 package io.vlingo.xoomapp.infrastructure.exchange;
 
+import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.lattice.exchange.Exchange;
+import io.vlingo.xoom.turbo.exchange.ExchangeSettings;
+import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.ExchangeFactory;
 import io.vlingo.xoom.lattice.exchange.ConnectionSettings;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.MessageSender;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.
 import io.vlingo.xoom.lattice.exchange.Covey;
 import io.vlingo.xoom.lattice.grid.Grid;
-import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
-import io.vlingo.xoom.turbo.actors.Settings;
-import io.vlingo.xoom.turbo.exchange.ExchangeSettings;
-import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 
 import io.vlingo.xoomapp.infrastructure.AuthorData;
+import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
 
 public class ExchangeBootstrap implements ExchangeInitializer {
 
@@ -27,67 +28,84 @@ public class ExchangeBootstrap implements ExchangeInitializer {
                 ExchangeSettings.of("otherapp-exchange").mapToConnection();
 
     final Exchange otherappExchange =
-                ExchangeFactory.fanOutInstance(otherappExchangeSettings, "otherapp-exchange", true);
+                ExchangeFactory.fanOutInstanceQuietly(otherappExchangeSettings, "otherapp-exchange", true);
 
-    otherappExchange.register(Covey.of(
-        new MessageSender(otherappExchange.connection()),
-        new AuthorExchangeReceivers.OtherAggregateDefined(stage),
-        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"),
-        AuthorData.class,
-        String.class,
-        Message.class));
+    try {
+      otherappExchange.register(Covey.of(
+          new MessageSender(otherappExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateDefined(stage),
+          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"),
+          AuthorData.class,
+          String.class,
+          Message.class));
 
-    otherappExchange.register(Covey.of(
-        new MessageSender(otherappExchange.connection()),
-        new AuthorExchangeReceivers.OtherAggregateUpdated(stage),
-        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"),
-        AuthorData.class,
-        String.class,
-        Message.class));
+      otherappExchange.register(Covey.of(
+          new MessageSender(otherappExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateUpdated(stage),
+          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"),
+          AuthorData.class,
+          String.class,
+          Message.class));
 
-    otherappExchange.register(Covey.of(
-        new MessageSender(otherappExchange.connection()),
-        new AuthorExchangeReceivers.OtherAggregateRemoved(stage),
-        new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3"),
-        AuthorData.class,
-        String.class,
-        Message.class));
+      otherappExchange.register(Covey.of(
+          new MessageSender(otherappExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateRemoved(stage),
+          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3"),
+          AuthorData.class,
+          String.class,
+          Message.class));
 
-    final ConnectionSettings authorExchangeSettings =
-                ExchangeSettings.of("author-exchange").mapToConnection();
-
-    final Exchange authorExchange =
-                ExchangeFactory.fanOutInstance(authorExchangeSettings, "author-exchange", true);
-
-    authorExchange.register(Covey.of(
-        new MessageSender(authorExchange.connection()),
-        received -> {},
-        new AuthorProducerAdapter(),
-        IdentifiedDomainEvent.class,
-        IdentifiedDomainEvent.class,
-        Message.class));
+    } catch (final InactiveBrokerExchangeException exception) {
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange otherapp-exchange");
+      stage.world().defaultLogger().warn(exception.getMessage());
+    }
 
     final ConnectionSettings bookExchangeSettings =
                 ExchangeSettings.of("book-exchange").mapToConnection();
 
     final Exchange bookExchange =
-                ExchangeFactory.fanOutInstance(bookExchangeSettings, "book-exchange", true);
+                ExchangeFactory.fanOutInstanceQuietly(bookExchangeSettings, "book-exchange", true);
 
-    bookExchange.register(Covey.of(
-        new MessageSender(bookExchange.connection()),
-        received -> {},
-        new BookProducerAdapter(),
-        IdentifiedDomainEvent.class,
-        IdentifiedDomainEvent.class,
-        Message.class));
+    try {
+      bookExchange.register(Covey.of(
+          new MessageSender(bookExchange.connection()),
+          received -> {},
+          new BookProducerAdapter(),
+          IdentifiedDomainEvent.class,
+          IdentifiedDomainEvent.class,
+          Message.class));
 
+    } catch (final InactiveBrokerExchangeException exception) {
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange book-exchange");
+      stage.world().defaultLogger().warn(exception.getMessage());
+    }
 
-    this.dispatcher = new ExchangeDispatcher(authorExchange, bookExchange);
+    final ConnectionSettings authorExchangeSettings =
+                ExchangeSettings.of("author-exchange").mapToConnection();
+
+    final Exchange authorExchange =
+                ExchangeFactory.fanOutInstanceQuietly(authorExchangeSettings, "author-exchange", true);
+
+    try {
+      authorExchange.register(Covey.of(
+          new MessageSender(authorExchange.connection()),
+          received -> {},
+          new AuthorProducerAdapter(),
+          IdentifiedDomainEvent.class,
+          IdentifiedDomainEvent.class,
+          Message.class));
+
+    } catch (final InactiveBrokerExchangeException exception) {
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange author-exchange");
+      stage.world().defaultLogger().warn(exception.getMessage());
+    }
+
+    this.dispatcher = new ExchangeDispatcher(bookExchange, authorExchange);
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         otherappExchange.close();
-        authorExchange.close();
         bookExchange.close();
+        authorExchange.close();
 
         System.out.println("\n");
         System.out.println("==================");
@@ -100,4 +118,5 @@ public class ExchangeBootstrap implements ExchangeInitializer {
   public Dispatcher<?> dispatcher() {
     return dispatcher;
   }
+
 }

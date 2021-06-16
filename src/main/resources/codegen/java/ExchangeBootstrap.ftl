@@ -8,6 +8,7 @@ import io.vlingo.xoom.lattice.exchange.rabbitmq.ExchangeFactory;
 import io.vlingo.xoom.lattice.exchange.ConnectionSettings;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.MessageSender;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.InactiveBrokerExchangeException;
 import io.vlingo.xoom.lattice.exchange.Covey;
 import io.vlingo.xoom.lattice.grid.Grid;
 <#if producerExchanges?has_content>
@@ -33,23 +34,26 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
                 ExchangeSettings.of("${exchange.name}").mapToConnection();
 
     final Exchange ${exchange.variableName} =
-                ExchangeFactory.fanOutInstance(${exchange.settingsName}, "${exchange.name}", true);
+                ExchangeFactory.fanOutInstanceQuietly(${exchange.settingsName}, "${exchange.name}", true);
 
-    <#list exchange.coveys as covey>
-    ${exchange.variableName}.register(Covey.of(
-        new MessageSender(${exchange.variableName}.connection()),
-        ${covey.receiverInstantiation},
-        ${covey.adapterInstantiation},
-        ${covey.localClass}.class,
-        ${covey.externalClass}.class,
-        Message.class));
+    try {
+      <#list exchange.coveys as covey>
+      ${exchange.variableName}.register(Covey.of(
+          new MessageSender(${exchange.variableName}.connection()),
+          ${covey.receiverInstantiation},
+          ${covey.adapterInstantiation},
+          ${covey.localClass}.class,
+          ${covey.externalClass}.class,
+          Message.class));
 
       </#list>
-    </#list>
+    } catch (final InactiveBrokerExchangeException exception) {
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange ${exchange.name}");
+      stage.world().defaultLogger().warn(exception.getMessage());
+    }
 
-    <#if producerExchanges?has_content>
-    this.dispatcher = new ExchangeDispatcher(${producerExchanges});
-    </#if>
+    </#list>
+    <#if producerExchanges?has_content>this.dispatcher = new ExchangeDispatcher(${producerExchanges});</#if>
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
         <#list exchanges as exchange>
@@ -69,4 +73,5 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
     return dispatcher;
   }
   </#if>
+
 }
