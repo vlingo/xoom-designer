@@ -1,6 +1,6 @@
 <script>
   import Textfield from '@smui/textfield/Textfield.svelte';
-  import { requireRule, routeRule } from "../../validators";
+  import { requireRule, rootPathRule } from "../../validators";
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import FieldsetBox from './FieldsetBox.svelte';
   import Route from "./Route.svelte";
@@ -34,11 +34,11 @@
       label="Root Path"
       required
       bind:value={rootPath}
-      invalid={[requireRule(rootPath), routeRule(rootPath)].some(f => f)}
+      invalid={[requireRule(rootPath), rootPathRule(rootPath)].some(f => f)}
     />
     <ErrorWarningTooltip
       names={['Root path', 'Root path']}
-      messages={[requireRule(rootPath), routeRule(rootPath)]}
+      messages={[requireRule(rootPath), rootPathRule(rootPath)]}
     />
   </div>
 

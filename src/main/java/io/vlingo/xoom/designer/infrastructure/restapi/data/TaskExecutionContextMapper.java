@@ -167,7 +167,7 @@ public class TaskExecutionContextMapper {
       final CodeGenerationParameter routeParameter =
               CodeGenerationParameter.of(ROUTE_SIGNATURE, route.aggregateMethod)
                       .relate(ROUTE_METHOD, route.httpMethod)
-                      .relate(ROUTE_PATH, route.path)
+                      .relate(ROUTE_PATH, route.path.replace("*", ""))
                       .relate(REQUIRE_ENTITY_LOADING, route.requireEntityLoad);
 
       aggregateParameter.relate(routeParameter);
