@@ -8,9 +8,9 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.PathFormatter;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.ROUTE_PATH;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
 public class Route {
 
@@ -25,7 +25,9 @@ public class Route {
   }
 
   public Route(final CodeGenerationParameter route) {
-    this.path = route.retrieveRelatedValue(ROUTE_PATH);
+    final String routePath = route.retrieveRelatedValue(ROUTE_PATH);
+    final String rootPath = route.parent().retrieveRelatedValue(URI_ROOT);
+    this.path = PathFormatter.formatAbsoluteRoutePath(rootPath, routePath);
     this.httpMethod = route.retrieveRelatedValue(ROUTE_METHOD);
     this.methodName = route.value;
   }

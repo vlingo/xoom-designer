@@ -18,6 +18,7 @@ public enum TemplateParameter implements ParameterKey {
   ROUTE("route"),
   FIELD_TYPES("fieldTypes"),
   VALUE_TYPES("valueTypes"),
+  TURBO_SETTINGS("turboSettings"),
   VERSION("version");
 
   private final String key;
