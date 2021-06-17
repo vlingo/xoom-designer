@@ -35,7 +35,7 @@
 		return (
 			route.httpMethod + " " +
 			aggregate.api.rootPath +
-			route.path
+			route.path.replaceAll("*", "")
 		).replaceAll("//", "/")  + "->" + route.aggregateMethod;
 	};
 
