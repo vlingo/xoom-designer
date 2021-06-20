@@ -172,8 +172,13 @@ public enum JavaTemplateStandard implements TemplateStandard {
   QUERIES_UNIT_TEST(parameters -> Template.QUERIES_UNIT_TEST.filename,
       (name, parameters) -> name + "Test"),
 
-  PROJECTION_UNIT_TEST(parameters -> Template.PROJECTION_UNIT_TEST.filename,
-      (name, parameters) -> name + "Test"),
+  PROJECTION_UNIT_TEST(parameters -> {
+    final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+    if (projectionType.isEventBased()) {
+      return Template.EVENT_BASED_PROJECTION_UNIT_TEST.filename;
+    }
+    return Template.ENTITY_STATE_PROJECTION_UNIT_TEST.filename;
+  }, (name, parameters) -> name + "Test"),
 
   ENTITY_UNIT_TEST(parameters -> {
     final StorageType storageType = parameters.find(STORAGE_TYPE);

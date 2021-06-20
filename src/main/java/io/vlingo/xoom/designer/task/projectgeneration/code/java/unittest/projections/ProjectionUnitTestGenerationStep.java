@@ -7,6 +7,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,17 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
     final List<CodeGenerationParameter> aggregates =
         context.parametersOf(Label.AGGREGATE).collect(Collectors.toList());
 
+    final ProjectionType projectionType =
+        context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf);
     final List<CodeGenerationParameter> valueObjects =
         context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
-
     final List<TemplateData> templatesData = new ArrayList<>();
-    templatesData.add(new CountingProjectionControlTemplateData(packageName));
-    templatesData.add(new CountingReadResultInterestTemplateData(packageName));
-    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), aggregates, valueObjects));
+    if (context.parametersOf(Label.PROJECTION_TYPE).noneMatch(type -> type.equals(ProjectionType.NONE))) {
+      templatesData.add(new CountingProjectionControlTemplateData(packageName));
+      templatesData.add(new CountingReadResultInterestTemplateData(packageName));
+    }
+    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), projectionType, aggregates, valueObjects));
     return templatesData;
+
   }
 }

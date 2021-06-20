@@ -16,6 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 
 import java.util.List;
 import java.util.function.Function;
@@ -29,18 +30,20 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final List<Content> contents,
+                                        final ProjectionType projectionType,
                                         final List<CodeGenerationParameter> aggregates,
                                         final List<CodeGenerationParameter> valueObjects) {
     final String packageName =
         ContentQuery.findPackage(JavaTemplateStandard.PROJECTION, contents);
 
     final Function<CodeGenerationParameter, TemplateData> mapper =
-        aggregate -> new ProjectionUnitTestTemplateData(packageName, aggregate, contents, valueObjects);
+        aggregate -> new ProjectionUnitTestTemplateData(packageName, projectionType, aggregate, contents, valueObjects);
 
     return aggregates.stream().map(mapper).collect(Collectors.toList());
   }
 
   public ProjectionUnitTestTemplateData(final String packageName,
+                                        final ProjectionType projectionType,
                                         final CodeGenerationParameter aggregate,
                                         final List<Content> contents,
                                         final List<CodeGenerationParameter> valueObjects) {
@@ -56,6 +59,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
             .and(DATA_OBJECT_NAME, dataObjectName)
             .and(STATE_DATA_OBJECT_NAME, aggregateState)
             .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
+            .and(PROJECTION_TYPE, projectionType)
             .addImport(resolveImport(dataObjectName, JavaTemplateStandard.DATA_OBJECT, contents))
             .addImport(resolveImport(aggregateState, JavaTemplateStandard.AGGREGATE_STATE, contents))
             .addImports(AggregateDetail.resolveImports(aggregate))

@@ -9,6 +9,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,10 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class ProjectionUnitTestGenerationStepTest {
 
   @Test
-  public void testThatProjectionsUnitTestAreGenerated() throws IOException {
+  public void testThatEventBasedProjectionsUnitTestAreGenerated() throws IOException {
     // GIVEN
-    final CodeGenerationParameters parameters = codeGenerationParameters();
+    final CodeGenerationParameters parameters = codeGenerationParameters()
+        .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED);
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(contents());
 
@@ -42,7 +44,26 @@ public class ProjectionUnitTestGenerationStepTest {
     Assertions.assertEquals(8, context.contents().size());
     Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onJava().read("counting-read-result-interest")));
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-projection-unit-test")));
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-event-based-projection-unit-test")));
+  }
+
+  @Test
+  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParameters()
+        .add(Label.PROJECTION_TYPE, ProjectionType.NONE);
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    // WHEN
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content authorProjectionTest =
+        context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    Assertions.assertEquals(8, context.contents().size());
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
