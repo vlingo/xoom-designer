@@ -47,7 +47,7 @@ public class ${projectionUnitTestName} {
   <#list testCases as testCase>
 
   private Projectable create${testCase.domainEventName}(${dataObjectName} data) {
-    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(${testCase.dataObjectParams});
+    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id, ${testCase.dataObjectParams});
 
     BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
     JsonSerialization.serialized(eventData), 1, Metadata.withObject(eventData));
@@ -87,15 +87,13 @@ public class ${projectionUnitTestName} {
       <#list statement.assertions as assertion>
     ${assertion}
       </#list>
-    </#list>
 
     interest = new CountingReadResultInterest();
     interestAccess = interest.afterCompleting(1);
     stateStore.read("2", ${dataObjectName}.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    <#list testCase.statements as statement>
-      <#list statement.assertions as assertion>
+      <#list statement.secondAssertions as assertion>
     ${assertion}
       </#list>
     </#list>

@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class TestStatement {
 
   private final List<String> assertions = new ArrayList<>();
+  private final List<String> secondAssertions = new ArrayList<>();
 
   private final List<String> resultAssignment = new ArrayList<>();
 
@@ -38,6 +39,7 @@ public class TestStatement {
                         final TestDataValueGenerator.TestDataValues testDataValues) {
     this.resultAssignment.addAll(generateExecutions(dataIndex, testMethodName, aggregate));
     this.assertions.addAll(generateAssertions(dataIndex, aggregate, valueObjects, testDataValues));
+    this.secondAssertions.addAll(generateAssertions(2, aggregate, valueObjects, testDataValues));
   }
 
   private List<String> generateExecutions(final int dataIndex,
@@ -60,6 +62,9 @@ public class TestStatement {
 
   public List<String> getAssertions() {
     return assertions;
+  }
+  public List<String> getSecondAssertions() {
+    return secondAssertions;
   }
 
   public List<String> getResultAssignment() {
