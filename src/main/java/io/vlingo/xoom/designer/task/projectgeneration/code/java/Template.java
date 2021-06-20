@@ -68,6 +68,8 @@ public enum Template {
   STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
   REST_RESOURCE_UNIT_TEST("RestResourceUnitTest"),
   ABSTRACT_REST_RESOURCE_UNIT_TEST("RestResourceAbstractUnitTest"),
+  COUNTING_READ_RESULT("CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL("CountingProjectionControl"),
   TURBO_SETTINGS("TurboSettings");
 
   public final String filename;

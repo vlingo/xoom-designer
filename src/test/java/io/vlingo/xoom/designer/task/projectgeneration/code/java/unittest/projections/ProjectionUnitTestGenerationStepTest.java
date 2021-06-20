@@ -32,9 +32,16 @@ public class ProjectionUnitTestGenerationStepTest {
 
     // THEN
     final Content authorProjectionTest =
-        context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTests");
+        context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
 
-    Assertions.assertEquals(5, context.contents().size());
+    final Content countingProjectionControl =
+        context.findContent(JavaTemplateStandard.COUNTING_PROJECTION_CTL, "CountingProjectionControl");
+    final Content countingReadResultInterest =
+        context.findContent(JavaTemplateStandard.COUNTING_READ_RESULT, "CountingReadResultInterest");
+
+    Assertions.assertEquals(8, context.contents().size());
+    Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
+    Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onJava().read("counting-read-result-interest")));
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-projection-unit-test")));
   }
 
@@ -220,6 +227,7 @@ public class ProjectionUnitTestGenerationStepTest {
 
   private Content[] contents() {
     return new Content[]{
+        Content.with(JavaTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT),
         Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.java"), null, null, AUTHOR_RANKED_CONTENT_TEXT),
@@ -246,6 +254,11 @@ public class ProjectionUnitTestGenerationStepTest {
   private static final String AUTHOR_DATA_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure; \\n" +
           "public class AuthorData { \\n" +
+          "... \\n" +
+          "}";
+  private static final String AUTHOR_STATE_CONTENT_TEXT =
+      "package io.vlingo.xoomapp.model.author; \\n" +
+          "public class AuthorState { \\n" +
           "... \\n" +
           "}";
 

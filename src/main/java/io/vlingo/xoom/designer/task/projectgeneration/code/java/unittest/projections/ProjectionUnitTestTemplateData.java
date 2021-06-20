@@ -47,22 +47,25 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
     this.projectionName = JavaTemplateStandard.PROJECTION.resolveClassname(aggregate.value);
 
     final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+    final String aggregateState = JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
 
     this.parameters =
         TemplateParameters.with(PACKAGE_NAME, packageName)
             .and(PROJECTION_UNIT_TEST_NAME, standard().resolveClassname(projectionName.replace("Actor", "")))
             .and(PROJECTION_NAME, projectionName)
             .and(DATA_OBJECT_NAME, dataObjectName)
+            .and(STATE_DATA_OBJECT_NAME, aggregateState)
             .and(TEST_CASES, TestCase.from(aggregate, valueObjects))
-            .addImport(resolveImport(dataObjectName, contents))
+            .addImport(resolveImport(dataObjectName, JavaTemplateStandard.DATA_OBJECT, contents))
+            .addImport(resolveImport(aggregateState, JavaTemplateStandard.AGGREGATE_STATE, contents))
             .addImports(AggregateDetail.resolveImports(aggregate))
             .and(PRODUCTION_CODE, false)
             .and(UNIT_TEST, true);
   }
 
-  private String resolveImport(final String dataObjectName, final List<Content> contents) {
+  private String resolveImport(final String dataObjectName, JavaTemplateStandard dataObject, final List<Content> contents) {
     final String dataObjectPackage =
-        ContentQuery.findPackage(JavaTemplateStandard.DATA_OBJECT, dataObjectName, contents);
+        ContentQuery.findPackage(dataObject, dataObjectName, contents);
 
     return CodeElementFormatter.importAllFrom(dataObjectPackage);
   }

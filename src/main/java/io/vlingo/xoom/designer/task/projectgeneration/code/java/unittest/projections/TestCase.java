@@ -20,35 +20,42 @@ public class TestCase {
   public static final int TEST_DATA_SET_SIZE = 2;
 
   private final String methodName;
-  private final String dataDeclaration;
+  private final List<String> dataDeclarations = new ArrayList<>();
   private final List<TestStatement> statements = new ArrayList<>();
   private final List<String> preliminaryStatements = new ArrayList<>();
+  private final String domainEventName;
+  private final String dataObjectParams;
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-        .map(method -> new TestCase(method.value, aggregate, valueObjects))
+        .map(method -> new TestCase(method, aggregate, valueObjects))
         .collect(Collectors.toList());
   }
 
-  private TestCase(final String signature, final CodeGenerationParameter aggregate,
+  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
                    List<CodeGenerationParameter> valueObjects) {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
     final String dataObjectType =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-    this.methodName = signature;
-    this.dataDeclaration = DataDeclaration.generate(signature, aggregate, valueObjects, testDataValues);
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature));
-    this.statements.addAll(TestStatement.with(signature, aggregate, valueObjects, testDataValues));
+    this.dataObjectParams = signature.retrieveAllRelated(Label.DOMAIN_EVENT)
+        .findFirst().get().retrieveAllRelated(Label.STATE_FIELD)
+        .map(x -> "data." + x.value)
+        .collect(Collectors.joining(", "));
+    this.methodName = signature.value;
+    this.domainEventName = signature.retrieveRelatedValue(Label.DOMAIN_EVENT);
+    this.dataDeclarations.addAll(DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues));
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value));
+    this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
   }
 
   public String getMethodName() {
     return methodName;
   }
 
-  public String getDataDeclaration() {
-    return dataDeclaration;
+  public List<String> getDataDeclarations() {
+    return dataDeclarations;
   }
 
   public List<TestStatement> getStatements() {
@@ -59,5 +66,11 @@ public class TestCase {
     return preliminaryStatements;
   }
 
+  public String getDomainEventName() {
+    return domainEventName;
+  }
 
+  public String getDataObjectParams() {
+    return dataObjectParams;
+  }
 }

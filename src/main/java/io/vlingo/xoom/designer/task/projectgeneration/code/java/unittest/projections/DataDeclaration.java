@@ -11,25 +11,29 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStan
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DataDeclaration {
 
   private static final String TEST_DATA_DECLARATION_PATTERN = "final %s %s = %s;";
 
-  public static String generate(final String methodName,
-                                final CodeGenerationParameter aggregate,
-                                final List<CodeGenerationParameter> valueObjects,
-                                final TestDataValueGenerator.TestDataValues testDataValues) {
-    final String testDataVariableName =
-        TestDataFormatter.formatStaticVariableName(1, methodName);
+  public static List<String> generate(final String methodName,
+                                      final CodeGenerationParameter aggregate,
+                                      final List<CodeGenerationParameter> valueObjects,
+                                      final TestDataValueGenerator.TestDataValues testDataValues) {
+    return IntStream.range(1, TestCase.TEST_DATA_SET_SIZE + 1).mapToObj(dataIndex -> {
+      final String testDataVariableName =
+          TestDataFormatter.formatLocalVariableName(dataIndex);
 
-    final String dataObjectType =
-        JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+      final String dataObjectType =
+          JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 
-    final String dataInstantiation =
-        InlineDataInstantiation.with(1, JavaTemplateStandard.DATA_OBJECT, aggregate,
-            valueObjects, testDataValues).generate();
+      final String dataInstantiation =
+          InlineDataInstantiation.with(dataIndex, JavaTemplateStandard.DATA_OBJECT, aggregate,
+              valueObjects, testDataValues).generate();
 
-    return String.format(TEST_DATA_DECLARATION_PATTERN, dataObjectType, testDataVariableName, dataInstantiation);
+      return String.format(TEST_DATA_DECLARATION_PATTERN, dataObjectType, testDataVariableName, dataInstantiation);
+    }).collect(Collectors.toList());
   }
 }

@@ -22,18 +22,18 @@ public class Assertions {
                                   final CodeGenerationParameter aggregate,
                                   final List<CodeGenerationParameter> valueObjects,
                                   final TestDataValueGenerator.TestDataValues testDataValues) {
-    final String variableName = TestDataFormatter.formatLocalVariableName(dataIndex);
+    final String variableName = "item";//TestDataFormatter.formatLocalVariableName(dataIndex);
 
     final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths(variableName, aggregate, valueObjects);
 
     final Function<String, String> mapper =
-            fieldPath -> {
-              final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
-              if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
-                return String.format("assertNotNull(%s);", fieldPath);
-              }
-              return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
-            };
+        fieldPath -> {
+          final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
+          if (FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
+            return String.format("assertNotNull(%s);", fieldPath);
+          }
+          return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
+        };
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
   }

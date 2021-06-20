@@ -173,7 +173,7 @@ public enum JavaTemplateStandard implements TemplateStandard {
       (name, parameters) -> name + "Test"),
 
   PROJECTION_UNIT_TEST(parameters -> Template.PROJECTION_UNIT_TEST.filename,
-      (name, parameters) -> name + "Tests"),
+      (name, parameters) -> name + "Test"),
 
   ENTITY_UNIT_TEST(parameters -> {
     final StorageType storageType = parameters.find(STORAGE_TYPE);
@@ -188,7 +188,10 @@ public enum JavaTemplateStandard implements TemplateStandard {
 
   ABSTRACT_REST_RESOURCE_UNIT_TEST(parameters -> Template.ABSTRACT_REST_RESOURCE_UNIT_TEST.filename,
       (name, parameters) -> "AbstractRestTest"),
-
+  COUNTING_READ_RESULT(parameters -> Template.COUNTING_READ_RESULT.filename,
+      (name, parameters) -> "CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL(parameters -> Template.COUNTING_PROJECTION_CTL.filename,
+      (name, parameters) -> "CountingProjectionControl"),
   MOCK_DISPATCHER(parameters -> {
     final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
     if (projectionType.isOperationBased()) {
@@ -237,4 +240,5 @@ public enum JavaTemplateStandard implements TemplateStandard {
   public String resolveFilename(final String name, final TemplateParameters parameters) {
     return this.nameResolver.apply(name, parameters);
   }
+
 }

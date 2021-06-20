@@ -11,11 +11,10 @@ import java.util.List;
 
 public class PreliminaryStatement {
 
-  private static final String PROJECTION_CONTROL_PATTERN = "final CountingProjectionControl control = new CountingProjectionControl();\n" +
-      "    final AccessSafely access = control.afterCompleting(2);";
+  private static final String PROJECTION_CONTROL_PATTERN = "";
 
   public static List<String> with(final String testMethodName) {
-    final String testDataVariableName = TestDataFormatter.formatStaticVariableName(1, testMethodName);
+    final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);
     return Collections.singletonList(String.format(PROJECTION_CONTROL_PATTERN, testDataVariableName));
   }
 

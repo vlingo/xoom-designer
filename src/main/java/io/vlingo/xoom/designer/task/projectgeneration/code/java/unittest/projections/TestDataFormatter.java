@@ -7,16 +7,9 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.NumberFormat;
 
 public class TestDataFormatter {
-
-  public static String formatStaticVariableName(final int dataIndex, final String methodName) {
-    final String dataOrdinalIndex = NumberFormat.toOrdinal(dataIndex);
-    final String formattedMethodName = CodeElementFormatter.staticConstant(methodName);
-    return String.format("%s_%s_TEST_DATA", dataOrdinalIndex, formattedMethodName).toUpperCase();
-  }
 
   public static String formatLocalVariableName(final int dataIndex) {
     return NumberFormat.toOrdinal(dataIndex) + "Data";
