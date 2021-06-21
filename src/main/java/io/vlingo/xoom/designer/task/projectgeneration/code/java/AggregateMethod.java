@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.FACTORY_METHOD;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
+@Deprecated
 public class AggregateMethod {
 
   public final String name;

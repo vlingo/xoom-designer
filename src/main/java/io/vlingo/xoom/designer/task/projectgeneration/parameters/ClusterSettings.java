@@ -5,12 +5,12 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
-
-import static java.util.Collections.unmodifiableList;
+package io.vlingo.xoom.designer.task.projectgeneration.parameters;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.unmodifiableList;
 
 public class ClusterSettings {
 

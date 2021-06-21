@@ -14,7 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
+import io.vlingo.xoom.designer.task.projectgeneration.parameters.TurboSettings;
 
 import java.util.Arrays;
 import java.util.List;

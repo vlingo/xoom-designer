@@ -12,6 +12,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.PathFor
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
+@Deprecated
 public class Route {
 
   public final String path;

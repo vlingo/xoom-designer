@@ -16,9 +16,9 @@ import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.task.projectgeneration.parameters.ClusterSettings;
+import io.vlingo.xoom.designer.task.projectgeneration.parameters.TurboSettings;
 
 import java.nio.file.Path;
 import java.util.Optional;

@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
+@Deprecated
 public class Field {
 
   public final String name;

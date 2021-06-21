@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
+@Deprecated
 public class Aggregate {
 
   public final String aggregateName;

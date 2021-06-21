@@ -12,8 +12,8 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.Aggregate;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RouteDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.parameters.TurboSettings;
 
 import java.util.Arrays;
 import java.util.List;
