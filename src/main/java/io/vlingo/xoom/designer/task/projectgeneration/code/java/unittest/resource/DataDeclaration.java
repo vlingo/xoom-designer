@@ -21,7 +21,7 @@ public class DataDeclaration {
                                 final List<CodeGenerationParameter> valueObjects,
                                 final TestDataValueGenerator.TestDataValues testDataValues) {
     final String testDataVariableName =
-        TestDataFormatter.formatStaticVariableName(1, methodName);
+            TestDataFormatter.formatLocalVariableName(1);
 
     final String dataObjectType =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);

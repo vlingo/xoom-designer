@@ -23,11 +23,11 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testWithName() {
-    final AuthorData FIRST_WITH_NAME_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_WITH_NAME_TEST_DATA)
+        .body(firstData)
         .post("/authors/")
         .then()
         .statusCode(201)
@@ -50,12 +50,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testChangeRank() {
-    final AuthorData FIRST_CHANGE_RANK_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_CHANGE_RANK_TEST_DATA)
-        .patch("/authors/"+FIRST_CHANGE_RANK_TEST_DATA.id+"/rank")
+        .body(firstData)
+        .patch("/authors/"+firstData.id+"/rank")
         .then()
         .statusCode(201)
         .extract()
@@ -77,12 +77,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testRelateAuthor() {
-    final AuthorData FIRST_RELATE_AUTHOR_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_RELATE_AUTHOR_TEST_DATA)
-        .patch("/"+FIRST_RELATE_AUTHOR_TEST_DATA.id+"/related-author")
+        .body(firstData)
+        .patch("/"+firstData.id+"/related-author")
         .then()
         .statusCode(201)
         .extract()
@@ -104,12 +104,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testRelateAuthors() {
-    final AuthorData FIRST_RELATE_AUTHORS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_RELATE_AUTHORS_TEST_DATA)
-        .patch("/"+FIRST_RELATE_AUTHORS_TEST_DATA.id+"/related-authors")
+        .body(firstData)
+        .patch("/"+firstData.id+"/related-authors")
         .then()
         .statusCode(201)
         .extract()
@@ -131,12 +131,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testReplaceAllRelatedAuthors() {
-    final AuthorData FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA)
-        .put("/"+FIRST_REPLACE_ALL_RELATED_AUTHORS_TEST_DATA.id+"/related-authors")
+        .body(firstData)
+        .put("/"+firstData.id+"/related-authors")
         .then()
         .statusCode(201)
         .extract()
@@ -158,12 +158,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testUnrelateAuthor() {
-    final AuthorData FIRST_UNRELATE_AUTHOR_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_UNRELATE_AUTHOR_TEST_DATA)
-        .delete("/"+FIRST_UNRELATE_AUTHOR_TEST_DATA.id+"/related-author")
+        .body(firstData)
+        .delete("/"+firstData.id+"/related-author")
         .then()
         .statusCode(201)
         .extract()
@@ -185,12 +185,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testAddTag() {
-    final AuthorData FIRST_ADD_TAG_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_ADD_TAG_TEST_DATA)
-        .patch("/"+FIRST_ADD_TAG_TEST_DATA.id+"/tag")
+        .body(firstData)
+        .patch("/"+firstData.id+"/tag")
         .then()
         .statusCode(201)
         .extract()
@@ -212,12 +212,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testAddTags() {
-    final AuthorData FIRST_ADD_TAGS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_ADD_TAGS_TEST_DATA)
-        .patch("/"+FIRST_ADD_TAGS_TEST_DATA.id+"/tags")
+        .body(firstData)
+        .patch("/"+firstData.id+"/tags")
         .then()
         .statusCode(201)
         .extract()
@@ -239,12 +239,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testReplaceTags() {
-    final AuthorData FIRST_REPLACE_TAGS_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_REPLACE_TAGS_TEST_DATA)
-        .put("/"+FIRST_REPLACE_TAGS_TEST_DATA.id+"/tags")
+        .body(firstData)
+        .put("/"+firstData.id+"/tags")
         .then()
         .statusCode(201)
         .extract()
@@ -266,12 +266,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testRemoveTag() {
-    final AuthorData FIRST_REMOVE_TAG_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_REMOVE_TAG_TEST_DATA)
-        .delete("/"+FIRST_REMOVE_TAG_TEST_DATA.id+"/tags")
+        .body(firstData)
+        .delete("/"+firstData.id+"/tags")
         .then()
         .statusCode(201)
         .extract()
@@ -293,12 +293,12 @@ public class AuthorResourceTests extends AbstractRestTest {
 
   @Test
   public void testChangeRank() {
-    final AuthorData FIRST_CHANGE_RANK_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
       AuthorData firstData = given()
         .when()
-        .body(FIRST_CHANGE_RANK_TEST_DATA)
-        .patch("/authors/"+FIRST_CHANGE_RANK_TEST_DATA.id+"/rank")
+        .body(firstData)
+        .patch("/authors/"+firstData.id+"/rank")
         .then()
         .statusCode(201)
         .extract()

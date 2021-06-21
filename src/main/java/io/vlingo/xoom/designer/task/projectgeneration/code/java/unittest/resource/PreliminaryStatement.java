@@ -22,7 +22,7 @@ public class PreliminaryStatement {
       "        .as(%s.class);";
 
   public static List<String> with(final String testMethodName, final String valueObjectData, final String rootPath, final String rootMethod) {
-    final String testDataVariableName = TestDataFormatter.formatStaticVariableName(1, testMethodName);
+    final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);
     return Collections.singletonList(String.format(REST_ASSURED, valueObjectData, testDataVariableName, rootMethod,
         rootPath.replace("{id}", "\"+"+testDataVariableName + ".id"+"+\""), valueObjectData));
   }
