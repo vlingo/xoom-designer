@@ -1,11 +1,7 @@
 package ${packageName};
 
 import io.vlingo.xoom.actors.World;
-import io.vlingo.xoom.actors.testkit.AccessSafely;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.lattice.model.projection.Projectable;
-import io.vlingo.xoom.lattice.model.projection.Projection;
-import io.vlingo.xoom.lattice.model.projection.TextProjectable;
 import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
 import io.vlingo.xoom.symbio.BaseEntry;
 import io.vlingo.xoom.symbio.Metadata;
@@ -18,48 +14,47 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 <#list imports as import>
-import ${import.qualifiedClassName};
+  import ${import.qualifiedClassName};
 </#list>
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ${projectionUnitTestName} {
 
-  private World world;
-  private StateStore stateStore;
-  private Projection projection;
-  private Map<String, String> valueToProjectionId;
+private World world;
+private StateStore stateStore;
+private ${aggregateProtocolName} entity;
 
-  @BeforeEach
-  public void setUp() {
-    world = World.startWithDefaults("test-state-store-projection");
-    NoOpDispatcher dispatcher = new NoOpDispatcher();
-    valueToProjectionId = new ConcurrentHashMap<>();
-    stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
-    StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, ${dataObjectName}.class);
-    QueryModelStateStoreProvider.using(world.stage(), statefulTypeRegistry);
-    projection = world.actorFor(Projection.class, ${projectionName}.class, stateStore);
-  }
+@BeforeEach
+public void setUp() {
+world = World.startWithDefaults("test-state-store-projection");
+NoOpDispatcher dispatcher = new NoOpDispatcher();
+stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
+StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, ${dataObjectName}.class);
+QueryModelStateStoreProvider.using(world.stage(), statefulTypeRegistry);
+entity = world.actorFor(${aggregateProtocolName}.class, ${entityName}.class, "1");
+}
 
-  <#list testCases as testCase>
+<#list testCases as testCase>
   @Test
   public void ${testCase.methodName}() {
 
-    <#list testCase.dataDeclarations as dataDeclaration>
+  <#list testCase.dataDeclarations as dataDeclaration>
     ${dataDeclaration}
-    </#list>
-    <#list testCase.preliminaryStatements as statement>
+  </#list>
+  final ${testCase.domainEventName} item = entity.${testCase.domainEventName}(data.id, ${testCase.dataObjectParams}).await();
+
+  <#list testCase.preliminaryStatements as statement>
     ${statement}
+  </#list>
+  <#list testCase.statements as statement>
+    <#list statement.resultAssignment as resultAssignment>
+      ${resultAssignment}
     </#list>
-    <#list testCase.statements as statement>
-      <#list statement.resultAssignment as resultAssignment>
-    ${resultAssignment}
-      </#list>
-      <#list statement.assertions as assertion>
-    ${assertion}
+    <#list statement.assertions as assertion>
+      ${assertion}
       </#list>
     </#list>
   }

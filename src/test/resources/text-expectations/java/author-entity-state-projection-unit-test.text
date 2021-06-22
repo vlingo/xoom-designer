@@ -1,11 +1,7 @@
 package io.vlingo.xoomapp.infrastructure.persistence;
 
 import io.vlingo.xoom.actors.World;
-import io.vlingo.xoom.actors.testkit.AccessSafely;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.lattice.model.projection.Projectable;
-import io.vlingo.xoom.lattice.model.projection.Projection;
-import io.vlingo.xoom.lattice.model.projection.TextProjectable;
 import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
 import io.vlingo.xoom.symbio.BaseEntry;
 import io.vlingo.xoom.symbio.Metadata;
@@ -18,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import java.time.LocalDate;
 import io.vlingo.xoomapp.infrastructure.*;
@@ -31,18 +26,16 @@ public class AuthorProjectionTest {
 
   private World world;
   private StateStore stateStore;
-  private Projection projection;
-  private Map<String, String> valueToProjectionId;
+  private Author entity;
 
   @BeforeEach
   public void setUp() {
     world = World.startWithDefaults("test-state-store-projection");
     NoOpDispatcher dispatcher = new NoOpDispatcher();
-    valueToProjectionId = new ConcurrentHashMap<>();
     stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
     StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, AuthorData.class);
     QueryModelStateStoreProvider.using(world.stage(), statefulTypeRegistry);
-    projection = world.actorFor(Projection.class, AuthorProjectionActor.class, stateStore);
+    entity = world.actorFor(Author.class, AuthorEntity.class, "1");
   }
 
   @Test
@@ -50,6 +43,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRegistered item = entity.AuthorRegistered(data.id, data.name, data.availableOn).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -65,6 +60,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRanked item = entity.AuthorRanked(data.id, data.rank).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -80,6 +77,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.tags).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -95,6 +94,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.tags).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -110,6 +111,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.tags).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -125,6 +128,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorUnrelated item = entity.AuthorUnrelated(data.id, data.tags).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -140,6 +145,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.relatedAuthors).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -155,6 +162,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.relatedAuthors).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -170,6 +179,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorUnrelated item = entity.AuthorUnrelated(data.id, data.relatedAuthors).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
@@ -185,6 +196,8 @@ public class AuthorProjectionTest {
 
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorRelated item = entity.AuthorRelated(data.id, data.relatedAuthors).await();
+
 
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");

@@ -21,13 +21,19 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 
 public class ProjectionUnitTestGenerationStepTest {
 
+  private static final String PERSISTENCE_SETUP_CONTENT_TEXT =
+          "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                  "public class PersistenceSetup { \\n" +
+                  "... \\n" +
+                  "}";
+
   @Test
   public void testThatEventBasedProjectionsUnitTestAreGenerated() throws IOException {
     // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters()
-        .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED);
+            .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED);
     final CodeGenerationContext context =
-        CodeGenerationContext.with(parameters).contents(contents());
+            CodeGenerationContext.with(parameters).contents(contents());
 
     // WHEN
     new ProjectionUnitTestGenerationStep().process(context);
@@ -41,29 +47,10 @@ public class ProjectionUnitTestGenerationStepTest {
     final Content countingReadResultInterest =
         context.findContent(JavaTemplateStandard.COUNTING_READ_RESULT, "CountingReadResultInterest");
 
-    Assertions.assertEquals(8, context.contents().size());
+    Assertions.assertEquals(9, context.contents().size());
     Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onJava().read("counting-read-result-interest")));
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-event-based-projection-unit-test")));
-  }
-
-  @Test
-  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
-    // GIVEN
-    final CodeGenerationParameters parameters = codeGenerationParameters()
-        .add(Label.PROJECTION_TYPE, ProjectionType.NONE);
-    final CodeGenerationContext context =
-        CodeGenerationContext.with(parameters).contents(contents());
-
-    // WHEN
-    new ProjectionUnitTestGenerationStep().process(context);
-
-    // THEN
-    final Content authorProjectionTest =
-        context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
-
-    Assertions.assertEquals(8, context.contents().size());
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
@@ -236,25 +223,33 @@ public class ProjectionUnitTestGenerationStepTest {
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
             .relate(Label.FIELD_TYPE, "String"))
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
-            .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
+                .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
   }
 
   private CodeGenerationParameter classifierValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
-        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
-            .relate(Label.FIELD_TYPE, "String"));
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+                    .relate(Label.FIELD_TYPE, "String"));
 
   }
 
-  private Content[] contents() {
-    return new Content[]{
-        Content.with(JavaTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.java"), null, null, AUTHOR_RANKED_CONTENT_TEXT),
-        Content.with(JavaTemplateStandard.PROJECTION, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.java"), null, null, AUTHOR_PROJECTION_CONTENT_TEXT),
+  @Test
+  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParameters()
+            .add(Label.PROJECTION_TYPE, ProjectionType.NONE);
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
 
-    };
+    // WHEN
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content authorProjectionTest =
+            context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    Assertions.assertEquals(7, context.contents().size());
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
   }
 
   private static final String PROJECT_PATH =
@@ -284,20 +279,32 @@ public class ProjectionUnitTestGenerationStepTest {
           "}";
 
   private static final String AUTHOR_REGISTERED_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.model.author; \\n" +
-          "public class AuthorRegistered extends DomainEvent { \\n" +
-          "... \\n" +
-          "}";
+          "package io.vlingo.xoomapp.model.author; \\n" +
+                  "public class AuthorRegistered extends DomainEvent { \\n" +
+                  "... \\n" +
+                  "}";
 
   private static final String AUTHOR_RANKED_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.model.author; \\n" +
-          "public class AuthorRanked extends DomainEvent { \\n" +
-          "... \\n" +
-          "}";
+          "package io.vlingo.xoomapp.model.author; \\n" +
+                  "public class AuthorRanked extends DomainEvent { \\n" +
+                  "... \\n" +
+                  "}";
+
+  private Content[] contents() {
+    return new Content[]{
+            Content.with(JavaTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "AuthorState.java"), null, null, AUTHOR_STATE_CONTENT_TEXT),
+            Content.with(JavaTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorData.java"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+            Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRegistered.java"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT),
+            Content.with(JavaTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.java"), null, null, AUTHOR_RANKED_CONTENT_TEXT),
+            Content.with(JavaTemplateStandard.PROJECTION, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.java"), null, null, AUTHOR_PROJECTION_CONTENT_TEXT),
+            Content.with(JavaTemplateStandard.PERSISTENCE_SETUP, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "PersistenceSetup.java"), null, null, PERSISTENCE_SETUP_CONTENT_TEXT),
+
+    };
+  }
 
   private static final String AUTHOR_PROJECTION_CONTENT_TEXT =
-      "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
-          "public class AuthorProjectionActor { \\n" +
-          "... \\n" +
-          "}";
+          "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
+                  "public class AuthorProjectionActor { \\n" +
+                  "... \\n" +
+                  "}";
 }
