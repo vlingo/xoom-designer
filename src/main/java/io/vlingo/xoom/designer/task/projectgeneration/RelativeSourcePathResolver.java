@@ -71,6 +71,19 @@ public interface RelativeSourcePathResolver {
     }
   }
 
+  class ReadmeFile implements RelativeSourcePathResolver {
+
+    @Override
+    public String[] resolve(final CodeGenerationContext context, final Dialect dialect, final TemplateData templateData) {
+      return new String[]{};
+    }
+
+    @Override
+    public boolean shouldResolve(final TemplateData templateData) {
+      return templateData.parameters().find(README_FILE, false);
+    }
+  }
+
   class ProjectGenerationSettingsPayload implements RelativeSourcePathResolver {
 
     @Override
