@@ -44,7 +44,7 @@ entity = world.actorFor(${aggregateProtocolName}.class, ${entityName}.class, "1"
   <#list testCase.dataDeclarations as dataDeclaration>
     ${dataDeclaration}
   </#list>
-  final ${testCase.domainEventName} item = entity.${testCase.domainEventName}(data.id, ${testCase.dataObjectParams}).await();
+  final ${testCase.domainEventName} item = entity.${testCase.methodName}(${testCase.dataObjectParams}).await();
 
   <#list testCase.preliminaryStatements as statement>
     ${statement}

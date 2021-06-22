@@ -40,7 +40,7 @@ public class TestCase {
     final String dataObjectType =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
     this.dataObjectParams = signature.retrieveAllRelated(Label.METHOD_PARAMETER)
-        .map(x -> "data." + x.value)
+            .map(x -> "firstData." + x.value)
         .collect(Collectors.joining(", "));
     this.methodName = signature.value;
     this.domainEventName = signature.retrieveRelatedValue(Label.DOMAIN_EVENT);

@@ -43,9 +43,9 @@ public class ProjectionUnitTestGenerationStepTest {
         context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
 
     final Content countingProjectionControl =
-        context.findContent(JavaTemplateStandard.COUNTING_PROJECTION_CTL, "CountingProjectionControl");
+            context.findContent(JavaTemplateStandard.COUNTING_PROJECTION_CTL, "CountingProjectionControl");
     final Content countingReadResultInterest =
-        context.findContent(JavaTemplateStandard.COUNTING_READ_RESULT, "CountingReadResultInterest");
+            context.findContent(JavaTemplateStandard.COUNTING_READ_RESULT, "CountingReadResultInterest");
 
     Assertions.assertEquals(9, context.contents().size());
     Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
@@ -53,13 +53,32 @@ public class ProjectionUnitTestGenerationStepTest {
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-event-based-projection-unit-test")));
   }
 
+  @Test
+  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParameters()
+            .add(Label.PROJECTION_TYPE, ProjectionType.NONE);
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
+
+    // WHEN
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content authorProjectionTest =
+            context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    Assertions.assertEquals(7, context.contents().size());
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
+  }
+
   private CodeGenerationParameters codeGenerationParameters() {
     return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
-        .add(Label.DIALECT, Dialect.JAVA)
-        .add(authorAggregate())
-        .add(nameValueObject()).add(rankValueObject())
-        .add(tagValueObject())
-        .add(classificationValueObject()).add(classifierValueObject());
+            .add(Label.DIALECT, Dialect.JAVA)
+            .add(authorAggregate())
+            .add(nameValueObject()).add(rankValueObject())
+            .add(tagValueObject())
+            .add(classificationValueObject()).add(classifierValueObject());
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -231,25 +250,6 @@ public class ProjectionUnitTestGenerationStepTest {
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
                     .relate(Label.FIELD_TYPE, "String"));
 
-  }
-
-  @Test
-  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
-    // GIVEN
-    final CodeGenerationParameters parameters = codeGenerationParameters()
-            .add(Label.PROJECTION_TYPE, ProjectionType.NONE);
-    final CodeGenerationContext context =
-            CodeGenerationContext.with(parameters).contents(contents());
-
-    // WHEN
-    new ProjectionUnitTestGenerationStep().process(context);
-
-    // THEN
-    final Content authorProjectionTest =
-            context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
-
-    Assertions.assertEquals(7, context.contents().size());
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
   }
 
   private static final String PROJECT_PATH =

@@ -46,19 +46,19 @@ public class ${projectionUnitTestName} {
 
   <#list testCases as testCase>
 
-  private Projectable create${testCase.domainEventName}(${dataObjectName} data) {
-    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id, ${testCase.dataObjectParams});
+    private Projectable create${testCase.domainEventName}(${dataObjectName} firstData) {
+    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(firstData.id, ${testCase.dataObjectParams});
 
     BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
     JsonSerialization.serialized(eventData), 1, Metadata.withObject(eventData));
 
     final String projectionId = UUID.randomUUID().toString();
-    valueToProjectionId.put(data.id, projectionId);
+    valueToProjectionId.put(firstData.id, projectionId);
     return new TextProjectable(null, Collections.singletonList(textEntry), projectionId);
-  }
+    }
 
-  @Test
-  public void ${testCase.methodName}() {
+    @Test
+    public void ${testCase.methodName}() {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
