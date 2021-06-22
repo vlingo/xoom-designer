@@ -76,7 +76,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
             AuxiliaryEntityCreation.from(aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues);
 
     final List<TestCase> testCases =
-            TestCase.from(aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues, projectionType);
+            TestCase.from(aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues, storageType, projectionType);
 
     this.parameters =
             TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)

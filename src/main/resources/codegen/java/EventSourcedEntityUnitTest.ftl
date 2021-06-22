@@ -10,8 +10,7 @@ import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
 import io.vlingo.xoom.symbio.EntryAdapterProvider;
 import io.vlingo.xoom.symbio.store.journal.Journal;
 import io.vlingo.xoom.symbio.store.journal.inmemory.InMemoryJournalActor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Collections;
 
@@ -50,7 +49,15 @@ public class ${entityUnitTestName} {
   </#list>
 
   @Test
+  <#if testCase.disabled>
+  @Disabled
+  </#if>
   public void ${testCase.methodName}() {
+    <#if testCase.disabled>
+    /**
+     * TODO: Unable to generate tests for method ${testCase.methodName}. See {@link ${entityName}#${testCase.methodName}()}
+     */
+    <#else>
     <#list testCase.preliminaryStatements as statement>
     ${statement}
     </#list>
@@ -59,6 +66,7 @@ public class ${entityUnitTestName} {
     <#list testCase.assertions as assertion>
     ${assertion}
     </#list>
+    </#if>
   }
 
   </#list>
