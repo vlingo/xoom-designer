@@ -126,7 +126,7 @@ public class TaskExecutionContextMapper {
 
       final Optional<CodeGenerationParameter> emitterMethod =
               aggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
-                      .filter(method -> method.retrieveRelatedValue(DOMAIN_EVENT).equals(event.name))
+                      .filter(method -> method.hasAny(DOMAIN_EVENT) && method.retrieveRelatedValue(DOMAIN_EVENT).equals(event.name))
                       .findFirst();
 
       event.fields.forEach(field -> {
