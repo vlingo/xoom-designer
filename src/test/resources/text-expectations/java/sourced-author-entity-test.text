@@ -16,8 +16,7 @@ import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
 import io.vlingo.xoom.symbio.EntryAdapterProvider;
 import io.vlingo.xoom.symbio.store.journal.Journal;
 import io.vlingo.xoom.symbio.store.journal.inmemory.InMemoryJournalActor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Collections;
 
@@ -84,20 +83,20 @@ public class AuthorEntityTest {
 
 
   @Test
+  @Disabled
   public void deactivate() {
-    author.deactivate().await();
-
+    /**
+     * TODO: Unable to generate tests for method deactivate. See {@link AuthorEntity#deactivate()}
+     */
   }
 
-  private static final LocalDate AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST = LocalDate.now();
 
   @Test
+  @Disabled
   public void makeAvailableOn() {
-    final AuthorState state = author.makeAvailableOn(AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST).await();
-
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
-    assertNotNull(state.availableOn);
+    /**
+     * TODO: Unable to generate tests for method makeAvailableOn. See {@link AuthorEntity#makeAvailableOn()}
+     */
   }
 
   private static final Tag TAGS_FOR_ADD_TAG_TEST = Tag.from("updated-author-tags-name");
