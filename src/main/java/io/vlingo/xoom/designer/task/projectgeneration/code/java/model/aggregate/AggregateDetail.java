@@ -8,8 +8,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -21,8 +19,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MUTATION;
 
 public class AggregateDetail {
 

@@ -4,21 +4,20 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.designer.task.projectgeneration.parameters.model;
 
-package io.vlingo.xoom.designer.task.projectgeneration.parameters.field;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Field {
+public class ValueObject {
 
   private final String name;
-  private final Type type;
+  private final List<Field> fields = new ArrayList<>();
 
-  public Field of(final String name, final Type type) {
-    return new Field(name, type);
-  }
-
-  private Field(final String name, final Type type) {
+  public ValueObject(final String name,
+                     final List<Field> fields) {
     this.name = name;
-    this.type = type;
+    this.fields.addAll(fields);
   }
 
 }

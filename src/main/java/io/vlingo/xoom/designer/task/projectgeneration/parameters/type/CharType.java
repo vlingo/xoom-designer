@@ -4,16 +4,12 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.parameters.field;
+package io.vlingo.xoom.designer.task.projectgeneration.parameters.type;
 
-public class StringType extends ScalarType {
+public class CharType extends ScalarType {
 
-  protected StringType() {
-    super("String");
-  }
-
-  public static boolean isString(final String typeName) {
-    return typeName.equalsIgnoreCase("String");
+  CharType() {
+    super("char");
   }
 
   @Override
@@ -23,12 +19,16 @@ public class StringType extends ScalarType {
 
   @Override
   public boolean isString() {
-    return true;
+    return false;
   }
 
   @Override
   public String defaultValue() {
-    return "null";
+    return "'\u0000'";
+  }
+
+  public static boolean isChar(final String typeName) {
+    return typeName.equalsIgnoreCase("char");
   }
 
 }

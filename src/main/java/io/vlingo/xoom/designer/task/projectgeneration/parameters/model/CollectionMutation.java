@@ -4,9 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration;
-
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+package io.vlingo.xoom.designer.task.projectgeneration.parameters.model;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,23 +13,20 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.ALIAS;
-
-@Deprecated
 public enum CollectionMutation {
 
   NONE("", param -> Collections.emptyList()),
   REPLACEMENT("*", param -> Collections.emptyList()),
-  ADDITION("+", param -> Arrays.asList(String.format("%s.add(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
-  REMOVAL("-", param -> Arrays.asList(String.format("%s.remove(%s);", param.value, param.retrieveRelatedValue(ALIAS)))),
-  MERGE("#", param -> Arrays.asList(String.format("%s.removeAll(%s);", param.value, param.value),
-          String.format("%s.addAll(%s);", param.value, param.value)));
+  ADDITION("+", param -> Arrays.asList(String.format("%s.add(%s);", param.stateFieldName(), param.name()))),
+  REMOVAL("-", param -> Arrays.asList(String.format("%s.remove(%s);", param.stateFieldName(), param.name()))),
+  MERGE("#", param -> Arrays.asList(String.format("%s.removeAll(%s);", param.stateFieldName(), param.stateFieldName()),
+          String.format("%s.addAll(%s);", param.stateFieldName(), param.stateFieldName())));
 
   private final String symbol;
-  private final Function<CodeGenerationParameter, List<String>> statementsResolver;
+  private final Function<MethodParameter, List<String>> statementsResolver;
 
   CollectionMutation(final String symbol,
-                     final Function<CodeGenerationParameter, List<String>> statementsResolver) {
+                     final Function<MethodParameter, List<String>> statementsResolver) {
     this.symbol = symbol;
     this.statementsResolver = statementsResolver;
   }
@@ -48,8 +43,8 @@ public enum CollectionMutation {
     return equals(ADDITION) || equals(REMOVAL);
   }
 
-  public List<String> resolveStatements(final String carrier, final CodeGenerationParameter methodParameter) {
-    return statementsResolver.apply(methodParameter).stream().map(statement -> carrier + "." + statement).collect(Collectors.toList());
+  public List<String> resolveStatements(final String collectionOwner, final MethodParameter methodParameter) {
+    return statementsResolver.apply(methodParameter).stream().map(statement -> collectionOwner + "." + statement).collect(Collectors.toList());
   }
 
   public boolean shouldReplaceWithMethodParameter() {
