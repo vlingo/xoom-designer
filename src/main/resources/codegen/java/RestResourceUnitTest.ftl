@@ -32,10 +32,6 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
     ${statement}
   </#list>
   <#list testCase.statements as statement>
-  <#list statement.resultAssignment as resultAssignment>
-    ${resultAssignment}
-  </#list>
-
   <#list statement.assertions as assertion>
     ${assertion}
   </#list>

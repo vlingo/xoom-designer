@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ${projectionUnitTestName} {
 
-private World world;
-private StateStore stateStore;
-private ${aggregateProtocolName} entity;
+  private World world;
+  private StateStore stateStore;
+  private ${aggregateProtocolName} entity;
 
   @BeforeEach
   public void setUp() {
@@ -39,27 +39,20 @@ private ${aggregateProtocolName} entity;
   }
 
   <#list testCases as testCase>
+
   @Test
   public void ${testCase.methodName}() {
-
   <#list testCase.dataDeclarations as dataDeclaration>
     ${dataDeclaration}
   </#list>
     ${dataName} data = firstData.to${dataName}();
     final ${testCase.domainEventName} item = entity.${testCase.methodName}(${testCase.dataObjectParams}).await();
 
-  <#list testCase.preliminaryStatements as statement>
-    ${statement}
-  </#list>
   <#list testCase.statements as statement>
-  <#list statement.resultAssignment as resultAssignment>
-    ${resultAssignment}
-  </#list>
   <#list statement.assertions as assertion>
     ${assertion}
   </#list>
   </#list>
   }
-
   </#list>
 }

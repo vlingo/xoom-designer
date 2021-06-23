@@ -11,15 +11,15 @@ import java.util.List;
 
 public class PreliminaryStatement {
 
-  private static final String REST_ASSURED = "%s result = given()\n" +
-      "        .when()\n" +
-      "        .body(%s)\n" +
-      "        .%s(\"%s\")\n" +
-      "        .then()\n" +
-      "        .statusCode(201)\n" +
-      "        .extract()\n" +
-      "        .body()\n" +
-      "        .as(%s.class);";
+  private static final String REST_ASSURED = "%s result = given()\r\n" +
+      "        .when()\r\n" +
+      "        .body(%s)\r\n" +
+      "        .%s(\"%s\")\r\n" +
+      "        .then()\r\n" +
+      "        .statusCode(201)\r\n" +
+      "        .extract()\r\n" +
+      "        .body()\r\n" +
+      "        .as(%s.class);\r\n";
 
   public static List<String> with(final String testMethodName, final String valueObjectData, final String rootPath, final String rootMethod) {
     final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);

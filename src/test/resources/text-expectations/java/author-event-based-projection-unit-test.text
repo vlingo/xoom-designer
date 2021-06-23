@@ -77,7 +77,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertEquals(item.name.firstName, "first-author-name-firstName");
     assertEquals(item.name.lastName, "first-author-name-lastName");
@@ -123,7 +122,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.rank);
 
@@ -167,7 +165,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -211,7 +208,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -255,7 +251,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -299,7 +294,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -343,7 +337,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -387,7 +380,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -431,7 +423,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 
@@ -475,7 +466,6 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
 

@@ -78,13 +78,7 @@ public class ${projectionUnitTestName} {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", ${dataObjectName}.class, interest);
     ${dataObjectName} item = interestAccess.readFrom("item", "1");
-  <#list testCase.preliminaryStatements as statement>
-    ${statement}
-  </#list>
   <#list testCase.statements as statement>
-  <#list statement.resultAssignment as resultAssignment>
-    ${resultAssignment}
-  </#list>
   <#list statement.assertions as assertion>
     ${assertion}
   </#list>
