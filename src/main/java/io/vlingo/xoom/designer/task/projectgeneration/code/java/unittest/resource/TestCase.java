@@ -18,48 +18,53 @@ import java.util.stream.Collectors;
 
 public class TestCase {
 
-  public static final int TEST_DATA_SET_SIZE = 2;
+    public static final int TEST_DATA_SET_SIZE = 2;
 
-  private final String methodName;
-  private final String dataDeclaration;
-  private final List<TestStatement> statements = new ArrayList<>();
-  private final List<String> preliminaryStatements = new ArrayList<>();
+    private final String methodName;
+    private final String dataDeclaration;
+    private final List<TestStatement> statements = new ArrayList<>();
+    private final List<String> preliminaryStatements = new ArrayList<>();
 
-  public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
-    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
-        .map(signature -> new TestCase(signature, aggregate, valueObjects))
-        .collect(Collectors.toList());
-  }
+    public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
+        return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
+                .map(signature -> new TestCase(signature, aggregate, valueObjects))
+                .collect(Collectors.toList());
+    }
 
-  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
-                   List<CodeGenerationParameter> valueObjects) {
-    final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
-        .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
+    private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
+                     List<CodeGenerationParameter> valueObjects) {
+        final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
+                .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
-    final String dataObjectType =
-        JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-    this.methodName = signature.value;
-    this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value, dataObjectType,
-        signature.retrieveRelatedValue(Label.ROUTE_PATH), signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT)));
-    this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
-  }
+        final String dataObjectType =
+                JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+        this.methodName = signature.value;
+        this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
+        String rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
+        this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value, dataObjectType, rootPath(signature, aggregate), rootMethod));
+        this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
+    }
 
-  public String getMethodName() {
-    return methodName;
-  }
+    private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
+        String uriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
+        return signature.retrieveRelatedValue(Label.ROUTE_PATH).startsWith(uriRoot) ? signature.retrieveRelatedValue(Label.ROUTE_PATH) : uriRoot + signature.retrieveRelatedValue(Label.ROUTE_PATH);
+    }
 
-  public String getDataDeclaration() {
-    return dataDeclaration;
-  }
+    public String getMethodName() {
+        return methodName;
+    }
 
-  public List<TestStatement> getStatements() {
-    return statements;
-  }
+    public String getDataDeclaration() {
+        return dataDeclaration;
+    }
 
-  public List<String> getPreliminaryStatements() {
-    return preliminaryStatements;
-  }
+    public List<TestStatement> getStatements() {
+        return statements;
+    }
+
+    public List<String> getPreliminaryStatements() {
+        return preliminaryStatements;
+    }
 
 
 }
