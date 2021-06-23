@@ -38,15 +38,11 @@ public class TestCase {
 
     final String dataObjectType =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-    this.methodName = "test" + toCamelCase(signature.value);
+    this.methodName = signature.value;
     this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
     this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value, dataObjectType,
         signature.retrieveRelatedValue(Label.ROUTE_PATH), signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT)));
     this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
-  }
-
-  private String toCamelCase(String testMethodName) {
-    return Character.toString(testMethodName.charAt(0)).toUpperCase() + testMethodName.substring(1);
   }
 
   public String getMethodName() {

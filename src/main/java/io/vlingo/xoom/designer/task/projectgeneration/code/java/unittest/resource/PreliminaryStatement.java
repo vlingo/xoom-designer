@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PreliminaryStatement {
 
-  private static final String REST_ASSURED = "%s firstData = given()\n" +
+  private static final String REST_ASSURED = "%s result = given()\n" +
       "        .when()\n" +
       "        .body(%s)\n" +
       "        .%s(\"%s\")\n" +

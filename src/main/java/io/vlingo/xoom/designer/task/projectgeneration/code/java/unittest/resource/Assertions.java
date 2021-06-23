@@ -22,7 +22,7 @@ public class Assertions {
                                   final CodeGenerationParameter aggregate,
                                   final List<CodeGenerationParameter> valueObjects,
                                   final TestDataValueGenerator.TestDataValues testDataValues) {
-    final String variableName = TestDataFormatter.formatLocalVariableName(dataIndex);
+    final String variableName = "result";
 
     final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths(variableName, aggregate, valueObjects);
 

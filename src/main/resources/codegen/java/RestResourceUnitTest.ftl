@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
+import java.time.LocalDate;
 
 public class ${resourceUnitTestName} extends AbstractRestTest {
 
@@ -21,28 +22,24 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
     .statusCode(200)
     .body(is(equalTo("[]")));
   }
-
 <#list testCases as testCase>
 
   @Test
   public void ${testCase.methodName}() {
     ${testCase.dataDeclaration}
 
-    <#list testCase.preliminaryStatements as statement>
-      ${statement}
-    </#list>
-    <#list testCase.statements as statement>
-
-      <#list statement.resultAssignment as resultAssignment>
+  <#list testCase.preliminaryStatements as statement>
+    ${statement}
+  </#list>
+  <#list testCase.statements as statement>
+  <#list statement.resultAssignment as resultAssignment>
     ${resultAssignment}
-      </#list>
-
-      <#list statement.assertions as assertion>
-    ${assertion}
-      </#list>
-    </#list>
-  }
-
   </#list>
 
+  <#list statement.assertions as assertion>
+    ${assertion}
+  </#list>
+  </#list>
+  }
+</#list>
 }

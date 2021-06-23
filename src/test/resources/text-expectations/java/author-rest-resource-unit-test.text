@@ -7,8 +7,9 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import io.vlingo.xoomapp.infrastructure.*;
+import java.time.LocalDate;
 
-public class AuthorResourceTests extends AbstractRestTest {
+public class AuthorResourceTest extends AbstractRestTest {
 
   @Test
   public void testEmptyResponse() {
@@ -20,12 +21,11 @@ public class AuthorResourceTests extends AbstractRestTest {
     .body(is(equalTo("[]")));
   }
 
-
   @Test
-  public void testWithName() {
+  public void withName() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .post("/authors/")
@@ -35,24 +35,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testChangeRank() {
+  public void changeRank() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/authors/"+firstData.id+"/rank")
@@ -62,24 +60,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testRelateAuthor() {
+  public void relateAuthor() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/"+firstData.id+"/related-author")
@@ -89,24 +85,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testRelateAuthors() {
+  public void relateAuthors() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/"+firstData.id+"/related-authors")
@@ -116,24 +110,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testReplaceAllRelatedAuthors() {
+  public void replaceAllRelatedAuthors() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .put("/"+firstData.id+"/related-authors")
@@ -143,24 +135,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testUnrelateAuthor() {
+  public void unrelateAuthor() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .delete("/"+firstData.id+"/related-author")
@@ -170,24 +160,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testAddTag() {
+  public void addTag() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/"+firstData.id+"/tag")
@@ -197,24 +185,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testAddTags() {
+  public void addTags() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/"+firstData.id+"/tags")
@@ -224,24 +210,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testReplaceTags() {
+  public void replaceTags() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .put("/"+firstData.id+"/tags")
@@ -251,24 +235,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testRemoveTag() {
+  public void removeTag() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .delete("/"+firstData.id+"/tags")
@@ -278,24 +260,22 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
 
-
   @Test
-  public void testChangeRank() {
+  public void changeRank() {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-      AuthorData firstData = given()
+    AuthorData result = given()
         .when()
         .body(firstData)
         .patch("/authors/"+firstData.id+"/rank")
@@ -305,17 +285,14 @@ public class AuthorResourceTests extends AbstractRestTest {
         .body()
         .as(AuthorData.class);
 
-
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
-    assertEquals(firstData.rank.points, 1);
-    assertEquals(firstData.rank.classification.label, "first-author-rank-classification-label");
-    assertNotNull(firstData.rank.classification.classifiers);
-    assertNotNull(firstData.availableOn);
-    assertNotNull(firstData.tags);
-    assertNotNull(firstData.relatedAuthors);
+    assertEquals(result.id, "1");
+    assertEquals(result.name.firstName, "first-author-name-firstName");
+    assertEquals(result.name.lastName, "first-author-name-lastName");
+    assertEquals(result.rank.points, 1);
+    assertEquals(result.rank.classification.label, "first-author-rank-classification-label");
+    assertNotNull(result.rank.classification.classifiers);
+    assertNotNull(result.availableOn);
+    assertNotNull(result.tags);
+    assertNotNull(result.relatedAuthors);
   }
-
-
 }

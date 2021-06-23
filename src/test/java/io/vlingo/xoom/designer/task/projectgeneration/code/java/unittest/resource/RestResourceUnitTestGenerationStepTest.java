@@ -47,10 +47,10 @@ public class RestResourceUnitTestGenerationStepTest {
     new RestResourceUnitTestGenerationStep().process(context);
 
     // THEN
-    final Content authorResourceTests =
-        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTests");
+    final Content authorResourceTest =
+        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
     Assertions.assertEquals(2, context.contents().size());
-    Assertions.assertTrue(authorResourceTests.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
+    Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {

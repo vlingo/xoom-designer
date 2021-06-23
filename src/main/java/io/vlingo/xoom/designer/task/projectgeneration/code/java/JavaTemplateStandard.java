@@ -189,7 +189,7 @@ public enum JavaTemplateStandard implements TemplateStandard {
   }, (name, parameters) -> name + "Test"),
 
   REST_RESOURCE_UNIT_TEST(parameters -> Template.REST_RESOURCE_UNIT_TEST.filename,
-      (name, parameters) -> name + "ResourceTests"),
+      (name, parameters) -> name + "ResourceTest"),
 
   ABSTRACT_REST_RESOURCE_UNIT_TEST(parameters -> Template.ABSTRACT_REST_RESOURCE_UNIT_TEST.filename,
       (name, parameters) -> "AbstractRestTest"),
