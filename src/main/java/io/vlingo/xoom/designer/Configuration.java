@@ -44,7 +44,7 @@ public class Configuration {
   public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.8";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.8.1-SNAPSHOT";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.8.1";
   public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
   private static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
