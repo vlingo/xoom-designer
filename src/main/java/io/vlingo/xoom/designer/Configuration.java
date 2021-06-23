@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGener
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
@@ -72,6 +73,7 @@ public class Configuration {
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
           //Java
+          new ReadmeFileGenerationStep(),
           new ValueObjectGenerationStep(),
           new ModelGenerationStep(),
           new DataObjectGenerationStep(),

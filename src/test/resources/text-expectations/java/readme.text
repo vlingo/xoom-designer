@@ -1,0 +1,7 @@
+# io.vlingo.xoomapp
+## Convert to Gradle Build
+
+```
+$ cd {project-folder}
+$ gradle init
+```

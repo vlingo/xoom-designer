@@ -135,6 +135,7 @@ public enum TemplateParameter implements ParameterKey {
   DESIGNER_MODEL_JSON("designerModelJson"),
   POM_SECTION("pomSection"),
   OFFSET("offset"),
+  README_FILE("readmeFile"),
   PRODUCER_ORGANIZATION("producerOrganization"),
   PRODUCER_UNIT("producerUnit"),
   PRODUCER_SCHEMAS("producerSchemas"),

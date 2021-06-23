@@ -20,7 +20,7 @@ public interface RelativeSourcePathResolver {
 
   static String[] resolveWith(final CodeGenerationContext context, final Dialect dialect, final TemplateData templateData) {
     final RelativeSourcePathResolver resolver =
-            Stream.of(new ResourceFile(), new SchemataSpecification(), new PomFile(),
+            Stream.of(new ResourceFile(), new SchemataSpecification(), new PomFile(), new ReadmeFile(),
                     new ProjectGenerationSettingsPayload(), new SourceCode(), new UnitTest())
                     .filter(candidate -> candidate.shouldResolve(templateData))
                     .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to resolve relative source path"));
@@ -68,6 +68,19 @@ public interface RelativeSourcePathResolver {
     @Override
     public boolean shouldResolve(final TemplateData templateData) {
       return templateData.parameters().find(POM_SECTION, false);
+    }
+  }
+
+  class ReadmeFile implements RelativeSourcePathResolver {
+
+    @Override
+    public String[] resolve(final CodeGenerationContext context, final Dialect dialect, final TemplateData templateData) {
+      return new String[]{};
+    }
+
+    @Override
+    public boolean shouldResolve(final TemplateData templateData) {
+      return templateData.parameters().find(README_FILE, false);
     }
   }
 

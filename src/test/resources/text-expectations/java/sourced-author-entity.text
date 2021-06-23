@@ -45,9 +45,9 @@ public final class AuthorEntity extends EventSourced implements Author {
   @Override
   public Completes<AuthorState> hide() {
     /**
-     * TODO: Implement command logic. See {@link AuthorState#hide()}
+     * TODO: Unable to generate method body because there is no associated Domain Event.
      */
-    return Completes.withSuccess(state.hide());
+    return Completes.withFailure();
   }
 
   @Override

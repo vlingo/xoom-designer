@@ -186,7 +186,9 @@ public enum JavaTemplateStandard implements TemplateStandard {
       return Template.OPERATION_BASED_MOCK_DISPATCHER.filename;
     }
     return Template.EVENT_BASED_MOCK_DISPATCHER.filename;
-  }, (name, parameters) -> "MockDispatcher");
+  }, (name, parameters) -> "MockDispatcher"),
+
+  README(parameters -> Template.README.filename, (name, parameters) -> "README.md");
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;
