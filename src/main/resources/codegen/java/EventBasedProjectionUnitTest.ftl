@@ -25,6 +25,7 @@ import ${import.qualifiedClassName};
 </#list>
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ${projectionUnitTestName} {
 
@@ -46,27 +47,27 @@ public class ${projectionUnitTestName} {
 
   <#list testCases as testCase>
 
-    private Projectable create${testCase.domainEventName}(${dataObjectName} firstData) {
-    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(firstData.id, ${testCase.dataObjectParams});
+  private Projectable create${testCase.domainEventName}(${dataName} data) {
+    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id, ${testCase.dataObjectParams});
 
     BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
     JsonSerialization.serialized(eventData), 1, Metadata.withObject(eventData));
 
     final String projectionId = UUID.randomUUID().toString();
-    valueToProjectionId.put(firstData.id, projectionId);
+    valueToProjectionId.put(data.id, projectionId);
     return new TextProjectable(null, Collections.singletonList(textEntry), projectionId);
-    }
+  }
 
-    @Test
-    public void ${testCase.methodName}() {
+  @Test
+  public void ${testCase.methodName}() {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    <#list testCase.dataDeclarations as dataDeclaration>
+  <#list testCase.dataDeclarations as dataDeclaration>
     ${dataDeclaration}
-    </#list>
-    projection.projectWith(create${testCase.domainEventName}(firstData), control);
-    projection.projectWith(create${testCase.domainEventName}(secondData), control);
+  </#list>
+    projection.projectWith(create${testCase.domainEventName}(firstData.to${dataName}()), control);
+    projection.projectWith(create${testCase.domainEventName}(secondData.to${dataName}()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
 
     assertEquals(2, confirmations.size());
@@ -77,26 +78,26 @@ public class ${projectionUnitTestName} {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", ${dataObjectName}.class, interest);
     ${dataObjectName} item = interestAccess.readFrom("item", "1");
-    <#list testCase.preliminaryStatements as statement>
+  <#list testCase.preliminaryStatements as statement>
     ${statement}
-    </#list>
-    <#list testCase.statements as statement>
-      <#list statement.resultAssignment as resultAssignment>
+  </#list>
+  <#list testCase.statements as statement>
+  <#list statement.resultAssignment as resultAssignment>
     ${resultAssignment}
-      </#list>
-      <#list statement.assertions as assertion>
+  </#list>
+  <#list statement.assertions as assertion>
     ${assertion}
-      </#list>
+  </#list>
 
     interest = new CountingReadResultInterest();
     interestAccess = interest.afterCompleting(1);
     stateStore.read("2", ${dataObjectName}.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-      <#list statement.secondAssertions as assertion>
+  <#list statement.secondAssertions as assertion>
     ${assertion}
-      </#list>
-    </#list>
+  </#list>
+  </#list>
   }
 
   </#list>

@@ -47,6 +47,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
                     .and(PROJECTION_UNIT_TEST_NAME, standard().resolveClassname(projectionName.replace("Actor", "")))
                     .and(PROJECTION_NAME, projectionName)
                     .and(DATA_OBJECT_NAME, dataObjectName)
+                    .and(STATE_DATA_OBJECT_NAME, aggregateState)
                     .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value).and(TemplateParameter.ENTITY_NAME, entityName)
                     .and(TemplateParameter.STATE_NAME, aggregateState)
                     .and(STATE_DATA_OBJECT_NAME, aggregateState)

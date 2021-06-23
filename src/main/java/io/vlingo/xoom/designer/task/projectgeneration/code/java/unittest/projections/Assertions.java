@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projec
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class Assertions {
 
   public static List<String> from(final int dataIndex,
-                                  final CodeGenerationParameter aggregate,
+                                  CodeGenerationParameter aggregate, final CodeGenerationParameter domainEvent,
                                   final List<CodeGenerationParameter> valueObjects,
                                   final TestDataValueGenerator.TestDataValues testDataValues) {
     final String variableName = "item";//TestDataFormatter.formatLocalVariableName(dataIndex);
@@ -35,7 +36,7 @@ public class Assertions {
           return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
         };
 
-    return fieldPaths.stream().map(mapper).collect(Collectors.toList());
+    return fieldPaths.stream().filter(fp -> DomainEventDetail.hasField(domainEvent, fp.split("\\.")[1])).map(mapper).collect(Collectors.toList());
   }
 
 }

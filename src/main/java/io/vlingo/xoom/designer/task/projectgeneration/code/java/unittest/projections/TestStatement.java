@@ -24,22 +24,22 @@ public class TestStatement {
   private final List<String> resultAssignment = new ArrayList<>();
 
   public static List<TestStatement> with(final String testMethodName,
-                                         final CodeGenerationParameter aggregate,
+                                         CodeGenerationParameter aggregate, final CodeGenerationParameter domainEvent,
                                          final List<CodeGenerationParameter> valueObjects,
                                          final TestDataValueGenerator.TestDataValues testDataValues) {
 
-    return Collections.singletonList(new TestStatement(1, testMethodName, aggregate,
+    return Collections.singletonList(new TestStatement(1, testMethodName, aggregate, domainEvent,
         valueObjects, testDataValues));
   }
 
   private TestStatement(final int dataIndex,
                         final String testMethodName,
-                        final CodeGenerationParameter aggregate,
+                        CodeGenerationParameter aggregate, final CodeGenerationParameter domainEvent,
                         final List<CodeGenerationParameter> valueObjects,
                         final TestDataValueGenerator.TestDataValues testDataValues) {
     this.resultAssignment.addAll(generateExecutions(dataIndex, testMethodName, aggregate));
-    this.assertions.addAll(generateAssertions(dataIndex, aggregate, valueObjects, testDataValues));
-    this.secondAssertions.addAll(generateAssertions(2, aggregate, valueObjects, testDataValues));
+    this.assertions.addAll(generateAssertions(dataIndex, aggregate, domainEvent, valueObjects, testDataValues));
+    this.secondAssertions.addAll(generateAssertions(2, aggregate, domainEvent, valueObjects, testDataValues));
   }
 
   private List<String> generateExecutions(final int dataIndex,
@@ -54,10 +54,10 @@ public class TestStatement {
   }
 
   private List<String> generateAssertions(final int dataIndex,
-                                          final CodeGenerationParameter aggregate,
+                                          final CodeGenerationParameter aggregate,final CodeGenerationParameter domainEvent,
                                           final List<CodeGenerationParameter> valueObjects,
                                           final TestDataValueGenerator.TestDataValues testDataValues) {
-    return Assertions.from(dataIndex, aggregate, valueObjects, testDataValues);
+    return Assertions.from(dataIndex, aggregate, domainEvent, valueObjects, testDataValues);
   }
 
   public List<String> getAssertions() {

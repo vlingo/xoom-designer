@@ -8,7 +8,6 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projec
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
@@ -37,16 +36,16 @@ public class TestCase {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
-    final String dataObjectType =
-        JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+    final CodeGenerationParameter domainEvent = signature
+            .retrieveAllRelated(Label.DOMAIN_EVENT).findFirst().orElse(aggregate);
     this.dataObjectParams = signature.retrieveAllRelated(Label.METHOD_PARAMETER)
-            .map(x -> "firstData." + x.value)
+            .map(x -> "data." + x.value)
         .collect(Collectors.joining(", "));
     this.methodName = signature.value;
     this.domainEventName = signature.retrieveRelatedValue(Label.DOMAIN_EVENT);
     this.dataDeclarations.addAll(DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues));
     this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value));
-    this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
+    this.statements.addAll(TestStatement.with(signature.value, aggregate,domainEvent, valueObjects, testDataValues));
   }
 
   public String getMethodName() {
