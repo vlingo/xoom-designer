@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGener
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
@@ -57,24 +58,25 @@ public class Configuration {
   }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
-      new ResourcesLocationStep(),
-      new CodeGenerationParametersLoadStep(),
-      new CodeGenerationParameterValidationStep(),
-      new MainClassResolverStep(),
-      new ArchetypeFolderCleanUpStep(),
-      new TemporaryTaskFolderCreationStep(),
-      new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
-      new ArchetypeGenerationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
-      new ProjectInstallationStep(),
-      new MavenWrapperInstallationStep(),
-      new CodeGenerationExecutionerStep(),
-      new ContentPurgerStep(),
-      new ProjectCompressionStep(),
-      new ArchetypeFolderCleanUpStep()
+          new ResourcesLocationStep(),
+          new CodeGenerationParametersLoadStep(),
+          new CodeGenerationParameterValidationStep(),
+          new MainClassResolverStep(),
+          new ArchetypeFolderCleanUpStep(),
+          new TemporaryTaskFolderCreationStep(),
+          new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
+          new ArchetypeGenerationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
+          new ProjectInstallationStep(),
+          new MavenWrapperInstallationStep(),
+          new CodeGenerationExecutionerStep(),
+          new ContentPurgerStep(),
+          new ProjectCompressionStep(),
+          new ArchetypeFolderCleanUpStep()
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
       //Java
+      new ReadmeFileGenerationStep(),
       new ValueObjectGenerationStep(),
       new ModelGenerationStep(),
       new DataObjectGenerationStep(),
