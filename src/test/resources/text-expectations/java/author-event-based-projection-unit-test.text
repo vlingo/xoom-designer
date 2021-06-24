@@ -63,8 +63,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRegistered(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRegistered(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -77,7 +77,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertEquals(item.name.firstName, "first-author-name-firstName");
     assertEquals(item.name.lastName, "first-author-name-lastName");
 
@@ -86,7 +86,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertEquals(item.name.firstName, "second-author-name-firstName");
     assertEquals(item.name.lastName, "second-author-name-lastName");
   }
@@ -108,8 +108,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRanked(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRanked(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -122,7 +122,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.rank);
 
     interest = new CountingReadResultInterest();
@@ -130,7 +130,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.rank);
   }
 
@@ -151,8 +151,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -165,7 +165,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -173,7 +173,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -194,8 +194,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -208,7 +208,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -216,7 +216,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -237,8 +237,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -251,7 +251,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -259,7 +259,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -280,8 +280,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorUnrelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorUnrelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -294,7 +294,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -302,7 +302,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -323,8 +323,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -337,7 +337,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -345,7 +345,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -366,8 +366,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -380,7 +380,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -388,7 +388,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -409,8 +409,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorUnrelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorUnrelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -423,7 +423,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -431,7 +431,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
@@ -452,8 +452,8 @@ public class AuthorProjectionTest {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
 
-    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     projection.projectWith(createAuthorRelated(firstData.toAuthorState()), control);
     projection.projectWith(createAuthorRelated(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
@@ -466,7 +466,7 @@ public class AuthorProjectionTest {
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read("1", AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", "1");
-    assertEquals(item.id, "1");
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
 
     interest = new CountingReadResultInterest();
@@ -474,7 +474,7 @@ public class AuthorProjectionTest {
     stateStore.read("2", AuthorData.class, interest);
     item = interestAccess.readFrom("item", "2");
     assertEquals("2", item.id);
-    assertEquals(item.id, "2");
+    assertEquals(item.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
     assertNotNull(item.relatedAuthors);
   }
 
