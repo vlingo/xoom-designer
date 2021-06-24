@@ -10,11 +10,13 @@
   import Checkbox from '@smui/checkbox';
   import Menu, { SelectionGroup } from '@smui/menu';
   import { Anchor } from '@smui/menu-surface';
+  import ProducerSchemataModal from './ProducerSchemataModal.svelte';
 
   let menu;
   let anchor;
   let anchorClasses = {}
   let selectedEvents = [];
+  let showShemataModal = false;
 
   export let events;
   export let producerExchangeName;
@@ -51,7 +53,7 @@
       bind:value={producerExchangeName}
       invalid={!producerExchangeName && (schemaGroup || outgoingEvents.length > 0)}
     />
-    <div style="flex: 1;">
+    <div style="flex: 1;" on:click={() => showShemataModal = true}>
       <Textfield
         style="width: 100%;"
         label="Organization : Unit : Context"
@@ -61,6 +63,7 @@
       >
         <HelperText persistent slot="helper">{schemaGroupRule(schemaGroup)}</HelperText>
       </Textfield>
+      <ProducerSchemataModal bind:show={showShemataModal} />
     </div>
 
     <div>

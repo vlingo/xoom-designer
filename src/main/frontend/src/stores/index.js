@@ -18,6 +18,7 @@ export const projectGenerationIndex = createLocalStore('projectGenerationIndex',
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime'];
 export const settings = createWritable('settings', defaultSettings, onSettingsChange);
+export const schemataData = createLocalStore('schemataData', {});
 
 export function updateSettings(newSettings) {
 	let emptySettings = {context: {}, model: {persistenceSettings: {}}, deployment: {}};
