@@ -23,28 +23,26 @@
   })
 </script>
 
-{#if show}
-  <Portal target=".s-app">
-    <Dialog
-      bind:open={show}
-      fullscreen
-      class="schemata-dialog"
-    >
-      <!-- <Header>
-        <Title></Title>
-        <IconButton action="close" class="material-icons">close</IconButton>
-      </Header> -->
-      <Content class="schemata-content">
-        <iframe
-          bind:this={iframe}
-          title="XOOM-SCHEMATA"
-          {src}
-          id="iframe"
-          name="iframe"></iframe>
-      </Content>
-    </Dialog>
-  </Portal>
-{/if}
+<Portal target=".s-app">
+  <Dialog
+    bind:open={show}
+    fullscreen
+    class="schemata-dialog"
+  >
+    <Header>
+      <Title></Title>
+      <IconButton action="close" class="material-icons"></IconButton>
+    </Header>
+    <Content class="schemata-content">
+      <iframe
+        bind:this={iframe}
+        title="XOOM-SCHEMATA"
+        {src}
+        id="iframe"
+        name="iframe"></iframe>
+    </Content>
+  </Dialog>
+</Portal>
 
 <style>
   :global(.schemata-content), #iframe {
