@@ -13,10 +13,10 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.Aut
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
