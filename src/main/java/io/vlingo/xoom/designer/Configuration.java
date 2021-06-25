@@ -2,9 +2,9 @@ package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
-import io.vlingo.xoom.designer.gui.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
-import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
+import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.infrastructure.userinterface.GenerationTargetRegistrationStep;
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;

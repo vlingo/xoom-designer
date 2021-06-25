@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;

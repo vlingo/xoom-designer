@@ -5,9 +5,12 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Environment;
+import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiter;
+import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiterFilter;
+import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestPreservationFilter;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerServer;
 import io.vlingo.xoom.http.Filters;
 import io.vlingo.xoom.http.RequestFilter;

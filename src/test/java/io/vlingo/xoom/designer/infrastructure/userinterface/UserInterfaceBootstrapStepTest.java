@@ -1,7 +1,6 @@
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;

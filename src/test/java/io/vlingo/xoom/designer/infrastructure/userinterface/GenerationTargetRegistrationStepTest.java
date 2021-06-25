@@ -5,9 +5,8 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.userinterface;
 
-import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.OptionValue;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;

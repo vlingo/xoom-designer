@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.requesthistory;
 
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.lattice.model.stateful.StatefulEntity;

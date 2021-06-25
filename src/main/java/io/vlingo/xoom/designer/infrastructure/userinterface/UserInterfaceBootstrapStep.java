@@ -1,6 +1,5 @@
-package io.vlingo.xoom.designer.gui;
+package io.vlingo.xoom.designer.infrastructure.userinterface;
 
-import io.vlingo.xoom.designer.gui.XoomInitializer;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
 import io.vlingo.xoom.designer.task.TaskExecutor;

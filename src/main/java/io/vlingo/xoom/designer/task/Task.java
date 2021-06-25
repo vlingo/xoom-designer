@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task;
 
-import io.vlingo.xoom.designer.gui.UserInterfaceManager;
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
 import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
