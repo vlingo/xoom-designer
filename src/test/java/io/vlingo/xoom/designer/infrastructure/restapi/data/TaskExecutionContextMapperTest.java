@@ -21,6 +21,11 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 public class TaskExecutionContextMapperTest {
 
   @Test
+  public void test() {
+    System.out.println("\n \n \\\"".replaceAll("\n", "<br>").replaceAll("\\\\\"", "\""));
+  }
+
+  @Test
   public void testThatTaskExecutionContextIsMapped() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),

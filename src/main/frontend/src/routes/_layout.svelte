@@ -19,7 +19,9 @@
 	let snackbar = false;
 	let importDialogActive = false;
 	let settingsResetDialog = false;
-	let menu, succeded, failed, successMessage, failureMessage;
+	let errorDetailsCopied = false;
+	let failureDialogActive = false;
+	let errorDetails, failureDialogTitle, menu, succeded, successMessage;
 
 	const toggleTheme = () => $theme = ($theme === "light") ? "dark" : "light";
 	$: bgTheme = ($theme === "light") ? "#ffffff" : "#212121";
@@ -45,10 +47,10 @@
 			.then(importedSettings => {
 				updateSettings(importedSettings);
 				succeed("Settings imported.");
-			}).catch(() => {
-				fail(["Settings importation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
+			}).catch(errorReport => {
+				errorDetails = errorReport.details;
+				handleModelProcessFailure("Model Importation Failure");
 			}).finally(() => {
-				snackbar = true;
 				this.form.reset();
 			})
 		});
@@ -59,11 +61,10 @@
 			.then(settingsFile => {
 					succeed("Settings exported.");
 					DownloadDialog.forJsonFile(Formatter.buildSettingsFullname($settings.context), settingsFile.encoded);
-				}).catch(() => {
-					failed(["Settings exportation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
-				}).finally(() => {
-					snackbar = true;
-				})
+				}).catch(errorReport => {
+					errorDetails = errorReport.details;
+					handleModelProcessFailure("Model Exportation Failure");
+				});
 	}
 
 	function openSettingsResetDialog() {
@@ -92,10 +93,11 @@
 		failed = false;
 	}
 
-	function fail(messages) {
-		failureMessage = messages;
-		succeded = false;
-		failed = true;
+	function handleModelProcessFailure(failureName) {
+		failureDialogTitle = failureName;
+		failureDialogActive = true;
+		errorDetailsCopied = false;
+    	succeded = false;
 	}
 
 	function openFileExplorer() {
@@ -103,9 +105,21 @@
 		closeImportDialog();
 	}
 
+	function closeFailureDialog() {
+    	failureDialogActive = false;
+  	}
+
 	function closeImportDialog() {
 		importDialogActive = false;
 	}
+
+	function copyErrorReport(event) {
+		if(errorDetails) {
+			navigator.clipboard.writeText(errorDetails);
+			errorDetailsCopied = true;
+		}
+		event.preventDefault();
+  	}
 
 	onMount(() => {
 		isMobile.check();
@@ -191,8 +205,6 @@
 	<Snackbar class="justify-space-between" bind:active={snackbar} top right>
 		{#if succeded}
 			<Icon class="green-text" path={mdiCheckBold}/> {successMessage}
-		{:else if failed}
-			<Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
 		{/if}
 		<Button text on:click={() => snackbar = false}>
 			Dismiss
@@ -232,17 +244,33 @@
 				</div>
 			</Card>
 		</Dialog>
+		<Dialog persistent bind:active={failureDialogActive}>
+			<Card class="pa-3">
+				<div class="d-flex flex-column">
+					<CardTitle class="error-text">
+			  {failureDialogTitle}
+			</CardTitle>
+			  <CardText>
+				{#if errorDetailsCopied}
+				Error details copied. <Icon class="green-text" path={mdiCheckBold}/> <br>
+				{:else}
+				If you would like to contact the XOOM team, please 
+				<!-- svelte-ignore a11y-invalid-attribute -->
+				<a href="#" rel="noopener" on:click={copyErrorReport}>click here</a> to copy the error details to your clipboard. 
+				{/if}
+				Then, <a href="https://github.com/vlingo/xoom-designer/issues/new" rel="noopener" target="_blank">create an issue</a> 
+				pasting the error details in the comments.
+			  </CardText>
+					<CardActions style="margin-top: auto" class="justify-space-around">
+			  <Button on:click={closeFailureDialog}>OK</Button>
+					</CardActions>
+				</div>
+			</Card>
+		</Dialog>
 	</Portal>
 			
 	<SiteNavigation {segment} bind:mobile={$isMobile} bind:sidenav />
 	<main class:navigation-enabled={!$isMobile}>
-		<section align="end">
-			{#if failed}
-				<Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
-				<a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failureMessage[1]}</a>
-			{/if}
-		</section>
-
 		<Container>
     	<!-- {#if ...}
     		<Loading />

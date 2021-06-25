@@ -9,8 +9,8 @@ package io.vlingo.xoom.designer.infrastructure.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModelFileException;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingFileException;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsFile;
 import io.vlingo.xoom.designer.infrastructure.restapi.report.ModelFileHandlingReport;
@@ -66,7 +66,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     try {
       final GenerationSettingsFile settingsFile = GenerationSettingsFile.from(settingsData);
       return Completes.withSuccess(Response.of(Ok, serialized(settingsFile)));
-    } catch (final GenerationSettingFileException exception) {
+    } catch (final DesignerModelFileException exception) {
       final ModelFileHandlingReport report = ModelFileHandlingReport.onExportFail(exception);
       return Completes.withSuccess(Response.of(InternalServerError, serialized(report)));
     }
@@ -75,7 +75,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
   public Completes<Response> processModelImportationFile(final GenerationSettingsFile generationSettingsFile) {
     try {
       return Completes.withSuccess(Response.of(Ok, serialized(generationSettingsFile.mapData())));
-    } catch (final GenerationSettingFileException exception) {
+    } catch (final DesignerModelFileException exception) {
       final ModelFileHandlingReport report = ModelFileHandlingReport.onImportFail(exception);
       return Completes.withSuccess(Response.of(InternalServerError, serialized(report)));
     }

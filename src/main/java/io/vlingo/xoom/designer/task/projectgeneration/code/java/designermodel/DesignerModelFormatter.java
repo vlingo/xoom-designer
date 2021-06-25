@@ -20,4 +20,6 @@ public class DesignerModelFormatter {
   public static String format(final GenerationSettingsData generationSettingsData) {
     return format(JsonSerialization.serialized(generationSettingsData));
   }
+
 }
+

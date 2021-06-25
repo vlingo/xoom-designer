@@ -6,13 +6,13 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
+import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskStatus;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 
 import static io.vlingo.xoom.designer.task.TaskOutput.COMPRESSED_PROJECT;
 
@@ -30,10 +30,8 @@ public class ProjectGenerationReport {
 
   public static ProjectGenerationReport onSuccess(final TaskExecutionContext context,
                                                   final ProjectGenerationInformation information) {
-    final TaskStatus taskStatus = TaskStatus.SUCCESSFUL;
-    final String target = information.generationTarget.key();
     final String compressedProject = context.retrieveOutput(COMPRESSED_PROJECT);
-    return new ProjectGenerationReport(target, compressedProject);
+    return new ProjectGenerationReport(information.generationTarget, compressedProject);
   }
 
   public static ProjectGenerationReport onFail(final TaskExecutionContext context,
@@ -54,21 +52,25 @@ public class ProjectGenerationReport {
                                                              final GenerationSettingsData settings,
                                                              final Exception exception) {
     final String designerModel =
-            DesignerModelFormatter.format(settings);
+            JsonSerialization.serialized(settings);
 
     final String errorDetails =
             ProjectGenerationReportDetails.format(target.key(), CONTEXT_MAPPING_FAILURE, designerModel, exception);
 
-    return new ProjectGenerationReport(CONTEXT_MAPPING_FAILURE, errorDetails);
+    return new ProjectGenerationReport(target, CONTEXT_MAPPING_FAILURE, errorDetails);
   }
 
-  public static ProjectGenerationReport onValidationFail(final String validationErrors) {
-    return new ProjectGenerationReport(VALIDATION_FAILURE, validationErrors);
+  public static ProjectGenerationReport onValidationFail(final String validationErrors, final GenerationTarget target) {
+    return new ProjectGenerationReport(target, VALIDATION_FAILURE, validationErrors);
   }
 
   private ProjectGenerationReport(final GenerationTarget target,
                                   final String compressedProject) {
     this(TaskStatus.SUCCESSFUL, target, compressedProject, null, null);
+  }
+
+  private ProjectGenerationReport(final GenerationTarget target, final String errorType, final String details) {
+    this(TaskStatus.FAILED, target, null, errorType, details);
   }
 
   private ProjectGenerationReport(final TaskStatus status,
@@ -81,14 +83,6 @@ public class ProjectGenerationReport {
     this.compressedProject = compressedProject;
     this.errorType = errorType;
     this.details = details;
-  }
-
-  private ProjectGenerationReport(final String errorType, final String details) {
-    this.status = TaskStatus.FAILED;
-    this.errorType = errorType;
-    this.details = details;
-    this.compressedProject = null;
-    this.target = null;
   }
 
 }

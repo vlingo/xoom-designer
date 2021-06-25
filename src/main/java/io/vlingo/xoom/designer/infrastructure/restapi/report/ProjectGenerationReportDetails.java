@@ -7,34 +7,42 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
+import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.joining;
+import java.io.IOException;
 
 public class ProjectGenerationReportDetails {
 
-  private final static String DETAILS_PATTERN = "`Operation: Project Generation \n\n " +
-                  "`Version`: %s \n\n " + "`Target`: %s \n\n " + "`Error Type`: %s \n\n " +
-                  "`Designer Model`: \n ``` %s ``` \n\n " + "`Stacktrace`: \n ``` %s ```";
+  private final static String DETAILS_PATTERN =
+                  "**Action**: Project Generation <br> **OS**:  %s <br> **Java Version**:  %s <br>" +
+                  "**Designer Version**: %s <br> **Target**: %s <br> **Error Type**: %s <br>" +
+                  "**Designer Model**: <br><pre> %s </pre><br> " +
+                   "**Stacktrace**: <br><pre>%s</pre>";
 
   public static String format(final String target,
                               final String errorType,
                               final GenerationSettingsData settingsData,
                               final Exception exception) {
-    return format(target, errorType, DesignerModelFormatter.format(settingsData), exception);
+    return format(target, errorType, JsonSerialization.serialized(settingsData), exception);
   }
 
   public static String format(final String target,
                               final String errorType,
                               final String designerModel,
                               final Exception exception) {
-    final String designerVersion = Configuration.resolveDefaultXoomVersion();
-    final String stacktrace = Stream.of(exception.getStackTrace()).map(Object::toString).collect(joining("\n"));
-    return String.format(DETAILS_PATTERN, designerVersion, target, errorType, designerModel, stacktrace);
+    try {
+      final String osName = System.getProperty("os.name");
+      final String javaVersion = System.getProperty("java.version");
+      final String stacktrace = ExceptionFormatter.format(exception);
+      final String designerVersion = Configuration.resolveDefaultXoomVersion();
+      final String simpleModelJson = designerModel.replaceAll("\n", "<br>").replaceAll("\\\\\"", "\"");
+      return String.format(DETAILS_PATTERN, osName, javaVersion, designerVersion,
+              target, errorType, simpleModelJson, stacktrace);
+    } catch (final IOException e) {
+      throw new ReportFormattingException(e);
+    }
   }
 
 }
