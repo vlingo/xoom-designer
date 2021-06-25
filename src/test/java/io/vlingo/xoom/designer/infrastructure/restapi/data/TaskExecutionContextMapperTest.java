@@ -38,7 +38,7 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-    Assertions.assertEquals("1.8.1-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.8.2-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
     Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
