@@ -6,18 +6,42 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration;
 
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.TaskExecutionContextMapper;
+import io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 
-public class WebBasedProjectGenerationManager extends ProjectGenerationManager<TaskExecutionContext> {
+import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.onContextMappingFail;
+import static io.vlingo.xoom.designer.task.TaskOutput.PROJECT_GENERATION_REPORT;
 
-    @Override
-    public void run(final TaskExecutionContext context) {
-        processSteps(context);
-    }
+public class WebBasedProjectGenerationManager extends ProjectGenerationManager {
 
-    @Override
-    public boolean support(final Object args) {
-        return args.getClass().equals(TaskExecutionContext.class);
+  public Completes<TaskExecutionContext> manage(final GenerationSettingsData settings,
+                                                final ProjectGenerationInformation information) {
+    return validate(settings)
+            .andThenTo(context -> mapContext(settings, information.generationTarget))
+            .andThenConsume(context -> processSteps(context, information));
+  }
+
+  private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings,
+                                                     final GenerationTarget target) {
+    try {
+      return Completes.withSuccess(TaskExecutionContextMapper.map(settings, target));
+    } catch (final Exception exception) {
+      exception.printStackTrace();
+      final ProjectGenerationReport report = onContextMappingFail(target, settings, exception);
+      return Completes.withFailure(TaskExecutionContext.withOutput(PROJECT_GENERATION_REPORT, report));
     }
+  }
+
+  private Completes<TaskExecutionContext> validate(final GenerationSettingsData settings) {
+    final String validationErrors = String.join(", ", settings.validate());
+    if(validationErrors.isEmpty()) {
+      return Completes.withSuccess(TaskExecutionContext.empty());
+    }
+    final ProjectGenerationReport report = ProjectGenerationReport.onValidationFail(validationErrors);
+    return Completes.withFailure(TaskExecutionContext.withOutput(PROJECT_GENERATION_REPORT, report));
+  }
 
 }

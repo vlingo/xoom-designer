@@ -1,9 +1,7 @@
 package io.vlingo.xoom.designer.task;
 
-import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.gui.UserInterfaceManager;
-import io.vlingo.xoom.designer.task.projectgeneration.CommandLineBasedProjectGenerationManager;
-import io.vlingo.xoom.designer.task.projectgeneration.WebBasedProjectGenerationManager;
+import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,14 +9,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static io.vlingo.xoom.designer.task.SubTask.*;
-import static io.vlingo.xoom.designer.task.Task.*;
+import static io.vlingo.xoom.designer.task.Task.DOCKER;
 
 public class TaskTest {
 
     @Test
     public void testTaskRetrievalByCommand() {
-        Assertions.assertEquals(CommandLineBasedProjectGenerationManager.class, Task.of("gen", Arrays.asList("0")).getClass());
-        Assertions.assertEquals(WebBasedProjectGenerationManager.class, Task.of("gen", TaskExecutionContext.withoutOptions()).getClass());
         Assertions.assertEquals(UserInterfaceManager.class, Task.of("gui", Arrays.asList("0")).getClass());
         Assertions.assertEquals(DockerCommandManager.class, Task.of("dOckEr", Arrays.asList("0")).getClass());
         Assertions.assertEquals(VersionDisplayManager.class, Task.of("-version", Arrays.asList("0")).getClass());

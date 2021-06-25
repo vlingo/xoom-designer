@@ -7,10 +7,16 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
+import io.vlingo.xoom.http.resource.serialization.JsonSerialization;
+
 public class GenerationPath {
   public final String path;
 
   public GenerationPath(final String path) {
     this.path = path;
+  }
+
+  public String serialized() {
+    return JsonSerialization.serialized(this);
   }
 }

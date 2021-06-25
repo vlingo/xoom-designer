@@ -20,7 +20,8 @@ public class DesignerModelGenerationStep extends TemplateProcessingStep {
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String appName = context.parameterOf(Label.APPLICATION_NAME);
-    final String generationSettings = context.parameterOf(Label.DESIGNER_MODEL_JSON);
-    return Arrays.asList(new DesignerModelTemplateData(appName, generationSettings));
+    final String designerModel = context.parameterOf(Label.DESIGNER_MODEL_JSON);
+    return Arrays.asList(new DesignerModelTemplateData(appName, designerModel));
+
   }
 }
