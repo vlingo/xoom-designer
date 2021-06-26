@@ -2,9 +2,9 @@ package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.GenerationTargetRegistrationStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
+import io.vlingo.xoom.designer.gui.BrowserLaunchCommandExecutionStep;
+import io.vlingo.xoom.designer.gui.GenerationTargetRegistrationStep;
+import io.vlingo.xoom.designer.gui.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
@@ -13,10 +13,10 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.Aut
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataObjectGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projectgenerationsettings.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
@@ -44,7 +44,7 @@ public class Configuration {
   public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.8";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.8.2-SNAPSHOT";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.8.1-SNAPSHOT";
   public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
   private static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";

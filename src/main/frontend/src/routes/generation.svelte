@@ -30,14 +30,11 @@
   let isLoading = false;
   let processing = false;
   let dialogActive = false;
-  let errorDetailsCopied = false;
-  let failureDialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
-  let dialogStatus, succeded, validationFailed, generationFailed, successMessage;
+  let dialogStatus, succeded, failed, successMessage, failureMessage;
   let menu;
   let anchor;
-  let errorDetails;
-  let anchorClasses = {};
+  let anchorClasses = {}
 
   function checkPath() {
     if(requiresCompression()){
@@ -76,19 +73,11 @@
           $projectGenerationIndex = Number($projectGenerationIndex) + 1;
           $generatedProjectsPaths = [...$generatedProjectsPaths, $settings.projectDirectory];
         }        
-      }).catch(generationReport => {
-        errorDetails = generationReport.details;
-        switch(generationReport.errorType) {
-          case "VALIDATION_FAILURE":
-            handleValidationFailure();
-            break;
-          case "CODEGEN_FAILURE": 
-          case "CONTEXT_MAPPING_FAILURE":
-            handleGenerationFailure();
-            break;
-        }
+      }).catch(() => {
+        fail(["Project generation failed. ","Please contact support: https://github.com/vlingo/xoom-designer/issues"]);
       }).finally(() => {
         processing = false;
+        snackbar = true;
       })
 	}
 
@@ -97,30 +86,16 @@
     isLoading = false;
   }
 
-  function cancelFailureDialog() {
-    failureDialogActive = false;
-    isLoading = false;
-  }
-
   function succeed(messages) {
     successMessage = messages;
-    snackbar = true;
     succeded = true;
     failed = false;
-    errorDetails = "";
   }
 
-  function handleValidationFailure() {
-    validationFailed = true;
-    snackbar = true;
+  function fail(messages) {
+    failureMessage = messages;
     succeded = false;
-  }
-
-  function handleGenerationFailure() {
-    failureDialogActive = true;
-    errorDetailsCopied = false;
-    validationFailed = false;
-    succeded = false;
+    failed = true;
   }
 
   function requiresCompression() {
@@ -133,14 +108,6 @@
       return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${context.groupId}${$settingsInfo.pathSeparator}${context.artifactId}${Number($projectGenerationIndex)}`;
     }
     return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
-  }
-
-  function copyErrorReport(event) {
-    if(errorDetails) {
-      navigator.clipboard.writeText(errorDetails);
-      errorDetailsCopied = true;
-    }
-    event.preventDefault();
   }
 
   $: $settings.projectDirectory = buildProjectDirectory();
@@ -237,8 +204,9 @@
     <ProgressCircular indeterminate color="primary" />
   {:else if succeded}
     <Icon class="green-text" path={mdiCheckBold}/> {successMessage[0]+successMessage[1]}
-  {:else if validationFailed}
-    <Icon class="red-text" path={mdiCloseThick}/> Unable to generate the project. {errorDetails}
+  {:else if failed}
+    <Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
+    <a href="https://github.com/vlingo/xoom-designer/issues" rel="noopener" target="_blank">{failureMessage[1]}</a>
   {/if}
 </CardForm>
 
@@ -246,8 +214,8 @@
 <Snackbar class="justify-space-between" bind:active={snackbar} top right>
   {#if succeded}
     <Icon class="green-text" path={mdiCheckBold}/> {successMessage[0]}
-  {:else if validationFailed}
-    <Icon class="red-text" path={mdiCloseThick}/> Validation Failed
+  {:else if failed}
+    <Icon class="red-text" path={mdiCloseThick}/> {failureMessage[0]}
   {/if}
   <Button text on:click={() => snackbar = false}>
     Dismiss
@@ -275,29 +243,6 @@
           {#if dialogStatus === 'Conflict'}
             <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
           {/if}
-				</CardActions>
-			</div>
-		</Card>
-	</Dialog>
-  <Dialog persistent bind:active={failureDialogActive}>
-		<Card class="pa-3">
-			<div class="d-flex flex-column">
-				<CardTitle class="error-text">
-          Generation Failure
-        </CardTitle>
-          <CardText>
-            {#if errorDetailsCopied}
-            Error details copied. <Icon class="green-text" path={mdiCheckBold}/> <br>
-            {:else}
-            If you would like to contact the XOOM team, please 
-            <!-- svelte-ignore a11y-invalid-attribute -->
-            <a href="#" rel="noopener" on:click={copyErrorReport}>click here</a> to copy the error details to your clipboard. 
-            {/if}
-            Then, <a href="https://github.com/vlingo/xoom-designer/issues/new" rel="noopener" target="_blank">create an issue</a> 
-            pasting the error details in the comments.
-          </CardText>
-				<CardActions style="margin-top: auto" class="justify-space-around">
-          <Button on:click={cancelFailureDialog}>OK</Button>
 				</CardActions>
 			</div>
 		</Card>

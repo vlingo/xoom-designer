@@ -29,7 +29,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2-
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -P deployment,frontend,github
+        run: mvn --batch-mode --update-snapshots install -P deployment,frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

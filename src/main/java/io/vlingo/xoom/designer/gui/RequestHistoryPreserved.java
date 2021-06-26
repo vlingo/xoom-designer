@@ -4,13 +4,15 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.designer.gui;
 
-package io.vlingo.xoom.designer.infrastructure.restapi.data;
+public class RequestHistoryPreserved {
 
-public class GenerationPath {
-  public final String path;
+  public static String name() {
+    return RequestHistoryPreserved.class.getSimpleName();
+  }
 
-  public GenerationPath(final String path) {
-    this.path = path;
+  public static boolean matchName(final String name) {
+    return name.equals(name());
   }
 }

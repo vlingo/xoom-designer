@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.infrastructure.persistence;
 
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestHistoryPreserved;
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestHistoryState;
-import io.vlingo.xoom.designer.infrastructure.userinterface.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.xoom.designer.gui.RequestHistoryPreserved;
+import io.vlingo.xoom.designer.gui.RequestHistoryState;
+import io.vlingo.xoom.designer.gui.infrastructure.persistence.QueryModelStateStoreProvider;
 import io.vlingo.xoom.lattice.model.projection.Projectable;
 import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
 import io.vlingo.xoom.symbio.store.state.StateStore;

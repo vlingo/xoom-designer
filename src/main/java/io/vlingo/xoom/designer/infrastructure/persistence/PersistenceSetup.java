@@ -7,13 +7,13 @@
 
 package io.vlingo.xoom.designer.infrastructure.persistence;
 
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestHistoryPreserved;
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestHistoryState;
+import io.vlingo.xoom.designer.gui.RequestHistoryPreserved;
+import io.vlingo.xoom.designer.gui.RequestHistoryState;
 import io.vlingo.xoom.turbo.annotation.persistence.*;
 
 import static io.vlingo.xoom.turbo.annotation.persistence.Persistence.StorageType.STATE_STORE;
 
-@Persistence(basePackage = "io.vlingo.xoom.designer", storageType = STATE_STORE, cqrs = true)
+@Persistence(basePackage = "io.vlingo.xoom.designer.gui", storageType = STATE_STORE, cqrs = true)
 @Projections(type = ProjectionType.OPERATION_BASED, value = {
         @Projection(actor = TotalRequestsByIPProjectionActor.class, becauseOf = RequestHistoryPreserved.class),
         @Projection(actor = TotalRequestsByMonthProjectionActor.class, becauseOf = RequestHistoryPreserved.class)
