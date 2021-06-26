@@ -5,10 +5,13 @@
   import Portal from "svelte-portal/src/Portal.svelte";
   import { schemataData } from "../../stores";
 
-  let iframe;
+
   export let show = false;
+  export let limitless = false;
+
+  let iframe;
   let origin = 'http://localhost:3001';
-  let src = `${origin}/organization?designer=true&producer=true`;
+  let src = `${origin}/organization${limitless ? '' : '?designer=true&producer=true'}`;
 
   onMount(() => {
     window.addEventListener("message", (event) => {
