@@ -4,19 +4,17 @@
   import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
   import FieldsetBox from './FieldsetBox.svelte';
   import Textfield from '@smui/textfield/Textfield.svelte';
-  import HelperText from '@smui/textfield/helper-text/index';
 
   import List, { Item, Label } from '@smui/list';
   import Checkbox from '@smui/checkbox';
   import Menu, { SelectionGroup } from '@smui/menu';
   import { Anchor } from '@smui/menu-surface';
-  import ProducerSchemataModal from './ProducerSchemataModal.svelte';
+  import ProducerSchemata from './ProducerSchemata.svelte';
 
   let menu;
   let anchor;
   let anchorClasses = {}
   let selectedEvents = [];
-  let showShemataModal = false;
 
   export let events;
   export let producerExchangeName;
@@ -53,24 +51,20 @@
       bind:value={producerExchangeName}
       invalid={!producerExchangeName && (schemaGroup || outgoingEvents.length > 0)}
     />
-    <div style="flex: 1;" on:click={() => showShemataModal = true}>
-      <Textfield
-        style="width: 100%;"
-        label="Organization : Unit : Context"
-        disabled={disableSchemaGroup}
-        bind:value={schemaGroup}
-        invalid={[schemaGroupRule(schemaGroup)].some(f => f) && (producerExchangeName || outgoingEvents.length > 0)}
-      >
-        <HelperText persistent slot="helper">{schemaGroupRule(schemaGroup)}</HelperText>
-      </Textfield>
-      <ProducerSchemataModal bind:show={showShemataModal} />
+    <div style="flex: 1;">
+      <ProducerSchemata
+        {disableSchemaGroup}
+        bind:schemaGroup
+        invalid={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0)}
+        helperText={schemaGroupRule(schemaGroup)}
+      />
     </div>
 
     <div>
       <ErrorWarningTooltip
-        type='warning'
-        messages={[producerExchangeName ? '' : 'Should you register any events for message publishing?']}
-        names={['']}
+        type={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? 'error' : 'warning'}
+        messages={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? [schemaGroupRule(schemaGroup), !producerExchangeName ? 'Exchange Name must not be empty' : ''] : [producerExchangeName ? '' : 'Should you register any events for message publishing?']}
+        names={['', '']}
       />
     </div>
   </div>
@@ -92,7 +86,7 @@
       }}
       bind:this={anchor}
     >
-    <div on:click={() => events.length && menu.setOpen(true)}>
+    <div class="d-flex align-center" on:click={() => events.length && menu.setOpen(true)}>
       <Textfield
         style="width: 100%;"
         value={selectedEvents}
@@ -102,6 +96,13 @@
         on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menu.setOpen(true)}}
         invalid={outgoingEvents.length < 1 && (producerExchangeName || schemaGroup)}
       ></Textfield>
+      <div>
+        <ErrorWarningTooltip
+          type={'error'}
+          messages={outgoingEvents.length < 1 && (producerExchangeName || schemaGroup) ? ['At least one event need to be selected'] : ['']}
+          names={['']}
+        />
+      </div>
     </div>
     <Menu
       bind:this={menu}
