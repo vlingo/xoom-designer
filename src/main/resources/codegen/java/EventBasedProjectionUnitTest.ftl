@@ -45,54 +45,92 @@ public class ${projectionUnitTestName} {
     projection = world.actorFor(Projection.class, ${projectionName}.class, stateStore);
   }
 
+  private void registerExample${aggregateProtocolName}(${dataName} firstData, ${dataName} secondData) {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+    projection.projectWith(create${domainEventName}(firstData), control);
+    projection.projectWith(create${domainEventName}(secondData), control);
+  }
+
   <#list testCases as testCase>
 
   private Projectable create${testCase.domainEventName}(${dataName} data) {
     final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id, ${testCase.dataObjectParams});
+    <#if testCase.isFactoryMethod()>
 
     BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
     JsonSerialization.serialized(eventData), 1, Metadata.withObject(eventData));
-
+      <#else >
+    BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
+    JsonSerialization.serialized(eventData), 2, Metadata.withObject(eventData));
+    </#if>
     final String projectionId = UUID.randomUUID().toString();
     valueToProjectionId.put(data.id, projectionId);
     return new TextProjectable(null, Collections.singletonList(textEntry), projectionId);
   }
 
-  @Test
-  public void ${testCase.methodName}() {
-    final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(2);
+    <#if testCase.isFactoryMethod()>
+    @Test
+    public void ${testCase.methodName}() {
+      <#list testCase.dataDeclarations as dataDeclaration>
+      ${dataDeclaration}
+      </#list>
+      final CountingProjectionControl control = new CountingProjectionControl();
+      final AccessSafely access = control.afterCompleting(2);
+      projection.projectWith(create${testCase.domainEventName}(firstData.to${dataName}()), control);
+      projection.projectWith(create${testCase.domainEventName}(secondData.to${dataName}()), control);
+      final Map<String, Integer> confirmations = access.readFrom("confirmations");
 
-  <#list testCase.dataDeclarations as dataDeclaration>
-    ${dataDeclaration}
-  </#list>
-    projection.projectWith(create${testCase.domainEventName}(firstData.to${dataName}()), control);
-    projection.projectWith(create${testCase.domainEventName}(secondData.to${dataName}()), control);
-    final Map<String, Integer> confirmations = access.readFrom("confirmations");
+      assertEquals(2, confirmations.size());
+      assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+      assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-    assertEquals(2, confirmations.size());
-    assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-    assertEquals(1, valueOfProjectionIdFor("2", confirmations));
+      CountingReadResultInterest interest = new CountingReadResultInterest();
+      AccessSafely interestAccess = interest.afterCompleting(1);
+      stateStore.read(firstData.id, ${dataObjectName}.class, interest);
+      ${dataObjectName} item = interestAccess.readFrom("item", firstData.id);
+      <#list testCase.statements as statement>
+        <#list statement.assertions as assertion>
+          ${assertion}
+        </#list>
 
-    CountingReadResultInterest interest = new CountingReadResultInterest();
-    AccessSafely interestAccess = interest.afterCompleting(1);
-    stateStore.read("1", ${dataObjectName}.class, interest);
-    ${dataObjectName} item = interestAccess.readFrom("item", "1");
-  <#list testCase.statements as statement>
-  <#list statement.assertions as assertion>
-    ${assertion}
-  </#list>
+        interest = new CountingReadResultInterest();
+        interestAccess = interest.afterCompleting(1);
+        stateStore.read(secondData.id, ${dataObjectName}.class, interest);
+        item = interestAccess.readFrom("item", secondData.id);
+        assertEquals(secondData.id, item.id);
+        <#list statement.secondAssertions as assertion>
+          ${assertion}
+        </#list>
+      </#list>
+    }
+    <#else >
+    @Test
+    public void ${testCase.methodName}() {
+      <#list testCase.dataDeclarations as dataDeclaration>
+        ${dataDeclaration}
+      </#list>
+      registerExample${aggregateProtocolName}(firstData.to${dataName}(), secondData.to${dataName}());
 
-    interest = new CountingReadResultInterest();
-    interestAccess = interest.afterCompleting(1);
-    stateStore.read("2", ${dataObjectName}.class, interest);
-    item = interestAccess.readFrom("item", "2");
-    assertEquals("2", item.id);
-  <#list statement.secondAssertions as assertion>
-    ${assertion}
-  </#list>
-  </#list>
-  }
+      final CountingProjectionControl control = new CountingProjectionControl();
+      final AccessSafely access = control.afterCompleting(1);
+      projection.projectWith(create${testCase.domainEventName}(firstData.to${dataName}()), control);
+      final Map<String, Integer> confirmations = access.readFrom("confirmations");
+
+      assertEquals(1, confirmations.size());
+      assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+
+      CountingReadResultInterest interest = new CountingReadResultInterest();
+      AccessSafely interestAccess = interest.afterCompleting(1);
+      stateStore.read(firstData.id, ${dataObjectName}.class, interest);
+      ${dataObjectName} item = interestAccess.readFrom("item", firstData.id);
+      <#list testCase.statements as statement>
+        <#list statement.assertions as assertion>
+      ${assertion}
+        </#list>
+      </#list>
+    }
+    </#if>
 
   </#list>
   private int valueOfProjectionIdFor(final String valueText, final Map<String, Integer> confirmations) {

@@ -24,6 +24,7 @@ public class TestCase {
   private final List<String> preliminaryStatements = new ArrayList<>();
   private final String domainEventName;
   private final String dataObjectParams;
+  private final boolean isFactoryMethod;
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
@@ -42,10 +43,15 @@ public class TestCase {
             .map(x -> "data." + x.value)
         .collect(Collectors.joining(", "));
     this.methodName = signature.value;
+    this.isFactoryMethod = signature.retrieveRelatedValue(Label.FACTORY_METHOD).equals("true");
     this.domainEventName = signature.retrieveRelatedValue(Label.DOMAIN_EVENT);
     this.dataDeclarations.addAll(DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues));
     this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value));
     this.statements.addAll(TestStatement.with(signature.value, aggregate,domainEvent, valueObjects, testDataValues));
+  }
+
+  public boolean isFactoryMethod() {
+    return isFactoryMethod;
   }
 
   public String getMethodName() {
