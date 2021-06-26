@@ -19,7 +19,7 @@
   export let schemaGroup;
   export let invalid;
 
-  let schemaGroupParsed = schemaGroup?.split(':');
+  let schemaGroupParsed = schemaGroup && schemaGroup.split(':');
   let selectedOrg = schemaGroupParsed ? $schemataData.organizationsStore.find(org => org.name === schemaGroupParsed[0]) : null;
   let selectedUnit = schemaGroupParsed ? $schemataData.unitsStore.find(unit => unit.name === schemaGroupParsed[1]) : null;
   let selectedContext = schemaGroupParsed ? $schemataData.contextsStore.find(context => context.namespace === schemaGroupParsed[2]) : null;
