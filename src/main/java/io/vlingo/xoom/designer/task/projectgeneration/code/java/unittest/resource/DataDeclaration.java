@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DataDeclaration {
 
-  private static final String TEST_DATA_DECLARATION_PATTERN = "final %s %s = %s;";
+  private static final String TEST_DATA_DECLARATION_PATTERN = "%s %s = %s;";
 
   public static String generate(final String methodName,
                                 final CodeGenerationParameter aggregate,

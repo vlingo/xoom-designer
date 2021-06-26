@@ -22,11 +22,28 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
     .statusCode(200)
     .body(is(equalTo("[]")));
   }
+
+  private ${dataObjectName} saveExampleData(${dataObjectName} data) {
+    return given()
+    .when()
+    .body(data)
+    .post("${uriRoot}")
+    .then()
+    .statusCode(201)
+    .extract()
+    .body()
+    .as(${dataObjectName}.class);
+  }
+
 <#list testCases as testCase>
 
   @Test
   public void ${testCase.methodName}() {
+
     ${testCase.dataDeclaration}
+  <#if testCase.isGetRootMethod()>
+    firstData = saveExampleData(firstData);
+  </#if>
 
   <#list testCase.preliminaryStatements as statement>
     ${statement}

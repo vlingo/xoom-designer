@@ -24,6 +24,7 @@ public class TestCase {
     private final String dataDeclaration;
     private final List<TestStatement> statements = new ArrayList<>();
     private final List<String> preliminaryStatements = new ArrayList<>();
+    private final String rootMethod;
 
     public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
         return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
@@ -36,13 +37,12 @@ public class TestCase {
         final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
                 .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
-        final String dataObjectType =
-                JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+        final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
         this.methodName = signature.value;
         this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
-        String rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
-        this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value, dataObjectType, rootPath(signature, aggregate), rootMethod));
-        this.statements.addAll(TestStatement.with(signature.value, aggregate, valueObjects, testDataValues));
+        this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
+        this.preliminaryStatements.addAll(PreliminaryStatement.with(aggregate.retrieveRelatedValue(Label.URI_ROOT), dataObjectType, rootPath(signature, aggregate), rootMethod));
+        this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
     }
 
     private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
@@ -54,6 +54,13 @@ public class TestCase {
         return methodName;
     }
 
+    public String getRootMethod() {
+        return rootMethod;
+    }
+
+    public boolean isGetRootMethod(){
+        return !getRootMethod().equals("post");
+    }
     public String getDataDeclaration() {
         return dataDeclaration;
     }

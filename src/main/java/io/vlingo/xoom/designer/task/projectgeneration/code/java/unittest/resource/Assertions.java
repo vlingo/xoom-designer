@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
@@ -19,17 +20,19 @@ import java.util.stream.Collectors;
 public class Assertions {
 
   public static List<String> from(final int dataIndex,
-                                  final CodeGenerationParameter aggregate,
-                                  final List<CodeGenerationParameter> valueObjects,
+                                  final CodeGenerationParameter aggregate,final String rootPath,
+                                  final String rootMethod, final List<CodeGenerationParameter> valueObjects,
                                   final TestDataValueGenerator.TestDataValues testDataValues) {
-    final String variableName = "result";
+    String aggregateUriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
+
+    final String variableName = rootMethod.equals("get") && rootPath.equals(aggregateUriRoot) ? "result[0]":"result";
 
     final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths(variableName, aggregate, valueObjects);
 
     final Function<String, String> mapper =
             fieldPath -> {
               final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
-              if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
+              if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType) || fieldPath.equals(variableName+".id")) {
                 return String.format("assertNotNull(%s);", fieldPath);
               }
               return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
