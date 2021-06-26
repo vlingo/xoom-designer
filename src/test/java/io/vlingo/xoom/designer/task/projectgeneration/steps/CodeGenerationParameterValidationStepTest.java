@@ -20,7 +20,7 @@ public class CodeGenerationParameterValidationStepTest {
                     deploymentSettingsData(), "/home/projects", true, false, false, "");
 
     final TaskExecutionContext context =
-            TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM);
+            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM);
 
     assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
   }

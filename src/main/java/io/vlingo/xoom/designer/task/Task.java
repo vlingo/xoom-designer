@@ -7,12 +7,10 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
 import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.designer.task.projectgeneration.CommandLineBasedProjectGenerationManager;
-import io.vlingo.xoom.designer.task.projectgeneration.WebBasedProjectGenerationManager;
-import io.vlingo.xoom.designer.gui.UserInterfaceManager;
 import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
@@ -24,67 +22,69 @@ import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 public enum Task {
 
-    WEB_BASED_PROJECT_GENERATION("gen", new WebBasedProjectGenerationManager()),
-    CLI_BASED_PROJECT_GENERATION("gen", new CommandLineBasedProjectGenerationManager()),
-    DOCKER("docker", new DockerCommandManager()),
-    K8S("k8s", new KubernetesCommandManager()),
-    GLOO("gloo", new GlooCommandManager()),
-    GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
-    VERSION("-version", new VersionDisplayManager());
+  DOCKER("docker", new DockerCommandManager()),
+  K8S("k8s", new KubernetesCommandManager()),
+  GLOO("gloo", new GlooCommandManager()),
+  GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
+  VERSION("-version", new VersionDisplayManager());
 
-    public final String command;
-    private final TaskManager manager;
-    private final List<Option> options;
+  public final String command;
+  private final TaskManager manager;
+  private final List<Option> options;
 
-    Task(final String command,
-         final TaskManager manager,
-         final Option...options) {
-        this.command = command;
-        this.manager = manager;
-        this.options = Arrays.asList(options);
+  Task(final String command,
+       final TaskManager manager,
+       final Option...options) {
+    this.command = command;
+    this.manager = manager;
+    this.options = Arrays.asList(options);
+  }
+
+  public static <T> TaskManager<T> of(final String command, final T args) {
+    final List<Task> matchedTasks =
+            Arrays.asList(values()).stream()
+                    .filter(task -> task.triggeredBy(command))
+                    .collect(Collectors.toList());
+
+    if(matchedTasks.isEmpty()) {
+      throw new UnknownCommandException(command);
     }
 
-    public static <T> TaskManager<T> of(final String command, final T args) {
-        final List<Task> matchedTasks =
-                Arrays.asList(values()).stream()
-                        .filter(task -> task.triggeredBy(command))
-                        .collect(Collectors.toList());
+    return findManager(matchedTasks, args);
+  }
 
-        if(matchedTasks.isEmpty()) {
-            throw new UnknownCommandException(command);
-        }
+  public static <T> TaskManager<T> of(final Task task, final T args) {
+    return findManager(Arrays.asList(task), args);
+  }
 
-        return findManager(matchedTasks, args);
-    }
+  private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
+    return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
+            .findFirst().orElseThrow(() -> new UnknownCommandException(args));
+  }
 
-    public static <T> TaskManager<T> of(final Task task, final T args) {
-        return findManager(Arrays.asList(task), args);
-    }
+  public List<OptionValue> findOptionValues(final List<String> args) {
+    return OptionValue.resolveValues(this.options, args);
+  }
 
-    private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
-        return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
-                .findFirst().orElseThrow(() -> new UnknownCommandException(args));
-    }
+  public <T extends TaskManager> T manager() {
+    return (T) manager;
+  }
 
-    public List<OptionValue> findOptionValues(final List<String> args) {
-        return OptionValue.resolveValues(this.options, args);
-    }
+  public String command() {
+    return command;
+  }
 
-    public String command() {
-        return command;
-    }
+  private boolean triggeredBy(final String command) {
+    return this.command.trim().equalsIgnoreCase(command);
+  }
 
-    private boolean triggeredBy(final String command) {
-        return this.command.trim().equalsIgnoreCase(command);
-    }
+  public SubTask subTaskOf(final String command) {
+    final Predicate<SubTask> matchCondition =
+            subTask -> subTask.isChildFrom(this) && subTask.triggeredBy(command);
 
-    public SubTask subTaskOf(final String command) {
-        final Predicate<SubTask> matchCondition =
-                subTask -> subTask.isChildFrom(this) && subTask.triggeredBy(command);
-
-        return Arrays.asList(SubTask.values())
-                .stream().filter(matchCondition).findFirst()
-                .orElseThrow(() -> new UnknownCommandException(command));
-    }
+    return Arrays.asList(SubTask.values())
+            .stream().filter(matchCondition).findFirst()
+            .orElseThrow(() -> new UnknownCommandException(command));
+  }
 
 }
