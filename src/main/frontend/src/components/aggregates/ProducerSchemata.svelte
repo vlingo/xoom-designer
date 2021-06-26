@@ -1,8 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import Dialog, { Title, Content, Header } from '@smui/dialog';
   import IconButton from '@smui/icon-button';
-  import Portal from "svelte-portal/src/Portal.svelte";
   import { schemataData } from "../../stores";
   import Textfield from '@smui/textfield/Textfield.svelte';
   import Button from '@smui/button';
@@ -10,6 +8,7 @@
   import Menu, { SelectionGroup } from '@smui/menu';
   import List, { Item, Text } from '@smui/list';
   import { Anchor } from '@smui/menu-surface';
+  import SchemataEmded from "./SchemataEmded.svelte";
 
   let anchor;
   let anchorClasses = {};
@@ -154,54 +153,9 @@ $: if(!selectedUnit) selectedContext = null;
 </Menu>
 </div>
 
-<Portal target=".s-app">
-  <Dialog
-    bind:open={showSchemataModal}
-    fullscreen
-    class="schemata-dialog"
-  >
-    <Header>
-      <Title></Title>
-      <IconButton action="close" class="material-icons">close</IconButton>
-    </Header>
-    <Content class="schemata-content">
-      <iframe
-        bind:this={iframe}
-        title="XOOM-SCHEMATA"
-        {src}
-        id="iframe"
-        name="iframe"></iframe>
-    </Content>
-  </Dialog>
-</Portal>
+<SchemataEmded bind:show={showSchemataModal} />
 
 <style>
-  :global(.schemata-content), #iframe {
-    padding: 0 !important;
-    margin: 0;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    width: 100%;
-    height: 100%;
-  }
-  :global(.schemata-content) {
-    overflow: hidden;
-  }
-  :global(.schemata-dialog .mdc-dialog__surface) {
-    max-height: calc(100vh - 110px);
-    border-radius: 20px;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-  }
-  :global(.schemata-dialog .mdc-dialog__container) {
-    width: 100%;
-  }
-  :global(.theme--dark .mdc-dialog__surface) {
-    --mdc-theme-surface: var(--theme-surface);
-    --mdc-theme-on-surface: var(--theme-text-primary);
-  }
   .bl-1 {
     min-height: 100%;
     border-left: 1px solid var(--theme-text-primary);
