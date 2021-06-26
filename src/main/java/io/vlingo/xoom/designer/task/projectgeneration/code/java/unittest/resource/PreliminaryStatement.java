@@ -44,18 +44,34 @@ public class PreliminaryStatement {
 
 	public static List<String> with(final String aggregateUriRoot, final String valueObjectData, final String rootPath, final String rootMethod) {
 		final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);
-		if (rootMethod.equals("get") && rootPath.equals(aggregateUriRoot))
-			return Collections.singletonList(String.format(REST_ASSURED_READ_ALL, valueObjectData,
-					rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\""), valueObjectData));
-		else if (rootMethod.equals("get"))
-			return Collections.singletonList(String.format(REST_ASSURED_READ, valueObjectData,
-					rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\""), valueObjectData));
-		else if (rootMethod.equals("delete"))
-			return Collections.singletonList(String.format(REST_ASSURED_DELETE, rootMethod,
-					rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\"")));
+		String rootPathWithId = rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\"");
+		switch (rootMethod) {
+			case "get":
+				if (rootPath.equals(aggregateUriRoot))
+					return fetchAll(valueObjectData, rootPathWithId);
+				return fetchById(valueObjectData, rootPathWithId);
+			case "delete":
+				return deleteById(rootPathWithId, rootMethod);
+			default:
+				return writeData(valueObjectData, rootPathWithId, rootMethod, testDataVariableName);
+		}
+	}
+
+	private static List<String> writeData(String valueObjectData, String rootPath, String rootMethod, String testDataVariableName) {
 		return Collections.singletonList(String.format(REST_ASSURED_WRITE, valueObjectData, testDataVariableName, rootMethod,
-				rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\""),
-				rootMethod.equals("post") ? 201 : 200, valueObjectData));
+				rootPath, rootMethod.equals("post") ? 201 : 200, valueObjectData));
+	}
+
+	private static List<String> deleteById(String rootPath, String rootMethod) {
+		return Collections.singletonList(String.format(REST_ASSURED_DELETE, rootMethod, rootPath));
+	}
+
+	private static List<String> fetchById(String valueObjectData, String rootPath) {
+		return Collections.singletonList(String.format(REST_ASSURED_READ, valueObjectData, rootPath, valueObjectData));
+	}
+
+	private static List<String> fetchAll(String valueObjectData, String rootPath) {
+		return Collections.singletonList(String.format(REST_ASSURED_READ_ALL, valueObjectData, rootPath, valueObjectData));
 	}
 
 }
