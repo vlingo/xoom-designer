@@ -22,8 +22,8 @@
   let selectedOrg = schemaParsed ? $schemataData.organizationsStore.find(org => org.name === schemaParsed[0]) : null;
   let selectedUnit = schemaParsed ? $schemataData.unitsStore.find(unit => unit.name === schemaParsed[1]) : null;
   let selectedContext = schemaParsed ? $schemataData.contextsStore.find(context => context.namespace === schemaParsed[2]) : null;
-  let selectedSchema = schemaParsed ? $schemataData.schemasStore.find(schema => schema.namespace === schemaParsed[3]) : null;
-  let selectedSchemaVersion = schemaParsed ? $schemataData.schemaVersionsStore.find(sv => sv.namespace === schemaParsed[4]) : null;
+  let selectedSchema = schemaParsed ? $schemataData.schemasStore.find(schema => schema.name === schemaParsed[3]) : null;
+  let selectedSchemaVersion = schemaParsed ? $schemataData.schemaVersionsStore.find(sv => sv.currentVersion === schemaParsed[4]) : null;
 
 $: schema = `${selectedOrg ? selectedOrg.name : ''}${selectedUnit ? `:${selectedUnit.name}` : ''}${selectedContext ? `:${selectedContext.namespace}` : ''}${selectedSchema ? `:${selectedSchema.name}` : ''}${selectedSchemaVersion ? `:${selectedSchemaVersion.currentVersion}` : ''}`;
 $: if(!selectedOrg) selectedUnit = null;
