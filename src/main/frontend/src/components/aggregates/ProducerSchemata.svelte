@@ -23,21 +23,7 @@
   let selectedUnit = schemaGroupParsed ? $schemataData.unitsStore.find(unit => unit.name === schemaGroupParsed[1]) : null;
   let selectedContext = schemaGroupParsed ? $schemataData.contextsStore.find(context => context.namespace === schemaGroupParsed[2]) : null;
 
-  let iframe;
   let showSchemataModal = false;
-  let origin = 'http://localhost:3001';
-  let src = `${origin}/organization?designer=true&producer=true`;
-
-  onMount(() => {
-    window.addEventListener("message", (event) => {
-      if (event.origin !== origin) return;
-
-      $schemataData = JSON.parse(event.data)
-    }, false);
-    return () => {
-      window.removeEventListener("message", () => {});
-    }
-  })
 
 $: schemaGroup = `${selectedOrg ? selectedOrg.name : ''}${selectedUnit ? `:${selectedUnit.name}` : ''}${selectedContext ? `:${selectedContext.namespace}` : ''}`;
 $: if(!selectedOrg) selectedUnit = null;

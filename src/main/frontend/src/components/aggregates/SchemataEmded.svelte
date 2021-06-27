@@ -7,11 +7,11 @@
 
 
   export let show = false;
-  export let limitless = true;
+  export let limitless = false;
 
   let iframe;
   let origin = 'http://localhost:9019';
-  let src = `${origin}/organization${limitless ? '' : '?designer=true&producer=true'}`;
+  let src = `${origin}/organization${limitless ? '' : '#producer=true'}`;
 
   onMount(() => {
     window.addEventListener("message", (event) => {
