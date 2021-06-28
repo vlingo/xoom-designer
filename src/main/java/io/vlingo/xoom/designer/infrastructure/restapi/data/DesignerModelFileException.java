@@ -7,16 +7,10 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
-import io.vlingo.xoom.http.resource.serialization.JsonSerialization;
+public class DesignerModelFileException extends RuntimeException {
 
-public class GenerationPath {
-  public final String path;
-
-  public GenerationPath(final String path) {
-    this.path = path;
+  public DesignerModelFileException(final String message, final Exception cause) {
+    super(message, cause);
   }
 
-  public String serialized() {
-    return JsonSerialization.serialized(this);
-  }
 }

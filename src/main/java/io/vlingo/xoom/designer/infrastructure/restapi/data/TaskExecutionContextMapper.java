@@ -10,12 +10,12 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.parameters.ClusterSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.parameters.TurboSettings;
@@ -34,8 +34,8 @@ public class TaskExecutionContextMapper {
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
 
-  public static TaskExecutionContext from(final GenerationSettingsData data,
-                                          final GenerationTarget generationTarget) {
+  public static TaskExecutionContext map(final GenerationSettingsData data,
+                                         final GenerationTarget generationTarget) {
     return new TaskExecutionContextMapper(data, generationTarget).map();
   }
 
@@ -236,7 +236,7 @@ public class TaskExecutionContextMapper {
             .add(CLUSTER_SETTINGS, clusterSettings)
             .add(TURBO_SETTINGS, turboSettings)
             .add(TARGET_FOLDER, definitiveFolder.toString())
-            .add(DESIGNER_MODEL_JSON, JsonSerialization.serialized(data));
+            .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data));
   }
 
 }

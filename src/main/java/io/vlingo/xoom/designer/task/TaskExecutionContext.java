@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
@@ -21,11 +22,10 @@ public class TaskExecutionContext {
 
   public final String executionId;
   private Properties properties;
-  private TaskStatus taskStatus;
   private final CodeGenerationParameters parameters;
   private final List<String> args = new ArrayList<>();
   private final List<OptionValue> optionValues = new ArrayList<>();
-  private final Map<Output, Object> taskOutput = new HashMap<>();
+  private final Map<TaskOutput, Object> taskOutput = new HashMap<>();
   private final Agent agent;
 
   public static TaskExecutionContext executedFrom(final Agent agent) {
@@ -42,6 +42,10 @@ public class TaskExecutionContext {
     this.parameters = CodeGenerationParameters.empty();
   }
 
+  public static TaskExecutionContext empty() {
+    return withoutOptions();
+  }
+
   public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
     this.optionValues.addAll(optionValues);
     return this;
@@ -50,6 +54,11 @@ public class TaskExecutionContext {
   public TaskExecutionContext withArgs(final List<String> args) {
     this.addArgs(args);
     return this;
+  }
+
+  public static TaskExecutionContext withOutput(final TaskOutput taskOutput,
+                                                final Object output) {
+    return withoutOptions().addOutput(taskOutput, output);
   }
 
   public TaskExecutionContext with(final CodeGenerationParameters parameters) {
@@ -79,19 +88,16 @@ public class TaskExecutionContext {
     return (T) mapper.apply(value);
   }
 
-  public void changeStatus(final TaskStatus taskStatus) {
-    this.taskStatus = taskStatus;
+  public TaskExecutionContext addOutput(final TaskOutput taskOutput, final Object content) {
+    this.taskOutput.put(taskOutput, content);
+    return this;
   }
 
-  public void addOutput(final Output output, final Object content) {
-    this.taskOutput.put(output, content);
-  }
-
-  public <T> T retrieveOutput(final Output output) {
-    if(!taskOutput.containsKey(output)) {
+  public <T> T retrieveOutput(final TaskOutput taskOutput) {
+    if(!this.taskOutput.containsKey(taskOutput)) {
       return null;
     }
-    return (T) taskOutput.get(output);
+    return (T) this.taskOutput.get(taskOutput);
   }
 
   public boolean hasProperty(final Property property) {
@@ -108,6 +114,10 @@ public class TaskExecutionContext {
     return optionValues.stream().anyMatch(optionValue -> optionValue.hasName(optionName));
   }
 
+  public <T> T codeGenerationParameterOf(final Label label) {
+    return (T) parameters.retrieveValue(label);
+  }
+
   public CodeGenerationParameters codeGenerationParameters() {
     return parameters;
   }
@@ -118,10 +128,6 @@ public class TaskExecutionContext {
 
   public String targetFolder() {
     return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
-  }
-
-  public TaskStatus status() {
-    return taskStatus;
   }
 
   public Properties properties() {

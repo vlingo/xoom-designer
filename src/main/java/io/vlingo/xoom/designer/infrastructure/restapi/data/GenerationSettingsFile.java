@@ -29,7 +29,7 @@ public class GenerationSettingsFile {
       return new GenerationSettingsFile(JsonSerialization.serialized(data));
     } catch (final IOException exception) {
       exception.printStackTrace();
-      throw new GenerationSettingFileException("Unable to create GenerationSettingsFile", exception);
+      throw new DesignerModelFileException("Unable to create GenerationSettingsFile", exception);
     }
   }
 
@@ -60,8 +60,8 @@ public class GenerationSettingsFile {
         byteArrayStream.write(Base64.getDecoder().decode(encoded));
       }
       return JsonSerialization.deserialized(new String(byteArraySupplier.get()), GenerationSettingsData.class);
-    } catch (final IOException exception) {
-      throw new GenerationSettingFileException("Unable to map data from encoded file", exception);
+    } catch (final Exception exception) {
+      throw new DesignerModelFileException("Unable to map data from encoded file", exception);
     }
   }
 
