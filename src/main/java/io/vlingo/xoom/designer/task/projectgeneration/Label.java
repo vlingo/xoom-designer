@@ -84,6 +84,7 @@ public enum Label implements ParameterLabel {
   ROLE("role"),
   DIALECT("dialect"),
   VALUE_OBJECT("valueObject"),
+  AGGREGATE_STATE("aggregateState"),
   VALUE_OBJECT_FIELD("valueObjectField"),
   UI_TYPE("uiType");
 

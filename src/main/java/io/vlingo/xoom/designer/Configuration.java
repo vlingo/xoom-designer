@@ -28,7 +28,10 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageG
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.*;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity.EntityUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections.ProjectionUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceAbstractUnitTestGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource.RestResourceUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateManagementGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.StaticFilesGenerationStep;
@@ -75,34 +78,37 @@ public class Configuration {
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
-          //Java
-          new ReadmeFileGenerationStep(),
-          new ValueObjectGenerationStep(),
-          new ModelGenerationStep(),
-          new DataObjectGenerationStep(),
-          new ProjectionGenerationStep(),
-          new StorageGenerationStep(),
-          new RestResourceGenerationStep(),
-          new AutoDispatchMappingGenerationStep(),
-          new ExchangeGenerationStep(),
-          new SchemataGenerationStep(),
-          new BootstrapGenerationStep(),
-          new EntityUnitTestGenerationStep(),
-          new QueriesUnitTestGenerationStep(),
-          new TurboSettingsGenerationStep(),
-          new ClusterSettingsGenerationStep(),
-          new DesignerModelGenerationStep(),
-          //React
-          new StaticFilesGenerationStep(),
-          new LayoutGenerationStep(),
-          new AggregateManagementGenerationStep(),
-          //Common
-          new ContentCreationStep()
+      //Java
+      new ReadmeFileGenerationStep(),
+      new ValueObjectGenerationStep(),
+      new ModelGenerationStep(),
+      new DataObjectGenerationStep(),
+      new ProjectionGenerationStep(),
+      new StorageGenerationStep(),
+      new RestResourceGenerationStep(),
+      new AutoDispatchMappingGenerationStep(),
+      new ExchangeGenerationStep(),
+      new SchemataGenerationStep(),
+      new BootstrapGenerationStep(),
+      new EntityUnitTestGenerationStep(),
+      new QueriesUnitTestGenerationStep(),
+      new ProjectionUnitTestGenerationStep(),
+      new RestResourceAbstractUnitTestGenerationStep(),
+      new RestResourceUnitTestGenerationStep(),
+      new TurboSettingsGenerationStep(),
+      new ClusterSettingsGenerationStep(),
+      new DesignerModelGenerationStep(),
+      //React
+      new StaticFilesGenerationStep(),
+      new LayoutGenerationStep(),
+      new AggregateManagementGenerationStep(),
+      //Common
+      new ContentCreationStep()
   );
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-          new ResourcesLocationStep(), new GenerationTargetRegistrationStep(), new UserInterfaceBootstrapStep(),
-          new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
+      new ResourcesLocationStep(), new GenerationTargetRegistrationStep(), new UserInterfaceBootstrapStep(),
+      new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
   );
 
   public static String resolveDefaultXoomVersion() {
