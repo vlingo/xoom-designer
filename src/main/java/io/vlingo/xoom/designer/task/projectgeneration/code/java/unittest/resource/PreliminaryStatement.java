@@ -11,36 +11,36 @@ import java.util.List;
 
 public class PreliminaryStatement {
 
-	private static final String REST_ASSURED_READ = "%s result = given()\n" +
-			"        .when()\n" +
-			"        .get(\"%s\")\n" +
-			"        .then()\n" +
-			"        .statusCode(200)\n" +
-			"        .extract()\n" +
-			"        .body()\n" +
-			"        .as(%s.class);\n";
-	private static final String REST_ASSURED_READ_ALL = "%s[] result = given()\n" +
-			"        .when()\n" +
-			"        .get(\"%s\")\n" +
-			"        .then()\n" +
-			"        .statusCode(200)\n" +
-			"        .extract()\n" +
-			"        .body()\n" +
-			"        .as(%s[].class);\n";
-	private static final String REST_ASSURED_WRITE = "%s result = given()\n" +
-			"        .when()\n" +
-			"        .body(%s)\n" +
-			"        .%s(\"%s\")\n" +
-			"        .then()\n" +
-			"        .statusCode(%s)\n" +
-			"        .extract()\n" +
-			"        .body()\n" +
-			"        .as(%s.class);\n";
-	private static final String REST_ASSURED_DELETE = "given()\n" +
-			"        .when()\n" +
-			"        .%s(\"%s\")\n" +
-			"        .then()\n" +
-			"        .statusCode(200);\n";
+	private static final String REST_ASSURED_READ = "%s result = given()%n" +
+			"        .when()%n" +
+			"        .get(\"%s\")%n" +
+			"        .then()%n" +
+			"        .statusCode(200)%n" +
+			"        .extract()%n" +
+			"        .body()%n" +
+			"        .as(%s.class);%n";
+	private static final String REST_ASSURED_READ_ALL = "%s[] result = given()%n" +
+			"        .when()%n" +
+			"        .get(\"%s\")%n" +
+			"        .then()%n" +
+			"        .statusCode(200)%n" +
+			"        .extract()%n" +
+			"        .body()%n" +
+			"        .as(%s[].class);%n";
+	private static final String REST_ASSURED_WRITE = "%s result = given()%n" +
+			"        .when()%n" +
+			"        .body(%s)%n" +
+			"        .%s(\"%s\")%n" +
+			"        .then()%n" +
+			"        .statusCode(%s)%n" +
+			"        .extract()%n" +
+			"        .body()%n" +
+			"        .as(%s.class);%n";
+	private static final String REST_ASSURED_DELETE = "given()%n" +
+			"        .when()%n" +
+			"        .%s(\"%s\")%n" +
+			"        .then()%n" +
+			"        .statusCode(200);%n";
 
 	public static List<String> with(final String aggregateUriRoot, final String valueObjectData, final String rootPath, final String rootMethod) {
 		final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);
