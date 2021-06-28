@@ -4,15 +4,16 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.steps;
+package io.vlingo.xoom.designer.task.projectgeneration.code;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.DatabaseType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
-import io.vlingo.xoom.designer.task.TaskExecutionStep;
 
 import java.util.ArrayList;
 import java.util.List;

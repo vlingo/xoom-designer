@@ -5,13 +5,13 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.task.projectgeneration.steps;
+package io.vlingo.xoom.designer.task.projectgeneration.code.java.structure;
 
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

@@ -5,14 +5,14 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.task.projectgeneration.steps;
+package io.vlingo.xoom.designer.task.projectgeneration.code;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.OutputFileInstantiator;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.ExternalFileLocationResolver;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
+import io.vlingo.xoom.designer.task.projectgeneration.ExternalFileLocationResolver;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.OFFSET;

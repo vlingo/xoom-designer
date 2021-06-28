@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.Agent;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.MainClassResolverStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

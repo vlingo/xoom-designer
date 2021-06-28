@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.steps.DeploymentType;
 
 import java.nio.file.Paths;
 import java.util.*;

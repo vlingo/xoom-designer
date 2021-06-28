@@ -2,7 +2,9 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.ContentAvailability;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +14,8 @@ import java.util.List;
 import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
 import static io.vlingo.xoom.designer.task.Agent.WEB;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
-import static io.vlingo.xoom.designer.task.projectgeneration.steps.ContentAvailability.DOCKER;
-import static io.vlingo.xoom.designer.task.projectgeneration.steps.ContentAvailability.KUBERNETES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.ContentAvailability.DOCKER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.ContentAvailability.KUBERNETES;
 
 public class ContentAvailabilityTest {
 
