@@ -13,8 +13,4 @@ public class CommandNotFoundException extends TaskExecutionException {
         super("Please inform a command.");
     }
 
-    public CommandNotFoundException(final String message) {
-        super(message);
-    }
-
 }
