@@ -62,10 +62,16 @@ public enum Template {
   VALUE_OBJECT("ValueObject"),
   QUERIES_UNIT_TEST("QueriesUnitTest"),
   README("Readme"),
+  EVENT_BASED_PROJECTION_UNIT_TEST("EventBasedProjectionUnitTest"),
+  ENTITY_STATE_PROJECTION_UNIT_TEST("EntityStateProjectionUnitTest"),
   OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
   EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
   EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
   STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
+  REST_RESOURCE_UNIT_TEST("RestResourceUnitTest"),
+  ABSTRACT_REST_RESOURCE_UNIT_TEST("RestResourceAbstractUnitTest"),
+  COUNTING_READ_RESULT("CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL("CountingProjectionControl"),
   TURBO_SETTINGS("TurboSettings");
 
   public final String filename;

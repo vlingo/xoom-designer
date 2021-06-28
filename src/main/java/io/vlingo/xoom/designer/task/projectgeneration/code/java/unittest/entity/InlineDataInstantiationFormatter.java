@@ -66,7 +66,7 @@ public class InlineDataInstantiationFormatter {
 
     valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).forEach(field -> generateValueObjectFieldAssignment(stateField.value, field));
 
-    return String.format("%s.from(%s)", valueObjectType, valuesAssignmentExpression.toString()).replaceAll(", \\)", ")");
+    return String.format("%s.from(%s)", valueObjectType, valuesAssignmentExpression).replaceAll(", \\)", ")");
   }
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {

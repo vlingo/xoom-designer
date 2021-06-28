@@ -141,7 +141,9 @@ public enum TemplateParameter implements ParameterKey {
   PRODUCER_SCHEMAS("producerSchemas"),
   CONSUMER_SCHEMAS("consumerSchemas"),
   STATIC_FACTORY_METHODS("staticFactoryMethods"),
+  REST_RESOURCE_UNIT_TEST_NAME("resourceUnitTestName"),
   QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),
   TEST_CASES("testCases"),
   UNIT_TEST("unitTest"),
   ENTITY_UNIT_TEST_NAME("entityUnitTestName"),
@@ -151,6 +153,7 @@ public enum TemplateParameter implements ParameterKey {
   VALUE_OBJECT_FIELDS("valueObjectFields"),
   CLUSTER_SETTINGS("clusterSettings"),
   TURBO_SETTINGS("turboSettings"),
+  DATA_OBJECT_PARAMS("dataObjectParams"),
   UI_TYPE("uiType");
 
   public final String key;

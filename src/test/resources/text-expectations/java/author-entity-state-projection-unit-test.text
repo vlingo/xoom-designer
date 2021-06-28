@@ -1,0 +1,160 @@
+package io.vlingo.xoomapp.infrastructure.persistence;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.actors.testkit.AccessSafely;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.symbio.StateAdapterProvider;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import java.time.LocalDate;
+import io.vlingo.xoomapp.infrastructure.*;
+import java.util.*;
+import io.vlingo.xoomapp.model.author.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class AuthorProjectionTest {
+
+  private World world;
+  private StateStore stateStore;
+  private MockDispatcher dispatcher;
+  private Author entity;
+
+  @BeforeEach
+  public void setUp() {
+    dispatcher = new MockDispatcher();
+    world = World.startWithDefaults("test-state-store-projection");;
+    new StateAdapterProvider(world).registerAdapter(AuthorState.class, new AuthorStateAdapter());
+    stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
+    new StatefulTypeRegistry(world).register(new StatefulTypeRegistry.Info(stateStore, AuthorState.class, AuthorState.class.getSimpleName()));
+    entity = world.actorFor(Author.class, AuthorEntity.class, "#1");
+  }
+
+
+  @Test
+  public void withName() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.withName(data.name, data.availableOn).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertEquals(item.name.firstName, "first-author-name-firstName");
+    assertEquals(item.name.lastName, "first-author-name-lastName");
+  }
+
+  @Test
+  public void changeRank() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.changeRank(data.rank).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.rank);
+  }
+
+  @Test
+  public void addTag() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.addTag(data.tags).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void addTags() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.addTags(data.tags).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void replaceTags() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.replaceTags(data.tags).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void removeTag() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.removeTag(data.tags).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void relateAuthor() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.relateAuthor(data.relatedAuthors).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void relateAuthors() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.relateAuthors(data.relatedAuthors).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void unrelateAuthor() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.unrelateAuthor(data.relatedAuthors).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+
+  @Test
+  public void replaceAllRelatedAuthors() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final AuthorData firstData = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    AuthorState data = firstData.toAuthorState();
+    final AuthorState item = entity.replaceAllRelatedAuthors(data.relatedAuthors).await();
+
+    assertEquals(item.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertNotNull(item.relatedAuthors);
+  }
+}
