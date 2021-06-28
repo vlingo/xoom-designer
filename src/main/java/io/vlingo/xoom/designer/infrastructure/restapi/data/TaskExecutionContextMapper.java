@@ -19,13 +19,16 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.task.projectgeneration.parameters.ExchangeReceiver;
 
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Optional;
 
 import static io.vlingo.xoom.designer.task.Agent.WEB;
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
+import static java.util.stream.Collectors.toMap;
 
 public class TaskExecutionContextMapper {
 
@@ -181,15 +184,14 @@ public class TaskExecutionContextMapper {
               CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
                       .relate(Label.ROLE, ExchangeRole.CONSUMER);
 
-
-
       aggregate.consumerExchange.receivers.forEach(receiver -> {
-        final CodeGenerationParameter schema =
-                CodeGenerationParameter.of(SCHEMA, receiver.schema);
+        final Map<String, String> fieldMapping =
+                receiver.fieldsMapping.stream().collect(toMap(mp -> mp.methodParameterName, mp -> mp.schemaFieldName));
 
-        consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
-                .relate(MODEL_METHOD, receiver.aggregateMethod)
-                .relate(schema));
+        final ExchangeReceiver exchangeReceiver =
+                new ExchangeReceiver(receiver.schema, receiver.aggregateMethod, fieldMapping);
+
+        consumerExchange.relate(RECEIVER, exchangeReceiver);
       });
       aggregateParameter.relate(consumerExchange);
     }
