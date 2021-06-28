@@ -181,10 +181,15 @@ public class TaskExecutionContextMapper {
               CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
                       .relate(Label.ROLE, ExchangeRole.CONSUMER);
 
+
+
       aggregate.consumerExchange.receivers.forEach(receiver -> {
+        final CodeGenerationParameter schema =
+                CodeGenerationParameter.of(SCHEMA, receiver.schema);
+
         consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
                 .relate(MODEL_METHOD, receiver.aggregateMethod)
-                .relate(SCHEMA, receiver.schema));
+                .relate(schema));
       });
       aggregateParameter.relate(consumerExchange);
     }

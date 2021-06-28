@@ -21,6 +21,7 @@ public class DeploymentSettingsData {
   public final int clusterPort;
   public final int producerExchangePort;
   public final int httpServerPort;
+  public final boolean pullSchemas;
 
   public DeploymentSettingsData(final String type,
                                 final String dockerImage,
@@ -29,7 +30,8 @@ public class DeploymentSettingsData {
                                 final int clusterTotalNodes,
                                 final int clusterPort,
                                 final int producerExchangePort,
-                                final int httpServerPort) {
+                                final int httpServerPort,
+                                final boolean pullSchemas) {
     this.type = type;
     this.dockerImage = dockerImage;
     this.kubernetesImage = kubernetesImage;
@@ -38,6 +40,7 @@ public class DeploymentSettingsData {
     this.clusterPort = clusterPort;
     this.producerExchangePort = producerExchangePort;
     this.httpServerPort = httpServerPort;
+    this.pullSchemas = pullSchemas;
   }
 
   public List<String> validate(List<String> errorStrings) {

@@ -184,6 +184,6 @@ public class TaskExecutionContextMapperTest {
   }
 
   private DeploymentSettingsData deploymentSettingsData() {
-    return new DeploymentSettingsData("DOCKER", "xoom-app", "", "", 0, 0, 0, 0);
+    return new DeploymentSettingsData("DOCKER", "xoom-app", "", "", 0, 0, 0, 0, false);
   }
 }

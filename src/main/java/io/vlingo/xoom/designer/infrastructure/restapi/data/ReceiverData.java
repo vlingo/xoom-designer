@@ -7,13 +7,20 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReceiverData {
 
     public final String schema;
     public final String aggregateMethod;
+    public final List<SchemaFieldMappingData> fieldsMapping = new ArrayList<>();
 
-    public ReceiverData(final String schema, final String aggregateMethod) {
+    public ReceiverData(final String schema,
+                        final String aggregateMethod,
+                        final List<SchemaFieldMappingData> fieldsMapping) {
         this.schema = schema;
         this.aggregateMethod = aggregateMethod;
+        this.fieldsMapping.addAll(fieldsMapping);
     }
 }
