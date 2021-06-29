@@ -106,7 +106,6 @@
     successMessage = messages;
     snackbar = true;
     succeded = true;
-    failed = false;
     errorDetails = "";
   }
 
@@ -124,7 +123,7 @@
   }
 
   function requiresCompression() {
-    return $settingsInfo.generationTarget === TARGET.ZIP_DOWNLOAD;
+    return $settingsInfo.generationTargetKey === TARGET.ZIP_DOWNLOAD;
   }
 
   function buildProjectDirectory() {
