@@ -13,19 +13,19 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.AGGREGATE_STATE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -63,7 +63,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
   private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
     final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-    return AggregateMethodInvocation.handlingDataObject("$stage").format(method, methodScope);
+    return AggregateMethodInvocation.accessingParametersFromDataObject("$stage").format(method, methodScope);
   }
 
   @Override

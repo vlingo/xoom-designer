@@ -46,8 +46,8 @@ public class Exchange {
   }
 
   private Exchange(final String aggregateName,
-                  final CodeGenerationParameter exchange,
-                  final List<CodeGenerationParameter> allExchangeParameters) {
+                   final CodeGenerationParameter exchange,
+                   final List<CodeGenerationParameter> allExchangeParameters) {
     this.name = exchange.value;
     this.coveys = resolveCoveyParameters(exchange.value, allExchangeParameters);
     this.variableName = Formatter.formatExchangeVariableName(exchange.value);

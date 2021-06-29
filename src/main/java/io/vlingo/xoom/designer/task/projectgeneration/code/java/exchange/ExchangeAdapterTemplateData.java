@@ -6,8 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -19,7 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.EXCHANGE_ADAPTER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.EXCHANGE_MAPPER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ExchangeAdapterTemplateData extends TemplateData {
@@ -27,34 +27,39 @@ public class ExchangeAdapterTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final String exchangePackage,
-                                        final Stream<CodeGenerationParameter> aggregates,
-                                        final List<Content> contents) {
+                                        final Stream<CodeGenerationParameter> aggregates) {
     return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
-            .map(exchange -> new ExchangeAdapterTemplateData(exchangePackage, exchange, contents))
-            .collect(Collectors.toList());
+            .flatMap(exchange -> {
+              if(exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer()) {
+                return Stream.of(new ExchangeAdapterTemplateData(exchangePackage, exchange));
+              } else {
+                return ExchangeDetail.findConsumedQualifiedEventNames(exchange)
+                        .map(qualifiedName -> new ExchangeAdapterTemplateData(exchangePackage, qualifiedName));
+              }
+            }).collect(Collectors.toList());
   }
 
   private ExchangeAdapterTemplateData(final String exchangePackage,
-                                      final CodeGenerationParameter exchange,
-                                      final List<Content> contents) {
+                                      final CodeGenerationParameter exchange) {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage)
                     .and(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
                     .and(SCHEMA_GROUP_NAME, exchange.retrieveRelatedValue(Label.SCHEMA_GROUP))
-                    .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of))
-                    .and(LOCAL_TYPE_NAME, DATA_OBJECT.resolveClassname(exchange.parent().value))
+                    .and(EXCHANGE_ROLE, ExchangeRole.PRODUCER)
                     .andResolve(EXCHANGE_ADAPTER_NAME, EXCHANGE_ADAPTER::resolveClassname)
                     .andResolve(EXCHANGE_MAPPER_NAME, EXCHANGE_MAPPER::resolveClassname)
-                    .addImport(resolveImports(exchange, contents));
+                    .addImport(IdentifiedDomainEvent.class.getCanonicalName());
   }
 
-  private String resolveImports(final CodeGenerationParameter exchange,
-                                final List<Content> contents) {
-    if (exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer()) {
-      final String dataObjectName = DATA_OBJECT.resolveClassname(exchange.parent().value);
-      return ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, dataObjectName, contents);
-    }
-    return IdentifiedDomainEvent.class.getCanonicalName();
+  private ExchangeAdapterTemplateData(final String exchangePackage,
+                                      final String qualifiedSchemaName) {
+    this.parameters =
+            TemplateParameters.with(PACKAGE_NAME, exchangePackage)
+                    .and(EXCHANGE_ROLE, ExchangeRole.CONSUMER)
+                    .and(LOCAL_TYPE_NAME, CodeElementFormatter.simpleNameOf(qualifiedSchemaName))
+                    .andResolve(EXCHANGE_ADAPTER_NAME, EXCHANGE_ADAPTER::resolveClassname)
+                    .andResolve(EXCHANGE_MAPPER_NAME, EXCHANGE_MAPPER::resolveClassname)
+                    .addImport(qualifiedSchemaName);
   }
 
   @Override

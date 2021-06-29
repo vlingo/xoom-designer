@@ -1,0 +1,22 @@
+package io.vlingo.xoomapp.infrastructure.exchange;
+
+import io.vlingo.xoom.lattice.exchange.ExchangeMapper;
+import io.vlingo.xoom.common.serialization.JsonSerialization;
+
+import io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
+public class OtherAggregateDefinedMapper implements ExchangeMapper<OtherAggregateDefined,String> {
+
+  @Override
+  public String localToExternal(final OtherAggregateDefined local) {
+    return JsonSerialization.serialized(local);
+  }
+
+  @Override
+  public OtherAggregateDefined externalToLocal(final String external) {
+    return JsonSerialization.deserialized(external, OtherAggregateDefined.class);
+  }
+}

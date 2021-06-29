@@ -123,10 +123,16 @@ public enum JavaTemplateStandard implements TemplateStandard {
       (name, parameters) -> parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
           parameters.find(LOCAL_TYPE_NAME) + "Mapper" : "DomainEventMapper"),
 
-  EXCHANGE_ADAPTER(parameters -> parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
-      CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
-      (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
-          parameters.<ExchangeRole>find(EXCHANGE_ROLE).formatName() + "Adapter"),
+  EXCHANGE_ADAPTER(parameters ->
+          parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
+                  CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
+          (name, parameters) -> {
+    final ExchangeRole exchangeRole = parameters.find(EXCHANGE_ROLE);
+    if(exchangeRole.isConsumer()) {
+      return parameters.<String>find(LOCAL_TYPE_NAME) + "Adapter";
+    }
+    return parameters.<String>find(AGGREGATE_PROTOCOL_NAME) + exchangeRole.formatName() + "Adapter";
+  }),
 
   EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
       (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +

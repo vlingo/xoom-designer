@@ -11,12 +11,10 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,7 +33,7 @@ public class ExchangeGenerationStepTest {
 
     new ExchangeGenerationStep().process(context);
 
-    Assertions.assertEquals(19, context.contents().size());
+    Assertions.assertEquals(23, context.contents().size());
 
     final Content exchangeBootstrap =
             context.findContent(JavaTemplateStandard.EXCHANGE_BOOTSTRAP, "ExchangeBootstrap");
@@ -43,14 +41,26 @@ public class ExchangeGenerationStepTest {
     final Content authorExchangeReceivers =
             context.findContent(JavaTemplateStandard.EXCHANGE_RECEIVER_HOLDER, "AuthorExchangeReceivers");
 
-    final Content authorConsumerAdapter =
-            context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "AuthorConsumerAdapter");
+    final Content otherAggregateDefinedAdapter =
+            context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "OtherAggregateDefinedAdapter");
+
+    final Content otherAggregateUpdatedAdapter =
+            context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "OtherAggregateUpdatedAdapter");
+
+    final Content otherAggregateRemovedAdapter =
+            context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "OtherAggregateRemovedAdapter");
 
     final Content authorProducerAdapter =
             context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "AuthorProducerAdapter");
 
-    final Content authorDataMapper =
-            context.findContent(JavaTemplateStandard.EXCHANGE_MAPPER, "AuthorDataMapper");
+    final Content otherAggregateDefinedMapper =
+            context.findContent(JavaTemplateStandard.EXCHANGE_MAPPER, "OtherAggregateDefinedMapper");
+
+    final Content otherAggregateUpdatedMapper =
+            context.findContent(JavaTemplateStandard.EXCHANGE_MAPPER, "OtherAggregateUpdatedMapper");
+
+    final Content otherAggregateRemovedMapper =
+            context.findContent(JavaTemplateStandard.EXCHANGE_MAPPER, "OtherAggregateRemovedMapper");
 
     final Content bookProducerAdapter =
             context.findContent(JavaTemplateStandard.EXCHANGE_ADAPTER, "BookProducerAdapter");
@@ -66,9 +76,13 @@ public class ExchangeGenerationStepTest {
 
     exchangeBootstrap.contains(TextExpectation.onJava().read("exchange-bootstrap"));
     authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers"));
-    authorConsumerAdapter.contains(TextExpectation.onJava().read("author-consumer-adapter"));
+    otherAggregateDefinedAdapter.contains(TextExpectation.onJava().read("other-aggregate-defined-adapter"));
+    otherAggregateUpdatedAdapter.contains(TextExpectation.onJava().read("other-aggregate-updated-adapter"));
+    otherAggregateRemovedAdapter.contains(TextExpectation.onJava().read("other-aggregate-removed-adapter"));
     authorProducerAdapter.contains(TextExpectation.onJava().read("author-producer-adapter"));
-    authorDataMapper.contains(TextExpectation.onJava().read("author-data-mapper"));
+    otherAggregateDefinedMapper.contains(TextExpectation.onJava().read("other-aggregate-defined-mapper"));
+    otherAggregateUpdatedMapper.contains(TextExpectation.onJava().read("other-aggregate-updated-mapper"));
+    otherAggregateRemovedMapper.contains(TextExpectation.onJava().read("other-aggregate-removed-mapper"));
     bookProducerAdapter.contains(TextExpectation.onJava().read("book-producer-adapter"));
     domainEventMapper.contains(TextExpectation.onJava().read("domain-event-mapper"));
     exchangeDispatcher.contains(TextExpectation.onJava().read("exchange-dispatcher"));

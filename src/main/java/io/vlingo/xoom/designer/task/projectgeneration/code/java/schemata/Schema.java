@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
@@ -18,11 +19,8 @@ public class Schema {
   public final String reference;
   public final String file;
 
-  public Schema(final CodeGenerationParameter schema) {
-    if (!schema.isLabeled(Label.SCHEMA)) {
-      throw new IllegalArgumentException("A schema parameter is expected.");
-    }
-    this.reference = schema.value;
+  public Schema(final String schemaReference) {
+    this.reference = schemaReference;
     this.file = null;
   }
 
@@ -33,6 +31,19 @@ public class Schema {
     }
     this.reference = String.format("%s:%s:%s", schemaGroup, publishedLanguage.value, DEFAULT_SCHEMA_VERSION);
     this.file = publishedLanguage.value + ".vss";
+  }
+
+  public String simpleClassName() {
+    return reference.split(":")[3];
+  }
+
+  public String qualifiedName() {
+    final String packageName =  reference.split(":")[2] + ".event";
+    return CodeElementFormatter.qualifiedNameOf(packageName, simpleClassName());
+  }
+
+  public String innerReceiverClassName() {
+    return simpleClassName() + "Receiver";
   }
 
   static String resolveFieldDeclaration(final CodeGenerationParameter field) {

@@ -7,8 +7,6 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ExchangeBootstrapTemplateData extends TemplateData {
@@ -27,20 +24,17 @@ public class ExchangeBootstrapTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static TemplateData from(final String exchangePackage,
-                                  final List<Exchange> exchanges,
-                                  final List<Content> contents) {
-
-    return new ExchangeBootstrapTemplateData(exchangePackage, exchanges, contents);
+                                  final List<Exchange> exchanges) {
+    return new ExchangeBootstrapTemplateData(exchangePackage, exchanges);
   }
 
   public ExchangeBootstrapTemplateData(final String exchangePackage,
-                                       final List<Exchange> exchanges,
-                                       final List<Content> contents) {
+                                       final List<Exchange> exchanges) {
     parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGES, exchanges)
                     .and(EXCHANGE_BOOTSTRAP_NAME, JavaTemplateStandard.EXCHANGE_BOOTSTRAP.resolveClassname())
                     .and(PRODUCER_EXCHANGES, joinProducerExchangeNames(exchanges))
-                    .addImports(resolveImports(exchanges, contents));
+                    .addImports(resolveImports(exchanges));
   }
 
   private String joinProducerExchangeNames(final List<Exchange> exchanges) {
@@ -48,10 +42,10 @@ public class ExchangeBootstrapTemplateData extends TemplateData {
             .distinct().collect(Collectors.joining(", "));
   }
 
-  private Set<String> resolveImports(final List<Exchange> exchanges,
-                                     final List<Content> contents) {
+  private Set<String> resolveImports(final List<Exchange> exchanges) {
     final Set<String> imports = exchanges.stream().filter(Exchange::isConsumer)
-            .map(exchange -> ContentQuery.findFullyQualifiedClassName(DATA_OBJECT, exchange.dataObjectName, contents))
+            .flatMap(exchange -> exchange.coveys.stream())
+            .map(covey -> covey.qualifiedLocalClassName)
             .collect(Collectors.toSet());
 
     if (exchanges.stream().anyMatch(Exchange::isProducer)) {

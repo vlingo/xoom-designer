@@ -13,19 +13,16 @@ public class ${exchangeReceiverHolderName} {
   /**
    * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
    */
-  static class ${receiver.schemaTypeName} implements ExchangeReceiver<${receiver.localTypeName}> {
+  static class ${receiver.innerClassName} implements ExchangeReceiver<${receiver.localTypeName}> {
 
     private final Grid stage;
 
-    public ${receiver.schemaTypeName}(final Grid stage) {
+    public ${receiver.innerClassName}(final Grid stage) {
       this.stage = stage;
     }
 
     @Override
-    public void receive(final ${receiver.localTypeName} data) {
-      <#list receiver.valueObjectInitializers as initializer>
-      ${initializer}
-      </#list>
+    public void receive(final ${receiver.localTypeName} event) {
       <#if receiver.dispatchToFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>

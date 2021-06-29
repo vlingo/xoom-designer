@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 
 import java.util.stream.Stream;
 
@@ -21,4 +22,14 @@ public class ExchangeDetail {
       return AggregateDetail.findInvolvedStateFields(aggregate, methodName);
     });
   }
+
+  public static Stream<String> findConsumedQualifiedEventNames(final CodeGenerationParameter exchange) {
+    if(exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer()) {
+      return Stream.empty();
+    }
+    return exchange.retrieveAllRelated(Label.RECEIVER)
+            .map(receiver -> receiver.retrieveOneRelated(Label.SCHEMA).<Schema>object())
+            .map(schema -> schema.qualifiedName()).distinct();
+  }
+
 }

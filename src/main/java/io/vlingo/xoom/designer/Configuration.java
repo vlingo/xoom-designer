@@ -23,9 +23,14 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjec
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaPullStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.*;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeFolderCleanUpStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeInstallationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.MavenWrapperInstallationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections.ProjectionUnitTestGenerationStep;
@@ -72,6 +77,7 @@ public class Configuration {
           new ProjectInstallationStep(),
           new MavenWrapperInstallationStep(),
           new CodeGenerationExecutionerStep(),
+          new SchemaPullStep(withType(CommandExecutionProcess.class)),
           new ContentPurgerStep(),
           new ProjectCompressionStep(),
           new ArchetypeFolderCleanUpStep()

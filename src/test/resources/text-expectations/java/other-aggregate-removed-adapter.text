@@ -1,0 +1,41 @@
+package io.vlingo.xoomapp.infrastructure.exchange;
+
+import io.vlingo.xoom.lattice.exchange.ExchangeAdapter;
+import io.vlingo.xoom.lattice.exchange.MessageParameters;
+import io.vlingo.xoom.lattice.exchange.MessageParameters.DeliveryMode;
+import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
+
+import io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
+public class OtherAggregateRemovedAdapter implements ExchangeAdapter<OtherAggregateRemoved, String, Message> {
+
+  private final String supportedSchemaName;
+
+  public OtherAggregateRemovedAdapter(final String supportedSchemaName) {
+    this.supportedSchemaName = supportedSchemaName;
+  }
+
+  @Override
+  public OtherAggregateRemoved fromExchange(final Message exchangeMessage) {
+    return new OtherAggregateRemovedMapper().externalToLocal(exchangeMessage.payloadAsText());
+  }
+
+  @Override
+  public Message toExchange(final OtherAggregateRemoved local) {
+    final String messagePayload = new OtherAggregateRemovedMapper().localToExternal(local);
+    return new Message(messagePayload, MessageParameters.bare().deliveryMode(DeliveryMode.Durable));
+  }
+
+  @Override
+  public boolean supports(final Object exchangeMessage) {
+    if(!exchangeMessage.getClass().equals(Message.class)) {
+      return false;
+    }
+    final String schemaName = ((Message) exchangeMessage).messageParameters.typeName();
+    return supportedSchemaName.equalsIgnoreCase(schemaName);
+  }
+
+}

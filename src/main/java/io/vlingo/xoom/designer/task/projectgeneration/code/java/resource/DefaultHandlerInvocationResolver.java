@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
@@ -41,7 +41,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
 
   private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
-    final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.handlingDataObject("grid");
+    final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.accessingParametersFromDataObject("grid");
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
     final Boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;

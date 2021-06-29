@@ -28,4 +28,9 @@ public class Formatter {
   public static String formatSchemaTypeName(final CodeGenerationParameter schema) {
     return schema.value.split(":")[3];
   }
+
+  public static String formatReceiverInnerClassName(final CodeGenerationParameter schema) {
+    return formatSchemaTypeName(schema) + "Receiver";
+  }
+
 }

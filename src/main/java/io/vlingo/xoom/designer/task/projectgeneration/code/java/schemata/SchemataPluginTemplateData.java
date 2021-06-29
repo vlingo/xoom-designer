@@ -11,11 +11,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,8 +60,9 @@ public class SchemataPluginTemplateData extends TemplateData {
 
   private List<Schema> retrieveConsumerSchemas(final List<CodeGenerationParameter> exchanges) {
     return exchanges.stream().filter(ex -> ex.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer())
-            .flatMap(ex -> ex.retrieveAllRelated(Label.RECEIVER)).flatMap(ex -> ex.retrieveAllRelated(Label.SCHEMA))
-            .map(Schema::new).collect(Collectors.toList());
+            .flatMap(ex -> ex.retrieveAllRelated(Label.RECEIVER))
+            .map(ex -> ex.retrieveOneRelated(Label.SCHEMA).<Schema>object())
+            .collect(Collectors.toList());
   }
 
   private List<Schema> retrieveProducerSchemas(final String schemaGroup,

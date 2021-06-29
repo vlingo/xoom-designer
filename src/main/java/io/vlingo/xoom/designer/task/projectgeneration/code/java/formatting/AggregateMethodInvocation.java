@@ -24,26 +24,27 @@ import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
 
-  private final String carrier;
   private final String stageVariableName;
-  private final boolean supportDataObjectHandling;
+  private final ParametersOwner parametersOwner;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
   private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.get(0)";
 
-  public static AggregateMethodInvocation handlingDataObject(final String stageVariableName) {
-    return new AggregateMethodInvocation(stageVariableName, "data", true);
+  public static AggregateMethodInvocation accessingParametersFromDataObject(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, ParametersOwner.DATA_OBJECT);
+  }
+
+  public static AggregateMethodInvocation accessingParametersFromConsumedEvent(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, ParametersOwner.CONSUMED_EVENT);
   }
 
   public AggregateMethodInvocation(final String stageVariableName) {
-    this(stageVariableName, "", false);
+    this(stageVariableName, ParametersOwner.NONE);
   }
 
   public AggregateMethodInvocation(final String stageVariableName,
-                                   final String carrier,
-                                   final boolean supportDataObjectHandling) {
-    this.carrier = carrier;
+                                   final ParametersOwner parametersOwner) {
     this.stageVariableName = stageVariableName;
-    this.supportDataObjectHandling = supportDataObjectHandling;
+    this.parametersOwner = parametersOwner;
   }
 
   @Override
@@ -64,9 +65,13 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
             AggregateDetail.stateFieldWithName(methodParameter.parent(AGGREGATE), methodParameter.value);
 
     final String fieldPath =
-            carrier.isEmpty() ? methodParameter.value : String.format(FIELD_ACCESS_PATTERN, carrier, methodParameter.value);
+            parametersOwner.isNone() ? methodParameter.value : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, methodParameter.value);
 
-    if(supportDataObjectHandling && FieldDetail.isValueObjectCollection(stateField)) {
+    if(parametersOwner.isConsumedEvent()) {
+      return fieldPath;
+    }
+
+    if(parametersOwner.isDataObject() && FieldDetail.isValueObjectCollection(stateField)) {
       return ValueObjectDetail.translateDataObjectCollection(fieldPath, stateField, methodParameter);
     }
 
@@ -78,8 +83,8 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
               methodParameter.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(collectionMutation.isSingleParameterBased()) {
-        if(supportDataObjectHandling) {
-          return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, carrier, methodParameter.retrieveRelatedValue(ALIAS));
+        if(parametersOwner.isDataObject()) {
+          return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, parametersOwner.ownerName, methodParameter.retrieveRelatedValue(ALIAS));
         } else {
           return methodParameter.retrieveRelatedValue(ALIAS);
         }
@@ -93,4 +98,29 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     return fieldPath;
   }
 
+
+
+  private enum ParametersOwner {
+    NONE(null),
+    DATA_OBJECT("data"),
+    CONSUMED_EVENT("event");
+
+    final String ownerName;
+
+    ParametersOwner(final String ownerName) {
+      this.ownerName = ownerName;
+    }
+
+    boolean isDataObject() {
+      return ParametersOwner.DATA_OBJECT.equals(this);
+    }
+
+    boolean isConsumedEvent() {
+      return CONSUMED_EVENT.equals(this);
+    }
+
+    boolean isNone() {
+      return NONE.equals(this);
+    }
+  }
 }

@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 
 import java.util.stream.Stream;
 
@@ -47,13 +48,13 @@ public class CodeGenerationParametersBuilder {
                 CodeGenerationParameter.of(Label.EXCHANGE, "otherapp-exchange")
                         .relate(Label.ROLE, ExchangeRole.CONSUMER)
                         .relate(CodeGenerationParameter.of(Label.RECEIVER)
-                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1")
+                                .relate(CodeGenerationParameter.ofObject(Label.SCHEMA, new Schema("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1")))
                                 .relate(Label.MODEL_METHOD, "withName"))
                         .relate(CodeGenerationParameter.of(Label.RECEIVER)
-                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2")
+                                .relate(CodeGenerationParameter.ofObject(Label.SCHEMA, new Schema("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2")))
                                 .relate(Label.MODEL_METHOD, "changeRank"))
                         .relate(CodeGenerationParameter.of(Label.RECEIVER)
-                                .relate(Label.SCHEMA, "vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3")
+                                .relate(CodeGenerationParameter.ofObject(Label.SCHEMA, new Schema("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3")))
                                 .relate(Label.MODEL_METHOD, "block"));
 
         final CodeGenerationParameter authorExchange =

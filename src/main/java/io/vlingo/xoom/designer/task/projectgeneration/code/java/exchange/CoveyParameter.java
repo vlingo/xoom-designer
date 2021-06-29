@@ -9,8 +9,9 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
 
 import java.util.List;
@@ -20,15 +21,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.AGGREGATE_PROTOCOL_NAME;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.EXCHANGE_ROLE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class CoveyParameter {
 
-  private final String localClass;
-  private final String externalClass;
-  private final String adapterInstantiation;
-  private final String receiverInstantiation;
+  public final String localClass;
+  public final String externalClass;
+  public final String adapterInstantiation;
+  public final String receiverInstantiation;
+  public final String qualifiedLocalClassName;
 
   public static Set<CoveyParameter> from(final List<CodeGenerationParameter> exchanges) {
     final Predicate<CodeGenerationParameter> onlyConsumers =
@@ -40,8 +41,7 @@ public class CoveyParameter {
     final Set<CoveyParameter> consumerCoveys =
             exchanges.stream().filter(onlyConsumers)
                     .flatMap(exchange -> exchange.retrieveAllRelated(Label.RECEIVER))
-                    .map(receiver -> receiver.retrieveOneRelated(Label.SCHEMA))
-                    .map(schema -> new CoveyParameter(schema.parent(Label.EXCHANGE), schema))
+                    .map(receiver -> new CoveyParameter(receiver.parent(Label.EXCHANGE), receiver.retrieveOneRelated(Label.SCHEMA).object()))
                     .collect(Collectors.toSet());
 
     final Set<CoveyParameter> producerCoveys =
@@ -51,60 +51,50 @@ public class CoveyParameter {
   }
 
   private CoveyParameter(final CodeGenerationParameter consumerExchange,
-                         final CodeGenerationParameter schema) {
+                         final Schema schema) {
+    this.localClass = schema.simpleClassName();
     this.externalClass = String.class.getSimpleName();
-    this.localClass = JavaTemplateStandard.DATA_OBJECT.resolveClassname(consumerExchange.parent().value);
-    this.adapterInstantiation = resolveConsumerAdapterInstantiation(consumerExchange, schema);
+    this.adapterInstantiation = resolveConsumerAdapterInstantiation(schema);
     this.receiverInstantiation = String.format("new %s(stage)", resolveReceiverName(consumerExchange, schema));
+    this.qualifiedLocalClassName = schema.qualifiedName();
   }
 
   private CoveyParameter(final CodeGenerationParameter producerExchange) {
     this.localClass = IdentifiedDomainEvent.class.getSimpleName();
     this.externalClass = IdentifiedDomainEvent.class.getSimpleName();
-    this.adapterInstantiation = String.format("new %s()", resolveAdapterName(producerExchange));
+    this.adapterInstantiation = String.format("new %s()", resolveProducerAdapterName(producerExchange));
     this.receiverInstantiation = "received -> {}";
+    this.qualifiedLocalClassName = IdentifiedDomainEvent.class.getCanonicalName();
   }
 
-  private String resolveConsumerAdapterInstantiation(final CodeGenerationParameter consumerExchange,
-                                                     final CodeGenerationParameter schema) {
-    return String.format("new %s(\"%s\")", resolveAdapterName(consumerExchange), schema.value);
+  private String resolveConsumerAdapterInstantiation(final Schema schema) {
+    return String.format("new %s(\"%s\")", resolveConsumerAdapterName(schema), schema.reference);
   }
 
   private String resolveReceiverName(final CodeGenerationParameter consumerExchange,
-                                     final CodeGenerationParameter schema) {
-    final String schemaTypeName = Formatter.formatSchemaTypeName(schema);
-
+                                     final Schema schema) {
     final TemplateParameters aggregateProtocolName =
             TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, consumerExchange.parent().value);
 
     final String holderName =
             JavaTemplateStandard.EXCHANGE_RECEIVER_HOLDER.resolveClassname(aggregateProtocolName);
 
-    return String.format("%s.%s", holderName, schemaTypeName);
+    return String.format("%s.%s", holderName, schema.innerReceiverClassName());
   }
 
-  private String resolveAdapterName(final CodeGenerationParameter exchange) {
+  private String resolveProducerAdapterName(final CodeGenerationParameter exchange) {
     final TemplateParameters parameters =
             TemplateParameters.with(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
-                    .and(EXCHANGE_ROLE, exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of));
-
+                    .and(EXCHANGE_ROLE, ExchangeRole.PRODUCER);
     return JavaTemplateStandard.EXCHANGE_ADAPTER.resolveClassname(parameters);
   }
 
-  public String getLocalClass() {
-    return localClass;
-  }
+  private String resolveConsumerAdapterName(final Schema schema) {
+    final TemplateParameters parameters =
+            TemplateParameters.with(LOCAL_TYPE_NAME, schema.simpleClassName())
+                    .and(EXCHANGE_ROLE, ExchangeRole.CONSUMER);
 
-  public String getAdapterInstantiation() {
-    return adapterInstantiation;
-  }
-
-  public String getExternalClass() {
-    return externalClass;
-  }
-
-  public String getReceiverInstantiation() {
-    return receiverInstantiation;
+    return JavaTemplateStandard.EXCHANGE_ADAPTER.resolveClassname(parameters);
   }
 
   @Override

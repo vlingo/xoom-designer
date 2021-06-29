@@ -8,13 +8,15 @@ import io.vlingo.xoom.lattice.exchange.rabbitmq.ExchangeFactory;
 import io.vlingo.xoom.lattice.exchange.ConnectionSettings;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.Message;
 import io.vlingo.xoom.lattice.exchange.rabbitmq.MessageSender;
-import io.vlingo.xoom.lattice.exchange.rabbitmq.
+import io.vlingo.xoom.lattice.exchange.rabbitmq.InactiveBrokerExchangeException;
 import io.vlingo.xoom.lattice.exchange.Covey;
 import io.vlingo.xoom.lattice.grid.Grid;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 
-import io.vlingo.xoomapp.infrastructure.AuthorData;
 import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
+import io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+import io.vlingo.xoom.otherapp.event.OtherAggregateUpdated;
+import io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
 
 public class ExchangeBootstrap implements ExchangeInitializer {
 
@@ -33,25 +35,25 @@ public class ExchangeBootstrap implements ExchangeInitializer {
     try {
       otherappExchange.register(Covey.of(
           new MessageSender(otherappExchange.connection()),
-          new AuthorExchangeReceivers.OtherAggregateDefined(stage),
-          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"),
-          AuthorData.class,
+          new AuthorExchangeReceivers.OtherAggregateDefinedReceiver(stage),
+          new OtherAggregateDefinedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"),
+          OtherAggregateDefined.class,
           String.class,
           Message.class));
 
       otherappExchange.register(Covey.of(
           new MessageSender(otherappExchange.connection()),
-          new AuthorExchangeReceivers.OtherAggregateUpdated(stage),
-          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"),
-          AuthorData.class,
+          new AuthorExchangeReceivers.OtherAggregateUpdatedReceiver(stage),
+          new OtherAggregateUpdatedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"),
+          OtherAggregateUpdated.class,
           String.class,
           Message.class));
 
       otherappExchange.register(Covey.of(
           new MessageSender(otherappExchange.connection()),
-          new AuthorExchangeReceivers.OtherAggregateRemoved(stage),
-          new AuthorConsumerAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3"),
-          AuthorData.class,
+          new AuthorExchangeReceivers.OtherAggregateRemovedReceiver(stage),
+          new OtherAggregateRemovedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3"),
+          OtherAggregateRemoved.class,
           String.class,
           Message.class));
 

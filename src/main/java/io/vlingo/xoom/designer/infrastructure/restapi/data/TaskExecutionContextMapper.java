@@ -19,6 +19,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -184,7 +185,7 @@ public class TaskExecutionContextMapper {
       aggregate.consumerExchange.receivers.forEach(receiver -> {
         consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
                 .relate(MODEL_METHOD, receiver.aggregateMethod)
-                .relate(SCHEMA, receiver.schema));
+                .relate(CodeGenerationParameter.ofObject(SCHEMA, new Schema(receiver.schema))));
       });
       aggregateParameter.relate(consumerExchange);
     }

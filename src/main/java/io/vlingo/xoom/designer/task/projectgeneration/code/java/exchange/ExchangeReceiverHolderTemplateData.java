@@ -8,89 +8,67 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
 import io.vlingo.xoom.actors.Definition;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.*;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.AGGREGATE;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.AGGREGATE_PROTOCOL;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ExchangeReceiverHolderTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public static List<TemplateData> from(final Dialect dialect,
-                                        final String exchangePackage,
+  public static List<TemplateData> from(final String exchangePackage,
                                         final Stream<CodeGenerationParameter> aggregates,
-                                        final List<CodeGenerationParameter> valueObjects,
                                         final List<Content> contents) {
     return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
             .filter(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer())
-            .map(exchange -> new ExchangeReceiverHolderTemplateData(dialect, exchangePackage, exchange, valueObjects, contents))
+            .map(exchange -> new ExchangeReceiverHolderTemplateData(exchangePackage, exchange, contents))
             .collect(Collectors.toList());
   }
 
-  private ExchangeReceiverHolderTemplateData(final Dialect dialect,
-                                             final String exchangePackage,
+  private ExchangeReceiverHolderTemplateData(final String exchangePackage,
                                              final CodeGenerationParameter exchange,
-                                             final List<CodeGenerationParameter> valueObjects,
                                              final List<Content> contents) {
-    final List<ExchangeReceiver> receiversParameters =
-            ExchangeReceiver.from(dialect, exchange, valueObjects);
-
+    final List<ExchangeReceiver> receiversParameters = ExchangeReceiver.from(exchange);
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage)
+                    .and(EXCHANGE_RECEIVERS, receiversParameters)
                     .and(AGGREGATE_PROTOCOL_NAME, exchange.parent().value)
                     .andResolve(EXCHANGE_RECEIVER_HOLDER_NAME, params -> standard().resolveClassname(params))
-                    .addImports(resolveImports(exchange, receiversParameters, contents))
-                    .and(EXCHANGE_RECEIVERS, receiversParameters);
+                    .addImports(resolveImports(exchange, receiversParameters, contents));
   }
 
   private Set<String> resolveImports(final CodeGenerationParameter exchange,
                                      final List<ExchangeReceiver> receiversParameters,
                                      final List<Content> contents) {
-    final CodeGenerationParameter aggregate = exchange.parent();
-
+    final Set<String> imports = new HashSet<>();
+    final String aggregateName = exchange.parent().value;
     final boolean involvesActorLoad =
             receiversParameters.stream().anyMatch(receiver -> !receiver.dispatchToFactoryMethod);
 
-    final Set<String> imports =
-            Stream.of(DATA_OBJECT, AGGREGATE_PROTOCOL, AGGREGATE).map(standard -> {
-              if (standard.equals(DATA_OBJECT)) {
-                final String dataObjectPackage = ContentQuery.findPackage(DATA_OBJECT, contents);
-                return CodeElementFormatter.importAllFrom(dataObjectPackage);
-              }
-              if (!standard.equals(AGGREGATE) || involvesActorLoad) {
-                final String typeName = standard.resolveClassname(aggregate.value);
-                return ContentQuery.findFullyQualifiedClassName(standard, typeName, contents);
-              }
-              return "";
-          }).collect(Collectors.toSet());
-
     if (involvesActorLoad) {
+      final String aggregateEntityName = AGGREGATE.resolveClassname(aggregateName);
+      imports.add(ContentQuery.findFullyQualifiedClassName(AGGREGATE, aggregateEntityName, contents));
       imports.add(Definition.class.getCanonicalName());
     }
 
-    final Stream<CodeGenerationParameter> involvedStateFields =
-            ExchangeDetail.findInvolvedStateFieldsOnReceivers(exchange);
-
-    final Set<String> valueObjects =
-            ValueObjectDetail.resolveImports(contents, involvedStateFields);
-
-    return Stream.of(imports, valueObjects).flatMap(Set::stream).collect(Collectors.toSet());
+    imports.add(ContentQuery.findFullyQualifiedClassName(AGGREGATE_PROTOCOL, aggregateName, contents));
+    imports.addAll(receiversParameters.stream().map(receiver -> receiver.localTypeQualifiedName).collect(Collectors.toSet()));
+    return imports;
   }
 
   @Override

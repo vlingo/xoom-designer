@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
@@ -14,6 +15,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
@@ -116,6 +118,10 @@ public class TaskExecutionContext {
 
   public <T> T codeGenerationParameterOf(final Label label) {
     return (T) parameters.retrieveValue(label);
+  }
+
+  public Stream<CodeGenerationParameter> codeGenerationParametersOf(final Label label) {
+    return parameters.retrieveAll(label);
   }
 
   public CodeGenerationParameters codeGenerationParameters() {

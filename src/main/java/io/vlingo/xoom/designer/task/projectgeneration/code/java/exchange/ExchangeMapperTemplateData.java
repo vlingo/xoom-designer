@@ -7,17 +7,15 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
-import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,10 +30,9 @@ public class ExchangeMapperTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final String exchangePackage,
-                                        final Stream<CodeGenerationParameter> aggregates,
-                                        final List<Content> contents) {
+                                        final Stream<CodeGenerationParameter> aggregates) {
     final List<CodeGenerationParameter> collectedAggregates = aggregates.collect(Collectors.toList());
-    final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, collectedAggregates, contents);
+    final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, collectedAggregates);
     mappers.add(forProducerExchanges(exchangePackage, collectedAggregates));
     return mappers;
   }
@@ -53,28 +50,20 @@ public class ExchangeMapperTemplateData extends TemplateData {
   }
 
   private static List<TemplateData> forConsumerExchanges(final String exchangePackage,
-                                                         final List<CodeGenerationParameter> aggregates,
-                                                         final List<Content> contents) {
-    final Predicate<CodeGenerationParameter> consumerPresent =
-            exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer();
-
-    final Predicate<CodeGenerationParameter> onlyConsumerExchanges =
-            aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE).anyMatch(consumerPresent);
-
-    final Function<CodeGenerationParameter, TemplateData> mapper =
-            aggregate -> new ExchangeMapperTemplateData(exchangePackage, aggregate, contents);
-
-    return aggregates.stream().filter(onlyConsumerExchanges).map(mapper).collect(Collectors.toList());
+                                                         final List<CodeGenerationParameter> aggregates) {
+    return aggregates.stream().flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
+            .flatMap(exchange -> ExchangeDetail.findConsumedQualifiedEventNames(exchange))
+            .map(schemaQualifiedName -> new ExchangeMapperTemplateData(exchangePackage, schemaQualifiedName))
+            .collect(Collectors.toList());
   }
 
   private ExchangeMapperTemplateData(final String exchangePackage,
-                                     final CodeGenerationParameter aggregate,
-                                     final List<Content> contents) {
+                                     final String schemaQualifiedName) {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGE_ROLE, CONSUMER)
-                    .and(LOCAL_TYPE_NAME, JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value))
+                    .and(LOCAL_TYPE_NAME, CodeElementFormatter.simpleNameOf(schemaQualifiedName))
                     .andResolve(EXCHANGE_MAPPER_NAME, param -> standard().resolveClassname(param))
-                    .addImport(resolveLocalTypeImport(aggregate, contents));
+                    .addImport(schemaQualifiedName);
 
     this.placeholder = false;
   }
@@ -88,11 +77,6 @@ public class ExchangeMapperTemplateData extends TemplateData {
     this.placeholder = placeholder;
   }
 
-  private String resolveLocalTypeImport(final CodeGenerationParameter aggregate,
-                                        final List<Content> contents) {
-    final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-    return ContentQuery.findFullyQualifiedClassName(JavaTemplateStandard.DATA_OBJECT, dataObjectName, contents);
-  }
 
   @Override
   public TemplateParameters parameters() {
