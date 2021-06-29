@@ -70,6 +70,6 @@ public class SchemaPullStepTest {
           "E: && cd E:\\projects\\designer-example && mvnw.cmd io.vlingo.xoom:xoom-build-plugins:pull-schema@pull";
 
   private static final String EXPECTED_SCHEMA_PULL_COMMAND =
-          "cd /home/projects/designer-example && ./mvnw.cmd io.vlingo.xoom:xoom-build-plugins:pull-schema@pull";
+          "cd /home/projects/designer-example && ./mvnw io.vlingo.xoom:xoom-build-plugins:pull-schema@pull";
 
 }
