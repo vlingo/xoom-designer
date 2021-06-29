@@ -24,12 +24,6 @@ import static java.util.stream.Collectors.toList;
 
 public class TestDataValueGenerator {
 
-  private static final String[] STATIC_UUID = {
-"e4f7bfea-d52e-11eb-b8bc-0242ac130003",
-          "26e02622-d52f-11eb-b8bc-0242ac130003",
-          "2a4fe89c-d52f-11eb-b8bc-0242ac130003",
-          "305ad2e2-d52f-11eb-b8bc-0242ac130003"
-  };
   private final int dataSetSize;
   private final String valuePrefix;
   @SuppressWarnings("unused")
@@ -112,7 +106,7 @@ public class TestDataValueGenerator {
     final String currentPath = resolvePath(path, field);
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     if (field.value.equalsIgnoreCase("id")) {
-      generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(STATIC_UUID[dataIndex]));
+      generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(dataIndex));
     } else if (FieldDetail.hasNumericType(field)) {
       generatedValues.add(dataIndex, fieldType, currentPath, currentNumericValue);
       alternateNumericValue();

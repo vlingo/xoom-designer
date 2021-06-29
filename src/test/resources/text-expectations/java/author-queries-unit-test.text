@@ -35,8 +35,8 @@ public class AuthorQueriesTest {
     queries = world.actorFor(AuthorQueries.class, AuthorQueriesActor.class, stateStore);
   }
 
-  private static final AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
-  private static final AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
 
   @Test
   public void queryById() {
@@ -45,7 +45,7 @@ public class AuthorQueriesTest {
 
     final AuthorData firstData = queries.authorOf("1").await();
 
-    assertEquals(firstData.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertEquals(firstData.id, "1");
     assertEquals(firstData.name.firstName, "first-author-name-firstName");
     assertEquals(firstData.name.lastName, "first-author-name-lastName");
     assertNotNull(firstData.rank);
@@ -54,7 +54,7 @@ public class AuthorQueriesTest {
 
     final AuthorData secondData = queries.authorOf("2").await();
 
-    assertEquals(secondData.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
+    assertEquals(secondData.id, "2");
     assertEquals(secondData.name.firstName, "second-author-name-firstName");
     assertEquals(secondData.name.lastName, "second-author-name-lastName");
     assertNotNull(secondData.rank);
@@ -62,8 +62,8 @@ public class AuthorQueriesTest {
     assertNotNull(secondData.availableOn);
   }
 
-  private static final AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.from("26e02622-d52f-11eb-b8bc-0242ac130003", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
-  private static final AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.from("2a4fe89c-d52f-11eb-b8bc-0242ac130003", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
+  private static final AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), true, LocalDate.now());
 
   @Test
   public void queryAll() {
@@ -73,7 +73,7 @@ public class AuthorQueriesTest {
     final Collection<AuthorData> results = queries.authors().await();
     final AuthorData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(firstData.id, "26e02622-d52f-11eb-b8bc-0242ac130003");
+    assertEquals(firstData.id, "1");
     assertEquals(firstData.name.firstName, "first-author-name-firstName");
     assertEquals(firstData.name.lastName, "first-author-name-lastName");
     assertNotNull(firstData.rank);
@@ -82,7 +82,7 @@ public class AuthorQueriesTest {
 
     final AuthorData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(secondData.id, "2a4fe89c-d52f-11eb-b8bc-0242ac130003");
+    assertEquals(secondData.id, "2");
     assertEquals(secondData.name.firstName, "second-author-name-firstName");
     assertEquals(secondData.name.lastName, "second-author-name-lastName");
     assertNotNull(secondData.rank);
