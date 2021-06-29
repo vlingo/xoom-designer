@@ -106,7 +106,6 @@
     successMessage = messages;
     snackbar = true;
     succeded = true;
-    failed = false;
     errorDetails = "";
   }
 
