@@ -74,14 +74,14 @@
           $generatedProjectsPaths = [...$generatedProjectsPaths, $settings.projectDirectory];
         }        
       }).catch(generationReport => {
-        fail(generationReport);    
+        fail(generationReport);
       }).finally(() => {
         processing = false;
       })
 	}
 
   function fail(generationReport) {
-    succeded = false;
+    succeeded = false;
     validationFailed = false;
     schemaPullFailed = false;
     errorDetails = generationReport.details;
@@ -89,11 +89,11 @@
       case "VALIDATION_FAILURE":
         handleValidationFailure();
         break;
-      case "CODEGEN_FAILURE": 
+      case "CODEGEN_FAILURE":
       case "CONTEXT_MAPPING_FAILURE":
         handleGenerationFailure();
         break;
-      case "SCHEMA_PULL_FAILURE": 
+      case "SCHEMA_PULL_FAILURE":
         handleSchemaPullFailure();
         break;
     }
@@ -112,13 +112,13 @@
   function succeed(messages) {
     successMessage = messages;
     snackbar = true;
-    succeded = true;
+    succeeded = true;
     errorDetails = "";
   }
 
   function handleValidationFailure() {
     snackbar = true;
-    succeded = false;
+    succeeded = false;
     validationFailed = true;
   }
 
@@ -244,7 +244,7 @@
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" />
-  {:else if succeded}
+  {:else if succeeded}
     <Icon class="green-text" path={mdiCheckBold}/> {successMessage[0]+successMessage[1]}
   {:else if validationFailed}
     <Icon class="red-text" path={mdiCloseThick}/> Unable to generate the project. {errorDetails}
@@ -253,7 +253,7 @@
 
 
 <Snackbar class="justify-space-between" bind:active={snackbar} top right>
-  {#if succeded}
+  {#if succeeded}
     <Icon class="green-text" path={mdiCheckBold}/> {successMessage[0]}
   {:else if validationFailed}
     <Icon class="red-text" path={mdiCloseThick}/> Validation Failed

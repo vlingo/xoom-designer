@@ -255,11 +255,11 @@
 				{#if errorDetailsCopied}
 				Error details copied. <Icon class="green-text" path={mdiCheckBold}/> <br>
 				{:else}
-				If you would like to contact the XOOM team, please 
+				If you would like to contact the XOOM team, please
 				<!-- svelte-ignore a11y-invalid-attribute -->
-				<a href="#" rel="noopener" on:click={copyErrorReport}>click here</a> to copy the error details to your clipboard. 
+				<a href="#" rel="noopener" on:click={copyErrorReport}>click here</a> to copy the error details to your clipboard.
 				{/if}
-				Then, <a href="https://github.com/vlingo/xoom-designer/issues/new" rel="noopener" target="_blank">create an issue</a> 
+				Then, <a href="https://github.com/vlingo/xoom-designer/issues/new" rel="noopener" target="_blank">create an issue</a>
 				pasting the error details in the comments.
 			  </CardText>
 					<CardActions style="margin-top: auto" class="justify-space-around">

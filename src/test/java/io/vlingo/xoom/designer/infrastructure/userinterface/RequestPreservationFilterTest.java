@@ -9,9 +9,9 @@ package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.actors.World;
 import io.vlingo.xoom.actors.testkit.AccessSafely;
-import io.vlingo.xoom.designer.infrastructure.userinterface.infrastructure.persistence.RequestHistoryStateAdapter;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestHistoryState;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestPreservationFilter;
+import io.vlingo.xoom.designer.infrastructure.userinterface.infrastructure.persistence.RequestHistoryStateAdapter;
 import io.vlingo.xoom.http.*;
 import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
 import io.vlingo.xoom.symbio.StateAdapterProvider;
