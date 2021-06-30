@@ -96,7 +96,7 @@
 		failureDialogTitle = failureName;
 		failureDialogActive = true;
 		errorDetailsCopied = false;
-    succeded = false;
+    	succeded = false;
 		snackbar = false;
 	}
 

@@ -98,8 +98,10 @@
     succeded = false;
   }
 
-  function fail(messages) {
-    failureMessage = messages;
+  function handleGenerationFailure() {
+    failureDialogActive = true;
+    errorDetailsCopied = false;
+    validationFailed = false;
     succeded = false;
     failed = true;
   }
