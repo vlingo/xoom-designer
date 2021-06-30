@@ -14,6 +14,7 @@
 	export let segment;
 	import { goto } from '@sapper/app';
 	import logo from '../images/xoom-horizontal_designer.png';
+	import SetSchemataOptions from '../components/SetSchemataOptions.svelte';
 
 	let sidenav = false;
 	let snackbar = false;
@@ -149,23 +150,28 @@
 		</a>
 		<Divider vertical inset class="ml-4 mr-4" />
 
-		<div style="min-width: 100px;">
-			<Button on:click={openMenu} aria-label="Open Menu">
-				<Text class="ml-2">Model</Text>
-			</Button>
-			<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
-				<List class="demo-list">
-					<Item on:SMUI:action={exportSettings}>
-						<Text>Export</Text>
-					</Item>
-					<Item on:SMUI:action={openSettingsImportationDialog}>
-						<Text>Import</Text>
-					</Item>
-					<Item on:SMUI:action={openSettingsResetDialog}>
-						<Text>Reset</Text>
-					</Item>
-				</List>
-			</MenuSurface>
+		<div class="d-flex align-center" style="min-width: 100px;">
+			<div>
+				<Button on:click={openMenu} aria-label="Open Menu">
+					<Text class="ml-2">Model</Text>
+				</Button>
+				<MenuSurface bind:this={menu} anchorCorner="BOTTOM_LEFT">
+					<List class="demo-list">
+						<Item on:SMUI:action={exportSettings}>
+							<Text>Export</Text>
+						</Item>
+						<Item on:SMUI:action={openSettingsImportationDialog}>
+							<Text>Import</Text>
+						</Item>
+						<Item on:SMUI:action={openSettingsResetDialog}>
+							<Text>Reset</Text>
+						</Item>
+					</List>
+				</MenuSurface>
+			</div>
+			<div class="ml-4">
+				<SetSchemataOptions />
+			</div>
 		</div>
 
 		<div style="flex-grow:1" />
@@ -275,11 +281,16 @@
 		}
 	}
 	.theme--dark {
+
+		.mdc-dialog__surface {
+			--mdc-theme-surface: var(--theme-surface);
+			--mdc-theme-on-surface: var(--theme-text-primary);
+		}
 		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line, .mdc-menu * {
-			color: white !important;
+			color: var(--theme-text-primary) !important;
 		}
 		.mdc-select__menu, .mdc-menu {
-			background-color: #212121;
+			background-color: var(--theme-surface);
 		}
 	}
 </style>
