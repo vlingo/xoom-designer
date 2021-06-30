@@ -8,14 +8,14 @@ package io.vlingo.xoom.designer.task.projectgeneration.steps;
 
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
+import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectCompressor;
-import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.IOException;
 
-import static io.vlingo.xoom.designer.task.Output.COMPRESSED_PROJECT;
+import static io.vlingo.xoom.designer.task.TaskOutput.COMPRESSED_PROJECT;
 
 public class ProjectCompressionStep implements TaskExecutionStep {
 

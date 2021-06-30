@@ -21,13 +21,18 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 public class TaskExecutionContextMapperTest {
 
   @Test
+  public void test() {
+    System.out.println("\n \n \\\"".replaceAll("\n", "<br>").replaceAll("\\\\\"", "\""));
+  }
+
+  @Test
   public void testThatTaskExecutionContextIsMapped() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
-            TaskExecutionContextMapper.from(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
+            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
 
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);
@@ -38,13 +43,19 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
-    Assertions.assertEquals("1.8.1-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.8.2-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
     Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
     Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
     Assertions.assertNotNull(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON));
-    Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\""));
+    Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\n" +
+            "  \"context\": {\n" +
+            "    \"groupId\": \"io.vlingo\",\n" +
+            "    \"artifactId\": \"xoomapp\",\n" +
+            "    \"artifactVersion\": \"1.0\",\n" +
+            "    \"packageName\": \"io.vlingo.xoomapp\"\n" +
+            "  },\n"));
   }
 
   private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {
