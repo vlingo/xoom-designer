@@ -3,15 +3,14 @@
   import Dialog, { Title, Content, Header } from '@smui/dialog';
   import IconButton from '@smui/icon-button';
   import Portal from "svelte-portal/src/Portal.svelte";
-  import { schemataData } from "../../stores";
-
+  import { schemataData, schemataSettings } from "../../stores";
 
   export let show = false;
   export let limitless = false;
 
   let iframe;
-  let origin = 'http://localhost:9019';
-  let src = `${origin}/organization${limitless ? '' : '#producer=true'}`;
+  let origin, src;
+
 
   onMount(() => {
     window.addEventListener("message", (event) => {
@@ -23,27 +22,34 @@
       window.removeEventListener("message", () => {});
     }
   })
+
+  $: origin = `http://${$schemataSettings.host}:${$schemataSettings.port}`;
+  $: src = `${origin}/organization${limitless ? '' : '#producer=true'}`;
+  $: console.log($schemataSettings);
 </script>
 
 <Portal target=".s-app">
-  <Dialog
-    bind:open={show}
-    fullscreen
-    class="schemata-dialog"
-  >
-    <Header>
-      <Title></Title>
-      <IconButton action="close" class="material-icons">close</IconButton>
-    </Header>
-    <Content class="schemata-content">
-      <iframe
-        bind:this={iframe}
-        title="XOOM-SCHEMATA"
-        {src}
-        id="iframe"
-        name="iframe"></iframe>
-    </Content>
-  </Dialog>
+  {#key src}
+    <Dialog
+      bind:open={show}
+      fullscreen
+      class="schemata-dialog"
+    >
+      <Header>
+        <Title></Title>
+        <IconButton action="close" class="material-icons">close</IconButton>
+      </Header>
+      <Content class="schemata-content">
+        <iframe
+          bind:this={iframe}
+          title="XOOM-SCHEMATA"
+          {src}
+          id="iframe"
+          name="iframe"></iframe>
+      </Content>
+    </Dialog>
+  {/key}
+
 </Portal>
 
 <style>
@@ -68,9 +74,5 @@
   }
   :global(.schemata-dialog .mdc-dialog__container) {
     width: 100%;
-  }
-  :global(.theme--dark .mdc-dialog__surface) {
-    --mdc-theme-surface: var(--theme-surface);
-    --mdc-theme-on-surface: var(--theme-text-primary);
   }
 </style>
