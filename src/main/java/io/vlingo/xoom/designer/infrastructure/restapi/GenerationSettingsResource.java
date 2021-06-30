@@ -9,22 +9,23 @@ package io.vlingo.xoom.designer.infrastructure.restapi;
 
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModelFileException;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsFile;
-import io.vlingo.xoom.designer.infrastructure.restapi.report.ModelFileHandlingReport;
-import io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport;
-import io.vlingo.xoom.designer.task.TaskOutput;
-import io.vlingo.xoom.designer.task.projectgeneration.*;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
+import io.vlingo.xoom.designer.task.Task;
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.TaskStatus;
+import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 import io.vlingo.xoom.http.Response;
 import io.vlingo.xoom.http.resource.DynamicResourceHandler;
 import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.serialization.JsonSerialization;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.File;
+import java.util.List;
 
 import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.designer.task.Task.WEB_BASED_PROJECT_GENERATION;
 import static io.vlingo.xoom.http.Response.Status.*;
 import static io.vlingo.xoom.http.ResponseHeader.*;
 import static io.vlingo.xoom.http.resource.ResourceBuilder.*;
@@ -32,52 +33,58 @@ import static io.vlingo.xoom.http.resource.ResourceBuilder.*;
 public class GenerationSettingsResource extends DynamicResourceHandler {
 
   private final GenerationTarget generationTarget;
-  private final ProjectGenerationManager projectGenerationManager;
   private final ProjectGenerationInformation generationInformation;
   public static final String REFUSE_REQUEST_URI = "/api/generation-settings/request-refusal";
 
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
-    this.projectGenerationManager = new WebBasedProjectGenerationManager();
     this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
     this.generationInformation = ProjectGenerationInformation.from(generationTarget);
   }
 
   public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-    return projectGenerationManager.generate(settings, generationInformation).andThenTo(context -> {
-              final ProjectGenerationReport report = context.retrieveOutput(TaskOutput.PROJECT_GENERATION_REPORT);
-              final Response.Status responseStatus = report.status.failed() ? InternalServerError : Ok;
-              return Completes.withSuccess(Response.of(responseStatus, serialized(report)));
-            });
+    final String validationMessage = validate(settings);
+
+    if(validationMessage.length() > 0) {
+      logger().debug(validationMessage);
+      return Completes.withFailure(Response.of(Conflict, serialized(validationMessage)));
+    }
+
+    return mapContext(settings).andThen(this::runProjectGeneration).andThenTo(this::buildResponse);
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
-    try {
-      projectGenerationManager.createGenerationPath(new File(path.path));
-      return Completes.withSuccess(Response.of(Created, headers(of(Location, path.path)), path.serialized()));
-    } catch (final GenerationPathAlreadyExistsException e) {
-      return Completes.withSuccess(Response.of(Conflict, path.serialized()));
-    } catch (final GenerationPathCreationException e) {
-      return Completes.withSuccess(Response.of(Forbidden, path.serialized()));
+    final File generationPath = new File(path.path);
+
+    final String serializedPath = JsonSerialization.serialized(path);
+
+    if (generationPath.exists() && generationPath.isDirectory() && generationPath.list().length > 0) {
+      return Completes.withSuccess(Response.of(Conflict, serializedPath));
     }
+
+    try {
+      generationPath.mkdirs();
+    } catch (final Exception e) {
+      return Completes.withSuccess(Response.of(Forbidden, serializedPath));
+    }
+
+    return Completes.withSuccess(Response.of(Created, headers(of(Location, path.path)), serializedPath));
   }
 
-  public Completes<Response> processModelExportationFile(final GenerationSettingsData settingsData) {
+  public Completes<Response> downloadSettingsFile(final GenerationSettingsData settingsData) {
     try {
       final GenerationSettingsFile settingsFile = GenerationSettingsFile.from(settingsData);
       return Completes.withSuccess(Response.of(Ok, serialized(settingsFile)));
-    } catch (final DesignerModelFileException exception) {
-      final ModelFileHandlingReport report = ModelFileHandlingReport.onExportFail(exception);
-      return Completes.withSuccess(Response.of(InternalServerError, serialized(report)));
+    } catch (final GenerationSettingFileException exception) {
+      return Completes.withSuccess(Response.of(InternalServerError));
     }
   }
 
-  public Completes<Response> processModelImportationFile(final GenerationSettingsFile generationSettingsFile) {
+  public Completes<Response> processSettingsFile(final GenerationSettingsFile generationSettingsFile) {
     try {
       return Completes.withSuccess(Response.of(Ok, serialized(generationSettingsFile.mapData())));
-    } catch (final DesignerModelFileException exception) {
-      final ModelFileHandlingReport report = ModelFileHandlingReport.onImportFail(exception);
-      return Completes.withSuccess(Response.of(InternalServerError, serialized(report)));
+    } catch (final GenerationSettingFileException exception) {
+      return Completes.withSuccess(Response.of(InternalServerError));
     }
   }
 
@@ -89,6 +96,36 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
     return Completes.withFailure(Response.of(TooManyRequests, serialized(generationInformation)));
   }
 
+  private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings) {
+    try {
+      return Completes.withSuccess(TaskExecutionContextMapper.from(settings, generationTarget));
+    } catch (final Exception exception) {
+      exception.printStackTrace();
+      return Completes.withFailure(TaskExecutionContext.withoutOptions());
+    }
+  }
+
+  private TaskExecutionContext runProjectGeneration(final TaskExecutionContext context) {
+    try {
+      return Task.of(WEB_BASED_PROJECT_GENERATION, context).manage(context);
+    } catch (final Exception exception) {
+      exception.printStackTrace();
+      context.changeStatus(TaskStatus.FAILED);
+      return context;
+    }
+  }
+
+  private Completes<Response> buildResponse(final TaskExecutionContext context) {
+    final Response.Status responseStatus = context.status().failed() ? InternalServerError : Ok;
+    return Completes.withSuccess(Response.of(responseStatus, serialized(ProjectGenerationReport.from(context, generationInformation))));
+  }
+
+  private String validate(final GenerationSettingsData settings) {
+    final List<String> errorStrings = settings.validate();
+    logger().debug("errorStrings: " + errorStrings);
+    return String.join(", ", errorStrings);
+  }
+
   @Override
   public Resource<?> routes() {
     return resource("Generation Settings Resource", this,
@@ -97,10 +134,10 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
                     .handle(this::startGeneration),
             post("/api/generation-settings/exportation-file")
                     .body(GenerationSettingsData.class)
-                    .handle(this::processModelExportationFile),
+                    .handle(this::downloadSettingsFile),
             post("/api/generation-settings/importation-file")
                     .body(GenerationSettingsFile.class)
-                    .handle(this::processModelImportationFile),
+                    .handle(this::processSettingsFile),
             post("/api/generation-settings/paths")
                     .body(GenerationPath.class)
                     .handle(this::makeGenerationPath),

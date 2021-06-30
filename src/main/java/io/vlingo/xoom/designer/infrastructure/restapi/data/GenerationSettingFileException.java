@@ -7,10 +7,10 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
-public class GenerationPath {
-  public final String path;
+public class GenerationSettingFileException extends RuntimeException {
 
-  public GenerationPath(final String path) {
-    this.path = path;
+  public GenerationSettingFileException(final String message, final Exception cause) {
+    super(message, cause);
   }
+
 }

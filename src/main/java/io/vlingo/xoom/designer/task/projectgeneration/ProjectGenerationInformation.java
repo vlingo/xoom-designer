@@ -15,8 +15,7 @@ public class ProjectGenerationInformation {
   public final String userHomePath;
   public final String pathSeparator;
   public final String xoomDesignerFileVersion;
-  public final GenerationTarget generationTarget;
-  public final String generationTargetKey;
+  public final String generationTarget;
 
   public static ProjectGenerationInformation from(final GenerationTarget generationTarget) {
     return new ProjectGenerationInformation(generationTarget);
@@ -24,8 +23,7 @@ public class ProjectGenerationInformation {
 
   private ProjectGenerationInformation(final GenerationTarget generationTarget) {
     this.pathSeparator = File.separator;
-    this.generationTarget = generationTarget;
-    this.generationTargetKey = generationTarget.key();
+    this.generationTarget = generationTarget.key();
     this.userHomePath = System.getProperty("user.home");
     this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
   }

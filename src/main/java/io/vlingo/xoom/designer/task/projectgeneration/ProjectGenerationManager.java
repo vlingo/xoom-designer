@@ -7,46 +7,19 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.TaskManager;
+import io.vlingo.xoom.designer.task.TaskStatus;
 
-import java.io.File;
+public abstract class ProjectGenerationManager<S> implements TaskManager<S> {
 
-import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.onFail;
-import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.onSuccess;
-import static io.vlingo.xoom.designer.task.TaskOutput.PROJECT_GENERATION_REPORT;
+    protected void processSteps(final TaskExecutionContext context) {
+        Configuration.PROJECT_GENERATION_STEPS.stream()
+                .filter(step -> step.shouldProcess(context))
+                .forEach(step -> step.process(context));
 
-public abstract class ProjectGenerationManager {
-
-  public Completes<TaskExecutionContext> generate(final GenerationSettingsData settings,
-                                                  final ProjectGenerationInformation information) {
-    return new WebBasedProjectGenerationManager().manage(settings, information);
-  }
-
-  public void createGenerationPath(final File generationPath) {
-    try {
-      if (generationPath.exists() && generationPath.isDirectory() && generationPath.list().length > 0) {
-        throw new GenerationPathAlreadyExistsException();
-      }
-      generationPath.mkdirs();
-    } catch (final Exception e) {
-      throw new GenerationPathCreationException();
+        context.changeStatus(TaskStatus.SUCCESSFUL);
     }
-  }
-
-  protected void processSteps(final TaskExecutionContext context, final ProjectGenerationInformation information) {
-    try {
-      Configuration.PROJECT_GENERATION_STEPS.stream()
-              .filter(step -> step.shouldProcess(context))
-              .forEach(step -> step.process(context));
-
-      context.addOutput(PROJECT_GENERATION_REPORT, onSuccess(context, information));
-    } catch (final Exception exception) {
-      exception.printStackTrace();
-      context.addOutput(PROJECT_GENERATION_REPORT, onFail(context, information, exception));
-    }
-  }
 
 }

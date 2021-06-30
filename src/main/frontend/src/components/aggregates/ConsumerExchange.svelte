@@ -6,6 +6,7 @@
 	import Textfield from '@smui/textfield/Textfield.svelte';
 	import Select, { Option } from '@smui/select';
 	import ErrorWarningTooltip from './ErrorWarningTooltip.svelte';
+	import ConsumerSchemata from './ConsumerSchemata.svelte';
 
   export let consumerExchangeName;
   export let receivers;
@@ -45,23 +46,30 @@
 
 </script>
 <FieldsetBox title="Consumer Exchange" on:add={addReceiver}>
-	<Textfield
-		class="mb-4"
-		style="width: 100%;"
-		bind:value={consumerExchangeName}
-		label="Exchange Name"
-		invalid={!consumerExchangeName && receivers.length > 0}
-	></Textfield>
+	<div class="d-flex align-center">
+		<Textfield
+			class="mb-4"
+			style="width: 100%;"
+			bind:value={consumerExchangeName}
+			label="Exchange Name"
+			invalid={!consumerExchangeName && receivers.length > 0}
+		></Textfield>
+		<ErrorWarningTooltip
+			names={['Exchange Name']}
+			messages={[!consumerExchangeName && receivers.length > 0 ? 'must not be empty' : '']}
+		/>
+	</div>
 	{#each receivers as receiver, i (i)}
 		<div class="d-flex align-center">
-			<div style="flex: 2;" class="mb-3 pb-3 mr-4">
-				<Textfield
-					id="schemaRefName{i}"
-					style="width: 100%;"
-					label="Schema Reference"
-					bind:value={receiver.schema}
+			<div
+				style="flex: 2;"
+				class="mb-3 pb-3 mr-4" 
+				id="schemaRefName{i}"
+			>
+				<ConsumerSchemata
+					bind:schema={receiver.schema}
 					invalid={[schemaRule(receiver.schema)].some(f => f)}
-				></Textfield>
+				/>
 			</div>
 			<div style="flex: 1;" mandatory class="mb-3 pb-3">
 				<Select
