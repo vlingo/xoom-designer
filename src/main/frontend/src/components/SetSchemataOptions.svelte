@@ -54,6 +54,7 @@
         required
         bind:value={port}
       />
+      <p class="mt-3 mb-3" style="font-size: 12px;">*XOOM reserved ports for locally installed tools: 9019, 17171-17176, 19090, 49101-49102</p>
     </Content>
     <Actions>
       <Button class="vl-btn-error" on:click={() => showSettings = false}>

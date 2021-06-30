@@ -286,7 +286,7 @@
 			--mdc-theme-surface: var(--theme-surface);
 			--mdc-theme-on-surface: var(--theme-text-primary);
 		}
-		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line, .mdc-menu * {
+		.mdc-text-field *, .mdc-select *, .mdc-text-field-helper-line, .mdc-menu *, p {
 			color: var(--theme-text-primary) !important;
 		}
 		.mdc-select__menu, .mdc-menu {
