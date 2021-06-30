@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 
+import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionException;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
@@ -42,6 +43,11 @@ public class SchemaPullStep extends CommandExecutionStep {
             .filter(aggregate -> aggregate.hasAny(Label.EXCHANGE))
             .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
             .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer());
+  }
+
+  @Override
+  protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
+    return new SchemaPullException(exception);
   }
 
 }

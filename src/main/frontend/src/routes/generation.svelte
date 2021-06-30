@@ -33,10 +33,7 @@
   let errorDetailsCopied = false;
   let failureDialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
-  let dialogStatus, succeded, validationFailed, generationFailed, successMessage;
-  let menu;
-  let anchor;
-  let errorDetails;
+  let anchor, menu, dialogStatus, succeded, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
   let anchorClasses = {};
 
   function checkPath() {
@@ -77,20 +74,30 @@
           $generatedProjectsPaths = [...$generatedProjectsPaths, $settings.projectDirectory];
         }        
       }).catch(generationReport => {
-        errorDetails = generationReport.details;
-        switch(generationReport.errorType) {
-          case "VALIDATION_FAILURE":
-            handleValidationFailure();
-            break;
-          case "CODEGEN_FAILURE": 
-          case "CONTEXT_MAPPING_FAILURE":
-            handleGenerationFailure();
-            break;
-        }
+        fail(generationReport);    
       }).finally(() => {
         processing = false;
       })
 	}
+
+  function fail(generationReport) {
+    succeded = false;
+    validationFailed = false;
+    schemaPullFailed = false;
+    errorDetails = generationReport.details;
+    switch(generationReport.errorType) {
+      case "VALIDATION_FAILURE":
+        handleValidationFailure();
+        break;
+      case "CODEGEN_FAILURE": 
+      case "CONTEXT_MAPPING_FAILURE":
+        handleGenerationFailure();
+        break;
+      case "SCHEMA_PULL_FAILURE": 
+        handleSchemaPullFailure();
+        break;
+    }
+  }
 
   function cancelDialog() {
     dialogActive = false
@@ -110,16 +117,19 @@
   }
 
   function handleValidationFailure() {
-    validationFailed = true;
     snackbar = true;
     succeded = false;
+    validationFailed = true;
   }
 
   function handleGenerationFailure() {
     failureDialogActive = true;
     errorDetailsCopied = false;
-    validationFailed = false;
-    succeded = false;
+  }
+
+  function handleSchemaPullFailure() {
+    failureDialogActive = true;
+    schemaPullFailed = true;
   }
 
   function requiresCompression() {
@@ -285,6 +295,9 @@
           Generation Failure
         </CardTitle>
           <CardText>
+            {#if schemaPullFailed}
+            Unable to pull schemas. Please ensure that the Schemata Service is running on the host/port set in the Options menu.
+            {:else}
             {#if errorDetailsCopied}
             Error details copied. <Icon class="green-text" path={mdiCheckBold}/> <br>
             {:else}
@@ -294,6 +307,7 @@
             {/if}
             Then, <a href="https://github.com/vlingo/xoom-designer/issues/new" rel="noopener" target="_blank">create an issue</a> 
             pasting the error details in the comments.
+            {/if}
           </CardText>
 				<CardActions style="margin-top: auto" class="justify-space-around">
           <Button on:click={cancelFailureDialog}>OK</Button>

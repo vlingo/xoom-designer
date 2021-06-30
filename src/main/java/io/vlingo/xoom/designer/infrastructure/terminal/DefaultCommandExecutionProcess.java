@@ -6,8 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,7 +53,7 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
       if(commandExecutionStatus == 0) {
         System.out.println(SUCCESS_MESSAGE);
       } else {
-        throw new ProjectGenerationException(FAILURE_MESSAGE);
+        throw new CommandExecutionException(FAILURE_MESSAGE);
       }
     } catch (final InterruptedException e) {
       e.printStackTrace();

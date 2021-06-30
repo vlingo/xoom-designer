@@ -21,8 +21,7 @@ public class RequestHistoryEntity extends StatefulEntity<RequestHistoryState> im
   }
 
   @Override
-  public Completes<RequestHistoryState> preserve(final String uri,
-                                                 final String ipAddress) {
+  public Completes<RequestHistoryState> preserve(final String uri, final String ipAddress) {
     return apply(state.preserve(uri, ipAddress), RequestHistoryPreserved.name(), () -> state);
   }
 

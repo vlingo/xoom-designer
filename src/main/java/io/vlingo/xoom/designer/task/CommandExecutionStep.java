@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionException;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 
@@ -25,7 +26,12 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
   public void process(final TaskExecutionContext context) {
     grantPermissions();
     System.out.println("Executing commands from " + this.getClass().getCanonicalName());
-    commandExecutionProcess.handle(formatCommands(context));
+    try {
+      commandExecutionProcess.handle(formatCommands(context));
+    } catch (final CommandExecutionException exception) {
+      final CommandExecutionException resolvedException = resolveCommandExecutionException(exception);
+      throw resolvedException;
+    }
   }
 
   protected abstract String formatCommands(final TaskExecutionContext context);
@@ -36,6 +42,10 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
 
   protected void grantPermissions() {
     executableFiles().forEach(Terminal::grantAllPermissions);
+  }
+
+  protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
+    return exception;
   }
 
 }

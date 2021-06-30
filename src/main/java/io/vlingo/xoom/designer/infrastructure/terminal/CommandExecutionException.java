@@ -8,7 +8,12 @@ package io.vlingo.xoom.designer.infrastructure.terminal;
 
 public class CommandExecutionException extends RuntimeException {
 
-  public CommandExecutionException(final Exception cause) {
+  public CommandExecutionException(final Throwable cause) {
     super(cause);
   }
+
+  public CommandExecutionException(final String message) {
+    super(message);
+  }
+
 }

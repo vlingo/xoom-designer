@@ -20,6 +20,7 @@ public class ProjectGenerationReport {
 
   public final static String CODEGEN_FAILURE = "CODEGEN_FAILURE";
   public final static String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+  public final static String SCHEMA_PULL_FAILURE = "SCHEMA_PULL_FAILURE";
   public final static String CONTEXT_MAPPING_FAILURE = "CONTEXT_MAPPING_FAILURE";
 
   public final String target;
@@ -46,6 +47,10 @@ public class ProjectGenerationReport {
             ProjectGenerationReportDetails.format(target.key(), CODEGEN_FAILURE, designerModel, exception);
 
     return new ProjectGenerationReport(TaskStatus.FAILED, target, null, CODEGEN_FAILURE, errorDetails);
+  }
+
+  public static ProjectGenerationReport onSchemaPullFail(final ProjectGenerationInformation information) {
+    return new ProjectGenerationReport(information.generationTarget, SCHEMA_PULL_FAILURE,  "");
   }
 
   public static ProjectGenerationReport onContextMappingFail(final GenerationTarget target,

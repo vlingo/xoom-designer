@@ -11,11 +11,11 @@ import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaPullException;
 
 import java.io.File;
 
-import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.onFail;
-import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.onSuccess;
+import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.*;
 import static io.vlingo.xoom.designer.task.TaskOutput.PROJECT_GENERATION_REPORT;
 
 public abstract class ProjectGenerationManager {
@@ -43,6 +43,9 @@ public abstract class ProjectGenerationManager {
               .forEach(step -> step.process(context));
 
       context.addOutput(PROJECT_GENERATION_REPORT, onSuccess(context, information));
+    } catch (final SchemaPullException exception) {
+      exception.printStackTrace();
+      context.addOutput(PROJECT_GENERATION_REPORT, onSchemaPullFail(information));
     } catch (final Exception exception) {
       exception.printStackTrace();
       context.addOutput(PROJECT_GENERATION_REPORT, onFail(context, information, exception));
