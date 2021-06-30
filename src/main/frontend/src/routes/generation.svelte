@@ -89,7 +89,13 @@
   function succeed(messages) {
     successMessage = messages;
     succeded = true;
-    failed = false;
+    errorDetails = "";
+  }
+
+  function handleValidationFailure() {
+    validationFailed = true;
+    snackbar = true;
+    succeded = false;
   }
 
   function fail(messages) {
@@ -99,7 +105,7 @@
   }
 
   function requiresCompression() {
-    return $settingsInfo.generationTarget === TARGET.ZIP_DOWNLOAD;
+    return $settingsInfo.generationTargetKey === TARGET.ZIP_DOWNLOAD;
   }
 
   function buildProjectDirectory() {

@@ -88,14 +88,16 @@
 
 	function succeed(message) {
 		successMessage = message;
+		snackbar = true;
 		succeded = true;
-		failed = false;
 	}
 
-	function fail(messages) {
-		failureMessage = messages;
-		succeded = false;
-		failed = true;
+	function handleModelProcessFailure(failureName) {
+		failureDialogTitle = failureName;
+		failureDialogActive = true;
+		errorDetailsCopied = false;
+    succeded = false;
+		snackbar = false;
 	}
 
 	function openFileExplorer() {
