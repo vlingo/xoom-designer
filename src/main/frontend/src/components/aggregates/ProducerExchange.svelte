@@ -55,15 +55,15 @@
       <ProducerSchemata
         {disableSchemaGroup}
         bind:schemaGroup
-        invalid={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0)}
+        invalid={schemaGroupRule(schemaGroup) || (producerExchangeName && outgoingEvents.length == 0)}
         helperText={schemaGroupRule(schemaGroup)}
       />
     </div>
 
     <div>
       <ErrorWarningTooltip
-        type={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? 'error' : 'warning'}
-        messages={[schemaGroupRule(schemaGroup)] && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? [schemaGroupRule(schemaGroup), !producerExchangeName ? 'Exchange Name must not be empty' : ''] : [producerExchangeName ? '' : 'Should you register any events for message publishing?']}
+        type={!schemaGroupRule(schemaGroup) && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? 'error' : 'warning'}
+        messages={schemaGroupRule(schemaGroup) && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? [schemaGroupRule(schemaGroup), !producerExchangeName ? 'Exchange Name must not be empty' : ''] : [producerExchangeName ? '' : 'Should you register any events for message publishing?']}
         names={['', '']}
       />
     </div>
