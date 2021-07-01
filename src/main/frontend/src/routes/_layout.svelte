@@ -183,7 +183,9 @@
 				</MenuSurface>
 			</div>
 			<div class="ml-4">
+				{#if $settings && $settings.schemata}
 				<SetSchemataOptions />
+				{/if}
 			</div>
 		</div>
 

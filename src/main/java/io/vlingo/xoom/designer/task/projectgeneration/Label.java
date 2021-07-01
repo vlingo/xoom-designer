@@ -19,6 +19,7 @@ public enum Label implements ParameterLabel {
   WEB_UI_DIALECT("webUIDialect"),
   TURBO_SETTINGS("turboSettings"),
   CLUSTER_SETTINGS("clusterSettings"),
+  SCHEMATA_SETTINGS("schemataSettings"),
   PRODUCER_EXCHANGE_PORT("producerExchangePort"),
   PACKAGE("package"),
   AGGREGATE("aggregate"),

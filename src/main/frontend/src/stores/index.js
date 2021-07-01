@@ -4,6 +4,7 @@ import { isMobileStore, createLocalStore } from './utils';
 import { defaultPersistenceSettings } from './persistence';
 import { defaultSettings, defaultGenerationSettings } from './generation';
 import { defaultDeploymentSettings } from './deployment';
+import { defaultSchemataSettings } from './schemata';
 import Validation from '../util/Validation';
 
 export const isMobile = isMobileStore();
@@ -25,17 +26,14 @@ export const schemataData = createLocalStore('schemataData', {
 	schemasStore: [],
 	schemaVersionsStore: [],
 });
-export const schemataSettings = createLocalStore('schemataSettings', {
-	host: 'localhost',
-	port: 9019,
-});
 
 export function updateSettings(newSettings) {
-	let emptySettings = {context: {}, model: {persistenceSettings: {}}, deployment: {}};
+	let emptySettings = {context: {}, model: {persistenceSettings: {}}, schemata: {}, deployment: {}};
 	updateContext(emptySettings, newSettings);
 	updateAggregates(emptySettings, newSettings);
 	updatePersistence(emptySettings, newSettings);
 	updateDeployment(emptySettings, newSettings);
+	updateSchemata(emptySettings, newSettings);
 	updateGeneration(emptySettings, newSettings);
 	settings.set(emptySettings);
 }
@@ -72,8 +70,13 @@ function updatePersistence(currentSettings, updatedSettings) {
 }
 
 function updateDeployment(currentSettings, updatedSettings) {
-	updatedSettings = updatedSettings ? updatedSettings : defaultDeploymentSettings;
-	currentSettings.deployment = { ...currentSettings.deployment, ...updatedSettings.deployment }
+	let updatedDeployment = updatedSettings.deployment ? updatedSettings.deployment : defaultDeploymentSettings;
+	currentSettings.deployment = { ...currentSettings.deployment, ...updatedDeployment }
+}
+
+function updateSchemata(currentSettings, updatedSettings) {
+	let updatedSchemata = updatedSettings.schemata ? updatedSettings.schemata  : defaultSchemataSettings;
+	currentSettings.schemata = { ...currentSettings.schemata, ...updatedSchemata }
 }
 
 function updateGeneration(currentSettings, updatedSettings) {

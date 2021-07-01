@@ -10,8 +10,11 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CodeGenerationParametersBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,8 @@ public class SchemataGenerationStepTest {
     public void testThatSpecificationAndPluginConfigAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
-                        .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()));
+                        .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()))
+                        .add(CodeGenerationParameter.ofObject(Label.SCHEMATA_SETTINGS, SchemataSettings.with("localhost", 18787)));
 
         final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 

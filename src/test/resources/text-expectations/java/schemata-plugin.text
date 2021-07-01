@@ -16,7 +16,7 @@
             <configuration>
               <srcDirectory>${basedir}/src/main/vlingo/schemata</srcDirectory>
               <schemataService>
-                <url>http://localhost:9019</url>
+                <url>http://localhost:18787</url>
                 <clientOrganization>vlingo</clientOrganization>
                 <clientUnit>xoom</clientUnit>
                 <hierarchicalCascade>true</hierarchicalCascade>

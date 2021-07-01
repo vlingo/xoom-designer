@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
@@ -45,7 +46,7 @@ public class TaskExecutionContextMapper {
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
-    mapAggregates(); mapValueObjects(); mapPersistence(); mapStructuralOptions();
+    mapAggregates(); mapValueObjects(); mapPersistence(); mapInfrastructureSettings();
   }
 
   private TaskExecutionContext map() {
@@ -210,12 +211,15 @@ public class TaskExecutionContextMapper {
             .add(QUERY_MODEL_DATABASE, data.model.persistenceSettings.queryModelDatabase);
   }
 
-  private void mapStructuralOptions() {
+  private void mapInfrastructureSettings() {
     final TurboSettings turboSettings =
             TurboSettings.with(data.deployment.httpServerPort, data.deployment.producerExchangePort);
 
     final ClusterSettings clusterSettings =
             ClusterSettings.with(data.deployment.clusterPort, data.deployment.clusterTotalNodes);
+
+    final SchemataSettings schemataSettings =
+            SchemataSettings.with(data.schemata.host, data.schemata.port);
 
     final Path definitiveFolder =
             generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
@@ -236,6 +240,7 @@ public class TaskExecutionContextMapper {
             .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "")
             .add(CLUSTER_SETTINGS, clusterSettings)
             .add(TURBO_SETTINGS, turboSettings)
+            .add(SCHEMATA_SETTINGS, schemataSettings)
             .add(TARGET_FOLDER, definitiveFolder.toString())
             .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data));
   }

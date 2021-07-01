@@ -19,7 +19,8 @@ public class GenerationSettingsDataTest {
   public void testThatGenerationSettingsDataIsValidated() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, false, "");
+                    deploymentSettingsData(), schemataSettingsData(), "/home/projects",
+                    true, false, false, "");
 
     Assertions.assertTrue(data.validate().isEmpty());
   }
@@ -28,7 +29,7 @@ public class GenerationSettingsDataTest {
   public void testThatGenerationSettingsDataValidationFailsDueToRecursiveValueObject() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), invalidModelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, false, "");
+                    deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final List<String> errors = data.validate();
     Assertions.assertEquals(1, errors.size());
@@ -43,6 +44,10 @@ public class GenerationSettingsDataTest {
   private ModelSettingsData modelSettingsData() {
     return new ModelSettingsData(persistenceData(),
             Arrays.asList(personAggregateData(), profileAggregateData()), Arrays.asList(rankValueObjectData()));
+  }
+
+  private SchemataSettingsData schemataSettingsData() {
+    return new SchemataSettingsData("localhost", 18787);
   }
 
   private ModelSettingsData invalidModelSettingsData() {

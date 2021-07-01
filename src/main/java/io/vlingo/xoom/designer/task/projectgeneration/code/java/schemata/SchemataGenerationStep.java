@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
@@ -32,10 +33,13 @@ public class SchemataGenerationStep extends TemplateProcessingStep {
     final List<CodeGenerationParameter> publishedValueObjects =
             findPublishedValueObjects(exchanges, valueObjects);
 
+    final SchemataSettings schemataSettings =
+            context.parameterObjectOf(Label.SCHEMATA_SETTINGS);
+
     final List<TemplateData> templateData = new ArrayList<>();
     templateData.addAll(DomainEventSpecificationTemplateData.from(exchanges));
     templateData.addAll(ValueObjectSpecificationTemplateData.from(exchanges, publishedValueObjects));
-    templateData.add(new SchemataPluginTemplateData(exchanges, publishedValueObjects));
+    templateData.add(new SchemataPluginTemplateData(schemataSettings, exchanges, publishedValueObjects));
     return templateData;
   }
 

@@ -17,7 +17,7 @@
             <configuration>
               <srcDirectory>${r"${basedir}"}/src/main/vlingo/schemata</srcDirectory>
               <schemataService>
-                <url>http://localhost:9019</url>
+                <url>http://${schemataSettings.host}:${schemataSettings.port?c}</url>
                 <clientOrganization>${producerOrganization}</clientOrganization>
                 <clientUnit>${producerUnit}</clientUnit>
                 <hierarchicalCascade>true</hierarchicalCascade>

@@ -4,16 +4,16 @@
 	import List, { Item, Text } from '@smui/list';
   import Dialog, { Content, Actions } from '@smui/dialog';
 	import Portal from "svelte-portal/src/Portal.svelte";
-  import { schemataSettings } from '../stores';
+  import { settings } from '../stores';
 	import Textfield from '@smui/textfield';
 
   let menu;
   let showSettings = false;
-  let host = $schemataSettings.host;
-  let port = $schemataSettings.port;
+  let host = $settings.schemata.host;
+  let port = $settings.schemata.port;
 
   function save() {
-    $schemataSettings = {
+    $settings.schemata = {
       host,
       port
     }

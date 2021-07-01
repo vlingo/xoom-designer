@@ -33,7 +33,7 @@
   let errorDetailsCopied = false;
   let failureDialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
-  let anchor, menu, dialogStatus, succeded, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
+  let anchor, menu, dialogStatus, succeeded, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
   let anchorClasses = {};
 
   function checkPath() {

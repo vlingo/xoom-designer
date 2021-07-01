@@ -9,9 +9,14 @@ export const deploymentTypes = readable(null, function start(set) {
 });
 
 export const defaultDeploymentSettings = {
-	type: "NONE",
-	clusterNodes: 3,
-	dockerImage: "",
-	kubernetesImage: "",
-	kubernetesPod: ""
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 3,
+    "clusterPort": 50011,
+    "producerExchangePort": 19762,
+    "httpServerPort": 8081,
+    "pullSchemas": false
 }
+

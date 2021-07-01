@@ -29,7 +29,7 @@ public class TaskExecutionContextMapperTest {
   public void testThatTaskExecutionContextIsMapped() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, false, "");
+                    deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
             TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
@@ -125,6 +125,10 @@ public class TaskExecutionContextMapperTest {
     return new ModelSettingsData(persistenceData(),
             Arrays.asList(personAggregateData(), profileAggregateData()),
             valueObjects());
+  }
+
+  private SchemataSettingsData schemataSettingsData() {
+    return new SchemataSettingsData("localhost", 18787);
   }
 
   private PersistenceData persistenceData() {

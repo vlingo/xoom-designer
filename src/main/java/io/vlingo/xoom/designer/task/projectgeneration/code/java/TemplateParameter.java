@@ -154,7 +154,8 @@ public enum TemplateParameter implements ParameterKey {
   CLUSTER_SETTINGS("clusterSettings"),
   TURBO_SETTINGS("turboSettings"),
   DATA_OBJECT_PARAMS("dataObjectParams"),
-  UI_TYPE("uiType");
+  UI_TYPE("uiType"),
+  SCHEMATA_SETTINGS("schemataSettings");
 
   public final String key;
 

@@ -17,7 +17,8 @@ public class CodeGenerationParameterValidationStepTest {
   public void testThatParametersAreValidated() {
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
-                    deploymentSettingsData(), "/home/projects", true, false, false, "");
+                    deploymentSettingsData(), schemataSettingsData(),
+                    "/home/projects", true, false, false, "");
 
     final TaskExecutionContext context =
             TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM);
@@ -38,6 +39,10 @@ public class CodeGenerationParameterValidationStepTest {
   private PersistenceData persistenceData() {
     return new PersistenceData("STATE_STORE", true, "EVENT_BASED",
             "IN_MEMORY", "POSTGRES", "MYSQL");
+  }
+
+  private SchemataSettingsData schemataSettingsData() {
+    return new SchemataSettingsData("localhost", 18787);
   }
 
   private AggregateData personAggregateData() {

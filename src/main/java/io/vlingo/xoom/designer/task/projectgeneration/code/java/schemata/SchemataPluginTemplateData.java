@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
@@ -25,7 +26,8 @@ public class SchemataPluginTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public SchemataPluginTemplateData(final List<CodeGenerationParameter> exchanges,
+  public SchemataPluginTemplateData(final SchemataSettings schemataSettings,
+                                    final List<CodeGenerationParameter> exchanges,
                                     final List<CodeGenerationParameter> valueObjects) {
     final String schemaGroup = retrieveSchemaGroup(exchanges);
 
@@ -33,6 +35,7 @@ public class SchemataPluginTemplateData extends TemplateData {
             TemplateParameters.with(TemplateParameter.POM_SECTION, true)
                     .and(TemplateParameter.PRODUCTION_CODE, false)
                     .and(TemplateParameter.OFFSET, "<plugins>")
+                    .and(TemplateParameter.SCHEMATA_SETTINGS, schemataSettings)
                     .and(TemplateParameter.PRODUCER_SCHEMAS, retrieveProducerSchemas(schemaGroup, exchanges, valueObjects))
                     .and(TemplateParameter.CONSUMER_SCHEMAS, retrieveConsumerSchemas(exchanges))
                     .and(TemplateParameter.PRODUCER_ORGANIZATION, retrieveProducerOrganization(schemaGroup))

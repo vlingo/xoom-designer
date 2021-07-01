@@ -3,7 +3,7 @@
   import Dialog, { Title, Content, Header } from '@smui/dialog';
   import IconButton from '@smui/icon-button';
   import Portal from "svelte-portal/src/Portal.svelte";
-  import { schemataData, schemataSettings } from "../../stores";
+  import { schemataData, settings } from "../../stores";
 
   export let show = false;
   export let limitless = false;
@@ -23,9 +23,9 @@
     }
   })
 
-  $: origin = `http://${$schemataSettings.host}:${$schemataSettings.port}`;
+  $: origin = `http://${$settings.schemata.host}:${$settings.schemata.port}`;
   $: src = `${origin}/organization${limitless ? '' : '#producer=true'}`;
-  $: console.log($schemataSettings);
+  $: console.log($settings.schemata);
 </script>
 
 <Portal target=".s-app">

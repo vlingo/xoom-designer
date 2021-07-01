@@ -17,6 +17,7 @@ public class GenerationSettingsData {
     public final ContextSettingsData context;
     public final ModelSettingsData model;
     public final DeploymentSettingsData deployment;
+    public final SchemataSettingsData schemata;
     public final String projectDirectory;
     public final Boolean useAnnotations;
     public final Boolean useAutoDispatch;
@@ -27,6 +28,7 @@ public class GenerationSettingsData {
     public GenerationSettingsData(final ContextSettingsData context,
                                   final ModelSettingsData model,
                                   final DeploymentSettingsData deployment,
+                                  final SchemataSettingsData schemata,
                                   final String projectDirectory,
                                   final Boolean useAnnotations,
                                   final Boolean useAutoDispatch,
@@ -34,6 +36,7 @@ public class GenerationSettingsData {
                                   final String generateUIWith) {
         this.context = context;
         this.model = model;
+        this.schemata = schemata;
         this.deployment = deployment;
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
