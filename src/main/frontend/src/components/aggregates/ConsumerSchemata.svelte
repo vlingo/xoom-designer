@@ -1,6 +1,6 @@
 <script>
   import IconButton from '@smui/icon-button';
-  import { schemataData } from "../../stores";
+  import { schemataData, subscribeToSchemataChanges } from "../../stores";
   import Textfield from '@smui/textfield/Textfield.svelte';
   import Button from '@smui/button';
 
@@ -18,6 +18,7 @@
   export let schema;
   export let invalid;
 
+  let orgs, units, contexts, schemas, schemaVersions = [];
   let schemaParsed = schema && schema.split(':');
   let selectedOrg = schemaParsed ? $schemataData.organizationsStore.find(org => org.name === schemaParsed[0]) : null;
   let selectedUnit = schemaParsed ? $schemataData.unitsStore.find(unit => unit.name === schemaParsed[1]) : null;
@@ -25,11 +26,22 @@
   let selectedSchema = schemaParsed ? $schemataData.schemasStore.find(schema => schema.name === schemaParsed[3]) : null;
   let selectedSchemaVersion = schemaParsed ? $schemataData.schemaVersionsStore.find(sv => sv.currentVersion === schemaParsed[4]) : null;
 
+  function loadSchemataLists() {
+    orgs = $schemataData.organizationsStore;
+    units = $schemataData.unitsStore.filter(u => selectedOrg && u.organizationId === selectedOrg.organizationId);
+    contexts = $schemataData.contextsStore.filter(c => selectedUnit && c.unitId === selectedUnit.unitId);
+    schemas = $schemataData.schemasStore.filter(sc => selectedContext && sc.contextId === selectedContext.contextId);
+    schemaVersions = $schemataData.schemaVersionsStore.filter(scv => selectedSchema && scv.schemaId === selectedSchema.schemaId);
+  }
+
+  subscribeToSchemataChanges(loadSchemataLists);
+
 $: schema = `${selectedOrg ? selectedOrg.name : ''}${selectedUnit ? `:${selectedUnit.name}` : ''}${selectedContext ? `:${selectedContext.namespace}` : ''}${selectedSchema ? `:${selectedSchema.name}` : ''}${selectedSchemaVersion ? `:${selectedSchemaVersion.currentVersion}` : ''}`;
 $: if(!selectedOrg) selectedUnit = null;
 $: if(!selectedUnit) selectedContext = null;
 $: if(!selectedContext) selectedSchema = null;
 $: if(!selectedSchema) selectedSchemaVersion = null;
+$: selectedOrg, selectedUnit, selectedContext, selectedSchema, loadSchemataLists();
 
 </script>
 <div
@@ -79,12 +91,18 @@ $: if(!selectedSchema) selectedSchemaVersion = null;
         <Item class="pl-4 justify-center" disabled={true}>
           <Text>Organization</Text>
         </Item>
-        {#each $schemataData.organizationsStore as org}
+        {#each orgs as org}
           <Item
             class="pl-4 justify-center"
             on:SMUI:action={() => {
               if (!selectedOrg || selectedOrg.organizationId !== org.organizationId) {
                 selectedOrg = org;
+                selectedUnit = null;
+                selectedContext = null;
+                selectedSchema = null;
+                selectedSchemaVersion = null;
+              } else { 
+                selectedOrg = null;
                 selectedUnit = null;
                 selectedContext = null;
                 selectedSchema = null;
@@ -103,12 +121,17 @@ $: if(!selectedSchema) selectedSchemaVersion = null;
           <Item class="pl-4 justify-center" disabled={true}>
             <Text>Unit</Text>
           </Item>
-          {#each $schemataData.unitsStore.filter(u => u.organizationId === selectedOrg.organizationId) as unit}
+          {#each units as unit}
             <Item
               class="pl-4 justify-center"
               on:SMUI:action={() => {
                 if (!selectedUnit || selectedUnit.unitId !== unit.unitId) {
                   selectedUnit = unit;
+                  selectedContext = null;
+                  selectedSchema = null;
+                  selectedSchemaVersion = null;
+                } else {
+                  selectedUnit = null;
                   selectedContext = null;
                   selectedSchema = null;
                   selectedSchemaVersion = null;
@@ -127,12 +150,16 @@ $: if(!selectedSchema) selectedSchemaVersion = null;
           <Item class="pl-4 justify-center" disabled={true}>
             <Text>Context</Text>
           </Item>
-          {#each $schemataData.contextsStore.filter(c => c.unitId === selectedUnit.unitId) as context}
+          {#each contexts as context}
             <Item
               class="pl-4 justify-center"
               on:SMUI:action={() => {
                 if (!selectedContext || selectedContext.contextId !== context.contextId) {
                   selectedContext = context;
+                  selectedSchema = null;
+                  selectedSchemaVersion = null;
+                } else {
+                  selectedContext = null;
                   selectedSchema = null;
                   selectedSchemaVersion = null;
                 }
@@ -150,12 +177,15 @@ $: if(!selectedSchema) selectedSchemaVersion = null;
           <Item class="pl-4 justify-center" disabled={true}>
             <Text>Schema</Text>
           </Item>
-          {#each $schemataData.schemasStore.filter(sc => sc.contextId === selectedContext.contextId) as schema}
+          {#each schemas as schema}
             <Item
               class="pl-4 justify-center"
               on:SMUI:action={() => {
                 if (!selectedSchema || selectedSchema.schemaId !== schema.schemaId) {
                   selectedSchema = schema
+                  selectedSchemaVersion = null;
+                } else {
+                  selectedSchema = null;
                   selectedSchemaVersion = null;
                 }
               }}
@@ -170,9 +200,9 @@ $: if(!selectedSchema) selectedSchemaVersion = null;
         <div class="bl-1"></div>
         <SelectionGroup style="flex: 1;">
           <Item class="pl-4 justify-center" disabled={true}>
-            <Text>Shema Version</Text>
+            <Text>Schema Version</Text>
           </Item>
-          {#each $schemataData.schemaVersionsStore.filter(scv => scv.schemaId === selectedSchema.schemaId) as schemaVersion}
+          {#each schemaVersions as schemaVersion}
             <Item
               class="pl-4 justify-center"
               on:SMUI:action={() => (selectedSchemaVersion = schemaVersion)}

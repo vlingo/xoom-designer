@@ -16,7 +16,7 @@
     window.addEventListener("message", (event) => {
       if (event.origin !== origin) return;
 
-      $schemataData = JSON.parse(event.data)
+      $schemataData = JSON.parse(event.data);
     }, false);
     return () => {
       window.removeEventListener("message", () => {});

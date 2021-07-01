@@ -142,6 +142,10 @@ export function onSettingsChange(changedSettings) {
 	setLocalStorage("settingsEditionStatus", EDITION_STATUS.CHANGED)
 }
 
+export function subscribeToSchemataChanges(subscriber) {
+	schemataData.subscribe(subscriber);
+}
+
 export const isValid = writable({
 	context: false,
 	aggregates: false,
