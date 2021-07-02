@@ -7,6 +7,7 @@
   import Menu, { SelectionGroup } from '@smui/menu';
   import List, { Item, Text } from '@smui/list';
   import { Anchor } from '@smui/menu-surface';
+  import { settings } from "../../stores";
 
   import SchemataEmded from './SchemataEmded.svelte';
 
@@ -220,4 +221,6 @@ $: selectedOrg, selectedUnit, selectedContext, selectedSchema, loadSchemataLists
   </Menu>
 </div>
 
+{#if $settings && $settings.schemata}
 <SchemataEmded bind:show={showSchemataModal} limitless={true} />
+{/if}

@@ -8,6 +8,7 @@
   import Menu, { SelectionGroup } from '@smui/menu';
   import List, { Item, Text } from '@smui/list';
   import { Anchor } from '@smui/menu-surface';
+  import { settings } from "../../stores";
   import SchemataEmded from "./SchemataEmded.svelte";
 
   let anchor;
@@ -139,7 +140,9 @@ $: if(!selectedUnit) selectedContext = null;
 </Menu>
 </div>
 
+{#if $settings && $settings.schemata}
 <SchemataEmded bind:show={showSchemataModal} />
+{/if}
 
 <style>
   .bl-1 {
