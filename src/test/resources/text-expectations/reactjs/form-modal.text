@@ -6,6 +6,7 @@ const FormModal = ({title, show, close, children, submit}) => {
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     submit(e);
+    setTimeout(() => close(e), 200);
   }, [submit]);
 
   return createPortal(
