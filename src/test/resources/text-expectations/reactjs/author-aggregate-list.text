@@ -34,7 +34,7 @@ const Authors = () => {
 
   const _withName = useCallback((e) => {
     console.log('showing withName modal');
-    setCurrentModal(<AuthorWithName defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
+    setCurrentModal(<AuthorWithName defaultForm={{ name: { firstName: '', lastName: '' } }} complete={onModalActionComplete}/>);
   }, [onModalActionComplete]);
 
   useEffect(() => {
