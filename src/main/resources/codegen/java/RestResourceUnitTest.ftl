@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import ${import.qualifiedClassName};
 </#list>
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ${resourceUnitTestName} extends AbstractRestTest {
 
