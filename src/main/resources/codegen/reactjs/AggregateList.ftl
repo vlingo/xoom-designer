@@ -60,7 +60,7 @@ const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 
   const _${aggregate.factoryMethod.name} = useCallback((e) => {
     console.log('showing ${aggregate.factoryMethod.name} modal');
-    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(aggregate.factoryMethod.name)} defaultForm={EMPTY_FORM} complete={onModalActionComplete}/>);
+    setCurrentModal(<${aggregate.aggregateName}${fns.capitalize(aggregate.factoryMethod.name)} defaultForm={<@printJSON aggregate.factoryMethodStateFields />} complete={onModalActionComplete}/>);
   }, [onModalActionComplete]);
 
   useEffect(() => {
