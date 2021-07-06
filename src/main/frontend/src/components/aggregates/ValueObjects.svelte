@@ -200,10 +200,10 @@
   {/if}
 </div>
 
-<Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" bind:active={deleteDialogActive}>
+<Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-left" bind:active={deleteDialogActive}>
   <div>
-    <b>{selectedValueObjectForDelete.name}</b> might be in use by other Value Objects or state fields of aggregates!
-    Are you sure you want to delete value object of <b>{selectedValueObjectForDelete.name}</b>?
+    The <b>{selectedValueObjectForDelete.name}</b> might be in use by other Value Object types or Aggregate state fields.
+    Are you sure you want to delete Value Object type <b>{selectedValueObjectForDelete.name}</b>?
   </div>
   <CardActions class="d-flex justify-end mt-4">
     <Button class="error-color white-text mr-4" on:click={remove}>Delete</Button>
@@ -278,10 +278,11 @@
   </CardActions>
 </Dialog>
 
-<Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" bind:active={renameDialogActive}>
+<Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-left" bind:active={renameDialogActive}>
   <div>
-    <b>{updateValueName}</b> might be in use by other Value Objects or state fields of aggregates!
-    Are you sure you want to rename value object of <b>{updateValueName}</b>?
+    The <b>{updateValueName}</b> might be in use by other Value Object types or Aggregate state fields.
+    If you agree to renaming, Designer will rename all uses.
+    Are you sure you want to rename Value Object type <b>{updateValueName}</b>?
   </div>
   <CardActions class="d-flex justify-end mt-4">
     <Button class="error-color white-text mr-4" on:click={rename}>Update</Button>
