@@ -7,19 +7,20 @@
 
 package io.vlingo.xoom.designer.task;
 
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
-import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
-import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
+import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.task.OptionName.TARGET;
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
+import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
+import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
+import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
+import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
+@SuppressWarnings("rawtypes")
 public enum Task {
 
   DOCKER("docker", new DockerCommandManager()),
@@ -57,6 +58,7 @@ public enum Task {
     return findManager(Arrays.asList(task), args);
   }
 
+  @SuppressWarnings("unchecked")
   private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
     return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
             .findFirst().orElseThrow(() -> new UnknownCommandException(args));
@@ -66,6 +68,7 @@ public enum Task {
     return OptionValue.resolveValues(this.options, args);
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends TaskManager> T manager() {
     return (T) manager;
   }

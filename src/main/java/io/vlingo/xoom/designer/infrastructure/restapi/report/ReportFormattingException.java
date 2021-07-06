@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
 public class ReportFormattingException extends RuntimeException {
+  private static final long serialVersionUID = -8697632337724723343L;
 
   public ReportFormattingException(final Exception exception) {
     super(exception);

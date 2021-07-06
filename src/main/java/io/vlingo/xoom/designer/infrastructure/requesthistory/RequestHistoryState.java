@@ -6,13 +6,14 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure.requesthistory;
 
-import io.vlingo.xoom.symbio.store.object.StateObject;
+import static java.time.ZoneOffset.UTC;
 
 import java.time.LocalDateTime;
 
-import static java.time.ZoneOffset.UTC;
+import io.vlingo.xoom.symbio.store.object.StateObject;
 
 public class RequestHistoryState extends StateObject {
+  private static final long serialVersionUID = -2921706611627431942L;
 
   public final String id;
   public final String uri;

@@ -7,15 +7,28 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.ENTRY_ADAPTER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_BASED_PROJECTION;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_SOURCE_ENTITY;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_SOURCE_ENTITY_METHOD;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.JOURNAL_PROVIDER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.OPERATION_BASED_PROJECTION;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATEFUL_ENTITY;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATEFUL_ENTITY_METHOD;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATE_ADAPTER;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATE_STORE_PROVIDER;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.*;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 
 public class CodeGenerationProperties {
 
@@ -44,7 +57,9 @@ public class CodeGenerationProperties {
 
   public static final Map<String, String> FIELD_TYPE_TRANSLATION =
           Collections.unmodifiableMap(
-                  new HashMap<String, String>() {{
+                  new HashMap<String, String>() {
+                    private static final long serialVersionUID = 964362975777915117L;
+                  {
                     put("Date", "LocalDate");
                     put("DateTime", "LocalDateTime");
                   }}

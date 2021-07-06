@@ -8,9 +8,10 @@
 package io.vlingo.xoom.designer.task;
 
 public class RequiredOptionNotFoundException extends TaskExecutionException {
+  private static final long serialVersionUID = 3511217751502567617L;
 
-    public RequiredOptionNotFoundException(final String optionName) {
-        super("The value is required for option " + optionName + " not found.");
-    }
+  public RequiredOptionNotFoundException(final String optionName) {
+      super("The value is required for option " + optionName + " not found.");
+  }
 
 }

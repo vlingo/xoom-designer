@@ -7,16 +7,16 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.task.Property;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
 
@@ -47,7 +47,10 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
     }
 
     private static final Map<Property, Label> PROPERTY_TRANSLATION =
-            new HashMap<Property, Label>(){{
+            new HashMap<Property, Label>(){
+              private static final long serialVersionUID = 6239027081958513358L;
+
+            {
                 put(Property.GROUP_ID, Label.GROUP_ID);
                 put(Property.ARTIFACT_ID, Label.ARTIFACT_ID);
                 put(Property.VERSION, Label.VERSION);

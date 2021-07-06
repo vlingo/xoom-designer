@@ -7,18 +7,18 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.storage;
 
-import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.ADAPTER;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.ADAPTER;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
 
@@ -51,12 +51,18 @@ public class StorageGenerationStep extends TemplateProcessingStep {
 
   private Map<Model, DatabaseType> databases(final CodeGenerationContext context) {
     if (context.parameterOf(Label.CQRS, Boolean::valueOf)) {
-      return new HashMap<Model, DatabaseType>() {{
+      return new HashMap<Model, DatabaseType>() {
+        private static final long serialVersionUID = -3707004109115266302L;
+
+      {
         put(Model.COMMAND, context.parameterOf(Label.COMMAND_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, DatabaseType.IN_MEMORY)));
         put(Model.QUERY, context.parameterOf(Label.QUERY_MODEL_DATABASE, name -> DatabaseType.getOrDefault(name, DatabaseType.IN_MEMORY)));
       }};
     }
-    return new HashMap<Model, DatabaseType>() {{
+    return new HashMap<Model, DatabaseType>() {
+      private static final long serialVersionUID = 8419003086116028408L;
+
+    {
       put(Model.DOMAIN, context.parameterOf(Label.DATABASE, name -> DatabaseType.getOrDefault(name, DatabaseType.IN_MEMORY)));
     }};
   }

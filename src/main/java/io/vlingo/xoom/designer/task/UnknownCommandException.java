@@ -8,13 +8,14 @@
 package io.vlingo.xoom.designer.task;
 
 public class UnknownCommandException extends TaskExecutionException {
+  private static final long serialVersionUID = 1984185658007779182L;
 
-    public UnknownCommandException(final String command) {
-        super("The informed command is not supported " + command);
-    }
+  public UnknownCommandException(final String command) {
+      super("The informed command is not supported " + command);
+  }
 
-    public UnknownCommandException(final Object args) {
-        super("The informed command does not support arguments type " + args.getClass());
-    }
+  public UnknownCommandException(final Object args) {
+      super("The informed command does not support arguments type " + args.getClass());
+  }
 
 }

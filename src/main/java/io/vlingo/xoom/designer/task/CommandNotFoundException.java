@@ -8,9 +8,10 @@
 package io.vlingo.xoom.designer.task;
 
 public class CommandNotFoundException extends TaskExecutionException {
+  private static final long serialVersionUID = 8539654805622498779L;
 
-    public CommandNotFoundException() {
-        super("Please inform a command.");
-    }
+  public CommandNotFoundException() {
+      super("Please inform a command.");
+  }
 
 }

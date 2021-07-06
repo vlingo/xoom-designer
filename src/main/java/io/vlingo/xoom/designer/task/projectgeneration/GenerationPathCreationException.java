@@ -8,5 +8,5 @@
 package io.vlingo.xoom.designer.task.projectgeneration;
 
 public class GenerationPathCreationException extends RuntimeException {
-
+  private static final long serialVersionUID = 4625879762747052548L;
 }

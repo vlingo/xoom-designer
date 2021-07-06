@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.infrastructure;
 import java.nio.file.Path;
 
 public class ResourceLoadException extends RuntimeException {
+  private static final long serialVersionUID = -3031635628464254040L;
 
   public ResourceLoadException(final Path path) {
     super("Unable to load: " + path.toString());

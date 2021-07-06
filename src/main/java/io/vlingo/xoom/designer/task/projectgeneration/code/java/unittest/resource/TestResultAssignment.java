@@ -7,9 +7,9 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource;
 
 
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
-
 import java.util.function.BiFunction;
+
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 
 class TestResultAssignment {
 
@@ -42,6 +42,7 @@ class TestResultAssignment {
   }
 
   private static String resolveSaveResultAssignment(final int dataIndex, final String aggregateName) {
+    @SuppressWarnings("unused")
     final String dataObjectName =
         JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName);
 

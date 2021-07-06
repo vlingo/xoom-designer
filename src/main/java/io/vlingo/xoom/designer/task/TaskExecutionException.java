@@ -8,13 +8,14 @@
 package io.vlingo.xoom.designer.task;
 
 public class TaskExecutionException extends RuntimeException {
+  private static final long serialVersionUID = -5321301758841578276L;
 
-    public TaskExecutionException(final Exception exception) {
-        super(exception);
-    }
+  public TaskExecutionException(final Exception exception) {
+      super(exception);
+  }
 
-    public TaskExecutionException(final String message) {
-        super(message);
-    }
+  public TaskExecutionException(final String message) {
+      super(message);
+  }
 
 }

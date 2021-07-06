@@ -10,12 +10,13 @@ package io.vlingo.xoom.designer.task.docker;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
 
 public class DockerCommandException extends TaskExecutionException {
+  private static final long serialVersionUID = 1566353612015507437L;
 
-    public DockerCommandException(final String message) {
-        super(message);
-    }
+  public DockerCommandException(final String message) {
+      super(message);
+  }
 
-    public DockerCommandException(final Exception exception) {
-        super(exception);
-    }
+  public DockerCommandException(final Exception exception) {
+      super(exception);
+  }
 }

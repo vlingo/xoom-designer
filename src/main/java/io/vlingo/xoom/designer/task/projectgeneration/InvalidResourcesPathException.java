@@ -8,9 +8,10 @@
 package io.vlingo.xoom.designer.task.projectgeneration;
 
 public class InvalidResourcesPathException extends ProjectGenerationException {
+  private static final long serialVersionUID = -2276075547640096725L;
 
-    public InvalidResourcesPathException() {
-        super("Please check if the designer path has been set in the environment variables");
-    }
+  public InvalidResourcesPathException() {
+      super("Please check if the designer path has been set in the environment variables");
+  }
 
 }

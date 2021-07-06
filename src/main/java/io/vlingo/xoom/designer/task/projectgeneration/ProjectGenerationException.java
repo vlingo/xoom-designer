@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.task.projectgeneration;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
 
 public class ProjectGenerationException extends TaskExecutionException {
+  private static final long serialVersionUID = -8654681953639807867L;
 
   public ProjectGenerationException(final Exception exception) {
     super(exception);

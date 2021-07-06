@@ -7,18 +7,23 @@
 
 package io.vlingo.xoom.designer.task;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
+
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
@@ -77,6 +82,7 @@ public class TaskExecutionContext {
     this.args.addAll(args);
   }
 
+  @SuppressWarnings("unchecked")
   public <T> T propertyOf(final Property property) {
     return (T) propertyOf(property, value -> value);
   }
@@ -87,7 +93,7 @@ public class TaskExecutionContext {
 
   public <T> T propertyOf(final String propertyValue, final Function<String, T> mapper) {
     final String value = properties.getProperty(propertyValue);
-    return (T) mapper.apply(value);
+    return mapper.apply(value);
   }
 
   public TaskExecutionContext addOutput(final TaskOutput taskOutput, final Object content) {
@@ -95,6 +101,7 @@ public class TaskExecutionContext {
     return this;
   }
 
+  @SuppressWarnings("unchecked")
   public <T> T retrieveOutput(final TaskOutput taskOutput) {
     if(!this.taskOutput.containsKey(taskOutput)) {
       return null;
@@ -116,6 +123,7 @@ public class TaskExecutionContext {
     return optionValues.stream().anyMatch(optionValue -> optionValue.hasName(optionName));
   }
 
+  @SuppressWarnings("unchecked")
   public <T> T codeGenerationParameterOf(final Label label) {
     return (T) parameters.retrieveValue(label);
   }

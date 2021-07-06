@@ -7,17 +7,17 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.EXCHANGES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.INLINE_EXCHANGE_NAMES;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.RESOURCE_FILE;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
-
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ExchangePropertiesTemplateData extends TemplateData {
 

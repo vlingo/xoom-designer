@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionException;
 
 public class SchemaPullException extends CommandExecutionException {
+  private static final long serialVersionUID = 6076113309743794985L;
 
   public SchemaPullException(final CommandExecutionException exception) {
     super(exception.getCause());

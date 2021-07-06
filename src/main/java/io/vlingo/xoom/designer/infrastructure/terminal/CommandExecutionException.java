@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
 public class CommandExecutionException extends RuntimeException {
+  private static final long serialVersionUID = -6703096102919057461L;
 
   public CommandExecutionException(final Throwable cause) {
     super(cause);

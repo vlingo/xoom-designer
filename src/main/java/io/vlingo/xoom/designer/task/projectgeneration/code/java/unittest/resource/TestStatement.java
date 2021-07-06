@@ -6,15 +6,15 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.resource;
 
-import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
+import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
 
 public class TestStatement {
 
@@ -41,7 +41,8 @@ public class TestStatement {
 		this.assertions.addAll(generateAssertions(dataIndex, aggregate, rootPath, rootMethod, valueObjects, testDataValues));
 	}
 
-	private List<String> generateExecutions(final int dataIndex,
+	@SuppressWarnings("unused")
+  private List<String> generateExecutions(final int dataIndex,
 	                                        final String testMethodName,
 	                                        final CodeGenerationParameter aggregate) {
 		final TestResultAssignment formatter =

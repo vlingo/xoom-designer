@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 public class DesignerModelFileException extends RuntimeException {
+  private static final long serialVersionUID = -6240268204679253567L;
 
   public DesignerModelFileException(final String message, final Exception cause) {
     super(message, cause);

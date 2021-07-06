@@ -7,11 +7,10 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
-
 public class ArchetypeNotFoundException extends ProjectGenerationException {
+  private static final long serialVersionUID = -3872607533773452802L;
 
-    public ArchetypeNotFoundException() {
-        super("Unable to find a Template based on properties. Please check if it contains all required properties.");
-    }
+  public ArchetypeNotFoundException() {
+      super("Unable to find a Template based on properties. Please check if it contains all required properties.");
+  }
 }
