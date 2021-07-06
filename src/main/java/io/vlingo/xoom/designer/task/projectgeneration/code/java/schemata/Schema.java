@@ -60,7 +60,8 @@ public class Schema {
       } else {
         return String.format("data.%s:%s[] %s", genericType, DEFAULT_SCHEMA_VERSION, field.value);
       }
-    }
+    } else if(FieldDetail.isDateTime(fieldType))
+      return "timestamp " + field.value;
     return fieldType.toLowerCase() + " " + field.value;
   }
 }
