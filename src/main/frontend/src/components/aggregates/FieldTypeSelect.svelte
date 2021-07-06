@@ -1,5 +1,6 @@
 <script>
   import Select, { Option } from '@smui/select';
+import { valueObjectNameChanges } from '../../stores';
 
   export let disabled;
   export let items;
@@ -8,6 +9,14 @@
 
   let innerValue = value;
   let innerItems = [];
+
+  function onValueObjectNameChange() {
+    if(valueObjectNameChanges.isDeprecated(innerValue)) {
+      innerValue = valueObjectNameChanges.currentNameOf(innerValue);
+    }
+  }
+  
+  valueObjectNameChanges.addListener(onValueObjectNameChange);
 
   $: innerItems = collectionType ? items.map(item => ({
     name: `${collectionType}<${item.value}>`,
@@ -29,6 +38,7 @@
   bind:value={innerValue}
   {disabled}
   required
+  invalid={!innerValue}
   label="Type"
 >
   {#each innerItems as item (item.name)}

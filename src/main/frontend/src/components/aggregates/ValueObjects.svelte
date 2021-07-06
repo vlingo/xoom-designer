@@ -1,5 +1,5 @@
 <script>
-	import { settings, simpleTypes } from "../../stores";
+	import { settings, simpleTypes, valueObjectNameChanges } from "../../stores";
 	import { Dialog, CardActions, Row, Col } from "svelte-materialify/src";
 	import { requireRule } from "../../validators";
   import { formatArrayForSelect } from "../../utils";
@@ -19,6 +19,7 @@
   let menu;
   let anchor;
   let anchorClasses = {};
+  let renameDialogActive = false;
   let deleteDialogActive = false;
   let updateValueName = null;
   let selectedValueObjectForDelete = null;
@@ -61,12 +62,28 @@
     selectedValueObjectForDelete = valueObject;
     deleteDialogActive = true;
   }
-  function update() {
-    const i = $settings.model.valueObjectSettings.findIndex(valueObject => valueObject.name === updateValueName)
-    $settings.model.valueObjectSettings.splice(i, 1, valueObjectForm);
-		$settings.model.valueObjectSettings = $settings.model.valueObjectSettings;
-    dialogActive = false;
+  function update() {  
+    if(valueObjectForm.name != updateValueName) {
+      renameDialogActive = true;
+    } else {
+      save();
+      dialogActive = false;
+    } 
   }
+
+  function rename() {
+    valueObjectNameChanges.log(updateValueName, valueObjectForm.name);
+    dialogActive = false;
+    renameDialogActive = false;
+    save();
+  }
+
+  function save() {
+    let i = $settings.model.valueObjectSettings.findIndex(valueObject => valueObject.name === updateValueName);
+    $settings.model.valueObjectSettings.splice(i, 1, valueObjectForm);
+    $settings.model.valueObjectSettings = $settings.model.valueObjectSettings;
+  }
+
   function edit(value) {
     updateValueName = value.name;
     valueObjectForm = {...value};
@@ -87,6 +104,7 @@
       if (el) el.focus()
     })
   }
+  
   const isObjectFieldNameUnique = (value) => {
     if (updateValueName === value) return undefined;
     return $settings.model.valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
@@ -193,6 +211,7 @@
   </CardActions>
 </Dialog>
 
+
 <Dialog class="vl-dialog d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" persistent bind:active={dialogActive}>
   <div>
     <Row class="align-center">
@@ -258,6 +277,18 @@
     <Button class="error-color white-text" variant="raised" on:click={() => dialogActive = !dialogActive}>Cancel</Button>
   </CardActions>
 </Dialog>
+
+<Dialog class="d-flex flex-column justify-space-between pa-4 pt-8 pb-8 text-center" bind:active={renameDialogActive}>
+  <div>
+    <b>{updateValueName}</b> might be in use by other Value Objects or state fields of aggregates!
+    Are you sure you want to rename value object of <b>{updateValueName}</b>?
+  </div>
+  <CardActions class="d-flex justify-end mt-4">
+    <Button class="error-color white-text mr-4" on:click={rename}>Update</Button>
+    <Button color="secondary" variant="raised" on:click={() => renameDialogActive = !renameDialogActive}>Cancel</Button>
+  </CardActions>
+</Dialog>
+
 
 <style global>
   .vl-dialog {

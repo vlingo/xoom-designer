@@ -27,6 +27,52 @@ export const schemataData = createLocalStore('schemataData', {
 	schemaVersionsStore: [],
 });
 
+export const valueObjectNameChanges = { 
+	oldName:'',
+	newName:'',
+	listeners: [],
+	finalizers: [],
+	log: function (oldTypeName, newTypeName) {
+		this.oldName = oldTypeName;
+		this.newName = newTypeName;
+		this.listeners.forEach(listener => listener.handle("CHANGED"));
+	},
+	addListener(listener) {
+		this.listeners.push({handle: listener});
+	},
+	addFinalizer(finalizer){
+		this.finalizers.push({handle: finalizer});
+	},
+	currentNameOf(fieldType) {
+		if(this.oldName == fieldType) {
+			return this.newName;
+		} 
+		return '';
+	},
+	isDeprecated(fieldType) {
+		return this.oldName === fieldType;
+	},
+	finishWith(settings) {
+		if(this.newName) {
+			this.listeners.forEach(listener => listener.handle("DONE"));
+			if(settings.model) {
+				settings.model.aggregateSettings.forEach(aggregate => {
+					aggregate.stateFields.forEach(field => {
+						if(this.isDeprecated(field.type)) {
+							field.type = this.newName;
+						}
+					});
+				});
+				settings.model.aggregateSettings = settings.model.aggregateSettings;
+			}
+			this.finalizers.forEach(finalizer => finalizer.handle());
+		}
+	},
+	deprecatedValues() {
+		return [this.oldName];
+	}
+};
+
 export function updateSettings(newSettings) {
 	let emptySettings = {context: {}, model: {persistenceSettings: {}}, schemata: {}, deployment: {}};
 	updateContext(emptySettings, newSettings);

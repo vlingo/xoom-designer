@@ -1,22 +1,26 @@
 <script>
   import { formatArrayForSelect, uuid } from '../../utils';
-	import { settings, simpleTypes } from '../../stores';
+	import { settings, simpleTypes, valueObjectNameChanges } from '../../stores';
   import Sortable from '../Sortable.svelte';
   import StateField from './StateField.svelte';
   import { tick } from "svelte";
   import FieldsetBox from "./FieldsetBox.svelte";
 
   export let stateFields;
-
-  $: stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)]);
+  let stateFieldsTypes;
+  
+  $: {
+    stateFieldsTypes =  formatArrayForSelect([...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)]);
+  }
   $: if (stateFieldsTypes) {
     stateFields = stateFields.map(f => {
       return {
         ...f,
-        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : '',
+        type: [...simpleTypes, ...$settings.model.valueObjectSettings.map(type => type.name)].includes(f.type) ? f.type : valueObjectNameChanges.currentNameOf(f.type),
         collectionType: f.collectionType === null || typeof f.collectionType === "string" ? f.collectionType : null
       }
     })
+    valueObjectNameChanges.finishWith($settings);
   }
 
 	const addStateField = () => {
