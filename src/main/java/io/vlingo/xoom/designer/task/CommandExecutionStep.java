@@ -29,8 +29,7 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
     try {
       commandExecutionProcess.handle(formatCommands(context));
     } catch (final CommandExecutionException exception) {
-      final CommandExecutionException resolvedException = resolveCommandExecutionException(exception);
-      throw resolvedException;
+      throw resolveCommandExecutionException(exception);
     }
   }
 

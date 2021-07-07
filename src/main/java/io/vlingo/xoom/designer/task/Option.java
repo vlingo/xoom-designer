@@ -26,15 +26,15 @@ public class Option {
         this.required = required;
     }
 
-    public static final Option of(final OptionName name) {
+    public static Option of(final OptionName name) {
         return new Option(name, "", false);
     }
 
-    public static final Option of(final OptionName name, final String defaultValue) {
+    public static Option of(final OptionName name, final String defaultValue) {
         return new Option(name, defaultValue, false);
     }
 
-    public static final Option required(final OptionName name) {
+    public static Option required(final OptionName name) {
         return new Option(name, null, true);
     }
 

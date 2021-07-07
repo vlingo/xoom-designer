@@ -23,13 +23,13 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
 
     //complete: PACKAGE_PATTERN, ARTIFACT_PATTERN, VERSION_PATTERN, IDENTIFIER_PATTERN
     //some of the others are maybe not complete
-    private static String PACKAGE_PATTERN = "^[a-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
-    private static String ARTIFACT_PATTERN = "^[a-z-]+$";
-    private static String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
-    private static String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
-    private static String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-    private static String ROUTE_PATTERN = "^[a-zA-Z_$/?%-]+$";
-    private static String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
+    private static final String PACKAGE_PATTERN = "^[a-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
+    private static final String ARTIFACT_PATTERN = "^[a-z-]+$";
+    private static final String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
+    private static final String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
+    private static final String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
+    private static final String ROUTE_PATTERN = "^[a-zA-Z_$/?%-]+$";
+    private static final String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
     private static CodeGenerationParameters parameters;
 
     @Override

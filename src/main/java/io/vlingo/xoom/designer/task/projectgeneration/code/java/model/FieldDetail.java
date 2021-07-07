@@ -19,7 +19,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.COLLECTION_MU
 
 public class FieldDetail {
 
-  private static String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
+  private static final String UNKNOWN_FIELD_MESSAGE = "%s is not a field in %s state";
 
   public static String typeOf(final CodeGenerationParameter parent, final String fieldName, final CollectionMutation collectionMutation) {
     final String type = typeOf(parent, fieldName);

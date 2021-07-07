@@ -69,7 +69,7 @@ public class Formatters {
     }
 
     @SuppressWarnings("serial")
-    private static Map<Style, Function<Dialect, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
+    private static final Map<Style, Function<Dialect, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
             new HashMap<Style, Function<Dialect, Variables<?>>>() {{
               put(Variables.Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer(DATA_OBJECT_NAME_SUFFIX.toLowerCase()));
               put(Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, lang -> new ValueObjectInitializer("this"));
