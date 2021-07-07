@@ -2,4 +2,5 @@ event AuthorRated {
   version semanticVersion
   string id
   data.Rank:1.0.0 rank
+  timestamp createdOn
 }

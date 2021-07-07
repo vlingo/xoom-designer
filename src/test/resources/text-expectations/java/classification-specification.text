@@ -2,4 +2,5 @@ data Classification {
   version semanticVersion
   String[] labels
   data.Classifier:1.0.0[] classifiers
+  timestamp classifiedOn
 }

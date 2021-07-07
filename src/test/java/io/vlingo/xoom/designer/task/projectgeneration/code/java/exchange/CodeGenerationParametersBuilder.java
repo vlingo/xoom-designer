@@ -31,6 +31,10 @@ public class CodeGenerationParametersBuilder {
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
                         .relate(Label.FIELD_TYPE, "Rank");
 
+        final CodeGenerationParameter createdOn =
+                CodeGenerationParameter.of(Label.STATE_FIELD, "createdOn")
+                        .relate(Label.FIELD_TYPE, "LocalDateTime");
+
         final CodeGenerationParameter factoryMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
                         .relate(Label.METHOD_PARAMETER, "name")
@@ -66,7 +70,7 @@ public class CodeGenerationParametersBuilder {
 
         final CodeGenerationParameter authorRatedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRated")
-                        .relate(idField).relate(rankField);
+                        .relate(idField).relate(rankField).relate(createdOn);
 
         final CodeGenerationParameter authorBlockedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorBlocked")
@@ -76,8 +80,8 @@ public class CodeGenerationParametersBuilder {
                 CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                         .relate(otherAppExchange).relate(authorExchange)
                         .relate(idField).relate(nameField).relate(rankField)
-                        .relate(factoryMethod).relate(rankMethod).relate(blockMethod)
-                        .relate(authorRatedEvent).relate(authorBlockedEvent);
+                        .relate(createdOn).relate(factoryMethod).relate(rankMethod)
+                        .relate(blockMethod).relate(authorRatedEvent).relate(authorBlockedEvent);
 
         final CodeGenerationParameter titleField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "name")
@@ -132,7 +136,9 @@ public class CodeGenerationParametersBuilder {
                                 .relate(Label.COLLECTION_TYPE, "Set"))
                         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
                                 .relate(Label.FIELD_TYPE, "Classifier")
-                                .relate(Label.COLLECTION_TYPE, "List"));
+                                .relate(Label.COLLECTION_TYPE, "List"))
+                        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiedOn")
+                                .relate(Label.FIELD_TYPE, "LocalDate"));
 
         final CodeGenerationParameter classifierValueObject =
                 CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
