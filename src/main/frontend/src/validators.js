@@ -72,10 +72,19 @@ export const frameworkRule = (v) => frameworks.includes(v) ? undefined : 'framew
 export const methodParametersValidityWithSelectedEventRule = (event, events, parameters) => {
 	const e = events.find(e => e.name === event);
 	if (e) {
-		const check = parameters.every(p => {
-			return e.fields.findIndex(f => f === p.stateField) > -1;
+		const check = e.fields.every(f => {
+			return f === "id" || parameters.findIndex(p => f === p.stateField) > -1;
 		})
 		return check ? undefined : 'do not match the event fields';
 	}
 	return undefined;
+};
+export const eventAlreadyInUseRule = (method, methods) => {
+	if(!method.event) {
+		return undefined;
+	}
+	const check = methods.some(m => {
+		return method.name != m.name && m.event === method.event;
+	});
+	return !check ? undefined : 'is already in use by other method';
 };

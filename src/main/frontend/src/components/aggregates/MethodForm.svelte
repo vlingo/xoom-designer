@@ -1,6 +1,6 @@
 <script>
   import { Switch } from "svelte-materialify/src";
-	import { identifierRule, requireRule, isPropertyUniqueRule, methodParametersValidityWithSelectedEventRule } from "../../validators";
+	import { identifierRule, requireRule, isPropertyUniqueRule, methodParametersValidityWithSelectedEventRule, eventAlreadyInUseRule } from "../../validators";
   import ErrorWarningTooltip from "./ErrorWarningTooltip.svelte";
 
   import List, { Item, Label } from '@smui/list';
@@ -79,7 +79,7 @@
     }
   }
 
-  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters)];
+  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters), eventAlreadyInUseRule(method, methods)];
   $: isAnyCollectionParameterSelected = method.parameters.some(p => p.multiplicity);
   $: selectedParameters = method.parameters && method.parameters.length > 0 ? isAnyCollectionParameterSelected ? `${method.parameters[0].parameterName} ${method.parameters[0].multiplicity}` : method.parameters.map(p => p.parameterName).join(', ') : '(none)';
 </script>
@@ -236,6 +236,6 @@
   <ErrorWarningTooltip
     type={validation && validation.filter(v => v).length > 0 ? 'error' : 'warning'}
     messages={validation && validation.filter(v => v).length > 0 ? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected']}
-    names={validation && validation.filter(v => v).length > 0 ? ['Name', 'Name', 'Name', 'Parameters'] : ['No paramaters', 'No event']}
+    names={validation && validation.filter(v => v).length > 0 ? ['Name', 'Name', 'Name', 'Parameters', 'Event'] : ['No paramaters', 'No event']}
   />
 </div>

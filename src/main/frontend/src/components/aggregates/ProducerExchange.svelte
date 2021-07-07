@@ -55,7 +55,7 @@
       <ProducerSchemata
         {disableSchemaGroup}
         bind:schemaGroup
-        invalid={schemaGroupRule(schemaGroup) || (producerExchangeName && outgoingEvents.length == 0)}
+        invalid={schemaGroupRule(schemaGroup) && producerExchangeName || (producerExchangeName && outgoingEvents.length == 0)}
         helperText={schemaGroupRule(schemaGroup)}
       />
     </div>
