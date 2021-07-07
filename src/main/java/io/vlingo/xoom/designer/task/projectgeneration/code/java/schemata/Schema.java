@@ -12,6 +12,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 
+import java.util.function.Function;
+
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.DEFAULT_SCHEMA_VERSION;
 
 public class Schema {
@@ -48,6 +50,8 @@ public class Schema {
 
   static String resolveFieldDeclaration(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+    final Function<String, String> schemaFieldTypeConverter =
+            type -> FieldDetail.isDateTime(type) ? "timestamp" : fieldType;
 
     if (FieldDetail.isAssignableToValueObject(field)) {
       return String.format("data.%s:%s %s", fieldType, DEFAULT_SCHEMA_VERSION, field.value);
@@ -58,10 +62,11 @@ public class Schema {
       if (FieldDetail.isScalar(genericType)) {
         return String.format("%s[] %s", genericType, field.value);
       } else {
-        return String.format("data.%s:%s[] %s", genericType, DEFAULT_SCHEMA_VERSION, field.value);
+        return String.format("data.%s:%s[] %s", schemaFieldTypeConverter.apply(genericType), DEFAULT_SCHEMA_VERSION, field.value);
       }
-    } else if(FieldDetail.isDateTime(fieldType))
-      return "timestamp " + field.value;
-    return fieldType.toLowerCase() + " " + field.value;
+    }
+
+    return schemaFieldTypeConverter.apply(fieldType).toLowerCase() + " " + field.value;
   }
+
 }
