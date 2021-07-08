@@ -56,11 +56,12 @@ public class ProjectGenerationManager {
       }
       generationPath.mkdirs();
     } catch (final Exception e) {
+      e.printStackTrace();
       throw new GenerationPathCreationException();
     }
   }
 
-  protected void processSteps(final TaskExecutionContext context, final ProjectGenerationInformation information) {
+  private void processSteps(final TaskExecutionContext context, final ProjectGenerationInformation information) {
     try {
       Configuration.PROJECT_GENERATION_STEPS.stream()
               .filter(step -> step.shouldProcess(context))
