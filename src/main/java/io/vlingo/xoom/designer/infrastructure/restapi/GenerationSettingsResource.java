@@ -38,7 +38,7 @@ public class GenerationSettingsResource extends DynamicResourceHandler {
 
   public GenerationSettingsResource(final Stage stage) {
     super(stage);
-    this.projectGenerationManager = new WebBasedProjectGenerationManager();
+    this.projectGenerationManager = new ProjectGenerationManager();
     this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
     this.generationInformation = ProjectGenerationInformation.from(generationTarget);
   }

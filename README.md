@@ -198,50 +198,6 @@ The fifth and final step defines project component types, and generates the proj
 Enter the project parent folder. In addition, select whether VLINGO XOOM annotations and auto-dispatch are preferred, or not. Click Finish to generate the defined service project.
 
 Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO XOOM acceleration components. Use the VLINGO XOOM platform SDK omprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
-     
-### CLI
-
-Alternatively, you can also generate applications directly from the terminal through `xoom gen` command. In this case, the project settings have to be informed in a <a href="https://github.com/vlingo/xoom-designer/blob/master/dist/designer/xoom-designer.properties">properties file</a> under the <code>xoom-designer</code> folder. 
-See a commented properties file sample below:    
-
-<pre>
-<code>
-    <strong>#Maven artifact version</strong>
-    version=1.0
-    <strong>#Maven project group id</strong>
-    group.id=com.company
-    <strong>#Maven artifact version</strong>
-    artifact.id=xoom-application
-    <strong>#Base package name</strong>
-    package=com.company.business
-    <strong>#Absolute path for the project parent folder</strong>
-    target.folder=/home/projects
-    <strong>#vlingo xoom version</strong>
-    vlingo.xoom.server.version=1.3.0
-    <strong>#Deployment Type (NONE, DOCKER, KUBERNETES)</strong>
-    deployment=DOCKER
-    <strong>#Docker Image name, required if deployment type is KUBERNETES or DOCKER</strong>
-    docker.image=xoom-app
-    <strong>#Published Docker Image, required if deployment type is KUBERNETES</strong>
-    k8s.image=xoom-application
-    <strong>#Kubernetes POD name, required if deployment type is KUBERNETES</strong>
-    k8s.pod.name=xoom-application
-    <strong>#Storage Type (STATE_STORE or JOURNAL)</strong>
-    storage.type=STATE_STORE
-    <strong>#CQRS (true or false)</strong>
-    cqrs=true
-    <strong>#Projections Type (NONE, EVENT_BASED or OPERATION_BASED)</strong>
-    projections=EVENT_BASED
-    <strong>#Domain Model Database, required if CQRS is false (IN_MEMORY, POSTGRES, HSQLDB, MYSQL, YUGA_BYTE)</strong>
-    database=HSQLDB
-    <strong>#Command Model Database, required if CQRS is true or Storage Type is Journal (see database types above)</strong>
-    command.model.database=MYSQL
-    <strong>#Query Model Database, required if CQRS is true or Storage Type is Journal (see database types above)</strong>
-    query.model.database=YUGA_BYTE
-</code>
-</pre>
-
-Executing `xoom gen` causes the application generation based on the settings above, which are the same available on user interface.  
 
 ### Docker Commands
 
