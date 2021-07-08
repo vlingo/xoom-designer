@@ -1,9 +1,15 @@
 package io.vlingo.xoomapp.infrastructure.resource;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import io.restassured.RestAssured;
+import io.restassured.config.ObjectMapperConfig;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.mapper.ObjectMapperType;
 import io.restassured.parsing.Parser;
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.turbo.ComponentRegistry;
@@ -11,6 +17,10 @@ import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,6 +61,13 @@ public class AbstractRestTest {
 
   public RequestSpecification given() {
     return io.restassured.RestAssured.given()
+    .config(RestAssured.config.objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.GSON).gsonObjectMapperFactory((type, s) ->
+      new GsonBuilder()
+        .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (source, typeOfTarget, context) -> new JsonPrimitive(source.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+        .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfTarget, context) -> LocalDate.parse(json.getAsJsonPrimitive().getAsString()))
+        .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (source, typeOfTarget, context) -> new JsonPrimitive(source.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+        .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfTarget, context) -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()))
+        .create())))
     .filter(new RequestLoggingFilter())
     .filter(new ResponseLoggingFilter())
     .port(port)
