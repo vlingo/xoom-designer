@@ -18,9 +18,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneOffset;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,10 +66,10 @@ public class AbstractRestTest {
     return io.restassured.RestAssured.given()
     .config(RestAssured.config.objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.GSON).gsonObjectMapperFactory((type, s) ->
       new GsonBuilder()
-        .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (source, typeOfTarget, context) -> new JsonPrimitive(source.format(DateTimeFormatter.ISO_LOCAL_DATE)))
-        .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfTarget, context) -> LocalDate.parse(json.getAsJsonPrimitive().getAsString()))
-        .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (source, typeOfTarget, context) -> new JsonPrimitive(source.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-        .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfTarget, context) -> LocalDateTime.parse(json.getAsJsonPrimitive().getAsString()))
+        .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (source, typeOfTarget, context) -> new JsonPrimitive(source.toEpochDay()))
+        .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfTarget, context) -> LocalDate.ofEpochDay(Long.parseLong(json.getAsJsonPrimitive().getAsString())))
+        .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (source, typeOfTarget, context) -> new JsonPrimitive(source.atZone(ZoneOffset.UTC).toInstant().toEpochMilli()))
+        .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfTarget, context) -> LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(json.getAsJsonPrimitive().getAsString())), ZoneOffset.UTC))
         .create())))
     .filter(new RequestLoggingFilter())
     .filter(new ResponseLoggingFilter())
