@@ -15,6 +15,13 @@ import axios from "axios";
     </#if>
 </#macro>
 
+<#macro formatFormElement name type>
+  <#if valueTypes[type]??>
+    if(Array.isArray(form.${name}))
+      form.${name} = [Object.assign({}, form.${name})]
+  </#if>
+</#macro>
+
 const applyData = (uri, data) => {
   return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
 }
@@ -24,6 +31,10 @@ const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} =
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
+<#list method.parameters as p>
+<@formatFormElement p fieldTypes[p]/>
+</#list>
+
     const url = applyData('${route.path}', form);
     axios.${route.httpMethod?lower_case}(url, form)
     .then(res => res.data)
