@@ -14,9 +14,12 @@ public class Field {
 
   public final String name;
   public final String type;
+  public final boolean isCollection;
 
   public Field(final CodeGenerationParameter fieldParameter) {
     this.name = fieldParameter.value;
+    final String collectionType = fieldParameter.retrieveRelatedValue(Label.COLLECTION_TYPE);
+    this.isCollection = collectionType != null && !collectionType.isEmpty();
     this.type = fieldParameter.retrieveRelatedValue(Label.FIELD_TYPE);
   }
 }

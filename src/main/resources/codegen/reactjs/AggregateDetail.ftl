@@ -8,13 +8,76 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
   </#if>
 </#list>
 <#macro printTableRow name type label>
-    <#if valueTypes[type]??>
-        <#list valueTypes[type] as subType>
-            <@printTableRow "${name}?.${subType.name}" subType.type "${name} ${subType.name}"/>
-        </#list>
+  <#if valueTypes[type]??>
+    <#list valueTypes[type] as subType>
+      <@printTableRow "${name}?.${subType.name}" subType.type "${name} ${subType.name}"/>
+    </#list>
+  <#else>
+    <#if type=="LocalDate">
+      {!Array.isArray(item?.${name?split("?.")[0]}) && <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{new Intl.DateTimeFormat('en-GB', {
+        month: 'long',
+        day: '2-digit',
+        year: 'numeric',
+        }).format(new Date(item?.${name}))}</td></tr>}
     <#else>
-            <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{item?.${name}}</td></tr>
+      {!Array.isArray(item?.${name?split("?.")[0]}) && <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{item?.${name}}</td></tr>}
     </#if>
+  </#if>
+</#macro>
+<#macro printItemsTable name type>
+  <#if valueTypes[type]??>
+  {Array.isArray(item?.${name}) && <table className={'table table-striped table-bordered'}>
+  <thead>
+  <tr>
+    <#list aggregate.stateFields as field>
+      <#if valueTypes[field.type]??>
+      <@printTableHeaderCell "${field.name}" "${field.type}" />
+      </#if>
+    </#list>
+  </tr>
+  </thead>
+  <tbody>
+  {item?.${name}.map(item => (
+  <tr>
+    <#list aggregate.stateFields as field>
+      <#if valueTypes[field.type]??>
+        <@printItemTableCell "${field.name}" "${field.type}" />
+      </#if>
+    </#list>
+  </tr>
+  ))}
+  </tbody>
+  </table>
+    }
+  </#if>
+
+</#macro>
+<#macro printTableHeaderCell name type>
+  <#if valueTypes[type]??>
+    <#list valueTypes[type] as subType>
+      <@printTableHeaderCell "${name} ${subType.name}" subType.type/>
+    </#list>
+  <#else>
+    <th>${fns.capitalizeMultiWord(name)}</th>
+  </#if>
+</#macro>
+<#macro printTableCell name type>
+  <#if valueTypes[type]??>
+    <#list valueTypes[type] as subType>
+      <@printTableCell "${name}?.${subType.name}" subType.type/>
+    </#list>
+  <#else>
+    <td>{item?.${name}}</td>
+  </#if>
+</#macro>
+<#macro printItemTableCell name type>
+  <#if valueTypes[type]??>
+    <#list valueTypes[type] as subType>
+      <@printItemTableCell "${subType.name}" subType.type/>
+    </#list>
+  <#else>
+    <td>{item?.${name}}</td>
+  </#if>
 </#macro>
 
 const ${fns.capitalize(aggregate.aggregateName)} = () => {
@@ -94,6 +157,12 @@ const ${fns.capitalize(aggregate.aggregateName)} = () => {
           </#list>
           </tbody>
         </table>
+        <#list aggregate.stateFields as field>
+          <#if field.isCollection>
+            <@printItemsTable "${field.name}" "${field.type}"/>
+          </#if>
+        </#list>
+
       </div>
     </>
     :
