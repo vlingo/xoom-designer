@@ -12,6 +12,9 @@ const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
+    if(Array.isArray(form.rank))
+      form.rank = [Object.assign({}, form.rank)]
+
     const url = applyData('/authors/{id}/rank', form);
     axios.patch(url, form)
     .then(res => res.data)

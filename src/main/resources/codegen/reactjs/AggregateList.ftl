@@ -19,7 +19,15 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.fact
             <@printTableCell "${name}?.${subType.name}" subType.type/>
         </#list>
     <#else>
+      <#if type=="LocalDate">
+          <td>{new Intl.DateTimeFormat('en-GB', {
+            month: 'long',
+            day: '2-digit',
+            year: 'numeric',
+            }).format(new Date(item?.${name}))}</td>
+      <#else>
           <td>{item?.${name}}</td>
+      </#if>
     </#if>
 </#macro>
 <#macro printJSON fields level=0>
