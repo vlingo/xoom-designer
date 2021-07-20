@@ -67,13 +67,13 @@ public class ProjectGenerationManager {
               .filter(step -> step.shouldProcess(context))
               .forEach(step -> step.process(context));
 
-      context.addOutput(PROJECT_GENERATION_REPORT, onSuccess(context, information));
+      context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationSucceed(context, information));
     } catch (final SchemaPullException exception) {
       exception.printStackTrace();
       context.addOutput(PROJECT_GENERATION_REPORT, onSchemaPullFail(information));
     } catch (final Exception exception) {
       exception.printStackTrace();
-      context.addOutput(PROJECT_GENERATION_REPORT, onFail(context, information, exception));
+      context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationFail(context, information, exception));
     }
   }
 

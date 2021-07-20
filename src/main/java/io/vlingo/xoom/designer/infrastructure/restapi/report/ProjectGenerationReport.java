@@ -29,15 +29,15 @@ public class ProjectGenerationReport {
   public final String details;
   public final String compressedProject; //Base 64
 
-  public static ProjectGenerationReport onSuccess(final TaskExecutionContext context,
-                                                  final ProjectGenerationInformation information) {
+  public static ProjectGenerationReport onCodeGenerationSucceed(final TaskExecutionContext context,
+                                                                final ProjectGenerationInformation information) {
     final String compressedProject = context.retrieveOutput(COMPRESSED_PROJECT);
     return new ProjectGenerationReport(information.generationTarget, compressedProject);
   }
 
-  public static ProjectGenerationReport onFail(final TaskExecutionContext context,
-                                               final ProjectGenerationInformation information,
-                                               final Exception exception) {
+  public static ProjectGenerationReport onCodeGenerationFail(final TaskExecutionContext context,
+                                                             final ProjectGenerationInformation information,
+                                                             final Exception exception) {
     final GenerationTarget target = information.generationTarget;
 
     final String designerModel =
