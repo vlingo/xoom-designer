@@ -110,11 +110,11 @@ jobs:
         id: version
         run: |
           DOCKER_IMAGE=vlingo/xoom-designer
-          VERSION=latest
+          VERSION=snapshot
           TAGS="${DOCKER_IMAGE}:${VERSION}"
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${VERSION}"
+            TAGS="${DOCKER_IMAGE}:snapshot,${DOCKER_IMAGE}:latest,${DOCKER_IMAGE}:${VERSION}"
           fi
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=tags::${TAGS}
