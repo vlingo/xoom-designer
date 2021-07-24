@@ -15,4 +15,16 @@ services:
     ports:
       - 9019:9019
     environment:
-      XOOM_ENV: "dev"
+      XOOM_SCHEMATA_PORT: 9019
+      XOOM_ENV: "env"
+      XOOM_SCHEMATA_DB_URL: "jdbc:postgresql://postgres/"
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: xoom_schemata
+      POSTGRES_USER: xoom_test
+      POSTGRES_PASSWORD: vlingo123
