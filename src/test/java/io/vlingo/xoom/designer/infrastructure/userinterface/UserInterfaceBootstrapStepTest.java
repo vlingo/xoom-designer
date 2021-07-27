@@ -52,7 +52,7 @@ public class UserInterfaceBootstrapStepTest {
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
     Assertions.assertFalse(TaskExecutor.shouldExit());
     Assertions.assertFalse(commandRetainer.retainedCommandsSequence().isEmpty());
-    Assertions.assertTrue(commandRetainer.retainedCommandsSequence().get(0)[2].endsWith("./mvnw.cmd -f ./kubernetes-archetype/pom.xml clean install"));
+    Assertions.assertTrue(commandRetainer.retainedCommandsSequence().get(0)[2].endsWith("./mvnw -f ./kubernetes-archetype/pom.xml clean install"));
   }
 
   @BeforeEach
