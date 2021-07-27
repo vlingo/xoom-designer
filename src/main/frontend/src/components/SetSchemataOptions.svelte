@@ -13,9 +13,9 @@
   let port = $settings.schemata.port;
 
   function save() {
+    host = host.trim();
     $settings.schemata = {
-      host,
-      port
+      host, port
     }
   }
 
