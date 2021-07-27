@@ -48,7 +48,7 @@ public class GenerationSettingsFile {
   }
 
   private String format(final String generationSettings) {
-    final JsonElement parsed = new JsonParser().parse(generationSettings);
+    final JsonElement parsed = JsonParser.parseString(generationSettings);
     return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
   }
 

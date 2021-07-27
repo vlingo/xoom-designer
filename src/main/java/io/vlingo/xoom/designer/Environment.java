@@ -18,4 +18,8 @@ public enum Environment {
   public boolean isLocal() {
     return equals(LOCAL);
   }
+
+  public boolean requiresEarlyDependencyInstallation() {
+    return equals(CONTAINER) || equals(CLOUD);
+  }
 }

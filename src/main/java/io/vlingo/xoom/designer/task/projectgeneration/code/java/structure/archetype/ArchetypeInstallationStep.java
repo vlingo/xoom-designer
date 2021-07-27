@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -27,6 +28,7 @@ public class ArchetypeInstallationStep extends CommandExecutionStep {
                                    final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
     this.archetype = archetype;
+    ComponentRegistry.register(ArchetypeInstallationStep.class, this);
   }
 
   @Override

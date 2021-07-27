@@ -58,11 +58,12 @@ public class Configuration {
   private static final String XOOM_VERSION_PLACEHOLDER = "1.8.3-SNAPSHOT";
   public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
-  private static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
+  public static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
+    ComponentRegistry.register(ArchetypeInstallationStep.class, new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)));
   }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
@@ -72,7 +73,7 @@ public class Configuration {
           new MainClassResolverStep(),
           new ArchetypeFolderCleanUpStep(),
           new TemporaryTaskFolderCreationStep(),
-          new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
+          withType(ArchetypeInstallationStep.class),
           new ArchetypeGenerationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
           new ProjectInstallationStep(),
           new MavenWrapperInstallationStep(),
@@ -134,6 +135,10 @@ public class Configuration {
   }
 
   public static Environment resolveEnvironment() {
+    final String registeredEnv = ComponentRegistry.withName(ENVIRONMENT_TYPE_VARIABLE);
+    if(registeredEnv != null) {
+      return Environment.valueOf(registeredEnv);
+    }
     final String environment = System.getenv(ENVIRONMENT_TYPE_VARIABLE);
     return environment == null ? Environment.LOCAL : Environment.valueOf(environment);
   }
