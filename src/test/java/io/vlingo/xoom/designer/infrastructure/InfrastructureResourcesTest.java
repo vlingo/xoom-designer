@@ -1,9 +1,9 @@
 package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerServer;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.UserInterface;
 import io.vlingo.xoom.designer.task.projectgeneration.InvalidResourcesPathException;
 import org.junit.jupiter.api.AfterAll;
@@ -22,7 +22,7 @@ public class InfrastructureResourcesTest {
     public void testInfraResourcesAreResolved() {
         Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
         Infrastructure.resolveExternalResources(ExternalDirectory.from(BASE_PATH));
-        Assertions.assertEquals(Paths.get(ROOT_FOLDER, "resources", "archetypes"), ArchetypesFolder.path());
+        Assertions.assertEquals(Paths.get(ROOT_FOLDER, "staging"), StagingFolder.path());
         Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
         Assertions.assertEquals("http://localhost:19090", DesignerServer.url().toString());
         // "xoom-designer": This will not work until a resource for it is created.

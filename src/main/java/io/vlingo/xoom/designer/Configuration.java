@@ -8,14 +8,16 @@ import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommand
 import io.vlingo.xoom.designer.infrastructure.userinterface.GenerationTargetRegistrationStep;
 import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationParametersLoadStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject.DataObjectGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.deploymentsettings.DockerfileGenerationStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.deploymentsettings.KubernetesManifestFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ModelGenerationStep;
@@ -27,11 +29,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaP
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.*;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeFolderCleanUpStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeGenerationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeInstallationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.MavenWrapperInstallationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.turbosettings.TurboSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections.ProjectionUnitTestGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.queries.QueriesUnitTestGenerationStep;
@@ -63,30 +60,26 @@ public class Configuration {
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
-    ComponentRegistry.register(ArchetypeInstallationStep.class, new ArchetypeInstallationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)));
   }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
-          new ResourcesLocationStep(),
-          new CodeGenerationParametersLoadStep(),
-          new CodeGenerationParameterValidationStep(),
-          new MainClassResolverStep(),
-          new ArchetypeFolderCleanUpStep(),
-          new TemporaryTaskFolderCreationStep(),
-          withType(ArchetypeInstallationStep.class),
-          new ArchetypeGenerationStep(Archetype.findDefault(), withType(CommandExecutionProcess.class)),
-          new ProjectInstallationStep(),
-          new MavenWrapperInstallationStep(),
-          new CodeGenerationExecutionerStep(),
-          new SchemaPullStep(withType(CommandExecutionProcess.class)),
-          new ContentPurgerStep(),
-          new ProjectCompressionStep(),
-          new ArchetypeFolderCleanUpStep()
+      new ResourcesLocationStep(),
+      new CodeGenerationParametersLoadStep(),
+      new CodeGenerationParameterValidationStep(),
+      new MainClassResolverStep(),
+      new StagingFolderCleanUpStep(),
+      new TemporaryTaskFolderCreationStep(),
+      new CodeGenerationExecutionerStep(),
+      new MavenWrapperInstallationStep(),
+      new SchemaPullStep(withType(CommandExecutionProcess.class)),
+      new ProjectCompressionStep(),
+      new StagingFolderCleanUpStep()
   );
 
   public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
       //Java
       new ReadmeFileGenerationStep(),
+      new ApplicationSettingsGenerationStep(),
       new ValueObjectGenerationStep(),
       new ModelGenerationStep(),
       new DataObjectGenerationStep(),
@@ -102,9 +95,10 @@ public class Configuration {
       new ProjectionUnitTestGenerationStep(),
       new RestResourceAbstractUnitTestGenerationStep(),
       new RestResourceUnitTestGenerationStep(),
-      new TurboSettingsGenerationStep(),
       new ClusterSettingsGenerationStep(),
       new DesignerModelGenerationStep(),
+      new DockerfileGenerationStep(),
+      new KubernetesManifestFileGenerationStep(),
       //React
       new StaticFilesGenerationStep(),
       new LayoutGenerationStep(),

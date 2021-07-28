@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.infrastructure.restapi.data;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -40,14 +41,15 @@ public class TaskExecutionContextMapperTest {
   }
 
   private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
+    final DeploymentSettings deploymentSettings = codeGenerationParameters.retrieveObject(DEPLOYMENT_SETTINGS);
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
-    Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(VERSION));
+    Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(ARTIFACT_VERSION));
     Assertions.assertEquals("1.8.3-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
-    Assertions.assertEquals("xoom-app", codeGenerationParameters.retrieveValue(DOCKER_IMAGE));
-    Assertions.assertEquals("DOCKER", codeGenerationParameters.retrieveValue(DEPLOYMENT));
-    Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_IMAGE));
-    Assertions.assertEquals("", codeGenerationParameters.retrieveValue(KUBERNETES_POD_NAME));
+    Assertions.assertEquals("xoom-app", deploymentSettings.dockerImage);
+    Assertions.assertEquals("DOCKER", deploymentSettings.type.name());
+    Assertions.assertEquals("", deploymentSettings.kubernetesImage);
+    Assertions.assertEquals("", deploymentSettings.kubernetesPod);
     Assertions.assertNotNull(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON));
     Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\n" +
             "  \"context\": {\n" +

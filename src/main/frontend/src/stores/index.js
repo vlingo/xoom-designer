@@ -18,7 +18,7 @@ export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
 export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime'];
-export const settings = createWritable('settings', defaultSettings, onSettingsChange);
+export const settings = createWritableSettings('settings', defaultSettings, onSettingsChange);
 export const schemataData = createLocalStore('schemataData', {
 	organizationsStore: [],
 	unitsStore: [],
@@ -73,7 +73,13 @@ export const valueObjectNameChanges = {
 	}
 };
 
-export function updateSettings(newSettings) {
+export function importSettings(importedSettings) {
+	let updatedSettigns = updateSettings(importedSettings);
+	settings.set(updatedSettigns);
+}
+
+function updateSettings(newSettings) {
+	newSettings = newSettings ? newSettings : defaultSettings;
 	let emptySettings = {context: {}, model: {persistenceSettings: {}}, schemata: {}, deployment: {}};
 	updateContext(emptySettings, newSettings);
 	updateAggregates(emptySettings, newSettings);
@@ -81,7 +87,7 @@ export function updateSettings(newSettings) {
 	updateDeployment(emptySettings, newSettings);
 	updateSchemata(emptySettings, newSettings);
 	updateGeneration(emptySettings, newSettings);
-	settings.set(emptySettings);
+	return emptySettings;
 }
 
 function updateContext(currentSettings, updatedSettings) {
@@ -145,7 +151,7 @@ export function isSettingsEdited() {
 }
 
 export async function clearSettings() {
-	updateSettings(defaultSettings);
+	importSettings(defaultSettings);
 	setLocalStorage("settingsEditionStatus", EDITION_STATUS.NEW);
 }
 
@@ -165,9 +171,10 @@ export function setLocalStorage(key, value) {
 	}
 }
 
-function createWritable(key, value, subscriber) {
-	const newWritable = writable(resolveLocalStorage(key, value));
-	newWritable.subscribe(subscriber);
+function createWritableSettings() { 
+	const updatedSettings = updateSettings(resolveLocalStorage('settings', defaultSettings));
+	const newWritable = writable(updatedSettings);
+	newWritable.subscribe(onSettingsChange);
 	return newWritable;
 }
 

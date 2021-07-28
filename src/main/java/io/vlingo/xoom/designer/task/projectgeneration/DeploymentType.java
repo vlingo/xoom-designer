@@ -8,15 +8,19 @@
 package io.vlingo.xoom.designer.task.projectgeneration;
 
 public enum DeploymentType {
-    NONE,
-    DOCKER,
-    KUBERNETES;
+  NONE,
+  DOCKER,
+  KUBERNETES;
 
-    public boolean isDocker() {
-        return equals(DOCKER);
-    }
+  public static DeploymentType of(final String typeName) {
+    return DeploymentType.valueOf(typeName.trim().toUpperCase());
+  }
 
-    public boolean isKubernetes() {
-        return equals(KUBERNETES);
-    }
+  public boolean isDocker() {
+    return equals(DOCKER);
+  }
+
+  public boolean isKubernetes() {
+    return equals(KUBERNETES);
+  }
 }

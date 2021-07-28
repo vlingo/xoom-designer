@@ -109,6 +109,11 @@ public enum TemplateParameter implements ParameterKey {
   REST_RESOURCES("restResources"),
   TYPE_REGISTRIES("registries"),
   XOOM_INITIALIZER_CLASS("xoomInitializerClass"),
+  XOOM_VERSION("xoomVersion"),
+  GROUP_ID("groupId"),
+  ARTIFACT_ID("artifactId"),
+  APPLICATION_MAIN_CLASS("applicationMainClass"),
+  ARTIFACT_VERSION("artifactVersion"),
   STAGE_INSTANTIATION_VARIABLES("stageInstantiationVariables"),
   PROJECTION_DISPATCHER_PROVIDER_NAME("projectionDispatcherProviderName"),
   PROVIDERS("providers"),
@@ -133,6 +138,7 @@ public enum TemplateParameter implements ParameterKey {
   FIELD_DECLARATIONS("fieldsDeclarations"),
   DESIGNER_MODEL("projectGenerationSettings"),
   DESIGNER_MODEL_JSON("designerModelJson"),
+  POM_FILE("pomFile"),
   POM_SECTION("pomSection"),
   OFFSET("offset"),
   README_FILE("readmeFile"),
@@ -155,7 +161,11 @@ public enum TemplateParameter implements ParameterKey {
   TURBO_SETTINGS("turboSettings"),
   DATA_OBJECT_PARAMS("dataObjectParams"),
   UI_TYPE("uiType"),
-  SCHEMATA_SETTINGS("schemataSettings");
+  SCHEMATA_SETTINGS("schemataSettings"),
+  DEPLOYMENT_SETTINGS("deploymentSettings"),
+  KUBERNETES_POD_NAME("kubernetesPodName"),
+  KUBERNETES_IMAGE("kubernetesImage"),
+  DOCKERFILE("dockerfile");
 
   public final String key;
 

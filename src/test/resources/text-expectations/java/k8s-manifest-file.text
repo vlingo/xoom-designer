@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xoom-app-pod
+  labels:
+    name: xoom-app-pod-0.1.0
+    app.kubernetes.io/name: xoom-app-pod
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 18080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: xoom-app-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xoom-app-pod
+  labels:
+    name: xoom-app-pod-0.1.0
+    app.kubernetes.io/name: xoom-app-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: xoom-app-pod
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: xoom-app-pod
+    spec:
+      securityContext:
+        {}
+      containers:
+        - image: xoom-app-img
+          name: xoom-app-pod
+          ports:
+            - containerPort: 18080
+              name: http

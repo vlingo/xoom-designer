@@ -30,7 +30,7 @@ public class StaticFilesGenerationStep extends ReactJsTemplateProcessingStep {
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String groupId = context.parameterOf(Label.GROUP_ID);
     final String artifactId = context.parameterOf(Label.ARTIFACT_ID);
-    final String artifactVersion = context.parameterOf(Label.VERSION);
+    final String artifactVersion = context.parameterOf(Label.ARTIFACT_VERSION);
 
     return Arrays.asList(BasicTemplateData.of(GIT_IGNORE),
             BasicTemplateData.of(FORM_HANDLER, utilsPackage), BasicTemplateData.of(FORM_MODAL, componentsPackage), BasicTemplateData.of(INDEX, sourcePackage),

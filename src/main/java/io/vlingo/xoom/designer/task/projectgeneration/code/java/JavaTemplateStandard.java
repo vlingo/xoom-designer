@@ -44,11 +44,20 @@ public enum JavaTemplateStandard implements TemplateStandard {
 
   VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
 
+  ACTOR_SETTINGS(parameters -> Template.ACTOR_SETTINGS.filename,
+          (name, parameters) -> "xoom-actors.properties"),
+
   CLUSTER_SETTINGS(parameters -> Template.CLUSTER_SETTINGS.filename,
       (name, parameters) -> "xoom-cluster.properties"),
 
+  MAVEN_SETTINGS(parameters -> Template.MAVEN_SETTINGS.filename,
+      (name, parameters) -> "pom.xml"),
+
   TURBO_SETTINGS(parameters -> Template.TURBO_SETTINGS.filename,
       (name, parameters) -> "xoom-turbo.properties"),
+
+  LOGBACK_SETTINGS(parameters -> Template.LOGBACK_SETTINGS.filename,
+          (name, parameters) -> "logback.xml"),
 
   DESIGNER_MODEL(parameters -> Template.DESIGNER_MODEL.filename,
       (name, parameters) -> parameters.find(APPLICATION_NAME) + "-designer-model.json"),
@@ -211,7 +220,11 @@ public enum JavaTemplateStandard implements TemplateStandard {
     return Template.EVENT_BASED_MOCK_DISPATCHER.filename;
   }, (name, parameters) -> "MockDispatcher"),
 
-  README(parameters -> Template.README.filename, (name, parameters) -> "README.md");
+  KUBERNETES_MANIFEST_FILE(parameters -> Template.KUBERNETES_MANIFEST_FILE.filename,
+          (name, parameters) -> parameters.find(TemplateParameter.KUBERNETES_POD_NAME) + ".yaml"),
+
+  README(parameters -> Template.README.filename, (name, parameters) -> "README.md"),
+  DOCKERFILE(parameters -> Template.DOCKERFILE.filename, (name, parameters) -> "Dockerfile");
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

@@ -29,7 +29,7 @@ public class MainClassResolverStep implements TaskExecutionStep {
         final String mainClass =
                 String.format(QUALIFIED_PATTERN, basePackage, resolveClassName(useAnnotations));
 
-        context.codeGenerationParameters().add(MAIN_CLASS, mainClass);
+        context.codeGenerationParameters().add(APPLICATION_MAIN_CLASS, mainClass);
     }
 
     private String resolveClassName(final Boolean useAnnotations) {

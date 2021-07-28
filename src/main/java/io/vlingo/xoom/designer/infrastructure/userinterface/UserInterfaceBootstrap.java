@@ -12,14 +12,11 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerServer;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiter;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiterFilter;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestPreservationFilter;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.archetype.ArchetypeInstallationStep;
 import io.vlingo.xoom.http.Filters;
 import io.vlingo.xoom.http.RequestFilter;
 import io.vlingo.xoom.http.resource.Configuration;
 import io.vlingo.xoom.http.resource.StaticFilesConfiguration;
 import io.vlingo.xoom.lattice.grid.Grid;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.XoomInitializationAware;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.turbo.annotation.initializer.ResourceHandlers;
@@ -43,9 +40,6 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
 
   @Override
   public void onInit(final Grid grid) {
-    if (environment.requiresEarlyDependencyInstallation()) {
-      ComponentRegistry.withType(ArchetypeInstallationStep.class).process(TaskExecutionContext.empty());
-    }
     if (environment.isCloud()) {
       Settings.clear();
     }

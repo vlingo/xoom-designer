@@ -7,16 +7,16 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.task.Property;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
 
@@ -53,12 +53,9 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
             {
                 put(Property.GROUP_ID, Label.GROUP_ID);
                 put(Property.ARTIFACT_ID, Label.ARTIFACT_ID);
-                put(Property.VERSION, Label.VERSION);
+                put(Property.VERSION, Label.ARTIFACT_VERSION);
                 put(Property.PACKAGE, Label.PACKAGE);
                 put(Property.XOOM_VERSION, Label.XOOM_VERSION);
-                put(Property.DOCKER_IMAGE, Label.DOCKER_IMAGE);
-                put(Property.KUBERNETES_IMAGE, Label.KUBERNETES_IMAGE);
-                put(Property.KUBERNETES_POD_NAME, Label.KUBERNETES_POD_NAME);
                 put(Property.TARGET_FOLDER, Label.TARGET_FOLDER);
                 put(Property.STORAGE_TYPE, Label.STORAGE_TYPE);
                 put(Property.CQRS, Label.CQRS);
@@ -66,7 +63,7 @@ public class CodeGenerationParametersLoadStep implements TaskExecutionStep {
                 put(Property.AUTO_DISPATCH, Label.USE_AUTO_DISPATCH);
                 put(Property.PROJECTIONS, Label.PROJECTION_TYPE);
                 put(Property.DATABASE, Label.DATABASE);
-                put(Property.DEPLOYMENT, Label.DEPLOYMENT);
+                put(Property.DEPLOYMENT, Label.DEPLOYMENT_SETTINGS);
                 put(Property.COMMAND_MODEL_DATABASE, Label.COMMAND_MODEL_DATABASE);
                 put(Property.QUERY_MODEL_DATABASE, Label.QUERY_MODEL_DATABASE);
                 //REST_RESOURCES, AGGREGATES, DOMAIN_EVENTS

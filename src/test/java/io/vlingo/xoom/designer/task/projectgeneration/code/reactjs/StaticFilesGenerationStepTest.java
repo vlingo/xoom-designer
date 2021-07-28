@@ -26,7 +26,7 @@ public class StaticFilesGenerationStepTest {
             CodeGenerationParameters.from(
                     CodeGenerationParameter.of(Label.GROUP_ID, "io.vlingo"),
                     CodeGenerationParameter.of(Label.ARTIFACT_ID, "xoom-app"),
-                    CodeGenerationParameter.of(Label.VERSION, "1.0.0"),
+                    CodeGenerationParameter.of(Label.ARTIFACT_VERSION, "1.0.0"),
                     CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp")
             );
 

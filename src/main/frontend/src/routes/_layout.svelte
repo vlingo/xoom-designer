@@ -3,7 +3,7 @@
 	import Base64 from "../util/Base64";
 	import MenuSurface from '@smui/menu-surface';
 	import { Button, Icon, MaterialApp, Divider, AppBar, Container, Dialog, Card, CardTitle, CardActions, CardText, Snackbar } from "svelte-materialify/src";
-	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, settings, clearSettings, isSettingsEdited, updateSettings } from '../stores';
+	import { theme, isMobile, settingsInfo, projectGenerationIndex, generatedProjectsPaths, settings, clearSettings, isSettingsEdited, importSettings } from '../stores';
 	import { mdiCheckBold, mdiCloseThick, mdiMenu, mdiWeatherNight, mdiWeatherSunny } from '@mdi/js';
 	import Portal from "svelte-portal/src/Portal.svelte";
 	import List, { Item, Text } from '@smui/list';
@@ -46,7 +46,7 @@
 		Base64.encode(this.files[0]).then(encodedFile => {
 			XoomDesignerRepository.processImportFile(encodedFile)
 			.then(importedSettings => {
-				updateSettings(importedSettings);
+				importSettings(importedSettings);
 				succeed("Settings imported.");
 			}).catch(errorReport => {
 				errorDetails = errorReport.details;

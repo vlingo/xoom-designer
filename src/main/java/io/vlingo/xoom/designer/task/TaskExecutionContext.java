@@ -7,23 +7,19 @@
 
 package io.vlingo.xoom.designer.task;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
-
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
+
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT_SETTINGS;
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER;
 
 public class TaskExecutionContext {
 
@@ -137,7 +133,7 @@ public class TaskExecutionContext {
   }
 
   public DeploymentType deploymentType() {
-    return DeploymentType.valueOf(parameters.retrieveValue(DEPLOYMENT));
+    return ((DeploymentSettings) parameters.retrieveObject(DEPLOYMENT_SETTINGS)).type;
   }
 
   public String targetFolder() {

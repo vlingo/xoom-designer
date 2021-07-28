@@ -27,7 +27,7 @@ public class CodeGenerationParametersLoadStepTest {
         final TaskExecutionContext context = TaskExecutionContext.executedFrom(TERMINAL);
         new CodeGenerationParametersLoadStep().process(context);
         Assertions.assertFalse(context.codeGenerationParameters().isEmpty());
-        Assertions.assertEquals("1.0.0", context.codeGenerationParameters().retrieveValue(VERSION));
+        Assertions.assertEquals("1.0.0", context.codeGenerationParameters().retrieveValue(ARTIFACT_VERSION));
         Assertions.assertEquals("com.company", context.codeGenerationParameters().retrieveValue(GROUP_ID));
         Assertions.assertEquals("xoom-application", context.codeGenerationParameters().retrieveValue(ARTIFACT_ID));
         Assertions.assertEquals("com.company.business", context.codeGenerationParameters().retrieveValue(PACKAGE));
@@ -39,7 +39,7 @@ public class CodeGenerationParametersLoadStepTest {
         Assertions.assertEquals("YUGA_BYTE", context.codeGenerationParameters().retrieveValue(QUERY_MODEL_DATABASE));
         Assertions.assertEquals("true", context.codeGenerationParameters().retrieveValue(USE_AUTO_DISPATCH));
         Assertions.assertEquals("STATE_STORE", context.codeGenerationParameters().retrieveValue(STORAGE_TYPE));
-        Assertions.assertEquals("DOCKER", context.codeGenerationParameters().retrieveValue(DEPLOYMENT));
+        Assertions.assertEquals("DOCKER", context.codeGenerationParameters().retrieveValue(DEPLOYMENT_SETTINGS));
         Assertions.assertEquals("/home/projects", context.codeGenerationParameters().retrieveValue(TARGET_FOLDER));
         //Assertions.assertEquals(context.codeGenerationParameters().retrieveValue(AGGREGATES), "FirstAggregate;SecondAggregate");
     }

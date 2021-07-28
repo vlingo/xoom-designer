@@ -8,7 +8,9 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange;
 
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 
 import java.util.stream.Stream;
@@ -91,8 +93,9 @@ public class CodeGenerationParametersBuilder {
                 CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
                         .relate(Label.FIELD_TYPE, "int");
 
-        final CodeGenerationParameter producerExchangePort =
-                CodeGenerationParameter.of(Label.PRODUCER_EXCHANGE_PORT, 8988);
+        final CodeGenerationParameter deploymentSettings =
+                CodeGenerationParameter.ofObject(Label.DEPLOYMENT_SETTINGS,
+                        DeploymentSettings.with(DeploymentType.NONE, "", "", "", 8988));
 
         final CodeGenerationParameter bookExchange =
                 CodeGenerationParameter.of(Label.EXCHANGE, "book-exchange")
@@ -145,7 +148,7 @@ public class CodeGenerationParametersBuilder {
                         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
                                 .relate(Label.FIELD_TYPE, "String"));
 
-        return Stream.of(dialect, producerExchangePort, authorAggregate, bookAggregate,
+        return Stream.of(dialect, deploymentSettings, authorAggregate, bookAggregate,
                 nameValueObject, rankValueObject, classificationValueObject, classifierValueObject);
     }
 

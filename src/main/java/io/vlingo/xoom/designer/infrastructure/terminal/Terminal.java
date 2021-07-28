@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -95,7 +95,7 @@ public enum Terminal {
 
   public File executableMavenFileLocation() {
     final String executableFile = mavenCommand.replaceAll("./", "");
-    return ArchetypesFolder.path().resolve(executableFile).toFile();
+    return StagingFolder.path().resolve(executableFile).toFile();
   }
 
   public String resolveDirectoryChangeCommand(final Path path) {

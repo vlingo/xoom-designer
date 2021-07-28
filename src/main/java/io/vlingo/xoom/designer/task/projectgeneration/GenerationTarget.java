@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +53,7 @@ public enum GenerationTarget {
   }
 
   public Path temporaryFolderFor(final String executionId, final String artifactName) {
-    return ArchetypesFolder.path().resolve(executionId).resolve(artifactName);
+    return StagingFolder.path().resolve(executionId).resolve(artifactName);
   }
 
 }

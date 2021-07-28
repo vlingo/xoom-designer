@@ -28,7 +28,7 @@ public class Infrastructure {
     if (!homeDirectory.isValid()) {
       throw new InvalidResourcesPathException();
     }
-    ArchetypesFolder.resolve(homeDirectory);
+    StagingFolder.resolve(homeDirectory);
     DesignerProperties.resolve(homeDirectory);
     DesignerServer.resolve();
     UserInterface.resolve();
@@ -53,28 +53,28 @@ public class Infrastructure {
   }
 
   public static void clear() {
-    ArchetypesFolder.instance = null;
+    StagingFolder.instance = null;
     DesignerProperties.instance = null;
     DesignerServer.instance = null;
     UserInterface.instance = null;
     XoomProperties.instance = null;
   }
 
-  public static class ArchetypesFolder {
-    private static final String ARCHETYPES_SUB_FOLDER = "archetypes";
-    private static final String ARCHETYPES_PARENT_FOLDER = "resources";
-    private static ArchetypesFolder instance;
+  public static class StagingFolder {
+    private static final String ARCHETYPES_PARENT_FOLDER = "staging";
+    private static StagingFolder instance;
     private final Path path;
 
     private static void resolve(final HomeDirectory homeDirectory) {
       if(instance == null){
-        instance = new ArchetypesFolder(homeDirectory);
+        instance = new StagingFolder(homeDirectory);
       }
     }
 
-    private ArchetypesFolder(final HomeDirectory homeDirectory) {
-      this.path = Paths.get(homeDirectory.path, ARCHETYPES_PARENT_FOLDER, ARCHETYPES_SUB_FOLDER);
+    private StagingFolder(final HomeDirectory homeDirectory) {
+      this.path = Paths.get(homeDirectory.path, ARCHETYPES_PARENT_FOLDER);
     }
+
     public static Path path() {
       if(instance == null) {
         throw new IllegalStateException("Unresolved Archetypes Folder");

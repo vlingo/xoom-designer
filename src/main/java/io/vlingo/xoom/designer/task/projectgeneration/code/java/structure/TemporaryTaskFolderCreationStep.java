@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.structure;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.ArchetypesFolder;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionException;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
@@ -21,7 +21,7 @@ public class TemporaryTaskFolderCreationStep implements TaskExecutionStep {
   public void process(final TaskExecutionContext context) {
     try {
       final Path temporaryTaskFolder =
-              ArchetypesFolder.path().resolve(context.executionId);
+              StagingFolder.path().resolve(context.executionId);
 
       Files.createDirectory(temporaryTaskFolder);
     } catch (final IOException e) {

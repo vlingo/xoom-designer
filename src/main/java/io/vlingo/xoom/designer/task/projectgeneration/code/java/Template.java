@@ -72,7 +72,12 @@ public enum Template {
   ABSTRACT_REST_RESOURCE_UNIT_TEST("RestResourceAbstractUnitTest"),
   COUNTING_READ_RESULT("CountingReadResultInterest"),
   COUNTING_PROJECTION_CTL("CountingProjectionControl"),
-  TURBO_SETTINGS("TurboSettings");
+  TURBO_SETTINGS("TurboSettings"),
+  ACTOR_SETTINGS("ActorSettings"),
+  LOGBACK_SETTINGS("LogbackSettings"),
+  MAVEN_SETTINGS("MavenSettings"),
+  DOCKERFILE("Dockerfile"),
+  KUBERNETES_MANIFEST_FILE("KubernetesManifestFile");
 
   public final String filename;
 

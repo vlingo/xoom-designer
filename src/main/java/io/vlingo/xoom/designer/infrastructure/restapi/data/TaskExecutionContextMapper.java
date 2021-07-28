@@ -13,9 +13,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
+import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
@@ -224,25 +226,26 @@ public class TaskExecutionContextMapper {
     final Path definitiveFolder =
             generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
 
+    final DeploymentSettings deploymentSettings =
+            DeploymentSettings.with(DeploymentType.of(data.deployment.type),
+                    data.deployment.dockerImage, data.deployment.kubernetesImage,
+                    data.deployment.kubernetesPod, data.deployment.producerExchangePort);
+
     parameters.add(APPLICATION_NAME, data.context.artifactId)
             .add(USE_ANNOTATIONS, data.useAnnotations)
             .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
             .add(GROUP_ID, data.context.groupId)
             .add(ARTIFACT_ID, data.context.artifactId)
-            .add(VERSION, data.context.artifactVersion)
+            .add(ARTIFACT_VERSION, data.context.artifactVersion)
             .add(PACKAGE, data.context.packageName)
             .add(XOOM_VERSION, Configuration.resolveDefaultXoomVersion())
-            .add(DEPLOYMENT, data.deployment.type)
-            .add(DOCKER_IMAGE, data.deployment.dockerImage)
-            .add(KUBERNETES_IMAGE, data.deployment.kubernetesImage)
-            .add(PRODUCER_EXCHANGE_PORT, data.deployment.producerExchangePort)
-            .add(KUBERNETES_POD_NAME, data.deployment.kubernetesPod)
-            .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "")
+            .add(DEPLOYMENT_SETTINGS, deploymentSettings)
             .add(CLUSTER_SETTINGS, clusterSettings)
             .add(TURBO_SETTINGS, turboSettings)
             .add(SCHEMATA_SETTINGS, schemataSettings)
             .add(TARGET_FOLDER, definitiveFolder.toString())
-            .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data));
+            .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data))
+            .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "");
   }
 
 }
