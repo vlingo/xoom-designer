@@ -25,13 +25,16 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
   </#if>
 </#macro>
 <#macro printItemsTable name type>
-  <#if valueTypes[type]??>
-  {Array.isArray(item?.${name}) && <table className={'table table-striped table-bordered'}>
+  <table className={'table table-striped table-bordered'}>
   <thead>
   <tr>
     <#list aggregate.stateFields as field>
-      <#if valueTypes[field.type]??>
+      <#if field.isCollection>
+        <#if valueTypes[field.type]??>
       <@printTableHeaderCell "${field.name}" "${field.type}" />
+          <#else>
+      <th>${fns.capitalizeMultiWord(field.name)}</th>
+        </#if>
       </#if>
     </#list>
   </tr>
@@ -40,17 +43,18 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
   {item?.${name}.map(item => (
   <tr>
     <#list aggregate.stateFields as field>
+      <#if field.isCollection>
       <#if valueTypes[field.type]??>
         <@printItemTableCell "${field.name}" "${field.type}" />
+        <#else>
+        <td>{item}</td>
+      </#if>
       </#if>
     </#list>
   </tr>
   ))}
   </tbody>
   </table>
-    }
-  </#if>
-
 </#macro>
 <#macro printTableHeaderCell name type>
   <#if valueTypes[type]??>
