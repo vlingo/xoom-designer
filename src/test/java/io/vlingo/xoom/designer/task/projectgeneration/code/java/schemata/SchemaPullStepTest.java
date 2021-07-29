@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
@@ -59,7 +60,7 @@ public class SchemaPullStepTest {
   @BeforeEach
   public void setUp() {
     Infrastructure.clear();
-    this.context = TaskExecutionContext.empty();
+    this.context = TaskExecutionContext.empty().logger(Logger.noOpLogger());
   }
 
   private static final String WINDOWS_ROOT_FOLDER = Paths.get("D:", "tools", "designer").toString();
