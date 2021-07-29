@@ -19,7 +19,7 @@ The next section show you how to run and use the VLINGO XOOM Designer in your lo
 
 ## [Quick Start](#quick-start)
 
-The quickest way to start XOOM Designer is to run it on Docker. Taking advantage of the `docker-compose` file created by the VLINGO XOOM team, you can initialize Designer with simply two commands:
+The quickest way to start XOOM Designer is to run it on Docker. Taking advantage of the `docker-compose` file created by the VLINGO XOOM team, you can initialize Designer simply using these two commands:
 
 ```bash
  $ curl -L -O https://raw.githubusercontent.com/vlingo/xoom-designer/master/docker-compose.yml
