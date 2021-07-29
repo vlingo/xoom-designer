@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModelFileException;
@@ -29,22 +30,24 @@ import static io.vlingo.xoom.http.Response.Status.*;
 import static io.vlingo.xoom.http.ResponseHeader.*;
 import static io.vlingo.xoom.http.resource.ResourceBuilder.*;
 
-public class GenerationSettingsResource extends DynamicResourceHandler {
+public class ProjectGenerationResource extends DynamicResourceHandler {
 
+  private final Logger logger;
   private final GenerationTarget generationTarget;
   private final ProjectGenerationManager projectGenerationManager;
   private final ProjectGenerationInformation generationInformation;
   public static final String REFUSE_REQUEST_URI = "/api/generation-settings/request-refusal";
 
-  public GenerationSettingsResource(final Stage stage) {
+  public ProjectGenerationResource(final Stage stage) {
     super(stage);
+    this.logger = stage().world().defaultLogger();
     this.projectGenerationManager = new ProjectGenerationManager();
     this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
     this.generationInformation = ProjectGenerationInformation.from(generationTarget);
   }
 
   public Completes<Response> startGeneration(final GenerationSettingsData settings) {
-    return projectGenerationManager.generate(settings, generationInformation).andThenTo(context -> {
+    return projectGenerationManager.generate(settings, generationInformation, logger).andThenTo(context -> {
               final ProjectGenerationReport report = context.retrieveOutput(TaskOutput.PROJECT_GENERATION_REPORT);
               final Response.Status responseStatus = report.status.failed() ? InternalServerError : Ok;
               return Completes.withSuccess(Response.of(responseStatus, serialized(report)));

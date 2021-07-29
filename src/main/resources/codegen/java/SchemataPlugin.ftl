@@ -21,6 +21,7 @@
                 <clientOrganization>${producerOrganization}</clientOrganization>
                 <clientUnit>${producerUnit}</clientUnit>
                 <hierarchicalCascade>true</hierarchicalCascade>
+                <skipPrompt>true</skipPrompt>
               </schemataService>
               <schemata>
                 <#list producerSchemas as schema>

@@ -33,7 +33,7 @@ public class TaskExecutionContextMapperTest {
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
-            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM).codeGenerationParameters();
+            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, null).codeGenerationParameters();
 
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);

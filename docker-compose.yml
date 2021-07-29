@@ -17,10 +17,13 @@ services:
     environment:
       XOOM_SCHEMATA_PORT: 9019
       XOOM_ENV: "env"
-      XOOM_SCHEMATA_DB_URL: "jdbc:postgresql://postgres/"
+      XOOM_SCHEMATA_DB_URL: "jdbc:postgresql://schemata-db/"
+    depends_on:
+      - schemata-db
 
-  postgres:
+  schemata-db:
     image: postgres:latest
+    container_name: xoom-schemata-db
     restart: always
     ports:
       - '5432:5432'

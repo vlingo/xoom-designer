@@ -17,9 +17,9 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.Exchang
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SchemaPullStep extends CommandExecutionStep {
+public class SchemaPushStep extends CommandExecutionStep {
 
-  public SchemaPullStep(final CommandExecutionProcess commandExecutionProcess) {
+  public SchemaPushStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
 
@@ -33,14 +33,14 @@ public class SchemaPullStep extends CommandExecutionStep {
     final String directoryChangeCommand =
             terminal.resolveDirectoryChangeCommand(projectPath);
 
-    return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:pull-schema@pull",
+    return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:push-schema@push",
             directoryChangeCommand, terminal.mavenCommand());
   }
 
   @Override
   protected void logPreliminaryMessage(final TaskExecutionContext context) {
     context.logger().info("[INFO] ------------------------------------------------------------------------");
-    context.logger().info("[INFO] PULLING SCHEMAS MAY REQUIRE A FEW SECONDS");
+    context.logger().info("[INFO] PUSHING SCHEMAS MAY REQUIRE A FEW SECONDS");
     context.logger().info("[INFO] ------------------------------------------------------------------------");
   }
 
@@ -49,7 +49,7 @@ public class SchemaPullStep extends CommandExecutionStep {
     return context.codeGenerationParametersOf(Label.AGGREGATE)
             .filter(aggregate -> aggregate.hasAny(Label.EXCHANGE))
             .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
-            .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer());
+            .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer());
   }
 
   @Override

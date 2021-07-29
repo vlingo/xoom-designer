@@ -33,7 +33,7 @@
   let errorDetailsCopied = false;
   let failureDialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
-  let anchor, menu, dialogStatus, succeeded, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
+  let anchor, menu, dialogStatus, succeeded, loadingDetails, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
   let anchorClasses = {};
 
   function checkPath() {
@@ -63,6 +63,7 @@
     if(!valid) return;
     processing = true;
     dialogActive = false;
+    loadingDetails = resolveLoadingDetails();
 		XoomDesignerRepository.generateProject($settings)
 		  .then(generationReport => {
         if(requiresCompression()) {
@@ -77,6 +78,7 @@
         fail(generationReport);
       }).finally(() => {
         processing = false;
+        loadingDetails = "";
       })
 	}
 
@@ -134,6 +136,30 @@
 
   function requiresCompression() {
     return $settingsInfo.generationTargetKey === TARGET.ZIP_DOWNLOAD;
+  }
+
+  function resolveLoadingDetails() {
+    let message = "";
+    let operationVerbs = [];
+    if(hasConsumedEvents()) {
+      operationVerbs.push("pulling");
+    }
+    if(hasPublishedEvents()) {
+      operationVerbs.push("pushing");
+    }
+    if(operationVerbs.length == 0) {
+      return message;
+    }
+    message = operationVerbs.join("/") + " schema(s). This may require a few seconds.";
+    return message.charAt(0).toUpperCase() + message.slice(1);
+  }
+
+  function hasConsumedEvents() {
+    return $settings.model.aggregateSettings.some(aggregate => aggregate.consumerExchange && aggregate.consumerExchange.receivers.length > 0);
+  }
+
+  function hasPublishedEvents() {
+    return $settings.model.aggregateSettings.some(aggregate => aggregate.producerExchange && aggregate.producerExchange.outgoingEvents.length > 0);
   }
 
   function buildProjectDirectory() {
@@ -243,7 +269,7 @@
   <Switch class="mb-4" bind:checked={$settings.useAutoDispatch} disabled={!$settings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}
-    <ProgressCircular indeterminate color="primary" />
+    <ProgressCircular indeterminate color="primary" /> {loadingDetails}
   {:else if succeeded}
     <Icon class="green-text" path={mdiCheckBold}/> {successMessage[0]+successMessage[1]}
   {:else if validationFailed}

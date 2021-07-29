@@ -26,6 +26,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.Proj
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaPullStep;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaPushStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.structure.*;
@@ -71,6 +72,7 @@ public class Configuration {
       new TemporaryTaskFolderCreationStep(),
       new CodeGenerationExecutionerStep(),
       new MavenWrapperInstallationStep(),
+      new SchemaPushStep(withType(CommandExecutionProcess.class)),
       new SchemaPullStep(withType(CommandExecutionProcess.class)),
       new ProjectCompressionStep(),
       new StagingFolderCleanUpStep()

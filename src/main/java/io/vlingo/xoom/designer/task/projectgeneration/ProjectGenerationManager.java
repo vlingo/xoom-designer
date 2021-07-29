@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
@@ -23,16 +24,18 @@ import static io.vlingo.xoom.designer.task.TaskOutput.PROJECT_GENERATION_REPORT;
 public class ProjectGenerationManager {
 
   public Completes<TaskExecutionContext> generate(final GenerationSettingsData settings,
-                                                  final ProjectGenerationInformation information) {
+                                                  final ProjectGenerationInformation information,
+                                                  final Logger logger) {
     return validate(settings, information)
-            .andThenTo(context -> mapContext(settings, information.generationTarget))
+            .andThenTo(context -> mapContext(settings, information.generationTarget, logger))
             .andThenConsume(context -> processSteps(context, information));
   }
 
   private Completes<TaskExecutionContext> mapContext(final GenerationSettingsData settings,
-                                                     final GenerationTarget target) {
+                                                     final GenerationTarget target,
+                                                     final Logger logger) {
     try {
-      return Completes.withSuccess(TaskExecutionContextMapper.map(settings, target));
+      return Completes.withSuccess(TaskExecutionContextMapper.map(settings, target, logger));
     } catch (final Exception exception) {
       exception.printStackTrace();
       final ProjectGenerationReport report = onContextMappingFail(target, settings, exception);

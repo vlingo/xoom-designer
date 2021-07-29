@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
@@ -24,12 +25,13 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.TARGET_FOLDER
 public class TaskExecutionContext {
 
   public final String executionId;
-  private Properties properties;
   private final CodeGenerationParameters parameters;
   private final List<String> args = new ArrayList<>();
   private final List<OptionValue> optionValues = new ArrayList<>();
   private final Map<TaskOutput, Object> taskOutput = new HashMap<>();
   private final Agent agent;
+  private Properties properties;
+  private Logger logger;
 
   public static TaskExecutionContext executedFrom(final Agent agent) {
     return new TaskExecutionContext(agent);
@@ -140,12 +142,21 @@ public class TaskExecutionContext {
     return Paths.get(parameters.retrieveValue(TARGET_FOLDER)).toString();
   }
 
+  public TaskExecutionContext logger(final Logger logger) {
+    this.logger = logger;
+    return this;
+  }
+
   public Properties properties() {
     return properties;
   }
 
   public List<String> args() {
     return args;
+  }
+
+  public Logger logger() {
+    return logger;
   }
 
   public Agent agent() {

@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -37,22 +38,31 @@ public class TaskExecutionContextMapper {
   private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
+  private final Logger logger;
 
   public static TaskExecutionContext map(final GenerationSettingsData data,
-                                         final GenerationTarget generationTarget) {
-    return new TaskExecutionContextMapper(data, generationTarget).map();
+                                         final GenerationTarget generationTarget,
+                                         final Logger logger) {
+    return new TaskExecutionContextMapper(data, generationTarget, logger).map();
   }
 
-  private TaskExecutionContextMapper(final GenerationSettingsData data, final GenerationTarget generationTarget) {
+  private TaskExecutionContextMapper(final GenerationSettingsData data,
+                                     final GenerationTarget generationTarget,
+                                     final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
-    mapAggregates(); mapValueObjects(); mapPersistence(); mapInfrastructureSettings();
+    this.logger = logger;
+
+    mapAggregates();
+    mapValueObjects();
+    mapPersistence();
+    mapInfrastructureSettings();
   }
 
   private TaskExecutionContext map() {
-    return context.with(parameters);
+    return context.with(parameters).logger(logger);
   }
 
   private void mapAggregates() {

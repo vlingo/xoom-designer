@@ -20,6 +20,7 @@
                 <clientOrganization>vlingo</clientOrganization>
                 <clientUnit>xoom</clientUnit>
                 <hierarchicalCascade>true</hierarchicalCascade>
+                <skipPrompt>true</skipPrompt>
               </schemataService>
               <schemata>
                 <schema>

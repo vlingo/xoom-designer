@@ -12,7 +12,7 @@ import io.vlingo.xoom.http.RequestFilter;
 
 import java.net.URI;
 
-import static io.vlingo.xoom.designer.infrastructure.restapi.GenerationSettingsResource.REFUSE_REQUEST_URI;
+import static io.vlingo.xoom.designer.infrastructure.restapi.ProjectGenerationResource.REFUSE_REQUEST_URI;
 import static io.vlingo.xoom.http.Body.Empty;
 import static io.vlingo.xoom.http.Header.Headers.empty;
 import static io.vlingo.xoom.http.Method.GET;

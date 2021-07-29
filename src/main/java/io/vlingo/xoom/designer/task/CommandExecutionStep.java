@@ -25,11 +25,21 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
 
   public void process(final TaskExecutionContext context) {
     grantPermissions();
-    System.out.println("Executing commands from " + this.getClass().getCanonicalName());
+    logPreliminaryMessage(context);
+    logCommandExecutionMessage(context);
     try {
       commandExecutionProcess.handle(formatCommands(context));
     } catch (final CommandExecutionException exception) {
       throw resolveCommandExecutionException(exception);
+    }
+  }
+
+  private void logCommandExecutionMessage(final TaskExecutionContext context) {
+    final String message = "Executing commands from " + this.getClass().getCanonicalName();
+    if(context.logger() == null) {
+      System.out.println(message);
+    } else {
+      context.logger().info(message);
     }
   }
 
@@ -45,6 +55,9 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
 
   protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
     return exception;
+  }
+
+  protected void logPreliminaryMessage(final TaskExecutionContext context) {
   }
 
 }

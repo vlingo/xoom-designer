@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.time.Duration;
 
-import static io.vlingo.xoom.designer.infrastructure.restapi.GenerationSettingsResource.REFUSE_REQUEST_URI;
+import static io.vlingo.xoom.designer.infrastructure.restapi.ProjectGenerationResource.REFUSE_REQUEST_URI;
 import static io.vlingo.xoom.http.Body.Empty;
 import static io.vlingo.xoom.http.Method.POST;
 import static io.vlingo.xoom.http.RequestHeader.XForwardedFor;
