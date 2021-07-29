@@ -28,15 +28,6 @@ The quickest way to start XOOM Designer is to run it on Docker. Taking advantage
 
 After these commands, XOOM Designer can be accessed at [http://localhost:19090/context](http://localhost:19090/context). Likewise, [XOOM Schemata](https://docs.vlingo.io/xoom-schemata) will be also initialized and can be accessed at [http://localhost:9019](http://localhost:9019). Learn more about the XOOM Designer/Schemata integration [here](https://docs.vlingo.io/xoom-designer#architecture-api-producer-exchange-and-consumer-exchange-s).     
 
-#### GraalVM Build
-```bash
-mvn clean package -Pfrontend -Pnative-image
-```
-```bash
-./target/xoom-designer gui
-```
-More details [GraalVM](GraalVM.md)
-
 ## [Installation](#installation)
 
 The installation process is short. Before you start, just check if you have these tools already installed:
@@ -93,9 +84,18 @@ You can get the latest snapshot build of the XOOM Designer from [GitHub Actions]
 - Click the link that says **designer** and it will start a download
 - Follow the above [Installaiton](#Installation) steps
 
-To build your own Designer from daily snapshots, see the next section.
+To build your own Designer from daily snapshots, see the [note for developers](https://github.com/vlingo/xoom-designer#note-for-developer).
 
-### Note for Developers
+#### GraalVM Build
+```bash
+mvn clean package -Pfrontend -Pnative-image
+```
+```bash
+./target/xoom-designer gui
+```
+More details [GraalVM](GraalVM.md)
+
+### [Note for Developers](https://github.com/vlingo/xoom-designer#note-for-developers)
 
 If developing on the `xoom-designer` project, the `VLINGO_XOOM_DESIGNER_HOME` must be set a bit differently. It should point to an inner folder under the cloned repository. Using a *nix shell, such as `bash`, do this:
 
