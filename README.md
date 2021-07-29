@@ -26,7 +26,7 @@ The quickest way to start XOOM Designer is to run it on Docker. Taking advantage
  $ docker-compose up -d
 ```
 
-After these commands, XOOM Designer can be accessed at [http://localhost:19090/context](http://localhost:19090/context). Likewise, [XOOM Schemata](https://docs.vlingo.io/xoom-schemata) will be also initialized and can be accessed at [http://localhost:9019](http://localhost:9019). Learn more about the XOOM Designer/Schemata integration [here](https://docs.vlingo.io/xoom-designer#architecture-api-producer-exchange-and-consumer-exchange-s).     
+Then, XOOM Designer can be accessed at [http://localhost:19090/context](http://localhost:19090/context). Likewise, [XOOM Schemata](https://docs.vlingo.io/xoom-schemata) will be also initialized and can be accessed at [http://localhost:9019](http://localhost:9019). Learn more about the XOOM Designer/Schemata integration [here](https://docs.vlingo.io/xoom-designer#architecture-api-producer-exchange-and-consumer-exchange-s).     
 
 ## [Installation](#installation)
 
