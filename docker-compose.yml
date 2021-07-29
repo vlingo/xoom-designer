@@ -26,7 +26,7 @@ services:
     container_name: xoom-schemata-db
     restart: always
     ports:
-      - '5432:5432'
+      - 5432:5432
     environment:
       POSTGRES_DB: xoom_schemata
       POSTGRES_USER: xoom_test
