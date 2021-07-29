@@ -17,26 +17,16 @@ The VLINGO XOOM platform SDK was created to help developers who face such challe
 
 The next section show you how to run and use the VLINGO XOOM Designer in your local environment. Let's get started!
 
-## [Docker Image](#docker-image)
+## Quick Start
 
-The quickest way to run XOOM Designer is to use the [Docker image](https://hub.docker.com/r/vlingo/xoom-designer)
-published by the VLINGO XOOM team.
-
-Remember to expose the `19090` port and mount the volume for your projects to `/designer/VLINGO-XOOM`.
-
-To run with `docker` on \*nix, use the following command:
+The quickest way to start XOOM Designer is to run it on Docker. Taking advantage of the `docker-compose` file created by the VLINGO XOOM team, you can initialize Designer with simply two commands:
 
 ```bash
- $ docker run -it --rm -p '19090:19090' -v $(pwd)/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
+ $ curl -L -O https://raw.githubusercontent.com/vlingo/xoom-designer/master/docker-compose.yml
+ $ docker-compose up -d
 ```
 
-To run with `docker` on Windows, use this command:
-
-```Windows
- C:\> docker run -it --rm -p 19090:19090 -v C:/projects:/designer/VLINGO-XOOM vlingo/xoom-designer
-```
-
-The Docker image cannot automatically open your preferred browser on the XOOM Designer URL. You will have to navigate manually using: [http://localhost:19090/context](http://localhost:19090/context)
+After these commands, XOOM Designer can be accessed at [http://localhost:19090/context](http://localhost:19090/context). Likewise, [XOOM Schemata](https://docs.vlingo.io/xoom-schemata) will be also initialized and can be accessed at [http://localhost:9019](http://localhost:9019). Learn more about the XOOM Designer/Schemata integration [here](https://docs.vlingo.io/xoom-designer#architecture-api-producer-exchange-and-consumer-exchange-s).     
 
 #### GraalVM Build
 ```bash
