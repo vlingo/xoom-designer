@@ -12,7 +12,6 @@ public enum OptionName {
     TAG("tag"),
     TARGET("target"),
     CURRENT_DIRECTORY("currentDirectory"),
-    SKIP_ARCHETYPE_INSTALLATION("skipArchetypeInstallation"),
     PUBLISHER("publisher");
 
     private final String name;

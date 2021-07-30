@@ -1,5 +1,6 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
@@ -21,7 +22,7 @@ public class CodeGenerationParameterValidationStepTest {
                     "/home/projects", true, false, false, "");
 
     final TaskExecutionContext context =
-            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, null);
+            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
 
     assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
   }

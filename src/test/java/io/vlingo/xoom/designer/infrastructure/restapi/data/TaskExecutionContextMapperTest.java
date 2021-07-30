@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
@@ -33,7 +34,7 @@ public class TaskExecutionContextMapperTest {
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
-            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, null).codeGenerationParameters();
+            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger()).codeGenerationParameters();
 
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);

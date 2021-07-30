@@ -9,33 +9,23 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.structure;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
-import io.vlingo.xoom.designer.task.projectgeneration.Archetype;
 import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationException;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 
 import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
 
 public class StagingFolderCleanUpStep implements TaskExecutionStep {
 
-  private static final List<Path> ALLOWED_FOLDERS =
-          Arrays.asList(Paths.get(MAVEN_WRAPPER_DIRECTORY), Paths.get(Archetype.findDefault().label()));
-
-  private static final Predicate<Path> LEFTOVERS =
-          dir -> !ALLOWED_FOLDERS.contains(dir.getFileName());
-
   @Override
   public void process(final TaskExecutionContext context) {
     try {
-      final Path archetypesFolder = StagingFolder.path();
-      Files.list(archetypesFolder).filter(Files::isDirectory).filter(LEFTOVERS).forEach(this::removeDirectory);
+      Files.list(StagingFolder.path()).filter(Files::isDirectory)
+              .filter(dir -> !dir.getFileName().toString().equals(MAVEN_WRAPPER_DIRECTORY))
+              .forEach(this::removeDirectory);
     } catch (final IOException e) {
       throw new ProjectGenerationException(e);
     }
