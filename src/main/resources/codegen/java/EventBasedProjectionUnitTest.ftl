@@ -55,7 +55,11 @@ public class ${projectionUnitTestName} {
   <#list testCases as testCase>
 
   private Projectable create${testCase.domainEventName}(${dataName} data) {
+    <#if testCase.dataObjectParams?has_content>
     final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id, ${testCase.dataObjectParams});
+    <#else>
+    final ${testCase.domainEventName} eventData = new ${testCase.domainEventName}(data.id);
+    </#if>
     <#if testCase.isFactoryMethod()>
 
     BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(${testCase.domainEventName}.class, 1,
