@@ -18,10 +18,9 @@ import static java.util.stream.Collectors.toList;
 
 public class TestStatement {
 
-  private final List<String> assertions = new ArrayList<>();
-  private final List<String> secondAssertions = new ArrayList<>();
-
-  private final List<String> resultAssignment = new ArrayList<>();
+  public final List<String> assertions = new ArrayList<>();
+  public final List<String> secondAssertions = new ArrayList<>();
+  public final List<String> resultAssignment = new ArrayList<>();
 
   public static List<TestStatement> with(final String testMethodName,
                                          CodeGenerationParameter aggregate, final CodeGenerationParameter domainEvent,
@@ -60,15 +59,5 @@ public class TestStatement {
     return Assertions.from(dataIndex, aggregate, domainEvent, valueObjects, testDataValues);
   }
 
-  public List<String> getAssertions() {
-    return assertions;
-  }
-  public List<String> getSecondAssertions() {
-    return secondAssertions;
-  }
-
-  public List<String> getResultAssignment() {
-    return resultAssignment;
-  }
 
 }

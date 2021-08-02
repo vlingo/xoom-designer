@@ -7,74 +7,76 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.projections;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.domainevent.DomainEventDetail;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DOMAIN_EVENT;
 
 public class TestCase {
 
   public static final int TEST_DATA_SET_SIZE = 2;
 
-  private final String methodName;
-  private final List<String> dataDeclarations = new ArrayList<>();
-  private final List<TestStatement> statements = new ArrayList<>();
-  private final List<String> preliminaryStatements = new ArrayList<>();
-  private final String domainEventName;
-  private final String dataObjectParams;
-  private final boolean isFactoryMethod;
+  public final String methodName;
+  public final List<String> dataDeclarations = new ArrayList<>();
+  public final List<TestStatement> statements = new ArrayList<>();
+  public final List<String> preliminaryStatements = new ArrayList<>();
+  public final String domainEventName;
+  public final String dataObjectParams;
+  public final boolean factoryMethod;
 
-  public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
+  public static List<TestCase> from(final CodeGenerationParameter aggregate,
+                                    final List<CodeGenerationParameter> valueObjects,
+                                    final ProjectionType projectionType) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-        .map(method -> new TestCase(method, aggregate, valueObjects))
+        .map(method -> new TestCase(method, aggregate, valueObjects, projectionType))
         .collect(Collectors.toList());
   }
 
-  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
-                   List<CodeGenerationParameter> valueObjects) {
+  private TestCase(final CodeGenerationParameter method,
+                   final CodeGenerationParameter aggregate,
+                   final List<CodeGenerationParameter> valueObjects,
+                   final ProjectionType projectionType) {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
 
-    final CodeGenerationParameter domainEvent = signature
-            .retrieveAllRelated(Label.DOMAIN_EVENT).findFirst().orElse(aggregate);
-    this.dataObjectParams = signature.retrieveAllRelated(Label.METHOD_PARAMETER)
-            .map(x -> "data." + x.value)
-        .collect(Collectors.joining(", "));
-    this.methodName = signature.value;
-    this.isFactoryMethod = signature.retrieveRelatedValue(Label.FACTORY_METHOD).equals("true");
-    this.domainEventName = signature.retrieveRelatedValue(Label.DOMAIN_EVENT);
-    this.dataDeclarations.addAll(DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues));
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(signature.value));
-    this.statements.addAll(TestStatement.with(signature.value, aggregate,domainEvent, valueObjects, testDataValues));
+    final String domainEventName = method.retrieveOneRelated(DOMAIN_EVENT).value;
+
+    final CodeGenerationParameter domainEvent =
+            DomainEventDetail.eventWithName(domainEventName,
+                    aggregate.retrieveAllRelated(DOMAIN_EVENT).collect(Collectors.toList()));
+
+    this.methodName = method.value;
+    this.domainEventName = domainEventName;
+    this.factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+    this.dataDeclarations.addAll(DataDeclaration.generate(method.value, aggregate, valueObjects, testDataValues));
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(method.value));
+    this.statements.addAll(TestStatement.with(method.value, aggregate, domainEvent, valueObjects, testDataValues));
+    this.dataObjectParams = resolveTestDataObjectParams(method, domainEvent, projectionType);
   }
 
-  public boolean isFactoryMethod() {
-    return isFactoryMethod;
+  public String resolveTestDataObjectParams(final CodeGenerationParameter method,
+                                            final CodeGenerationParameter domainEvent,
+                                            final ProjectionType projectionType) {
+    final Stream<CodeGenerationParameter> involvedFields =
+            projectionType.isEventBased() ? domainEvent.retrieveAllRelated(Label.STATE_FIELD) :
+                    method.retrieveAllRelated(Label.METHOD_PARAMETER);
+
+    return involvedFields.map(field -> {
+      final CollectionMutation collectionMutation =
+              field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+      if (collectionMutation.isSingleParameterBased()) {
+        return String.format("data.%s.stream().findFirst().orElse(null)", field.value);
+      }
+      return "data." + field.value;
+    }).collect(Collectors.joining(", "));
   }
 
-  public String getMethodName() {
-    return methodName;
-  }
-
-  public List<String> getDataDeclarations() {
-    return dataDeclarations;
-  }
-
-  public List<TestStatement> getStatements() {
-    return statements;
-  }
-
-  public List<String> getPreliminaryStatements() {
-    return preliminaryStatements;
-  }
-
-  public String getDomainEventName() {
-    return domainEventName;
-  }
-
-  public String getDataObjectParams() {
-    return dataObjectParams;
-  }
 }

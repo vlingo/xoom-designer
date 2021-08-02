@@ -36,7 +36,6 @@ public class AuthorProjectionTest {
     entity = world.actorFor(Author.class, AuthorEntity.class, "#1");
   }
 
-
   @Test
   public void withName() {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
@@ -68,10 +67,10 @@ public class AuthorProjectionTest {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     AuthorState data = firstData.toAuthorState();
-    final AuthorState item = entity.addTag(data.tags).await();
+    final AuthorState item = entity.addTag(data.tags.stream().findFirst().orElse(null)).await();
 
     assertEquals(item.id, "1");
-    assertNotNull(item.relatedAuthors);
+    assertNotNull(item.tags);
   }
 
   @Test
@@ -83,7 +82,7 @@ public class AuthorProjectionTest {
     final AuthorState item = entity.addTags(data.tags).await();
 
     assertEquals(item.id, "1");
-    assertNotNull(item.relatedAuthors);
+    assertNotNull(item.tags);
   }
 
   @Test
@@ -95,7 +94,7 @@ public class AuthorProjectionTest {
     final AuthorState item = entity.replaceTags(data.tags).await();
 
     assertEquals(item.id, "1");
-    assertNotNull(item.relatedAuthors);
+    assertNotNull(item.tags);
   }
 
   @Test
@@ -104,10 +103,10 @@ public class AuthorProjectionTest {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     AuthorState data = firstData.toAuthorState();
-    final AuthorState item = entity.removeTag(data.tags).await();
+    final AuthorState item = entity.removeTag(data.tags.stream().findFirst().orElse(null)).await();
 
     assertEquals(item.id, "1");
-    assertNotNull(item.relatedAuthors);
+    assertNotNull(item.tags);
   }
 
   @Test
@@ -116,7 +115,7 @@ public class AuthorProjectionTest {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     AuthorState data = firstData.toAuthorState();
-    final AuthorState item = entity.relateAuthor(data.relatedAuthors).await();
+    final AuthorState item = entity.relateAuthor(data.relatedAuthors.stream().findFirst().orElse(null)).await();
 
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
@@ -140,7 +139,7 @@ public class AuthorProjectionTest {
     final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     AuthorState data = firstData.toAuthorState();
-    final AuthorState item = entity.unrelateAuthor(data.relatedAuthors).await();
+    final AuthorState item = entity.unrelateAuthor(data.relatedAuthors.stream().findFirst().orElse(null)).await();
 
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
@@ -157,4 +156,5 @@ public class AuthorProjectionTest {
     assertEquals(item.id, "1");
     assertNotNull(item.relatedAuthors);
   }
+
 }

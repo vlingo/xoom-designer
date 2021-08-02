@@ -35,4 +35,10 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
     return templatesData;
 
   }
+
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    return context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf).isProjectionEnabled();
+  }
+
 }

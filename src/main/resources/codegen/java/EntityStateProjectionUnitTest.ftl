@@ -36,7 +36,6 @@ public class ${projectionUnitTestName} {
   }
 
   <#list testCases as testCase>
-
   @Test
   public void ${testCase.methodName}() {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
@@ -52,5 +51,6 @@ public class ${projectionUnitTestName} {
   </#list>
   </#list>
   }
+
   </#list>
 }

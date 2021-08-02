@@ -82,6 +82,8 @@ public class ProjectionUnitTestGenerationStepTest {
   }
 
   private CodeGenerationParameter authorAggregate() {
+    //Fields
+
     final CodeGenerationParameter idField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "id")
             .relate(Label.FIELD_TYPE, "String");
@@ -109,6 +111,8 @@ public class ProjectionUnitTestGenerationStepTest {
         CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
             .relate(Label.FIELD_TYPE, "LocalDate");
 
+    //Events
+
     final CodeGenerationParameter authorRegisteredEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
             .relate(idField).relate(nameField);
@@ -120,22 +124,59 @@ public class ProjectionUnitTestGenerationStepTest {
     final CodeGenerationParameter authorTaggedEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagged")
             .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                    .relate(Label.ALIAS, "tag")
+                    .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+    final CodeGenerationParameter authorBulkTaggedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorBulkTagged")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"));
 
     final CodeGenerationParameter authorUntaggedEvent =
-        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUntagged")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUntagged")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "tag")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
+
+    final CodeGenerationParameter authorTagsReplacedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagsReplacedEvent")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"));
 
     final CodeGenerationParameter authorRelatedEvent =
-        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+    final CodeGenerationParameter authorsRelatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorsRelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"));
+
+    final CodeGenerationParameter relatedAuthorsReplacedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "RelatedAuthorsReplacedEvent")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"));
 
     final CodeGenerationParameter authorUnrelatedEvent =
-        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"));
+    //method
 
     final CodeGenerationParameter factoryMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
@@ -154,28 +195,28 @@ public class ProjectionUnitTestGenerationStepTest {
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "ADDITION"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter addTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "MERGE"))
-            .relate(authorRelatedEvent);
+            .relate(authorBulkTaggedEvent);
 
     final CodeGenerationParameter replaceTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-            .relate(authorRelatedEvent);
+            .relate(authorTagsReplacedEvent);
 
     final CodeGenerationParameter removeTagMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
-            .relate(authorUnrelatedEvent);
+            .relate(authorUntaggedEvent);
 
     final CodeGenerationParameter relatedAuthorMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
@@ -189,14 +230,14 @@ public class ProjectionUnitTestGenerationStepTest {
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "MERGE"))
-            .relate(authorRelatedEvent);
+            .relate(authorsRelatedEvent);
 
     final CodeGenerationParameter relatedAuthorsReplacementMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
             .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "relatedAuthors")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-            .relate(authorRelatedEvent);
+            .relate(relatedAuthorsReplacedEvent);
 
     final CodeGenerationParameter relatedAuthorRemovalMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")
@@ -204,15 +245,15 @@ public class ProjectionUnitTestGenerationStepTest {
                 .relate(Label.ALIAS, "relatedAuthor")
                 .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
             .relate(authorUnrelatedEvent);
+
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author").relate(idField)
-        .relate(nameField).relate(rankField).relate(availableOnField)
-        .relate(tagsField).relate(relatedAuthorsField).relate(factoryMethod)
-        .relate(rankMethod)
-        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(addTagMethod)
-        .relate(addTagsMethod).relate(replaceTagsMethod).relate(removeTagMethod)
-        .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
-        .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
-        .relate(authorTaggedEvent).relate(authorUntaggedEvent);
+        .relate(nameField).relate(rankField).relate(availableOnField).relate(tagsField).relate(relatedAuthorsField)
+        .relate(factoryMethod).relate(rankMethod).relate(addTagMethod).relate(addTagsMethod).relate(replaceTagsMethod)
+        .relate(removeTagMethod).relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
+        .relate(relatedAuthorsReplacementMethod)
+        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorRelatedEvent).relate(authorsRelatedEvent)
+        .relate(authorUnrelatedEvent).relate(relatedAuthorsReplacedEvent).relate(authorTaggedEvent).relate(authorUntaggedEvent)
+        .relate(authorBulkTaggedEvent).relate(authorTagsReplacedEvent).relate(authorRegisteredEvent).relate(authorRankedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {

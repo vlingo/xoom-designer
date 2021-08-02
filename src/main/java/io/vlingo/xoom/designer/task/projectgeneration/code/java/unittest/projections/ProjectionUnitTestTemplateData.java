@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.DOMAIN_EVENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 
 public class ProjectionUnitTestTemplateData extends TemplateData {
@@ -40,19 +41,14 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 
 		final String entityName =
 				JavaTemplateStandard.AGGREGATE.resolveClassname(aggregate.value);
-		CodeGenerationParameter signature = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-				.filter(sig -> sig.retrieveRelatedValue(Label.FACTORY_METHOD).equals("true"))
-				.findFirst()
-				.orElseThrow(UnsupportedOperationException::new);
-		final String domainEventName = signature
-				.retrieveOneRelated(Label.DOMAIN_EVENT).value;
+
+		final CodeGenerationParameter signature = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+				.filter(sig -> sig.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
+				.findFirst().orElseThrow(UnsupportedOperationException::new);
+
+		final String domainEventName = signature.retrieveOneRelated(DOMAIN_EVENT).value;
 		final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 		final String aggregateState = JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
-
-		final String dataObjectParams = signature
-				.retrieveAllRelated(Label.METHOD_PARAMETER)
-				.map(x -> "data" + x.value)
-				.collect(Collectors.joining(", "));
 
 		this.parameters =
 				TemplateParameters.with(PACKAGE_NAME, packageName)
@@ -60,13 +56,12 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 						.and(AGGREGATE_PROTOCOL_NAME, entityName)
 						.and(DOMAIN_EVENT_NAME, domainEventName)
 						.and(PROJECTION_NAME, projectionName)
-						.and(DATA_OBJECT_PARAMS, dataObjectParams)
 						.and(DATA_OBJECT_NAME, dataObjectName)
 						.and(STATE_DATA_OBJECT_NAME, aggregateState)
 						.and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value).and(TemplateParameter.ENTITY_NAME, entityName)
 						.and(TemplateParameter.STATE_NAME, aggregateState)
 						.and(STATE_DATA_OBJECT_NAME, aggregateState)
-						.and(TEST_CASES, TestCase.from(aggregate, valueObjects))
+						.and(TEST_CASES, TestCase.from(aggregate, valueObjects, projectionType))
 						.and(PROJECTION_TYPE, projectionType)
 						.addImport(resolveImport(dataObjectName, JavaTemplateStandard.DATA_OBJECT, contents))
 						.addImport(resolveImport(aggregateState, JavaTemplateStandard.AGGREGATE_STATE, contents))
