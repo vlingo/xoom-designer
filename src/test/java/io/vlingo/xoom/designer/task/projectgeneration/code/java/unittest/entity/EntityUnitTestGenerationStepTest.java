@@ -270,7 +270,7 @@ public class EntityUnitTestGenerationStepTest {
                     .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "tags")
                             .relate(Label.ALIAS, "tag")
                             .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
-                    .relate(authorUnrelatedEvent);
+                    .relate(authorUntaggedEvent);
 
     final CodeGenerationParameter relateAuthorMethod =
             CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")

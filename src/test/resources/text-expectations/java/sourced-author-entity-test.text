@@ -160,7 +160,7 @@ public class AuthorEntityTest {
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("entriesCount"));
-    assertEquals(AuthorUnrelated.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
+    assertEquals(AuthorUntagged.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 1)).typeName());
   }
 
   private static final String RELATED_AUTHORS_FOR_RELATE_AUTHOR_TEST = "updated-author-relatedAuthors";
