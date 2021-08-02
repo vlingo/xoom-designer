@@ -10,8 +10,8 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.dataobject;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -19,16 +19,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters.Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope.INSTANCE;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope.STATIC;
 
 public class StaticFactoryMethod {
 
-  private final String parameters;
-  private final String dataObjectName;
-  private final String constructorInvocation;
-
-  private final List<String> valueObjectInitializers = new ArrayList<>();
+  public final String parameters;
+  public final String dataObjectName;
+  public final String constructorInvocation;
+  public final String singleArgumentName;
+  public final List<String> valueObjectInitializers = new ArrayList<>();
 
   public static List<StaticFactoryMethod> from(final CodeGenerationParameter parent) {
     return Arrays.asList(new StaticFactoryMethod(parent, Arguments.SINGLE),
@@ -41,6 +42,7 @@ public class StaticFactoryMethod {
     this.parameters = resolveMethodParameters(parent, staticFactoryMethodArguments);
     this.constructorInvocation = resolveConstructorInvocation(parent, staticFactoryMethodArguments);
     this.valueObjectInitializers.addAll(resolveValueObjectInitializers(parent, staticFactoryMethodArguments));
+    this.singleArgumentName = resolveSingleArgumentName(parent, staticFactoryMethodArguments);
   }
 
   private String resolveMethodParameters(final CodeGenerationParameter parent,
@@ -65,7 +67,7 @@ public class StaticFactoryMethod {
     if (staticFactoryMethodArguments.isAllArgs()) {
       return Collections.emptyList();
     }
-    return Formatters.Variables.format(Formatters.Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, Dialect.findDefault(), parent);
+    return Formatters.Variables.format(DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, Dialect.findDefault(), parent);
   }
 
   private String resolveCarrierName(final CodeGenerationParameter parent) {
@@ -78,20 +80,12 @@ public class StaticFactoryMethod {
     throw new IllegalArgumentException("Unable to resolve carrier name from " + parent.label);
   }
 
-  public String getParameters() {
-    return parameters;
-  }
-
-  public String getDataObjectName() {
-    return dataObjectName;
-  }
-
-  public String getConstructorInvocation() {
-    return constructorInvocation;
-  }
-
-  public List<String> getValueObjectInitializers() {
-    return valueObjectInitializers;
+  private String resolveSingleArgumentName(final CodeGenerationParameter parent,
+                                           final Arguments staticFactoryMethodArguments) {
+    if (staticFactoryMethodArguments.isSingleArg()) {
+      return Introspector.decapitalize(resolveCarrierName(parent));
+    }
+    return "";
   }
 
   private enum Arguments {

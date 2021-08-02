@@ -15,7 +15,11 @@ public class ClassifierData {
   public final String name;
 
   public static ClassifierData from(final Classifier classifier) {
-    return from(classifier.name);
+    if (classifier == null) {
+      return ClassifierData.empty();
+    } else {
+      return from(classifier.name);
+    }
   }
 
   public static ClassifierData from(final String name) {
@@ -36,6 +40,10 @@ public class ClassifierData {
 
   public Classifier toClassifier() {
     return Classifier.from(name);
+  }
+
+  public static ClassifierData empty() {
+    return new ClassifierData(null);
   }
 
   @Override

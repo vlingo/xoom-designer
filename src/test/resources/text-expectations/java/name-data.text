@@ -16,7 +16,11 @@ public class NameData {
   public final String lastName;
 
   public static NameData from(final Name name) {
-    return from(name.firstName, name.lastName);
+    if (name == null) {
+      return NameData.empty();
+    } else {
+      return from(name.firstName, name.lastName);
+    }
   }
 
   public static NameData from(final String firstName, final String lastName) {
@@ -38,6 +42,10 @@ public class NameData {
 
   public Name toName() {
     return Name.from(firstName, lastName);
+  }
+
+  public static NameData empty() {
+    return new NameData(null, null);
   }
 
   @Override

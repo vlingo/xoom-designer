@@ -22,10 +22,21 @@ public class ${dataValueObjectName} {
 
   <#list staticFactoryMethods as factoryMethod>
   public static ${factoryMethod.dataObjectName} from(${factoryMethod.parameters}) {
+    <#if factoryMethod.singleArgumentName?has_content>
+    if (${factoryMethod.singleArgumentName} == null) {
+      return ${dataValueObjectName}.empty();
+    } else {
+      <#list factoryMethod.valueObjectInitializers as initializer>
+      ${initializer}
+      </#list>
+      return ${factoryMethod.constructorInvocation};
+    }
+    <#else>
     <#list factoryMethod.valueObjectInitializers as initializer>
     ${initializer}
     </#list>
     return ${factoryMethod.constructorInvocation};
+    </#if>
   }
 
   </#list>
@@ -48,6 +59,10 @@ public class ${dataValueObjectName} {
     ${translation}
     </#list>
     return ${valueObjectName}.from(${valueObjectFields});
+  }
+
+  public static ${dataValueObjectName} empty() {
+    return new ${dataValueObjectName}(${emptyObjectArguments});
   }
 
   @Override

@@ -16,8 +16,12 @@ public class RankData {
   public final ClassificationData classification;
 
   public static RankData from(final Rank rank) {
-    final ClassificationData classification = rank.classification != null ? ClassificationData.from(rank.classification) : null;
-    return from(rank.points, classification);
+    if (rank == null) {
+      return RankData.empty();
+    } else {
+      final ClassificationData classification = rank.classification != null ? ClassificationData.from(rank.classification) : null;
+      return from(rank.points, classification);
+    }
   }
 
   public static RankData from(final int points, final ClassificationData classification) {
@@ -40,6 +44,10 @@ public class RankData {
   public Rank toRank() {
     final Classification classification = Classification.from(this.classification.label, this.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
     return Rank.from(points, classification);
+  }
+
+  public static RankData empty() {
+    return new RankData(0, null);
   }
 
   @Override

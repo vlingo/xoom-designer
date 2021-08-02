@@ -39,6 +39,7 @@ public enum TemplateParameter implements ParameterKey {
   DATA_OBJECT_NAME("dataObjectName"),
   VALUE_OBJECT_NAME("valueObjectName"),
   DATA_VALUE_OBJECT_NAME("dataValueObjectName"),
+  EMPTY_OBJECT_ARGUMENTS("emptyObjectArguments"),
   INDEX_NAME("indexName"),
   PROJECTION_SOURCES("sources"),
   PROJECTION_SOURCE_TYPES_NAME("projectionSourceTypesName"),
