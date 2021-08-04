@@ -61,7 +61,7 @@ public class ClassifierData {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    Classifier another = (Classifier) other;
+    ClassifierData another = (ClassifierData) other;
     return new EqualsBuilder()
               .append(this.name, another.name)
               .isEquals();

@@ -1,7 +1,7 @@
 version: '3'
 services:
   designer:
-    image: vlingo/xoom-designer:latest
+    image: vlingo/xoom-designer:snapshot
     container_name: xoom-designer
     ports:
       - 19090:19090
