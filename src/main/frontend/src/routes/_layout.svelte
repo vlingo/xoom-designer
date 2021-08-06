@@ -46,9 +46,9 @@
 		Base64.encode(this.files[0]).then(encodedFile => {
 			XoomDesignerRepository.processImportFile(encodedFile)
 			.then(importedSettings => {
+				resetSettings();
 				importSettings(importedSettings);
 				succeed("Settings imported.");
-				goto('/context');
 			}).catch(errorReport => {
 				errorDetails = errorReport.details;
 				handleModelProcessFailure("Model Importation Failure");
@@ -74,6 +74,8 @@
 			settingsResetDialog = true;
 		} else {
 			resetSettings();
+			succeed("Settings reset.");
+			snackbar = true;
 		}
 	}
 
@@ -82,10 +84,8 @@
 	}
 
 	function resetSettings() {
-		succeed("Settings reset.");
 		closeResetDialog();
 		clearSettings();
-		snackbar = true;
 		goto('/context');
 	}
 
