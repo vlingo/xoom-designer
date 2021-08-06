@@ -48,6 +48,7 @@
 			.then(importedSettings => {
 				importSettings(importedSettings);
 				succeed("Settings imported.");
+				goto('/context');
 			}).catch(errorReport => {
 				errorDetails = errorReport.details;
 				handleModelProcessFailure("Model Importation Failure");
