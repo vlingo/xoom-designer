@@ -2,32 +2,29 @@ package io.vlingo.xoomapp.infrastructure.persistence;
 
 import io.vlingo.xoom.actors.World;
 import io.vlingo.xoom.actors.testkit.AccessSafely;
-import io.vlingo.xoom.common.Outcome;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.lattice.model.projection.WarbleStateStoreProjection.Warble;
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.Projection;
+import io.vlingo.xoom.lattice.model.projection.TextProjectable;
 import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
 import io.vlingo.xoom.symbio.Metadata;
 import io.vlingo.xoom.symbio.State.TextState;
-import io.vlingo.xoom.symbio.store.Result;
-import io.vlingo.xoom.symbio.store.StorageException;
 import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.xoom.symbio.store.state.StateStore;
-import io.vlingo.xoom.symbio.store.state.StateStore.ReadResultInterest;
 import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.LocalDate;
 import io.vlingo.xoomapp.infrastructure.*;
 import java.util.*;
 import io.vlingo.xoomapp.model.author.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AuthorProjectionTest {
   private Projection projection;
@@ -41,9 +38,9 @@ public class AuthorProjectionTest {
 
     store = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Arrays.asList(new NoOpDispatcher()));
 
-    projection = world.actorFor(Projection.class, WarbleStateStoreProjection.class, store);
+    projection = world.actorFor(Projection.class, AuthorProjectionActor.class, store);
 
-    StatefulTypeRegistry.registerAll(world, store, Warble.class);
+    StatefulTypeRegistry.registerAll(world, store, AuthorData.class);
 
     valueToProjectionId = new HashMap<>();
   }
@@ -59,144 +56,142 @@ public class AuthorProjectionTest {
 
     final Map<String,Integer> confirmations = access.readFrom("confirmations");
 
-    Assert.assertEquals(3, confirmations.size());
+    assertEquals(3, confirmations.size());
 
-    Assert.assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-    Assert.assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-    Assert.assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+    assertEquals(1, valueOfProjectionIdFor("1", confirmations));
+    assertEquals(1, valueOfProjectionIdFor("2", confirmations));
+    assertEquals(1, valueOfProjectionIdFor("3", confirmations));
 
-    Assert.assertEquals(3, (int) access.readFrom("sum"));
+		final CountingReadResultInterest interest = new CountingReadResultInterest();
+
+		final AccessSafely accessInterest = interest.afterCompleting(3);
+		assertNotNull(accessInterest.readFrom("warble", "1"));
   }
 
-  @Test
-  public void testThatProjectionsUpdate() {
-    final CountingProjectionControl control = new CountingProjectionControl();
+	@Test
+	public void testThatProjectionsUpdate() {
+		final CountingProjectionControl control = new CountingProjectionControl();
 
-    final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(6);
 
-    projection.projectWith(textWarble("1", 1), control);
-    projection.projectWith(textWarble("2", 2), control);
-    projection.projectWith(textWarble("3", 3), control);
+		projection.projectWith(textWarble("1", 1), control);
+		projection.projectWith(textWarble("2", 2), control);
+		projection.projectWith(textWarble("3", 3), control);
 
-    projection.projectWith(textWarble("1", 4), control);
-    projection.projectWith(textWarble("2", 5), control);
-    projection.projectWith(textWarble("3", 6), control);
+		projection.projectWith(textWarble("1", 4), control);
+		projection.projectWith(textWarble("2", 5), control);
+		projection.projectWith(textWarble("3", 6), control);
 
-    final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
+		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-    Assert.assertEquals(6, confirmations.size());
+		assertEquals(6, confirmations.size());
 
-    Assert.assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-    Assert.assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-    Assert.assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
+		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
+		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
 
-    Assert.assertEquals(6, (int) accessControl.readFrom("sum"));
+		final CountingReadResultInterest interest = new CountingReadResultInterest();
 
-    final CountingReadResultInterest interest = new CountingReadResultInterest();
+		final AccessSafely accessInterest = interest.afterCompleting(3);
 
-    final AccessSafely accessInterest = interest.afterCompleting(3);
+		store.read("1", AuthorState.class, interest);
+		store.read("2", AuthorState.class, interest);
+		store.read("3", AuthorState.class, interest);
 
-    store.read("1", Warble.class, interest);
-    store.read("2", Warble.class, interest);
-    store.read("3", Warble.class, interest);
+		final AuthorState warble1 = accessInterest.readFrom("warble", "1");
+		assertNotNull(warble1);
 
-    final int sum = accessInterest.readFrom("sum");
+		final AuthorState warble2 = accessInterest.readFrom("warble", "2");
+		assertNotNull(warble2);
 
-    Assert.assertEquals(21, sum);
+		final AuthorState warble3 = accessInterest.readFrom("warble", "3");
+		assertNotNull(warble3);
+	}
 
-    final Warble warble1 = accessInterest.readFrom("warble", "1");
-    Assert.assertEquals(5, warble1.count);
+	@Test
+	public void testThatProjectionsWriteStateBeforeHandlingNextEvent() {
+		final CountingProjectionControl control = new CountingProjectionControl();
 
-    final Warble warble2 = accessInterest.readFrom("warble", "2");
-    Assert.assertEquals(7, warble2.count);
+		final AccessSafely accessControl = control.afterCompleting(3);
 
-    final Warble warble3 = accessInterest.readFrom("warble", "3");
-    Assert.assertEquals(9, warble3.count);
-  }
+		projection.projectWith(textWarble("1", 1), control);
+		projection.projectWith(textWarble("1", 2), control);
+		projection.projectWith(textWarble("1", 3), control);
 
-  @Test
-  public void testThatProjectionsWriteStateBeforeHandlingNextEvent() {
-    final CountingProjectionControl control = new CountingProjectionControl();
+		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-    final AccessSafely accessControl = control.afterCompleting(3);
+		assertEquals(3, confirmations.size());
 
-    projection.projectWith(textWarble("1", 1), control);
-    projection.projectWith(textWarble("1", 2), control);
-    projection.projectWith(textWarble("1", 3), control);
+		final CountingReadResultInterest interest = new CountingReadResultInterest();
 
-    final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
+		final AccessSafely accessInterest = interest.afterCompleting(1);
 
-    Assert.assertEquals(3, confirmations.size());
+		store.read("1", AuthorState.class, interest);
 
-    final CountingReadResultInterest interest = new CountingReadResultInterest();
+		final AuthorState warble = accessInterest.readFrom("warble", "1");
+		assertNotNull(warble);
+	}
 
-    final AccessSafely accessInterest = interest.afterCompleting(1);
+	@Test
+	public void testThatProjectionDoesNotRequireDiff() {
+		final Projection projection = world.actorFor(Projection.class, AuthorProjectionActor.class, store, true);
 
-    store.read("1", Warble.class, interest);
+		final CountingProjectionControl control = new CountingProjectionControl();
 
-    final Warble warble = accessInterest.readFrom("warble", "1");
-    Assert.assertEquals(6, warble.count);
-  }
+		final AccessSafely accessControl = control.afterCompleting(2);
 
-  @Test
-  public void testThatProjectionDoesNotRequireDiff() {
-    final Projection projection = world.actorFor(Projection.class, WarbleStateStoreProjection.class, store, true);
+		projection.projectWith(textWarble("1", 1), control);
+		projection.projectWith(textWarble("1", 0), control);
 
-    final CountingProjectionControl control = new CountingProjectionControl();
+		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-    final AccessSafely accessControl = control.afterCompleting(2);
+		assertEquals(2, confirmations.size());
 
-    projection.projectWith(textWarble("1", 1), control);
-    projection.projectWith(textWarble("1", 0), control);
+		final CountingReadResultInterest interest = new CountingReadResultInterest();
 
-    final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
+		final AccessSafely accessInterest = interest.afterCompleting(1);
 
-    Assert.assertEquals(2, confirmations.size());
+		store.read("1", AuthorState.class, interest);
 
-    final CountingReadResultInterest interest = new CountingReadResultInterest();
+		final AuthorState warble = accessInterest.readFrom("warble", "1");
+		assertNotNull(warble);
+	}
 
-    final AccessSafely accessInterest = interest.afterCompleting(1);
+	@Test
+	public void testThatProjectionDoesRequireDiff() {
+		final Projection projection = world.actorFor(Projection.class, AuthorProjectionActor.class, store, false);
 
-    store.read("1", Warble.class, interest);
+		final CountingProjectionControl control = new CountingProjectionControl();
 
-    final Warble warble = accessInterest.readFrom("warble", "1");
-    Assert.assertEquals(1, warble.count);
-  }
+		final AccessSafely accessControl = control.afterCompleting(3);
 
-  @Test
-  public void testThatProjectionDoesRequireDiff() {
-    final Projection projection = world.actorFor(Projection.class, WarbleStateStoreProjection.class, store, false);
+		projection.projectWith(textWarble("1", 1_000), control);
+		projection.projectWith(textWarble("1", 1_000), control); // forces previousData answer to not write
+		projection.projectWith(textWarble("1", 3_000), control);
 
-    final CountingProjectionControl control = new CountingProjectionControl();
+		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-    final AccessSafely accessControl = control.afterCompleting(3);
+		assertEquals(3, confirmations.size());
 
-    projection.projectWith(textWarble("1", 1_000), control);
-    projection.projectWith(textWarble("1", 1_000), control); // forces previousData answer to not write
-    projection.projectWith(textWarble("1", 3_000), control);
+		final CountingReadResultInterest interest = new CountingReadResultInterest();
 
-    final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
+		final AccessSafely accessInterest = interest.afterCompleting(1);
 
-    Assert.assertEquals(3, confirmations.size());
+		store.read("1", AuthorState.class, interest);
 
-    final CountingReadResultInterest interest = new CountingReadResultInterest();
+		final AuthorState warble = accessInterest.readFrom("warble", "1");
+		assertNotNull(warble);
+}
 
-    final AccessSafely accessInterest = interest.afterCompleting(1);
-
-    store.read("1", Warble.class, interest);
-
-    final Warble warble = accessInterest.readFrom("warble", "1");
-    Assert.assertEquals(4_000, warble.count); // 4_000 not 5_000
-  }
   @AfterEach
   public void tearDown() {
     world.terminate();
   }
 
   private Projectable textWarble(final String id, final int value) {
-    final Warble warble = new Warble(id, "W" + value, value);
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
 
-    final TextState state = new TextState(id, Warble.class, 1, JsonSerialization.serialized(warble), warble.version, Metadata.withObject(warble));
+    final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), 1, Metadata.withObject(firstData.toAuthorState()));
 
     final String valueText = Integer.toString(value);
     final String projectionId = UUID.randomUUID().toString();
@@ -210,29 +205,4 @@ public class AuthorProjectionTest {
     return confirmations.get(valueToProjectionId.get(valueText));
   }
 
-  private static class CountingProjectionControl implements ProjectionControl {
-    private AccessSafely access = AccessSafely.afterCompleting(0);
-
-    private final Map<String, Integer> confirmations = new ConcurrentHashMap<>();
-
-    @Override
-    public void confirmProjected(final String projectionId) {
-      access.writeUsing("confirmations", projectionId);
-    }
-
-    public AccessSafely afterCompleting(final int times) {
-      access = AccessSafely.afterCompleting(times);
-
-      access.writingWith("confirmations", (String projectionId) -> {
-        final int count = confirmations.getOrDefault(projectionId, 0);
-        confirmations.put(projectionId, count + 1);
-      });
-
-      access.readingWith("confirmations", () -> confirmations);
-
-      access.readingWith("sum", () -> confirmations.values().stream().mapToInt(i -> i).sum());
-
-      return access;
-    }
-  }
 }

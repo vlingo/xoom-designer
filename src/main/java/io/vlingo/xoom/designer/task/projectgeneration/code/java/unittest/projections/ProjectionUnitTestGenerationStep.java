@@ -27,13 +27,12 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
     final List<CodeGenerationParameter> valueObjects =
         context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
     final List<TemplateData> templatesData = new ArrayList<>();
-    if (projectionType.isEventBased()) {
-      templatesData.add(new CountingProjectionControlTemplateData(packageName));
-      templatesData.add(new CountingReadResultInterestTemplateData(packageName));
-    }
-    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), packageName, projectionType, aggregates, valueObjects));
-    return templatesData;
+    templatesData.add(new CountingProjectionControlTemplateData(packageName));
+    templatesData.add(new CountingReadResultInterestTemplateData(packageName));
 
+    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), packageName, projectionType, aggregates, valueObjects));
+
+    return templatesData;
   }
 
   @Override
