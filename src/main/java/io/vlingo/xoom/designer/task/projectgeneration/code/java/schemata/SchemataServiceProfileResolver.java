@@ -13,7 +13,7 @@ public class SchemataServiceProfileResolver {
   private static final String PROFILE_NAME = "schemata-service";
 
   public static String resolveSchemataProfile(final SchemataSettings schemataSettings) {
-    if(schemataSettings.serviceName.isPresent()) {
+    if(schemataSettings.serviceDNS.isPresent()) {
       return "-P" + PROFILE_NAME;
     }
     return "";

@@ -6,5 +6,8 @@
         </activation>
         <properties>
           <name>${serviceName}</name>
+          <#if servicePort?has_content>
+          <port>${servicePort?c}</port>
+          </#if>
         </properties>
       </profile>

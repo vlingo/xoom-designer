@@ -6,5 +6,6 @@
         </activation>
         <properties>
           <name>xoom-schemata</name>
+          <port>1009</port>
         </properties>
       </profile>

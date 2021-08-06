@@ -2,6 +2,7 @@ package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
@@ -39,6 +40,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.AggregateMana
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.StaticFilesGenerationStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -59,6 +61,7 @@ public class Configuration {
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
   public static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
   public static final String SCHEMATA_SERVICE_NAME = "SCHEMATA_SERVICE_NAME";
+  public static final String SCHEMATA_SERVICE_PORT = "SCHEMATA_SERVICE_PORT";
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   static {
@@ -151,14 +154,17 @@ public class Configuration {
     return expirationSeconds != null ? Duration.ofSeconds(Long.valueOf(expirationSeconds)) : DEFAULT_REQUEST_COUNT_EXPIRATION;
   }
 
-  public static Optional<String> resolveSchemataDNS() {
-    final String schemataServiceName = ComponentRegistry.withName(SCHEMATA_SERVICE_NAME);
+  public static Optional<Tuple2<String, Integer>> resolveSchemataServiceDNS() {
+    final String schemataServiceName = System.getenv(SCHEMATA_SERVICE_NAME);
     if(schemataServiceName != null) {
-        return Optional.of(schemataServiceName);
-    }
-    final String schemataServiceNameFromEnv = System.getenv(SCHEMATA_SERVICE_NAME);
-    if(schemataServiceNameFromEnv != null) {
-      return Optional.of(schemataServiceNameFromEnv);
+      final String schemataServicePort = System.getenv(SCHEMATA_SERVICE_PORT);
+      if (schemataServicePort == null) {
+        return Optional.of(Tuple2.tuple(schemataServiceName, null));
+      }
+      if(!StringUtils.isNumeric(schemataServicePort)) {
+        throw new IllegalArgumentException("The schemata service port is not a number.");
+      }
+      return Optional.of(Tuple2.tuple(schemataServiceName, Integer.parseInt(schemataServicePort)));
     }
     return Optional.empty();
   }

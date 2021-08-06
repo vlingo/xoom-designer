@@ -40,7 +40,7 @@ public class SchemataGenerationStep extends TemplateProcessingStep {
     templateData.addAll(DomainEventSpecificationTemplateData.from(exchanges));
     templateData.addAll(ValueObjectSpecificationTemplateData.from(exchanges, publishedValueObjects));
     templateData.add(new SchemataPluginTemplateData(schemataSettings, exchanges, publishedValueObjects));
-    if(schemataSettings.serviceName.isPresent()) {
+    if(schemataSettings.serviceDNS.isPresent()) {
       templateData.add(new SchemataDNSTemplateData(schemataSettings));
     }
     return templateData;

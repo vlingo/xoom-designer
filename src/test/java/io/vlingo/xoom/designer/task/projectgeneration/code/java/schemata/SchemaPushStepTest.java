@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
@@ -48,7 +49,7 @@ public class SchemaPushStepTest {
   @EnabledOnOs({OS.WINDOWS})
   public void testCommandPreparationWithProfileOnWindows() {
     Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
-    final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of("vlingo-xoom-schemata"));
+    final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of(Tuple2.from("vlingo-xoom-schemata", 10009)));
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
     new SchemaPushStep(commandRetainer).process(context);

@@ -164,6 +164,7 @@ public enum TemplateParameter implements ParameterKey {
   UI_TYPE("uiType"),
   SCHEMATA_SETTINGS("schemataSettings"),
   SERVICE_NAME("serviceName"),
+  SERVICE_PORT("servicePort"),
   DEPLOYMENT_SETTINGS("deploymentSettings"),
   KUBERNETES_POD_NAME("kubernetesPodName"),
   KUBERNETES_IMAGE("kubernetesImage"),

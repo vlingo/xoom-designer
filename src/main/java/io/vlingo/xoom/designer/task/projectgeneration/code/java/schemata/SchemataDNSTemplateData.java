@@ -23,7 +23,8 @@ public class SchemataDNSTemplateData extends TemplateData {
             TemplateParameters.with(TemplateParameter.POM_SECTION, true)
                     .and(TemplateParameter.PRODUCTION_CODE, false)
                     .and(TemplateParameter.OFFSET, "<profiles>")
-                    .and(TemplateParameter.SERVICE_NAME, schemataSettings.serviceName.get());
+                    .and(TemplateParameter.SERVICE_NAME, schemataSettings.serviceDNS.get()._1)
+                    .and(TemplateParameter.SERVICE_PORT, schemataSettings.serviceDNS.get()._2);
   }
 
   @Override

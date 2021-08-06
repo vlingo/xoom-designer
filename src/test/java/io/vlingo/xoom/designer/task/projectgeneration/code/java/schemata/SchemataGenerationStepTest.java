@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
@@ -27,10 +28,13 @@ public class SchemataGenerationStepTest {
 
     @Test
     public void testThatSchemataResourcesAreGenerated() {
+        final SchemataSettings schemataSettings =
+                SchemataSettings.with("localhost", 18787, Optional.of(Tuple2.from("xoom-schemata", 1009)));
+
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()))
-                        .add(CodeGenerationParameter.ofObject(Label.SCHEMATA_SETTINGS, SchemataSettings.with("localhost", 18787, Optional.of("xoom-schemata"))));
+                        .add(CodeGenerationParameter.ofObject(Label.SCHEMATA_SETTINGS, schemataSettings));
 
         final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
