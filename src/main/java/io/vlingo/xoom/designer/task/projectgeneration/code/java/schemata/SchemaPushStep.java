@@ -54,7 +54,7 @@ public class SchemaPushStep extends CommandExecutionStep {
 
   @Override
   protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
-    return new SchemaPullException(exception);
+    return new SchemaPushException(exception);
   }
 
 }

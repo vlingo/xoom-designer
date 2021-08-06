@@ -11,11 +11,11 @@ public class SchemataSettings {
   public final String host;
   public final int port;
 
-  public static SchemataSettings with(String host, int port) {
+  public static SchemataSettings with(final String host, final int port) {
     return new SchemataSettings(host, port);
   }
 
-  private SchemataSettings(String host, int port) {
+  private SchemataSettings(final String host, final int port) {
     this.host = host;
     this.port = port;
   }

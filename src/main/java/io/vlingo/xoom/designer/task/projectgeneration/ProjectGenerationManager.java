@@ -14,7 +14,6 @@ import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsDat
 import io.vlingo.xoom.designer.infrastructure.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.SchemaPullException;
 
 import java.io.File;
 
@@ -71,12 +70,18 @@ public class ProjectGenerationManager {
               .forEach(step -> step.process(context));
 
       context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationSucceed(context, information));
-    } catch (final SchemaPullException exception) {
-      exception.printStackTrace();
-      context.addOutput(PROJECT_GENERATION_REPORT, onSchemaPullFail(information));
     } catch (final Exception exception) {
       exception.printStackTrace();
-      context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationFail(context, information, exception));
+      switch(exception.getClass().getSimpleName()) {
+        case "SchemaPullException":
+          context.addOutput(PROJECT_GENERATION_REPORT, onSchemaPullFail(information));
+          break;
+        case "SchemaPushException":
+          context.addOutput(PROJECT_GENERATION_REPORT, onSchemaPushFail(information));
+          break;
+        default:
+          context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationFail(context, information, exception));
+      }
     }
   }
 

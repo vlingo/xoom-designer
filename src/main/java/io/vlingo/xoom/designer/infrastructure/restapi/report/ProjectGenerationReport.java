@@ -21,6 +21,7 @@ public class ProjectGenerationReport {
   public final static String CODEGEN_FAILURE = "CODEGEN_FAILURE";
   public final static String VALIDATION_FAILURE = "VALIDATION_FAILURE";
   public final static String SCHEMA_PULL_FAILURE = "SCHEMA_PULL_FAILURE";
+  public final static String SCHEMA_PUSH_FAILURE = "SCHEMA_PUSH_FAILURE";
   public final static String CONTEXT_MAPPING_FAILURE = "CONTEXT_MAPPING_FAILURE";
 
   public final String target;
@@ -51,6 +52,10 @@ public class ProjectGenerationReport {
 
   public static ProjectGenerationReport onSchemaPullFail(final ProjectGenerationInformation information) {
     return new ProjectGenerationReport(information.generationTarget, SCHEMA_PULL_FAILURE,  "");
+  }
+
+  public static ProjectGenerationReport onSchemaPushFail(final ProjectGenerationInformation information) {
+    return new ProjectGenerationReport(information.generationTarget, SCHEMA_PUSH_FAILURE,  "");
   }
 
   public static ProjectGenerationReport onContextMappingFail(final GenerationTarget target,

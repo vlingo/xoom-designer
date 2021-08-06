@@ -33,7 +33,7 @@
   let errorDetailsCopied = false;
   let failureDialogActive = false;
   let generateButtonLabel = requiresCompression() ? "Download Project" : "Generate";
-  let anchor, menu, dialogStatus, succeeded, loadingDetails, errorDetails, schemaPullFailed, validationFailed, generationFailed, successMessage;
+  let anchor, menu, dialogStatus, succeeded, loadingDetails, errorDetails, schemaPushFailed, schemaPullFailed, validationFailed, generationFailed, successMessage;
   let anchorClasses = {};
 
   function checkPath() {
@@ -98,6 +98,9 @@
       case "SCHEMA_PULL_FAILURE":
         handleSchemaPullFailure();
         break;
+      case "SCHEMA_PUSH_FAILURE":
+        handleSchemaPushFailure();
+        break;
     }
   }
 
@@ -132,6 +135,11 @@
   function handleSchemaPullFailure() {
     failureDialogActive = true;
     schemaPullFailed = true;
+  }
+
+  function handleSchemaPushFailure() {
+    failureDialogActive = true;
+    schemaPushFailed = true;
   }
 
   function requiresCompression() {
@@ -323,6 +331,8 @@
           <CardText>
             {#if schemaPullFailed}
             Unable to pull schemas. Please ensure that the Schemata Service is running on the host/port set in the Options menu.
+            {:else if schemaPushFailed}
+            Unable to push schemas. Please ensure that the Schemata Service is running on the host/port set in the Options menu.
             {:else}
             {#if errorDetailsCopied}
             Error details copied. <Icon class="green-text" path={mdiCheckBold}/> <br>
