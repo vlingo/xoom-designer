@@ -44,6 +44,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
@@ -57,6 +58,7 @@ public class Configuration {
   public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
   public static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
+  public static final String SCHEMATA_SERVICE_NAME = "SCHEMATA_SERVICE_NAME";
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   static {
@@ -147,6 +149,18 @@ public class Configuration {
   public static Duration resolveProjectGenerationRequestCountExpiration() {
     final String expirationSeconds = System.getenv(REQUEST_COUNT_EXPIRATION);
     return expirationSeconds != null ? Duration.ofSeconds(Long.valueOf(expirationSeconds)) : DEFAULT_REQUEST_COUNT_EXPIRATION;
+  }
+
+  public static Optional<String> resolveSchemataDNS() {
+    final String schemataServiceName = ComponentRegistry.withName(SCHEMATA_SERVICE_NAME);
+    if(schemataServiceName != null) {
+        return Optional.of(schemataServiceName);
+    }
+    final String schemataServiceNameFromEnv = System.getenv(SCHEMATA_SERVICE_NAME);
+    if(schemataServiceNameFromEnv != null) {
+      return Optional.of(schemataServiceNameFromEnv);
+    }
+    return Optional.empty();
   }
 
 }

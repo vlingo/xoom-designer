@@ -231,7 +231,7 @@ public class TaskExecutionContextMapper {
             ClusterSettings.with(data.deployment.clusterPort, data.deployment.clusterTotalNodes);
 
     final SchemataSettings schemataSettings =
-            SchemataSettings.with(data.schemata.host, data.schemata.port);
+            SchemataSettings.with(data.schemata.host, data.schemata.port, Configuration.resolveSchemataDNS());
 
     final Path definitiveFolder =
             generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);

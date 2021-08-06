@@ -63,6 +63,8 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <profiles>
+  </profiles>
   <build>
     <plugins>
       <plugin>

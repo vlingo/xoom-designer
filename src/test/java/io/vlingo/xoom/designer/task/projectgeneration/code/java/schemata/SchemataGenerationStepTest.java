@@ -19,16 +19,18 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CodeGen
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static java.util.stream.Collectors.toList;
 
 public class SchemataGenerationStepTest {
 
     @Test
-    public void testThatSpecificationAndPluginConfigAreGenerated() {
+    public void testThatSchemataResourcesAreGenerated() {
         final CodeGenerationParameters parameters =
                 CodeGenerationParameters.empty()
                         .addAll(CodeGenerationParametersBuilder.threeExchanges().collect(toList()))
-                        .add(CodeGenerationParameter.ofObject(Label.SCHEMATA_SETTINGS, SchemataSettings.with("localhost", 18787)));
+                        .add(CodeGenerationParameter.ofObject(Label.SCHEMATA_SETTINGS, SchemataSettings.with("localhost", 18787, Optional.of("xoom-schemata"))));
 
         final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
@@ -36,6 +38,9 @@ public class SchemataGenerationStepTest {
 
         final Content plugin =
                 context.findContent(JavaTemplateStandard.SCHEMATA_PLUGIN, "pom");
+
+        final Content dns =
+                context.findContent(JavaTemplateStandard.SCHEMATA_DNS, "pom");
 
         final Content authorRatedSpecification =
                 context.findContent(JavaTemplateStandard.SCHEMATA_SPECIFICATION, "AuthorRated");
@@ -61,8 +66,9 @@ public class SchemataGenerationStepTest {
         final Content classifierSpecification =
                 context.findContent(JavaTemplateStandard.SCHEMATA_SPECIFICATION, "Classifier");
 
-        Assertions.assertEquals(9, context.contents().size());
+        Assertions.assertEquals(10, context.contents().size());
         Assertions.assertTrue(plugin.contains(TextExpectation.onJava().read("schemata-plugin")));
+        Assertions.assertTrue(dns.contains(TextExpectation.onJava().read("schemata-dns")));
         Assertions.assertTrue(authorRatedSpecification.contains(TextExpectation.onJava().read("author-rated-specification")));
         Assertions.assertTrue(authorBlockedSpecification.contains(TextExpectation.onJava().read("author-blocked-specification")));
         Assertions.assertTrue(bookSoldOutSpecification.contains(TextExpectation.onJava().read("book-sold-out")));

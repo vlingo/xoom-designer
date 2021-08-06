@@ -19,4 +19,5 @@ public enum Environment {
     return equals(LOCAL);
   }
 
+  public boolean isContainer() { return equals(CONTAINER); }
 }
