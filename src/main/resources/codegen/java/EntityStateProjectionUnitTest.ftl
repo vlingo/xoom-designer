@@ -24,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
-<#macro textWarbleProjectable operation>
+<#macro textWarbleProjectable version operation>
 	private Projectable create${operation}(final String id, final int value, final String operation) {
 		final String valueText = Integer.toString(value);
-	    ${testCases?first.dataDeclarations?first}
+		${testCases?first.dataDeclarations?first}
 
-		final TextState state = new TextState(id, ${dataName}.class, 1, JsonSerialization.serialized(firstData.to${dataName}()), 1,
+		final TextState state = new TextState(id, ${dataName}.class, 1, JsonSerialization.serialized(firstData.to${dataName}()), ${version},
 		Metadata.with(firstData.to${dataName}(), valueText, operation));
 		final String projectionId = UUID.randomUUID().toString();
 
@@ -38,6 +38,7 @@ import ${import.qualifiedClassName};
 		return new TextProjectable(state, Collections.emptyList(), projectionId);
 	}
 </#macro>
+
 public class ${projectionUnitTestName} {
   private Projection projection;
   private StateStore store;
@@ -56,7 +57,9 @@ public class ${projectionUnitTestName} {
 
     valueToProjectionId = new HashMap<>();
   }
+
 <#list testCases as testCase>
+	<#if testCase.factoryMethod>
   @Test
   public void ${testCase.methodName}() {
     final CountingProjectionControl control = new CountingProjectionControl();
@@ -76,8 +79,37 @@ public class ${projectionUnitTestName} {
 
 		assertEquals(3, ((Map) access.readFrom("confirmations")).size());
   }
-	<@textWarbleProjectable testCase.domainEventName/>
 
+  <@textWarbleProjectable 1 testCase.domainEventName/>
+  <#else>
+
+	@Test
+	public void ${testCase.methodName}() {
+		final CountingProjectionControl control = new CountingProjectionControl();
+
+		final AccessSafely accessControl = control.afterCompleting(6);
+
+	  projection.projectWith(create${testCases?first.domainEventName}("1", 1, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}("2", 2, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}("3", 3, "${testCases?first.domainEventName}"), control);
+
+	  projection.projectWith(create${testCase.domainEventName}("1", 4, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}("2", 5, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}("3", 6, "${testCase.domainEventName}"), control);
+
+		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
+
+		assertEquals(6, confirmations.size());
+
+		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
+		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
+		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+
+		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
+	}
+
+	<@textWarbleProjectable 2 testCase.domainEventName/>
+  </#if>
 </#list>
 
   @AfterEach
