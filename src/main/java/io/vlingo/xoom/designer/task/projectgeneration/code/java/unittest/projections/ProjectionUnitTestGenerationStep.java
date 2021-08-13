@@ -37,7 +37,8 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(CodeGenerationContext context) {
-    return context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf).isProjectionEnabled();
+    //TODO: Change it to ´return context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf).isProjectionEnabled();´ when https://trello.com/c/CxE2UquT is done
+    return context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf).isEventBased();
   }
 
 }

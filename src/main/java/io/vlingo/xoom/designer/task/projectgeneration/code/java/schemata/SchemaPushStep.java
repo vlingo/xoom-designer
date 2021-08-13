@@ -12,6 +12,7 @@ import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 
 import java.nio.file.Path;
@@ -33,8 +34,14 @@ public class SchemaPushStep extends CommandExecutionStep {
     final String directoryChangeCommand =
             terminal.resolveDirectoryChangeCommand(projectPath);
 
-    return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:push-schema@push",
-            directoryChangeCommand, terminal.mavenCommand());
+    final SchemataSettings schemataSettings =
+            context.codeGenerationParameters().retrieveObject(Label.SCHEMATA_SETTINGS);
+
+    final String schemataServiceProfile =
+            SchemataServiceProfileResolver.resolveSchemataProfile(schemataSettings);
+
+    return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:push-schema@push %s",
+            directoryChangeCommand, terminal.mavenCommand(), schemataServiceProfile);
   }
 
   @Override
@@ -54,7 +61,7 @@ public class SchemaPushStep extends CommandExecutionStep {
 
   @Override
   protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
-    return new SchemaPullException(exception);
+    return new SchemaPushException(exception);
   }
 
 }

@@ -19,9 +19,15 @@ public class RestResourceUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-
     final List<CodeGenerationParameter> valueObjects =
         context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
+
     return RestResourceUnitTestTemplateDataFactory.build(context.parameters(), context.contents(), valueObjects);
+  }
+
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    //TODO: Remove this method when https://trello.com/c/ikCGH4fb is done.
+    return false;
   }
 }

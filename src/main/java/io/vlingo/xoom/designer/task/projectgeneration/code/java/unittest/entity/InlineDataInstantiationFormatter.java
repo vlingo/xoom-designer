@@ -71,10 +71,10 @@ public class InlineDataInstantiationFormatter {
 
   private void generateValueObjectFieldAssignment(final String path, final CodeGenerationParameter field) {
     final String currentFieldPath = path + "." + field.value;
-    if (FieldDetail.isMethodParameterAssignableToValueObject(field, methodParameter)) {
-      generateComplexTypeAssignment(currentFieldPath, field);
-    } else if (FieldDetail.isCollectionOrDate(field)) {
+    if (FieldDetail.isCollectionOrDate(field)) {
       valuesAssignmentExpression.append(FieldDetail.resolveDefaultValue(field.parent(), field.value)).append(", ");
+    } else if (FieldDetail.isMethodParameterAssignableToValueObject(field, methodParameter)) {
+      generateComplexTypeAssignment(currentFieldPath, field);
     } else {
       generateScalarTypeAssignment(currentFieldPath);
     }

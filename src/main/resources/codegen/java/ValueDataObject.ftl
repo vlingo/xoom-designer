@@ -82,7 +82,7 @@ public class ${dataValueObjectName} {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    ${valueObjectName} another = (${valueObjectName}) other;
+    ${dataValueObjectName} another = (${dataValueObjectName}) other;
     return new EqualsBuilder()
               <#list memberNames as member>
               .append(this.${member}, another.${member})
