@@ -24,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 <#list imports as import>
 import ${import.qualifiedClassName};
 </#list>
-<#macro textWarbleProjectable version operation>
-	private Projectable create${operation}(final String id, final int value, final String operation) {
+<#macro textWarbleProjectable operation>
+	private Projectable create${operation}(final String id, final int value, final int version, final String operation) {
 		final String valueText = Integer.toString(value);
 		${testCases?first.dataDeclarations?first}
 
-		final TextState state = new TextState(id, ${dataName}.class, 1, JsonSerialization.serialized(firstData.to${dataName}()), ${version},
+		final TextState state = new TextState(id, ${dataName}.class, 1, JsonSerialization.serialized(firstData.to${dataName}()), version,
 		Metadata.with(firstData.to${dataName}(), valueText, operation));
 		final String projectionId = UUID.randomUUID().toString();
 
@@ -65,9 +65,9 @@ public class ${projectionUnitTestName} {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(3);
 
-    projection.projectWith(create${testCase.domainEventName}("1", 1, "${testCase.domainEventName}"), control);
-    projection.projectWith(create${testCase.domainEventName}("2", 2, "${testCase.domainEventName}"), control);
-    projection.projectWith(create${testCase.domainEventName}("3", 3, "${testCase.domainEventName}"), control);
+    projection.projectWith(create${testCase.domainEventName}("1", 1, 1, "${testCase.domainEventName}"), control);
+    projection.projectWith(create${testCase.domainEventName}("2", 2, 1, "${testCase.domainEventName}"), control);
+    projection.projectWith(create${testCase.domainEventName}("3", 3, 1, "${testCase.domainEventName}"), control);
 
     final Map<String,Integer> confirmations = access.readFrom("confirmations");
 
@@ -79,8 +79,6 @@ public class ${projectionUnitTestName} {
 
 		assertEquals(3, ((Map) access.readFrom("confirmations")).size());
   }
-
-  <@textWarbleProjectable 1 testCase.domainEventName/>
   <#else>
 
 	@Test
@@ -89,13 +87,13 @@ public class ${projectionUnitTestName} {
 
 		final AccessSafely accessControl = control.afterCompleting(6);
 
-	  projection.projectWith(create${testCases?first.domainEventName}("1", 1, "${testCases?first.domainEventName}"), control);
-	  projection.projectWith(create${testCases?first.domainEventName}("2", 2, "${testCases?first.domainEventName}"), control);
-	  projection.projectWith(create${testCases?first.domainEventName}("3", 3, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}("1", 1, 1, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}("2", 2, 1, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}("3", 3, 1, "${testCases?first.domainEventName}"), control);
 
-	  projection.projectWith(create${testCase.domainEventName}("1", 4, "${testCase.domainEventName}"), control);
-	  projection.projectWith(create${testCase.domainEventName}("2", 5, "${testCase.domainEventName}"), control);
-	  projection.projectWith(create${testCase.domainEventName}("3", 6, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}("1", 4, 2, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}("2", 5, 2, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}("3", 6, 2, "${testCase.domainEventName}"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
@@ -107,9 +105,9 @@ public class ${projectionUnitTestName} {
 
 		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
 	}
+	</#if>
 
-	<@textWarbleProjectable 2 testCase.domainEventName/>
-  </#if>
+  <@textWarbleProjectable testCase.domainEventName/>
 </#list>
 
   @AfterEach
