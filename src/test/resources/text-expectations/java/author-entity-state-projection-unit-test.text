@@ -29,395 +29,252 @@ import io.vlingo.xoomapp.model.author.*;
 public class AuthorProjectionTest {
   private Projection projection;
   private StateStore store;
-  private Map<String,String> valueToProjectionId;
+  private Map<String, String> valueToProjectionId;
   private World world;
 
   @BeforeEach
   public void setUp() {
     world = World.startWithDefaults("test-state-store-projection");
-
     store = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Arrays.asList(new NoOpDispatcher()));
-
     projection = world.actorFor(Projection.class, AuthorProjectionActor.class, store);
-
     StatefulTypeRegistry.registerAll(world, store, AuthorData.class);
-
     valueToProjectionId = new HashMap<>();
   }
 
   @Test
   public void withName() {
-    final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(3);
+		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+		final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+		final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
 
-    projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-    projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-    projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+    projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
     final Map<String,Integer> confirmations = access.readFrom("confirmations");
 
-    assertEquals(3, confirmations.size());
+    assertEquals(2, confirmations.size());
 
-    assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-    assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-    assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+    assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+    assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(3, ((Map) access.readFrom("confirmations")).size());
+		assertEquals(2, ((Map) access.readFrom("confirmations")).size());
   }
-
-	private Projectable createAuthorRegistered(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
-	}
 
 	@Test
 	public void changeRank() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorRanked("1", 4, 2, "AuthorRanked"), control);
-	  projection.projectWith(createAuthorRanked("2", 5, 2, "AuthorRanked"), control);
-	  projection.projectWith(createAuthorRanked("3", 6, 2, "AuthorRanked"), control);
+	  projection.projectWith(createAuthorRanked(firstData, 2, "AuthorRanked"), control);
+	  projection.projectWith(createAuthorRanked(secondData, 2, "AuthorRanked"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorRanked(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void addTag() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorTagged("1", 4, 2, "AuthorTagged"), control);
-	  projection.projectWith(createAuthorTagged("2", 5, 2, "AuthorTagged"), control);
-	  projection.projectWith(createAuthorTagged("3", 6, 2, "AuthorTagged"), control);
+	  projection.projectWith(createAuthorTagged(firstData, 2, "AuthorTagged"), control);
+	  projection.projectWith(createAuthorTagged(secondData, 2, "AuthorTagged"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorTagged(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void addTags() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorBulkTagged("1", 4, 2, "AuthorBulkTagged"), control);
-	  projection.projectWith(createAuthorBulkTagged("2", 5, 2, "AuthorBulkTagged"), control);
-	  projection.projectWith(createAuthorBulkTagged("3", 6, 2, "AuthorBulkTagged"), control);
+	  projection.projectWith(createAuthorBulkTagged(firstData, 2, "AuthorBulkTagged"), control);
+	  projection.projectWith(createAuthorBulkTagged(secondData, 2, "AuthorBulkTagged"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorBulkTagged(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void replaceTags() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorTagsReplacedEvent("1", 4, 2, "AuthorTagsReplacedEvent"), control);
-	  projection.projectWith(createAuthorTagsReplacedEvent("2", 5, 2, "AuthorTagsReplacedEvent"), control);
-	  projection.projectWith(createAuthorTagsReplacedEvent("3", 6, 2, "AuthorTagsReplacedEvent"), control);
+	  projection.projectWith(createAuthorTagsReplacedEvent(firstData, 2, "AuthorTagsReplacedEvent"), control);
+	  projection.projectWith(createAuthorTagsReplacedEvent(secondData, 2, "AuthorTagsReplacedEvent"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorTagsReplacedEvent(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void removeTag() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorUntagged("1", 4, 2, "AuthorUntagged"), control);
-	  projection.projectWith(createAuthorUntagged("2", 5, 2, "AuthorUntagged"), control);
-	  projection.projectWith(createAuthorUntagged("3", 6, 2, "AuthorUntagged"), control);
+	  projection.projectWith(createAuthorUntagged(firstData, 2, "AuthorUntagged"), control);
+	  projection.projectWith(createAuthorUntagged(secondData, 2, "AuthorUntagged"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorUntagged(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void relateAuthor() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorRelated("1", 4, 2, "AuthorRelated"), control);
-	  projection.projectWith(createAuthorRelated("2", 5, 2, "AuthorRelated"), control);
-	  projection.projectWith(createAuthorRelated("3", 6, 2, "AuthorRelated"), control);
+	  projection.projectWith(createAuthorRelated(firstData, 2, "AuthorRelated"), control);
+	  projection.projectWith(createAuthorRelated(secondData, 2, "AuthorRelated"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorRelated(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void relateAuthors() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorsRelated("1", 4, 2, "AuthorsRelated"), control);
-	  projection.projectWith(createAuthorsRelated("2", 5, 2, "AuthorsRelated"), control);
-	  projection.projectWith(createAuthorsRelated("3", 6, 2, "AuthorsRelated"), control);
+	  projection.projectWith(createAuthorsRelated(firstData, 2, "AuthorsRelated"), control);
+	  projection.projectWith(createAuthorsRelated(secondData, 2, "AuthorsRelated"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorsRelated(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void unrelateAuthor() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createAuthorUnrelated("1", 4, 2, "AuthorUnrelated"), control);
-	  projection.projectWith(createAuthorUnrelated("2", 5, 2, "AuthorUnrelated"), control);
-	  projection.projectWith(createAuthorUnrelated("3", 6, 2, "AuthorUnrelated"), control);
+	  projection.projectWith(createAuthorUnrelated(firstData, 2, "AuthorUnrelated"), control);
+	  projection.projectWith(createAuthorUnrelated(secondData, 2, "AuthorUnrelated"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createAuthorUnrelated(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
 	@Test
 	public void replaceAllRelatedAuthors() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+    final AuthorData secondData = AuthorData.from("2", NameData.from("second-author-name-firstName", "second-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(createAuthorRegistered("1", 1, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("2", 2, 1, "AuthorRegistered"), control);
-	  projection.projectWith(createAuthorRegistered("3", 3, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+	  projection.projectWith(createAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
 
-	  projection.projectWith(createRelatedAuthorsReplacedEvent("1", 4, 2, "RelatedAuthorsReplacedEvent"), control);
-	  projection.projectWith(createRelatedAuthorsReplacedEvent("2", 5, 2, "RelatedAuthorsReplacedEvent"), control);
-	  projection.projectWith(createRelatedAuthorsReplacedEvent("3", 6, 2, "RelatedAuthorsReplacedEvent"), control);
+	  projection.projectWith(createRelatedAuthorsReplacedEvent(firstData, 2, "RelatedAuthorsReplacedEvent"), control);
+	  projection.projectWith(createRelatedAuthorsReplacedEvent(secondData, 2, "RelatedAuthorsReplacedEvent"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
-	}
-
-	private Projectable createRelatedAuthorsReplacedEvent(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		final AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), new ArrayList<>(), LocalDate.now(), new ArrayList<>(), new HashSet<>());
-
-		final TextState state = new TextState(id, AuthorState.class, 1, JsonSerialization.serialized(firstData.toAuthorState()), version,
-		Metadata.with(firstData.toAuthorState(), valueText, operation));
-		final String projectionId = UUID.randomUUID().toString();
-
-		valueToProjectionId.put(valueText, projectionId);
-
-		return new TextProjectable(state, Collections.emptyList(), projectionId);
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 
   @AfterEach
@@ -429,4 +286,123 @@ public class AuthorProjectionTest {
     return confirmations.get(valueToProjectionId.get(valueText));
   }
 
+	private Projectable createAuthorRegistered(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorRanked(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorTagged(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorBulkTagged(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorTagsReplacedEvent(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorUntagged(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorRelated(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorsRelated(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createAuthorUnrelated(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
+
+	private Projectable createRelatedAuthorsReplacedEvent(final AuthorData data, final int version, final String operation) {
+
+		final TextState state = new TextState(data.id, AuthorState.class, 1, JsonSerialization.serialized(data.toAuthorState()), version,
+		Metadata.with(data.toAuthorState(), data.id, operation));
+
+		final String projectionId = UUID.randomUUID().toString();
+
+		valueToProjectionId.put(data.id, projectionId);
+
+		return new TextProjectable(state, Collections.emptyList(), projectionId);
+	}
 }

@@ -25,15 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import ${import.qualifiedClassName};
 </#list>
 <#macro textWarbleProjectable operation>
-	private Projectable create${operation}(final String id, final int value, final int version, final String operation) {
-		final String valueText = Integer.toString(value);
-		${testCases?first.dataDeclarations?first}
+	private Projectable create${operation}(final ${dataObjectName} data, final int version, final String operation) {
 
-		final TextState state = new TextState(id, ${dataName}.class, 1, JsonSerialization.serialized(firstData.to${dataName}()), version,
-		Metadata.with(firstData.to${dataName}(), valueText, operation));
+		final TextState state = new TextState(data.id, ${dataName}.class, 1, JsonSerialization.serialized(data.to${dataName}()), version,
+		Metadata.with(data.to${dataName}(), data.id, operation));
+
 		final String projectionId = UUID.randomUUID().toString();
 
-		valueToProjectionId.put(valueText, projectionId);
+		valueToProjectionId.put(data.id, projectionId);
 
 		return new TextProjectable(state, Collections.emptyList(), projectionId);
 	}
@@ -42,19 +41,15 @@ import ${import.qualifiedClassName};
 public class ${projectionUnitTestName} {
   private Projection projection;
   private StateStore store;
-  private Map<String,String> valueToProjectionId;
+  private Map<String, String> valueToProjectionId;
   private World world;
 
   @BeforeEach
   public void setUp() {
     world = World.startWithDefaults("test-state-store-projection");
-
     store = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Arrays.asList(new NoOpDispatcher()));
-
     projection = world.actorFor(Projection.class, ${projectionName}.class, store);
-
     StatefulTypeRegistry.registerAll(world, store, ${dataObjectName}.class);
-
     valueToProjectionId = new HashMap<>();
   }
 
@@ -62,52 +57,51 @@ public class ${projectionUnitTestName} {
 	<#if testCase.factoryMethod>
   @Test
   public void ${testCase.methodName}() {
-    final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(3);
+    <#list testCase.dataDeclarations as dataDeclaration>
+		${dataDeclaration}
+    </#list>
+		final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
 
-    projection.projectWith(create${testCase.domainEventName}("1", 1, 1, "${testCase.domainEventName}"), control);
-    projection.projectWith(create${testCase.domainEventName}("2", 2, 1, "${testCase.domainEventName}"), control);
-    projection.projectWith(create${testCase.domainEventName}("3", 3, 1, "${testCase.domainEventName}"), control);
+    projection.projectWith(create${testCase.domainEventName}(firstData, 1, "${testCase.domainEventName}"), control);
+    projection.projectWith(create${testCase.domainEventName}(secondData, 1, "${testCase.domainEventName}"), control);
 
     final Map<String,Integer> confirmations = access.readFrom("confirmations");
 
-    assertEquals(3, confirmations.size());
+    assertEquals(2, confirmations.size());
 
-    assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-    assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-    assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+    assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+    assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(3, ((Map) access.readFrom("confirmations")).size());
+		assertEquals(2, ((Map) access.readFrom("confirmations")).size());
   }
   <#else>
 
 	@Test
 	public void ${testCase.methodName}() {
-		final CountingProjectionControl control = new CountingProjectionControl();
+    <#list testCase.dataDeclarations as dataDeclaration>
+    ${dataDeclaration}
+    </#list>
+	  final CountingProjectionControl control = new CountingProjectionControl();
 
-		final AccessSafely accessControl = control.afterCompleting(6);
+		final AccessSafely accessControl = control.afterCompleting(4);
 
-	  projection.projectWith(create${testCases?first.domainEventName}("1", 1, 1, "${testCases?first.domainEventName}"), control);
-	  projection.projectWith(create${testCases?first.domainEventName}("2", 2, 1, "${testCases?first.domainEventName}"), control);
-	  projection.projectWith(create${testCases?first.domainEventName}("3", 3, 1, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}(firstData, 1, "${testCases?first.domainEventName}"), control);
+	  projection.projectWith(create${testCases?first.domainEventName}(secondData, 1, "${testCases?first.domainEventName}"), control);
 
-	  projection.projectWith(create${testCase.domainEventName}("1", 4, 2, "${testCase.domainEventName}"), control);
-	  projection.projectWith(create${testCase.domainEventName}("2", 5, 2, "${testCase.domainEventName}"), control);
-	  projection.projectWith(create${testCase.domainEventName}("3", 6, 2, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}(firstData, 2, "${testCase.domainEventName}"), control);
+	  projection.projectWith(create${testCase.domainEventName}(secondData, 2, "${testCase.domainEventName}"), control);
 
 		final Map<String,Integer> confirmations = accessControl.readFrom("confirmations");
 
-		assertEquals(6, confirmations.size());
+		assertEquals(4, confirmations.size());
 
-		assertEquals(1, valueOfProjectionIdFor("1", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("2", confirmations));
-		assertEquals(1, valueOfProjectionIdFor("3", confirmations));
+		assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+		assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
-		assertEquals(6, ((Map) accessControl.readFrom("confirmations")).size());
+		assertEquals(4, ((Map) accessControl.readFrom("confirmations")).size());
 	}
 	</#if>
-
-  <@textWarbleProjectable testCase.domainEventName/>
 </#list>
 
   @AfterEach
@@ -118,5 +112,8 @@ public class ${projectionUnitTestName} {
   private int valueOfProjectionIdFor(final String valueText, final Map<String,Integer> confirmations) {
     return confirmations.get(valueToProjectionId.get(valueText));
   }
+<#list testCases as testCase>
 
+  <@textWarbleProjectable testCase.domainEventName/>
+</#list>
 }
