@@ -76,7 +76,7 @@ public class ProjectionUnitTestGenerationStepTest {
     Assertions.assertEquals(9, context.contents().size());
     Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onJava().read("counting-read-result-interest")));
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-entity-state-projection-unit-test")));
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-operation-based-projection-unit-test")));
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
