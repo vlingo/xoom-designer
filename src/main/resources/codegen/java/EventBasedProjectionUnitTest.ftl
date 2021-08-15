@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
   }
 </#macro>
 
-<#macro factoryMethodTestStatments domainEventName>
+<#macro factoryMethodTestStatements domainEventName>
 
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
@@ -67,7 +67,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     assertEquals(secondData.id, item.id);
 </#macro>
 
-<#macro updateTestStatments domainEventName>
+<#macro updateTestStatements domainEventName>
     registerExample${aggregateProtocolName}(firstData.to${dataName}(), secondData.to${dataName}());
 
     final CountingProjectionControl control = new CountingProjectionControl();
@@ -115,9 +115,9 @@ public class ${projectionUnitTestName} {
     ${dataDeclaration}
     </#list>
     <#if testCase.factoryMethod>
-      <@factoryMethodTestStatments testCase.domainEventName />
+      <@factoryMethodTestStatements testCase.domainEventName />
     <#else>
-      <@updateTestStatments testCase.domainEventName />
+      <@updateTestStatements testCase.domainEventName />
     </#if>
 
     <#list testCase.statements as statement>
