@@ -1,13 +1,15 @@
 version: '3'
 services:
   designer:
-    image: vlingo/xoom-designer:latest
+    image: vlingo/xoom-designer:snapshot
     container_name: xoom-designer
     ports:
       - 19090:19090
     environment:
       VLINGO_XOOM_DESIGNER_SERVER_PORT: 19090
       VLINGO_XOOM_DESIGNER_ENV: "CONTAINER"
+      SCHEMATA_SERVICE_NAME: "xoom-schemata"
+      SCHEMATA_SERVICE_PORT: 9019
 
   schemata:
     image: vlingo/xoom-schemata:latest

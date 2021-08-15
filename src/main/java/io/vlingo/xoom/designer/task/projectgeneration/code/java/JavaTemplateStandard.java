@@ -72,6 +72,9 @@ public enum JavaTemplateStandard implements TemplateStandard {
       Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
       (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),
 
+  SCHEMATA_DNS(parameters -> Template.SCHEMATA_DNS.filename,
+          (name, parameters) -> "pom.xml"),
+
   REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
       (name, parameters) -> name + "Resource"),
 

@@ -1,0 +1,11 @@
+
+      <profile>
+        <id>schemata-service</id>
+        <activation>
+          <activeByDefault>false</activeByDefault>
+        </activation>
+        <properties>
+          <name>xoom-schemata</name>
+          <port>1009</port>
+        </properties>
+      </profile>

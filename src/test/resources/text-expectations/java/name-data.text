@@ -64,7 +64,7 @@ public class NameData {
     if (other == null || getClass() != other.getClass()) {
       return false;
     }
-    Name another = (Name) other;
+    NameData another = (NameData) other;
     return new EqualsBuilder()
               .append(this.firstName, another.firstName)
               .append(this.lastName, another.lastName)
