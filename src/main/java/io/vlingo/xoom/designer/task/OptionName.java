@@ -9,10 +9,8 @@ package io.vlingo.xoom.designer.task;
 
 public enum OptionName {
 
-    TAG("tag"),
     TARGET("target"),
-    CURRENT_DIRECTORY("currentDirectory"),
-    PUBLISHER("publisher");
+    CURRENT_DIRECTORY("currentDirectory");
 
     private final String name;
 
@@ -24,7 +22,7 @@ public enum OptionName {
         return name;
     }
 
-    public String withPreffix() {
+    public String withPrefix() {
         return "--" + name;
     }
 

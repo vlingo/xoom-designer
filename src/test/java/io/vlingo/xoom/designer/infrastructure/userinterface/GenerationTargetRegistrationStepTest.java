@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
 import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 public class GenerationTargetRegistrationStepTest {
@@ -27,21 +26,21 @@ public class GenerationTargetRegistrationStepTest {
   @Test
   public void testThatGenerationTargetIsRegisteredWithEmptyOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.process(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.FILESYSTEM, ComponentRegistry.withType(GenerationTarget.class));
   }
 
   @Test
   public void testThatGenerationTargetIsRegisteredWithZipOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "zip-download");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.process(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.ZIP, ComponentRegistry.withType(GenerationTarget.class));
   }
 
   @Test
   public void testThatGenerationTargetIsRegisteredWithFileSystemOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "filesystem");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.process(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.FILESYSTEM, ComponentRegistry.withType(GenerationTarget.class));
   }
 

@@ -28,7 +28,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static io.vlingo.xoom.designer.task.Agent.WEB;
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
 
@@ -51,7 +50,7 @@ public class TaskExecutionContextMapper {
                                      final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.context = TaskExecutionContext.executedFrom(WEB);
+    this.context = TaskExecutionContext.empty();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     this.logger = logger;
 

@@ -14,15 +14,13 @@ import io.vlingo.xoom.designer.task.TaskManager;
 
 import java.util.List;
 
-import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
 
 public class UserInterfaceManager implements TaskManager<List<String>> {
 
     @Override
     public void run(final List<String> args) {
         final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Task.GRAPHICAL_USER_INTERFACE.findOptionValues(args));
+                TaskExecutionContext.withOptions(Task.DESIGNER_UI.findOptionValues(args));
 
         Configuration.GUI_STEPS.stream().filter(step -> step.shouldProcess(context))
                 .forEach(step -> step.process(context));

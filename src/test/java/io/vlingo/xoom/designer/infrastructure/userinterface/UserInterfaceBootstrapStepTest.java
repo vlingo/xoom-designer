@@ -16,7 +16,7 @@ public class UserInterfaceBootstrapStepTest {
 
   @Test
   public void testThatUserInterfaceBootstrapStepIsProcessed() {
-    new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
+    new UserInterfaceBootstrapStep().process(TaskExecutionContext.empty());
     Assertions.assertFalse(TaskExecutor.shouldExit());
   }
 
@@ -25,7 +25,7 @@ public class UserInterfaceBootstrapStepTest {
     Infrastructure.clear();
     ComponentRegistry.clear();
     Profile.enableTestProfile();
-    Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+    Infrastructure.resolveResources(HomeDirectory.fromEnvironment());
     ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
   }
 

@@ -12,7 +12,6 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
@@ -40,12 +39,8 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
     final TurboSettings turboSettings =
             context.parameterObjectOf(Label.TURBO_SETTINGS);
 
-    final DeploymentSettings deploymentSettings =
-            context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS);
-
     final TemplateParameters turboSettingsTemplateParameters =
             TemplateParameters.with(TemplateParameter.TURBO_SETTINGS, turboSettings)
-                    .and(TemplateParameter.DEPLOYMENT_SETTINGS, deploymentSettings)
                     .and(TemplateParameter.RESOURCE_FILE, true);
 
     return BasicTemplateData.of(JavaTemplateStandard.TURBO_SETTINGS, turboSettingsTemplateParameters);

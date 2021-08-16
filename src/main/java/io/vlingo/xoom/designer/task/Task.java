@@ -7,26 +7,19 @@
 
 package io.vlingo.xoom.designer.task;
 
-import static io.vlingo.xoom.designer.task.OptionName.TARGET;
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
+import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
-import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
-import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
+import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 @SuppressWarnings("rawtypes")
 public enum Task {
 
-  DOCKER("docker", new DockerCommandManager()),
-  K8S("k8s", new KubernetesCommandManager()),
-  GLOO("gloo", new GlooCommandManager()),
-  GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
+  DESIGNER_UI("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
   VERSION("-version", new VersionDisplayManager());
 
   public final String command;
@@ -81,13 +74,5 @@ public enum Task {
     return this.command.trim().equalsIgnoreCase(command);
   }
 
-  public SubTask subTaskOf(final String command) {
-    final Predicate<SubTask> matchCondition =
-            subTask -> subTask.isChildFrom(this) && subTask.triggeredBy(command);
-
-    return Arrays.asList(SubTask.values())
-            .stream().filter(matchCondition).findFirst()
-            .orElseThrow(() -> new UnknownCommandException(command));
-  }
 
 }

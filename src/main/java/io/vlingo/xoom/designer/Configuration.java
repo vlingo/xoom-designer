@@ -11,7 +11,6 @@ import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstr
 import io.vlingo.xoom.designer.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationParameterValidationStep;
-import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationParametersLoadStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.bootstrap.BootstrapGenerationStep;
@@ -70,7 +69,6 @@ public class Configuration {
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
       new ResourcesLocationStep(),
-      new CodeGenerationParametersLoadStep(),
       new CodeGenerationParameterValidationStep(),
       new MainClassResolverStep(),
       new StagingFolderCleanUpStep(),

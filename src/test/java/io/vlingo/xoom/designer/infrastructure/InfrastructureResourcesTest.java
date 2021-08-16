@@ -20,20 +20,18 @@ public class InfrastructureResourcesTest {
 
     @Test
     public void testInfraResourcesAreResolved() {
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
-        Infrastructure.resolveExternalResources(ExternalDirectory.from(BASE_PATH));
+        Infrastructure.resolveResources(HomeDirectory.fromEnvironment());
         Assertions.assertEquals(Paths.get(ROOT_FOLDER, "staging"), StagingFolder.path());
         Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
         Assertions.assertEquals("http://localhost:19090", DesignerServer.url().toString());
         // "xoom-designer": This will not work until a resource for it is created.
         Assertions.assertEquals("http://localhost:19090/context", UserInterface.rootContext());
-        Assertions.assertFalse(Infrastructure.XoomProperties.properties().isEmpty());
     }
 
     @Test
     public void testNullPathUpdate() {
         Assertions.assertThrows(InvalidResourcesPathException.class, () -> {
-            Infrastructure.resolveInternalResources(HomeDirectory.from(null));
+            Infrastructure.resolveResources(HomeDirectory.from(null));
         });
     }
 

@@ -20,7 +20,7 @@ public class BrowserLaunchCommandExecutionStepTest {
     @Test
     public void testBrowserLaunchCommandResolution() {
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.empty();
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 
@@ -51,7 +51,7 @@ public class BrowserLaunchCommandExecutionStepTest {
         Terminal.disable();
         Infrastructure.clear();
         Profile.enableTestProfile();
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+        Infrastructure.resolveResources(HomeDirectory.fromEnvironment());
     }
 
     @AfterAll

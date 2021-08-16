@@ -16,7 +16,6 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettin
 
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.DEPLOYMENT_SETTINGS;
@@ -26,72 +25,32 @@ public class TaskExecutionContext {
 
   public final String executionId;
   private final CodeGenerationParameters parameters;
-  private final List<String> args = new ArrayList<>();
   private final List<OptionValue> optionValues = new ArrayList<>();
   private final Map<TaskOutput, Object> taskOutput = new HashMap<>();
-  private final Agent agent;
-  private Properties properties;
   private Logger logger;
 
-  public static TaskExecutionContext executedFrom(final Agent agent) {
-    return new TaskExecutionContext(agent);
-  }
-
-  public static TaskExecutionContext withoutOptions() {
-    return new TaskExecutionContext(Agent.TERMINAL);
-  }
-
-  private TaskExecutionContext(final Agent agent) {
-    this.agent = agent;
-    this.executionId = UUID.randomUUID().toString();
-    this.parameters = CodeGenerationParameters.empty();
-  }
-
   public static TaskExecutionContext empty() {
-    return withoutOptions();
+    return new TaskExecutionContext(Collections.emptyList());
   }
 
-  public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
-    this.optionValues.addAll(optionValues);
-    return this;
-  }
-
-  public TaskExecutionContext withArgs(final List<String> args) {
-    this.addArgs(args);
-    return this;
+  public static TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
+    return new TaskExecutionContext(optionValues);
   }
 
   public static TaskExecutionContext withOutput(final TaskOutput taskOutput,
                                                 final Object output) {
-    return withoutOptions().addOutput(taskOutput, output);
+    return empty().addOutput(taskOutput, output);
+  }
+
+  private TaskExecutionContext(final List<OptionValue> optionValues) {
+    this.executionId = UUID.randomUUID().toString();
+    this.parameters = CodeGenerationParameters.empty();
+    this.optionValues.addAll(optionValues);
   }
 
   public TaskExecutionContext with(final CodeGenerationParameters parameters) {
     this.parameters.addAll(parameters);
     return this;
-  }
-
-  public TaskExecutionContext onProperties(final Properties properties) {
-    this.properties = properties;
-    return this;
-  }
-
-  public void addArgs(final List<String> args) {
-    this.args.addAll(args);
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T> T propertyOf(final Property property) {
-    return (T) propertyOf(property, value -> value);
-  }
-
-  public <T> T propertyOf(final Property property, final Function<String, T> mapper) {
-    return this.propertyOf(property.literal(), mapper);
-  }
-
-  public <T> T propertyOf(final String propertyValue, final Function<String, T> mapper) {
-    final String value = properties.getProperty(propertyValue);
-    return mapper.apply(value);
   }
 
   public TaskExecutionContext addOutput(final TaskOutput taskOutput, final Object content) {
@@ -105,10 +64,6 @@ public class TaskExecutionContext {
       return null;
     }
     return (T) this.taskOutput.get(taskOutput);
-  }
-
-  public boolean hasProperty(final Property property) {
-    return this.propertyOf(property) != null && !this.<String>propertyOf(property).trim().isEmpty();
   }
 
   public String optionValueOf(final OptionName optionName) {
@@ -147,19 +102,8 @@ public class TaskExecutionContext {
     return this;
   }
 
-  public Properties properties() {
-    return properties;
-  }
-
-  public List<String> args() {
-    return args;
-  }
-
   public Logger logger() {
     return logger;
   }
 
-  public Agent agent() {
-    return agent;
-  }
 }

@@ -190,61 +190,6 @@ Enter the project parent folder. In addition, select whether VLINGO XOOM annotat
 
 Once the five definition steps are completed and the service project is generated, take full advantage of the power of the VLINGO XOOM acceleration components. Use the VLINGO XOOM platform SDK omprehensive [documentation](https://docs.vlingo.io/) and its live and collaborative [community](https://gitter.im/vlingo-platform-java/community) that supports developers on their journey. Now, go have fun!
 
-### Docker Commands
-
-`xoom-designer` provides cool shortcuts for interacting with Docker, from the project root folder, as follows:
-
-<table>
-    <thead>
-        <tr>
-            <th align="center">Command</th>
-            <th align="center">Description</th>
-            <th align="center">Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td align="center">xoom docker status</td>
-            <td align="left">Shows the container status.</td>
-            <td align="center">N/A</td>
-        </tr>
-        <tr>
-            <td align="center">xoom docker package</td>
-            <td align="left">Builds / update the Docker image from the application current state.</td>
-            <td align="center"><strong>tag</strong>: relate a tag to the current image build. If not informed, the default value is <em>latest</em>. Example: xoom docker package --tag 1.0</td>
-        </tr>
-        <tr>
-            <td align="center">xoom docker push</td>
-            <td align="left">Publishes the image into the configured docker repository.</td>
-            <td align="center"><strong>tag</strong>: relate the local tag to the remote tag. If not informed, the default value is <em>latest:latest</em>, following the pattern <em>local-tag:remote-tag</em>. Example: xoom docker push --tag 1.0:latest</td>
-        </tr>
-        <tr>
-            <td align="center">xoom k8s push</td>
-            <td align="left">Apply the manifest file(s) placed under <em>deployment/k8s</em> on Kubernetes.</td>
-            <td align="center">N/A</td>
-       </tr>
-       <tr>
-            <td align="center">xoom gloo init</td>
-            <td align="left">Install the Gloo Gateway API generating an upstream for each running service on Kubernetes.</td>
-            <td align="center">N/A</td>
-       </tr>
-       <tr>
-            <td align="center">xoom gloo suspend</td>
-            <td align="left">Uninstall the Gloo Gateway API.</td>
-            <td align="center">N/A</td>
-       </tr>
-       <tr>
-            <td align="center">xoom gloo route</td>
-            <td align="left">Create routes, on Gloo Gateway API, for endpoints declared in <em>xoom-turbo.properties</em></td>
-            <td align="center">In <em>xoom-turbo.properties</em> , define the options described below: 
-             <p><b>gloo.upstream</b>: a Gloo upstream name for the app's service running on K8s. Example: <em>gloo.upstream = default-myxoomapp-8080</em></p>
-             <p><b>gloo.resource.[resource-name]</b>: an endpoint for an application resource identified by resource-name. Example: <em>gloo.resource.balance = v1/balance</em></p>
-             <p><b>gloo.gateway.[resource-name]</b>: a gateway route corresponding to a mapped endpoint identified by resource-name. Example: <em>gloo.gateway.balance= balance</em></p>
-         Note that, for each resource, a pair of gloo.resource / gloo.gateway has to be informed for properly creating a route in the Gloo Gateway API.
-        </td>
-       </tr>
-    </tbody>
-</table>
 
 ## Collaboration
 
