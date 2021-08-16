@@ -12,7 +12,7 @@ services:
       SCHEMATA_SERVICE_PORT: 9019
 
   schemata:
-    image: vlingo/xoom-schemata:latest
+    image: vlingo/xoom-schemata:snapshot
     container_name: xoom-schemata
     ports:
       - 9019:9019
