@@ -40,7 +40,7 @@ public class Option {
 
     public String findValue(final List<String> args) {
         try {
-            return ArgumentRetriever.retrieve(name.withPrefix(), args);
+            return ArgumentRetriever.retrieve(name.withPreffix(), args);
         } catch(final ArgumentNotFoundException exception) {
             if(isRequired()) {
                 throw new RequiredOptionNotFoundException(name.literal());

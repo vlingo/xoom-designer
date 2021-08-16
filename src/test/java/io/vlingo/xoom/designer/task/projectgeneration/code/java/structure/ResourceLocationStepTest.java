@@ -28,7 +28,7 @@ public class ResourceLocationStepTest {
     public void setUp() {
         Infrastructure.clear();
         Profile.enableTestProfile();
-        this.context = TaskExecutionContext.empty();
+        this.context = TaskExecutionContext.withoutOptions();
         this.resourcesLocationStep = new ResourcesLocationStep();
     }
 

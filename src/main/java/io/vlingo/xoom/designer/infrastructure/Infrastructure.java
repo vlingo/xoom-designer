@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure;
 
+import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.task.projectgeneration.InvalidResourcesPathException;
 import io.vlingo.xoom.turbo.ApplicationProperty;
 
@@ -19,9 +20,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+import static io.vlingo.xoom.designer.task.Property.DESIGNER_SERVER_PORT;
+
 public class Infrastructure {
 
-  public static void resolveResources(final HomeDirectory homeDirectory) {
+  public static void resolveInternalResources(final HomeDirectory homeDirectory) {
     if (!homeDirectory.isValid()) {
       throw new InvalidResourcesPathException();
     }
@@ -31,11 +34,30 @@ public class Infrastructure {
     UserInterface.resolve();
   }
 
+  public static void resolveExternalResources(final ExternalDirectory externalDirectory) {
+    XoomProperties.resolve(externalDirectory);
+  }
+
+  private static Properties loadProperties(final Path path) {
+    try {
+      final File propertiesFile = path.toFile();
+      final Properties properties = new Properties();
+      if (propertiesFile.exists()) {
+        properties.load(new FileInputStream(propertiesFile));
+      }
+      return properties;
+    } catch (final IOException exception) {
+      exception.printStackTrace();
+      throw new ResourceLoadException(path);
+    }
+  }
+
   public static void clear() {
     StagingFolder.instance = null;
     DesignerProperties.instance = null;
     DesignerServer.instance = null;
     UserInterface.instance = null;
+    XoomProperties.instance = null;
   }
 
   public static class StagingFolder {
@@ -130,23 +152,9 @@ public class Infrastructure {
         throw new IllegalStateException("Unresolved Designer Properties");
       }
       final String port =
-              ApplicationProperty.readValue("designer.server.port", instance.properties);
+              ApplicationProperty.readValue(DESIGNER_SERVER_PORT.literal(), instance.properties);
 
       return port == null ? defaultPort : Integer.valueOf(port);
-    }
-
-    private Properties loadProperties(final Path path) {
-      try {
-        final File propertiesFile = path.toFile();
-        final Properties properties = new Properties();
-        if (propertiesFile.exists()) {
-          properties.load(new FileInputStream(propertiesFile));
-        }
-        return properties;
-      } catch (final IOException exception) {
-        exception.printStackTrace();
-        throw new ResourceLoadException(path);
-      }
     }
 
     public static Properties properties() {
@@ -157,4 +165,30 @@ public class Infrastructure {
     }
   }
 
+  public static class XoomProperties {
+    private final Properties properties;
+    private static XoomProperties instance;
+
+    private static void resolve(final ExternalDirectory externalDirectory) {
+      if(instance == null) {
+        instance = new XoomProperties(externalDirectory);
+      }
+    }
+
+    private XoomProperties(final ExternalDirectory externalDirectory) {
+      this.properties = loadProperties(buildPath(externalDirectory));
+    }
+
+    public static Properties properties() {
+      if(instance == null) {
+        throw new IllegalStateException("Unresolved Xoom Properties");
+      }
+      return instance.properties;
+    }
+
+    private Path buildPath(final ExternalDirectory externalDirectory) {
+      final String subFolder = Profile.isTestProfileEnabled() ? "test" : "main";
+      return Paths.get(externalDirectory.path, "src", subFolder, "resources", "xoom-turbo.properties");
+    }
+  }
 }

@@ -34,7 +34,7 @@ public class SchemaPushStepTest {
   @Test
   @EnabledOnOs({OS.WINDOWS})
   public void testCommandPreparationOnWindows() {
-    Infrastructure.resolveResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
+    Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
@@ -48,7 +48,7 @@ public class SchemaPushStepTest {
   @Test
   @EnabledOnOs({OS.WINDOWS})
   public void testCommandPreparationWithProfileOnWindows() {
-    Infrastructure.resolveResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
+    Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of(Tuple2.from("vlingo-xoom-schemata", 10009)));
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
@@ -62,7 +62,7 @@ public class SchemaPushStepTest {
   @Test
   @EnabledOnOs({OS.MAC, OS.LINUX})
   public void testCommandPreparationWithOnUnixBasedOS() {
-    Infrastructure.resolveResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
+    Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("/home/projects/designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();

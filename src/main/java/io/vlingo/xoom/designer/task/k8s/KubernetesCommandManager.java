@@ -4,28 +4,30 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.designer.task.k8s;
 
-package io.vlingo.xoom.designer.infrastructure.userinterface;
-
-import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.task.Task;
+import io.vlingo.xoom.designer.task.SubTask;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.TaskManager;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
+import static io.vlingo.xoom.designer.task.Task.K8S;
 
-public class UserInterfaceManager implements TaskManager<List<String>> {
+public class KubernetesCommandManager implements TaskManager<List<String>> {
+
+    private static final int SUB_TASK_INDEX = 1;
 
     @Override
     public void run(final List<String> args) {
-        final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Task.GRAPHICAL_USER_INTERFACE.findOptionValues(args));
+        final String command = args.get(SUB_TASK_INDEX);
+        final SubTask subTask = K8S.subTaskOf(command);
 
-        Configuration.GUI_STEPS.stream().filter(step -> step.shouldProcess(context))
+        final TaskExecutionContext context =
+                TaskExecutionContext.withoutOptions();
+
+        Arrays.asList(subTask.commandResolverStep())
                 .forEach(step -> step.process(context));
     }
-
 }

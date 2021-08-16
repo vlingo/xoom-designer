@@ -13,6 +13,20 @@ import java.util.List;
 public class OptionTest {
 
     @Test
+    public void testValueFoundConditionOnNonRequiredOption() {
+        final Option option = Option.of(OptionName.TAG, "latest");
+        final List<String> args = Arrays.asList("docker", "package", "--tag", "0.0.1", "--user", "danilo");
+        Assertions.assertEquals("0.0.1", option.findValue(args));
+    }
+
+    @Test
+    public void testValueNotFoundConditionOnNonRequiredOption() {
+        final Option option = Option.of(OptionName.TAG, "latest");
+        final List<String> args = Arrays.asList("docker", "package", "--currentDirectory", "/home/users/projects/designer", "--user", "danilo");
+        Assertions.assertEquals("latest", option.findValue(args));
+    }
+
+    @Test
     public void testValueFoundConditionOnRequiredOption() {
         final Option option = Option.required(OptionName.CURRENT_DIRECTORY);
         final List<String> args = Arrays.asList("docker", "package", "--currentDirectory", "/home/users/projects/designer", "--user", "danilo");

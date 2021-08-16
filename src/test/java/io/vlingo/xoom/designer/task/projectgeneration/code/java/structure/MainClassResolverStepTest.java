@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.structure;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.designer.task.Agent;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class MainClassResolverStepTest {
                 CodeGenerationParameters.from(PACKAGE, "io.vlingo.xoomapp")
                         .add(USE_ANNOTATIONS, useAnnotations);
 
-        return TaskExecutionContext.empty().with(parameters);
+        return TaskExecutionContext.executedFrom(Agent.WEB).with(parameters);
     }
 
 }

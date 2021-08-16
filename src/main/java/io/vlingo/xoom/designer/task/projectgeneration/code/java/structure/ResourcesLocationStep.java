@@ -16,7 +16,7 @@ public class ResourcesLocationStep implements TaskExecutionStep {
 
   @Override
   public void process(final TaskExecutionContext context) {
-    Infrastructure.resolveResources(HomeDirectory.fromEnvironment());
+    Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
   }
 
 }
