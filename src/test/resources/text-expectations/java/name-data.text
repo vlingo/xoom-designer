@@ -27,11 +27,11 @@ public class NameData {
     return new NameData(firstName, lastName);
   }
 
-  public static Set<NameData> from(final Set<Name> correspondingObjects) {
+  public static Set<NameData> fromAll(final Set<Name> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(NameData::from).collect(Collectors.toSet());
   }
 
-  public static List<NameData> from(final List<Name> correspondingObjects) {
+  public static List<NameData> fromAll(final List<Name> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(NameData::from).collect(Collectors.toList());
   }
 

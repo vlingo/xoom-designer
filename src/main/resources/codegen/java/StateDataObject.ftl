@@ -26,7 +26,7 @@ public class ${dataName} {
   }
 
   </#list>
-  public static List<${dataName}> from(final List<${stateName}> states) {
+  public static List<${dataName}> fromAll(final List<${stateName}> states) {
     return states.stream().map(${dataName}::from).collect(Collectors.toList());
   }
 

@@ -28,11 +28,11 @@ public class RankData {
     return new RankData(points, classification);
   }
 
-  public static Set<RankData> from(final Set<Rank> correspondingObjects) {
+  public static Set<RankData> fromAll(final Set<Rank> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(RankData::from).collect(Collectors.toSet());
   }
 
-  public static List<RankData> from(final List<Rank> correspondingObjects) {
+  public static List<RankData> fromAll(final List<Rank> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(RankData::from).collect(Collectors.toList());
   }
 

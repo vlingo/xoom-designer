@@ -40,11 +40,11 @@ public class ${dataValueObjectName} {
   }
 
   </#list>
-  public static Set<${dataValueObjectName}> from(final Set<${valueObjectName}> correspondingObjects) {
+  public static Set<${dataValueObjectName}> fromAll(final Set<${valueObjectName}> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(${dataValueObjectName}::from).collect(Collectors.toSet());
   }
 
-  public static List<${dataValueObjectName}> from(final List<${valueObjectName}> correspondingObjects) {
+  public static List<${dataValueObjectName}> fromAll(final List<${valueObjectName}> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(${dataValueObjectName}::from).collect(Collectors.toList());
   }
 
