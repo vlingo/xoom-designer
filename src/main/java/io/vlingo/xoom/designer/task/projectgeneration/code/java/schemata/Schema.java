@@ -15,11 +15,13 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetai
 import java.util.function.Function;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.DEFAULT_SCHEMA_VERSION;
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail.isDateTime;
 
 public class Schema {
 
-  public final String reference;
   public final String file;
+  public final String reference;
+  private static final Function<String, String> schemaFieldTypeConverter = t -> isDateTime(t) ? "timestamp" : t;
 
   public Schema(final String schemaReference) {
     this.reference = schemaReference;
@@ -50,19 +52,17 @@ public class Schema {
 
   static String resolveFieldDeclaration(final CodeGenerationParameter field) {
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
-    final Function<String, String> schemaFieldTypeConverter =
-            type -> FieldDetail.isDateTime(type) ? "timestamp" : fieldType;
 
     if (FieldDetail.isAssignableToValueObject(field)) {
       return String.format("data.%s:%s %s", fieldType, DEFAULT_SCHEMA_VERSION, field.value);
     }
 
     if (FieldDetail.isCollection(field)) {
-      final String genericType = FieldDetail.genericTypeOf(field.parent(), field.value);
-      if (FieldDetail.isScalar(genericType)) {
-        return String.format("%s[] %s", genericType.toLowerCase(), field.value);
+      final String convertedGenericType = schemaFieldTypeConverter.apply(FieldDetail.genericTypeOf(field.parent(), field.value));
+      if (FieldDetail.isScalar(convertedGenericType)) {
+        return String.format("%s[] %s", convertedGenericType.toLowerCase(), field.value);
       } else {
-        return String.format("data.%s:%s[] %s", schemaFieldTypeConverter.apply(genericType), DEFAULT_SCHEMA_VERSION, field.value);
+        return String.format("data.%s:%s[] %s", schemaFieldTypeConverter.apply(convertedGenericType), DEFAULT_SCHEMA_VERSION, field.value);
       }
     }
 
