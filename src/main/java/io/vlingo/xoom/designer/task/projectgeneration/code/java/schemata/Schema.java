@@ -60,7 +60,7 @@ public class Schema {
     if (FieldDetail.isCollection(field)) {
       final String genericType = FieldDetail.genericTypeOf(field.parent(), field.value);
       if (FieldDetail.isScalar(genericType)) {
-        return String.format("%s[] %s", genericType, field.value);
+        return String.format("%s[] %s", genericType.toLowerCase(), field.value);
       } else {
         return String.format("data.%s:%s[] %s", schemaFieldTypeConverter.apply(genericType), DEFAULT_SCHEMA_VERSION, field.value);
       }
