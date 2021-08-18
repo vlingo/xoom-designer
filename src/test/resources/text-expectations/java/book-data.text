@@ -24,7 +24,7 @@ public class BookData {
     return new BookData(id, title, publisher, publicationDate);
   }
 
-  public static List<BookData> from(final List<BookState> states) {
+  public static List<BookData> fromAll(final List<BookState> states) {
     return states.stream().map(BookData::from).collect(Collectors.toList());
   }
 

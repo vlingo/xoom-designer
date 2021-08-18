@@ -30,7 +30,7 @@ public class AuthorData {
     return new AuthorData(id, name, rank, status, bookIds, updatedOn);
   }
 
-  public static List<AuthorData> from(final List<AuthorState> states) {
+  public static List<AuthorData> fromAll(final List<AuthorState> states) {
     return states.stream().map(AuthorData::from).collect(Collectors.toList());
   }
 

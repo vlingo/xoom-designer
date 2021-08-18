@@ -26,11 +26,11 @@ public class ClassifierData {
     return new ClassifierData(name);
   }
 
-  public static Set<ClassifierData> from(final Set<Classifier> correspondingObjects) {
+  public static Set<ClassifierData> fromAll(final Set<Classifier> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(ClassifierData::from).collect(Collectors.toSet());
   }
 
-  public static List<ClassifierData> from(final List<Classifier> correspondingObjects) {
+  public static List<ClassifierData> fromAll(final List<Classifier> correspondingObjects) {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(ClassifierData::from).collect(Collectors.toList());
   }
 
