@@ -64,7 +64,7 @@ public enum Template {
   QUERIES_UNIT_TEST("QueriesUnitTest"),
   README("Readme"),
   EVENT_BASED_PROJECTION_UNIT_TEST("EventBasedProjectionUnitTest"),
-  ENTITY_STATE_PROJECTION_UNIT_TEST("EntityStateProjectionUnitTest"),
+  OPERATION_BASED_PROJECTION_UNIT_TEST("OperationBasedProjectionUnitTest"),
   OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
   EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
   EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
