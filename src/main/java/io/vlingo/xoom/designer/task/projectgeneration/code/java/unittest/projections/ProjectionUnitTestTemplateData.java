@@ -44,7 +44,8 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 
 		final CodeGenerationParameter signature = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
 				.filter(sig -> sig.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
-				.findFirst().orElseThrow(UnsupportedOperationException::new);
+				.findFirst()
+				.orElseThrow(UnsupportedOperationException::new);
 
 		final String domainEventName = signature.retrieveOneRelated(DOMAIN_EVENT).value;
 		final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
@@ -58,7 +59,8 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 						.and(PROJECTION_NAME, projectionName)
 						.and(DATA_OBJECT_NAME, dataObjectName)
 						.and(STATE_DATA_OBJECT_NAME, aggregateState)
-						.and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value).and(TemplateParameter.ENTITY_NAME, entityName)
+						.and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value)
+						.and(TemplateParameter.ENTITY_NAME, entityName)
 						.and(TemplateParameter.STATE_NAME, aggregateState)
 						.and(STATE_DATA_OBJECT_NAME, aggregateState)
 						.and(TEST_CASES, TestCase.from(aggregate, valueObjects, projectionType))

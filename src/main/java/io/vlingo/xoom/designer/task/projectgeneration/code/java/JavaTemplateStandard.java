@@ -195,7 +195,7 @@ public enum JavaTemplateStandard implements TemplateStandard {
     if (projectionType.isEventBased()) {
       return Template.EVENT_BASED_PROJECTION_UNIT_TEST.filename;
     }
-    return Template.ENTITY_STATE_PROJECTION_UNIT_TEST.filename;
+    return Template.OPERATION_BASED_PROJECTION_UNIT_TEST.filename;
   }, (name, parameters) -> name + "Test"),
 
   ENTITY_UNIT_TEST(parameters -> {

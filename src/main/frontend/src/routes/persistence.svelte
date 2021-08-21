@@ -10,22 +10,16 @@
 	const projectionFormat = (val) => $projectionsTypes.find(t => t.value === val).name;
 	const databaseFormat = (val) => $databaseTypes.find(t => t.value === val).name;
 
-	function onStorageTypeChange(value) {
-		if (value.detail === 'JOURNAL') {
-			disableCQRS = true;
-			$settings.model.persistenceSettings = { ...$settings.model.persistenceSettings, useCQRS: true, projections: 'EVENT_BASED' }
-		} else {
-			disableCQRS = false;
-		}
-	}
-
 	$: {
 		if($settings.model.persistenceSettings.storageType === "JOURNAL") {
+			disableCQRS = true;
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
 				{name: 'Event-based', value: 'EVENT_BASED'},
 			];
+			$settings.model.persistenceSettings = { ...$settings.model.persistenceSettings, useCQRS: true, projections: 'EVENT_BASED' }
 		} else {
+			disableCQRS = false;
 			$projectionsTypes = [
 				{name: 'Not Applicable', value: 'NONE'},
 				{name: 'Event-based', value: 'EVENT_BASED'},
@@ -47,9 +41,9 @@
 
 <!-- add newbie tooltips -->
 <CardForm title="Persistence" previous="aggregates" next="deployment">
-	<VlSelect class="pb-4" mandatory items={$storageTypes} bind:value={$settings.model.persistenceSettings.storageType} format={(val) => storageFormat(val)} on:change={onStorageTypeChange}>Storage Type</VlSelect>
+	<VlSelect class="pb-4" mandatory items={$storageTypes} bind:value={$settings.model.persistenceSettings.storageType} format={(val) => storageFormat(val)}>Storage Type</VlSelect>
 	<Switch disabled={disableCQRS} class="mb-4 pb-4" bind:checked={$settings.model.persistenceSettings.useCQRS}>Use CQRS</Switch>
-	<Select disabled={!$settings.model.persistenceSettings.useCQRS} class="mb-4 pb-4" mandatory items={$projectionsTypes} bind:value={$settings.model.persistenceSettings.projections} format={(val) => projectionFormat(val)} on:change={onStorageTypeChange}>Projections</Select>
+	<Select disabled={!$settings.model.persistenceSettings.useCQRS} class="mb-4 pb-4" mandatory items={$projectionsTypes} bind:value={$settings.model.persistenceSettings.projections} format={(val) => projectionFormat(val)}>Projections</Select>
 	{#if $settings.model.persistenceSettings.useCQRS}
 		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={$settings.model.persistenceSettings.commandModelDatabase} format={(val) => databaseFormat(val)}>Command Model Database</Select>
 		<Select class="mb-4 pb-4" mandatory items={$databaseTypes} bind:value={$settings.model.persistenceSettings.queryModelDatabase} format={(val) => databaseFormat(val)}>Query Model Database</Select>
