@@ -35,13 +35,13 @@
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-turbo</artifactId>
-      <version>${xoomVersion}</version>
+      <version>${r"${vlingo.xoom.version}"}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.vlingo.xoom</groupId>
       <artifactId>xoom-build-plugins</artifactId>
-      <version>${xoomVersion}</version>
+      <version>${r"${vlingo.xoom.version}"}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
