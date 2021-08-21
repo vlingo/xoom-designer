@@ -3,16 +3,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-designer</artifactId>
-  <version>1.8.4-SNAPSHOT</version>
+  <version>1.8.5-SNAPSHOT</version>
   <name>xoom-designer</name>
   <url>http://maven.apache.org</url>
 
   <developers>
     <developer>
       <name>Danilo Ambrosio</name>
-      <email>danilo.ambrosio@gmail.com</email>
-      <organization>Kalele</organization>
-      <organizationUrl>http://kalele.io</organizationUrl>
+      <email>danilo@vlingo.io</email>
+      <organization>VLINGO LLC</organization>
+      <organizationUrl>http://vlingo.io</organizationUrl>
     </developer>
   </developers>
 
