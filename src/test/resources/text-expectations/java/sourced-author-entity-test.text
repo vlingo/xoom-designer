@@ -18,7 +18,7 @@ import io.vlingo.xoom.symbio.store.journal.Journal;
 import io.vlingo.xoom.symbio.store.journal.inmemory.InMemoryJournalActor;
 import org.junit.jupiter.api.*;
 
-import java.util.Collections;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
