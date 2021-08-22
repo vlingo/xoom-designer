@@ -17,6 +17,7 @@ import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl;
 import io.vlingo.xoom.symbio.store.dispatch.Dispatchable;
 import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.actors.Settings;
 import io.vlingo.xoom.turbo.storage.Model;
 import io.vlingo.xoom.turbo.storage.StoreActorBuilder;
