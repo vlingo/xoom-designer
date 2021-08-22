@@ -45,8 +45,8 @@ public class StateDataObjectTemplateData extends TemplateData {
                                         final List<CodeGenerationParameter> valueObjects,
                                         final List<Content> contents) {
     final Function<CodeGenerationParameter, TemplateData> mapper =
-            aggregate -> new StateDataObjectTemplateData(basePackage, dialect,
-                    aggregate, valueObjects, contents);
+        aggregate -> new StateDataObjectTemplateData(basePackage, dialect,
+            aggregate, valueObjects, contents);
 
     return aggregates.map(mapper).collect(toList());
   }
@@ -58,7 +58,7 @@ public class StateDataObjectTemplateData extends TemplateData {
                                       final List<Content> contents) {
     this.protocolName = aggregate.value;
     this.parameters =
-            loadParameters(resolvePackage(basePackage), dialect, aggregate, valueObjects, contents);
+        loadParameters(resolvePackage(basePackage), dialect, aggregate, valueObjects, contents);
   }
 
   private TemplateParameters loadParameters(final String packageName,
@@ -71,42 +71,42 @@ public class StateDataObjectTemplateData extends TemplateData {
     final String dataName = DATA_OBJECT.resolveClassname(protocolName);
 
     final List<String> members =
-            Formatters.Fields.format(Formatters.Fields.Style.DATA_OBJECT_MEMBER_DECLARATION, dialect, aggregate);
+        Formatters.Fields.format(Formatters.Fields.Style.DATA_OBJECT_MEMBER_DECLARATION, dialect, aggregate);
 
     final List<String> membersAssignment =
-            Formatters.Fields.format(Formatters.Fields.Style.DATA_VALUE_OBJECT_ASSIGNMENT, dialect, aggregate);
+        Formatters.Fields.format(Formatters.Fields.Style.DATA_VALUE_OBJECT_ASSIGNMENT, dialect, aggregate);
 
     final List<String> valueObjectTranslations =
             Formatters.Variables.format(Formatters.Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, dialect, aggregate, valueObjects.stream());
 
     return TemplateParameters.with(PACKAGE_NAME, packageName)
-            .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
-            .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(aggregate))
-            .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
-            .and(MEMBER_NAMES, aggregate.retrieveAllRelated(Label.STATE_FIELD).map(p -> p.value).collect(Collectors.toList()))
-            .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(STATE_FIELDS, joinStateFields(aggregate))
-            .and(DATA_OBJECT_QUALIFIED_NAME, CodeElementFormatter.qualifiedNameOf(packageName, dataName))
-            .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
-            .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)))
-            .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents))
-            .addImport(CodeElementFormatter.importAllFrom("java.util"))
-            .addImports(AggregateDetail.resolveImports(aggregate));
+        .and(STATE_NAME, stateName).and(STATE_DATA_OBJECT_NAME, dataName)
+        .and(STATIC_FACTORY_METHODS, StaticFactoryMethod.from(aggregate))
+        .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
+        .and(MEMBER_NAMES, aggregate.retrieveAllRelated(Label.STATE_FIELD).map(p -> p.value).collect(Collectors.toList()))
+        .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(STATE_FIELDS, joinStateFields(aggregate))
+        .and(DATA_OBJECT_QUALIFIED_NAME, CodeElementFormatter.qualifiedNameOf(packageName, dataName))
+        .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
+        .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)))
+        .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents))
+        .addImport(CodeElementFormatter.importAllFrom("java.util"))
+        .addImports(AggregateDetail.resolveImports(aggregate));
   }
 
   private String joinStateFields(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.STATE_FIELD)
-            .map(field -> {
-              if (FieldDetail.isValueObjectCollection(field)) {
-                return ValueObjectDetail.translateDataObjectCollection(field.value, field);
-              } else {
-                return field.value;
-              }
-            }).collect(Collectors.joining(", "));
+        .map(field -> {
+          if (FieldDetail.isValueObjectCollection(field)) {
+            return ValueObjectDetail.translateDataObjectCollection(field.value, field);
+          } else {
+            return field.value;
+          }
+        }).collect(Collectors.joining(", "));
   }
 
   private String resolvePackage(final String basePackage) {
     return String.format(PACKAGE_PATTERN, basePackage,
-            INFRA_PACKAGE_NAME).toLowerCase();
+        INFRA_PACKAGE_NAME).toLowerCase();
   }
 
   @Override

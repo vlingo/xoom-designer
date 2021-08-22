@@ -26,7 +26,7 @@ public class ${exchangeReceiverHolderName} {
       <#if receiver.dispatchToFactoryMethod>
       ${receiver.modelProtocol}.${receiver.modelMethod}(${receiver.modelMethodParameters});
       <#else>
-      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(data.id), Definition.has(${receiver.modelActor}.class, Definition.parameters(data.id)))
+      stage.actorOf(${receiver.modelProtocol}.class, stage.addressFactory().from(event.id), Definition.has(${receiver.modelActor}.class, Definition.parameters(event.id)))
               .andFinallyConsume(${receiver.modelVariable} -> ${receiver.modelVariable}.${receiver.modelMethod}(${receiver.modelMethodParameters}));
       </#if>
     }

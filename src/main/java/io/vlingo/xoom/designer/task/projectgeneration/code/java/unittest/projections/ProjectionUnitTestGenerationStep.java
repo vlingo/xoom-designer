@@ -18,7 +18,7 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String packageName =
-        ContentQuery.findPackage(JavaTemplateStandard.PERSISTENCE_SETUP, context.contents());
+        ContentQuery.findPackage(JavaTemplateStandard.PROJECTION, context.contents());
     final List<CodeGenerationParameter> aggregates =
         context.parametersOf(Label.AGGREGATE).collect(Collectors.toList());
 

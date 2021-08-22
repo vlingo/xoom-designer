@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
@@ -32,18 +32,18 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                              final Stream<CodeGenerationParameter> valueObjectsStream) {
     final List<CodeGenerationParameter> valueObjects = valueObjectsStream.collect(Collectors.toList());
     return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
-            .flatMap(field -> buildExpressions(field, valueObjects).stream())
-            .collect(Collectors.toList());
+        .flatMap(field -> buildExpressions(field, valueObjects).stream())
+        .collect(Collectors.toList());
   }
 
   private Stream<CodeGenerationParameter> findInvolvedFields(final CodeGenerationParameter parent) {
-    if(parent.isLabeled(Label.AGGREGATE_METHOD)) {
+    if (parent.isLabeled(Label.AGGREGATE_METHOD)) {
       return AggregateDetail.findInvolvedStateFields(parent.parent(), parent.value);
     }
-    if(parent.isLabeled(Label.AGGREGATE)) {
+    if (parent.isLabeled(Label.AGGREGATE)) {
       return parent.retrieveAllRelated(Label.STATE_FIELD);
     }
-    if(parent.isLabeled(Label.VALUE_OBJECT)) {
+    if (parent.isLabeled(Label.VALUE_OBJECT)) {
       return parent.retrieveAllRelated(Label.VALUE_OBJECT_FIELD);
     }
     throw new UnsupportedOperationException("Unable to format " + parent.label);
@@ -61,22 +61,22 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                                final List<CodeGenerationParameter> valueObjects,
                                final List<String> expressions) {
     final CodeGenerationParameter valueObject =
-            ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
+        ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
 
     final String fieldReferencePath =
-            String.format("%s.%s", carrierReferencePath, field.value);
+        String.format("%s.%s", carrierReferencePath, field.value);
 
     valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
-            .filter(ValueObjectDetail::isValueObject)
-            .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
+        .filter(ValueObjectDetail::isValueObject)
+        .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
 
     final String args =
-            valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
-                    .map(valueObjectField -> resolveArgument(fieldReferencePath, valueObjectField))
-                    .collect(Collectors.joining(", "));
+        valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+            .map(valueObjectField -> resolveArgument(fieldReferencePath, valueObjectField))
+            .collect(Collectors.joining(", "));
 
     final String expression =
-            String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
+        String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
 
     expressions.add(expression);
   }
@@ -84,12 +84,18 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
   private String resolveArgument(final String fieldReferencePath,
                                  final CodeGenerationParameter valueObjectField) {
     final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
-    if(ValueObjectDetail.isValueObject(valueObjectField)) {
+    if (ValueObjectDetail.isValueObject(valueObjectField)) {
       return valueObjectField.value;
     }
-    if(FieldDetail.isValueObjectCollection(valueObjectField)) {
+    if (FieldDetail.isValueObjectCollection(valueObjectField)) {
       final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
       final String collectionType = valueObjectField.retrieveRelatedValue(Label.COLLECTION_TYPE);
+
+      if (FieldDetail.isValueObjectCollection(valueObjectField.parent().retrieveOneRelated(Label.VALUE_OBJECT_FIELD))) {
+        final String dataObjectFieldName = valueObjectField.parent().retrieveRelatedValue(Label.VALUE_OBJECT_FIELD);
+        return String.format("%s.%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectFieldName, dataObjectName, fieldType, collectionType);
+      }
+
       return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
     }
     return String.format("%s.%s", fieldReferencePath, valueObjectField.value);

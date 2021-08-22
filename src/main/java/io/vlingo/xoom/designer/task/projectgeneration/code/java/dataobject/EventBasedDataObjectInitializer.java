@@ -36,9 +36,9 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
                              final Stream<CodeGenerationParameter> fields) {
     final List<CodeGenerationParameter> valueObjects = fields.collect(Collectors.toList());
     return event.retrieveAllRelated(Label.STATE_FIELD)
-            .filter(FieldDetail::isAssignableToValueObject)
-            .flatMap(field -> buildExpressions(field, valueObjects).stream())
-            .collect(Collectors.toList());
+        .filter(FieldDetail::isAssignableToValueObject)
+        .flatMap(field -> buildExpressions(field, valueObjects).stream())
+        .collect(Collectors.toList());
   }
 
   private List<String> buildExpressions(final CodeGenerationParameter stateField, final List<CodeGenerationParameter> valueObjects) {
@@ -52,36 +52,42 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
                                final List<CodeGenerationParameter> valueObjects,
                                final List<String> expressions) {
     final String fieldAlias =
-            field.hasAny(ALIAS) ? field.retrieveRelatedValue(ALIAS) : field.value;
+        field.hasAny(ALIAS) ? field.retrieveRelatedValue(ALIAS) : field.value;
 
     final CodeGenerationParameter valueObject =
-            ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
+        ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
 
     final CollectionMutation collectionMutation =
-            field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
+        field.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
     final String dataObjectName =
-            JavaTemplateStandard.DATA_OBJECT.resolveClassname(valueObject.value);
+        JavaTemplateStandard.DATA_OBJECT.resolveClassname(valueObject.value);
 
     final String fieldReferencePath =
-            String.format("%s.%s", carrierReferencePath, fieldAlias);
+        String.format("%s.%s", carrierReferencePath, fieldAlias);
 
     valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD)
-            .filter(ValueObjectDetail::isValueObject)
-            .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
+        .filter(ValueObjectDetail::isValueObject)
+        .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
 
     final Function<CodeGenerationParameter, String> pathResolver = valueObjectField ->
-            ValueObjectDetail.isValueObject(valueObjectField) ? valueObjectField.value :
-                    String.format("%s.%s", fieldReferencePath, valueObjectField.value);
+        ValueObjectDetail.isValueObject(valueObjectField) ? valueObjectField.value :
+            String.format("%s.%s", fieldReferencePath, valueObjectField.value);
 
     final String args =
-            collectionMutation.isSingleParameterBased() ?
-                    fieldReferencePath : valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(pathResolver).collect(joining(", "));
-
-    final String expression =
-            String.format("final %s %s = %s.from(%s);", dataObjectName, fieldAlias, dataObjectName, args);
-
-    expressions.add(expression);
+        collectionMutation.isSingleParameterBased() ?
+            fieldReferencePath : valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(pathResolver).collect(joining(", "));
+    if (FieldDetail.isValueObjectCollection(valueObject.retrieveOneRelated(Label.VALUE_OBJECT_FIELD))) {
+      final String dataObjectMemberName =
+          JavaTemplateStandard.DATA_OBJECT.resolveClassname(ValueObjectDetail.valueObjectOf(valueObject.retrieveOneRelated(Label.VALUE_OBJECT_FIELD).retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream()).value);
+      final String expressionForAll =
+          String.format("final %s %s = %s.from(%s.fromAll(%s));", dataObjectName, fieldAlias, dataObjectName, dataObjectMemberName, args);
+      expressions.add(expressionForAll);
+    } else {
+      final String expression =
+          String.format("final %s %s = %s.from(%s);", dataObjectName, fieldAlias, dataObjectName, args);
+      expressions.add(expression);
+    }
   }
 
 }
