@@ -33,12 +33,12 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.fact
 <#macro printJSON fields level=0>
   <@compress single_line=true>
     {<#list fields as field>
-        ${field.name}: <#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else>''</#if><#if field?has_next>,</#if>
+        ${field.name}: <#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else><#if field.isCollection>[]<#else>''</#if></#if><#if field?has_next>,</#if>
     </#list>}
   </@compress>
 </#macro>
 
-const EMPTY_FORM = <@printJSON aggregate.factoryMethodStateFields />;
+export const EMPTY_FORM = <@printJSON aggregate.factoryMethodStateFields />;
 
 const ${fns.capitalize(fns.makePlural(aggregate.aggregateName))} = () => {
 

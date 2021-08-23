@@ -2,6 +2,7 @@ import FormModal from "../FormModal";
 import useFormHandler from "../../utils/FormHandler";
 import {useCallback} from "react";
 import axios from "axios";
+import {EMPTY_FORM} from "./Authors";
 
 const applyData = (uri, data) => {
   return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
@@ -12,8 +13,10 @@ const AuthorWithName = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(Array.isArray(form.name))
-      form.name = [Object.assign({}, form.name)]
+    if(Array.isArray(EMPTY_FORM.name.firstName))
+      form.name.firstName = [form.name.firstName]
+    if(Array.isArray(EMPTY_FORM.name.lastName))
+      form.name.lastName = [form.name.lastName]
 
     const url = applyData('/authors', form);
     axios.post(url, form)

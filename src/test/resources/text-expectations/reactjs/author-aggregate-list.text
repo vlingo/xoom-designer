@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import LoadingOrFailed from "../LoadingOrFailed";
 import AuthorWithName from "./AuthorWithName";
 
-const EMPTY_FORM = { name: { firstName: '', lastName: '' } };
+export const EMPTY_FORM = { name: { firstName: '', lastName: '' } };
 
 const Authors = () => {
 

@@ -2,6 +2,7 @@ import FormModal from "../FormModal";
 import useFormHandler from "../../utils/FormHandler";
 import {useCallback} from "react";
 import axios from "axios";
+import {EMPTY_FORM} from "./Authors";
 
 const applyData = (uri, data) => {
   return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
@@ -12,8 +13,10 @@ const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(Array.isArray(form.rank))
-      form.rank = [Object.assign({}, form.rank)]
+    if(Array.isArray(EMPTY_FORM.rank.points))
+      form.rank.points = [form.rank.points]
+    if(Array.isArray(EMPTY_FORM.rank.classification))
+      form.rank.classification = [form.rank.classification]
 
     const url = applyData('/authors/{id}/rank', form);
     axios.patch(url, form)
