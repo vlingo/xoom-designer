@@ -2,6 +2,7 @@ import FormModal from "../FormModal";
 import useFormHandler from "../../utils/FormHandler";
 import {useCallback} from "react";
 import axios from "axios";
+import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateName))}";
 <#macro printFormElement name type>
     <#if valueTypes[type]??>
         <#list valueTypes[type] as subType>
@@ -17,10 +18,15 @@ import axios from "axios";
 
 <#macro formatFormElement name type>
   <#if valueTypes[type]??>
-    if(Array.isArray(form.${name}))
-      form.${name} = [Object.assign({}, form.${name})]
-  <#elseif aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
+    <#list valueTypes[type] as subType>
+    if(Array.isArray(EMPTY_FORM.${name}.${subType.name}))
+      form.${name}.${subType.name} = [form.${name}.${subType.name}]
+    </#list>
+    <#elseif aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
     form.${name} = [form.${name}]
+    <#else>
+    if(Array.isArray(EMPTY_FORM.${name}))
+      form.${name} = [Object.assign({}, form.${name})]
   </#if>
 </#macro>
 
