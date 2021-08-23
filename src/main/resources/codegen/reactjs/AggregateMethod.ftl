@@ -19,6 +19,8 @@ import axios from "axios";
   <#if valueTypes[type]??>
     if(Array.isArray(form.${name}))
       form.${name} = [Object.assign({}, form.${name})]
+  <#elseif aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
+    form.${name} = [form.${name}]
   </#if>
 </#macro>
 
