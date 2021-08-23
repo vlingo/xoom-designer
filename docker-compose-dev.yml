@@ -1,0 +1,35 @@
+version: '3'
+services:
+  designer:
+    image: vlingo/xoom-designer:snapshot
+    container_name: xoom-designer
+    ports:
+      - 19090:19090
+    environment:
+      VLINGO_XOOM_DESIGNER_SERVER_PORT: 19090
+      VLINGO_XOOM_DESIGNER_ENV: "CONTAINER"
+      SCHEMATA_SERVICE_NAME: "xoom-schemata"
+      SCHEMATA_SERVICE_PORT: 9019
+
+  schemata:
+    image: vlingo/xoom-schemata:snapshot
+    container_name: xoom-schemata
+    ports:
+      - 9019:9019
+    environment:
+      XOOM_SCHEMATA_PORT: 9019
+      XOOM_ENV: "env"
+      XOOM_SCHEMATA_DB_URL: "jdbc:postgresql://schemata-db/"
+    depends_on:
+      - schemata-db
+
+  schemata-db:
+    image: postgres:latest
+    container_name: xoom-schemata-db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: xoom_schemata
+      POSTGRES_USER: xoom_test
+      POSTGRES_PASSWORD: vlingo123
