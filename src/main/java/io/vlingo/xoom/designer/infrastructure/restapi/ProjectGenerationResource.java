@@ -88,6 +88,7 @@ public class ProjectGenerationResource extends DynamicResourceHandler {
     return Completes.withSuccess(Response.of(Ok, serialized(generationInformation)));
   }
 
+
   public Completes<Response> refuseRequest() {
     return Completes.withFailure(Response.of(TooManyRequests, serialized(generationInformation)));
   }

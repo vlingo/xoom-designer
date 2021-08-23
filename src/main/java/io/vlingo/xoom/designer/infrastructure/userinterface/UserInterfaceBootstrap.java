@@ -43,6 +43,7 @@ public class UserInterfaceBootstrap implements XoomInitializationAware {
     if (environment.isCloud()) {
       Settings.clear();
     }
+    grid.world().defaultLogger().info("XOOM Designer version: " + resolveDefaultXoomVersion());
   }
 
   @Override
