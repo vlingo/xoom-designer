@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class RestResourceGenerationStepTest {
 
     @Test
-    public void testRestResourceGeneration() throws IOException {
+    public void testRestResourceGeneration() {
         final CodeGenerationParameter packageParameter =
                 CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp");
 
@@ -155,6 +154,9 @@ public class RestResourceGenerationStepTest {
                         .relate(Label.METHOD_PARAMETER, "rank")
                         .relate(authorRankedEvent);
 
+        final CodeGenerationParameter unavailableMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "makeUnavailable");
+
         final CodeGenerationParameter withNameRoute =
                 CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
                         .relate(Label.ROUTE_METHOD, "POST")
@@ -271,16 +273,22 @@ public class RestResourceGenerationStepTest {
                         .relate(Label.ROUTE_PATH, "/{id}/related-author")
                         .relate(Label.REQUIRE_ENTITY_LOADING, "true");
 
+        final CodeGenerationParameter unavailableRoute =
+                CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "makeUnavailable")
+                        .relate(Label.ROUTE_METHOD, "PATCH")
+                        .relate(Label.ROUTE_PATH, "/{id}/status")
+                        .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
         return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                 .relate(Label.URI_ROOT, "/authors").relate(idField)
                 .relate(nameField).relate(rankField).relate(availableOnField)
                 .relate(tagsField).relate(relatedAuthorsField).relate(factoryMethod)
                 .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
                 .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(addTagMethod)
-                .relate(addTagsMethod).relate(replaceTagsMethod).relate(removeTagMethod)
+                .relate(addTagsMethod).relate(replaceTagsMethod).relate(removeTagMethod).relate(unavailableMethod)
                 .relate(relatedAuthorRoute).relate(relatedAuthorsRoute).relate(relatedAuthorsReplacementRoute)
                 .relate(relatedAuthorRemovalRoute).relate(addTagRoute).relate(addTagsRoute)
-                .relate(replaceTagsRoute).relate(removeTagsRoute).relate(changeRankRoute)
+                .relate(replaceTagsRoute).relate(removeTagsRoute).relate(changeRankRoute).relate(unavailableRoute)
                 .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
                 .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
                 .relate(authorTaggedEvent).relate(authorUntaggedEvent);

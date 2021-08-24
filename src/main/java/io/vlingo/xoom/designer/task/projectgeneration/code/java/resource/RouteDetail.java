@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.QueriesDetail;
@@ -51,9 +51,12 @@ public class RouteDetail {
     }
 
     if (route.parent().isLabeled(Label.AGGREGATE)) {
-      return JavaTemplateStandard.DATA_OBJECT.resolveClassname(route.parent(Label.AGGREGATE).value);
+      final CodeGenerationParameter aggregate = route.parent(Label.AGGREGATE);
+      if(AggregateDetail.methodWithName(aggregate, route.value).hasAny(Label.METHOD_PARAMETER)) {
+        return JavaTemplateStandard.DATA_OBJECT.resolveClassname(route.parent(Label.AGGREGATE).value);
+      }
+      return "";
     }
-
     return route.retrieveRelatedValue(Label.BODY_TYPE);
   }
 

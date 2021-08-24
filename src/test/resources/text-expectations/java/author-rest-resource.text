@@ -127,6 +127,14 @@ public class AuthorResource extends DynamicResourceHandler {
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
+  public Completes<Response> makeUnavailable(final String id) {
+    return resolve(id)
+            .andThenTo(author -> author.makeUnavailable())
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
   public Completes<Response> authors() {
     return $queries.authors()
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
@@ -187,6 +195,9 @@ public class AuthorResource extends DynamicResourceHandler {
             .param(String.class)
             .body(AuthorData.class)
             .handle(this::changeRank),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/authors/{id}/status")
+            .param(String.class)
+            .handle(this::makeUnavailable),
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors")
             .handle(this::authors),
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{id}")
