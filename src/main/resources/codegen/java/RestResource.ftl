@@ -79,11 +79,7 @@ public class ${resourceName} extends DynamicResourceHandler {
          <#if declaration.bodyType?has_content>
             .body(${declaration.bodyType}.class)
          </#if>
-         <#if declaration.last>
-            .handle(this::${declaration.handlerName})
-         <#else>
-            .handle(this::${declaration.handlerName}),
-         </#if>
+            .handle(this::${declaration.handlerName})<#if declaration?has_next>,</#if>
      </#list>
      );
   </#if>
