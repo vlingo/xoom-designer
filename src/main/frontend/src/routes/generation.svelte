@@ -36,17 +36,7 @@
   let anchor, menu, dialogStatus, succeeded, loadingDetails, errorDetails, schemaPushFailed, schemaPullFailed, validationFailed, generationFailed, successMessage;
   let anchorClasses = {};
 
-  function checkModel() {
-    if(shouldUseCQRS()) {
-      dialogStatus = 'CQRS_WARNING';
-      dialogActive = true;
-    } else {
-      checkPath();
-    }
-  }
-
   function checkPath() {
-    dialogActive = false;
     if(requiresCompression()){
       generate();
     } else {
@@ -180,10 +170,6 @@
     return $settings.model.aggregateSettings.some(aggregate => aggregate.producerExchange && aggregate.producerExchange.outgoingEvents.length > 0);
   }
 
-  function shouldUseCQRS() {
-    return !$settings.model.persistenceSettings.useCQRS && $settings.model.aggregateSettings.some(aggregate => aggregate.api && aggregate.api.routes && aggregate.api.routes.some(route => route.httpMethod === "GET"));
-  }
-
   function buildProjectDirectory() {
     let context = $settings.context;
     if(context) {
@@ -289,7 +275,7 @@
   </div> -->
 	<Switch class="mb-4" bind:checked={$settings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$settings.useAutoDispatch} disabled={!$settings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
-  <Button class="mt-4 mr-4" on:click={checkModel} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
+  <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
   {#if processing}
     <ProgressCircular indeterminate color="primary" /> {loadingDetails}
   {:else if succeeded}
@@ -318,11 +304,7 @@
 				<CardTitle class="error-text">
           Be Careful!
         </CardTitle>
-        {#if dialogStatus === 'CQRS_WARNING'}
-          <CardText>
-            As CQRS is not used, the current model will produce erroneous code but it could be fixed manually. Would you like to generate the project?
-          </CardText>
-        {:else if dialogStatus === 'Conflict'}
+        {#if dialogStatus === 'Conflict'}
           <CardText>
             You already generated a project with the same path. If that project still exists and you continue, that project will be overwritten.
           </CardText>
@@ -332,14 +314,9 @@
           </CardText>
         {/if}
 				<CardActions style="margin-top: auto" class="justify-space-around">
-          {#if dialogStatus === 'Forbidden'}
-          <Button on:click={cancelDialog}>OK</Button>
-          {:else if dialogStatus === 'Conflict'}
-          <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
-          <Button on:click={cancelDialog}>Cancel</Button>
-          {:else if dialogStatus === 'CQRS_WARNING'}
-          <Button class="primary-color" on:click={checkPath}>Yes</Button>
-          <Button on:click={cancelDialog}>No</Button>
+          <Button on:click={cancelDialog}>{dialogStatus === 'Forbidden' ? 'OK' : 'Cancel'}</Button>
+          {#if dialogStatus === 'Conflict'}
+            <Button class="primary-color" disabled={!valid || processing} on:click={generate}>Generate</Button>
           {/if}
 				</CardActions>
 			</div>
