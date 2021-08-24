@@ -28,6 +28,7 @@ public class ProjectionSource {
   public final String name;
   public final String dataObjectName;
   public final String mergeParameters;
+  public final String sourceFieldsCarrierName;
   public final List<String> collectionMutations = new ArrayList<>();
   public final List<String> dataObjectInitializers = new ArrayList<>();
 
@@ -47,6 +48,7 @@ public class ProjectionSource {
                            final List<CodeGenerationParameter> events,
                            final List<CodeGenerationParameter> valueObjects) {
     this.name = event.value;
+    this.sourceFieldsCarrierName = resolveSourceFieldsCarrierName(event);
     this.mergeParameters = resolveMergeParameters(projectionType, event, events);
     this.dataObjectName = DATA_OBJECT.resolveClassname(event.parent(Label.AGGREGATE).value);
     this.dataObjectInitializers.addAll(resolveDataObjectInitializers(projectionType, event, events, valueObjects));
@@ -69,7 +71,8 @@ public class ProjectionSource {
     }
     return DomainEventDetail.eventWithName(event.value, events).retrieveAllRelated(STATE_FIELD)
             .map(eventField -> Tuple2.from(eventField, eventField.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName)))
-            .filter(tuple -> tuple._2.isSingleParameterBased()).flatMap(tuple -> tuple._2.resolveStatements("previousData", tuple._1).stream())
+            .filter(tuple -> tuple._2.isSingleParameterBased())
+            .flatMap(tuple -> tuple._2.resolveStatements(sourceFieldsCarrierName, tuple._1).stream())
             .collect(Collectors.toList());
   }
 
@@ -85,7 +88,7 @@ public class ProjectionSource {
                 eventField.get().retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName);
 
         if (collectionMutation.isSingleParameterBased()) {
-          return "previousData." + field.value;
+          return sourceFieldsCarrierName + "." + field.value;
         } else if (FieldDetail.isValueObjectCollection(field)) {
           final String valueObjectType = field.retrieveRelatedValue(FIELD_TYPE);
           final String dataObjectName = DATA_OBJECT.resolveClassname(valueObjectType);
@@ -99,7 +102,7 @@ public class ProjectionSource {
       if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
         return FieldDetail.resolveDefaultValue(aggregate, field.value);
       }
-      return "previousData." + field.value;
+      return sourceFieldsCarrierName + "." + field.value;
     }).collect(Collectors.joining(", "));
   }
 
@@ -109,7 +112,7 @@ public class ProjectionSource {
     return aggregate.retrieveAllRelated(Label.STATE_FIELD).map(field -> {
       if (DomainEventDetail.hasField(event.value, field.value, events) ||
               DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
-        return "currentData." + field.value;
+        return sourceFieldsCarrierName + "." + field.value;
       }
       return "previousData." + field.value;
     }).collect(Collectors.joining(", "));
@@ -124,6 +127,14 @@ public class ProjectionSource {
     }
     return Formatters.Variables.format(Formatters.Variables.Style.EVENT_BASED_DATA_OBJECT_INITIALIZER,
             Dialect.findDefault(), DomainEventDetail.eventWithName(event.value, events), valueObjects.stream());
+  }
+
+  private String resolveSourceFieldsCarrierName(final CodeGenerationParameter event) {
+    final CodeGenerationParameter aggregate = event.parent(Label.AGGREGATE);
+    if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
+      return "currentData";
+    }
+    return "previousData";
   }
 
   @Override
