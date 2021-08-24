@@ -255,7 +255,7 @@ public class TaskExecutionContextMapper {
             .add(SCHEMATA_SETTINGS, schemataSettings)
             .add(TARGET_FOLDER, definitiveFolder.toString())
             .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data))
-            .add(WEB_UI_DIALECT, data.generateUI ? data.generateUIWith : "");
+            .add(WEB_UI_DIALECT, data.generateUI != null && data.generateUI ? data.generateUIWith : "");
   }
 
 }

@@ -208,7 +208,7 @@
     invalid={[requireRule($settings.projectDirectory)].some(f => f)}
   ></Textfield>
   {/if}
-  <div>
+  <!-- <div>
     <Switch class="mb-4" bind:checked={$settings.generateUI}>Generate Web UI?</Switch>
     {#if $settings.generateUI}
       <div
@@ -272,7 +272,7 @@
         </Menu>
       </div>
     {/if}
-  </div>
+  </div> -->
 	<Switch class="mb-4" bind:checked={$settings.useAnnotations}>Use VLINGO XOOM annotations</Switch>
   <Switch class="mb-4" bind:checked={$settings.useAutoDispatch} disabled={!$settings.useAnnotations}>Use VLINGO XOOM auto dispatch</Switch>
   <Button class="mt-4 mr-4" on:click={checkPath} disabled={!valid || processing || isLoading}>{generateButtonLabel}</Button>
