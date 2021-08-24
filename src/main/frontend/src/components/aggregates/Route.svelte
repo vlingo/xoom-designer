@@ -6,7 +6,7 @@
 	import { requireRule } from '../../validators';
 	import Select, { Option } from '@smui/select';
 
-	const httpMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
+	const httpMethods = [/*'GET', */'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'];
 
 	export let methods;
 	export let route;
