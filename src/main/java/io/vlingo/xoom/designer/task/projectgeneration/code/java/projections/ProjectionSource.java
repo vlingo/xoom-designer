@@ -89,7 +89,7 @@ public class ProjectionSource {
         } else if (FieldDetail.isValueObjectCollection(field)) {
           final String valueObjectType = field.retrieveRelatedValue(FIELD_TYPE);
           final String dataObjectName = DATA_OBJECT.resolveClassname(valueObjectType);
-          return String.format("%s.from(typedEvent.%s)", dataObjectName, field.value);
+          return String.format("%s.fromAll(typedEvent.%s)", dataObjectName, field.value);
         } else if (ValueObjectDetail.isValueObject(field)) {
           return field.value;
         } else {

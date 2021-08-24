@@ -51,7 +51,7 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
 
         case AuthorRanked: {
           final AuthorRanked typedEvent = typed(event);
-          merged = AuthorData.from(typedEvent.id, previousData.name, RankData.from(typedEvent.rank), previousData.relatedAuthors, previousData.availableOn);
+          merged = AuthorData.from(typedEvent.id, previousData.name, RankData.fromAll(typedEvent.rank), previousData.relatedAuthors, previousData.availableOn);
           break;
         }
 
