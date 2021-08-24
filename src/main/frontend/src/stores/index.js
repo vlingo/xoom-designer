@@ -115,7 +115,9 @@ function updatePersistence(currentSettings, updatedSettings) {
 		importedPersistenceSettings = defaultPersistenceSettings;
 	}  else {
 		importedPersistenceSettings = updatedSettings.model.persistenceSettings;
-	}currentSettings.model.persistenceSettings = {
+	}
+	
+	currentSettings.model.persistenceSettings = {
 		...currentSettings.model.persistenceSettings,
 		...importedPersistenceSettings
 	}
