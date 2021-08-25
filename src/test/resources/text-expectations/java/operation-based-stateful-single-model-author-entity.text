@@ -31,7 +31,7 @@ public final class AuthorEntity extends StatefulEntity<AuthorState> implements A
     /**
      * TODO: Implement command logic. See {@link AuthorState#withName()}
      */
-    return apply(state.withName(name), new AuthorRegistered(state.id, name), () -> state);
+    return apply(state.withName(name), new AuthorRegistered(state.id), () -> state);
   }
 
   @Override

@@ -12,8 +12,13 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DomainEventDetail {
+
+  public static CodeGenerationParameter eventWithName(final String eventName, final CodeGenerationParameter aggregate) {
+    return eventWithName(eventName, aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).collect(Collectors.toList()));
+  }
 
   public static CodeGenerationParameter eventWithName(final String eventName, final List<CodeGenerationParameter> events) {
     return events.stream().filter(event -> event.value.equals(eventName)).findFirst().get();

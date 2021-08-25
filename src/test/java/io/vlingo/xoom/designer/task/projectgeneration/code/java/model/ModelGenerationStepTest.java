@@ -282,8 +282,7 @@ public class ModelGenerationStepTest {
 
     final CodeGenerationParameter authorRegisteredEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
-                    .relate(nameField).relate(availableOnField);
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
 
     final CodeGenerationParameter authorRankedEvent =
             CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")

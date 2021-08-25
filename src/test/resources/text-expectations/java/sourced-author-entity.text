@@ -31,7 +31,7 @@ public final class AuthorEntity extends EventSourced implements Author {
     /**
      * TODO: Implement command logic. See {@link AuthorState#withName()}
      */
-    return apply(new AuthorRegistered(state.id, name), () -> state);
+    return apply(new AuthorRegistered(state.id), () -> state);
   }
 
   @Override
@@ -83,7 +83,8 @@ public final class AuthorEntity extends EventSourced implements Author {
   }
 
   private void applyAuthorRegistered(final AuthorRegistered event) {
-    state = state.withName(event.name);
+    //TODO: Event is missing name; using null instead
+    state = state.withName(null);
   }
 
   private void applyAuthorRanked(final AuthorRanked event) {

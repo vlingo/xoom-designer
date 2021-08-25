@@ -4,7 +4,7 @@
     /**
      * TODO: Implement command logic. See {@link ${stateName}#${methodName}()}
      */
-    return apply(new ${domainEventName}(state.id<#if methodInvocationParameters?has_content>, ${methodInvocationParameters}</#if>), () -> state);
+    return apply(new ${domainEventName}(${domainEventConstructorParameters}), () -> state);
     <#else>
     /**
      * TODO: Unable to generate method body because there is no associated Domain Event.

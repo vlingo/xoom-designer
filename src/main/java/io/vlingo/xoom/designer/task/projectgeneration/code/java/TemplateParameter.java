@@ -102,6 +102,7 @@ public enum TemplateParameter implements ParameterKey {
   MODEL_ATTRIBUTE("modelAttribute"),
   CONSTRUCTOR_PARAMETERS("constructorParameters"),
   CONSTRUCTOR_INVOCATION_PARAMETERS("constructorInvocationParameters"),
+  DOMAIN_EVENT_CONSTRUCTOR_PARAMETERS("domainEventConstructorParameters"),
   RETRIEVAL_ROUTE("retrievalRoute"),
   REST_RESOURCE_NAME("resourceName"),
   REST_RESOURCE_PACKAGE("restResourcePackage"),

@@ -42,10 +42,12 @@ public class AggregateMethodTemplateData extends TemplateData {
                                       final CodeGenerationParameter method,
                                       final StorageType storageType,
                                       final ProjectionType projectionType) {
+
     this.parameters =
             TemplateParameters.with(METHOD_NAME, method.value).and(STORAGE_TYPE, storageType)
                     .and(DOMAIN_EVENT_NAME, method.retrieveRelatedValue(Label.DOMAIN_EVENT))
                     .and(METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
+                    .and(DOMAIN_EVENT_CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DOMAIN_EVENT_CONSTRUCTOR_INVOCATION.format(method))
                     .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
                     .and(SOURCED_EVENTS, SourcedEvent.from(method.parent()))
                     .and(OPERATION_BASED, projectionType.isOperationBased())
