@@ -27,7 +27,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   private final String stageVariableName;
   private final ParametersOwner parametersOwner;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
-  private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.get(0)";
+  private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.stream().findFirst().get()";
 
   public static AggregateMethodInvocation accessingParametersFromDataObject(final String stageVariableName) {
     return new AggregateMethodInvocation(stageVariableName, ParametersOwner.DATA_OBJECT);
