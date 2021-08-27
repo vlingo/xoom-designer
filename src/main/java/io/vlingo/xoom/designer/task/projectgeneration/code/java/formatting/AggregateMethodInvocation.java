@@ -84,7 +84,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
       if(collectionMutation.isSingleParameterBased()) {
         if(parametersOwner.isDataObject()) {
-          return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, parametersOwner.ownerName, methodParameter.retrieveRelatedValue(ALIAS));
+          return String.format(SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN, parametersOwner.ownerName, methodParameter.value);
         } else {
           return methodParameter.retrieveRelatedValue(ALIAS);
         }
