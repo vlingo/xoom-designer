@@ -29,7 +29,7 @@ import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAME
 public class RestResourceGenerationStepTest {
 
     @Test
-    public void testRestResourceGeneration() {
+    public void testThatRestResourceIsGenerated() {
         final CodeGenerationParameter packageParameter =
                 CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp");
 

@@ -91,8 +91,7 @@ public class ProjectionTemplateData extends TemplateData {
     final Stream<String> specialTypesImports =
             projectionSources.stream()
                     .map(projectionSource -> projectionSource.mergeParameters)
-                    .map(mergeParameters -> CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.entrySet().stream().filter(entry -> mergeParameters.contains(entry.getKey())))
-                    .flatMap(s -> s).map(involvedSpecialTypes -> involvedSpecialTypes.getValue());
+                    .flatMap(mergeParameters -> CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.entrySet().stream().filter(entry -> mergeParameters.contains(entry.getKey()))).map(involvedSpecialTypes -> involvedSpecialTypes.getValue());
 
     return Stream.of(defaultImports, specialTypesImports).flatMap(s -> s).collect(Collectors.toSet());
   }

@@ -72,7 +72,12 @@ public class ProjectionSource {
     return DomainEventDetail.eventWithName(event.value, events).retrieveAllRelated(STATE_FIELD)
             .map(eventField -> Tuple2.from(eventField, eventField.retrieveRelatedValue(COLLECTION_MUTATION, CollectionMutation::withName)))
             .filter(tuple -> tuple._2.isSingleParameterBased())
-            .flatMap(tuple -> tuple._2.resolveStatements(sourceFieldsCarrierName, tuple._1).stream())
+            .flatMap(tuple -> {
+              if(FieldDetail.isAssignableToValueObject(tuple._1)) {
+                return tuple._2.resolveStatements(sourceFieldsCarrierName, tuple._1).stream();
+              }
+              return tuple._2.resolveStatements(sourceFieldsCarrierName, "typedEvent", tuple._1).stream();
+            })
             .collect(Collectors.toList());
   }
 
