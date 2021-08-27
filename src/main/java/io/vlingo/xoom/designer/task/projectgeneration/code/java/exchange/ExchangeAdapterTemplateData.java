@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,13 +29,14 @@ public class ExchangeAdapterTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final String exchangePackage,
                                         final Stream<CodeGenerationParameter> aggregates) {
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     return aggregates.flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
             .flatMap(exchange -> {
               if(exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer()) {
                 return Stream.of(new ExchangeAdapterTemplateData(exchangePackage, exchange));
               } else {
                 return ExchangeDetail.findConsumedQualifiedEventNames(exchange)
-                        .map(qualifiedName -> new ExchangeAdapterTemplateData(exchangePackage, qualifiedName));
+                        .map(qualifiedName -> new ExchangeAdapterTemplateData(codeElementFormatter, exchangePackage, qualifiedName));
               }
             }).collect(Collectors.toList());
   }
@@ -51,12 +53,13 @@ public class ExchangeAdapterTemplateData extends TemplateData {
                     .addImport(IdentifiedDomainEvent.class.getCanonicalName());
   }
 
-  private ExchangeAdapterTemplateData(final String exchangePackage,
+  private ExchangeAdapterTemplateData(final CodeElementFormatter codeElementFormatter,
+                                      final String exchangePackage,
                                       final String qualifiedSchemaName) {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage)
                     .and(EXCHANGE_ROLE, ExchangeRole.CONSUMER)
-                    .and(LOCAL_TYPE_NAME, CodeElementFormatter.simpleNameOf(qualifiedSchemaName))
+                    .and(LOCAL_TYPE_NAME, codeElementFormatter.simpleNameOf(qualifiedSchemaName))
                     .andResolve(EXCHANGE_ADAPTER_NAME, EXCHANGE_ADAPTER::resolveClassname)
                     .andResolve(EXCHANGE_MAPPER_NAME, EXCHANGE_MAPPER::resolveClassname)
                     .addImport(qualifiedSchemaName);

@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Aggre
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                                                final List<CodeGenerationParameter> valueObjects) {
     final CodeGenerationParameter aggregate = route.parent(Label.AGGREGATE);
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
+    final CodeElementFormatter formatter = ComponentRegistry.withName("defaultCodeFormatter");
     final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final List<String> valueObjectInitializers =
             Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, dialect, method, valueObjects.stream());
@@ -53,9 +55,9 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                     .and(FACTORY_METHOD, factoryMethod)
                     .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
                     .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
-                    .and(AGGREGATE_PROTOCOL_VARIABLE, CodeElementFormatter.simpleNameToAttribute(aggregate.value))
+                    .and(AGGREGATE_PROTOCOL_VARIABLE, formatter.simpleNameToAttribute(aggregate.value))
                     .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
-                    .and(INDEX_NAME, CodeElementFormatter.staticConstant(route.value))
+                    .and(INDEX_NAME, formatter.staticConstant(route.value))
                     .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
                     .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers);
   }

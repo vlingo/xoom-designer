@@ -20,13 +20,13 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStan
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.RouteDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.QueriesDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.CodeElementFormatter.staticConstant;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.QUERIES;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard.*;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
@@ -39,6 +39,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
   private final String aggregateName;
   private final TemplateParameters parameters;
+  private final CodeElementFormatter codeElementFormatter;
 
   @SuppressWarnings("unchecked")
   protected AutoDispatchHandlersMappingTemplateData(final String basePackage,
@@ -48,6 +49,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                                                     final List<Content> contents,
                                                     final Boolean useCQRS) {
     this.aggregateName = aggregate.value;
+    this.codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                     .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
@@ -56,9 +58,9 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                     .and(QUERIES_NAME, QUERIES.resolveClassname(aggregateName)).and(USE_CQRS, useCQRS)
                     .and(QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateName))
                     .and(QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateName))
-                    .andResolve(QUERY_ALL_INDEX_NAME, params -> staticConstant(params.find(QUERY_ALL_METHOD_NAME)))
-                    .andResolve(QUERY_BY_ID_INDEX_NAME, params -> staticConstant(params.find(QUERY_BY_ID_METHOD_NAME)))
-                    .addImport(CodeElementFormatter.importAllFrom(ContentQuery.findPackage(DATA_OBJECT, contents)))
+                    .andResolve(QUERY_ALL_INDEX_NAME, params -> codeElementFormatter.staticConstant(params.find(QUERY_ALL_METHOD_NAME)))
+                    .andResolve(QUERY_BY_ID_INDEX_NAME, params -> codeElementFormatter.staticConstant(params.find(QUERY_BY_ID_METHOD_NAME)))
+                    .addImport(codeElementFormatter.importAllFrom(ContentQuery.findPackage(DATA_OBJECT, contents)))
                     .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                     .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                     .and(HANDLER_ENTRIES, new ArrayList<String>())
@@ -79,7 +81,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     return IntStream.range(0, handlers.size()).mapToObj(index -> {
       final String signature = handlers.get(index).value;
-      final String mappingValue = CodeElementFormatter.staticConstant(signature);
+      final String mappingValue = codeElementFormatter.staticConstant(signature);
       return String.format(HANDLER_INDEX_PATTERN, mappingValue, index);
     }).collect(Collectors.toList());
   }
@@ -92,7 +94,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                 final String className = entry.getValue();
                 final TemplateStandard standard = entry.getKey();
                 if(className.isEmpty()) {
-                  return CodeElementFormatter.importAllFrom(ContentQuery.findPackage(standard, contents));
+                  return codeElementFormatter.importAllFrom(ContentQuery.findPackage(standard, contents));
                 }
                 return ContentQuery.findFullyQualifiedClassName(standard, className, contents);
               } catch (final IllegalArgumentException exception) {

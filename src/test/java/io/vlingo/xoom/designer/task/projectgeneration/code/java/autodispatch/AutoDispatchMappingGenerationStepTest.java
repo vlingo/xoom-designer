@@ -15,20 +15,20 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
-public class AutoDispatchMappingGenerationStepTest {
+public class AutoDispatchMappingGenerationStepTest extends CodeGenerationTest {
 
   @Test
-  public void testThatAutoDispatchMappingsAreGenerated() throws IOException {
+  public void testThatAutoDispatchMappingsAreGenerated() {
     final String basePackage = "io.vlingo.xoomapp";
 
     final CodeGenerationParameters parameters =

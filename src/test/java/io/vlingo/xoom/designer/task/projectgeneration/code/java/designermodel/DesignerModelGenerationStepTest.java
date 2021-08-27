@@ -16,12 +16,10 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStan
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 public class DesignerModelGenerationStepTest {
 
   @Test
-  public void testThatProjectSettingsIsGenerated() throws IOException {
+  public void testThatProjectSettingsIsGenerated() {
     final String uglyDesignerModel =
             "{\"context\":{ \"groupId\":\"io.vlingo\", \"artifactId\":\"xoom-app\", \"artifactVersion\":\"1.0.0\"," +
                     " \"packageName\":\"io.vlingo.xoom-app\" }, \"deployment\":{ \"clusterNodes\":3, \"type\":\"NONE\", " +

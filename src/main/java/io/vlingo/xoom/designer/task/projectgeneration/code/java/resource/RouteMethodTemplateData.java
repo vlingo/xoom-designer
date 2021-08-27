@@ -14,10 +14,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Collections;
 import java.util.List;
@@ -117,11 +118,14 @@ public class RouteMethodTemplateData extends TemplateData {
 
   private String resolveModelAttributeName(final CodeGenerationParameter mainParameter,
                                            final Label protocolLabel) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     if (mainParameter.isLabeled(Label.AGGREGATE)) {
-      return CodeElementFormatter.simpleNameToAttribute(mainParameter.value);
+      return codeElementFormatter.simpleNameToAttribute(mainParameter.value);
     }
     final String qualifiedName = mainParameter.retrieveRelatedValue(protocolLabel);
-    return CodeElementFormatter.qualifiedNameToAttribute(qualifiedName);
+    return codeElementFormatter.qualifiedNameToAttribute(qualifiedName);
   }
 
   private List<String> resolveValueObjectInitializers(final Dialect dialect,

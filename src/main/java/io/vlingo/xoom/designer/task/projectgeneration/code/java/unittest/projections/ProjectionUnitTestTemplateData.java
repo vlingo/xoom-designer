@@ -19,6 +19,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStan
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -88,7 +89,10 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 		final String dataObjectPackage =
 				ContentQuery.findPackage(dataObject, dataObjectName, contents);
 
-		return CodeElementFormatter.importAllFrom(dataObjectPackage);
+		final CodeElementFormatter codeElementFormatter =
+						ComponentRegistry.withName("defaultCodeFormatter");
+
+		return codeElementFormatter.importAllFrom(dataObjectPackage);
 	}
 
 	@Override

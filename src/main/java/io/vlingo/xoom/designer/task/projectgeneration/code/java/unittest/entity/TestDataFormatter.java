@@ -9,13 +9,15 @@ package io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.entity
 
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class TestDataFormatter {
 
   public static String formatStaticVariableName(final CodeGenerationParameter method,
                                                 final CodeGenerationParameter stateField) {
-    final String formattedMethodName = CodeElementFormatter.staticConstant(method.value);
-    final String formattedStateFieldName = CodeElementFormatter.staticConstant(stateField.value);
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+    final String formattedMethodName = codeElementFormatter.staticConstant(method.value);
+    final String formattedStateFieldName = codeElementFormatter.staticConstant(stateField.value);
     return String.format("%s_FOR_%s_TEST", formattedStateFieldName, formattedMethodName).toUpperCase();
   }
 

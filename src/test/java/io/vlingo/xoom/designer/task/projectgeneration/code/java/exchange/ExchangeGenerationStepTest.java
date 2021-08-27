@@ -12,13 +12,14 @@ import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.stream.Collectors.toList;
 
-public class ExchangeGenerationStepTest {
+public class ExchangeGenerationStepTest extends CodeGenerationTest  {
 
   @Test
   public void testThatExchangeCodeIsGenerated() {

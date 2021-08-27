@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -24,6 +25,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -38,6 +40,7 @@ public class TaskExecutionContextMapper {
   private final TaskExecutionContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
+  private final CodeElementFormatter formatter;
   private final Logger logger;
 
   public static TaskExecutionContext map(final GenerationSettingsData data,
@@ -53,6 +56,7 @@ public class TaskExecutionContextMapper {
     this.generationTarget = generationTarget;
     this.context = TaskExecutionContext.executedFrom(WEB);
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
+    this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.logger = logger;
 
     mapAggregates();
@@ -68,7 +72,7 @@ public class TaskExecutionContextMapper {
   private void mapAggregates() {
     data.model.aggregateSettings.forEach(aggregate -> {
       final CodeGenerationParameter aggregateParameter =
-              CodeGenerationParameter.of(AGGREGATE, aggregate.aggregateName)
+              CodeGenerationParameter.of(AGGREGATE, formatter.rectifySyntax(aggregate.aggregateName))
                       .relate(URI_ROOT, aggregate.api.rootPath);
 
       mapStateFields(aggregate, aggregateParameter);
@@ -83,12 +87,12 @@ public class TaskExecutionContextMapper {
   private void mapValueObjects() {
     data.model.valueObjectSettings.forEach(valueObject -> {
       final CodeGenerationParameter valueObjectParameter =
-              CodeGenerationParameter.of(VALUE_OBJECT, valueObject.name);
+              CodeGenerationParameter.of(VALUE_OBJECT, formatter.rectifySyntax(valueObject.name));
 
       valueObject.fields.forEach(field -> {
         final CodeGenerationParameter fieldParameter =
-                CodeGenerationParameter.of(VALUE_OBJECT_FIELD, field.name)
-                        .relate(FIELD_TYPE, FIELD_TYPE_TRANSLATION.getOrDefault(field.type, field.type))
+                CodeGenerationParameter.of(VALUE_OBJECT_FIELD, formatter.rectifySyntax(field.name))
+                        .relate(FIELD_TYPE, formatter.rectifySyntax((FIELD_TYPE_TRANSLATION.getOrDefault(field.type, field.type))))
                         .relate(COLLECTION_TYPE, field.collectionType);
 
         valueObjectParameter.relate(fieldParameter);
@@ -102,8 +106,8 @@ public class TaskExecutionContextMapper {
                               final CodeGenerationParameter aggregateParameter) {
     aggregateData.stateFields.forEach(stateField -> {
       aggregateParameter.relate(
-              CodeGenerationParameter.of(STATE_FIELD, stateField.name)
-                      .relate(FIELD_TYPE, FIELD_TYPE_TRANSLATION.getOrDefault(stateField.type, stateField.type))
+              CodeGenerationParameter.of(STATE_FIELD, formatter.rectifySyntax(stateField.name))
+                      .relate(FIELD_TYPE, formatter.rectifySyntax(FIELD_TYPE_TRANSLATION.getOrDefault(stateField.type, stateField.type)))
                       .relate(COLLECTION_TYPE, stateField.collectionType));
     });
   }
@@ -112,7 +116,7 @@ public class TaskExecutionContextMapper {
                           final CodeGenerationParameter aggregateParameter) {
     aggregateData.methods.forEach(methodData -> {
       final CodeGenerationParameter method =
-              CodeGenerationParameter.of(AGGREGATE_METHOD, methodData.name)
+              CodeGenerationParameter.of(AGGREGATE_METHOD, formatter.rectifySyntax(methodData.name))
                       .relate(FACTORY_METHOD, methodData.useFactory)
                       .relate(DOMAIN_EVENT, methodData.event);
 
@@ -121,8 +125,8 @@ public class TaskExecutionContextMapper {
                 CollectionMutation.withSymbol(param.multiplicity);
 
         final CodeGenerationParameter methodParameter =
-                CodeGenerationParameter.of(METHOD_PARAMETER, param.stateField)
-                        .relate(ALIAS, param.parameterName)
+                CodeGenerationParameter.of(METHOD_PARAMETER, formatter.rectifySyntax(param.stateField))
+                        .relate(ALIAS, formatter.rectifySyntax(param.parameterName))
                         .relate(COLLECTION_MUTATION, collectionMutation);
 
         method.relate(methodParameter);
@@ -136,14 +140,14 @@ public class TaskExecutionContextMapper {
                                final CodeGenerationParameter aggregateParameter) {
     aggregateData.events.forEach(event -> {
       final CodeGenerationParameter eventCodeGenParam =
-              CodeGenerationParameter.of(DOMAIN_EVENT, event.name);
+              CodeGenerationParameter.of(DOMAIN_EVENT, formatter.rectifySyntax(event.name));
 
       final Optional<CodeGenerationParameter> emitterMethod =
               aggregateParameter.retrieveAllRelated(AGGREGATE_METHOD)
                       .filter(method -> method.hasAny(DOMAIN_EVENT) && method.retrieveRelatedValue(DOMAIN_EVENT).equals(event.name))
                       .findFirst();
 
-      event.fields.forEach(field -> {
+      event.fields.stream().map(formatter::rectifySyntax).forEach(field -> {
         final CodeGenerationParameter correspondingStateField =
                 aggregateParameter.retrieveAllRelated(STATE_FIELD)
                         .filter(stateField -> stateField.value.equals(field))
@@ -179,7 +183,7 @@ public class TaskExecutionContextMapper {
                          final CodeGenerationParameter aggregateParameter) {
     aggregateData.api.routes.forEach(route -> {
       final CodeGenerationParameter routeParameter =
-              CodeGenerationParameter.of(ROUTE_SIGNATURE, route.aggregateMethod)
+              CodeGenerationParameter.of(ROUTE_SIGNATURE, formatter.rectifySyntax(route.aggregateMethod))
                       .relate(ROUTE_METHOD, route.httpMethod)
                       .relate(ROUTE_PATH, route.path.replace("*", ""))
                       .relate(REQUIRE_ENTITY_LOADING, route.requireEntityLoad);
@@ -197,7 +201,7 @@ public class TaskExecutionContextMapper {
 
       aggregate.consumerExchange.receivers.forEach(receiver -> {
         consumerExchange.relate(CodeGenerationParameter.of(RECEIVER)
-                .relate(MODEL_METHOD, receiver.aggregateMethod)
+                .relate(MODEL_METHOD, formatter.rectifySyntax(receiver.aggregateMethod))
                 .relate(CodeGenerationParameter.ofObject(SCHEMA, new Schema(receiver.schema))));
       });
       aggregateParameter.relate(consumerExchange);
@@ -247,7 +251,7 @@ public class TaskExecutionContextMapper {
             .add(GROUP_ID, data.context.groupId)
             .add(ARTIFACT_ID, data.context.artifactId)
             .add(ARTIFACT_VERSION, data.context.artifactVersion)
-            .add(PACKAGE, data.context.packageName)
+            .add(PACKAGE, formatter.rectifyPackageSyntax(data.context.packageName))
             .add(XOOM_VERSION, Configuration.resolveDefaultXoomVersion())
             .add(DEPLOYMENT_SETTINGS, deploymentSettings)
             .add(CLUSTER_SETTINGS, clusterSettings)

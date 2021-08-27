@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.function.Function;
 
@@ -42,8 +43,9 @@ public class Schema {
   }
 
   public String qualifiedName() {
+    final CodeElementFormatter formatter = ComponentRegistry.withName("defaultCodeFormatter");
     final String packageName =  reference.split(":")[2] + ".event";
-    return CodeElementFormatter.qualifiedNameOf(packageName, simpleClassName());
+    return formatter.qualifiedNameOf(packageName, simpleClassName());
   }
 
   public String innerReceiverClassName() {

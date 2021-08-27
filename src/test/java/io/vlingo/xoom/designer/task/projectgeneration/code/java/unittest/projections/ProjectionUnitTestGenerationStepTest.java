@@ -8,18 +8,18 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
-public class ProjectionUnitTestGenerationStepTest {
+public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
 
   private static final String PERSISTENCE_SETUP_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure.persistence; \\n" +
@@ -28,7 +28,7 @@ public class ProjectionUnitTestGenerationStepTest {
           "}";
 
   @Test
-  public void testThatEventBasedProjectionsUnitTestAreGenerated() throws IOException {
+  public void testThatEventBasedProjectionsUnitTestAreGenerated() {
     // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters()
         .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED);
@@ -54,7 +54,7 @@ public class ProjectionUnitTestGenerationStepTest {
   }
 
   @Test
-  public void testThatEntityStateProjectionsUnitTestAreGenerated() throws IOException {
+  public void testThatEntityStateProjectionsUnitTestAreGenerated() {
     // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters()
         .add(Label.PROJECTION_TYPE, ProjectionType.NONE);

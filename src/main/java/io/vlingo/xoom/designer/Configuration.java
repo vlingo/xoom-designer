@@ -1,7 +1,10 @@
 package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
@@ -66,6 +69,7 @@ public class Configuration {
 
   static {
     ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
+    ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
   }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(

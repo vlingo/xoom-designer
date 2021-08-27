@@ -14,12 +14,13 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Queries;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -83,16 +84,17 @@ public class RestResourceTemplateData extends TemplateData {
                                      final List<Content> contents,
                                      final Boolean useCQRS) {
     final Set<String> imports = new HashSet<>();
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
     if (RouteDetail.requireEntityLoad(aggregate)) {
       final String aggregateEntityName = JavaTemplateStandard.AGGREGATE.resolveClassname(aggregateName);
       imports.add(findFullyQualifiedClassName(JavaTemplateStandard.AGGREGATE, aggregateEntityName, contents));
       imports.add(findFullyQualifiedClassName(JavaTemplateStandard.AGGREGATE_PROTOCOL, aggregateName, contents));
-      imports.add(CodeElementFormatter.importAllFrom(findPackage(JavaTemplateStandard.DATA_OBJECT, JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
+      imports.add(codeElementFormatter.importAllFrom(findPackage(JavaTemplateStandard.DATA_OBJECT, JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
     }
     if (RouteDetail.requireModelFactory(aggregate)) {
       imports.add(findFullyQualifiedClassName(JavaTemplateStandard.AGGREGATE_PROTOCOL, aggregateName, contents));
-      imports.add(CodeElementFormatter.importAllFrom(findPackage(JavaTemplateStandard.DATA_OBJECT, JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
+      imports.add(codeElementFormatter.importAllFrom(findPackage(JavaTemplateStandard.DATA_OBJECT, JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
     }
     if (useCQRS) {
       final String queriesName = JavaTemplateStandard.QUERIES.resolveClassname(aggregateName);

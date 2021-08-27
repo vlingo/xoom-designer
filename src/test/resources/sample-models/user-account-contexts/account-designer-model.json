@@ -1,0 +1,104 @@
+{
+  "context": {
+    "groupId": "com.mycompany",
+    "artifactId": "account",
+    "artifactVersion": "1.0.0",
+    "packageName": "com.mycompany.map.account"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "STATE_STORE",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/accounts",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "CreateAccount",
+              "requireEntityLoad": false
+            }
+          ]
+        },
+        "aggregateName": "Account",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "collectionType": ""
+          }
+        ],
+        "methods": [
+          {
+            "name": "CreateAccount",
+            "parameters": [
+              {
+                "stateField": "userId",
+                "parameterName": "userId",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "AccountCreated"
+          }
+        ],
+        "events": [
+          {
+            "name": "AccountCreated",
+            "fields": [
+              "id",
+              "userId"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "user-topic",
+          "receivers": [
+            {
+              "schema": "myorganisation:mycompany:mycontext.user:UserRegistered:1.0.0",
+              "aggregateMethod": "CreateAccount"
+            }
+          ]
+        },
+        "producerExchange": {
+          "exchangeName": "account-topic",
+          "schemaGroup": "myorganisation:mycompany:mycontext.account",
+          "outgoingEvents": [
+            "AccountCreated"
+          ]
+        }
+      }
+    ],
+    "valueObjectSettings": []
+  },
+  "deployment": {
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 3,
+    "clusterPort": 37373,
+    "producerExchangePort": 8081,
+    "httpServerPort": 18081,
+    "pullSchemas": false
+  },
+  "schemata": {
+    "host": "localhost",
+    "port": 9019
+  },
+  "projectDirectory": "D:\\christophe\\account",
+  "useAnnotations": true,
+  "useAutoDispatch": true,
+  "generateUIWith": "ReactJS"
+}

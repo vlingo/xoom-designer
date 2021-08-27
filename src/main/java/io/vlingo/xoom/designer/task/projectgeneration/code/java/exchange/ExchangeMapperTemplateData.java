@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -31,8 +32,9 @@ public class ExchangeMapperTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final String exchangePackage,
                                         final Stream<CodeGenerationParameter> aggregates) {
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     final List<CodeGenerationParameter> collectedAggregates = aggregates.collect(Collectors.toList());
-    final List<TemplateData> mappers = forConsumerExchanges(exchangePackage, collectedAggregates);
+    final List<TemplateData> mappers = forConsumerExchanges(codeElementFormatter, exchangePackage, collectedAggregates);
     mappers.add(forProducerExchanges(exchangePackage, collectedAggregates));
     return mappers;
   }
@@ -49,19 +51,21 @@ public class ExchangeMapperTemplateData extends TemplateData {
     return new ExchangeMapperTemplateData(exchangePackage, !hasProducerExchange);
   }
 
-  private static List<TemplateData> forConsumerExchanges(final String exchangePackage,
+  private static List<TemplateData> forConsumerExchanges(final CodeElementFormatter codeElementFormatter,
+                                                         final String exchangePackage,
                                                          final List<CodeGenerationParameter> aggregates) {
     return aggregates.stream().flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
             .flatMap(exchange -> ExchangeDetail.findConsumedQualifiedEventNames(exchange))
-            .map(schemaQualifiedName -> new ExchangeMapperTemplateData(exchangePackage, schemaQualifiedName))
+            .map(schemaQualifiedName -> new ExchangeMapperTemplateData(codeElementFormatter, exchangePackage, schemaQualifiedName))
             .collect(Collectors.toList());
   }
 
-  private ExchangeMapperTemplateData(final String exchangePackage,
+  private ExchangeMapperTemplateData(final CodeElementFormatter codeElementFormatter,
+                                     final String exchangePackage,
                                      final String schemaQualifiedName) {
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, exchangePackage).and(EXCHANGE_ROLE, CONSUMER)
-                    .and(LOCAL_TYPE_NAME, CodeElementFormatter.simpleNameOf(schemaQualifiedName))
+                    .and(LOCAL_TYPE_NAME, codeElementFormatter.simpleNameOf(schemaQualifiedName))
                     .andResolve(EXCHANGE_MAPPER_NAME, param -> standard().resolveClassname(param))
                     .addImport(schemaQualifiedName);
 

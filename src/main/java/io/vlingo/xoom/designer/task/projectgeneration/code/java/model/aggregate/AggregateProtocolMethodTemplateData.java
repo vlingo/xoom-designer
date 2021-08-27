@@ -7,14 +7,16 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +24,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter.*;
 import static java.util.stream.Collectors.toList;
 
@@ -50,13 +51,16 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
   private AggregateProtocolMethodTemplateData(final MethodScope methodScope,
                                               final TemplateParameters parentParameters,
                                               final CodeGenerationParameter method) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     this.parameters =
             TemplateParameters.with(METHOD_SCOPE, methodScope).and(METHOD_NAME, method.value)
                     .and(STATE_NAME, JavaTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent().value))
                     .and(ENTITY_NAME, JavaTemplateStandard.AGGREGATE.resolveClassname(method.parent().value))
                     .and(METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
                     .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method, methodScope))
-                    .and(AGGREGATE_PROTOCOL_VARIABLE, simpleNameToAttribute(method.parent().value))
+                    .and(AGGREGATE_PROTOCOL_VARIABLE, codeElementFormatter.simpleNameToAttribute(method.parent().value))
                     .and(AGGREGATE_PROTOCOL_NAME, method.parent().value);
 
     parentParameters.addImports(resolveImports(method, methodScope));

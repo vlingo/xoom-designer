@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.unittest.TestDataValueGenerator.TestDataValues;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,8 @@ public class AuxiliaryEntityCreation {
   }
 
   private String fixStaticDataVariablesName(final String statement) {
-    final String constantMiddleName = CodeElementFormatter.staticConstant(defaultFactoryMethodName) + "_TEST";
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+    final String constantMiddleName = codeElementFormatter.staticConstant(defaultFactoryMethodName) + "_TEST";
     return statement.replaceAll(constantMiddleName, "ENTITY_CREATION");
   }
 

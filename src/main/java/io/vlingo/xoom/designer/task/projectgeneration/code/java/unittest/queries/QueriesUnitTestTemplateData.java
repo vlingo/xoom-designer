@@ -17,6 +17,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.QueriesDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -69,7 +70,10 @@ public class QueriesUnitTestTemplateData extends TemplateData {
     final String dataObjectPackage =
             ContentQuery.findPackage(JavaTemplateStandard.DATA_OBJECT, dataObjectName, contents);
 
-    return CodeElementFormatter.importAllFrom(dataObjectPackage);
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
+    return codeElementFormatter.importAllFrom(dataObjectPackage);
   }
 
   @Override

@@ -20,6 +20,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Forma
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -38,6 +39,7 @@ public class StateDataObjectTemplateData extends TemplateData {
 
   private final String protocolName;
   private final TemplateParameters parameters;
+  private final CodeElementFormatter codeElementFormatter;
 
   public static List<TemplateData> from(final String basePackage,
                                         final Dialect dialect,
@@ -57,6 +59,7 @@ public class StateDataObjectTemplateData extends TemplateData {
                                       final List<CodeGenerationParameter> valueObjects,
                                       final List<Content> contents) {
     this.protocolName = aggregate.value;
+    this.codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.parameters =
         loadParameters(resolvePackage(basePackage), dialect, aggregate, valueObjects, contents);
   }
@@ -85,11 +88,11 @@ public class StateDataObjectTemplateData extends TemplateData {
         .and(MEMBERS, members).and(MEMBERS_ASSIGNMENT, membersAssignment)
         .and(MEMBER_NAMES, aggregate.retrieveAllRelated(Label.STATE_FIELD).map(p -> p.value).collect(Collectors.toList()))
         .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations).and(STATE_FIELDS, joinStateFields(aggregate))
-        .and(DATA_OBJECT_QUALIFIED_NAME, CodeElementFormatter.qualifiedNameOf(packageName, dataName))
+        .and(DATA_OBJECT_QUALIFIED_NAME, codeElementFormatter.qualifiedNameOf(packageName, dataName))
         .and(CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
         .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)))
         .addImport(ContentQuery.findFullyQualifiedClassName(AGGREGATE_STATE, stateName, contents))
-        .addImport(CodeElementFormatter.importAllFrom("java.util"))
+        .addImport(codeElementFormatter.importAllFrom("java.util"))
         .addImports(AggregateDetail.resolveImports(aggregate));
   }
 

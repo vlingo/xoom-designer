@@ -8,10 +8,14 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +33,11 @@ public class TaskExecutionContextMapperTest {
 
   @Test
   public void testThatTaskExecutionContextIsMapped() {
+    final CodeElementFormatter codeElementFormatter =
+            CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+
     final GenerationSettingsData data =
             new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");

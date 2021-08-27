@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.stream.Collectors;
 
@@ -32,8 +33,11 @@ public class ResultAssignmentStatement {
 
   public static String resolveEntityMethodInvocation(final CodeGenerationParameter aggregate,
                                                      final CodeGenerationParameter method) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     final String variableName =
-            CodeElementFormatter.simpleNameToAttribute(aggregate.value);
+            codeElementFormatter.simpleNameToAttribute(aggregate.value);
 
     final String methodParameters =
             method.retrieveAllRelated(Label.METHOD_PARAMETER)

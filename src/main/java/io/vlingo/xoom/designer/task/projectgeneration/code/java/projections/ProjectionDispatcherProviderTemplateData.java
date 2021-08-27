@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -62,11 +63,14 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
                                      final ProjectionType projectionType,
                                      final List<Content> contents) {
     if (projectionType.isOperationBased()) {
+      final CodeElementFormatter codeElementFormatter =
+              ComponentRegistry.withName("defaultCodeFormatter");
+
       final String projectionSourceTypesQualifiedName =
               ProjectionSourceTypesDetail.resolveQualifiedName(basePackage, projectionType);
 
       final String allSourceTypes =
-              CodeElementFormatter.staticallyImportAllFrom(projectionSourceTypesQualifiedName);
+              codeElementFormatter.staticallyImportAllFrom(projectionSourceTypesQualifiedName);
 
       return Stream.of(allSourceTypes).collect(Collectors.toSet());
     }

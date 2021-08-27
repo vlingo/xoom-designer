@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.HashSet;
 import java.util.List;
@@ -63,6 +64,7 @@ public class StorageProviderTemplateData extends TemplateData {
                                             final Model model) {
     final List<Adapter> adapters = Adapter.from(templatesData);
     final List<Queries> queries = Queries.from(model, contents, templatesData);
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     final Stream<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents).stream();
     final Set<String> imports = resolveImports(model, storageType, contents, queries);
 
@@ -72,7 +74,7 @@ public class StorageProviderTemplateData extends TemplateData {
             .and(USE_PROJECTIONS, projectionType.isProjectionEnabled())
             .and(ADAPTERS, adapters).and(QUERIES, queries)
             .and(AGGREGATES, ContentQuery.findClassNames(JavaTemplateStandard.AGGREGATE, contents))
-            .and(PERSISTENT_TYPES, persistentTypes.map(CodeElementFormatter::simpleNameOf).collect(toSet()))
+            .and(PERSISTENT_TYPES, persistentTypes.map(codeElementFormatter::simpleNameOf).collect(toSet()))
             .andResolve(STORE_PROVIDER_NAME, JavaTemplateStandard.STORE_PROVIDER::resolveClassname)
             .and(USE_ANNOTATIONS, useAnnotation)
             .addImports(imports);

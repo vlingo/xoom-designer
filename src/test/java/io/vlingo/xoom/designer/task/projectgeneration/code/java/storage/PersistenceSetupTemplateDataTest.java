@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class PersistenceSetupTemplateDataTest {
+public class PersistenceSetupTemplateDataTest extends CodeGenerationTest {
 
     @Test
     public void testWithAdaptersAndProjections() {
