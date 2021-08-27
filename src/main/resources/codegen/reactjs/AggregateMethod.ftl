@@ -23,7 +23,7 @@ import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateN
   <#elseif valueTypes[type]??>
     <#if !aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
       <#list valueTypes[type] as subType>
-    if(Array.isArray(EMPTY_FORM.${name}.${subType.name}))
+    if(EMPTY_FORM.${name} === undefined || Array.isArray(EMPTY_FORM.${name}.${subType.name}))
       form.${name}.${subType.name} = [form.${name}.${subType.name}]
       </#list>
     </#if>

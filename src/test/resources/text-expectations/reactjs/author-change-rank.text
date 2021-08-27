@@ -13,9 +13,9 @@ const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(Array.isArray(EMPTY_FORM.rank.points))
+    if(EMPTY_FORM.rank === undefined || Array.isArray(EMPTY_FORM.rank.points))
       form.rank.points = [form.rank.points]
-    if(Array.isArray(EMPTY_FORM.rank.classification))
+    if(EMPTY_FORM.rank === undefined || Array.isArray(EMPTY_FORM.rank.classification))
       form.rank.classification = [form.rank.classification]
 
     const url = applyData('/authors/{id}/rank', form);
