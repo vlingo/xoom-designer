@@ -134,7 +134,7 @@ public class ProjectionDispatcherProviderGenerationStepTest {
                         .relate(Label.FIELD_TYPE, "Name");
 
         final CodeGenerationParameter rankField =
-                CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                CodeGenerationParameter.of(Label.STATE_FIELD, "ranks")
                         .relate(Label.FIELD_TYPE, "Rank")
                         .relate(Label.COLLECTION_TYPE, "List");
 
@@ -157,7 +157,22 @@ public class ProjectionDispatcherProviderGenerationStepTest {
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
                         .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                                 .relate(Label.FIELD_TYPE, "String"))
-                        .relate(rankField);
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "ranks")
+                                .relate(Label.FIELD_TYPE, "Rank")
+                                .relate(Label.COLLECTION_TYPE, "List")
+                                .relate(Label.ALIAS, "rank")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"));
+
+        final CodeGenerationParameter authorBulkRankedEvent =
+                CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorBulkRanked")
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                                .relate(Label.FIELD_TYPE, "String"))
+                        .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "ranks")
+                                .relate(Label.FIELD_TYPE, "Rank")
+                                .relate(Label.COLLECTION_TYPE, "List")
+                                .relate(Label.ALIAS, "")
+                                .relate(Label.COLLECTION_MUTATION, "MERGE"));
+
 
         final CodeGenerationParameter authorRelatedEvent =
                 CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
@@ -196,9 +211,18 @@ public class ProjectionDispatcherProviderGenerationStepTest {
                         .relate(authorRegisteredEvent);
 
         final CodeGenerationParameter rankMethod =
-                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
-                        .relate(METHOD_PARAMETER, "rank")
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addRank")
+                        .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "ranks")
+                                .relate(Label.ALIAS, "rank")
+                                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
                         .relate(authorRankedEvent);
+
+        final CodeGenerationParameter bulkRankMethod =
+                CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "bulkRank")
+                        .relate(METHOD_PARAMETER, "ranks")
+                        .relate(Label.ALIAS, "ranks")
+                        .relate(Label.COLLECTION_MUTATION, "MERGE")
+                        .relate(authorBulkRankedEvent);
 
         final CodeGenerationParameter relatedAuthorMethod =
                 CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
@@ -234,10 +258,11 @@ public class ProjectionDispatcherProviderGenerationStepTest {
         final CodeGenerationParameter authorAggregate =
                 CodeGenerationParameter.of(Label.AGGREGATE, "Author")
                         .relate(idField).relate(nameField).relate(rankField).relate(relatedAuthors)
-                        .relate(availableOnField).relate(factoryMethod).relate(rankMethod).relate(hideMethod)
-                        .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
-                        .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
-                        .relate(authorRelatedEvent).relate(authorsRelatedEvent).relate(authorUnrelatedEvent);
+                        .relate(availableOnField).relate(factoryMethod).relate(rankMethod).relate(bulkRankMethod)
+                        .relate(hideMethod).relate(relatedAuthorMethod).relate(relatedAuthorsMethod)
+                        .relate(relatedAuthorRemovalMethod).relate(relatedAuthorsReplacementMethod)
+                        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorRelatedEvent)
+                        .relate(authorsRelatedEvent).relate(authorUnrelatedEvent).relate(authorBulkRankedEvent);
 
         final CodeGenerationParameter titleField =
                 CodeGenerationParameter.of(Label.STATE_FIELD, "title")

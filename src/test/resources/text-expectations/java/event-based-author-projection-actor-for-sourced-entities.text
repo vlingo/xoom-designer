@@ -44,34 +44,42 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
       switch (Events.valueOf(event.typeName())) {
         case AuthorRegistered: {
           final AuthorRegistered typedEvent = typed(event);
-          final NameData name = NameData.from(typedEvent.name.firstName, typedEvent.name.lastName);
+          final NameData name = NameData.from(typedEvent.name);
           merged = AuthorData.from(typedEvent.id, name, new ArrayList<>(), new HashSet<>(), typedEvent.availableOn);
           break;
         }
 
         case AuthorRanked: {
           final AuthorRanked typedEvent = typed(event);
-          merged = AuthorData.from(typedEvent.id, previousData.name, RankData.fromAll(typedEvent.rank), previousData.relatedAuthors, previousData.availableOn);
+          final RankData rank = RankData.from(typedEvent.rank);
+          previousData.ranks.add(rank);
+          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+          break;
+        }
+
+        case AuthorBulkRanked: {
+          final AuthorBulkRanked typedEvent = typed(event);
+          merged = AuthorData.from(typedEvent.id, previousData.name, RankData.fromAll(typedEvent.ranks), previousData.relatedAuthors, previousData.availableOn);
           break;
         }
 
         case AuthorRelated: {
           final AuthorRelated typedEvent = typed(event);
-          previousData.relatedAuthors.add(relatedAuthor);
-          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.rank, previousData.relatedAuthors, previousData.availableOn);
+          previousData.relatedAuthors.add(typedEvent.relatedAuthor);
+          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
           break;
         }
 
         case AuthorsRelated: {
           final AuthorsRelated typedEvent = typed(event);
-          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.rank, typedEvent.relatedAuthors, previousData.availableOn);
+          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.ranks, typedEvent.relatedAuthors, previousData.availableOn);
           break;
         }
 
         case AuthorUnrelated: {
           final AuthorUnrelated typedEvent = typed(event);
-          previousData.relatedAuthors.remove(relatedAuthor);
-          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.rank, previousData.relatedAuthors, previousData.availableOn);
+          previousData.relatedAuthors.remove(typedEvent.relatedAuthor);
+          merged = AuthorData.from(typedEvent.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
           break;
         }
 

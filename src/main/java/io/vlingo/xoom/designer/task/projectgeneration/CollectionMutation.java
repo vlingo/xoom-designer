@@ -47,8 +47,14 @@ public enum CollectionMutation {
     return equals(ADDITION) || equals(REMOVAL);
   }
 
-  public List<String> resolveStatements(final String carrier, final CodeGenerationParameter methodParameter) {
-    return statementsResolver.apply(methodParameter).stream().map(statement -> carrier + "." + statement).collect(Collectors.toList());
+  public List<String> resolveStatements(final String collectionOwner, final CodeGenerationParameter methodParameter) {
+    return statementsResolver.apply(methodParameter).stream().map(statement -> collectionOwner + "." + statement).collect(Collectors.toList());
+  }
+
+  public List<String> resolveStatements(final String collectionOwner, final String elementOwner, final CodeGenerationParameter methodParameter) {
+    return resolveStatements(collectionOwner, methodParameter)
+            .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
+            .collect(Collectors.toList());
   }
 
   public boolean shouldReplaceWithMethodParameter() {
