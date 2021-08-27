@@ -1,0 +1,168 @@
+{
+  "context": {
+    "groupId": "com.mycompany",
+    "artifactId": "user",
+    "artifactVersion": "1.0.0",
+    "packageName": "com.mycompany.map.user"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "STATE_STORE",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/users",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "RegisterUser",
+              "requireEntityLoad": false
+            }
+          ]
+        },
+        "aggregateName": "User",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "collectionType": "Set"
+          }
+        ],
+        "methods": [
+          {
+            "name": "RegisterUser",
+            "parameters": [
+              {
+                "stateField": "name",
+                "parameterName": "name",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "UserRegistered"
+          }
+        ],
+        "events": [
+          {
+            "name": "UserRegistered",
+            "fields": [
+              "id",
+              "name"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "",
+          "receivers": []
+        },
+        "producerExchange": {
+          "exchangeName": "user-topic",
+          "schemaGroup": "myorganisation:mycompany:mycontext.user",
+          "outgoingEvents": [
+            "UserRegistered"
+          ]
+        }
+      },
+      {
+        "api": {
+          "rootPath": "/notifications",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "CreateNotification",
+              "requireEntityLoad": false
+            }
+          ]
+        },
+        "aggregateName": "Notifications",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "AccountCreated",
+            "type": "boolean",
+            "collectionType": ""
+          }
+        ],
+        "methods": [
+          {
+            "name": "CreateNotification",
+            "parameters": [
+              {
+                "stateField": "userId",
+                "parameterName": "userId",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "NotificationReceived"
+          }
+        ],
+        "events": [
+          {
+            "name": "NotificationReceived",
+            "fields": [
+              "id",
+              "userId"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "account-topic",
+          "receivers": [
+            {
+              "schema": "myorganisation:mycompany:mycontext.account:AccountCreated:1.0.0",
+              "aggregateMethod": "CreateNotification"
+            }
+          ]
+        },
+        "producerExchange": {
+          "exchangeName": "user-topic",
+          "schemaGroup": "myorganisation:mycompany:mycontext.user",
+          "outgoingEvents": [
+            "NotificationReceived"
+          ]
+        }
+      }
+    ],
+    "valueObjectSettings": []
+  },
+  "deployment": {
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 3,
+    "clusterPort": 37375,
+    "producerExchangePort": 8080,
+    "httpServerPort": 18080,
+    "pullSchemas": false
+  },
+  "schemata": {
+    "host": "localhost",
+    "port": 9019
+  },
+  "projectDirectory": "D:\\christophe\\user",
+  "useAnnotations": true,
+  "useAutoDispatch": true,
+  "generateUIWith": "ReactJS"
+}

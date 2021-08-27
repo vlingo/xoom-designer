@@ -1,0 +1,266 @@
+{
+  "context": {
+    "groupId": "co.donebyme",
+    "artifactId": "matching",
+    "artifactVersion": "1.0.0",
+    "packageName": "co.donebyme.matching"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "JOURNAL",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/proposals",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "submitFor",
+              "requireEntityLoad": false
+            }
+          ]
+        },
+        "aggregateName": "Proposal",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "client",
+            "type": "Client",
+            "collectionType": ""
+          },
+          {
+            "name": "doer",
+            "type": "Doer",
+            "collectionType": ""
+          },
+          {
+            "name": "progress",
+            "type": "Progress",
+            "collectionType": ""
+          },
+          {
+            "name": "expectations",
+            "type": "Expectations",
+            "collectionType": ""
+          },
+          {
+            "name": "candidateDoers",
+            "type": "CandidateDoers",
+            "collectionType": ""
+          }
+        ],
+        "methods": [
+          {
+            "name": "submitFor",
+            "parameters": [
+              {
+                "stateField": "client",
+                "parameterName": "client",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "expectations",
+                "parameterName": "expectations",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "ProposalSubmitted"
+          },
+          {
+            "name": "acceptPricing",
+            "parameters": [],
+            "useFactory": false,
+            "event": "PricingAccepted"
+          },
+          {
+            "name": "denyPricing",
+            "parameters": [],
+            "useFactory": false,
+            "event": "PricingDenied"
+          },
+          {
+            "name": "recordCandiateDoers",
+            "parameters": [
+              {
+                "stateField": "candidateDoers",
+                "parameterName": "candidateDoers",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": false,
+            "event": "CandidateDoersRecorded"
+          },
+          {
+            "name": "mergeCandidateDoers",
+            "parameters": [
+              {
+                "stateField": "candidateDoers",
+                "parameterName": "candidateDoers",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": false,
+            "event": "CandidateDoersLocated"
+          }
+        ],
+        "events": [
+          {
+            "name": "ProposalSubmitted",
+            "fields": [
+              "id",
+              "client",
+              "expectations"
+            ]
+          },
+          {
+            "name": "PricingAccepted",
+            "fields": [
+              "id"
+            ]
+          },
+          {
+            "name": "PricingDenied",
+            "fields": [
+              "id"
+            ]
+          },
+          {
+            "name": "CandidateDoersRecorded",
+            "fields": [
+              "id",
+              "candidateDoers"
+            ]
+          },
+          {
+            "name": "CandidateDoersLocated",
+            "fields": [
+              "id",
+              "candidateDoers"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "donebyme-topic",
+          "receivers": [
+            {
+              "schema": "DoneByMe:Pricing:co.donebyme.pricing:PricingVerified:0.0.1",
+              "aggregateMethod": "acceptPricing"
+            }
+          ]
+        },
+        "producerExchange": {
+          "exchangeName": "donebyme-topic",
+          "schemaGroup": "DoneByMe:Matching:co.donebyme.matching",
+          "outgoingEvents": [
+            "ProposalSubmitted",
+            "PricingAccepted",
+            "PricingDenied",
+            "CandidateDoersRecorded",
+            "CandidateDoersLocated"
+          ]
+        }
+      }
+    ],
+    "valueObjectSettings": [
+      {
+        "name": "Client",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "collectionType": ""
+          }
+        ]
+      },
+      {
+        "name": "Doer",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "collectionType": ""
+          }
+        ]
+      },
+      {
+        "name": "Progress",
+        "fields": [
+          {
+            "name": "steps",
+            "type": "String",
+            "collectionType": "Set"
+          }
+        ]
+      },
+      {
+        "name": "Expectations",
+        "fields": [
+          {
+            "name": "keywords",
+            "type": "String",
+            "collectionType": "List"
+          },
+          {
+            "name": "price",
+            "type": "Money",
+            "collectionType": ""
+          },
+          {
+            "name": "dueOn",
+            "type": "DateTime",
+            "collectionType": ""
+          }
+        ]
+      },
+      {
+        "name": "Money",
+        "fields": [
+          {
+            "name": "value",
+            "type": "String",
+            "collectionType": ""
+          }
+        ]
+      },
+      {
+        "name": "CandidateDoers",
+        "fields": [
+          {
+            "name": "doers",
+            "type": "Doer",
+            "collectionType": "List"
+          }
+        ]
+      }
+    ]
+  },
+  "deployment": {
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 5,
+    "clusterPort": 50011,
+    "producerExchangePort": 19762,
+    "httpServerPort": 8081,
+    "pullSchemas": false
+  },
+  "schemata": {
+    "host": "localhost",
+    "port": 9019
+  },
+  "projectDirectory": "/designer/VLINGO-XOOM/co.donebyme/matching1",
+  "useAnnotations": false,
+  "useAutoDispatch": false
+}
