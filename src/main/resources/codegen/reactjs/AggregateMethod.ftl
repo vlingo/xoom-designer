@@ -17,13 +17,18 @@ import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateN
 </#macro>
 
 <#macro formatFormElement name type>
-  <#if valueTypes[type]??>
+  <#if valueTypes[type]?? && aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
+    if(EMPTY_FORM.${name} === undefined)
+      form.${name} = [Object.assign({}, form.${name})]
+  <#elseif valueTypes[type]??>
     <#if !aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
       <#list valueTypes[type] as subType>
     if(Array.isArray(EMPTY_FORM.${name}.${subType.name}))
       form.${name}.${subType.name} = [form.${name}.${subType.name}]
       </#list>
     </#if>
+  <#elseif aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
+    form.${name} = [form.${name}]
   </#if>
 </#macro>
 

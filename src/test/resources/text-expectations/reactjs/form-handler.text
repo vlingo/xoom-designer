@@ -17,7 +17,7 @@ const useFormHandler = (defaultForm) => {
       else
         setObjectValue(obj[path1], path2, value);
     } else {
-      if (Array.isArray(obj))
+      if (Array.isArray(obj) && obj[0] !== undefined)
         obj[0][name] = value;
       else
         obj[name] = value;

@@ -13,6 +13,8 @@ const OrderCreate = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
+    if(EMPTY_FORM.orderLines === undefined)
+      form.orderLines = [Object.assign({}, form.orderLines)]
 
     const url = applyData('/orders/order', form);
     axios.post(url, form)

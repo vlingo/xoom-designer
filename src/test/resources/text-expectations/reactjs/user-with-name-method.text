@@ -13,6 +13,8 @@ const UserWithName = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
+    form.name = [form.name]
+    form.address = [form.address]
 
     const url = applyData('/users', form);
     axios.post(url, form)
