@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.resource.HandlerInvocationResolver;
 import io.vlingo.xoom.http.Method;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationResolver {
 
@@ -19,6 +20,12 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
   private static final String HANDLER_INVOCATION_PATTERN = "%s.%s";
   private static final String DEFAULT_FACTORY_METHOD_PARAMETER = "$stage";
   private static final String HANDLER_INVOCATION_WITH_DEFAULT_PARAMS_PATTERN = "%s.%s(%s)";
+
+  private final CodeElementFormatter codeElementFormatter;
+
+  public AutoDispatchHandlerInvocationResolver() {
+    this.codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+  }
 
   public String resolveRouteHandlerInvocation(final CodeGenerationParameter parentParameter,
                                               final CodeGenerationParameter routeSignatureParameter) {
@@ -48,7 +55,7 @@ public class AutoDispatchHandlerInvocationResolver implements HandlerInvocationR
             parentParameter.retrieveRelatedValue(Label.HANDLERS_CONFIG_NAME);
 
     final String handlersConfigClassName =
-            CodeElementFormatter.simpleNameOf(handlersConfigQualifiedName);
+            codeElementFormatter.simpleNameOf(handlersConfigQualifiedName);
 
     final String invocation = routeSignatureParameter.retrieveRelatedValue(invocationLabel);
 

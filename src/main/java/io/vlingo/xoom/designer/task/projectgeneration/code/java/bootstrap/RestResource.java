@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,40 +22,32 @@ import static java.util.stream.Collectors.toList;
 
 public class RestResource {
 
-  private final String className;
-  private final String objectName;
-  private final boolean last;
+  public final String className;
+  public final String objectName;
+  public final boolean last;
 
   public static List<RestResource> from(final List<Content> contents) {
+
     final Set<String> classNames =
             ContentQuery.findClassNames(contents, JavaTemplateStandard.REST_RESOURCE, JavaTemplateStandard.REST_UI_RESOURCE,
                     JavaTemplateStandard.AUTO_DISPATCH_RESOURCE_HANDLER, JavaTemplateStandard.AUTO_DISPATCH_RESOURCE_UI_HANDLER);
 
     final Iterator<String> iterator = classNames.iterator();
 
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+
     return IntStream.range(0, classNames.size()).mapToObj(index ->
-            new RestResource(iterator.next(), index,
+            new RestResource(codeElementFormatter, iterator.next(), index,
                     classNames.size())).collect(toList());
   }
 
-  private RestResource(final String restResourceName,
+  private RestResource(final CodeElementFormatter codeElementFormatter,
+                       final String restResourceName,
                        final int resourceIndex,
                        final int numberOfResources) {
     this.className = restResourceName;
-    this.objectName = CodeElementFormatter.simpleNameToAttribute(restResourceName);
+    this.objectName = codeElementFormatter.simpleNameToAttribute(restResourceName);
     this.last = resourceIndex == numberOfResources - 1;
-  }
-
-  public String getClassName() {
-    return className;
-  }
-
-  public String getObjectName() {
-    return objectName;
-  }
-
-  public boolean isLast() {
-    return last;
   }
 
 }

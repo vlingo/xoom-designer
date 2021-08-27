@@ -16,6 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -83,10 +84,13 @@ public class ProjectionTemplateData extends TemplateData {
   private Set<String> resolveImports(final String dataObjectName,
                                      final List<ProjectionSource> projectionSources,
                                      final List<Content> contents) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     final Stream<String> defaultImports =
             Stream.of(ContentQuery.findPackage(JavaTemplateStandard.AGGREGATE_PROTOCOL, protocolName, contents),
                     ContentQuery.findPackage(JavaTemplateStandard.DATA_OBJECT, dataObjectName, contents))
-                    .map(CodeElementFormatter::importAllFrom);
+                    .map(codeElementFormatter::importAllFrom);
 
     final Stream<String> specialTypesImports =
             projectionSources.stream()

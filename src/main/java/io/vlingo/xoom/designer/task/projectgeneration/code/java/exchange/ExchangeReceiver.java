@@ -15,6 +15,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Aggre
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public class ExchangeReceiver {
 
   private ExchangeReceiver(final CodeGenerationParameter exchange,
                            final CodeGenerationParameter receiver) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     final CodeGenerationParameter aggregateMethod =
             AggregateDetail.methodWithName(exchange.parent(), receiver.retrieveRelatedValue(Label.MODEL_METHOD));
 
@@ -49,7 +53,7 @@ public class ExchangeReceiver {
     this.modelProtocol = exchange.parent(Label.AGGREGATE).value;
     this.innerClassName = schema.innerReceiverClassName();
     this.modelActor = JavaTemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
-    this.modelVariable = CodeElementFormatter.simpleNameToAttribute(modelProtocol);
+    this.modelVariable = codeElementFormatter.simpleNameToAttribute(modelProtocol);
     this.modelMethodParameters = resolveModelMethodParameters(aggregateMethod);
     this.dispatchToFactoryMethod = aggregateMethod.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     this.localTypeQualifiedName = schema.qualifiedName();

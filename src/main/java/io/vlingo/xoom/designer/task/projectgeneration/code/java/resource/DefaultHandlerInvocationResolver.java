@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration.code.java.resource;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
@@ -15,8 +16,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Forma
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.MethodScope;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.http.Method;
-
-import static io.vlingo.xoom.codegen.content.CodeElementFormatter.simpleNameToAttribute;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
@@ -41,12 +41,13 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
 
   private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
     final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.accessingParametersFromDataObject("grid");
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
     final Boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
     final String methodInvocationParameters = argumentsFormat.format(method, scope);
-    final String invoker = factoryMethod ? aggregateParameter.value : simpleNameToAttribute(aggregateParameter.value);
+    final String invoker = factoryMethod ? aggregateParameter.value : codeElementFormatter.simpleNameToAttribute(aggregateParameter.value);
     return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
   }
 

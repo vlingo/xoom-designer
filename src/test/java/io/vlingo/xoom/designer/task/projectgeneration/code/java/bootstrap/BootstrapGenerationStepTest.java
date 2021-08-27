@@ -11,20 +11,20 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.OutputFile;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
-public class BootstrapGenerationStepTest {
+public class BootstrapGenerationStepTest extends CodeGenerationTest {
 
     @Test
-    public void testThatDefaultBootstrapIsGenerated() throws IOException {
+    public void testThatDefaultBootstrapIsGenerated() {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty().with(Label.PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 
@@ -40,7 +40,7 @@ public class BootstrapGenerationStepTest {
     }
 
     @Test
-    public void testThatAnnotatedBootstrapIsGenerated() throws IOException {
+    public void testThatAnnotatedBootstrapIsGenerated() {
         final CodeGenerationContext context =
                 CodeGenerationContext.empty().with(Label.PROJECTION_TYPE, ProjectionType.OPERATION_BASED.name());
 

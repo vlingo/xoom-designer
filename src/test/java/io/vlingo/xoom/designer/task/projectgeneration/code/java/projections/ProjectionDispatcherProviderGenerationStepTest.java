@@ -14,18 +14,18 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 
-public class ProjectionDispatcherProviderGenerationStepTest {
+public class ProjectionDispatcherProviderGenerationStepTest extends CodeGenerationTest {
 
     private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";
     private static final String PROJECT_PATH = Paths.get(HOME_DIRECTORY, "xoom-app").toString();
@@ -38,7 +38,7 @@ public class ProjectionDispatcherProviderGenerationStepTest {
                     "io", "vlingo", "xoomapp", "infrastructure").toString();
 
     @Test
-    public void testThatEventBasedProjectionClassesAreGeneratedForSourcedEntities() throws IOException {
+    public void testThatEventBasedProjectionClassesAreGeneratedForSourcedEntities() {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters());
 
@@ -61,7 +61,7 @@ public class ProjectionDispatcherProviderGenerationStepTest {
     }
 
     @Test
-    public void testThatEventBasedProjectionClassesAreGeneratedForStatefulEntities() throws IOException {
+    public void testThatEventBasedProjectionClassesAreGeneratedForStatefulEntities() {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters());
 
@@ -84,7 +84,7 @@ public class ProjectionDispatcherProviderGenerationStepTest {
     }
 
     @Test
-    public void testThatOperationBasedProjectionClassesAreGenerated() throws IOException {
+    public void testThatOperationBasedProjectionClassesAreGenerated() {
         final CodeGenerationContext context =
                 CodeGenerationContext.with(codeGenerationParameters());
 

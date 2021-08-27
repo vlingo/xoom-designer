@@ -12,19 +12,19 @@ import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
-public class StorageGenerationStepTest {
+public class StorageGenerationStepTest extends CodeGenerationTest {
 
   @Test
-  public void testJournalGenerationWithHSQLDBDatabase() throws IOException {
+  public void testJournalGenerationWithHSQLDBDatabase() {
     final CodeGenerationContext context =
             CodeGenerationContext.empty();
 
@@ -46,7 +46,7 @@ public class StorageGenerationStepTest {
   }
 
   @Test
-  public void testStateStoreGenerationWithoutProjections() throws IOException {
+  public void testStateStoreGenerationWithoutProjections() {
     final CodeGenerationContext context =
             CodeGenerationContext.empty();
 
@@ -68,7 +68,7 @@ public class StorageGenerationStepTest {
   }
 
   @Test
-  public void testStateStoreGenerationWithProjections() throws IOException {
+  public void testStateStoreGenerationWithProjections() {
     final CodeGenerationContext context =
             CodeGenerationContext.empty();
 
@@ -92,7 +92,7 @@ public class StorageGenerationStepTest {
   }
 
   @Test
-  public void testAnnotatedStoreGeneration() throws IOException {
+  public void testAnnotatedStoreGeneration() {
     final CodeGenerationContext context =
             CodeGenerationContext.empty().with(Label.USE_ANNOTATIONS, "true");
 

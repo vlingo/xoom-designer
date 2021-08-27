@@ -12,8 +12,9 @@ import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -90,8 +91,8 @@ public class Queries {
 
   private Queries(final String protocolQualifiedName,
                   final String actorQualifiedName) {
-    this(CodeElementFormatter.packageOf(protocolQualifiedName), CodeElementFormatter.simpleNameOf(protocolQualifiedName),
-            CodeElementFormatter.packageOf(actorQualifiedName), CodeElementFormatter.simpleNameOf(actorQualifiedName));
+    this(codeElementFormatter().packageOf(protocolQualifiedName), codeElementFormatter().simpleNameOf(protocolQualifiedName),
+            codeElementFormatter().packageOf(actorQualifiedName), codeElementFormatter().simpleNameOf(actorQualifiedName));
   }
 
   private Queries(final String protocolPackageName,
@@ -100,7 +101,7 @@ public class Queries {
                   final String actorName) {
     this.actorName = actorName;
     this.protocolName = protocolName;
-    this.attributeName = CodeElementFormatter.simpleNameToAttribute(protocolName);
+    this.attributeName = codeElementFormatter().simpleNameToAttribute(protocolName);
 
     if (!isEmpty()) {
       this.qualifiedNames.addAll(
@@ -129,4 +130,7 @@ public class Queries {
     return protocolName.isEmpty() && actorName.isEmpty() && attributeName.isEmpty();
   }
 
+  private static CodeElementFormatter codeElementFormatter() {
+    return ComponentRegistry.withName("defaultCodeFormatter");
+  }
 }

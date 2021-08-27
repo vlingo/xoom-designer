@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class ProjectionSourceTypesDetail {
 
@@ -27,6 +28,7 @@ public class ProjectionSourceTypesDetail {
   }
 
   public static String resolveQualifiedName(final String basePackage, final ProjectionType projectionType) {
-    return CodeElementFormatter.qualifiedNameOf(resolvePackage(basePackage), resolveClassName(projectionType));
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+    return codeElementFormatter.qualifiedNameOf(resolvePackage(basePackage), resolveClassName(projectionType));
   }
 }

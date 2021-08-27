@@ -9,6 +9,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 
@@ -44,7 +45,10 @@ public class RestResourceUnitTestTemplateData extends TemplateData {
 		final String dataObjectPackage =
 				ContentQuery.findPackage(JavaTemplateStandard.DATA_OBJECT, dataObjectName, contents);
 
-		return CodeElementFormatter.importAllFrom(dataObjectPackage);
+		final CodeElementFormatter codeElementFormatter =
+						ComponentRegistry.withName("defaultCodeFormatter");
+
+		return codeElementFormatter.importAllFrom(dataObjectPackage);
 	}
 
 	private String resolvePackage(final String basePackage) {

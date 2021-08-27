@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.beans.Introspector;
 import java.util.List;
@@ -49,8 +50,11 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
 
   private String resolveVariableDeclaration(final CodeGenerationParameter field,
                                             final String dataObjectName) {
+    final CodeElementFormatter codeElementFormatter =
+            ComponentRegistry.withName("defaultCodeFormatter");
+
     final String variableName =
-            CodeElementFormatter.simpleNameToAttribute(field.value);
+            codeElementFormatter.simpleNameToAttribute(field.value);
 
     final String variableType =
             FieldDetail.isCollection(field) ? DataObjectDetail.resolveCollectionType(field) : dataObjectName;

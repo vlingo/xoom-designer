@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 
@@ -56,7 +57,8 @@ public class ProjectionSourceTypesTemplateData extends TemplateData {
   private String resolveQualifiedName(final TemplateParameters parameters) {
     final String packageName = parameters.find(PACKAGE_NAME);
     final String className = parameters.find(PROJECTION_SOURCE_TYPES_NAME);
-    return CodeElementFormatter.qualifiedNameOf(packageName, className);
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+    return codeElementFormatter.qualifiedNameOf(packageName, className);
   }
 
   @Override

@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
@@ -24,7 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class StorageTemplateDataFactoryTest {
+public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
 
     @Test
     public void testStorageTemplateDataOnSourcedSingleModel() {

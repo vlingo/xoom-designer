@@ -12,8 +12,9 @@ import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.parameter.ParameterLabel;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TemplateParameter;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AnnotatedBootstrapTemplateDataTest {
+public class AnnotatedBootstrapTemplateDataTest extends CodeGenerationTest {
 
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {

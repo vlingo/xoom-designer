@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +30,8 @@ public class ValueObjectDetail {
 
   public static Set<String> resolveImports(final List<Content> contents,
                                            final Stream<CodeGenerationParameter> arguments) {
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+
     final Optional<String> anyQualifiedName =
             arguments.filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field))
                     .map(arg -> arg.retrieveRelatedValue(Label.FIELD_TYPE))
@@ -36,8 +39,8 @@ public class ValueObjectDetail {
                     .findAny();
 
     if (anyQualifiedName.isPresent()) {
-      final String packageName = CodeElementFormatter.packageOf(anyQualifiedName.get());
-      return Stream.of(CodeElementFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
+      final String packageName = codeElementFormatter.packageOf(anyQualifiedName.get());
+      return Stream.of(codeElementFormatter.importAllFrom(packageName)).collect(Collectors.toSet());
     }
 
     return Collections.emptySet();

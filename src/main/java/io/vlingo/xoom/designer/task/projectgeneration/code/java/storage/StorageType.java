@@ -5,6 +5,7 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -113,11 +114,15 @@ public enum StorageType {
   }
 
   public String typeRegistryObjectName() {
-    return CodeElementFormatter.simpleNameToAttribute(typeRegistryClassName);
+    return codeElementFormatter().simpleNameToAttribute(typeRegistryClassName);
   }
 
   private String typeRegistryQualifiedClassName() {
-    return CodeElementFormatter.qualifiedNameOf(typeRegistryPackage, typeRegistryClassName);
+    return codeElementFormatter().qualifiedNameOf(typeRegistryPackage, typeRegistryClassName);
+  }
+
+  private static CodeElementFormatter codeElementFormatter() {
+    return ComponentRegistry.withName("defaultCodeFormatter");
   }
 
 }

@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStan
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.formatting.Formatters;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.FieldDetail;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -30,6 +31,7 @@ public class ValueDataObjectTemplateData extends TemplateData {
 
   private final String valueObjectName;
   private final TemplateParameters parameters;
+  private final CodeElementFormatter codeElementFormatter;
 
   public static List<TemplateData> from(final String basePackage,
                                         final Dialect dialect,
@@ -49,6 +51,7 @@ public class ValueDataObjectTemplateData extends TemplateData {
                                       final List<CodeGenerationParameter> valueObjects,
                                       final List<Content> contents) {
     this.valueObjectName = valueObject.value;
+    this.codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
 
     final List<String> valueObjectTranslations =
             Formatters.Variables.format(Formatters.Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, dialect, valueObject, valueObjects.stream());
@@ -67,7 +70,7 @@ public class ValueDataObjectTemplateData extends TemplateData {
                     .and(MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.DATA_OBJECT_MEMBER_DECLARATION, dialect, valueObject))
                     .and(MEMBER_NAMES, valueObject.retrieveAllRelated(VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList()))
                     .and(MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.DATA_VALUE_OBJECT_ASSIGNMENT, dialect, valueObject))
-                    .addImport(CodeElementFormatter.importAllFrom(ContentQuery.findPackage(JavaTemplateStandard.VALUE_OBJECT, contents)))
+                    .addImport(codeElementFormatter.importAllFrom(ContentQuery.findPackage(JavaTemplateStandard.VALUE_OBJECT, contents)))
                     .addImports(ValueObjectDetail.resolveFieldsImports(valueObject))
                     .and(VALUE_OBJECT_TRANSLATIONS, valueObjectTranslations)
                     .and(EMPTY_OBJECT_ARGUMENTS, emptyObjectArguments);
