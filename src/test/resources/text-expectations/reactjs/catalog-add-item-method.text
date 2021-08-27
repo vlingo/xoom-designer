@@ -1,0 +1,53 @@
+import FormModal from "../FormModal";
+import useFormHandler from "../../utils/FormHandler";
+import {useCallback} from "react";
+import axios from "axios";
+import {EMPTY_FORM} from "./Catalogs";
+
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
+const CatalogAddItem = ({id = null, defaultForm, complete}) => {
+
+  const [form, onFormValueChange] = useFormHandler(defaultForm);
+
+  const submit = useCallback((e) => {
+
+    const url = applyData('/catalogs/{id}/add-item', form);
+    axios.patch(url, form)
+    .then(res => res.data)
+    .then(data => {
+      complete(data);
+      console.log('CatalogAddItem axios complete', data);
+    })
+    .catch(e => {
+      console.error('CatalogAddItem axios failed', e);
+    });
+  }, [form, complete]);
+
+  const close = useCallback((e) => {
+    complete();
+  }, [complete]);
+
+  return (
+    <>
+      <FormModal title={"AddItem"} show={true} close={close} submit={submit}>
+      <div className='mb-3'>
+        <label htmlFor='items.name' className={'form-label text-capitalize'}>Items Name</label>
+        <input id='items.name' name={'items.name'} required={true} value={form.items?.name} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='items.price' className={'form-label text-capitalize'}>Items Price</label>
+        <input id='items.price' name={'items.price'} required={true} value={form.items?.price} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='items.discount' className={'form-label text-capitalize'}>Items Discount</label>
+        <input id='items.discount' name={'items.discount'} required={true} value={form.items?.discount} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      </FormModal>
+    </>
+  )
+};
+
+export default CatalogAddItem;

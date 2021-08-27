@@ -1,0 +1,57 @@
+import FormModal from "../FormModal";
+import useFormHandler from "../../utils/FormHandler";
+import {useCallback} from "react";
+import axios from "axios";
+import {EMPTY_FORM} from "./Orders";
+
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
+const OrderCreate = ({id = null, defaultForm, complete}) => {
+
+  const [form, onFormValueChange] = useFormHandler(defaultForm);
+
+  const submit = useCallback((e) => {
+
+    const url = applyData('/orders/order', form);
+    axios.post(url, form)
+    .then(res => res.data)
+    .then(data => {
+      complete(data);
+      console.log('OrderCreate axios complete', data);
+    })
+    .catch(e => {
+      console.error('OrderCreate axios failed', e);
+    });
+  }, [form, complete]);
+
+  const close = useCallback((e) => {
+    complete();
+  }, [complete]);
+
+  return (
+    <>
+      <FormModal title={"Create"} show={true} close={close} submit={submit}>
+      <div className='mb-3'>
+        <label htmlFor='orderLines.productId' className={'form-label text-capitalize'}>OrderLines ProductId</label>
+        <input id='orderLines.productId' name={'orderLines.productId'} required={true} value={form.orderLines?.productId} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='orderLines.quantity' className={'form-label text-capitalize'}>OrderLines Quantity</label>
+        <input id='orderLines.quantity' name={'orderLines.quantity'} required={true} value={form.orderLines?.quantity} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='orderLines.price' className={'form-label text-capitalize'}>OrderLines Price</label>
+        <input id='orderLines.price' name={'orderLines.price'} required={true} value={form.orderLines?.price} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='orderLines.discount' className={'form-label text-capitalize'}>OrderLines Discount</label>
+        <input id='orderLines.discount' name={'orderLines.discount'} required={true} value={form.orderLines?.discount} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      </FormModal>
+    </>
+  )
+};
+
+export default OrderCreate;

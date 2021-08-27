@@ -6,27 +6,24 @@ import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateN
 <#macro printFormElement name type>
     <#if valueTypes[type]??>
         <#list valueTypes[type] as subType>
-            <@printFormElement "${name}.${subType.name}" subType.type/>
+            <@printFormElement "${name}?.${subType.name}" subType.type/>
         </#list>
     <#else>
       <div className='mb-3'>
-        <label htmlFor='${name}' className={'form-label text-capitalize'}>${fns.capitalizeMultiWord(name?replace('.', ' '))}</label>
-        <input id='${name}' name={'${name}'} required={true} value={form.${name}} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <label htmlFor='${name?replace('?', '')}' className={'form-label text-capitalize'}>${fns.capitalizeMultiWord(name?replace('?.', ' '))}</label>
+        <input id='${name?replace('?', '')}' name={'${name?replace('?', '')}'} required={true} value={form.${name}} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
     </#if>
 </#macro>
 
 <#macro formatFormElement name type>
   <#if valueTypes[type]??>
-    <#list valueTypes[type] as subType>
+    <#if !aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
+      <#list valueTypes[type] as subType>
     if(Array.isArray(EMPTY_FORM.${name}.${subType.name}))
       form.${name}.${subType.name} = [form.${name}.${subType.name}]
-    </#list>
-    <#elseif aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
-    form.${name} = [form.${name}]
-    <#else>
-    if(Array.isArray(EMPTY_FORM.${name}))
-      form.${name} = [Object.assign({}, form.${name})]
+      </#list>
+    </#if>
   </#if>
 </#macro>
 

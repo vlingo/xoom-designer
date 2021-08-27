@@ -2,27 +2,27 @@ import FormModal from "../FormModal";
 import useFormHandler from "../../utils/FormHandler";
 import {useCallback} from "react";
 import axios from "axios";
-import {EMPTY_FORM} from "./Users";
+import {EMPTY_FORM} from "./Catalogs";
 
 const applyData = (uri, data) => {
   return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
 }
 
-const UserWithName = ({id = null, defaultForm, complete}) => {
+const CatalogCreate = ({id = null, defaultForm, complete}) => {
 
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
 
-    const url = applyData('/users', form);
+    const url = applyData('/catalogs', form);
     axios.post(url, form)
     .then(res => res.data)
     .then(data => {
       complete(data);
-      console.log('UserWithName axios complete', data);
+      console.log('CatalogCreate axios complete', data);
     })
     .catch(e => {
-      console.error('UserWithName axios failed', e);
+      console.error('CatalogCreate axios failed', e);
     });
   }, [form, complete]);
 
@@ -32,18 +32,18 @@ const UserWithName = ({id = null, defaultForm, complete}) => {
 
   return (
     <>
-      <FormModal title={"WithName"} show={true} close={close} submit={submit}>
+      <FormModal title={"Create"} show={true} close={close} submit={submit}>
       <div className='mb-3'>
         <label htmlFor='name' className={'form-label text-capitalize'}>Name</label>
         <input id='name' name={'name'} required={true} value={form.name} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       <div className='mb-3'>
-        <label htmlFor='address' className={'form-label text-capitalize'}>Address</label>
-        <input id='address' name={'address'} required={true} value={form.address} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <label htmlFor='category' className={'form-label text-capitalize'}>Category</label>
+        <input id='category' name={'category'} required={true} value={form.category} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       </FormModal>
     </>
   )
 };
 
-export default UserWithName;
+export default CatalogCreate;
