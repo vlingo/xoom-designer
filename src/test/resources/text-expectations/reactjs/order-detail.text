@@ -1,0 +1,100 @@
+import {useParams} from 'react-router-dom';
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import LoadingOrFailed from "../LoadingOrFailed";
+
+const Order = () => {
+
+  const [loading, setLoading] = useState(false);
+  const {id} = useParams();
+  const [item, setItem] = useState(null);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItem = useCallback((id) => {
+    axios.get('/orders/'+id)
+      .then(res => res.data)
+      .then(data => {
+        console.log('Order axios success', data);
+        setItem(data);
+      })
+      .catch(e => {
+        console.error('Order axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    if (data){
+      setItem((item) => {
+        return {...item, ...data};
+      });
+    }
+    setCurrentModal(null);
+  }, []);
+
+
+  useEffect(() => {
+    setLoading(true);
+    loadItem(id);
+  }, [id, loadItem]);
+
+  return (
+    <div>
+      {
+      item
+      ?
+      <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Order</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+          </div>
+        </div>
+      </div>
+      <div>
+        <table className={'table'}>
+          <tbody>
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
+      {!Array.isArray(item?.clientName) && <tr><td>ClientName</td><td>{item?.clientName}</td></tr>}
+      {!Array.isArray(item?.clientAddress) && <tr><td>ClientAddress</td><td>{item?.clientAddress}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines ProductId</td><td>{item?.orderLines?.productId}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Quantity</td><td>{item?.orderLines?.quantity}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Price</td><td>{item?.orderLines?.price}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Discount</td><td>{item?.orderLines?.discount}</td></tr>}
+          </tbody>
+        </table>
+  <table className={'table table-striped table-bordered'}>
+  <thead>
+  <tr>
+    <th>OrderLines ProductId</th>
+    <th>OrderLines Quantity</th>
+    <th>OrderLines Price</th>
+    <th>OrderLines Discount</th>
+  </tr>
+  </thead>
+  <tbody>
+  {item?.orderLines.map(item => (
+  <tr>
+    <td>{item?.productId}</td>
+    <td>{item?.quantity}</td>
+    <td>{item?.price}</td>
+    <td>{item?.discount}</td>
+  </tr>
+  ))}
+  </tbody>
+  </table>
+
+      </div>
+    </>
+    :
+    <LoadingOrFailed loading={loading}/>
+      }
+
+      {currentModal}
+    </div>
+  );
+};
+
+export default Order;
