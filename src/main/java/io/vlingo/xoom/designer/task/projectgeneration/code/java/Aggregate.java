@@ -42,7 +42,9 @@ public class Aggregate {
   }
 
   private List<AggregateMethod> resolveMethods(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(AGGREGATE_METHOD).map(AggregateMethod::new).collect(Collectors.toList());
+    return aggregate.retrieveAllRelated(AGGREGATE_METHOD)
+        .filter(method -> resolveRoutes(aggregate).stream().map(route -> route.methodName).collect(Collectors.toList()).contains(method.value))
+        .map(AggregateMethod::new).collect(Collectors.toList());
   }
 
   private List<Field> resolveStateFields(final CodeGenerationParameter aggregate) {
