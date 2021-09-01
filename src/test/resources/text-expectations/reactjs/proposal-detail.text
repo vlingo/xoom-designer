@@ -1,0 +1,95 @@
+import {useParams} from 'react-router-dom';
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import LoadingOrFailed from "../LoadingOrFailed";
+
+const Proposal = () => {
+
+  const [loading, setLoading] = useState(false);
+  const {id} = useParams();
+  const [item, setItem] = useState(null);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItem = useCallback((id) => {
+    axios.get('/proposals/'+id)
+      .then(res => res.data)
+      .then(data => {
+        console.log('Proposal axios success', data);
+        setItem(data);
+      })
+      .catch(e => {
+        console.error('Proposal axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    if (data){
+      setItem((item) => {
+        return {...item, ...data};
+      });
+    }
+    setCurrentModal(null);
+  }, []);
+
+
+  useEffect(() => {
+    setLoading(true);
+    loadItem(id);
+  }, [id, loadItem]);
+
+  return (
+    <div>
+      {
+      item
+      ?
+      <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Proposal</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+          </div>
+        </div>
+      </div>
+      <div>
+        <table className={'table'}>
+          <tbody>
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations Keywords</td><td>{item?.multipleExpectations?.keywords}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations?.price Value</td><td>{item?.multipleExpectations?.price?.value}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations DueOn</td><td>{item?.multipleExpectations?.dueOn}</td></tr>}
+          </tbody>
+        </table>
+  <table className={'table table-striped table-bordered'}>
+  <thead>
+  <tr>
+    <th>MultipleExpectations Keywords</th>
+    <th>MultipleExpectations Price Value</th>
+    <th>MultipleExpectations DueOn</th>
+  </tr>
+  </thead>
+  <tbody>
+  {item?.multipleExpectations.map(item => (
+  <tr>
+    <td>{item?.keywords}</td>
+    <td>{item?.value}</td>
+    <td>{item?.dueOn}</td>
+  </tr>
+  ))}
+  </tbody>
+  </table>
+
+      </div>
+    </>
+    :
+    <LoadingOrFailed loading={loading}/>
+      }
+
+      {currentModal}
+    </div>
+  );
+};
+
+export default Proposal;

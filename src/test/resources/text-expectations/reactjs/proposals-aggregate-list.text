@@ -1,0 +1,87 @@
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import {Link} from "react-router-dom";
+import LoadingOrFailed from "../LoadingOrFailed";
+import ProposalSubmitFor from "./ProposalSubmitFor";
+
+export const EMPTY_FORM = { multipleExpectations: [{ keywords: [{ value: [] }], price: { value: '' }, dueOn: '' }] };
+
+const Proposals = () => {
+
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItems = useCallback(() => {
+    axios.get('/proposals')
+      .then(res => res.data)
+      .then(data => {
+        console.log('Proposal axios success', data);
+        setItems(data);
+      })
+      .catch((e) => {
+        console.error('Proposal axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    loadItems();
+    setCurrentModal(null);
+  }, [loadItems]);
+
+  const _submitFor = useCallback((e) => {
+    console.log('showing submitFor modal');
+    setCurrentModal(<ProposalSubmitFor defaultForm={{ multipleExpectations: [{ keywords: [{ value: [] }], price: { value: '' }, dueOn: '' }] }} complete={onModalActionComplete}/>);
+  }, [onModalActionComplete]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadItems();
+  }, [loadItems]);
+
+  return (
+    <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Proposals</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_submitFor}>SubmitFor</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        {
+        items ?
+        <table className={'table table-striped table-bordered'}>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>MultipleExpectations Keywords Value</th>
+            <th>MultipleExpectations Price Value</th>
+            <th>MultipleExpectations DueOn</th>
+          </tr>
+        </thead>
+        <tbody>
+        {items.map(item => (
+        <tr key={item.id}>
+          <td> <Link to={"/app/proposals/"+item.id}>{item.id} </Link> </td>
+          <td>{item?.multipleExpectations?.keywords?.value}</td>
+          <td>{item?.multipleExpectations?.price?.value}</td>
+          <td>{item?.multipleExpectations?.dueOn}</td>
+        </tr>
+        ))}
+        </tbody>
+        </table>
+        : <LoadingOrFailed loading={loading}/>
+      }
+      </div>
+
+      {currentModal}
+    </>
+  );
+};
+
+export default Proposals;

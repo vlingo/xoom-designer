@@ -34,7 +34,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.fact
   <@compress single_line=true>
       {<#list fields as field>
     <#if valueTypes[field.type]?? && field.isCollection>
-      ${field.name}: [<#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else><#if field.isCollection>[]<#else>''</#if></#if><#if field?has_next>,</#if>]
+      ${field.name}: [<#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else><#if field.isCollection>[]<#else>''</#if></#if>]<#if field?has_next>,</#if>
     <#else>
       ${field.name}: <#if valueTypes[field.type]??><@printJSON valueTypes[field.type] /><#else><#if field.isCollection>[]<#else>''</#if></#if><#if field?has_next>,</#if>
     </#if>

@@ -13,10 +13,6 @@ const AuthorWithName = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(EMPTY_FORM.name === undefined || Array.isArray(EMPTY_FORM.name.firstName))
-      form.name.firstName = [form.name.firstName]
-    if(EMPTY_FORM.name === undefined || Array.isArray(EMPTY_FORM.name.lastName))
-      form.name.lastName = [form.name.lastName]
 
     const url = applyData('/authors', form);
     axios.post(url, form)

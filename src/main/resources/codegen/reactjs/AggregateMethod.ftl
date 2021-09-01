@@ -16,19 +16,45 @@ import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateN
     </#if>
 </#macro>
 
-<#macro formatFormElement name type>
-  <#if aggregate.stateFields?filter(field -> field.name == name)?first.isCollection>
-    <#if valueTypes[type]??>
+<#macro formatFactoryFormElement name type isCollection>
+  <#if name?contains(".") && isCollection>
+    if(!Array.isArray(form.${name}))
+      form.${name} = [form.${name}]
+  </#if>
+  <#if valueTypes[type]??>
+    <#if !name?contains("[0]") && isCollection>
+    if(Array.isArray(EMPTY_FORM.${name}) && !Array.isArray(form.${name}))
+      form.${name} = [form.${name}]
+    </#if>
+    <#list valueTypes[type] as subType>
+      <#if isCollection>
+        <@formatFactoryFormElement "${name}[0].${subType.name}" subType.type subType.isCollection/>
+      <#else>
+        <@formatFactoryFormElement "${name}.${subType.name}" subType.type subType.isCollection/>
+      </#if>
+    </#list>
+  <#elseif !name?contains(".") && !name?contains("[0]") && isCollection>
+    form.${name} = [form.${name}]
+  </#if>
+</#macro>
+<#macro formatFormElement name type isCollection>
+  <#if name?contains(".") && isCollection>
+    if(!Array.isArray(form.${name}))
+      form.${name} = [form.${name}]
+    <#elseif isCollection>
     if(EMPTY_FORM.${name} === undefined)
       form.${name} = [Object.assign({}, form.${name})]
-    <#else>
-    form.${name} = [form.${name}]
-    </#if>
-  <#elseif valueTypes[type]??>
+  </#if>
+  <#if valueTypes[type]??>
     <#list valueTypes[type] as subType>
-    if(EMPTY_FORM.${name} === undefined || Array.isArray(EMPTY_FORM.${name}.${subType.name}))
-      form.${name}.${subType.name} = [form.${name}.${subType.name}]
+      <#if isCollection>
+        <@formatFormElement "${name}[0].${subType.name}" subType.type subType.isCollection/>
+      <#else>
+        <@formatFormElement "${name}.${subType.name}" subType.type subType.isCollection/>
+      </#if>
     </#list>
+  <#elseif !name?contains("[0]") && isCollection>
+    form.${name} = [form.${name}]
   </#if>
 </#macro>
 
@@ -42,7 +68,11 @@ const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} =
 
   const submit = useCallback((e) => {
 <#list method.parameters as p>
-<@formatFormElement p fieldTypes[p]/>
+  <#if method.useFactory>
+    <@formatFactoryFormElement p fieldTypes[p] aggregate.stateFields?filter(field -> field.name == p && field.isCollection)?has_content/>
+  <#else>
+    <@formatFormElement p fieldTypes[p] aggregate.stateFields?filter(field -> field.name == p && field.isCollection)?has_content/>
+  </#if>
 </#list>
 
     const url = applyData('${route.path}', form);

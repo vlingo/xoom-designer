@@ -1,0 +1,59 @@
+import FormModal from "../FormModal";
+import useFormHandler from "../../utils/FormHandler";
+import {useCallback} from "react";
+import axios from "axios";
+import {EMPTY_FORM} from "./Proposals";
+
+const applyData = (uri, data) => {
+  return uri.replace(/(?:{(.+?)})/g, x => data[x.slice(1,-1)]);
+}
+
+const ProposalSubmitFor = ({id = null, defaultForm, complete}) => {
+
+  const [form, onFormValueChange] = useFormHandler(defaultForm);
+
+  const submit = useCallback((e) => {
+    if(Array.isArray(EMPTY_FORM.multipleExpectations) && !Array.isArray(form.multipleExpectations))
+      form.multipleExpectations = [form.multipleExpectations]
+    if(!Array.isArray(form.multipleExpectations[0].keywords))
+      form.multipleExpectations[0].keywords = [form.multipleExpectations[0].keywords]
+    if(!Array.isArray(form.multipleExpectations[0].keywords[0].value))
+      form.multipleExpectations[0].keywords[0].value = [form.multipleExpectations[0].keywords[0].value]
+
+    const url = applyData('/proposals', form);
+    axios.post(url, form)
+    .then(res => res.data)
+    .then(data => {
+      complete(data);
+      console.log('ProposalSubmitFor axios complete', data);
+    })
+    .catch(e => {
+      console.error('ProposalSubmitFor axios failed', e);
+    });
+  }, [form, complete]);
+
+  const close = useCallback((e) => {
+    complete();
+  }, [complete]);
+
+  return (
+    <>
+      <FormModal title={"SubmitFor"} show={true} close={close} submit={submit}>
+      <div className='mb-3'>
+        <label htmlFor='multipleExpectations.keywords.value' className={'form-label text-capitalize'}>MultipleExpectations Keywords Value</label>
+        <input id='multipleExpectations.keywords.value' name={'multipleExpectations.keywords.value'} required={true} value={form.multipleExpectations?.keywords?.value} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='multipleExpectations.price.value' className={'form-label text-capitalize'}>MultipleExpectations Price Value</label>
+        <input id='multipleExpectations.price.value' name={'multipleExpectations.price.value'} required={true} value={form.multipleExpectations?.price?.value} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      <div className='mb-3'>
+        <label htmlFor='multipleExpectations.dueOn' className={'form-label text-capitalize'}>MultipleExpectations DueOn</label>
+        <input id='multipleExpectations.dueOn' name={'multipleExpectations.dueOn'} required={true} value={form.multipleExpectations?.dueOn} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+      </div>
+      </FormModal>
+    </>
+  )
+};
+
+export default ProposalSubmitFor;
