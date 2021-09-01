@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.task.projectgeneration.Label;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static io.vlingo.xoom.designer.task.projectgeneration.Label.METHOD_PARAMETER;
 import static io.vlingo.xoom.designer.task.projectgeneration.code.reactjs.ReactJsTemplateStandard.*;
 
 public class AggregateManagementGenerationStepTest {
@@ -23,10 +24,10 @@ public class AggregateManagementGenerationStepTest {
   @Test
   public void testThatAggregateManagementIsGenerated() {
     final CodeGenerationParameters parameters =
-            CodeGenerationParameters.from(
-                    authorAggregate(), nameValueObject(), rankValueObject(),
-                    classificationValueObject(), classifierValueObject()
-            );
+        CodeGenerationParameters.from(
+            authorAggregate(), nameValueObject(), rankValueObject(),
+            classificationValueObject(), classifierValueObject()
+        );
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
@@ -43,84 +44,297 @@ public class AggregateManagementGenerationStepTest {
     Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("author-detail")));
   }
 
-  private CodeGenerationParameter authorAggregate() {
+  @Test
+  public void testThatAggregateWithPrimitiveCollectionIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(userAggregate());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Users");
+    final Content withNameMethod = context.findContent(AGGREGATE_METHOD, "UserWithName");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "User");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("user-aggregate-list")));
+    Assertions.assertTrue(withNameMethod.contains(TextExpectation.onReactJs().read("user-with-name-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("user-detail")));
+  }
+
+  @Test
+  public void testThatAggregateWithValueObjectCollectionIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(catalogAggregate(), itemValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Catalogs");
+    final Content createMethod = context.findContent(AGGREGATE_METHOD, "CatalogCreate");
+    final Content addItemMethod = context.findContent(AGGREGATE_METHOD, "CatalogAddItem");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Catalog");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("catalog-aggregate-list")));
+    Assertions.assertTrue(createMethod.contains(TextExpectation.onReactJs().read("catalog-create-method")));
+    Assertions.assertTrue(addItemMethod.contains(TextExpectation.onReactJs().read("catalog-add-item-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("catalog-detail")));
+  }
+
+  @Test
+  public void testThatAggregateWithValueObjectCollectionOnFactoryMethodIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(orderAggregate(), orderLineValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Orders");
+    final Content createMethod = context.findContent(AGGREGATE_METHOD, "OrderCreate");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Order");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("order-aggregate-list")));
+    Assertions.assertTrue(createMethod.contains(TextExpectation.onReactJs().read("order-create-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("order-detail")));
+  }
+
+  private CodeGenerationParameter catalogAggregate() {
     final CodeGenerationParameter idField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-                    .relate(Label.FIELD_TYPE, "String");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter categoryField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "category")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter itemsField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "items")
+            .relate(Label.FIELD_TYPE, "Item")
+            .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter catalogCreatedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "CatalogCreated")
+            .relate(idField).relate(nameField).relate(categoryField);
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "create")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "category")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(catalogCreatedEvent);
+
+    final CodeGenerationParameter itemAddedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ItemAdded")
+            .relate(idField).relate(itemsField);
+    final CodeGenerationParameter addItemMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addItem")
+            .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "items")
+                .relate(Label.ALIAS, "item")
+                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+            .relate(itemAddedEvent);
+
+    final CodeGenerationParameter createRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "create")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/catalogs/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+    final CodeGenerationParameter addOrderLineRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "addItem")
+            .relate(Label.ROUTE_METHOD, "PATCH")
+            .relate(Label.ROUTE_PATH, "/catalogs/{id}/add-item")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Catalog")
+        .relate(Label.URI_ROOT, "/catalogs").relate(idField)
+        .relate(nameField).relate(categoryField).relate(itemsField)
+        .relate(factoryMethod).relate(addItemMethod)
+        .relate(createRoute).relate(addOrderLineRoute)
+        .relate(catalogCreatedEvent).relate(itemAddedEvent);
+  }
+
+  private CodeGenerationParameter orderAggregate() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter clientNameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "clientName")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter clientAddressField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "clientAddress")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter orderLinesField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "orderLines")
+            .relate(Label.FIELD_TYPE, "OrderLine")
+            .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter orderCreatedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "OrderCreated")
+            .relate(idField).relate(orderLinesField);
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "create")
+            .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "orderLines")
+                .relate(Label.ALIAS, "orderLine")
+                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(orderCreatedEvent);
+
+    final CodeGenerationParameter createRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "create")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/order/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Order")
+        .relate(Label.URI_ROOT, "/orders").relate(idField)
+        .relate(clientNameField).relate(clientAddressField).relate(orderLinesField)
+        .relate(factoryMethod)
+        .relate(createRoute)
+        .relate(orderCreatedEvent);
+  }
+
+  private CodeGenerationParameter itemValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Item")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+            .relate(Label.FIELD_TYPE, "Double"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "discount")
+            .relate(Label.FIELD_TYPE, "Double"));
+  }
+
+  private CodeGenerationParameter orderLineValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "OrderLine")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "productId")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "quantity")
+            .relate(Label.FIELD_TYPE, "Integer"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+            .relate(Label.FIELD_TYPE, "Double"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "discount")
+            .relate(Label.FIELD_TYPE, "Double"));
+  }
+
+  private CodeGenerationParameter userAggregate() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter nameField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                    .relate(Label.FIELD_TYPE, "Name");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String")
+            .relate(Label.COLLECTION_TYPE, "List");
 
-    final CodeGenerationParameter rankField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                    .relate(Label.FIELD_TYPE, "Rank");
+    final CodeGenerationParameter addressField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "address")
+            .relate(Label.FIELD_TYPE, "String")
+            .relate(Label.COLLECTION_TYPE, "Set");
 
-    final CodeGenerationParameter authorRegisteredEvent =
-            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-                    .relate(idField).relate(nameField);
-
-    final CodeGenerationParameter authorRankedEvent =
-            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
-                    .relate(idField).relate(rankField);
+    final CodeGenerationParameter userRegisteredEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "UserRegistered")
+            .relate(idField).relate(nameField).relate(addressField);
 
     final CodeGenerationParameter factoryMethod =
-            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
-                    .relate(Label.METHOD_PARAMETER, "name")
-                    .relate(Label.FACTORY_METHOD, "true")
-                    .relate(authorRegisteredEvent);
-
-    final CodeGenerationParameter rankMethod =
-            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
-                    .relate(Label.METHOD_PARAMETER, "rank")
-                    .relate(authorRankedEvent);
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "address")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(userRegisteredEvent);
 
     final CodeGenerationParameter withNameRoute =
-            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
-                    .relate(Label.ROUTE_METHOD, "POST")
-                    .relate(Label.ROUTE_PATH, "/authors/")
-                    .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/users/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "User")
+        .relate(Label.URI_ROOT, "/users").relate(idField)
+        .relate(nameField).relate(addressField)
+        .relate(factoryMethod).relate(withNameRoute)
+        .relate(userRegisteredEvent);
+  }
+
+  private CodeGenerationParameter authorAggregate() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "Name");
+
+    final CodeGenerationParameter rankField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+            .relate(Label.FIELD_TYPE, "Rank");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+            .relate(idField).relate(nameField);
+
+    final CodeGenerationParameter authorRankedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+            .relate(idField).relate(rankField);
+
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter rankMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+            .relate(Label.METHOD_PARAMETER, "rank")
+            .relate(authorRankedEvent);
+
+    final CodeGenerationParameter withNameRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/authors/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
 
     final CodeGenerationParameter changeRankRoute =
-            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "changeRank")
-                    .relate(Label.ROUTE_METHOD, "PATCH")
-                    .relate(Label.ROUTE_PATH, "/authors/{id}/rank")
-                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "changeRank")
+            .relate(Label.ROUTE_METHOD, "PATCH")
+            .relate(Label.ROUTE_PATH, "/authors/{id}/rank")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "true");
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-            .relate(Label.URI_ROOT, "/authors").relate(idField)
-            .relate(nameField).relate(rankField).relate(factoryMethod)
-            .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
-            .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(changeRankRoute);
+        .relate(Label.URI_ROOT, "/authors").relate(idField)
+        .relate(nameField).relate(rankField).relate(factoryMethod)
+        .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
+        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(changeRankRoute);
   }
 
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
-                    .relate(Label.FIELD_TYPE, "String"))
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
-                    .relate(Label.FIELD_TYPE, "String"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+            .relate(Label.FIELD_TYPE, "String"));
   }
 
   private CodeGenerationParameter rankValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
-                    .relate(Label.FIELD_TYPE, "int"))
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                    .relate(Label.FIELD_TYPE, "Classification"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+            .relate(Label.FIELD_TYPE, "int"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+            .relate(Label.FIELD_TYPE, "Classification"));
   }
 
   private CodeGenerationParameter classificationValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
-                    .relate(Label.FIELD_TYPE, "String"))
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
-                    .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
+            .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
   }
 
   private CodeGenerationParameter classifierValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
-                    .relate(Label.FIELD_TYPE, "String"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String"));
   }
 }

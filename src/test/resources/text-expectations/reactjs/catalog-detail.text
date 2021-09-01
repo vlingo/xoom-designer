@@ -1,0 +1,107 @@
+import {useParams} from 'react-router-dom';
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import LoadingOrFailed from "../LoadingOrFailed";
+import CatalogAddItem from "./CatalogAddItem";
+
+const Catalog = () => {
+
+  const [loading, setLoading] = useState(false);
+  const {id} = useParams();
+  const [item, setItem] = useState(null);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItem = useCallback((id) => {
+    axios.get('/catalogs/'+id)
+      .then(res => res.data)
+      .then(data => {
+        console.log('Catalog axios success', data);
+        setItem(data);
+      })
+      .catch(e => {
+        console.error('Catalog axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    if (data){
+      setItem((item) => {
+        return {...item, ...data};
+      });
+    }
+    setCurrentModal(null);
+  }, []);
+
+  const _addItem = useCallback((e) => {
+    console.log('showing addItem modal');
+    const form = {
+      id: item.id,
+      items: item.items
+    };
+    setCurrentModal(<CatalogAddItem id={id} defaultForm={form} complete={onModalActionComplete}/>);
+  }, [id, item, onModalActionComplete]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadItem(id);
+  }, [id, loadItem]);
+
+  return (
+    <div>
+      {
+      item
+      ?
+      <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Catalog</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_addItem}>AddItem</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table className={'table'}>
+          <tbody>
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
+      {!Array.isArray(item?.name) && <tr><td>Name</td><td>{item?.name}</td></tr>}
+      {!Array.isArray(item?.category) && <tr><td>Category</td><td>{item?.category}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Name</td><td>{item?.items?.name}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Price</td><td>{item?.items?.price}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Discount</td><td>{item?.items?.discount}</td></tr>}
+          </tbody>
+        </table>
+  <table className={'table table-striped table-bordered'}>
+  <thead>
+  <tr>
+    <th>Items Name</th>
+    <th>Items Price</th>
+    <th>Items Discount</th>
+  </tr>
+  </thead>
+  <tbody>
+  {item?.items.map(item => (
+  <tr>
+    <td>{item?.name}</td>
+    <td>{item?.price}</td>
+    <td>{item?.discount}</td>
+  </tr>
+  ))}
+  </tbody>
+  </table>
+
+      </div>
+    </>
+    :
+    <LoadingOrFailed loading={loading}/>
+      }
+
+      {currentModal}
+    </div>
+  );
+};
+
+export default Catalog;

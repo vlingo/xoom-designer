@@ -13,9 +13,9 @@ const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(Array.isArray(EMPTY_FORM.rank.points))
+    if(EMPTY_FORM.rank === undefined || Array.isArray(EMPTY_FORM.rank.points))
       form.rank.points = [form.rank.points]
-    if(Array.isArray(EMPTY_FORM.rank.classification))
+    if(EMPTY_FORM.rank === undefined || Array.isArray(EMPTY_FORM.rank.classification))
       form.rank.classification = [form.rank.classification]
 
     const url = applyData('/authors/{id}/rank', form);
@@ -39,15 +39,15 @@ const AuthorChangeRank = ({id = null, defaultForm, complete}) => {
       <FormModal title={"ChangeRank"} show={true} close={close} submit={submit}>
       <div className='mb-3'>
         <label htmlFor='rank.points' className={'form-label text-capitalize'}>Rank Points</label>
-        <input id='rank.points' name={'rank.points'} required={true} value={form.rank.points} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <input id='rank.points' name={'rank.points'} required={true} value={form.rank?.points} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       <div className='mb-3'>
         <label htmlFor='rank.classification.label' className={'form-label text-capitalize'}>Rank Classification Label</label>
-        <input id='rank.classification.label' name={'rank.classification.label'} required={true} value={form.rank.classification.label} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <input id='rank.classification.label' name={'rank.classification.label'} required={true} value={form.rank?.classification?.label} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       <div className='mb-3'>
         <label htmlFor='rank.classification.classifiers.name' className={'form-label text-capitalize'}>Rank Classification Classifiers Name</label>
-        <input id='rank.classification.classifiers.name' name={'rank.classification.classifiers.name'} required={true} value={form.rank.classification.classifiers.name} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <input id='rank.classification.classifiers.name' name={'rank.classification.classifiers.name'} required={true} value={form.rank?.classification?.classifiers?.name} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       </FormModal>
     </>

@@ -13,9 +13,9 @@ const AuthorWithName = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(Array.isArray(EMPTY_FORM.name.firstName))
+    if(EMPTY_FORM.name === undefined || Array.isArray(EMPTY_FORM.name.firstName))
       form.name.firstName = [form.name.firstName]
-    if(Array.isArray(EMPTY_FORM.name.lastName))
+    if(EMPTY_FORM.name === undefined || Array.isArray(EMPTY_FORM.name.lastName))
       form.name.lastName = [form.name.lastName]
 
     const url = applyData('/authors', form);
@@ -39,11 +39,11 @@ const AuthorWithName = ({id = null, defaultForm, complete}) => {
       <FormModal title={"WithName"} show={true} close={close} submit={submit}>
       <div className='mb-3'>
         <label htmlFor='name.firstName' className={'form-label text-capitalize'}>Name FirstName</label>
-        <input id='name.firstName' name={'name.firstName'} required={true} value={form.name.firstName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <input id='name.firstName' name={'name.firstName'} required={true} value={form.name?.firstName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       <div className='mb-3'>
         <label htmlFor='name.lastName' className={'form-label text-capitalize'}>Name LastName</label>
-        <input id='name.lastName' name={'name.lastName'} required={true} value={form.name.lastName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
+        <input id='name.lastName' name={'name.lastName'} required={true} value={form.name?.lastName} onChange={onFormValueChange} className={'form-control form-control-sm'}/>
       </div>
       </FormModal>
     </>

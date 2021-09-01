@@ -28,29 +28,21 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
   <table className={'table table-striped table-bordered'}>
   <thead>
   <tr>
-    <#list aggregate.stateFields as field>
-      <#if field.isCollection>
-        <#if valueTypes[field.type]??>
-      <@printTableHeaderCell "${field.name}" "${field.type}" />
-          <#else>
-      <th>${fns.capitalizeMultiWord(field.name)}</th>
-        </#if>
-      </#if>
-    </#list>
+    <#if valueTypes[type]??>
+      <@printTableHeaderCell "${name}" "${type}" />
+    <#else>
+      <th>${fns.capitalizeMultiWord(name)}</th>
+    </#if>
   </tr>
   </thead>
   <tbody>
   {item?.${name}.map(item => (
   <tr>
-    <#list aggregate.stateFields as field>
-      <#if field.isCollection>
-      <#if valueTypes[field.type]??>
-        <@printItemTableCell "${field.name}" "${field.type}" />
+      <#if valueTypes[type]??>
+        <@printItemTableCell "${name}" "${type}" />
         <#else>
         <td>{item}</td>
       </#if>
-      </#if>
-    </#list>
   </tr>
   ))}
   </tbody>

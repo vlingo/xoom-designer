@@ -1,0 +1,91 @@
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import {Link} from "react-router-dom";
+import LoadingOrFailed from "../LoadingOrFailed";
+import CatalogCreate from "./CatalogCreate";
+
+export const EMPTY_FORM = { name: '', category: '' };
+
+const Catalogs = () => {
+
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItems = useCallback(() => {
+    axios.get('/catalogs')
+      .then(res => res.data)
+      .then(data => {
+        console.log('Catalog axios success', data);
+        setItems(data);
+      })
+      .catch((e) => {
+        console.error('Catalog axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    loadItems();
+    setCurrentModal(null);
+  }, [loadItems]);
+
+  const _create = useCallback((e) => {
+    console.log('showing create modal');
+    setCurrentModal(<CatalogCreate defaultForm={{ name: '', category: '' }} complete={onModalActionComplete}/>);
+  }, [onModalActionComplete]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadItems();
+  }, [loadItems]);
+
+  return (
+    <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Catalogs</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_create}>Create</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        {
+        items ?
+        <table className={'table table-striped table-bordered'}>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Items Name</th>
+            <th>Items Price</th>
+            <th>Items Discount</th>
+          </tr>
+        </thead>
+        <tbody>
+        {items.map(item => (
+        <tr key={item.id}>
+          <td> <Link to={"/app/catalogs/"+item.id}>{item.id} </Link> </td>
+          <td>{item?.name}</td>
+          <td>{item?.category}</td>
+          <td>{item?.items?.name}</td>
+          <td>{item?.items?.price}</td>
+          <td>{item?.items?.discount}</td>
+        </tr>
+        ))}
+        </tbody>
+        </table>
+        : <LoadingOrFailed loading={loading}/>
+      }
+      </div>
+
+      {currentModal}
+    </>
+  );
+};
+
+export default Catalogs;
