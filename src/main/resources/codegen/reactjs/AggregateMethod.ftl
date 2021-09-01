@@ -76,11 +76,7 @@ const ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} =
 </#list>
 
     const url = applyData('${route.path}', form);
-<#if route.httpMethod?length == 0>
-    axios.post(url, form)
-  <#else>
     axios.${route.httpMethod?lower_case}(url, form)
-</#if>
     .then(res => res.data)
     .then(data => {
       complete(data);
