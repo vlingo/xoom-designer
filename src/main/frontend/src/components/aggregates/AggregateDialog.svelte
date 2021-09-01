@@ -1,6 +1,6 @@
 <script>
 	import { Dialog, CardActions } from 'svelte-materialify/src';
-	import { settings, getLocalStorage, setLocalStorage } from "../../stores";
+	import { settings, getLocalStorage, setLocalStorage, resolveDefaultExchangeName } from "../../stores";
 	import { classNameRule, identifierRule, requireRule, rootPathRule, routeRule, isPropertyUniqueRule, isAggregateUniqueRule, schemaGroupRule, schemaRule, methodParametersValidityWithSelectedEventRule, eventAlreadyInUseRule } from "../../validators";
 	import StateFields from './StateFields.svelte';
 	import Events from './Events.svelte';
@@ -26,6 +26,7 @@
 		aggregateNameElement.focus();
 	})
 
+	const defaultExchangeName = resolveDefaultExchangeName($settings);
 	const retrieveSchemaGroup = () => $settings.model.aggregateSettings.length > 0 ? $settings.model.aggregateSettings[0].producerExchange.schemaGroup : "";
 	const canWriteSchemaGroup = () => (schemaGroup == undefined || schemaGroup.length == 0); //currentId == 0 ||
 	const initialAggregate = {
@@ -38,12 +39,12 @@
 			routes: [],
 		},
 		producerExchange: {
-			exchangeName: "",
+			exchangeName: defaultExchangeName,
 			schemaGroup: retrieveSchemaGroup(),
 			outgoingEvents: [],
 		},
 		consumerExchange: {
-			exchangeName: "",
+			exchangeName: defaultExchangeName,
 			receivers: [],
 		},
 		disableSchemaGroup: !canWriteSchemaGroup(),

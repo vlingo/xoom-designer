@@ -53,6 +53,7 @@
 			bind:value={consumerExchangeName}
 			label="Exchange Name"
 			invalid={!consumerExchangeName && receivers.length > 0}
+			disabled={true}
 		></Textfield>
 		<ErrorWarningTooltip
 			names={['Exchange Name']}

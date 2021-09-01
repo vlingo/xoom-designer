@@ -49,6 +49,7 @@
       style="flex: 1;"
       label="Exchange Name"
       bind:value={producerExchangeName}
+      disabled={true}
       invalid={!producerExchangeName && (schemaGroup || outgoingEvents.length > 0)}
     />
     <div style="flex: 1;">

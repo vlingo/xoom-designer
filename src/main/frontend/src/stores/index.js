@@ -105,7 +105,16 @@ function updateAggregates(currentSettings, updatedSettings) {
 			valueObjectSettings: []
 		}
 	} else {
+		let defaultExchangeName = resolveDefaultExchangeName(updatedSettings);
 		currentSettings.model = { ...currentSettings.model, ...updatedSettings.model }
+		currentSettings.model.aggregateSettings.forEach(aggregate => {
+			if(aggregate.producerExchange) {
+				aggregate.producerExchange.exchangeName = defaultExchangeName;
+			}
+			if(aggregate.consumerExchange) {
+				aggregate.consumerExchange.exchangeName = defaultExchangeName;
+			}
+		});
 	}
 }
 
@@ -144,6 +153,13 @@ export function isSettingsComplete(currentSettings) {
 			currentSettings.model.aggregateSettings && currentSettings.model.aggregateSettings.length > 0 &&
 			currentSettings.model.persistenceSettings && Validation.validateDeployment(currentSettings)
 			&& currentSettings.projectDirectory;
+}
+
+export function resolveDefaultExchangeName(currentSettings) {
+	if(currentSettings && currentSettings.context && currentSettings.context.artifactId) {
+		return currentSettings.context.artifactId + "-topic";
+	}
+	return "";
 }
 
 export function isSettingsEdited() {
