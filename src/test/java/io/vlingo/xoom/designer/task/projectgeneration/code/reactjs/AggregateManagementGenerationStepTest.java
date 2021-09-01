@@ -118,6 +118,46 @@ public class AggregateManagementGenerationStepTest {
     Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("proposal-detail")));
   }
 
+  @Test
+  public void testThatAggregateWithThreeLevelCollectionIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(proposalAggregateWithThreeLevelCollection(), expectationsWithValueObjectCollectionValueObject(), keywordsValueObject(), moneyValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Proposals");
+    final Content submitForMethod = context.findContent(AGGREGATE_METHOD, "ProposalSubmitFor");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Proposal");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("proposals-aggregate-list")));
+    Assertions.assertTrue(submitForMethod.contains(TextExpectation.onReactJs().read("proposals-submit-for-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("proposals-detail")));
+  }
+
+  @Test
+  public void testThatAggregateMethodWithoutApiModelIsNotGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(
+            authorAggregateWithoutApiMode(), nameValueObject(), rankValueObject(),
+            classificationValueObject(), classifierValueObject()
+        );
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Authors");
+    final Content withNameMethod = context.findContent(AGGREGATE_METHOD, "AuthorWithName");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Author");
+
+    Assertions.assertThrows(IllegalArgumentException.class, () -> context.findContent(AGGREGATE_METHOD, "AuthorChangeRank"));
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("author-aggregate-list")));
+    Assertions.assertTrue(withNameMethod.contains(TextExpectation.onReactJs().read("author-with-name-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("author-detail-without-change-rank")));
+  }
+
   private CodeGenerationParameter moneyValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Money")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
@@ -166,24 +206,6 @@ public class AggregateManagementGenerationStepTest {
         .relate(proposalSubmittedEvent);
   }
 
-  @Test
-  public void testThatAggregateWithThreeLevelCollectionIsGenerated() {
-    final CodeGenerationParameters parameters =
-        CodeGenerationParameters.from(proposalAggregateWithThreeLevelCollection(), expectationsWithValueObjectCollectionValueObject(), keywordsValueObject(), moneyValueObject());
-
-    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
-
-    new AggregateManagementGenerationStep().process(context);
-
-    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Proposals");
-    final Content submitForMethod = context.findContent(AGGREGATE_METHOD, "ProposalSubmitFor");
-    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Proposal");
-
-    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("proposals-aggregate-list")));
-    Assertions.assertTrue(submitForMethod.contains(TextExpectation.onReactJs().read("proposals-submit-for-method")));
-    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("proposals-detail")));
-  }
-
   private CodeGenerationParameter expectationsWithValueObjectCollectionValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Expectations")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "keywords")
@@ -230,28 +252,6 @@ public class AggregateManagementGenerationStepTest {
         .relate(factoryMethod)
         .relate(submitForRoute)
         .relate(proposalSubmittedEvent);
-  }
-
-  @Test
-  public void testThatAggregateMethodWithoutApiModelIsNotGenerated() {
-    final CodeGenerationParameters parameters =
-        CodeGenerationParameters.from(
-            authorAggregateWithoutApiMode(), nameValueObject(), rankValueObject(),
-            classificationValueObject(), classifierValueObject()
-        );
-
-    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
-
-    new AggregateManagementGenerationStep().process(context);
-
-    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Authors");
-    final Content withNameMethod = context.findContent(AGGREGATE_METHOD, "AuthorWithName");
-    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Author");
-
-    Assertions.assertThrows(IllegalArgumentException.class, () -> context.findContent(AGGREGATE_METHOD, "AuthorChangeRank"));
-    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("author-aggregate-list")));
-    Assertions.assertTrue(withNameMethod.contains(TextExpectation.onReactJs().read("author-with-name-method")));
-    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("author-detail-without-change-rank")));
   }
 
   private CodeGenerationParameter catalogAggregate() {
