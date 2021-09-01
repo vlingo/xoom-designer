@@ -7,29 +7,17 @@
 
 package io.vlingo.xoom.designer.task.projectgeneration;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.ENTRY_ADAPTER;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_BASED_PROJECTION;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_SOURCE_ENTITY;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.EVENT_SOURCE_ENTITY_METHOD;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.JOURNAL_PROVIDER;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.OPERATION_BASED_PROJECTION;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATEFUL_ENTITY;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATEFUL_ENTITY_METHOD;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATE_ADAPTER;
-import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.STATE_STORE_PROVIDER;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.Model;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static io.vlingo.xoom.designer.task.projectgeneration.code.java.Template.*;
+
+@SuppressWarnings("serial")
 public class CodeGenerationProperties {
 
   public static final String DATA_SCHEMA_CATEGORY = "data";
@@ -38,11 +26,11 @@ public class CodeGenerationProperties {
 
   public static final String CHAR_TYPE = "char";
   public static final List<String> DATE_TIME_TYPES = Arrays.asList("LocalDate", "LocalDateTime");
-  public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "long", "double", "integer");
+  public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "float", "long", "double", "integer");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", CHAR_TYPE, "string"))
           .flatMap(List::stream).collect(Collectors.toList());
 
-  @SuppressWarnings("serial")
+
   public static final Map<String, String> SPECIAL_TYPES_IMPORTS =
           Collections.unmodifiableMap(
                   new HashMap<String, String>() {{
@@ -64,7 +52,7 @@ public class CodeGenerationProperties {
                     put("DateTime", "LocalDateTime");
                   }}
           );
-  @SuppressWarnings("serial")
+
   public static final Map<StorageType, String> AGGREGATE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
@@ -73,7 +61,6 @@ public class CodeGenerationProperties {
                   }}
           );
 
-  @SuppressWarnings("serial")
   public static final Map<StorageType, String> AGGREGATE_METHOD_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
@@ -82,7 +69,6 @@ public class CodeGenerationProperties {
                   }}
           );
 
-  @SuppressWarnings("serial")
   public static final Map<StorageType, String> ADAPTER_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
@@ -91,7 +77,6 @@ public class CodeGenerationProperties {
                   }}
           );
 
-  @SuppressWarnings("serial")
   public static final Map<ProjectionType, String> PROJECTION_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<ProjectionType, String>() {{
@@ -100,7 +85,6 @@ public class CodeGenerationProperties {
                   }}
           );
 
-  @SuppressWarnings("serial")
   public static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
@@ -109,7 +93,6 @@ public class CodeGenerationProperties {
                   }}
           );
 
-  @SuppressWarnings("serial")
   public static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
           Collections.unmodifiableMap(
                   new HashMap<StorageType, String>() {{
