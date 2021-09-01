@@ -13,7 +13,7 @@ const CatalogAddItem = ({id = null, defaultForm, complete}) => {
   const [form, onFormValueChange] = useFormHandler(defaultForm);
 
   const submit = useCallback((e) => {
-    if(EMPTY_FORM.items === undefined)
+    if(Array.isArray(form.items) && form.items.length === 0)
       form.items = [Object.assign({}, form.items)]
 
     const url = applyData('/catalogs/{id}/add-item', form);

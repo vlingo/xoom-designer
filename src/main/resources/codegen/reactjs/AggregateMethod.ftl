@@ -42,7 +42,7 @@ import {EMPTY_FORM} from "./${fns.capitalize(fns.makePlural(aggregate.aggregateN
     if(!Array.isArray(form.${name}))
       form.${name} = [form.${name}]
     <#elseif isCollection>
-    if(EMPTY_FORM.${name} === undefined)
+    if(Array.isArray(form.${name}) && form.${name}.length === 0)
       form.${name} = [Object.assign({}, form.${name})]
   </#if>
   <#if valueTypes[type]??>
