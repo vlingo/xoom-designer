@@ -12,7 +12,7 @@ const useFormHandler = (defaultForm) => {
       if (!obj[path1]) {
         obj[path1] = {};
       }
-      if (Array.isArray(obj))
+      if (Array.isArray(obj) && obj[0] !== undefined)
         setObjectValue(obj[0][path1], path2, value);
       else
         setObjectValue(obj[path1], path2, value);
