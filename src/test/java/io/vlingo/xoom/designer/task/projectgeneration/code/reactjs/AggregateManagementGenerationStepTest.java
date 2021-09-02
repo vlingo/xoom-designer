@@ -100,6 +100,160 @@ public class AggregateManagementGenerationStepTest {
     Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("order-detail")));
   }
 
+  @Test
+  public void testThatAggregateWithTwoLevelCollectionIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(proposalAggregateWithTwoLevelCollection(), expectationsValueObject(), moneyValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Proposals");
+    final Content submitForMethod = context.findContent(AGGREGATE_METHOD, "ProposalSubmitFor");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Proposal");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("proposal-aggregate-list")));
+    Assertions.assertTrue(submitForMethod.contains(TextExpectation.onReactJs().read("proposal-submit-for-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("proposal-detail")));
+  }
+
+  @Test
+  public void testThatAggregateWithThreeLevelCollectionIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(proposalAggregateWithThreeLevelCollection(), expectationsWithValueObjectCollectionValueObject(), keywordsValueObject(), moneyValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Proposals");
+    final Content submitForMethod = context.findContent(AGGREGATE_METHOD, "ProposalSubmitFor");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Proposal");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("proposals-aggregate-list")));
+    Assertions.assertTrue(submitForMethod.contains(TextExpectation.onReactJs().read("proposals-submit-for-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("proposals-detail")));
+  }
+
+  @Test
+  public void testThatAggregateMethodWithoutApiModelIsNotGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(
+            authorAggregateWithoutApiMode(), nameValueObject(), rankValueObject(),
+            classificationValueObject(), classifierValueObject()
+        );
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Authors");
+    final Content withNameMethod = context.findContent(AGGREGATE_METHOD, "AuthorWithName");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Author");
+
+    Assertions.assertThrows(IllegalArgumentException.class, () -> context.findContent(AGGREGATE_METHOD, "AuthorChangeRank"));
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("author-aggregate-list")));
+    Assertions.assertTrue(withNameMethod.contains(TextExpectation.onReactJs().read("author-with-name-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("author-detail-without-change-rank")));
+  }
+
+  private CodeGenerationParameter moneyValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Money")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
+            .relate(Label.FIELD_TYPE, "String"));
+  }
+
+  private CodeGenerationParameter expectationsValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Expectations")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "keywords")
+            .relate(Label.FIELD_TYPE, "String").relate(Label.COLLECTION_TYPE, "List"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+            .relate(Label.FIELD_TYPE, "Money"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "dueOn")
+            .relate(Label.FIELD_TYPE, "DateTime"));
+  }
+
+  private CodeGenerationParameter proposalAggregateWithTwoLevelCollection() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter expectationsField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "multipleExpectations")
+            .relate(Label.FIELD_TYPE, "Expectations")
+            .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter proposalSubmittedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ProposalSubmitted")
+            .relate(idField).relate(expectationsField);
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "submitFor")
+            .relate(Label.METHOD_PARAMETER, "multipleExpectations")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(proposalSubmittedEvent);
+
+    final CodeGenerationParameter submitForRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "submitFor")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/proposals/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Proposal")
+        .relate(Label.URI_ROOT, "/proposals").relate(idField)
+        .relate(expectationsField)
+        .relate(factoryMethod)
+        .relate(submitForRoute)
+        .relate(proposalSubmittedEvent);
+  }
+
+  private CodeGenerationParameter expectationsWithValueObjectCollectionValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Expectations")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "keywords")
+            .relate(Label.FIELD_TYPE, "Keyword").relate(Label.COLLECTION_TYPE, "List"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+            .relate(Label.FIELD_TYPE, "Money"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "dueOn")
+            .relate(Label.FIELD_TYPE, "DateTime"));
+  }
+
+  private CodeGenerationParameter keywordsValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Keyword")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
+            .relate(Label.FIELD_TYPE, "String").relate(Label.COLLECTION_TYPE, "List"));
+  }
+
+  private CodeGenerationParameter proposalAggregateWithThreeLevelCollection() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter expectationsField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "multipleExpectations")
+            .relate(Label.FIELD_TYPE, "Expectations")
+            .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter proposalSubmittedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ProposalSubmitted")
+            .relate(idField).relate(expectationsField);
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "submitFor")
+            .relate(Label.METHOD_PARAMETER, "multipleExpectations")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(proposalSubmittedEvent);
+
+    final CodeGenerationParameter submitForRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "submitFor")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/proposals/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Proposal")
+        .relate(Label.URI_ROOT, "/proposals").relate(idField)
+        .relate(expectationsField)
+        .relate(factoryMethod)
+        .relate(submitForRoute)
+        .relate(proposalSubmittedEvent);
+  }
+
   private CodeGenerationParameter catalogAggregate() {
     final CodeGenerationParameter idField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "id")
@@ -306,6 +460,52 @@ public class AggregateManagementGenerationStepTest {
         .relate(nameField).relate(rankField).relate(factoryMethod)
         .relate(rankMethod).relate(withNameRoute).relate(changeRankRoute)
         .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(changeRankRoute);
+  }
+
+  private CodeGenerationParameter authorAggregateWithoutApiMode() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "Name");
+
+    final CodeGenerationParameter rankField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+            .relate(Label.FIELD_TYPE, "Rank");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+            .relate(idField).relate(nameField);
+
+    final CodeGenerationParameter authorRankedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+            .relate(idField).relate(rankField);
+
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter rankMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+            .relate(Label.METHOD_PARAMETER, "rank")
+            .relate(authorRankedEvent);
+
+    final CodeGenerationParameter withNameRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/authors/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+        .relate(Label.URI_ROOT, "/authors").relate(idField)
+        .relate(nameField).relate(rankField).relate(factoryMethod)
+        .relate(rankMethod).relate(withNameRoute)
+        .relate(authorRegisteredEvent).relate(authorRankedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {
