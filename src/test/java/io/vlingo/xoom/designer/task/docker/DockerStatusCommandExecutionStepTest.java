@@ -3,8 +3,6 @@ package io.vlingo.xoom.designer.task.docker;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.docker.DockerCommandException;
-import io.vlingo.xoom.designer.task.docker.DockerStatusCommandExecutionStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +20,7 @@ public class DockerStatusCommandExecutionStepTest {
         properties.put(DOCKER_IMAGE.literal(), "xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         context.onProperties(properties);
 
@@ -42,7 +40,7 @@ public class DockerStatusCommandExecutionStepTest {
         properties.put(DOCKER_IMAGE.literal(), "xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         context.onProperties(new Properties());
 

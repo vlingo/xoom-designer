@@ -260,7 +260,7 @@
     "host": "localhost",
     "port": 9019
   },
-  "projectDirectory": "/designer/VLINGO-XOOM/co.donebyme/matching1",
+  "projectDirectory": "%s",
   "useAnnotations": false,
   "useAutoDispatch": false
 }

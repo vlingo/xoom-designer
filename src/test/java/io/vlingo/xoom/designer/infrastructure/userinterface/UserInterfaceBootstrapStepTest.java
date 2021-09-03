@@ -16,7 +16,7 @@ public class UserInterfaceBootstrapStepTest {
 
   @Test
   public void testThatUserInterfaceBootstrapStepIsProcessed() {
-    new UserInterfaceBootstrapStep().process(TaskExecutionContext.withoutOptions());
+    new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
     Assertions.assertFalse(TaskExecutor.shouldExit());
   }
 
