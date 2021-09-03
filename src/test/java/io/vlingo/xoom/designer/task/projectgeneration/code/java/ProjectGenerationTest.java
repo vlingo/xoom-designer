@@ -7,6 +7,9 @@
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
 import io.restassured.http.ContentType;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
@@ -34,12 +37,9 @@ public abstract class ProjectGenerationTest {
     ComponentRegistry.clear();
     Profile.enableTestProfile();
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
-    ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), AvailablePort.find(19099, 20100));
     ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
-    runDesigner();
-  }
-
-  public static void runDesigner() {
+    ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), AvailablePort.find(19099, 20100));
+    ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
   }
 
@@ -76,7 +76,8 @@ public abstract class ProjectGenerationTest {
   }
 
   private String resolveGenerationPath(final String model) {
-    return Paths.get(System.getProperty("user.dir"), "target", "project-generation", model).toString();
+    return Paths.get(System.getProperty("user.dir"), "target", "project-generation", model)
+            .toString().replace("\\", "\\\\");
   }
 
 }
