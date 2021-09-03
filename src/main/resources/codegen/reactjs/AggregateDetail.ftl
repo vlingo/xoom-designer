@@ -39,7 +39,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
   {item?.${name}.map(item => (
   <tr>
       <#if valueTypes[type]??>
-        <@printItemTableCell "${name}" "${type}" />
+        <@printItemTableCell "item" "${type}" />
         <#else>
         <td>{item}</td>
       </#if>
@@ -69,10 +69,14 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
 <#macro printItemTableCell name type>
   <#if valueTypes[type]??>
     <#list valueTypes[type] as subType>
-      <@printItemTableCell "${subType.name}" subType.type/>
+      <#if subType.isCollection>
+        <@printItemTableCell "${name}?.${subType.name}[0]" subType.type/>
+        <#else>
+        <@printItemTableCell "${name}?.${subType.name}" subType.type/>
+      </#if>
     </#list>
   <#else>
-    <td>{item?.${name}}</td>
+    <td>{${name}}</td>
   </#if>
 </#macro>
 
