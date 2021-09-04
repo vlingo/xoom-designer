@@ -34,7 +34,6 @@ const Proposal = () => {
     setCurrentModal(null);
   }, []);
 
-
   useEffect(() => {
     setLoading(true);
     loadItem(id);

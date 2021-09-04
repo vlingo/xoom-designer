@@ -39,10 +39,27 @@ const Author = () => {
     console.log('showing changeRank modal');
     const form = {
       id: item.id,
-      rank: item.rank
+      rank: copyAndClearObject(item.rank)
     };
     setCurrentModal(<AuthorChangeRank id={id} defaultForm={form} complete={onModalActionComplete}/>);
   }, [id, item, onModalActionComplete]);
+
+  const copyAndClearObject = (obj) => {
+    if(obj === undefined || !Array.isArray(obj))
+      return obj;
+    return clearObjectValues(JSON.parse(JSON.stringify(obj)))
+  }
+
+  const clearObjectValues = (objToClear) => {
+    Object.keys(objToClear).forEach((param) => {
+      if (Array.isArray(objToClear[param]) || (objToClear[param]).toString() === "[object Object]") {
+        clearObjectValues(objToClear[param]);
+      } else {
+        objToClear[param] = undefined;
+      }
+    })
+    return objToClear;
+  };
 
   useEffect(() => {
     setLoading(true);

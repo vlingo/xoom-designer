@@ -34,7 +34,6 @@ const User = () => {
     setCurrentModal(null);
   }, []);
 
-
   useEffect(() => {
     setLoading(true);
     loadItem(id);
