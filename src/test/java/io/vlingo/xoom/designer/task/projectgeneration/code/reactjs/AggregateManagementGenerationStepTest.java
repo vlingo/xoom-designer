@@ -158,12 +158,70 @@ public class AggregateManagementGenerationStepTest {
     Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("author-detail-without-change-rank")));
   }
 
+  @Test
+  public void testThatAggregateWithCommandSelectingParametersAndCollectionIsGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(orderAggregateWithCommandParametersAndCollections(), orderLineValueObject());
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new AggregateManagementGenerationStep().process(context);
+
+    final Content aggregateList = context.findContent(AGGREGATE_LIST, "Orders");
+    final Content createMethod = context.findContent(AGGREGATE_METHOD, "OrderCreate");
+    final Content aggregateDetail = context.findContent(AGGREGATE_DETAIL, "Order");
+
+    Assertions.assertTrue(aggregateList.contains(TextExpectation.onReactJs().read("orders-aggregate-list")));
+    Assertions.assertTrue(createMethod.contains(TextExpectation.onReactJs().read("orders-create-method")));
+    Assertions.assertTrue(aggregateDetail.contains(TextExpectation.onReactJs().read("orders-detail")));
+  }
+
   private CodeGenerationParameter moneyValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Money")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
             .relate(Label.FIELD_TYPE, "String"));
   }
 
+  private CodeGenerationParameter orderAggregateWithCommandParametersAndCollections() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter clientNameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "clientName")
+            .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter clientAddressField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "clientAddress")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter orderLinesField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "orderLines")
+            .relate(Label.FIELD_TYPE, "OrderLine")
+            .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter orderCreatedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "OrderCreated")
+            .relate(idField).relate(clientNameField).relate(clientAddressField).relate(orderLinesField);
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "create")
+            .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "clientName"))
+            .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "clientAddress"))
+            .relate(CodeGenerationParameter.of(METHOD_PARAMETER, "orderLines")
+                .relate(Label.ALIAS, "orderLine")
+                .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(orderCreatedEvent);
+
+    final CodeGenerationParameter createRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "create")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/order/")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Order")
+        .relate(Label.URI_ROOT, "/orders").relate(idField)
+        .relate(clientNameField).relate(clientAddressField).relate(orderLinesField)
+        .relate(factoryMethod)
+        .relate(createRoute)
+        .relate(orderCreatedEvent);
+  }
   private CodeGenerationParameter expectationsValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Expectations")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "keywords")
