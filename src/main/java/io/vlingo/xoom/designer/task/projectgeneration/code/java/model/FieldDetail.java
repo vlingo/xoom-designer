@@ -50,6 +50,9 @@ public class FieldDetail {
     if (isBoolean(type)) {
       return "false";
     }
+    if (isByte(type)) {
+      return "(byte) 0";
+    }
     if (isNumeric(type)) {
       return "0";
     }
@@ -170,6 +173,10 @@ public class FieldDetail {
 
   public static boolean isNumeric(final String fieldType) {
     return SCALAR_NUMERIC_TYPES.contains(fieldType.toLowerCase());
+  }
+
+  public static boolean isByte(final String fieldType) {
+    return fieldType.equalsIgnoreCase(Byte.class.getSimpleName());
   }
 
   public static boolean isBoolean(final String fieldType) {
