@@ -108,7 +108,7 @@ public class TestDataValueGenerator {
     if (field.value.equalsIgnoreCase("id")) {
       generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(dataIndex));
     } else if (FieldDetail.hasNumericType(field)) {
-      generatedValues.add(dataIndex, fieldType, currentPath, currentNumericValue);
+      generatedValues.add(dataIndex, fieldType, currentPath, FieldDetail.isByte(fieldType) ? "(byte) " + currentNumericValue : currentNumericValue);
       alternateNumericValue();
     } else if (FieldDetail.hasBooleanType(field)) {
       generatedValues.add(dataIndex, fieldType, currentPath, currentBooleanValue);
@@ -228,6 +228,9 @@ public class TestDataValueGenerator {
       }
 
       private String resolveUpdatedValue() {
+        if (FieldDetail.isByte(type)) {
+          return value;
+        }
         if (FieldDetail.isNumeric(type)) {
           return String.valueOf(Integer.valueOf(value) + 1);
         }
