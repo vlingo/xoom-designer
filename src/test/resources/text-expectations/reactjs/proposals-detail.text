@@ -34,7 +34,6 @@ const Proposal = () => {
     setCurrentModal(null);
   }, []);
 
-
   useEffect(() => {
     setLoading(true);
     loadItem(id);
@@ -73,8 +72,8 @@ const Proposal = () => {
   <tbody>
   {item?.multipleExpectations.map(item => (
   <tr>
-    <td>{item?.value}</td>
-    <td>{item?.value}</td>
+    <td>{item?.keywords[0]?.value[0]}</td>
+    <td>{item?.price?.value}</td>
     <td>{item?.dueOn}</td>
   </tr>
   ))}

@@ -25,6 +25,19 @@
       if (el) el.focus()
     })
   }
+
+  function resolvePathVariableMessage() {
+    return rootPath.includes("{") ? "Path variables in the root path are valid but need to be manually mapped in the generated code." : "";
+  }
+
+  function resolveErrorMessages() {
+    return [requireRule(rootPath), rootPathRule(rootPath)];
+  }
+
+  function hasErrorMessages() {
+    const errorMessages = resolveErrorMessages();
+    return errorMessages.some(m => m && m.length > 0);
+  }
 </script>
 
 <FieldsetBox title="API" on:add={addRoute}>
@@ -37,8 +50,9 @@
       invalid={[requireRule(rootPath), rootPathRule(rootPath)].some(f => f)}
     />
     <ErrorWarningTooltip
-      names={['Root path', 'Root path']}
-      messages={[requireRule(rootPath), rootPathRule(rootPath)]}
+      type={hasErrorMessages() ? 'error' : 'warning'}
+      names={hasErrorMessages() ? ['Root path', 'Root path'] : ['', '']} 
+      messages={hasErrorMessages() ? [requireRule(rootPath), rootPathRule(rootPath)] : [resolvePathVariableMessage()]}
     />
   </div>
 
