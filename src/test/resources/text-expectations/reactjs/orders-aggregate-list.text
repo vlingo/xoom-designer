@@ -1,0 +1,93 @@
+import {useCallback, useEffect, useState} from "react";
+import axios from "axios";
+import {Link} from "react-router-dom";
+import LoadingOrFailed from "../LoadingOrFailed";
+import OrderCreate from "./OrderCreate";
+
+export const EMPTY_FORM = { clientName: '', clientAddress: '', orderLines: [{ productId: '', quantity: '', price: '', discount: '' }] };
+
+const Orders = () => {
+
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [currentModal, setCurrentModal] = useState(null);
+
+  const loadItems = useCallback(() => {
+    axios.get('/orders')
+      .then(res => res.data)
+      .then(data => {
+        console.log('Order axios success', data);
+        setItems(data);
+      })
+      .catch((e) => {
+        console.error('Order axios failed', e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const onModalActionComplete = useCallback((data) => {
+    loadItems();
+    setCurrentModal(null);
+  }, [loadItems]);
+
+  const _create = useCallback((e) => {
+    console.log('showing create modal');
+    setCurrentModal(<OrderCreate defaultForm={{ clientName: '', clientAddress: '', orderLines: [{ productId: '', quantity: '', price: '', discount: '' }] }} complete={onModalActionComplete}/>);
+  }, [onModalActionComplete]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadItems();
+  }, [loadItems]);
+
+  return (
+    <>
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 className="h2">Orders</h1>
+        <div className="btn-toolbar mb-2 mb-md-0">
+          <div className="btn-group me-2">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={_create}>Create</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        {
+        items ?
+        <table className={'table table-striped table-bordered'}>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>ClientName</th>
+            <th>ClientAddress</th>
+            <th>OrderLines ProductId</th>
+            <th>OrderLines Quantity</th>
+            <th>OrderLines Price</th>
+            <th>OrderLines Discount</th>
+          </tr>
+        </thead>
+        <tbody>
+        {items.map(item => (
+        <tr key={item.id}>
+          <td> <Link to={"/app/orders/"+item.id}>{item.id} </Link> </td>
+          <td>{item?.clientName}</td>
+          <td>{item?.clientAddress}</td>
+          <td>{item?.orderLines?.productId}</td>
+          <td>{item?.orderLines?.quantity}</td>
+          <td>{item?.orderLines?.price}</td>
+          <td>{item?.orderLines?.discount}</td>
+        </tr>
+        ))}
+        </tbody>
+        </table>
+        : <LoadingOrFailed loading={loading}/>
+      }
+      </div>
+
+      {currentModal}
+    </>
+  );
+};
+
+export default Orders;

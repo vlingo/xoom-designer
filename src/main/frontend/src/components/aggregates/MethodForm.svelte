@@ -38,7 +38,7 @@
   let anchorClassesEvent = {};
   let selectedParameters = '';
   let isAnyCollectionParameterSelected = false;
-  function updateParamaters(name) {
+  function updateParameters(name) {
     const indexOfAlreadyExists = method.parameters.findIndex(p => p.stateField === name && !p.multiplicity)
     if (indexOfAlreadyExists > -1) {
       method.parameters.splice(indexOfAlreadyExists, 1)
@@ -50,25 +50,19 @@
       parameterName: name,
       multiplicity: ''
     }
-    if (isAnyCollectionParameterSelected) {
-      method.parameters = [param]
-    } else {
-      method.parameters = [...method.parameters, param]
-    }
+
+    method.parameters = [...method.parameters, param]
+
   }
 
-  function updateParamatersWithSymbol(fName, symbol) {
+  function updateParametersWithSymbol(fName, symbol) {
     const param = {
       stateField: fName,
       parameterName: symbol.isPlural ? fName : pluralize.singular(fName),
       multiplicity: symbol.sign
     }
-    const p = method.parameters.find(p => p.stateField === fName && p.multiplicity === symbol.sign)
-    if (p) {
-      method.parameters = []
-    } else {
-      method.parameters = [param]
-    }
+
+    method.parameters = [...method.parameters.filter(p => p.stateField !== fName), param]
   }
 
   function updateEvent(eName) {
@@ -81,7 +75,7 @@
 
   $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters), eventAlreadyInUseRule(method, methods)];
   $: isAnyCollectionParameterSelected = method.parameters.some(p => p.multiplicity);
-  $: selectedParameters = method.parameters && method.parameters.length > 0 ? isAnyCollectionParameterSelected ? `${method.parameters[0].parameterName} ${method.parameters[0].multiplicity}` : method.parameters.map(p => p.parameterName).join(', ') : '(none)';
+  $: selectedParameters = method.parameters && method.parameters.length > 0 ? method.parameters.map(p => p.parameterName).join(', ') : '(none)';
 </script>
 
 <div style="flex: 1;">
@@ -139,9 +133,8 @@
           {#each stateFields.filter(f => f.name && f.type) as field}
             <Item
               class="pa-0"
-              on:SMUI:action={() => !field.collectionType && updateParamaters(field.name)}
+              on:SMUI:action={() => !field.collectionType && updateParameters(field.name)}
               selected={method.parameters.findIndex(p => p.stateField === field.name) > -1}
-              disabled={isAnyCollectionParameterSelected || field.collectionType}
             >
               <Checkbox
                 style="visibility: {field.collectionType ? 'hidden' : 'visible'}"
@@ -156,7 +149,7 @@
                 {#each symbols as symbol}
                   <Item
                     class="pa-0 pl-10"
-                    on:SMUI:action={() => updateParamatersWithSymbol(field.name, symbol)}
+                    on:SMUI:action={() => updateParametersWithSymbol(field.name, symbol)}
                     selected={method.parameters.some(p => p.stateField === field.name && p.multiplicity === symbol.sign)}
                   >
                     <Checkbox
