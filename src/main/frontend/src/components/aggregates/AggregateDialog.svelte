@@ -97,8 +97,8 @@
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
 	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name') && !methodParametersValidityWithSelectedEventRule(m.event, events, m.parameters) && !eventAlreadyInUseRule(m, methods);
 	const validRoute = (r) => r.path && !routeRule(r.path) && r.aggregateMethod;
-	const validProducer = (name, schema, events) => (name && schema && !schemaGroupRule(schema) && events.length > 0) || (!name && !schema && events.length === 0);
-	const validConsumer = (name, receivers) => ((name || !name) && receivers.length === 0) || (name && receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
+	const validProducer = (schema, events) => (schema && !schemaGroupRule(schema) && events.length > 0) || (!schema && events.length === 0);
+	const validConsumer = (receivers) => (receivers.length === 0) || (receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
 
 	$: {
 		const storageState = getLocalStorage("aggregateDialogState");
@@ -108,7 +108,7 @@
 	}
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
-	&& !rootPathRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(producerExchangeName, schemaGroup, outgoingEvents) && validConsumer(consumerExchangeName, receivers);
+	&& !rootPathRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(schemaGroup, outgoingEvents) && validConsumer(receivers);
 	$: if(valid) {
 		newAggregate = {
 			aggregateName, stateFields, events, methods, api: { rootPath, routes }

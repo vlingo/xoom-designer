@@ -50,21 +50,20 @@
       label="Exchange Name"
       bind:value={producerExchangeName}
       disabled={true}
-      invalid={!producerExchangeName && (schemaGroup || outgoingEvents.length > 0)}
     />
     <div style="flex: 1;">
       <ProducerSchemata
         {disableSchemaGroup}
         bind:schemaGroup
-        invalid={schemaGroupRule(schemaGroup) && producerExchangeName || (producerExchangeName && outgoingEvents.length == 0)}
+        invalid={schemaGroupRule(schemaGroup) && outgoingEvents.length == 0}
         helperText={schemaGroupRule(schemaGroup)}
       />
     </div>
 
     <div>
       <ErrorWarningTooltip
-        type={!schemaGroupRule(schemaGroup) && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? 'error' : 'warning'}
-        messages={schemaGroupRule(schemaGroup) && (producerExchangeName || outgoingEvents.length > 0 || schemaGroup ) ? [schemaGroupRule(schemaGroup), !producerExchangeName ? 'Exchange Name must not be empty' : ''] : [producerExchangeName ? '' : 'Should you register any events for message publishing?']}
+        type={!schemaGroupRule(schemaGroup) && (outgoingEvents.length > 0 || schemaGroup ) ? 'error' : 'warning'}
+        messages={schemaGroupRule(schemaGroup) && (outgoingEvents.length > 0 || schemaGroup ) ? [schemaGroupRule(schemaGroup)] : []}
         names={['', '']}
       />
     </div>
@@ -95,12 +94,12 @@
         label="Domain Event"
         input$readonly={true}
         on:keypress={(e) => {if(e.keyCode === 13 || e.key === 'Enter') menu.setOpen(true)}}
-        invalid={outgoingEvents.length < 1 && (producerExchangeName || schemaGroup)}
+        invalid={outgoingEvents.length < 1 && schemaGroup}
       ></Textfield>
       <div>
         <ErrorWarningTooltip
           type={'error'}
-          messages={outgoingEvents.length < 1 && (producerExchangeName || schemaGroup) ? ['At least one event need to be selected'] : ['']}
+          messages={outgoingEvents.length < 1 && schemaGroup ? ['At least one event need to be selected'] : ['']}
           names={['']}
         />
       </div>
