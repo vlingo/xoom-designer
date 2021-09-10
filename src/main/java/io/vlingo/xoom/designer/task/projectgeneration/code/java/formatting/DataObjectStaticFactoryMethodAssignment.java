@@ -53,8 +53,7 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
     final CodeElementFormatter codeElementFormatter =
             ComponentRegistry.withName("defaultCodeFormatter");
 
-    final String variableName =
-            codeElementFormatter.simpleNameToAttribute(field.value);
+    final String variableName = codeElementFormatter.rectifySyntax(field.value);
 
     final String variableType =
             FieldDetail.isCollection(field) ? DataObjectDetail.resolveCollectionType(field) : dataObjectName;
@@ -79,7 +78,7 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
   }
 
   private String resolveFieldAccessExpression(final CodeGenerationParameter carrier, final CodeGenerationParameter field) {
-    return resolveCarrierName(carrier) + "." + Introspector.decapitalize(field.value);
+    return resolveCarrierName(carrier) + "." + field.value;
   }
 
   private String resolveDataObjectName(final CodeGenerationParameter field) {
