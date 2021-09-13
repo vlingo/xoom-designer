@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
+import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
@@ -14,7 +15,6 @@ import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 public class JavaCompilationCommand extends CommandExecutionStep {
@@ -36,7 +36,7 @@ public class JavaCompilationCommand extends CommandExecutionStep {
   protected String formatCommands(final TaskExecutionContext context) {
     final Terminal terminal = Terminal.supported();
     final Path pomPath = Paths.get(applicationPath, "pom.xml");
-    final Path designerPath = Paths.get(System.getProperty("user.dir"));
+    final Path designerPath = Infrastructure.StagingFolder.path();
     final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(designerPath);
     return String.format("%s && %s -f %s package", directoryChangeCommand, terminal.mavenCommand(), pomPath);
   }
