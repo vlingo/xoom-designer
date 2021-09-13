@@ -61,10 +61,7 @@ const Orders = () => {
             <th>Id</th>
             <th>ClientName</th>
             <th>ClientAddress</th>
-            <th>OrderLines ProductId</th>
-            <th>OrderLines Quantity</th>
-            <th>OrderLines Price</th>
-            <th>OrderLines Discount</th>
+            <th>OrderLines</th>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +70,7 @@ const Orders = () => {
           <td> <Link to={"/app/orders/"+item.id}>{item.id} </Link> </td>
           <td>{item?.clientName}</td>
           <td>{item?.clientAddress}</td>
-          <td>{item?.orderLines?.productId}</td>
-          <td>{item?.orderLines?.quantity}</td>
-          <td>{item?.orderLines?.price}</td>
-          <td>{item?.orderLines?.discount}</td>
+          <td><Link to={"/app/orders/"+item.id}>View</Link></td>
         </tr>
         ))}
         </tbody>

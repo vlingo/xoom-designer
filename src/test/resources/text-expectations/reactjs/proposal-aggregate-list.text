@@ -59,18 +59,14 @@ const Proposals = () => {
         <thead>
           <tr>
             <th>Id</th>
-            <th>MultipleExpectations Keywords</th>
-            <th>MultipleExpectations Price Value</th>
-            <th>MultipleExpectations DueOn</th>
+            <th>MultipleExpectations</th>
           </tr>
         </thead>
         <tbody>
         {items.map(item => (
         <tr key={item.id}>
           <td> <Link to={"/app/proposals/"+item.id}>{item.id} </Link> </td>
-          <td>{item?.multipleExpectations?.keywords}</td>
-          <td>{item?.multipleExpectations?.price?.value}</td>
-          <td>{item?.multipleExpectations?.dueOn}</td>
+          <td><Link to={"/app/proposals/"+item.id}>View</Link></td>
         </tr>
         ))}
         </tbody>

@@ -61,9 +61,7 @@ const Catalogs = () => {
             <th>Id</th>
             <th>Name</th>
             <th>Category</th>
-            <th>Items Name</th>
-            <th>Items Price</th>
-            <th>Items Discount</th>
+            <th>Items</th>
           </tr>
         </thead>
         <tbody>
@@ -72,9 +70,7 @@ const Catalogs = () => {
           <td> <Link to={"/app/catalogs/"+item.id}>{item.id} </Link> </td>
           <td>{item?.name}</td>
           <td>{item?.category}</td>
-          <td>{item?.items?.name}</td>
-          <td>{item?.items?.price}</td>
-          <td>{item?.items?.discount}</td>
+          <td><Link to={"/app/catalogs/"+item.id}>View</Link></td>
         </tr>
         ))}
         </tbody>
