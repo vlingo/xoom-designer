@@ -36,8 +36,8 @@ public class JavaCompilationCommand extends CommandExecutionStep {
   protected String formatCommands(final TaskExecutionContext context) {
     final Terminal terminal = Terminal.supported();
     final Path pomPath = Paths.get(applicationPath, "pom.xml");
-    final Path designerPath = Infrastructure.StagingFolder.path();
-    final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(designerPath);
+    final Path stagingFolderPath = Infrastructure.StagingFolder.path();
+    final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(stagingFolderPath);
     return String.format("%s && %s -f %s package", directoryChangeCommand, terminal.mavenCommand(), pomPath);
   }
 
