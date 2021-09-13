@@ -45,27 +45,27 @@ public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData>
       }
 
       case AuthorRanked: {
-        merged = AuthorData.from(previousData.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+        merged = AuthorData.from(currentData.id, previousData.name, currentData.ranks, previousData.relatedAuthors, previousData.availableOn);
         break;
       }
 
       case AuthorBulkRanked: {
-        merged = AuthorData.from(previousData.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+        merged = AuthorData.from(currentData.id, previousData.name, currentData.ranks, previousData.relatedAuthors, previousData.availableOn);
         break;
       }
 
       case AuthorRelated: {
-        merged = AuthorData.from(previousData.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.ranks, currentData.relatedAuthors, previousData.availableOn);
         break;
       }
 
       case AuthorsRelated: {
-        merged = AuthorData.from(previousData.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.ranks, currentData.relatedAuthors, previousData.availableOn);
         break;
       }
 
       case AuthorUnrelated: {
-        merged = AuthorData.from(previousData.id, previousData.name, previousData.ranks, previousData.relatedAuthors, previousData.availableOn);
+        merged = AuthorData.from(currentData.id, previousData.name, previousData.ranks, currentData.relatedAuthors, previousData.availableOn);
         break;
       }
 
