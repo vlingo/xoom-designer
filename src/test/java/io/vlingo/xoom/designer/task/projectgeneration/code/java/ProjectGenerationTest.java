@@ -38,7 +38,7 @@ public abstract class ProjectGenerationTest {
     Profile.enableTestProfile();
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
-    ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), AvailablePort.find(19099, 20100));
+    ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), PortDriver.init().findAvailable(19099, 20100));
     ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
   }
