@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@EnabledIfSystemProperty(named="e2e", matches="true")
+@EnabledIfSystemProperty(named="e2e-tests", matches="true")
 public @interface EndToEndTest {
 
 
