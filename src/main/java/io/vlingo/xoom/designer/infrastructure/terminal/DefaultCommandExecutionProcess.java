@@ -6,13 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
-import java.io.BufferedReader;
+import io.vlingo.xoom.actors.Logger;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
 
@@ -33,17 +29,7 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
 
   @Override
   protected void log() {
-    final ExecutorService executor =
-            Executors.newSingleThreadExecutor();
-
-    final Stream<BufferedReader> processReaders =
-            Stream.of(process.getInputStream(), process.getErrorStream())
-                    .map(inputStream -> new BufferedReader(new InputStreamReader(inputStream)));
-
-    final Consumer<BufferedReader> readerConsumer =
-            reader -> executor.submit(() -> reader.lines().forEach(System.out::println));
-
-    processReaders.forEach(readerConsumer);
+    CommandOutputConsumer.of(Logger.basicLogger(), process).tail();
   }
 
   @Override
@@ -60,4 +46,5 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
       throw new CommandExecutionException(e);
     }
   }
+
 }

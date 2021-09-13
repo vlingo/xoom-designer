@@ -12,7 +12,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 @EndToEndTest
-public class ProjectWithStatefulEntitiesAndProjectableEventsGenerationTest extends ProjectGenerationTest {
+public class BasicProjectGenerationTest extends ProjectGenerationTest {
+
+  private static final String bookStoreWithStatefulEntities = "book-store-with-stateful-entities";
 
   @BeforeAll
   public static void setUp() {
@@ -20,13 +22,15 @@ public class ProjectWithStatefulEntitiesAndProjectableEventsGenerationTest exten
   }
 
   @Test
-  public void testThatGeneratedProjectIsWorking() {
-    generateProjectFor("freighter-maintenance-designer-model");
+  public void testThatProjectWithScalarTypesIsWorking() {
+    generate(bookStoreWithStatefulEntities);
+    compile(bookStoreWithStatefulEntities);
+    run(bookStoreWithStatefulEntities);
   }
 
   @Override
   public String modelDirectory() {
-    return "freighter-maintenance-context";
+    return "book-store-context";
   }
 
   @AfterAll

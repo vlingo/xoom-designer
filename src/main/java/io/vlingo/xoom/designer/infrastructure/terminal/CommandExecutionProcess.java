@@ -16,13 +16,9 @@ public abstract class CommandExecutionProcess {
   }
 
   public void handle(final String command) {
-      execute(prependPreliminaryCommands(command));
+      execute(terminal.prepareCommand(command));
       log();
       handleCommandExecutionStatus();
-  }
-
-  protected String[] prependPreliminaryCommands(final String command) {
-    return new String[]{terminal.initializationCommand(), terminal.parameter(), command};
   }
 
   protected abstract void execute(final String[] commandSequence);
@@ -30,4 +26,5 @@ public abstract class CommandExecutionProcess {
   protected abstract void log();
 
   protected abstract void handleCommandExecutionStatus();
+
 }

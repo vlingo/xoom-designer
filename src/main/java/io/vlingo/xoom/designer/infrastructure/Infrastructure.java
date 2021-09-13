@@ -155,7 +155,7 @@ public class Infrastructure {
 
       final String port =
               ComponentRegistry.has(DESIGNER_SERVER_PORT.literal()) ?
-                      ComponentRegistry.withName(DESIGNER_SERVER_PORT.literal()) :
+                      ComponentRegistry.withName(DESIGNER_SERVER_PORT.literal()).toString() :
                       ApplicationProperty.readValue(DESIGNER_SERVER_PORT.literal(), instance.properties);
 
       return port == null ? defaultPort : Integer.valueOf(port);
