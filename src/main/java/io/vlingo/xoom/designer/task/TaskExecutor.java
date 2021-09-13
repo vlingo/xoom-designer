@@ -16,8 +16,7 @@ public class TaskExecutor {
 
     public static void execute(final List<String> args) {
         try {
-            validateArgs(args);
-            Task.of(args.get(MAIN_COMMAND_INDEX), args).run(args);
+            Task.of(resolveMainCommand(args), args).run(args);
         } catch (final Exception exception) {
             System.out.println(exception.getMessage());
             exception.printStackTrace();
@@ -25,10 +24,11 @@ public class TaskExecutor {
         }
     }
 
-    private static void validateArgs(final List<String> args){
+    private static String resolveMainCommand(final List<String> args){
         if(args.size() == 0) {
-            throw new CommandNotFoundException();
+            return Task.GRAPHICAL_USER_INTERFACE.command();
         }
+        return args.get(MAIN_COMMAND_INDEX);
     }
 
     public static void skipAutomaticExit() {
