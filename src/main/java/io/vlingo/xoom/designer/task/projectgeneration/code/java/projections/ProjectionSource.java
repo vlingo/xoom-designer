@@ -115,9 +115,11 @@ public class ProjectionSource {
                                                       final List<CodeGenerationParameter> events) {
     final CodeGenerationParameter aggregate = event.parent(Label.AGGREGATE);
     return aggregate.retrieveAllRelated(Label.STATE_FIELD).map(field -> {
-      if (DomainEventDetail.hasField(event.value, field.value, events) ||
-              DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
+      if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
         return sourceFieldsCarrierName + "." + field.value;
+      }
+      if (DomainEventDetail.hasField(event.value, field.value, events)) {
+        return "currentData." + field.value;
       }
       return "previousData." + field.value;
     }).collect(Collectors.joining(", "));

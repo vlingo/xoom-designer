@@ -161,7 +161,7 @@
     "host": "localhost",
     "port": 9019
   },
-  "projectDirectory": "D:\\christophe\\user",
+  "projectDirectory": "%s",
   "useAnnotations": true,
   "useAutoDispatch": true,
   "generateUIWith": "ReactJS"

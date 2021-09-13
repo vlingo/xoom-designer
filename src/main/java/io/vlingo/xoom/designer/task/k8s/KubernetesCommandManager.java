@@ -25,7 +25,7 @@ public class KubernetesCommandManager implements TaskManager<List<String>> {
         final SubTask subTask = K8S.subTaskOf(command);
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         Arrays.asList(subTask.commandResolverStep())
                 .forEach(step -> step.process(context));

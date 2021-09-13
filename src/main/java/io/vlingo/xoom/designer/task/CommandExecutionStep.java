@@ -60,4 +60,8 @@ public abstract class CommandExecutionStep implements TaskExecutionStep {
   protected void logPreliminaryMessage(final TaskExecutionContext context) {
   }
 
+  public CommandExecutionProcess commandExecutionProcess() {
+    return commandExecutionProcess;
+  }
+
 }

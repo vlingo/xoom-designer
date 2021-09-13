@@ -93,6 +93,10 @@ public enum Terminal {
     return browserLaunchCommand;
   }
 
+  public String[] prepareCommand(final String command) {
+    return new String[]{initializationCommand(), parameter(), command};
+  }
+
   public File executableMavenFileLocation() {
     final String executableFile = mavenCommand.replaceAll("./", "");
     return StagingFolder.path().resolve(executableFile).toFile();

@@ -37,7 +37,7 @@ public class TaskExecutionContext {
     return new TaskExecutionContext(agent);
   }
 
-  public static TaskExecutionContext withoutOptions() {
+  public static TaskExecutionContext bare() {
     return new TaskExecutionContext(Agent.TERMINAL);
   }
 
@@ -48,7 +48,7 @@ public class TaskExecutionContext {
   }
 
   public static TaskExecutionContext empty() {
-    return withoutOptions();
+    return bare();
   }
 
   public TaskExecutionContext withOptions(final List<OptionValue> optionValues) {
@@ -63,7 +63,7 @@ public class TaskExecutionContext {
 
   public static TaskExecutionContext withOutput(final TaskOutput taskOutput,
                                                 final Object output) {
-    return withoutOptions().addOutput(taskOutput, output);
+    return bare().addOutput(taskOutput, output);
   }
 
   public TaskExecutionContext with(final CodeGenerationParameters parameters) {

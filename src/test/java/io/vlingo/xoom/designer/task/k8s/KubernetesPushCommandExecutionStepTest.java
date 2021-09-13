@@ -10,7 +10,6 @@ package io.vlingo.xoom.designer.task.k8s;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.k8s.KubernetesPushCommandExecutionStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +26,7 @@ public class KubernetesPushCommandExecutionStepTest {
                         LINUX_EXPECT_COMMAND;
 
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 
