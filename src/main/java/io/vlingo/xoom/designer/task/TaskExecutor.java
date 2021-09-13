@@ -7,36 +7,30 @@
 
 package io.vlingo.xoom.designer.task;
 
+import io.vlingo.xoom.actors.Logger;
+
 import java.util.List;
 
 public class TaskExecutor {
 
-    private static boolean AUTOMATIC_EXIT = true;
-    private static final int MAIN_COMMAND_INDEX = 0;
+  private static boolean AUTOMATIC_EXIT = true;
+  private static final int MAIN_COMMAND_INDEX = 0;
 
-    public static void execute(final List<String> args) {
-        try {
-            Task.of(resolveMainCommand(args), args).run(args);
-        } catch (final Exception exception) {
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-            throw exception;
-        }
+  public static void execute(final List<String> args) {
+    try {
+      Task.of(args.get(MAIN_COMMAND_INDEX), args).run(args);
+    } catch (final Exception exception) {
+      Logger.basicLogger().error(exception.getMessage(), exception);
+      throw exception;
     }
+  }
 
-    private static String resolveMainCommand(final List<String> args){
-        if(args.size() == 0) {
-            return Task.GRAPHICAL_USER_INTERFACE.command();
-        }
-        return args.get(MAIN_COMMAND_INDEX);
-    }
+  public static void skipAutomaticExit() {
+    AUTOMATIC_EXIT = false;
+  }
 
-    public static void skipAutomaticExit() {
-        AUTOMATIC_EXIT = false;
-    }
-
-    public static boolean shouldExit() {
-        return AUTOMATIC_EXIT;
-    }
+  public static boolean shouldExit() {
+    return AUTOMATIC_EXIT;
+  }
 
 }
