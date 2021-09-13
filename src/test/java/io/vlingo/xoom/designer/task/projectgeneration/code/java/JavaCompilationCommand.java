@@ -11,8 +11,11 @@ import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 public class JavaCompilationCommand extends CommandExecutionStep {
 
@@ -40,6 +43,11 @@ public class JavaCompilationCommand extends CommandExecutionStep {
 
   public CommandStatus status() {
     return compilationObserver.status;
+  }
+
+  @Override
+  protected List<File> executableFiles() {
+    return Terminal.supported().executableMavenFilesLocations();
   }
 
   public static class CompilationObserver implements ObservableCommandExecutionProcess.CommandExecutionObserver {

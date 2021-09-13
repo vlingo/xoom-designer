@@ -7,11 +7,15 @@
 
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
+import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
+import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -97,9 +101,13 @@ public enum Terminal {
     return new String[]{initializationCommand(), parameter(), command};
   }
 
-  public File executableMavenFileLocation() {
+  public List<File> executableMavenFilesLocations() {
     final String executableFile = mavenCommand.replaceAll("./", "");
-    return StagingFolder.path().resolve(executableFile).toFile();
+    final Path homeFolderPath = Paths.get(HomeDirectory.fromEnvironment().path);
+    final Path stagingFolderPath = StagingFolder.path();
+    return Arrays.asList(
+            homeFolderPath.resolve(executableFile).toFile(),
+            stagingFolderPath.resolve(executableFile).toFile());
   }
 
   public String resolveDirectoryChangeCommand(final Path path) {
