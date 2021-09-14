@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
@@ -18,7 +19,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Project {
@@ -31,7 +31,7 @@ public class Project {
   private static List<Project> all =  new ArrayList<>();
 
   public static Project from(final String directory,
-                           final String modelFilename) {
+                             final String modelFilename) {
     final int availablePort = PortDriver.init().findAvailable();
     return new Project(directory, modelFilename, availablePort);
   }
@@ -76,11 +76,14 @@ public class Project {
             .toString();
   }
 
-  public static List<Project> all() {
-    return Collections.unmodifiableList(all);
-  }
-
-  public static void clear() {
+  public static void stopAll(final Logger logger, final PortDriver portDriver) {
+    all.forEach(project -> {
+      if(!portDriver.release(project.appPort)) {
+        logger.error("Unable to release port " + project.appPort);
+      } else {
+        logger.info("Port " + project.appPort + " released");
+      }
+    });
     all.clear();
   }
 

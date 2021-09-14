@@ -29,8 +29,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
+      - name: Test with Maven
+        run: mvn --batch-mode --update-snapshots test -De2e-tests=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -De2e-tests=true -P deployment,frontend,github-releases
+        run: mvn --batch-mode --update-snapshots install -DskipTests=true -P deployment,frontend,github-releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
