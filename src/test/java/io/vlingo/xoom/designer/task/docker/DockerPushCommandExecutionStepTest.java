@@ -2,11 +2,9 @@ package io.vlingo.xoom.designer.task.docker;
 
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.docker.DockerCommandException;
-import io.vlingo.xoom.designer.task.docker.DockerPushCommandExecutionStep;
 import io.vlingo.xoom.designer.task.OptionName;
 import io.vlingo.xoom.designer.task.OptionValue;
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -64,9 +62,8 @@ public class DockerPushCommandExecutionStepTest {
 
         final TaskExecutionContext context =
                 TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Arrays.asList(tag, directory));
-
-        context.onProperties(properties);
+                        .withOptions(Arrays.asList(tag, directory))
+                        .onProperties(properties);
 
         Assertions.assertThrows(DockerCommandException.class, () -> {
             new DockerPushCommandExecutionStep(new CommandRetainer()).process(context);

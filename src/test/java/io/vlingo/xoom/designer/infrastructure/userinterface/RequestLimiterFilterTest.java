@@ -25,6 +25,7 @@ import static io.vlingo.xoom.http.Method.POST;
 import static io.vlingo.xoom.http.RequestHeader.XForwardedFor;
 import static io.vlingo.xoom.http.Version.Http1_1;
 
+@SuppressWarnings("unchecked")
 public class RequestLimiterFilterTest {
 
   @Test

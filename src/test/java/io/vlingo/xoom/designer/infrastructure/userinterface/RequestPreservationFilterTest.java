@@ -34,6 +34,7 @@ public class RequestPreservationFilterTest {
   private MockDispatcher dispatcher;
 
   @BeforeEach
+  @SuppressWarnings("unchecked")
   private void setUp() {
     dispatcher = new MockDispatcher();
     world = World.startWithDefaults("request-preservation-filter-test");

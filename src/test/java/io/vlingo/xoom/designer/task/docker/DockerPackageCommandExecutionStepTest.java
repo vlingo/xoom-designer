@@ -3,11 +3,9 @@ package io.vlingo.xoom.designer.task.docker;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.Agent;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.docker.DockerCommandException;
-import io.vlingo.xoom.designer.task.docker.DockerPackageCommandExecutionStep;
 import io.vlingo.xoom.designer.task.OptionName;
 import io.vlingo.xoom.designer.task.OptionValue;
+import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,9 +56,9 @@ public class DockerPackageCommandExecutionStepTest {
                 OptionValue.with(OptionName.CURRENT_DIRECTORY, "/home/projects/xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(Agent.TERMINAL).withOptions(Arrays.asList(tag, directory));
-
-        context.onProperties(new Properties());
+                TaskExecutionContext.executedFrom(Agent.TERMINAL)
+                        .withOptions(Arrays.asList(tag, directory))
+                        .onProperties(new Properties());
 
         Assertions.assertThrows(DockerCommandException.class, () ->{
             new DockerPackageCommandExecutionStep(new CommandRetainer()).process(context);

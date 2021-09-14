@@ -14,20 +14,18 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.model.ValueObjectGenerationStep;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.storage.StorageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 
 public class ValueObjectGenerationStepTest {
 
   @Test
-  public void testThatValueObjectsAreGenerated() throws IOException {
+  public void testThatValueObjectsAreGenerated() {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
                     CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
