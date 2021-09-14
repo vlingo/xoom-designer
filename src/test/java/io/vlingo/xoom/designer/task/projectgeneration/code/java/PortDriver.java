@@ -22,7 +22,7 @@ public abstract class PortDriver {
   protected final Terminal terminal = Terminal.supported();
 
   public static PortDriver init() {
-    if(System.getProperty("os.name").contains("Windows")) {
+    if(Terminal.supported().isWindows()) {
       return new WindowsPortDriver();
     }
     return new UnixPortDriver();
