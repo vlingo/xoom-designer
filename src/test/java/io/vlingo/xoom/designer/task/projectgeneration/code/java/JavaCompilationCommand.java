@@ -38,7 +38,7 @@ public class JavaCompilationCommand extends CommandExecutionStep {
     final Path pomPath = Paths.get(applicationPath, "pom.xml");
     final Path stagingFolderPath = Infrastructure.StagingFolder.path();
     final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(stagingFolderPath);
-    return String.format("%s && %s -f %s package", directoryChangeCommand, terminal.mavenCommand(), pomPath);
+    return String.format("%s && %s -f %s --batch-mode --update-snapshots package", directoryChangeCommand, terminal.mavenCommand(), pomPath);
   }
 
   public CommandStatus status() {
