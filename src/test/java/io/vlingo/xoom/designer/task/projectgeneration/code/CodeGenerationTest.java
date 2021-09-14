@@ -10,6 +10,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.turbo.ComponentRegistry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 public class CodeGenerationTest {
@@ -19,4 +20,8 @@ public class CodeGenerationTest {
     ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
   }
 
+  @AfterEach
+  public void tearDown() {
+    ComponentRegistry.clear();
+  }
 }
