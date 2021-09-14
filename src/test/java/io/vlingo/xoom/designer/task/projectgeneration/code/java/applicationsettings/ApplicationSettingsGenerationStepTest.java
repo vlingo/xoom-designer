@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.TURBO_SETTINGS;
 
-public class ApplicationSettingsGenerationStepTest {
+public class ApplicationSettingsGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatCustomTurboSettingsAreGenerated() {

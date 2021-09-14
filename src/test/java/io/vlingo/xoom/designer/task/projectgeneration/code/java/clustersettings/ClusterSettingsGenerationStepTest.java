@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.designer.task.projectgeneration.Label.CLUSTER_SETTINGS;
 
-public class ClusterSettingsGenerationStepTest {
+public class ClusterSettingsGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatCustomClusterSettingsAreGenerated() {

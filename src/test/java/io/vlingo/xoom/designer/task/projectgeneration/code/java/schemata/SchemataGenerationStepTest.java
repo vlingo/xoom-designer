@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.task.projectgeneration.Label;
+import io.vlingo.xoom.designer.task.projectgeneration.code.CodeGenerationTest;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
 import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.CodeGenerationParametersBuilder;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class SchemataGenerationStepTest {
+public class SchemataGenerationStepTest extends CodeGenerationTest {
 
     @Test
     public void testThatSchemataResourcesAreGenerated() {
