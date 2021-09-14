@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -107,20 +106,8 @@ public abstract class ProjectGenerationTest {
 
   public static void releasePortsOnShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      Project.all().forEach(project -> {
-        if(!portDriver.release(project.appPort)) {
-          logger.error("Unable to release port " + project.appPort);
-        } else {
-          logger.info("Port " + project.appPort + " released");
-        }
-      });
-      Project.clear();
+      Project.stopAll(logger, portDriver);
     }));
-  }
-
-  private String resolveGenerationPath(final String model) {
-    return Paths.get(System.getProperty("user.dir"), "target", "e2e-tests", model)
-            .toString().replace("\\", "\\\\");
   }
 
 }
