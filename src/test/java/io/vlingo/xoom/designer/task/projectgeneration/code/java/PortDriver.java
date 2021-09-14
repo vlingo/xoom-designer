@@ -82,7 +82,7 @@ public abstract class PortDriver {
     @Override
     public boolean release(int port) {
       try {
-        final String command = String.format("kill -9 $(lsof -t -i:%s)", port);
+        final String command = String.format("fuser -n tcp -k %s", port);
         getRuntime().exec(terminal.prepareCommand(command)).waitFor();
       } catch (final IOException | InterruptedException exception) {
         exception.printStackTrace();
@@ -123,6 +123,7 @@ public abstract class PortDriver {
       final String command = String.format("taskkill /PID %s /F", processIds.get(port));
       getRuntime().exec(terminal.prepareCommand(command)).waitFor();
     }
+
     private void registerPID(final Process process, final int port) {
       CommandOutputConsumer.of(process).consumeWith(output -> {
        if(output.trim().startsWith("TCP") && !processIds.containsKey(port)) {
