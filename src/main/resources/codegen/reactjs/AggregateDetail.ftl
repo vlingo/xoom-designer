@@ -20,7 +20,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
         year: 'numeric',
         }).format(new Date(item?.${name}))}</td></tr>}
     <#else>
-      {!Array.isArray(item?.${name?split("?.")[0]}) && <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{item?.${name}}</td></tr>}
+      {!Array.isArray(item?.${name?split("?.")[0]}) && <tr><td>${fns.capitalizeMultiWord(label)}</td><td>{''+item?.${name}}</td></tr>}
     </#if>
   </#if>
 </#macro>
@@ -41,7 +41,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
       <#if valueTypes[type]??>
         <@printItemTableCell "item" "${type}" />
         <#else>
-        <td>{item}</td>
+        <td>{''+item}</td>
       </#if>
   </tr>
   ))}
@@ -63,7 +63,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
       <@printTableCell "${name}?.${subType.name}" subType.type/>
     </#list>
   <#else>
-    <td>{item?.${name}}</td>
+    <td>{''+item?.${name}}</td>
   </#if>
 </#macro>
 <#macro printItemTableCell name type>
@@ -76,7 +76,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(method.name)} 
       </#if>
     </#list>
   <#else>
-    <td>{${name}}</td>
+    <td>{''+${name}}</td>
   </#if>
 </#macro>
 

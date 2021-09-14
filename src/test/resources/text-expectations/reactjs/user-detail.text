@@ -55,9 +55,9 @@ const User = () => {
       <div>
         <table className={'table'}>
           <tbody>
-      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
-      {!Array.isArray(item?.name) && <tr><td>Name</td><td>{item?.name}</td></tr>}
-      {!Array.isArray(item?.address) && <tr><td>Address</td><td>{item?.address}</td></tr>}
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{''+item?.id}</td></tr>}
+      {!Array.isArray(item?.name) && <tr><td>Name</td><td>{''+item?.name}</td></tr>}
+      {!Array.isArray(item?.address) && <tr><td>Address</td><td>{''+item?.address}</td></tr>}
           </tbody>
         </table>
   <table className={'table table-striped table-bordered'}>
@@ -69,7 +69,7 @@ const User = () => {
   <tbody>
   {item?.name.map(item => (
   <tr>
-        <td>{item}</td>
+        <td>{''+item}</td>
   </tr>
   ))}
   </tbody>
@@ -83,7 +83,7 @@ const User = () => {
   <tbody>
   {item?.address.map(item => (
   <tr>
-        <td>{item}</td>
+        <td>{''+item}</td>
   </tr>
   ))}
   </tbody>

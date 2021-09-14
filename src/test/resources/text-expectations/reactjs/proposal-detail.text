@@ -55,10 +55,10 @@ const Proposal = () => {
       <div>
         <table className={'table'}>
           <tbody>
-      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
-      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations Keywords</td><td>{item?.multipleExpectations?.keywords}</td></tr>}
-      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations?.price Value</td><td>{item?.multipleExpectations?.price?.value}</td></tr>}
-      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations DueOn</td><td>{item?.multipleExpectations?.dueOn}</td></tr>}
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{''+item?.id}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations Keywords</td><td>{''+item?.multipleExpectations?.keywords}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations?.price Value</td><td>{''+item?.multipleExpectations?.price?.value}</td></tr>}
+      {!Array.isArray(item?.multipleExpectations) && <tr><td>MultipleExpectations DueOn</td><td>{''+item?.multipleExpectations?.dueOn}</td></tr>}
           </tbody>
         </table>
   <table className={'table table-striped table-bordered'}>
@@ -72,9 +72,9 @@ const Proposal = () => {
   <tbody>
   {item?.multipleExpectations.map(item => (
   <tr>
-    <td>{item?.keywords[0]}</td>
-    <td>{item?.price?.value}</td>
-    <td>{item?.dueOn}</td>
+    <td>{''+item?.keywords[0]}</td>
+    <td>{''+item?.price?.value}</td>
+    <td>{''+item?.dueOn}</td>
   </tr>
   ))}
   </tbody>

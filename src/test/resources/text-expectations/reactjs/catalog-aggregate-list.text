@@ -68,8 +68,8 @@ const Catalogs = () => {
         {items.map(item => (
         <tr key={item.id}>
           <td> <Link to={"/app/catalogs/"+item.id}>{item.id} </Link> </td>
-          <td>{item?.name}</td>
-          <td>{item?.category}</td>
+          <td>{''+item?.name}</td>
+          <td>{''+item?.category}</td>
           <td><Link to={"/app/catalogs/"+item.id}>View</Link></td>
         </tr>
         ))}

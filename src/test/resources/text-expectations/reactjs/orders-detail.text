@@ -55,13 +55,13 @@ const Order = () => {
       <div>
         <table className={'table'}>
           <tbody>
-      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
-      {!Array.isArray(item?.clientName) && <tr><td>ClientName</td><td>{item?.clientName}</td></tr>}
-      {!Array.isArray(item?.clientAddress) && <tr><td>ClientAddress</td><td>{item?.clientAddress}</td></tr>}
-      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines ProductId</td><td>{item?.orderLines?.productId}</td></tr>}
-      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Quantity</td><td>{item?.orderLines?.quantity}</td></tr>}
-      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Price</td><td>{item?.orderLines?.price}</td></tr>}
-      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Discount</td><td>{item?.orderLines?.discount}</td></tr>}
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{''+item?.id}</td></tr>}
+      {!Array.isArray(item?.clientName) && <tr><td>ClientName</td><td>{''+item?.clientName}</td></tr>}
+      {!Array.isArray(item?.clientAddress) && <tr><td>ClientAddress</td><td>{''+item?.clientAddress}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines ProductId</td><td>{''+item?.orderLines?.productId}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Quantity</td><td>{''+item?.orderLines?.quantity}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Price</td><td>{''+item?.orderLines?.price}</td></tr>}
+      {!Array.isArray(item?.orderLines) && <tr><td>OrderLines Discount</td><td>{''+item?.orderLines?.discount}</td></tr>}
           </tbody>
         </table>
   <table className={'table table-striped table-bordered'}>
@@ -76,10 +76,10 @@ const Order = () => {
   <tbody>
   {item?.orderLines.map(item => (
   <tr>
-    <td>{item?.productId}</td>
-    <td>{item?.quantity}</td>
-    <td>{item?.price}</td>
-    <td>{item?.discount}</td>
+    <td>{''+item?.productId}</td>
+    <td>{''+item?.quantity}</td>
+    <td>{''+item?.price}</td>
+    <td>{''+item?.discount}</td>
   </tr>
   ))}
   </tbody>

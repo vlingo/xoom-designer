@@ -42,7 +42,7 @@ import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.fact
             year: 'numeric',
             }).format(new Date(item?.${name}))}</td>
       <#else>
-          <td>{item?.${name}}</td>
+          <td>{''+item?.${name}}</td>
       </#if>
     </#if>
 </#macro>

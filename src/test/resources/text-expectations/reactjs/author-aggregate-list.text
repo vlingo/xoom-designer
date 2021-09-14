@@ -70,10 +70,10 @@ const Authors = () => {
         {items.map(item => (
         <tr key={item.id}>
           <td> <Link to={"/app/authors/"+item.id}>{item.id} </Link> </td>
-          <td>{item?.name?.firstName}</td>
-          <td>{item?.name?.lastName}</td>
-          <td>{item?.rank?.points}</td>
-          <td>{item?.rank?.classification?.label}</td>
+          <td>{''+item?.name?.firstName}</td>
+          <td>{''+item?.name?.lastName}</td>
+          <td>{''+item?.rank?.points}</td>
+          <td>{''+item?.rank?.classification?.label}</td>
           <td><Link to={"/app/authors/"+item.id}>View</Link></td>
         </tr>
         ))}

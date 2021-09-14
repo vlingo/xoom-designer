@@ -83,12 +83,12 @@ const Catalog = () => {
       <div>
         <table className={'table'}>
           <tbody>
-      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
-      {!Array.isArray(item?.name) && <tr><td>Name</td><td>{item?.name}</td></tr>}
-      {!Array.isArray(item?.category) && <tr><td>Category</td><td>{item?.category}</td></tr>}
-      {!Array.isArray(item?.items) && <tr><td>Items Name</td><td>{item?.items?.name}</td></tr>}
-      {!Array.isArray(item?.items) && <tr><td>Items Price</td><td>{item?.items?.price}</td></tr>}
-      {!Array.isArray(item?.items) && <tr><td>Items Discount</td><td>{item?.items?.discount}</td></tr>}
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{''+item?.id}</td></tr>}
+      {!Array.isArray(item?.name) && <tr><td>Name</td><td>{''+item?.name}</td></tr>}
+      {!Array.isArray(item?.category) && <tr><td>Category</td><td>{''+item?.category}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Name</td><td>{''+item?.items?.name}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Price</td><td>{''+item?.items?.price}</td></tr>}
+      {!Array.isArray(item?.items) && <tr><td>Items Discount</td><td>{''+item?.items?.discount}</td></tr>}
           </tbody>
         </table>
   <table className={'table table-striped table-bordered'}>
@@ -102,9 +102,9 @@ const Catalog = () => {
   <tbody>
   {item?.items.map(item => (
   <tr>
-    <td>{item?.name}</td>
-    <td>{item?.price}</td>
-    <td>{item?.discount}</td>
+    <td>{''+item?.name}</td>
+    <td>{''+item?.price}</td>
+    <td>{''+item?.discount}</td>
   </tr>
   ))}
   </tbody>

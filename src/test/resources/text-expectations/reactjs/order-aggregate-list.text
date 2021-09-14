@@ -68,8 +68,8 @@ const Orders = () => {
         {items.map(item => (
         <tr key={item.id}>
           <td> <Link to={"/app/orders/"+item.id}>{item.id} </Link> </td>
-          <td>{item?.clientName}</td>
-          <td>{item?.clientAddress}</td>
+          <td>{''+item?.clientName}</td>
+          <td>{''+item?.clientAddress}</td>
           <td><Link to={"/app/orders/"+item.id}>View</Link></td>
         </tr>
         ))}

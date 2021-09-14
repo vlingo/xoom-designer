@@ -67,8 +67,8 @@ const Users = () => {
         {items.map(item => (
         <tr key={item.id}>
           <td> <Link to={"/app/users/"+item.id}>{item.id} </Link> </td>
-          <td>{item?.name}</td>
-          <td>{item?.address}</td>
+          <td>{''+item?.name}</td>
+          <td>{''+item?.address}</td>
         </tr>
         ))}
         </tbody>

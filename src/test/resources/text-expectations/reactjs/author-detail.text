@@ -83,12 +83,12 @@ const Author = () => {
       <div>
         <table className={'table'}>
           <tbody>
-      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{item?.id}</td></tr>}
-      {!Array.isArray(item?.name) && <tr><td>Name FirstName</td><td>{item?.name?.firstName}</td></tr>}
-      {!Array.isArray(item?.name) && <tr><td>Name LastName</td><td>{item?.name?.lastName}</td></tr>}
-      {!Array.isArray(item?.rank) && <tr><td>Rank Points</td><td>{item?.rank?.points}</td></tr>}
-      {!Array.isArray(item?.rank) && <tr><td>Rank?.classification Label</td><td>{item?.rank?.classification?.label}</td></tr>}
-      {!Array.isArray(item?.rank) && <tr><td>Rank?.classification?.classifiers Name</td><td>{item?.rank?.classification?.classifiers?.name}</td></tr>}
+      {!Array.isArray(item?.id) && <tr><td>Id</td><td>{''+item?.id}</td></tr>}
+      {!Array.isArray(item?.name) && <tr><td>Name FirstName</td><td>{''+item?.name?.firstName}</td></tr>}
+      {!Array.isArray(item?.name) && <tr><td>Name LastName</td><td>{''+item?.name?.lastName}</td></tr>}
+      {!Array.isArray(item?.rank) && <tr><td>Rank Points</td><td>{''+item?.rank?.points}</td></tr>}
+      {!Array.isArray(item?.rank) && <tr><td>Rank?.classification Label</td><td>{''+item?.rank?.classification?.label}</td></tr>}
+      {!Array.isArray(item?.rank) && <tr><td>Rank?.classification?.classifiers Name</td><td>{''+item?.rank?.classification?.classifiers?.name}</td></tr>}
           </tbody>
         </table>
 
