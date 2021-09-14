@@ -4,13 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
+package io.vlingo.xoom.designer.task.projectgeneration.e2e;
 
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
@@ -36,13 +34,13 @@ public abstract class ProjectGenerationTest {
   private static final Logger logger = Logger.basicLogger();
   private static final PortDriver portDriver = PortDriver.init();
 
-  public static void init() {
+  public static void init(final CodeElementFormatter codeElementFormatter) {
     Infrastructure.clear();
     ComponentRegistry.clear();
     Profile.enableTestProfile();
     ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
     ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), portDriver.findAvailable());
-    ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
+    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
     releasePortsOnShutdown();
@@ -74,17 +72,15 @@ public abstract class ProjectGenerationTest {
     Assertions.assertEquals(Ok.code, generationStatusCode, "Error generating " + project);
   }
 
-  private void compile(final Project project) {
-    final JavaCompilationCommand compilationCommand =
-            JavaCompilationCommand.at(project.generationPath.path);
+  protected abstract void compile(final Project project);
 
-    compilationCommand.process();
+  protected abstract void run(final Project project);
 
-    Assertions.assertEquals(CommandStatus.SUCCEEDED, compilationCommand.status(), "Error compiling " + project);
+  protected void assertCompilation(final CommandStatus status, final Project project) {
+    Assertions.assertEquals(CommandStatus.SUCCEEDED, status, "Error compiling " + project);
   }
 
-  private void run(final Project project) {
-    JavaAppInitializationCommand.from(project.generationSettings, project.appPort).process();
+  protected void assertInitialization(final Project project) {
     Assertions.assertEquals(false, portDriver.isPortAvailable(project.appPort, 300, 30, false), "Error initializing app " + project);
   }
 

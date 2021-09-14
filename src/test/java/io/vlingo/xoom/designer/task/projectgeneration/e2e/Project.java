@@ -4,12 +4,13 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
+package io.vlingo.xoom.designer.task.projectgeneration.e2e;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.task.projectgeneration.e2e.java.JavaProjectGenerationTest;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -51,7 +52,7 @@ public class Project {
 
     try {
       final String generationPath = resolveGenerationPath(modelFilename);
-      final InputStream modelStream = ProjectGenerationTest.class.getResourceAsStream(modelPath);
+      final InputStream modelStream = JavaProjectGenerationTest.class.getResourceAsStream(modelPath);
       final String modelJson = IOUtils.toString(modelStream, StandardCharsets.UTF_8.name());
       return JsonSerialization.deserialized(String.format(modelJson, generationPath), GenerationSettingsData.class);
     } catch (final IOException exception) {
@@ -68,14 +69,6 @@ public class Project {
             .toString().replace("\\", "\\\\");
   }
 
-  public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
-            .append("directory", directory)
-            .append("modelFileName", modelFilename)
-            .append("appPort", appPort)
-            .toString();
-  }
-
   public static void stopAll(final Logger logger, final PortDriver portDriver) {
     all.forEach(project -> {
       if(!portDriver.release(project.appPort)) {
@@ -85,6 +78,14 @@ public class Project {
       }
     });
     all.clear();
+  }
+
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+            .append("directory", directory)
+            .append("modelFileName", modelFilename)
+            .append("appPort", appPort)
+            .toString();
   }
 
 }

@@ -4,32 +4,38 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
+package io.vlingo.xoom.designer.task.projectgeneration.e2e.java;
 
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.e2e.CommandStatus;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 
-public class JavaAppInitializationCommand extends CommandExecutionStep {
+public class JavaAppInitialization extends CommandExecutionStep {
 
   private final int availablePort;
   private final GenerationSettingsData generationSettings;
-  private final JavaCompilationCommand.CompilationObserver compilationObserver;
+  private final JavaCompilation.CompilationObserver compilationObserver;
 
-  public static JavaAppInitializationCommand from(final GenerationSettingsData generationSettings,
-                                                  final int availablePort) {
-    return new JavaAppInitializationCommand(generationSettings, new JavaCompilationCommand.CompilationObserver(), availablePort);
+  public static JavaAppInitialization run(final GenerationSettingsData generationSettings,
+                                          final int availablePort) {
+    final JavaAppInitialization appInitialization =
+            new JavaAppInitialization(generationSettings, new JavaCompilation.CompilationObserver(), availablePort);
+
+    appInitialization.process();
+
+    return appInitialization;
   }
 
-  private JavaAppInitializationCommand(final GenerationSettingsData generationSettings,
-                                       final JavaCompilationCommand.CompilationObserver compilationObserver,
-                                       final int availablePort) {
+  private JavaAppInitialization(final GenerationSettingsData generationSettings,
+                                final JavaCompilation.CompilationObserver compilationObserver,
+                                final int availablePort) {
     super(new ObservableCommandExecutionProcess(compilationObserver));
     this.generationSettings = generationSettings;
     this.compilationObserver = compilationObserver;

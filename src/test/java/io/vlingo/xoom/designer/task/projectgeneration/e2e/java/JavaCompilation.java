@@ -4,7 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
+package io.vlingo.xoom.designer.task.projectgeneration.e2e.java;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
@@ -13,23 +13,25 @@ import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.task.projectgeneration.code.EndToEndTest;
+import io.vlingo.xoom.designer.task.projectgeneration.e2e.CommandStatus;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.IntStream;
 
-public class JavaCompilationCommand extends CommandExecutionStep {
+public class JavaCompilation extends CommandExecutionStep {
 
   private final String applicationPath;
   private final CompilationObserver compilationObserver;
 
-  public static JavaCompilationCommand at(final String applicationPath) {
-    return new JavaCompilationCommand(applicationPath, new CompilationObserver());
+  public static JavaCompilation run(final String applicationPath) {
+    final JavaCompilation compilation = new JavaCompilation(applicationPath, new CompilationObserver());
+    compilation.process();
+    return compilation;
   }
 
-  private JavaCompilationCommand(final String applicationPath, final CompilationObserver compilationObserver) {
+  private JavaCompilation(final String applicationPath, final CompilationObserver compilationObserver) {
     super(new ObservableCommandExecutionProcess(compilationObserver));
     this.applicationPath = applicationPath;
     this.compilationObserver = compilationObserver;

@@ -4,10 +4,10 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.task.projectgeneration.code.java;
+package io.vlingo.xoom.designer.task.projectgeneration.e2e.java;
 
 import io.restassured.response.Response;
-import io.vlingo.xoom.designer.task.projectgeneration.code.EndToEndTest;
+import io.vlingo.xoom.designer.task.projectgeneration.e2e.Project;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.http.Response.Status;
 
-@EndToEndTest
-public class BasicProjectGenerationTest extends ProjectGenerationTest {
+public class BasicProjectGenerationTest extends JavaProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {

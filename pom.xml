@@ -76,22 +76,22 @@
   </dependencies>
 
   <profiles>
-    <profile>
-      <id>jdk11</id>
-      <activation>
-        <jdk>11</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <release>${maven.compiler.target}</release>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
+      <profile>
+        <id>jdk11</id>
+        <activation>
+          <jdk>11</jdk>
+        </activation>
+        <build>
+          <plugins>
+            <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                <release>${maven.compiler.target}</release>
+              </configuration>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
     <profile>
       <id>deployment</id>
       <build>
@@ -258,7 +258,6 @@
       </build>
     </profile>
     <profile>
-      <!-- We only need GitHub packages during releases as syncing to central is too slow. -->
       <id>e2e-tests</id>
       <build>
         <plugins>
@@ -267,10 +266,23 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>${maven-surefire-plugin.version}</version>
             <configuration>
-              <systemPropertyVariables>
-                <e2e-tests>true</e2e-tests>
-              </systemPropertyVariables>
+              <skipTests>true</skipTests>
             </configuration>
+            <executions>
+              <execution>
+                <id>e2e-tests</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+                <configuration>
+                  <skipTests>false</skipTests>
+                  <includes>
+                    <include>io.vlingo.xoom.designer.task.projectgeneration.e2e.**</include>
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
@@ -393,22 +405,21 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
           <configuration>
-            <detail>true</detail>
-            <includes>
-              <include>%regex[.*]</include>
-            </includes>
+            <skipTests>true</skipTests>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>${maven-failsafe-plugin.version}</version>
           <executions>
             <execution>
+              <id>unit-tests</id>
+              <phase>test</phase>
               <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
+                <goal>test</goal>
               </goals>
+              <configuration>
+                <skipTests>false</skipTests>
+                <excludes>
+                  <exclude>io.vlingo.xoom.designer.task.projectgeneration.e2e.**</exclude>
+                </excludes>
+              </configuration>
             </execution>
           </executions>
         </plugin>
