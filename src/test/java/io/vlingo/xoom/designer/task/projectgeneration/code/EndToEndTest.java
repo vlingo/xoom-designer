@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 @EnabledIfSystemProperty(named="e2e-tests", matches="true")
 public @interface EndToEndTest {
 
-
+  String mavenProfile = "e2e-tests-maven-profile";
 }

@@ -246,5 +246,15 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>github-releases</id>
+      <repositories>
+        <repository>
+          <id>github</id>
+          <name>GitHub Packages</name>
+          <url>https://maven.pkg.github.com/vlingo/xoom-platform</url>
+        </repository>
+      </repositories>
+    </profile>
   </profiles>
 </project>

@@ -259,7 +259,39 @@
     </profile>
     <profile>
       <!-- We only need GitHub packages during releases as syncing to central is too slow. -->
+      <id>e2e-tests</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <systemPropertyVariables>
+                <e2e-tests>true</e2e-tests>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- We only need GitHub packages during releases as syncing to central is too slow. -->
       <id>github-releases</id>
+      <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <systemPropertyVariables>
+                <e2e-tests-maven-profile>github-releases</e2e-tests-maven-profile>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
       <repositories>
         <repository>
           <id>github</id>

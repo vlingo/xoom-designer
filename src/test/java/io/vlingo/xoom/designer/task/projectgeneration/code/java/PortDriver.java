@@ -87,7 +87,7 @@ public abstract class PortDriver {
       } catch (final IOException | InterruptedException exception) {
         exception.printStackTrace();
       } finally {
-        return isPortAvailable(port);
+        return isPortAvailable(port, 5, 300, true);
       }
     }
   }
@@ -104,7 +104,7 @@ public abstract class PortDriver {
       } catch (final IOException | InterruptedException exception) {
         exception.printStackTrace();
       } finally {
-        if(isPortAvailable(port)) {
+        if(isPortAvailable(port, 5, 300, true)) {
           processIds.remove(port);
           return true;
         }

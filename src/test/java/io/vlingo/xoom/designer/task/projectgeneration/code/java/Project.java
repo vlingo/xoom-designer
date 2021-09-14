@@ -79,7 +79,7 @@ public class Project {
   public static void stopAll(final Logger logger, final PortDriver portDriver) {
     all.forEach(project -> {
       if(!portDriver.release(project.appPort)) {
-        logger.error("Unable to release port " + project.appPort);
+        logger.warn("Unable to release port " + project.appPort);
       } else {
         logger.info("Port " + project.appPort + " released");
       }

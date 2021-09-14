@@ -6,16 +6,19 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.task.projectgeneration.code.java;
 
+import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.CommandExecutionStep;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
+import io.vlingo.xoom.designer.task.projectgeneration.code.EndToEndTest;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class JavaCompilationCommand extends CommandExecutionStep {
 
@@ -35,19 +38,29 @@ public class JavaCompilationCommand extends CommandExecutionStep {
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
     final Terminal terminal = Terminal.supported();
+    final String profileName = resolveMavenProfile();
     final Path pomPath = Paths.get(applicationPath, "pom.xml");
     final Path stagingFolderPath = Infrastructure.StagingFolder.path();
     final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(stagingFolderPath);
-    return String.format("%s && %s -f %s package", directoryChangeCommand, terminal.mavenCommand(), pomPath);
+    return String.format("%s && %s -f %s package %s", directoryChangeCommand, terminal.mavenCommand(), pomPath, profileName);
   }
 
-  public CommandStatus status() {
-    return compilationObserver.status;
+  private String resolveMavenProfile() {
+    final String profileName = System.getProperty(EndToEndTest.mavenProfile);
+    if(profileName == null) {
+      return "";
+    }
+    Logger.basicLogger().info(String.format("Enabling profile %s for compilation", profileName));
+    return "-P " + profileName;
   }
 
   @Override
   protected List<File> executableFiles() {
     return Terminal.supported().executableMavenFilesLocations();
+  }
+
+  public CommandStatus status() {
+    return compilationObserver.status;
   }
 
   public static class CompilationObserver implements ObservableCommandExecutionProcess.CommandExecutionObserver {
