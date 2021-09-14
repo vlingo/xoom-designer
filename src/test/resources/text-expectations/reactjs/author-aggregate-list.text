@@ -63,7 +63,7 @@ const Authors = () => {
             <th>Name LastName</th>
             <th>Rank Points</th>
             <th>Rank Classification Label</th>
-            <th>Rank Classification Classifiers Name</th>
+            <th>Rank Classification</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +74,7 @@ const Authors = () => {
           <td>{item?.name?.lastName}</td>
           <td>{item?.rank?.points}</td>
           <td>{item?.rank?.classification?.label}</td>
-          <td>{item?.rank?.classification?.classifiers?.name}</td>
+          <td><Link to={"/app/authors/"+item.id}>View</Link></td>
         </tr>
         ))}
         </tbody>

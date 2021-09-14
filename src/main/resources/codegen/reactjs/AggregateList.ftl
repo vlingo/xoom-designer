@@ -6,18 +6,34 @@ import LoadingOrFailed from "../LoadingOrFailed";
 import ${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.factoryMethod.name)} from "./${fns.capitalize(aggregate.aggregateName)}${fns.capitalize(aggregate.factoryMethod.name)}";
 <#macro printTableHeaderCell name type>
     <#if valueTypes[type]??>
+      <#if aggregate.stateFields?filter(field -> field.name == name && field.isCollection)?has_content>
+            <th>${fns.capitalizeMultiWord(name)}</th>
+        <#else>
         <#list valueTypes[type] as subType>
-            <@printTableHeaderCell "${name} ${subType.name}" subType.type/>
+            <#if subType.isCollection>
+            <th>${fns.capitalizeMultiWord(name)}</th>
+              <#else>
+              <@printTableHeaderCell "${name} ${subType.name}" subType.type/>
+            </#if>
         </#list>
+      </#if>
     <#else>
             <th>${fns.capitalizeMultiWord(name)}</th>
     </#if>
 </#macro>
 <#macro printTableCell name type>
     <#if valueTypes[type]??>
+      <#if aggregate.stateFields?filter(field -> field.name == name && field.isCollection)?has_content>
+          <td><Link to={"/app${aggregate.apiRootPath}/"+item.id}>View</Link></td>
+        <#else>
         <#list valueTypes[type] as subType>
+          <#if subType.isCollection>
+          <td><Link to={"/app${aggregate.apiRootPath}/"+item.id}>View</Link></td>
+              <#else>
             <@printTableCell "${name}?.${subType.name}" subType.type/>
+            </#if>
         </#list>
+      </#if>
     <#else>
       <#if type=="LocalDate">
           <td>{new Intl.DateTimeFormat('en-GB', {
