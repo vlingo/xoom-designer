@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
+import io.vlingo.xoom.actors.Logger;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,7 @@ public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
   private Process process;
   private final List<CommandExecutionObserver> observers = new ArrayList<>();
 
-  public ObservableCommandExecutionProcess(final CommandExecutionObserver...observers) {
+  public ObservableCommandExecutionProcess(final CommandExecutionObserver ...observers) {
     this.observers.addAll(Arrays.asList(observers));
   }
 
@@ -32,7 +34,9 @@ public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
   }
 
   @Override
-  protected void log() {}
+  protected void log() {
+    CommandOutputConsumer.of(Logger.basicLogger(), process).tail();
+  }
 
   @Override
   protected void handleCommandExecutionStatus() {

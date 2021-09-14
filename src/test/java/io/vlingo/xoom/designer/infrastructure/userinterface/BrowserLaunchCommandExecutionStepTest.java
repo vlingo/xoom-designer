@@ -20,7 +20,7 @@ public class BrowserLaunchCommandExecutionStepTest {
     @Test
     public void testBrowserLaunchCommandResolution() {
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 

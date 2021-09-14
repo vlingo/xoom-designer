@@ -9,10 +9,14 @@ package io.vlingo.xoom.designer.task;
 
 public interface TaskExecutionStep {
 
-    void process(final TaskExecutionContext context);
+  default void process() {
+    process(TaskExecutionContext.bare());
+  }
 
-    default boolean shouldProcess(final TaskExecutionContext context) {
-        return true;
-    }
+  void process(final TaskExecutionContext context);
+
+  default boolean shouldProcess(final TaskExecutionContext context) {
+    return true;
+  }
 
 }

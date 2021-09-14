@@ -10,7 +10,6 @@ import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import io.vlingo.xoom.designer.task.Property;
 import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.gloo.GlooRouteCommandExecutionStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +25,7 @@ public class GlooRouteCommandExecutionStepTest {
     @Test
     public void testGlooRouteCommandResolution() {
         final TaskExecutionContext context =
-                TaskExecutionContext.withoutOptions();
+                TaskExecutionContext.bare();
 
         final Properties properties = new Properties();
         properties.put(Property.GLOO_UPSTREAM.literal(), "default-banking-8080");

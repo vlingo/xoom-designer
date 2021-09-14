@@ -7,18 +7,18 @@
 
 package io.vlingo.xoom.designer.task;
 
-import static io.vlingo.xoom.designer.task.OptionName.TARGET;
+import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
+import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
+import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
+import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
+import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
-import io.vlingo.xoom.designer.task.docker.DockerCommandManager;
-import io.vlingo.xoom.designer.task.gloo.GlooCommandManager;
-import io.vlingo.xoom.designer.task.k8s.KubernetesCommandManager;
-import io.vlingo.xoom.designer.task.version.VersionDisplayManager;
+import static io.vlingo.xoom.designer.task.OptionName.TARGET;
 
 @SuppressWarnings("rawtypes")
 public enum Task {
@@ -62,6 +62,10 @@ public enum Task {
   private static <T> TaskManager<T> findManager(final List<Task> tasks, final T args) {
     return tasks.stream().map(task -> task.manager).filter(manager -> manager.support(args))
             .findFirst().orElseThrow(() -> new UnknownCommandException(args));
+  }
+
+  public static String resolveDefaultCommand() {
+    return Task.GRAPHICAL_USER_INTERFACE.command;
   }
 
   public List<OptionValue> findOptionValues(final List<String> args) {

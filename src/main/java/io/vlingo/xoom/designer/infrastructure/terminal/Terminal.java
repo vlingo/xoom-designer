@@ -12,6 +12,7 @@ import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -93,9 +94,13 @@ public enum Terminal {
     return browserLaunchCommand;
   }
 
-  public File executableMavenFileLocation() {
+  public String[] prepareCommand(final String command) {
+    return new String[]{initializationCommand(), parameter(), command};
+  }
+
+  public List<File> executableMavenFilesLocations() {
     final String executableFile = mavenCommand.replaceAll("./", "");
-    return StagingFolder.path().resolve(executableFile).toFile();
+    return Arrays.asList(StagingFolder.path().resolve(executableFile).toFile());
   }
 
   public String resolveDirectoryChangeCommand(final Path path) {

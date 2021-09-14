@@ -1,9 +1,9 @@
 {
   "context": {
-    "groupId": "com.mycompany",
-    "artifactId": "account",
+    "groupId": "io.vlingo.cargoshipping",
+    "artifactId": "freighter-maintenance",
     "artifactVersion": "1.0.0",
-    "packageName": "com.mycompany.map.account"
+    "packageName": "io.vlingo.cargoshipping.freightermaintenance"
   },
   "model": {
     "persistenceSettings": {
@@ -17,66 +17,71 @@
     "aggregateSettings": [
       {
         "api": {
-          "rootPath": "/accounts",
+          "rootPath": "/maintenanceOrder",
           "routes": [
             {
               "path": "*",
               "httpMethod": "POST",
-              "aggregateMethod": "CreateAccount",
+              "aggregateMethod": "schedule",
               "requireEntityLoad": false
             }
           ]
         },
-        "aggregateName": "Account",
+        "aggregateName": "MaintenanceOrder",
         "stateFields": [
           {
             "name": "id",
             "type": "String"
           },
           {
-            "name": "userId",
+            "name": "freighterId",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "freighterPartNumber",
             "type": "String",
             "collectionType": ""
           }
         ],
         "methods": [
           {
-            "name": "CreateAccount",
+            "name": "schedule",
             "parameters": [
               {
-                "stateField": "userId",
-                "parameterName": "userId",
+                "stateField": "freighterId",
+                "parameterName": "freighterId",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "freighterPartNumber",
+                "parameterName": "freighterPartNumber",
                 "multiplicity": ""
               }
             ],
             "useFactory": true,
-            "event": "AccountCreated"
+            "event": "MaintenanceOrderScheduled"
           }
         ],
         "events": [
           {
-            "name": "AccountCreated",
+            "name": "MaintenanceOrderScheduled",
             "fields": [
               "id",
-              "userId"
+              "freighterId",
+              "freighterPartNumber"
             ]
           }
         ],
         "consumerExchange": {
-          "exchangeName": "user-topic",
+          "exchangeName": "",
           "receivers": [
-            {
-              "schema": "myorganisation:mycompany:mycontext.user:UserRegistered:1.0.0",
-              "aggregateMethod": "CreateAccount"
-            }
           ]
         },
         "producerExchange": {
-          "exchangeName": "account-topic",
-          "schemaGroup": "myorganisation:mycompany:mycontext.account",
-          "outgoingEvents": [
-            "AccountCreated"
-          ]
+          "exchangeName": "",
+          "schemaGroup": "",
+          "outgoingEvents": []
         }
       }
     ],
@@ -88,9 +93,9 @@
     "kubernetesImage": "",
     "kubernetesPod": "",
     "clusterTotalNodes": 3,
-    "clusterPort": 37373,
-    "producerExchangePort": 8081,
-    "httpServerPort": 18081,
+    "clusterPort": 50011,
+    "producerExchangePort": 19762,
+    "httpServerPort": 8081,
     "pullSchemas": false
   },
   "schemata": {
@@ -100,5 +105,6 @@
   "projectDirectory": "%s",
   "useAnnotations": true,
   "useAutoDispatch": true,
-  "generateUIWith": "ReactJS"
+  "generateUIWith": "ReactJS",
+  "generateUI": false
 }
