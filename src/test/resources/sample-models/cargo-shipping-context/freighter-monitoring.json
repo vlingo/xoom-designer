@@ -1,0 +1,183 @@
+{
+  "context": {
+    "groupId": "io.vlingo.shiping",
+    "artifactId": "freighter-monitoring",
+    "artifactVersion": "1.0.0",
+    "packageName": "io.vlingo.shipping.freightermonitoring"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "JOURNAL",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/incidents",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "register",
+              "requireEntityLoad": false
+            },
+            {
+              "path": "/{id}/part",
+              "httpMethod": "PATCH",
+              "aggregateMethod": "relatePart",
+              "requireEntityLoad": true
+            }
+          ]
+        },
+        "aggregateName": "MechanicalIncident",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "freighterId",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "freighterPartNumber",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "occurredOn",
+            "type": "DateTime",
+            "collectionType": ""
+          },
+          {
+            "name": "relatedParts",
+            "type": "FreighterPart",
+            "collectionType": "Set"
+          }
+        ],
+        "methods": [
+          {
+            "name": "register",
+            "parameters": [
+              {
+                "stateField": "freighterId",
+                "parameterName": "freighterId",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "freighterPartNumber",
+                "parameterName": "freighterPartNumber",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "occurredOn",
+                "parameterName": "occurredOn",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "MechanicalIncidentRegistered"
+          },
+          {
+            "name": "relatePart",
+            "parameters": [
+              {
+                "stateField": "relatedParts",
+                "parameterName": "relatedPart",
+                "multiplicity": "+"
+              }
+            ],
+            "useFactory": false,
+            "event": "MechanicalIncidentPartsRelated"
+          }
+        ],
+        "events": [
+          {
+            "name": "MechanicalIncidentRegistered",
+            "fields": [
+              "id",
+              "freighterId",
+              "freighterPartNumber",
+              "occurredOn"
+            ]
+          },
+          {
+            "name": "MechanicalIncidentPartsRelated",
+            "fields": [
+              "id",
+              "relatedParts"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "exchangeName": "",
+          "receivers": []
+        },
+        "producerExchange": {
+          "exchangeName": "incidents",
+          "schemaGroup": "vlingo:containershipping:io.vlingo.containershipping",
+          "outgoingEvents": [
+            "MechanicalIncidentRegistered"
+          ]
+        }
+      }
+    ],
+    "valueObjectSettings": [
+      {
+        "name": "Component",
+        "fields": [
+          {
+            "name": "name",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "cricalityLevel",
+            "type": "String",
+            "collectionType": ""
+          }
+        ]
+      },
+      {
+        "name": "FreighterPart",
+        "fields": [
+          {
+            "name": "partNumber",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "dependentComponents",
+            "type": "Component",
+            "collectionType": "Set"
+          }
+        ]
+      }
+    ]
+  },
+  "deployment": {
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 3,
+    "clusterPort": 54011,
+    "producerExchangePort": 19762,
+    "httpServerPort": %s,
+    "pullSchemas": false
+  },
+  "schemata": {
+    "host": "localhost",
+    "port": 9019
+  },
+  "projectDirectory": "%s",
+  "useAnnotations": true,
+  "useAutoDispatch": true,
+  "generateUIWith": "ReactJS",
+  "generateUI": false
+}

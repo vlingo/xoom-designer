@@ -74,8 +74,12 @@
           }
         ],
         "consumerExchange": {
-          "exchangeName": "",
+          "exchangeName": "maintenance",
           "receivers": [
+            {
+              "schema": "vlingo:containershipping:io.vlingo.containershipping:MechanicalIncidentRegistered:1.0.0",
+              "aggregateMethod": "schedule"
+            }
           ]
         },
         "producerExchange": {
@@ -93,9 +97,9 @@
     "kubernetesImage": "",
     "kubernetesPod": "",
     "clusterTotalNodes": 3,
-    "clusterPort": 50011,
+    "clusterPort": 53011,
     "producerExchangePort": 19762,
-    "httpServerPort": 8081,
+    "httpServerPort": %s,
     "pullSchemas": false
   },
   "schemata": {
@@ -103,8 +107,8 @@
     "port": 9019
   },
   "projectDirectory": "%s",
-  "useAnnotations": true,
-  "useAutoDispatch": true,
+  "useAnnotations": false,
+  "useAutoDispatch": false,
   "generateUIWith": "ReactJS",
   "generateUI": false
 }

@@ -8,7 +8,8 @@ package io.vlingo.xoom.designer.codegen.e2e.java;
 
 import io.vlingo.xoom.designer.cli.CommandExecutionStep;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.codegen.e2e.CommandStatus;
+import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
+import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
@@ -21,12 +22,12 @@ public class JavaAppInitialization extends CommandExecutionStep {
 
   private final int availablePort;
   private final GenerationSettingsData generationSettings;
-  private final JavaCompilation.CompilationObserver compilationObserver;
+  private final CommandObserver observer;
 
   public static JavaAppInitialization run(final GenerationSettingsData generationSettings,
                                           final int availablePort) {
     final JavaAppInitialization appInitialization =
-            new JavaAppInitialization(generationSettings, new JavaCompilation.CompilationObserver(), availablePort);
+            new JavaAppInitialization(generationSettings, new CommandObserver(), availablePort);
 
     appInitialization.process();
 
@@ -34,11 +35,11 @@ public class JavaAppInitialization extends CommandExecutionStep {
   }
 
   private JavaAppInitialization(final GenerationSettingsData generationSettings,
-                                final JavaCompilation.CompilationObserver compilationObserver,
+                                final CommandObserver observer,
                                 final int availablePort) {
-    super(new ObservableCommandExecutionProcess(compilationObserver));
+    super(new ObservableCommandExecutionProcess(observer));
     this.generationSettings = generationSettings;
-    this.compilationObserver = compilationObserver;
+    this.observer = observer;
     this.availablePort = availablePort;
   }
 
@@ -51,31 +52,11 @@ public class JavaAppInitialization extends CommandExecutionStep {
   protected String formatCommands(final TaskExecutionContext context) {
     final Path projectBinariesFolder = Paths.get(generationSettings.projectDirectory, "target");
     final String directoryChangeCommand = Terminal.supported().resolveDirectoryChangeCommand(projectBinariesFolder);
-    return String.format("%s && java -jar %s-%s.jar -Dport=%s", directoryChangeCommand, generationSettings.context.artifactId, generationSettings.context.artifactVersion, availablePort);
+    return String.format("%s && java -jar %s-%s.jar", directoryChangeCommand, generationSettings.context.artifactId, generationSettings.context.artifactVersion, availablePort);
   }
 
-  public CommandStatus status() {
-    return compilationObserver.status;
-  }
-
-  public static class InitializationObserver implements ObservableCommandExecutionProcess.CommandExecutionObserver {
-
-    public CommandStatus status;
-
-    public InitializationObserver() {
-      status = CommandStatus.IN_PROGRESS;
-    }
-
-    @Override
-    public void onSuccess() {
-      status = CommandStatus.SUCCEEDED;
-    }
-
-    @Override
-    public void onFailure() {
-      status = CommandStatus.FAILED;
-    }
-
+  public ExecutionStatus status() {
+    return observer.status;
   }
 
 }

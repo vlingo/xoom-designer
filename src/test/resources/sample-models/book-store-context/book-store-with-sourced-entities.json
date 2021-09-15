@@ -7,9 +7,9 @@
   },
   "model": {
     "persistenceSettings": {
-      "storageType": "STATE_STORE",
+      "storageType": "JOURNAL",
       "useCQRS": true,
-      "projections": "OPERATION_BASED",
+      "projections": "EVENT_BASED",
       "database": "IN_MEMORY",
       "commandModelDatabase": "IN_MEMORY",
       "queryModelDatabase": "IN_MEMORY"
@@ -183,7 +183,7 @@
     "kubernetesImage": "",
     "kubernetesPod": "",
     "clusterTotalNodes": 1,
-    "clusterPort": 52011,
+    "clusterPort": 51011,
     "producerExchangePort": 19762,
     "httpServerPort": %s,
     "pullSchemas": false
@@ -194,7 +194,7 @@
   },
   "projectDirectory": "%s",
   "useAnnotations": true,
-  "useAutoDispatch": true,
+  "useAutoDispatch": false,
   "generateUIWith": "ReactJS",
-  "generateUI": false
+  "generateUI": true
 }

@@ -258,35 +258,36 @@
       </build>
     </profile>
     <profile>
-      <id>e2e-tests</id>
+      <id>only-tests</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>${maven-surefire-plugin.version}</version>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
             <executions>
               <execution>
-                <id>e2e-tests</id>
-                <phase>test</phase>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <phase>none</phase>
                 <goals>
-                  <goal>test</goal>
+                  <goal>shade</goal>
                 </goals>
-                <configuration>
-                  <skipTests>false</skipTests>
-                  <includes>
-                    <include>io.vlingo.xoom.designer.codegen.e2e.**</include>
-                  </includes>
-                </configuration>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
     </profile>
+
     <profile>
       <!-- We only need GitHub packages during releases as syncing to central is too slow. -->
       <id>github-releases</id>
@@ -311,6 +312,23 @@
           <url>https://maven.pkg.github.com/vlingo/xoom-platform</url>
         </repository>
       </repositories>
+    </profile>
+    <profile>
+      <id>docker-services</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <systemPropertyVariables>
+                <e2e-docker-services>true</e2e-docker-services>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
@@ -382,47 +400,44 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
         <configuration>
-          <executable>java</executable>
-          <arguments>
-            <argument>-classpath</argument>
-            <classpath/>
-            <argument>-noverify</argument>
-            <argument>-XX:TieredStopAtLevel=1</argument>
-            <argument>-Dcom.sun.management.jmxremote</argument>
-            <argument>${exec.mainClass}</argument>
-          </arguments>
+          <skipTests>true</skipTests>
         </configuration>
+        <executions>
+          <execution>
+            <id>unit-tests</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skipTests>false</skipTests>
+              <excludes>
+                <exclude>io.vlingo.xoom.designer.codegen.e2e.**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skipTests>false</skipTests>
+              <includes>
+                <include>io.vlingo.xoom.designer.codegen.e2e.**</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
-          <configuration>
-            <skipTests>true</skipTests>
-          </configuration>
-          <executions>
-            <execution>
-              <id>unit-tests</id>
-              <phase>test</phase>
-              <goals>
-                <goal>test</goal>
-              </goals>
-              <configuration>
-                <skipTests>false</skipTests>
-                <excludes>
-                  <exclude>io.vlingo.xoom.designer.codegen.e2e.**</exclude>
-                </excludes>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>

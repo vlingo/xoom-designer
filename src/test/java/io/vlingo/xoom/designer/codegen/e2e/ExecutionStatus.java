@@ -6,8 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e;
 
-public enum CommandStatus {
-  IN_PROGRESS,
+public enum ExecutionStatus {
+  NEW,
   SUCCEEDED,
-  FAILED
+  FAILED,
+  STOPPED
 }

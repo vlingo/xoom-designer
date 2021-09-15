@@ -49,6 +49,7 @@ public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
       }
     } catch (final InterruptedException e) {
       e.printStackTrace();
+      process.destroyForcibly();
       throw new CommandExecutionException(e);
     }
   }

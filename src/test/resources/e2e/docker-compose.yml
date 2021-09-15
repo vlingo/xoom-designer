@@ -1,0 +1,15 @@
+version: '2'
+services:
+  schemata:
+    image: "vlingo/xoom-schemata:snapshot"
+    container_name: "xoom-schemata"
+    ports:
+      - "9019:9019"
+    environment:
+      XOOM_SCHEMATA_PORT: "9019"
+      XOOM_ENV: "dev"
+
+  rabbit:
+    image: "rabbitmq:3"
+    ports:
+      - "5672:5672"

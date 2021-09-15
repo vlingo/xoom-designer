@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -33,6 +35,7 @@ public abstract class ProjectGenerationTest {
 
   private static final Logger logger = Logger.basicLogger();
   private static final PortDriver portDriver = PortDriver.init();
+  public static final Path testResourcesPath = Paths.get(System.getProperty("user.dir"), "src", "test", "resources", "e2e");
 
   public static void init(final CodeElementFormatter codeElementFormatter) {
     Infrastructure.clear();
@@ -43,7 +46,8 @@ public abstract class ProjectGenerationTest {
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
-    releasePortsOnShutdown();
+    DockerServices.run();
+    onShutdown();
   }
 
   public void generateAndRun(final Project project) {
@@ -76,8 +80,8 @@ public abstract class ProjectGenerationTest {
 
   protected abstract void run(final Project project);
 
-  protected void assertCompilation(final CommandStatus status, final Project project) {
-    Assertions.assertEquals(CommandStatus.SUCCEEDED, status, "Error compiling " + project);
+  protected void assertCompilation(final ExecutionStatus status, final Project project) {
+    Assertions.assertEquals(ExecutionStatus.SUCCEEDED, status, "Error compiling " + project);
   }
 
   protected void assertInitialization(final Project project) {
@@ -100,9 +104,10 @@ public abstract class ProjectGenerationTest {
     XoomInitializer.instance().stopServer();
   }
 
-  public static void releasePortsOnShutdown() {
+  public static void onShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       Project.stopAll(logger, portDriver);
+      DockerServices.shutdown();
     }));
   }
 

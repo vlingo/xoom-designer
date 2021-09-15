@@ -14,6 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    services:
+      schemata:
+        image: vlingo/xoom-schemata:latest
+        ports:
+          - "9019:9019"
+        env:
+          XOOM_SCHEMATA_PORT: 9019
+          XOOM_ENV: dev
+
+      rabbit:
+        image: "rabbitmq:3"
+        ports:
+          - "5672:5672"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -30,7 +44,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2-
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -P e2e-tests,deployment,frontend,github-releases
+        run: mvn --batch-mode --update-snapshots install -P deployment,frontend,github-releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

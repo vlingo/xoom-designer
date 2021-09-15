@@ -47,14 +47,17 @@ public class Project {
   }
 
   private GenerationSettingsData buildGenerationSettings() {
-    final String modelPath =
-            String.format("/sample-models/%s/%s.json", directory, modelFilename);
+    final String completeModel = completeDynamicModelProperties();
+    return JsonSerialization.deserialized(completeModel, GenerationSettingsData.class);
+  }
 
+  private String completeDynamicModelProperties() {
+    final String modelPath = String.format("/sample-models/%s/%s.json", directory, modelFilename);
     try {
-      final String generationPath = resolveGenerationPath(modelFilename);
       final InputStream modelStream = JavaProjectGenerationTest.class.getResourceAsStream(modelPath);
       final String modelJson = IOUtils.toString(modelStream, StandardCharsets.UTF_8.name());
-      return JsonSerialization.deserialized(String.format(modelJson, generationPath), GenerationSettingsData.class);
+      final String generationPath = resolveGenerationPath(modelFilename);
+      return String.format(modelJson, appPort, generationPath);
     } catch (final IOException exception) {
       throw new RuntimeException(String.format("Failed to load Designer model from `%s`.", modelPath), exception);
     }
