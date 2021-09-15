@@ -1,4 +1,4 @@
-package io.vlingo.xoom.designer.codegen.e2e.java.integratedservices;
+package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 

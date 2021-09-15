@@ -101,7 +101,8 @@ public abstract class ProjectGenerationTest {
     Infrastructure.clear();
     ComponentRegistry.clear();
     Profile.disableTestProfile();
-    XoomInitializer.instance().stopServer();
+    XoomInitializer.instance().stopServer().await();
+    XoomInitializer.instance().terminateWorld();
   }
 
   public static void onShutdown() {

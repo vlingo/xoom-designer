@@ -30,6 +30,7 @@ public class Project {
   public final GenerationPath generationPath;
   public final GenerationSettingsData generationSettings;
   private static List<Project> all =  new ArrayList<>();
+  private boolean stopped;
 
   public static Project from(final String directory,
                              final String modelFilename) {
@@ -73,14 +74,18 @@ public class Project {
   }
 
   public static void stopAll(final Logger logger, final PortDriver portDriver) {
-    all.forEach(project -> {
-      if(!portDriver.release(project.appPort)) {
-        logger.warn("Unable to release port " + project.appPort);
+    all.forEach(project -> project.stop(logger, portDriver));
+  }
+
+  private void stop(final Logger logger, final PortDriver portDriver) {
+    if(!stopped) {
+      if (!portDriver.release(appPort)) {
+        logger.warn("Unable to release port " + appPort);
       } else {
-        logger.info("Port " + project.appPort + " released");
+        this.stopped = true;
+        logger.info("Port " + appPort + " released");
       }
-    });
-    all.clear();
+    }
   }
 
   public String toString() {
