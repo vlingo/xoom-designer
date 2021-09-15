@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.designer.task.projectgeneration.ByteArraySupplier;
+import io.vlingo.xoom.designer.codegen.ByteArraySupplier;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

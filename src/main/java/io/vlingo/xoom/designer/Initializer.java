@@ -8,8 +8,8 @@
 package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.designer.task.Task;
-import io.vlingo.xoom.designer.task.TaskExecutor;
+import io.vlingo.xoom.designer.cli.Task;
+import io.vlingo.xoom.designer.cli.TaskExecutor;
 
 import java.util.Arrays;
 import java.util.List;

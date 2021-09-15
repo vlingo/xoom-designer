@@ -8,7 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.task.projectgeneration.InvalidResourcesPathException;
+import io.vlingo.xoom.designer.codegen.InvalidResourcesPathException;
 import io.vlingo.xoom.turbo.ApplicationProperty;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import static io.vlingo.xoom.designer.task.Property.DESIGNER_SERVER_PORT;
+import static io.vlingo.xoom.designer.cli.Property.DESIGNER_SERVER_PORT;
 
 public class Infrastructure {
 

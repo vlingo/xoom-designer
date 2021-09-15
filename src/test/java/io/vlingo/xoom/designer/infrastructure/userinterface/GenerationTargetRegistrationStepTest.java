@@ -7,9 +7,9 @@
 
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
-import io.vlingo.xoom.designer.task.OptionValue;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
+import io.vlingo.xoom.designer.cli.OptionValue;
+import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static io.vlingo.xoom.designer.task.Agent.TERMINAL;
-import static io.vlingo.xoom.designer.task.OptionName.TARGET;
+import static io.vlingo.xoom.designer.cli.Agent.TERMINAL;
+import static io.vlingo.xoom.designer.cli.OptionName.TARGET;
 
 public class GenerationTargetRegistrationStepTest {
 

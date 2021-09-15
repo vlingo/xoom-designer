@@ -8,11 +8,11 @@
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.cli.CommandExecutionStep;
+import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
-import io.vlingo.xoom.designer.task.CommandExecutionStep;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
 
 public class BrowserLaunchCommandExecutionStep extends CommandExecutionStep {
 

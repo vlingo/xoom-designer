@@ -1,11 +1,11 @@
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Profile;
+import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

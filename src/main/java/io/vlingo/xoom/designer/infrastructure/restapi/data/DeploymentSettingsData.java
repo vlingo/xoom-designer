@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
-import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
+import io.vlingo.xoom.designer.codegen.DeploymentType;
 
 import java.util.List;
 

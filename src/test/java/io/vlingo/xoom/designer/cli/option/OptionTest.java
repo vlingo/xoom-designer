@@ -1,0 +1,46 @@
+package io.vlingo.xoom.designer.cli.option;
+
+
+import io.vlingo.xoom.designer.cli.Option;
+import io.vlingo.xoom.designer.cli.OptionName;
+import io.vlingo.xoom.designer.cli.RequiredOptionNotFoundException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class OptionTest {
+
+    @Test
+    public void testValueFoundConditionOnNonRequiredOption() {
+        final Option option = Option.of(OptionName.TAG, "latest");
+        final List<String> args = Arrays.asList("docker", "package", "--tag", "0.0.1", "--user", "danilo");
+        Assertions.assertEquals("0.0.1", option.findValue(args));
+    }
+
+    @Test
+    public void testValueNotFoundConditionOnNonRequiredOption() {
+        final Option option = Option.of(OptionName.TAG, "latest");
+        final List<String> args = Arrays.asList("docker", "package", "--currentDirectory", "/home/users/projects/designer", "--user", "danilo");
+        Assertions.assertEquals("latest", option.findValue(args));
+    }
+
+    @Test
+    public void testValueFoundConditionOnRequiredOption() {
+        final Option option = Option.required(OptionName.CURRENT_DIRECTORY);
+        final List<String> args = Arrays.asList("docker", "package", "--currentDirectory", "/home/users/projects/designer", "--user", "danilo");
+        Assertions.assertEquals("/home/users/projects/designer", option.findValue(args));
+    }
+
+    @Test
+    public void testValueNotFoundConditionOnRequiredOption() {
+        final Option option = Option.required(OptionName.CURRENT_DIRECTORY);
+        final List<String> args = Arrays.asList("docker", "package", "--tag", "1.0.1", "--user", "danilo");
+
+        Assertions.assertThrows(RequiredOptionNotFoundException.class, () -> {
+            option.findValue(args);
+        });
+    }
+
+}

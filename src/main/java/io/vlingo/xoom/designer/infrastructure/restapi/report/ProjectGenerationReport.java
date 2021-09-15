@@ -7,14 +7,14 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.designer.cli.TaskStatus;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
+import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.ProjectGenerationInformation;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.TaskStatus;
-import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.ProjectGenerationInformation;
 
-import static io.vlingo.xoom.designer.task.TaskOutput.COMPRESSED_PROJECT;
+import static io.vlingo.xoom.designer.cli.TaskOutput.COMPRESSED_PROJECT;
 
 public class ProjectGenerationReport {
 

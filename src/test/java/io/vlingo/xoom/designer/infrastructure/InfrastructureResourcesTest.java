@@ -1,11 +1,11 @@
 package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
+import io.vlingo.xoom.designer.codegen.InvalidResourcesPathException;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerServer;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure.UserInterface;
-import io.vlingo.xoom.designer.task.projectgeneration.InvalidResourcesPathException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

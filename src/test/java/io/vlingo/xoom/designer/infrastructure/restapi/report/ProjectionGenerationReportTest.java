@@ -7,8 +7,8 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
 import io.vlingo.xoom.codegen.CodeGenerationException;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
-import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

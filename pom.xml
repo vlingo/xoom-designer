@@ -278,7 +278,7 @@
                 <configuration>
                   <skipTests>false</skipTests>
                   <includes>
-                    <include>io.vlingo.xoom.designer.task.projectgeneration.e2e.**</include>
+                    <include>io.vlingo.xoom.designer.codegen.e2e.**</include>
                   </includes>
                 </configuration>
               </execution>
@@ -417,7 +417,7 @@
               <configuration>
                 <skipTests>false</skipTests>
                 <excludes>
-                  <exclude>io.vlingo.xoom.designer.task.projectgeneration.e2e.**</exclude>
+                  <exclude>io.vlingo.xoom.designer.codegen.e2e.**</exclude>
                 </excludes>
               </configuration>
             </execution>

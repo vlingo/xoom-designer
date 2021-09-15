@@ -13,8 +13,8 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
+import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
+import static io.vlingo.xoom.designer.codegen.Label.*;
 
 public class TaskExecutionContextMapperTest {
 

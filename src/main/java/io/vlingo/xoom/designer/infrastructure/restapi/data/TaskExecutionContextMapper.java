@@ -13,26 +13,26 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.task.projectgeneration.CollectionMutation;
-import io.vlingo.xoom.designer.task.projectgeneration.DeploymentType;
-import io.vlingo.xoom.designer.task.projectgeneration.GenerationTarget;
-import io.vlingo.xoom.designer.task.projectgeneration.Label;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.ClusterSettings;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.DeploymentSettings;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.SchemataSettings;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.TurboSettings;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.designermodel.DesignerModelFormatter;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.exchange.ExchangeRole;
-import io.vlingo.xoom.designer.task.projectgeneration.code.java.schemata.Schema;
+import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.designer.codegen.CollectionMutation;
+import io.vlingo.xoom.designer.codegen.DeploymentType;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
+import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.java.ClusterSettings;
+import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
+import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
+import io.vlingo.xoom.designer.codegen.java.TurboSettings;
+import io.vlingo.xoom.designer.codegen.java.designermodel.DesignerModelFormatter;
+import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.codegen.java.schemata.Schema;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static io.vlingo.xoom.designer.task.Agent.WEB;
-import static io.vlingo.xoom.designer.task.projectgeneration.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
-import static io.vlingo.xoom.designer.task.projectgeneration.Label.*;
+import static io.vlingo.xoom.designer.cli.Agent.WEB;
+import static io.vlingo.xoom.designer.codegen.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
+import static io.vlingo.xoom.designer.codegen.Label.*;
 
 public class TaskExecutionContextMapper {
 
