@@ -90,7 +90,7 @@
             "event": "PricingDenied"
           },
           {
-            "name": "recordCandiateDoers",
+            "name": "recordCandidateDoers",
             "parameters": [
               {
                 "stateField": "candidateDoers",
@@ -152,12 +152,7 @@
         ],
         "consumerExchange": {
           "exchangeName": "donebyme-topic",
-          "receivers": [
-            {
-              "schema": "DoneByMe:Pricing:co.donebyme.pricing:PricingVerified:0.0.1",
-              "aggregateMethod": "acceptPricing"
-            }
-          ]
+          "receivers": []
         },
         "producerExchange": {
           "exchangeName": "donebyme-topic",
@@ -253,7 +248,7 @@
     "clusterTotalNodes": 5,
     "clusterPort": 50011,
     "producerExchangePort": 19762,
-    "httpServerPort": 8081,
+    "httpServerPort": %s,
     "pullSchemas": false
   },
   "schemata": {
