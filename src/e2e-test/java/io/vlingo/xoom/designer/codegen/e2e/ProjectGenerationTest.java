@@ -35,9 +35,10 @@ public abstract class ProjectGenerationTest {
 
   private static final Logger logger = Logger.basicLogger();
   private static final PortDriver portDriver = PortDriver.init();
-  public static final Path testResourcesPath = Paths.get(System.getProperty("user.dir"), "src", "test", "resources", "e2e");
+  public static final Path e2eResourcesPath = Paths.get(System.getProperty("user.dir"), "src", "e2e-test", "resources");
 
   public static void init(final CodeElementFormatter codeElementFormatter) {
+    onShutdown();
     Infrastructure.clear();
     ComponentRegistry.clear();
     Profile.enableTestProfile();
@@ -46,8 +47,6 @@ public abstract class ProjectGenerationTest {
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
     new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
-    DockerServices.run();
-    onShutdown();
   }
 
   public void generateAndRun(final Project project) {

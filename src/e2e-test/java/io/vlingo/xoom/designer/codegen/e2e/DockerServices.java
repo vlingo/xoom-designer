@@ -18,19 +18,24 @@ public class DockerServices extends CommandExecutionStep {
   private final CommandObserver observer;
 
   public static void run() {
-    if (!ComponentRegistry.has(DockerServices.class)) {
-      new DockerServices(new CommandObserver()).start();
-    }
-    if (ComponentRegistry.withType(DockerServices.class).isSucceeded()) {
-      Logger.basicLogger().info("Docker services are ready");
-    } else {
-      Logger.basicLogger().warn("Unable to run Docker Services");
+    if(isSupported()) {
+      if (!ComponentRegistry.has(DockerServices.class)) {
+        new DockerServices(new CommandObserver()).start();
+      }
+      if (ComponentRegistry.withType(DockerServices.class).isSucceeded()) {
+        Logger.basicLogger().info("Docker services running...");
+      } else {
+        Logger.basicLogger().warn("Unable to run Docker Services");
+      }
     }
   }
 
   public static void shutdown() {
-    if (ComponentRegistry.has(DockerServices.class)) {
-      ComponentRegistry.withType(DockerServices.class).stop();
+    if(isSupported()) {
+      if (ComponentRegistry.has(DockerServices.class)) {
+        Logger.basicLogger().info("Stopping Docker services...");
+        ComponentRegistry.withType(DockerServices.class).stop();
+      }
     }
   }
 
@@ -41,14 +46,12 @@ public class DockerServices extends CommandExecutionStep {
   }
 
   private void start() {
-    if(isEnabled()) {
       process();
-    }
   }
 
   private void stop() {
-    if(isEnabled() && !isStopped()) {
-      Logger.basicLogger().info("Stopping Docker services...");
+    if(!isStopped()) {
+      process();
       observer.stop();
     }
   }
@@ -56,7 +59,7 @@ public class DockerServices extends CommandExecutionStep {
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
     final String directoryChangeCommand =
-            Terminal.supported().resolveDirectoryChangeCommand(ProjectGenerationTest.testResourcesPath);
+            Terminal.supported().resolveDirectoryChangeCommand(ProjectGenerationTest.e2eResourcesPath);
 
     return isNew() ? resolveStartUpCommand(directoryChangeCommand) : resolveShutdownCommand(directoryChangeCommand);
   }
@@ -81,8 +84,8 @@ public class DockerServices extends CommandExecutionStep {
     return observer.status.equals(ExecutionStatus.NEW);
   }
 
-  private static boolean isEnabled() {
-    return Boolean.valueOf(System.getProperty("e2e-docker-services", "false"));
+  private static boolean isSupported() {
+    return Boolean.valueOf(System.getProperty("auto-deps-initialization", "false"));
   }
 
 }

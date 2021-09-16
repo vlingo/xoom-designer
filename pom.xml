@@ -314,7 +314,7 @@
       </repositories>
     </profile>
     <profile>
-      <id>docker-services</id>
+      <id>e2e-services-deps</id>
       <build>
         <plugins>
           <plugin>
@@ -323,7 +323,7 @@
             <version>${maven-surefire-plugin.version}</version>
             <configuration>
               <systemPropertyVariables>
-                <e2e-docker-services>true</e2e-docker-services>
+                <auto-deps-initialization>true</auto-deps-initialization>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -334,6 +334,75 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/main/frontend/__sapper__/export</directory>
+                  <targetPath>frontend</targetPath>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-e2e-test-source</id>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/e2e-test/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+        <executions>
+          <execution>
+            <id>unit-tests</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skipTests>false</skipTests>
+              <excludes>
+                <exclude>io.vlingo.xoom.designer.codegen.e2e.**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skipTests>false</skipTests>
+              <includes>
+                <include>io.vlingo.xoom.designer.codegen.e2e.**</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -377,65 +446,8 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>add-resource</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>add-resource</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>src/main/frontend/__sapper__/export</directory>
-                  <targetPath>frontend</targetPath>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-        <executions>
-          <execution>
-            <id>unit-tests</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-            <configuration>
-              <skipTests>false</skipTests>
-              <excludes>
-                <exclude>io.vlingo.xoom.designer.codegen.e2e.**</exclude>
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>e2e-tests</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-            <configuration>
-              <skipTests>false</skipTests>
-              <includes>
-                <include>io.vlingo.xoom.designer.codegen.e2e.**</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
+
     <pluginManagement>
       <plugins>
         <plugin>

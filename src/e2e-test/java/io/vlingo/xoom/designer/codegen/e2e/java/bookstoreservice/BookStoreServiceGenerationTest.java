@@ -4,7 +4,7 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.codegen.e2e.java.singleservice;
+package io.vlingo.xoom.designer.codegen.e2e.java.bookstoreservice;
 
 import io.restassured.response.Response;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.http.Response.Status;
 
-public class SingleServiceWithPlainModelGenerationTest extends JavaProjectGenerationTest {
+public class BookStoreServiceGenerationTest extends JavaProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {

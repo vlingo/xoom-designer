@@ -6,16 +6,22 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
+import io.vlingo.xoom.designer.codegen.e2e.DockerServices;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class IntegratedServicesGenerationTest extends JavaProjectGenerationTest {
+/**
+ * This scenario consists of two services sharing Event schemas and
+ * exchange messages respectively via XOOM Schemata and XOOM Lattice/Exchange.
+ */
+public class CargoShippingServicesGenerationTest extends JavaProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {
+    DockerServices.run();
     init();
   }
 
@@ -34,7 +40,7 @@ public class IntegratedServicesGenerationTest extends JavaProjectGenerationTest 
    * - Collection mutation (addition)
    * - Producer Exchanges / Schema Registration
    * - Event-based projection
-   * - Without annotations
+   * - XOOM Annotations + Auto Dispatch
    */
   private void testThatUpstreamServiceIsWorking() {
     final Project freighterMonitoring =
@@ -45,10 +51,10 @@ public class IntegratedServicesGenerationTest extends JavaProjectGenerationTest 
 
   /**
    * Test that the upstream service is generated and working with:
-   * - Stateful Entities containing Value Objects and Custom-typed collections
+   * - Stateful Entities containing only String fields
    * - Consumer Exchanges / Schema Download/Transpilation
    * - Operation-based projection
-   * - Without annotations
+   * - Without annotations or auto-dispatch
    */
   private void testThatDownstreamServiceIsWorking() {
     final Project freighterMaintenance =

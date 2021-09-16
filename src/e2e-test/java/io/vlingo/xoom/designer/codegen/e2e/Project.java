@@ -8,16 +8,15 @@ package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.junit.jupiter.api.Assertions;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,19 +28,19 @@ public class Project {
   public final String modelFilename;
   public final GenerationPath generationPath;
   public final GenerationSettingsData generationSettings;
-  private static List<Project> all =  new ArrayList<>();
   private boolean stopped;
+
+  private static List<Project> all =  new ArrayList<>();
 
   public static Project from(final String directory,
                              final String modelFilename) {
-    final int availablePort = PortDriver.init().findAvailable();
-    return new Project(directory, modelFilename, availablePort);
+    return new Project(directory, modelFilename, PortDriver.init());
   }
 
-  private Project(final String directory, final String modelFilename, int availablePort) {
+  private Project(final String directory, final String modelFilename, final PortDriver portDriver) {
     this.directory = directory;
     this.modelFilename = modelFilename;
-    this.appPort = availablePort;
+    this.appPort = portDriver.findAvailable();
     this.generationPath = buildGenerationPath();
     this.generationSettings = buildGenerationSettings();
     all.add(this);
@@ -53,24 +52,24 @@ public class Project {
   }
 
   private String completeDynamicModelProperties() {
-    final String modelPath = String.format("/sample-models/%s/%s.json", directory, modelFilename);
-    try {
-      final InputStream modelStream = JavaProjectGenerationTest.class.getResourceAsStream(modelPath);
-      final String modelJson = IOUtils.toString(modelStream, StandardCharsets.UTF_8.name());
-      final String generationPath = resolveGenerationPath(modelFilename);
-      return String.format(modelJson, appPort, generationPath);
-    } catch (final IOException exception) {
-      throw new RuntimeException(String.format("Failed to load Designer model from `%s`.", modelPath), exception);
-    }
+    final Path modelPath = resolveModelPath();
+    return Assertions.assertDoesNotThrow(() -> {
+      final String modelJson = FileUtils.readFileToString(modelPath.toFile(), StandardCharsets.UTF_8);
+      return String.format(modelJson, appPort, resolveGenerationPath());
+    }, String.format("Failed to load Designer model from `%s`.", modelPath));
   }
 
   private GenerationPath buildGenerationPath() {
-    return new GenerationPath(resolveGenerationPath(modelFilename));
+    return new GenerationPath(resolveGenerationPath());
   }
 
-  private String resolveGenerationPath(final String model) {
-    return Paths.get(System.getProperty("user.dir"), "target", "e2e-tests", model)
+  private String resolveGenerationPath() {
+    return Paths.get(System.getProperty("user.dir"), "target", "e2e-tests", modelFilename)
             .toString().replace("\\", "\\\\");
+  }
+
+  private Path resolveModelPath() {
+    return ProjectGenerationTest.e2eResourcesPath.resolve("sample-models").resolve(directory).resolve(modelFilename + ".json");
   }
 
   public static void stopAll(final Logger logger, final PortDriver portDriver) {
