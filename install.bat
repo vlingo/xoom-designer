@@ -1,1 +1,1 @@
-call mvnw.cmd clean install -De2e-tests=true -P deployment,frontend
+call mvnw.cmd clean install -P e2e-supporting-services,deployment,frontend

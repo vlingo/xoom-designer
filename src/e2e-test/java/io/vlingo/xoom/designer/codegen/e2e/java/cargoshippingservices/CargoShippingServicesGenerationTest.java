@@ -7,36 +7,37 @@
 package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
 import io.restassured.response.Response;
-import io.vlingo.xoom.designer.codegen.e2e.DockerServices;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
+import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static io.vlingo.xoom.designer.codegen.e2e.DockerServices.RABBIT_MQ;
-import static io.vlingo.xoom.designer.codegen.e2e.DockerServices.SCHEMATA;
+import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.RABBIT_MQ;
+import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.SCHEMATA;
 
 /**
- * This scenario consists of two services sharing Event schemas and
- * exchange messages respectively via XOOM Schemata and XOOM Lattice/Exchange.
+ * This scenario consists mainly of two services sharing Event schema via
+ * XOOM Schemata taking advantage of automatic Schema pull/push provided
+ * by the Designer / Schemata integration.
  */
 public class CargoShippingServicesGenerationTest extends JavaProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {
-    DockerServices.run();
+    SupportingServicesManager.run();
     init();
   }
 
   /**
-   * Test that the services are generated and working
+   * Test that the cargo shipping services are generated and working
    */
   @Test
   public void testThatGeneratedServicesAreWorking() {
-    assertServiceIsAvailable(DockerServices.findPortOf(SCHEMATA), "Schemata service is not available");
-    assertServiceIsAvailable(DockerServices.findPortOf(RABBIT_MQ), "RabbitMQ service is not available");
+    assertServiceIsAvailable(SupportingServicesManager.findPortOf(SCHEMATA), "Schemata service is not available");
+    assertServiceIsAvailable(SupportingServicesManager.findPortOf(RABBIT_MQ), "RabbitMQ service is not available");
 
     testThatUpstreamServiceIsWorking();
     testThatDownstreamServiceIsWorking();
@@ -125,6 +126,7 @@ public class CargoShippingServicesGenerationTest extends JavaProjectGenerationTe
    * - Operation-based projection
    * - Without annotations or auto-dispatch
    */
+  //TODO: Configure Rabbit MQ exchanges to assert that downstream service properly consumes events
   private void testThatDownstreamServiceIsWorking() {
     final Project freighterMaintenance =
             Project.from("cargo-shipping-context", "freighter-maintenance");

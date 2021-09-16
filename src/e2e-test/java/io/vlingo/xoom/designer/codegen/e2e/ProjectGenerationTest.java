@@ -84,11 +84,11 @@ public abstract class ProjectGenerationTest {
   }
 
   protected void assertInitialization(final Project project) {
-    Assertions.assertEquals(false, portDriver.isPortAvailable(project.appPort, 300, 30, false), "Error initializing app " + project);
+    Assertions.assertFalse(portDriver.isPortAvailable(project.appPort, 300, 30, false), "Error initializing app " + project);
   }
 
   protected void assertServiceIsAvailable(final int port, final String failureMessage) {
-    Assertions.assertEquals(false, portDriver.isPortAvailable(port, 1000, 10, false), failureMessage);
+    Assertions.assertFalse(portDriver.isPortAvailable(port, 1000, 10, false), failureMessage);
   }
 
   private void removeTargetFolder(final String generationPath) {
@@ -111,7 +111,7 @@ public abstract class ProjectGenerationTest {
   public static void onShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       Project.stopAll(logger, portDriver);
-      DockerServices.shutdown();
+      SupportingServicesManager.shutdown();
     }));
   }
 

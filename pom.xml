@@ -314,7 +314,7 @@
       </repositories>
     </profile>
     <profile>
-      <id>e2e-services-deps</id>
+      <id>e2e-supporting-services</id>
       <build>
         <plugins>
           <plugin>
@@ -323,7 +323,7 @@
             <version>${maven-surefire-plugin.version}</version>
             <configuration>
               <systemPropertyVariables>
-                <auto-deps-initialization>true</auto-deps-initialization>
+                <enable-supporting-services>true</enable-supporting-services>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -372,18 +372,11 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
+          <skipTests>true</skipTests>
           <systemPropertyVariables>
             <schemata-port>9019</schemata-port>
             <rabbitmq-port>5672</rabbitmq-port>
           </systemPropertyVariables>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-surefire-plugin.version}</version>
-        <configuration>
-          <skipTests>true</skipTests>
         </configuration>
         <executions>
           <execution>
