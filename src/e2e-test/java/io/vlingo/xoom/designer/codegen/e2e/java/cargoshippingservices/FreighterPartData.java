@@ -16,6 +16,10 @@ public class FreighterPartData {
     this.dependentComponents.addAll(dependentComponents);
   }
 
+  public static FreighterPartData sample() {
+    return new FreighterPartData("IIU76", ComponentData.samples());
+  }
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder(31, 17)

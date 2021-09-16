@@ -88,7 +88,7 @@ public class Project {
   }
 
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
             .append("directory", directory)
             .append("modelFileName", modelFilename)
             .append("appPort", appPort)

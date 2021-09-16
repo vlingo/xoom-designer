@@ -15,7 +15,11 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class DockerServices extends CommandExecutionStep {
 
+  private final PortDriver portDriver;
   private final CommandObserver observer;
+
+  public static final String SCHEMATA = "schemata";
+  public static final String RABBIT_MQ = "rabbitmq";
 
   public static void run() {
     if(isSupported()) {
@@ -43,6 +47,7 @@ public class DockerServices extends CommandExecutionStep {
     super(new ObservableCommandExecutionProcess(observer));
     ComponentRegistry.register(DockerServices.class, this);
     this.observer = observer;
+    this.portDriver = PortDriver.init();
   }
 
   private void start() {
@@ -88,4 +93,11 @@ public class DockerServices extends CommandExecutionStep {
     return Boolean.valueOf(System.getProperty("auto-deps-initialization", "false"));
   }
 
+  public static int findPortOf(final String serviceName) {
+    final String port = System.getProperty(serviceName + "-port");
+    if(port == null) {
+      throw new IllegalArgumentException("Unknown port for service " + serviceName);
+    }
+    return Integer.valueOf(port);
+  }
 }

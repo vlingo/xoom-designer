@@ -3,6 +3,10 @@ package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ComponentData {
 
   public final String name;
@@ -11,6 +15,10 @@ public class ComponentData {
   public ComponentData (final String name, final String cricalityLevel) {
     this.name = name;
     this.cricalityLevel = cricalityLevel;
+  }
+
+  public static Set<ComponentData> samples() {
+    return Stream.of(new ComponentData("distiller", "high"), new ComponentData("tracker", "low")).collect(Collectors.toSet());
   }
 
   @Override

@@ -87,6 +87,10 @@ public abstract class ProjectGenerationTest {
     Assertions.assertEquals(false, portDriver.isPortAvailable(project.appPort, 300, 30, false), "Error initializing app " + project);
   }
 
+  protected void assertServiceIsAvailable(final int port, final String failureMessage) {
+    Assertions.assertEquals(false, portDriver.isPortAvailable(port, 1000, 10, false), failureMessage);
+  }
+
   private void removeTargetFolder(final String generationPath) {
     try {
       FileUtils.deleteDirectory(new File(generationPath));

@@ -2,30 +2,39 @@ package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("all")
 public class MechanicalIncidentData {
 
-  public final String id;
+  public String id;
   public final String freighterId;
   public final String freighterPartNumber;
-  public final LocalDateTime occurredOn;
+  public final Long occurredOn;
   public final Set<FreighterPartData> relatedParts = new HashSet<>();
 
-  public MechanicalIncidentData (final String id,
-                                 final String freighterId,
+  public static MechanicalIncidentData sampleOfNewIncident() {
+    return new MechanicalIncidentData("YLK-17825", "752489&Y", 1631764888381l, new HashSet<>());
+  }
+
+  public static MechanicalIncidentData sampleOfIncidentWithRelatedPart(final String incidentId) {
+    final MechanicalIncidentData incident = sampleOfNewIncident();
+    incident.id = incidentId;
+    incident.relatedParts.add(FreighterPartData.sample());
+    return incident;
+  }
+
+  public MechanicalIncidentData (final String freighterId,
                                  final String freighterPartNumber,
-                                 final LocalDateTime occurredOn,
+                                 final Long occurredOn,
                                  final Set<FreighterPartData> relatedParts) {
-    this.id = id;
     this.freighterId = freighterId;
     this.freighterPartNumber = freighterPartNumber;
     this.occurredOn = occurredOn;
     this.relatedParts.addAll(relatedParts);
   }
+
 
   @Override
   public boolean equals(Object other) {
