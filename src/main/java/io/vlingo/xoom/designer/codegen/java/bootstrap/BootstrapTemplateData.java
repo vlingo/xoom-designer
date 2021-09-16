@@ -28,8 +28,6 @@ public abstract class BootstrapTemplateData extends TemplateData {
   private final static String INFRA_PACKAGE_NAME = "infrastructure";
 
   private final TemplateParameters parameters;
-  private final static List<BootstrapTemplateData> TEMPLATES =
-          Arrays.asList(new AnnotatedBootstrapTemplateData(), new DefaultBootstrapTemplateData());
 
   protected BootstrapTemplateData() {
     this.parameters = TemplateParameters.empty();
@@ -40,7 +38,8 @@ public abstract class BootstrapTemplateData extends TemplateData {
             templateData -> templateData.support(context);
 
     final BootstrapTemplateData bootstrapTemplateData =
-            TEMPLATES.stream().filter(supportCondition).findFirst().get();
+            Arrays.asList(new AnnotatedBootstrapTemplateData(), new DefaultBootstrapTemplateData())
+                    .stream().filter(supportCondition).findFirst().get();
 
     bootstrapTemplateData.handleParameters(context);
 
