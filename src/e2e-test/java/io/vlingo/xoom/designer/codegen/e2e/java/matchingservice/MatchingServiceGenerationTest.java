@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.codegen.e2e.java.matchingservice;
 
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
-import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
+import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,9 +18,11 @@ import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.SCHE
 
 /**
  * This scenario consists of a service containing complex values objects
- * and command methods accepting many combination of parameters.
+ * and command methods accepting many combinations of parameters.
+ *
+ * See: https://docs.vlingo.io/xoom-designer/development-guide/e2e-tests
  */
-public class MatchingServiceGenerationTest extends JavaProjectGenerationTest {
+public class MatchingServiceGenerationTest extends JavaBasedProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {

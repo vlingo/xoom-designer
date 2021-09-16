@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.codegen.e2e.java.bookstoreservice;
 
 import io.restassured.response.Response;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
-import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
+import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,10 @@ import org.junit.jupiter.api.Test;
 
 import static io.vlingo.xoom.http.Response.Status;
 
-public class BookStoreServiceGenerationTest extends JavaProjectGenerationTest {
+/**
+ * See: https://docs.vlingo.io/xoom-designer/development-guide/e2e-tests
+ */
+public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {
@@ -30,7 +33,7 @@ public class BookStoreServiceGenerationTest extends JavaProjectGenerationTest {
    * - Xoom Annotations + Auto-dispatch
    */
   @Test
-  public void testThatGeneratedServiceWithStatefulEntitiesIsWorking() {
+  public void testThatServiceWithStatefulEntitiesIsWorking() {
     final BookData newBook =
             BookData.sampleOfInitialData();
 
@@ -40,7 +43,7 @@ public class BookStoreServiceGenerationTest extends JavaProjectGenerationTest {
     final Project projectWithStatefulEntities =
             Project.from("book-store-context", "book-store-with-stateful-entities");
 
-    generateAndRun(projectWithStatefulEntities);
+    super.generateAndRun(projectWithStatefulEntities);
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
     assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook);
@@ -61,7 +64,7 @@ public class BookStoreServiceGenerationTest extends JavaProjectGenerationTest {
    * - ReactJS app gen
    */
   @Test
-  public void testThatGeneratedServiceWithSourcedEntitiesIsWorking() {
+  public void testThatServiceWithSourcedEntitiesIsWorking() {
     final BookData newBook =
             BookData.sampleOfInitialData();
 

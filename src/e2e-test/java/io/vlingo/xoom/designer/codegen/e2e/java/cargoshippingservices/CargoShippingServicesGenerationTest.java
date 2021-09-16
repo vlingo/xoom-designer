@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 import io.restassured.response.Response;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
-import io.vlingo.xoom.designer.codegen.e2e.java.JavaProjectGenerationTest;
+import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,8 +22,10 @@ import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.SCHE
  * This scenario consists mainly of two services sharing Event schema via
  * XOOM Schemata taking advantage of automatic Schema pull/push provided
  * by the Designer / Schemata integration.
+ *
+ * See: https://docs.vlingo.io/xoom-designer/development-guide/e2e-tests
  */
-public class CargoShippingServicesGenerationTest extends JavaProjectGenerationTest {
+public class CargoShippingServicesGenerationTest extends JavaBasedProjectGenerationTest {
 
   @BeforeAll
   public static void setUp() {

@@ -12,7 +12,10 @@ import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.ProjectGenerationTest;
 
-public abstract class JavaProjectGenerationTest extends ProjectGenerationTest {
+/**
+ * See: https://docs.vlingo.io/xoom-designer/development-guide/e2e-tests
+ */
+public abstract class JavaBasedProjectGenerationTest extends ProjectGenerationTest {
 
   public static void init() {
     init(CodeElementFormatter.with(Dialect.JAVA, ReservedWordsHandler.usingSuffix("_")));
