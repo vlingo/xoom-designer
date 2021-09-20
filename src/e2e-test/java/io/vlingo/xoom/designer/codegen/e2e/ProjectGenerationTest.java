@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstr
 import io.vlingo.xoom.designer.infrastructure.userinterface.XoomInitializer;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
@@ -100,6 +101,11 @@ public abstract class ProjectGenerationTest {
     }
   }
 
+  @AfterEach
+  public void stopProject() {
+    stopProjects();
+  }
+
   public static void clear() throws Exception {
     Infrastructure.clear();
     ComponentRegistry.clear();
@@ -108,11 +114,15 @@ public abstract class ProjectGenerationTest {
     XoomInitializer.instance().terminateWorld();
   }
 
-  public static void onShutdown() {
+  private static void onShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      Project.stopAll(logger, portDriver);
+      stopProjects();
       SupportingServicesManager.shutdown();
     }));
+  }
+
+  private static void stopProjects() {
+    Project.stopAll(logger, portDriver);
   }
 
 }
