@@ -55,7 +55,7 @@
       <ProducerSchemata
         {disableSchemaGroup}
         bind:schemaGroup
-        invalid={schemaGroupRule(schemaGroup) && outgoingEvents.length == 0}
+        invalid={schemaGroupRule(schemaGroup) && outgoingEvents.length > 0}
         helperText={schemaGroupRule(schemaGroup)}
       />
     </div>
@@ -99,7 +99,7 @@
       <div>
         <ErrorWarningTooltip
           type={'error'}
-          messages={outgoingEvents.length < 1 && schemaGroup ? ['At least one event need to be selected'] : ['']}
+          messages={outgoingEvents.length < 1 && schemaGroup ? ['At least one event needs to be selected'] : ['']}
           names={['']}
         />
       </div>
