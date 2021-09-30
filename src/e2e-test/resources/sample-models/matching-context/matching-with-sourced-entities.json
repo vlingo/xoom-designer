@@ -246,7 +246,7 @@
     "kubernetesImage": "",
     "kubernetesPod": "",
     "clusterTotalNodes": 5,
-    "clusterPort": 50011,
+    "clusterPort": 57011,
     "producerExchangePort": 19762,
     "httpServerPort": %s,
     "pullSchemas": false
