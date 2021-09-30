@@ -6,14 +6,18 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
+import io.vlingo.xoom.designer.codegen.e2e.RequestAttempt;
 import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Predicate;
 
 import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.RABBIT_MQ;
 import static io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager.SCHEMATA;
@@ -60,16 +64,19 @@ public class CargoShippingServicesGenerationTest extends JavaBasedProjectGenerat
     final MechanicalIncidentData newIncident =
             MechanicalIncidentData.sampleOfNewIncident();
 
+    final Predicate<JsonPath> validResponsePreConditionOnNewIncident = res -> !res.get("freighterId").toString().isEmpty();
+    final Predicate<JsonPath> validResponsePreConditionOnRelatedPart = res -> !res.getList("relatedParts").isEmpty();
+
     generateAndRun(freighterMonitoringProject);
     assertThatIncidentIsRegistered(freighterMonitoringProject, newIncident);
-    assertThatIncidentIsRetrievedById(freighterMonitoringProject, newIncident);
+    assertThatIncidentIsRetrievedById(freighterMonitoringProject, newIncident, validResponsePreConditionOnNewIncident);
     assertThatIncidentsAreRetrieved(freighterMonitoringProject, newIncident);
 
     final MechanicalIncidentData incidentWithRelatedPart =
             MechanicalIncidentData.sampleOfIncidentWithRelatedPart(newIncident.id);
 
     assertThatPartIsRelated(freighterMonitoringProject, incidentWithRelatedPart);
-    assertThatIncidentIsRetrievedById(freighterMonitoringProject, incidentWithRelatedPart);
+    assertThatIncidentIsRetrievedById(freighterMonitoringProject, incidentWithRelatedPart, validResponsePreConditionOnRelatedPart);
     assertThatIncidentsAreRetrieved(freighterMonitoringProject, incidentWithRelatedPart);
   }
 
@@ -99,9 +106,12 @@ public class CargoShippingServicesGenerationTest extends JavaBasedProjectGenerat
     Assertions.assertEquals(incidentWithRelatedPart, responseBody, "Wrong response while relating part " + freighterMonitoringProject);
   }
 
-  private void assertThatIncidentIsRetrievedById(final Project freighterMonitoringProject, final MechanicalIncidentData incident) {
+  private void assertThatIncidentIsRetrievedById(final Project freighterMonitoringProject,
+                                                 final MechanicalIncidentData incident,
+                                                 final Predicate<JsonPath> responsePreCondition) {
     final Response response =
-            apiOf(freighterMonitoringProject).get("/incidents/" + incident.id);
+            RequestAttempt.of("Incident retrieval by id").acceptResponseWhen(responsePreCondition)
+                    .perform(() -> apiOf(freighterMonitoringProject).get("/incidents/" + incident.id));
 
     final MechanicalIncidentData responseBody =
             response.then().extract().body().as(MechanicalIncidentData.class);

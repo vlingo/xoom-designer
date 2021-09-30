@@ -6,13 +6,17 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java.bookstoreservice;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.vlingo.xoom.designer.codegen.e2e.RequestAttempt;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Predicate;
 
 import static io.vlingo.xoom.http.Response.Status;
 
@@ -43,16 +47,19 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
     final Project projectWithStatefulEntities =
             Project.from("book-store-context", "book-store-with-stateful-entities");
 
-    super.generateAndRun(projectWithStatefulEntities);
+    generateAndRun(projectWithStatefulEntities);
+
+    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> !res.get("title").toString().isEmpty();
+    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> !res.get("price").toString().equals(String.valueOf(newBook.price));
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook);
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, validResponsePreConditionOnNewBook);
     assertThatBooksAreRetrieved(projectWithStatefulEntities, newBook);
 
     bookWithNewPrice.id = newBook.id;
 
     assertThatPriceIsChanged(projectWithStatefulEntities, bookWithNewPrice);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice);
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice, validResponsePreConditionOnChangedPrice);
     assertThatBooksAreRetrieved(projectWithStatefulEntities, bookWithNewPrice);
   }
 
@@ -77,13 +84,13 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
     generateAndRun(projectWithStatefulEntities);
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook);
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, res -> !res.get("title").toString().isEmpty());
     assertThatBooksAreRetrieved(projectWithStatefulEntities, newBook);
 
     bookWithNewPrice.id = newBook.id;
 
     assertThatPriceIsChanged(projectWithStatefulEntities, bookWithNewPrice);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice);
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice, res -> !res.get("price").toString().equals(String.valueOf(newBook.price)));
     assertThatBooksAreRetrieved(projectWithStatefulEntities, bookWithNewPrice);
   }
 
@@ -100,9 +107,10 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
     Assertions.assertEquals(newBook, responseBody, "Wrong response while creating book " + bookStoreProject);
   }
 
-  private void assertThatBookIsRetrievedById(final Project bookStoreProject, final BookData book) {
+  private void assertThatBookIsRetrievedById(final Project bookStoreProject, final BookData book, final Predicate<JsonPath> responsePreCondition) {
     final Response response =
-            apiOf(bookStoreProject).get("/books/" + book.id);
+            RequestAttempt.of("Book retrieval by id").acceptResponseWhen(responsePreCondition)
+                    .perform(() -> apiOf(bookStoreProject).get("/books/" + book.id));
 
     final BookData responseBody =
             response.then().extract().body().as(BookData.class);
