@@ -139,7 +139,7 @@ public class TaskExecutionContextMapperTest {
     final CodeGenerationParameter receiver =
             consumerExchange.retrieveAllRelated(RECEIVER).findFirst().get();
 
-    Assertions.assertEquals("xoomapp-topic", consumerExchange.value);
+    Assertions.assertEquals("xoomapp-exchange", consumerExchange.value);
     Assertions.assertEquals("vlingo:business:io.vlingo.iam:UserAuthorized:1.0.0", receiver.retrieveOneRelated(SCHEMA).<Schema>object().reference);
     Assertions.assertEquals("defineWith", receiver.retrieveRelatedValue(MODEL_METHOD));
 
@@ -148,7 +148,7 @@ public class TaskExecutionContextMapperTest {
                     .filter(param -> param.retrieveRelatedValue(ROLE, ExchangeRole::valueOf).isProducer())
                     .findFirst().get();
 
-    Assertions.assertEquals("xoomapp-topic", producerExchange.value);
+    Assertions.assertEquals("xoomapp-exchange", producerExchange.value);
     Assertions.assertEquals("vlingo:business:io.vlingo.registry", producerExchange.retrieveRelatedValue(SCHEMA_GROUP));
     Assertions.assertEquals("PersonDefined", producerExchange.retrieveRelatedValue(DOMAIN_EVENT));
   }

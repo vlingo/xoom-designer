@@ -70,6 +70,6 @@ public class GenerationSettingsData {
     }
 
     public String defaultExchangeName() {
-        return context.artifactId + "-topic";
+        return context.artifactId + "-exchange";
     }
 }

@@ -157,7 +157,7 @@ export function isSettingsComplete(currentSettings) {
 
 export function resolveDefaultExchangeName(currentSettings) {
 	if(currentSettings && currentSettings.context && currentSettings.context.artifactId) {
-		return currentSettings.context.artifactId + "-topic";
+		return currentSettings.context.artifactId + "-exchange";
 	}
 	return "";
 }
