@@ -68,14 +68,10 @@ public class AggregateData {
     }
 
     public boolean hasConsumerExchange() {
-        return consumerExchange != null && consumerExchange.exchangeName != null
-                && !consumerExchange.exchangeName.trim().isEmpty() &&
-                !consumerExchange.receivers.isEmpty();
+        return consumerExchange != null && !consumerExchange.receivers.isEmpty();
     }
 
     public boolean hasProducerExchange() {
-        return producerExchange != null && producerExchange.exchangeName != null
-                && !producerExchange.exchangeName.trim().isEmpty() &&
-                !producerExchange.outgoingEvents.isEmpty();
+        return producerExchange != null && !producerExchange.outgoingEvents.isEmpty();
     }
 }

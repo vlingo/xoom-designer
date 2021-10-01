@@ -12,10 +12,6 @@ import java.util.List;
 
 public class ConsumerExchangeData {
 
-    public final String exchangeName;
     public final List<ReceiverData> receivers = new ArrayList<>();
 
-    public ConsumerExchangeData(final String exchangeName) {
-        this.exchangeName = exchangeName;
-    }
 }

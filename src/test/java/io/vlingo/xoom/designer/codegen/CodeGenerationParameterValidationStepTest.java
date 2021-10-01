@@ -70,7 +70,7 @@ public class CodeGenerationParameterValidationStepTest {
             Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
                     new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
 
-    return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+    return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(), new ProducerExchangeData(""));
   }
 
   private AggregateData profileAggregateData() {
@@ -89,7 +89,7 @@ public class CodeGenerationParameterValidationStepTest {
             Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
                     new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
 
-    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(), new ProducerExchangeData(""));
   }
 
     private DeploymentSettingsData deploymentSettingsData() {

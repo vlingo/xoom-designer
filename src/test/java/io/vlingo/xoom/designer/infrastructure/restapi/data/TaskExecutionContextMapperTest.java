@@ -15,6 +15,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
+import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
+import io.vlingo.xoom.designer.codegen.java.schemata.Schema;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,11 +27,6 @@ import java.util.List;
 import static io.vlingo.xoom.designer.codegen.Label.*;
 
 public class TaskExecutionContextMapperTest {
-
-  @Test
-  public void test() {
-    System.out.println("\n \n \\\"".replaceAll("\n", "<br>").replaceAll("\\\\\"", "\""));
-  }
 
   @Test
   public void testThatTaskExecutionContextIsMapped() {
@@ -48,6 +45,7 @@ public class TaskExecutionContextMapperTest {
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);
     assertModelParameters(codeGenerationParameters);
+    assertExchangeParameters(codeGenerationParameters);
   }
 
   private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
@@ -128,6 +126,33 @@ public class TaskExecutionContextMapperTest {
     Assertions.assertEquals("/persons/", personAggregateParameter.retrieveRelatedValue(URI_ROOT));
   }
 
+  private void assertExchangeParameters(final CodeGenerationParameters codeGenerationParameters) {
+    final CodeGenerationParameter personAggregate =
+            codeGenerationParameters.retrieveAll(AGGREGATE)
+                    .filter(aggregate -> aggregate.value.equals("Person")).findFirst().get();
+
+    final CodeGenerationParameter consumerExchange =
+            personAggregate.retrieveAllRelated(EXCHANGE)
+                    .filter(param -> param.retrieveRelatedValue(ROLE, ExchangeRole::valueOf).isConsumer())
+                    .findFirst().get();
+
+    final CodeGenerationParameter receiver =
+            consumerExchange.retrieveAllRelated(RECEIVER).findFirst().get();
+
+    Assertions.assertEquals("xoomapp-topic", consumerExchange.value);
+    Assertions.assertEquals("vlingo:business:io.vlingo.iam:UserAuthorized:1.0.0", receiver.retrieveOneRelated(SCHEMA).<Schema>object().reference);
+    Assertions.assertEquals("defineWith", receiver.retrieveRelatedValue(MODEL_METHOD));
+
+    final CodeGenerationParameter producerExchange =
+            personAggregate.retrieveAllRelated(EXCHANGE)
+                    .filter(param -> param.retrieveRelatedValue(ROLE, ExchangeRole::valueOf).isProducer())
+                    .findFirst().get();
+
+    Assertions.assertEquals("xoomapp-topic", producerExchange.value);
+    Assertions.assertEquals("vlingo:business:io.vlingo.registry", producerExchange.retrieveRelatedValue(SCHEMA_GROUP));
+    Assertions.assertEquals("PersonDefined", producerExchange.retrieveRelatedValue(DOMAIN_EVENT));
+  }
+
   private ContextSettingsData contextSettingsData() {
     return new ContextSettingsData("io.vlingo", "xoomapp",
             "1.0", "io.vlingo.xoomapp");
@@ -164,7 +189,13 @@ public class TaskExecutionContextMapperTest {
             Arrays.asList(new RouteData("/persons/", "POST", "defineWith", false),
                     new RouteData("/persons/{id}/name", "PATCH", "defineWith", true)));
 
-    return new AggregateData("Person", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+    final ConsumerExchangeData consumerExchange = new ConsumerExchangeData();
+    consumerExchange.receivers.add(new ReceiverData("vlingo:business:io.vlingo.iam:UserAuthorized:1.0.0", "defineWith"));
+
+    final ProducerExchangeData producerExchange = new ProducerExchangeData("vlingo:business:io.vlingo.registry");
+    producerExchange.outgoingEvents.add("PersonDefined");
+
+    return new AggregateData("Person", apiData, events, statesFields, methods, consumerExchange, producerExchange);
   }
 
   private AggregateData profileAggregateData() {
@@ -183,7 +214,7 @@ public class TaskExecutionContextMapperTest {
             Arrays.asList(new RouteData("/profiles/", "POST", "defineWith", false),
                     new RouteData("/profiles/{id}/status", "PATCH", "defineWith", true)));
 
-    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(""), new ProducerExchangeData("", ""));
+    return new AggregateData("Profile", apiData, events, statesFields, methods, new ConsumerExchangeData(), new ProducerExchangeData(""));
   }
 
   private List<ValueObjectData> valueObjects() {

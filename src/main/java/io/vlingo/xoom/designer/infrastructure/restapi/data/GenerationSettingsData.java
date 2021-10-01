@@ -68,4 +68,8 @@ public class GenerationSettingsData {
         if(useAutoDispatch==null) errorStrings.add("GenerationSettingsData.useAutoDispatch is null");
         return errorStrings;
     }
+
+    public String defaultExchangeName() {
+        return context.artifactId + "-topic";
+    }
 }

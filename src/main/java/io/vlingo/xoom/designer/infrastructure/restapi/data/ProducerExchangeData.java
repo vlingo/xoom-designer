@@ -11,13 +11,10 @@ import java.util.List;
 
 public class ProducerExchangeData {
 
-    public final String exchangeName;
     public final String schemaGroup;
     public final List<String> outgoingEvents = new ArrayList<>();
 
-    public ProducerExchangeData(final String exchangeName,
-                                final String schemaGroup) {
-        this.exchangeName = exchangeName;
+    public ProducerExchangeData(final String schemaGroup) {
         this.schemaGroup = schemaGroup;
     }
 

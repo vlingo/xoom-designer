@@ -196,7 +196,7 @@ public class TaskExecutionContextMapper {
                             final CodeGenerationParameter aggregateParameter) {
     if(aggregate.hasConsumerExchange()) {
       final CodeGenerationParameter consumerExchange =
-              CodeGenerationParameter.of(Label.EXCHANGE, aggregate.consumerExchange.exchangeName)
+              CodeGenerationParameter.of(Label.EXCHANGE, data.defaultExchangeName())
                       .relate(Label.ROLE, ExchangeRole.CONSUMER);
 
       aggregate.consumerExchange.receivers.forEach(receiver -> {
@@ -208,7 +208,7 @@ public class TaskExecutionContextMapper {
     }
     if(aggregate.hasProducerExchange()) {
       final CodeGenerationParameter producerExchange =
-              CodeGenerationParameter.of(Label.EXCHANGE, aggregate.producerExchange.exchangeName)
+              CodeGenerationParameter.of(Label.EXCHANGE, data.defaultExchangeName())
                       .relate(Label.SCHEMA_GROUP, aggregate.producerExchange.schemaGroup)
                       .relate(Label.ROLE, ExchangeRole.PRODUCER);
 
