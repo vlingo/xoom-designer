@@ -7,23 +7,27 @@
 
 package io.vlingo.xoom.designer;
 
+import io.vlingo.xoom.turbo.ComponentRegistry;
+
 public enum Profile {
 
   PRODUCTION,
   TEST;
 
-  private static Profile active = PRODUCTION;
-
   public static void enableTestProfile() {
-    active = TEST;
+    ComponentRegistry.register(Profile.class, Profile.TEST);
   }
 
   public static void disableTestProfile() {
-    active = PRODUCTION;
+    ComponentRegistry.unregister(Profile.class);
+    ComponentRegistry.register(Profile.class, Profile.TEST);
   }
 
   public static boolean isTestProfileEnabled() {
-    return active.equals(TEST);
+    if(!ComponentRegistry.has(Profile.class)) {
+      return false;
+    }
+    return ComponentRegistry.withType(Profile.class).equals(TEST);
   }
 
 }

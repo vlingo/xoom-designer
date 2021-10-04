@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
+import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 
 import java.io.File;
 import java.nio.file.Path;

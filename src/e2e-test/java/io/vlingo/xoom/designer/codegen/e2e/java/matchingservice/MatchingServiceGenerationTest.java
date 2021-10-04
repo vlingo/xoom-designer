@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen.e2e.java.matchingservice;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -48,9 +48,9 @@ public class MatchingServiceGenerationTest extends JavaBasedProjectGenerationTes
     generateAndRun(matchingServiceWithSourcedEntities);
   }
 
-  @AfterAll
-  public static void tearDown() throws Exception {
-    clear();
+  @AfterEach
+  public void stopProject() {
+    stopServices();
   }
 
 }

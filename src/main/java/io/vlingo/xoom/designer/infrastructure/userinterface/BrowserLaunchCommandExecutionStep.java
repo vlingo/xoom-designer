@@ -8,9 +8,10 @@
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.cli.CommandExecutionStep;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
+import io.vlingo.xoom.designer.infrastructure.UserInterface;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 
@@ -23,11 +24,11 @@ public class BrowserLaunchCommandExecutionStep extends CommandExecutionStep {
   @Override
   protected String formatCommands(final TaskExecutionContext context) {
       final String browserLaunchCommand = Terminal.supported().browserLaunchCommand();
-      return String.format("%s %s", browserLaunchCommand, Infrastructure.UserInterface.rootContext());
+      return String.format("%s %s", browserLaunchCommand, UserInterface.rootContext());
   }
 
   @Override
   public boolean shouldProcess(final TaskExecutionContext context) {
-    return Configuration.resolveEnvironment().isLocal();
+    return Configuration.resolveEnvironment().isLocal() && !Profile.isTestProfileEnabled();
   }
 }

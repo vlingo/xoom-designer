@@ -4,12 +4,11 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.codegen.java.structure;
+package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.cli.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;

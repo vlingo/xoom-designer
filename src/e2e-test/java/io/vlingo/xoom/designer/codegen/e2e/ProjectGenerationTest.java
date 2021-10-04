@@ -8,17 +8,9 @@ package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
-import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.codegen.GenerationTarget;
-import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.XoomInitializer;
-import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.designer.Initializer;
+import io.vlingo.xoom.designer.infrastructure.DesignerServer;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
@@ -28,26 +20,22 @@ import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
-import static io.vlingo.xoom.designer.cli.Property.DESIGNER_SERVER_PORT;
 import static io.vlingo.xoom.http.Response.Status.Created;
 import static io.vlingo.xoom.http.Response.Status.Ok;
 
 public abstract class ProjectGenerationTest {
 
+  private static Integer designerPort;
   private static final Logger logger = Logger.basicLogger();
   private static final PortDriver portDriver = PortDriver.init();
   public static final Path e2eResourcesPath = Paths.get(System.getProperty("user.dir"), "src", "e2e-test", "resources");
 
-  public static void init(final CodeElementFormatter codeElementFormatter) {
+  public static void init() {
     onShutdown();
-    Infrastructure.clear();
-    ComponentRegistry.clear();
-    Profile.enableTestProfile();
-    ComponentRegistry.register(GenerationTarget.class, GenerationTarget.FILESYSTEM);
-    ComponentRegistry.register(DESIGNER_SERVER_PORT.literal(), portDriver.findAvailable());
-    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
-    Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
-    new UserInterfaceBootstrapStep().process(TaskExecutionContext.bare());
+    if(!isDesignerRunning()) {
+      designerPort = portDriver.findAvailable();
+      Initializer.main(new String[]{"gui", "--port", designerPort.toString(), "--profile", "test"});
+    }
   }
 
   public void generateAndRun(final Project project) {
@@ -63,14 +51,12 @@ public abstract class ProjectGenerationTest {
   private void generate(final Project project){
     removeTargetFolder(project.generationPath.path);
 
-    final int designerPort = Infrastructure.DesignerServer.url().getPort();
-
     final int pathCreationStatusCode = given().port(designerPort).accept(JSON)
             .contentType(JSON).body(project.generationPath).post("/api/generation-settings/paths").statusCode();
 
     Assertions.assertEquals(Created.code, pathCreationStatusCode, "Error creating generation path for " + project);
 
-    final int generationStatusCode = given().port(Infrastructure.DesignerServer.url().getPort())
+    final int generationStatusCode = given().port(DesignerServer.url().getPort())
             .accept(JSON).contentType(JSON).body(project.generationSettings).post("/api/generation-settings").statusCode();
 
     Assertions.assertEquals(Ok.code, generationStatusCode, "Error generating " + project);
@@ -101,28 +87,19 @@ public abstract class ProjectGenerationTest {
     }
   }
 
-  @AfterEach
-  public void stopProject() {
-    stopProjects();
-  }
-
-  public static void clear() throws Exception {
-    Infrastructure.clear();
-    ComponentRegistry.clear();
-    Profile.disableTestProfile();
-    XoomInitializer.instance().stopServer().await();
-    XoomInitializer.instance().terminateWorld();
-  }
-
   private static void onShutdown() {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      stopProjects();
+      stopServices();
       SupportingServicesManager.shutdown();
     }));
   }
 
-  private static void stopProjects() {
+  public static void stopServices() {
     Project.stopAll(logger, portDriver);
+  }
+
+  private static boolean isDesignerRunning() {
+    return designerPort != null;
   }
 
 }

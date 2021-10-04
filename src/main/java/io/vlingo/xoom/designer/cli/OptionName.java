@@ -11,6 +11,8 @@ public enum OptionName {
 
     TAG("tag"),
     TARGET("target"),
+    PORT("port"),
+    PROFILE("profile"),
     CURRENT_DIRECTORY("currentDirectory"),
     PUBLISHER("publisher");
 

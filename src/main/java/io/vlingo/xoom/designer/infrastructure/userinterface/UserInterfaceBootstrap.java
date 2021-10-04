@@ -8,7 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
 import io.vlingo.xoom.designer.Environment;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerServer;
+import io.vlingo.xoom.designer.infrastructure.DesignerServer;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiter;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiterFilter;
 import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestPreservationFilter;

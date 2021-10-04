@@ -93,7 +93,7 @@ public class SupportingServicesManager {
       final String directoryChangeCommand =
               Terminal.supported().resolveDirectoryChangeCommand(ProjectGenerationTest.e2eResourcesPath);
 
-      return String.format("%s && docker-compose stop", directoryChangeCommand);
+      return String.format("%s && docker-compose stop && docker-compose rm -v -f", directoryChangeCommand);
     }
   }
 

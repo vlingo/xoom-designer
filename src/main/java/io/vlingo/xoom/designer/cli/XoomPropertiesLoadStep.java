@@ -9,8 +9,8 @@ package io.vlingo.xoom.designer.cli;
 
 import io.vlingo.xoom.designer.infrastructure.ExternalDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.XoomProperties;
 import io.vlingo.xoom.designer.infrastructure.ResourceLoadException;
+import io.vlingo.xoom.designer.infrastructure.XoomProperties;
 
 import java.util.Properties;
 

@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.codegen;
 
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
+import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

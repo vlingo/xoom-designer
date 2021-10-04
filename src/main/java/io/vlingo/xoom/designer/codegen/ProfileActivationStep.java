@@ -4,19 +4,22 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.designer.codegen;
 
-package io.vlingo.xoom.designer.codegen.java.structure;
-
+import io.vlingo.xoom.designer.Profile;
+import io.vlingo.xoom.designer.cli.OptionName;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.cli.TaskExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 
-public class ResourcesLocationStep implements TaskExecutionStep {
+public class ProfileActivationStep implements TaskExecutionStep {
 
   @Override
   public void process(final TaskExecutionContext context) {
-    Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
+    final String profileName = context.optionValueOf(OptionName.PROFILE);
+    if(profileName.equalsIgnoreCase(Profile.TEST.name())) {
+      context.logger().info("Enabling Test profile");
+      Profile.enableTestProfile();
+    }
   }
 
 }

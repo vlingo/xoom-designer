@@ -7,6 +7,7 @@
 
 package io.vlingo.xoom.designer.cli;
 
+import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.cli.docker.DockerCommandManager;
 import io.vlingo.xoom.designer.cli.gloo.GlooCommandManager;
 import io.vlingo.xoom.designer.cli.k8s.KubernetesCommandManager;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.vlingo.xoom.designer.cli.OptionName.TARGET;
+import static io.vlingo.xoom.designer.cli.OptionName.*;
 
 @SuppressWarnings("rawtypes")
 public enum Task {
@@ -26,8 +27,8 @@ public enum Task {
   DOCKER("docker", new DockerCommandManager()),
   K8S("k8s", new KubernetesCommandManager()),
   GLOO("gloo", new GlooCommandManager()),
-  GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, "")),
-  VERSION("-version", new VersionDisplayManager());
+  VERSION("-version", new VersionDisplayManager()),
+  GRAPHICAL_USER_INTERFACE("gui", new UserInterfaceManager(), Option.of(TARGET, ""), Option.of(PROFILE, Profile.PRODUCTION.name()),  Option.of(PORT, "0")),;
 
   public final String command;
   private final TaskManager manager;

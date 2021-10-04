@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.codegen.java.structure;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.cli.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
+import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 import org.apache.commons.io.FileUtils;
 

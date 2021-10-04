@@ -12,7 +12,7 @@ import io.vlingo.xoom.designer.codegen.e2e.Project;
 import io.vlingo.xoom.designer.codegen.e2e.RequestAttempt;
 import io.vlingo.xoom.designer.codegen.e2e.SupportingServicesManager;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -146,9 +146,10 @@ public class CargoShippingServicesGenerationTest extends JavaBasedProjectGenerat
     generateAndRun(freighterMaintenance);
   }
 
-  @AfterAll
-  public static void tearDown() throws Exception {
-    clear();
+  @AfterEach
+  public void stopProject() {
+    stopServices();
   }
+
 
 }

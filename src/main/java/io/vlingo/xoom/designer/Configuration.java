@@ -10,6 +10,7 @@ import io.vlingo.xoom.designer.cli.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParametersLoadStep;
+import io.vlingo.xoom.designer.codegen.ProfileActivationStep;
 import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
@@ -28,7 +29,8 @@ import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPullStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPushStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemataGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.storage.StorageGenerationStep;
-import io.vlingo.xoom.designer.codegen.java.structure.*;
+import io.vlingo.xoom.designer.codegen.java.structure.MainClassResolverStep;
+import io.vlingo.xoom.designer.codegen.java.structure.MavenWrapperInstallationStep;
 import io.vlingo.xoom.designer.codegen.java.unittest.entity.EntityUnitTestGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.unittest.projections.ProjectionUnitTestGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.unittest.queries.QueriesUnitTestGenerationStep;
@@ -37,6 +39,10 @@ import io.vlingo.xoom.designer.codegen.java.unittest.resource.RestResourceUnitTe
 import io.vlingo.xoom.designer.codegen.reactjs.AggregateManagementGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.StaticFilesGenerationStep;
+import io.vlingo.xoom.designer.infrastructure.InfraResourcesInitializationStep;
+import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
+import io.vlingo.xoom.designer.infrastructure.StagingFolderCleanUpStep;
+import io.vlingo.xoom.designer.infrastructure.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
@@ -73,7 +79,6 @@ public class Configuration {
   }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
-      new ResourcesLocationStep(),
       new CodeGenerationParametersLoadStep(),
       new CodeGenerationParameterValidationStep(),
       new MainClassResolverStep(),
@@ -119,7 +124,10 @@ public class Configuration {
   );
 
   public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-      new ResourcesLocationStep(), new GenerationTargetRegistrationStep(), new UserInterfaceBootstrapStep(),
+      new ProfileActivationStep(),
+      new InfraResourcesInitializationStep(),
+      new GenerationTargetRegistrationStep(),
+      new UserInterfaceBootstrapStep(),
       new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
   );
 

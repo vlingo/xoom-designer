@@ -8,10 +8,10 @@ package io.vlingo.xoom.designer.codegen.e2e.java.bookstoreservice;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.vlingo.xoom.designer.codegen.e2e.RequestAttempt;
 import io.vlingo.xoom.designer.codegen.e2e.Project;
+import io.vlingo.xoom.designer.codegen.e2e.RequestAttempt;
 import io.vlingo.xoom.designer.codegen.e2e.java.JavaBasedProjectGenerationTest;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -143,8 +143,9 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
     Assertions.assertEquals(bookWithNewPrice, responseBody, "Wrong response while changing price " + bookStoreProject);
   }
 
-  @AfterAll
-  public static void tearDown() throws Exception {
-    clear();
+  @AfterEach
+  public void stopProject() {
+    stopServices();
   }
+
 }

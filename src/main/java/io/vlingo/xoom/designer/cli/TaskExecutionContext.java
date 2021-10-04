@@ -45,6 +45,7 @@ public class TaskExecutionContext {
     this.agent = agent;
     this.executionId = UUID.randomUUID().toString();
     this.parameters = CodeGenerationParameters.empty();
+    this.logger = Logger.basicLogger();
   }
 
   public static TaskExecutionContext empty() {

@@ -11,7 +11,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.cli.Property;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.cli.TaskExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.DesignerProperties;
+import io.vlingo.xoom.designer.infrastructure.DesignerProperties;
 
 import java.util.HashMap;
 import java.util.Map;

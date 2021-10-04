@@ -11,7 +11,7 @@ import io.vlingo.xoom.designer.cli.CommandExecutionStep;
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
+import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
 
@@ -43,7 +43,7 @@ public class JavaCompilation extends CommandExecutionStep {
     final Terminal terminal = Terminal.supported();
     final String profileName = resolveMavenProfile();
     final Path pomPath = Paths.get(applicationPath, "pom.xml");
-    final Path stagingFolderPath = Infrastructure.StagingFolder.path();
+    final Path stagingFolderPath = StagingFolder.path();
     final String directoryChangeCommand = terminal.resolveDirectoryChangeCommand(stagingFolderPath);
     return String.format("%s && %s -f %s package %s", directoryChangeCommand, terminal.mavenCommand(), pomPath, profileName);
   }

@@ -4,29 +4,35 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.codegen.java.structure;
+package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.cli.TaskExecutionException;
 import io.vlingo.xoom.designer.cli.TaskExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure.StagingFolder;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
-public class TemporaryTaskFolderCreationStep implements TaskExecutionStep {
+import static io.vlingo.xoom.designer.cli.TaskOutput.COMPRESSED_PROJECT;
+
+public class ProjectCompressionStep implements TaskExecutionStep {
 
   @Override
   public void process(final TaskExecutionContext context) {
     try {
-      final Path temporaryTaskFolder =
-              StagingFolder.path().resolve(context.executionId);
-
-      Files.createDirectory(temporaryTaskFolder);
+      context.addOutput(COMPRESSED_PROJECT, ProjectCompressor.compress(context.targetFolder()));
     } catch (final IOException e) {
-      e.printStackTrace();
       throw new TaskExecutionException(e);
     }
+  }
+
+  @Override
+  public boolean shouldProcess(final TaskExecutionContext context) {
+    return generationTarget().supportDownload();
+  }
+
+  private GenerationTarget generationTarget() {
+    return ComponentRegistry.withType(GenerationTarget.class);
   }
 }
