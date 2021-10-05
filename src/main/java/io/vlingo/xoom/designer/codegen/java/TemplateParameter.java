@@ -126,7 +126,6 @@ public enum TemplateParameter implements ParameterKey {
   EXCHANGE_ROLE("exchangeRole"),
   EXCHANGE_RECEIVERS("exchangeReceivers"),
   INLINE_EXCHANGE_NAMES("inlineExchangeNames"),
-  EXCHANGE_NAME("exchangeName"),
   EXCHANGE_NAMES("exchangeNames"),
   SCHEMA_GROUP_NAME("schemaGroupName"),
   EXCHANGES("exchanges"),

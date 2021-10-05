@@ -24,7 +24,6 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
   <#if producerExchanges?has_content>
   private Dispatcher<?> dispatcher;
   </#if>
-  public static final String exchangeName = "${exchangeName}";
 
   @Override
   public void init(final Grid stage) {
@@ -32,10 +31,10 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
 
     <#list exchanges as exchange>
     final ConnectionSettings ${exchange.settingsName} =
-                ExchangeSettings.of(exchangeName).mapToConnection();
+                ExchangeSettings.one().mapToConnection();
 
     final Exchange ${exchange.variableName} =
-                ExchangeFactory.fanOutInstanceQuietly(${exchange.settingsName}, exchangeName, true);
+                ExchangeFactory.fanOutInstanceQuietly(${exchange.settingsName}, ExchangeSettings.one().exchangeName, true);
 
     try {
       <#list exchange.coveys as covey>
@@ -49,7 +48,7 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
 
       </#list>
     } catch (final InactiveBrokerExchangeException exception) {
-      stage.world().defaultLogger().error("Unable to register covey(s) for exchange " + exchangeName);
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange");
       stage.world().defaultLogger().warn(exception.getMessage());
     }
 

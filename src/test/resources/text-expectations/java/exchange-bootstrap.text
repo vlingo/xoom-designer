@@ -21,17 +21,16 @@ import io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
 public class ExchangeBootstrap implements ExchangeInitializer {
 
   private Dispatcher<?> dispatcher;
-  public static final String exchangeName = "book-store-exchange";
 
   @Override
   public void init(final Grid stage) {
     ExchangeSettings.load(Settings.properties());
 
     final ConnectionSettings bookStoreExchangeSettings =
-                ExchangeSettings.of(exchangeName).mapToConnection();
+                ExchangeSettings.one().mapToConnection();
 
     final Exchange bookStoreExchange =
-                ExchangeFactory.fanOutInstanceQuietly(bookStoreExchangeSettings, exchangeName, true);
+                ExchangeFactory.fanOutInstanceQuietly(bookStoreExchangeSettings, ExchangeSettings.one().exchangeName, true);
 
     try {
       bookStoreExchange.register(Covey.of(
@@ -75,7 +74,7 @@ public class ExchangeBootstrap implements ExchangeInitializer {
           Message.class));
 
     } catch (final InactiveBrokerExchangeException exception) {
-      stage.world().defaultLogger().error("Unable to register covey(s) for exchange " + exchangeName);
+      stage.world().defaultLogger().error("Unable to register covey(s) for exchange");
       stage.world().defaultLogger().warn(exception.getMessage());
     }
 

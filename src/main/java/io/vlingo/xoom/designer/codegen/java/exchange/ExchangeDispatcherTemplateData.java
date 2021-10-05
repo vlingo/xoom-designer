@@ -45,7 +45,6 @@ public class ExchangeDispatcherTemplateData extends TemplateData {
     this.parameters =
             TemplateParameters.with(TemplateParameter.PACKAGE_NAME, exchangePackage)
                     .and(TemplateParameter.PRODUCER_EXCHANGES, ProducerExchange.from(producerExchanges))
-                    .and(TemplateParameter.EXCHANGE_BOOTSTRAP_NAME, JavaTemplateStandard.EXCHANGE_BOOTSTRAP.resolveClassname())
                     .addImports(resolveImports(producerExchanges, contents));
   }
 

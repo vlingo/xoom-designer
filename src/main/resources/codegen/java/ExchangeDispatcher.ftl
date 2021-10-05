@@ -11,9 +11,8 @@ import io.vlingo.xoom.symbio.store.dispatch.Dispatcher;
 import io.vlingo.xoom.symbio.store.dispatch.DispatcherControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.*;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 <#if imports?has_content>
 <#list imports as import>
@@ -31,17 +30,16 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
   private static final Logger logger = LoggerFactory.getLogger(ExchangeDispatcher.class);
 
   private DispatcherControl control;
-  private final List<Exchange> producerExchanges;
-  private final Map<String, Set<String>> eventsByExchangeName = new HashMap<>();
+  private final Exchange producer;
+  private final List<String> outgoingEvents = new ArrayList<>();
 
-  public ExchangeDispatcher(final Exchange ...producerExchanges) {
+  public ExchangeDispatcher(final Exchange producer) {
+    this.producer = producer;
     <#list producerExchanges as exchange>
-    this.eventsByExchangeName.put(${exchangeBootstrapName}.exchangeName, new HashSet<>());
     <#list exchange.events as event>
-    this.eventsByExchangeName.get(${exchangeBootstrapName}.exchangeName).add(${event}.class.getCanonicalName());
+    this.outgoingEvents.add(${event}.class.getCanonicalName());
     </#list>
     </#list>
-    this.producerExchanges = Arrays.asList(producerExchanges);
   }
 
   @Override
@@ -56,27 +54,23 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
   }
 
   @Override
-  public void confirmDispatchedResultedIn(Result result, String dispatchId) {
-      logger.debug("Dispatch id {} resulted in {}", dispatchId, result);
+  public void confirmDispatchedResultedIn(final Result result, final String dispatchId) {
+    logger.debug("Dispatch id {} resulted in {}", dispatchId, result);
   }
 
   @Override
-  public void controlWith(DispatcherControl control) {
+  public void controlWith(final DispatcherControl control) {
     this.control = control;
   }
 
   private void send(final Object event) {
-    this.findInterestedIn(event).forEach(exchange -> exchange.send(event));
+    if(shouldPublish(event)) {
+      this.producer.send(event);
+    }
   }
 
-  private Stream<Exchange> findInterestedIn(final Object event) {
-    final Set<String> exchangeNames =
-          eventsByExchangeName.entrySet().stream().filter(exchange -> {
-             final Set<String> events = exchange.getValue();
-             return events.contains(event.getClass().getCanonicalName());
-         }).map(Map.Entry::getKey).collect(Collectors.toSet());
-
-    return this.producerExchanges.stream().filter(exchange -> exchangeNames.contains(exchange.name()));
+  private boolean shouldPublish(final Object event) {
+    return outgoingEvents.contains(event.getClass().getCanonicalName());
   }
 
 }
