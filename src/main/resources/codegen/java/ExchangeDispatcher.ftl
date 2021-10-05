@@ -36,9 +36,9 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
 
   public ExchangeDispatcher(final Exchange ...producerExchanges) {
     <#list producerExchanges as exchange>
-    this.eventsByExchangeName.put("${exchange.name}", new HashSet<>());
+    this.eventsByExchangeName.put(${exchangeBootstrapName}.exchangeName, new HashSet<>());
     <#list exchange.events as event>
-    this.eventsByExchangeName.get("${exchange.name}").add(${event}.class.getCanonicalName());
+    this.eventsByExchangeName.get(${exchangeBootstrapName}.exchangeName).add(${event}.class.getCanonicalName());
     </#list>
     </#list>
     this.producerExchanges = Arrays.asList(producerExchanges);

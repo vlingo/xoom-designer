@@ -51,7 +51,7 @@ public class CodeGenerationParametersBuilder {
                         .relate(Label.METHOD_PARAMETER, "name");
 
         final CodeGenerationParameter otherAppExchange =
-                CodeGenerationParameter.of(Label.EXCHANGE, "otherapp-exchange")
+                CodeGenerationParameter.of(Label.EXCHANGE, "book-store-exchange")
                         .relate(Label.ROLE, ExchangeRole.CONSUMER)
                         .relate(CodeGenerationParameter.of(Label.RECEIVER)
                                 .relate(CodeGenerationParameter.ofObject(Label.SCHEMA, new Schema("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1")))
@@ -64,7 +64,7 @@ public class CodeGenerationParametersBuilder {
                                 .relate(Label.MODEL_METHOD, "block"));
 
         final CodeGenerationParameter authorExchange =
-                CodeGenerationParameter.of(Label.EXCHANGE, "author-exchange")
+                CodeGenerationParameter.of(Label.EXCHANGE, "book-store-exchange")
                         .relate(Label.ROLE, ExchangeRole.PRODUCER)
                         .relate(Label.SCHEMA_GROUP, "vlingo:xoom:io.vlingo.xoomapp")
                         .relate(Label.DOMAIN_EVENT, "AuthorBlocked")
@@ -98,7 +98,7 @@ public class CodeGenerationParametersBuilder {
                         DeploymentSettings.with(DeploymentType.NONE, "", "", "", 8988));
 
         final CodeGenerationParameter bookExchange =
-                CodeGenerationParameter.of(Label.EXCHANGE, "book-exchange")
+                CodeGenerationParameter.of(Label.EXCHANGE, "book-store-exchange")
                         .relate(Label.ROLE, ExchangeRole.PRODUCER)
                         .relate(Label.SCHEMA_GROUP, "vlingo:xoom:io.vlingo.xoomapp")
                         .relate(Label.DOMAIN_EVENT, "BookSoldOut")

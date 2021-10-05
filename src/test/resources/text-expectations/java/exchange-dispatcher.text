@@ -34,12 +34,11 @@ public class ExchangeDispatcher implements Dispatcher<Dispatchable<Entry<String>
   private final Map<String, Set<String>> eventsByExchangeName = new HashMap<>();
 
   public ExchangeDispatcher(final Exchange ...producerExchanges) {
-    this.eventsByExchangeName.put("author-exchange", new HashSet<>());
-    this.eventsByExchangeName.get("author-exchange").add(AuthorRated.class.getCanonicalName());
-    this.eventsByExchangeName.get("author-exchange").add(AuthorBlocked.class.getCanonicalName());
-    this.eventsByExchangeName.put("book-exchange", new HashSet<>());
-    this.eventsByExchangeName.get("book-exchange").add(BookSoldOut.class.getCanonicalName());
-    this.eventsByExchangeName.get("book-exchange").add(BookPurchased.class.getCanonicalName());
+    this.eventsByExchangeName.put(ExchangeBootstrap.exchangeName, new HashSet<>());
+    this.eventsByExchangeName.get(ExchangeBootstrap.exchangeName).add(AuthorRated.class.getCanonicalName());
+    this.eventsByExchangeName.get(ExchangeBootstrap.exchangeName).add(AuthorBlocked.class.getCanonicalName());
+    this.eventsByExchangeName.get(ExchangeBootstrap.exchangeName).add(BookSoldOut.class.getCanonicalName());
+    this.eventsByExchangeName.get(ExchangeBootstrap.exchangeName).add(BookPurchased.class.getCanonicalName());
     this.producerExchanges = Arrays.asList(producerExchanges);
   }
 
