@@ -49,8 +49,8 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
 
     generateAndRun(projectWithStatefulEntities);
 
-    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> !res.get("title").toString().isEmpty();
-    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> !res.get("price").toString().equals(String.valueOf(newBook.price));
+    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> res.get("title") != null && !res.get("title").toString().isEmpty();
+    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
     assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, validResponsePreConditionOnNewBook);
@@ -83,14 +83,17 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
 
     generateAndRun(projectWithStatefulEntities);
 
+    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> res.get("title") != null && !res.get("title").toString().isEmpty();
+    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
+
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, res -> !res.get("title").toString().isEmpty());
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, validResponsePreConditionOnNewBook);
     assertThatBooksAreRetrieved(projectWithStatefulEntities, newBook);
 
     bookWithNewPrice.id = newBook.id;
 
     assertThatPriceIsChanged(projectWithStatefulEntities, bookWithNewPrice);
-    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice, res -> !res.get("price").toString().equals(String.valueOf(newBook.price)));
+    assertThatBookIsRetrievedById(projectWithStatefulEntities, bookWithNewPrice, validResponsePreConditionOnChangedPrice);
     assertThatBooksAreRetrieved(projectWithStatefulEntities, bookWithNewPrice);
   }
 
