@@ -49,8 +49,11 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
 
     generateAndRun(projectWithStatefulEntities);
 
-    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> res.get("title") != null && !res.get("title").toString().isEmpty();
-    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
+    final Predicate<JsonPath> validResponsePreConditionOnNewBook =
+            res -> res.get("title") != null && !res.get("title").toString().isEmpty();
+
+    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice =
+            res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
     assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, validResponsePreConditionOnNewBook);
@@ -83,8 +86,11 @@ public class BookStoreServiceGenerationTest extends JavaBasedProjectGenerationTe
 
     generateAndRun(projectWithStatefulEntities);
 
-    final Predicate<JsonPath> validResponsePreConditionOnNewBook = res -> res.get("title") != null && !res.get("title").toString().isEmpty();
-    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice = res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
+    final Predicate<JsonPath> validResponsePreConditionOnNewBook =
+            res -> res.get("title") != null && !res.get("title").toString().isEmpty();
+
+    final Predicate<JsonPath> validResponsePreConditionOnChangedPrice =
+            res -> res.get("price") != null && !res.get("price").toString().equals(String.valueOf(newBook.price));
 
     assertThatBookIsCreated(projectWithStatefulEntities, newBook);
     assertThatBookIsRetrievedById(projectWithStatefulEntities, newBook, validResponsePreConditionOnNewBook);

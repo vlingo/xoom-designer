@@ -64,8 +64,11 @@ public class CargoShippingServicesGenerationTest extends JavaBasedProjectGenerat
     final MechanicalIncidentData newIncident =
             MechanicalIncidentData.sampleOfNewIncident();
 
-    final Predicate<JsonPath> validResponsePreConditionOnNewIncident = res -> res.get("freighterId") !=null && !res.get("freighterId").toString().isEmpty();
-    final Predicate<JsonPath> validResponsePreConditionOnRelatedPart = res -> res.getList("relatedParts") != null && !res.getList("relatedParts").isEmpty();
+    final Predicate<JsonPath> validResponsePreConditionOnNewIncident =
+            res -> res.get("freighterId") !=null && !res.get("freighterId").toString().isEmpty();
+
+    final Predicate<JsonPath> validResponsePreConditionOnRelatedPart =
+            res -> res.getList("relatedParts") != null && !res.getList("relatedParts").isEmpty();
 
     generateAndRun(freighterMonitoringProject);
     assertThatIncidentIsRegistered(freighterMonitoringProject, newIncident);
