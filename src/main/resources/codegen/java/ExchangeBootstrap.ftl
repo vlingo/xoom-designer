@@ -27,14 +27,14 @@ public class ${exchangeBootstrapName} implements ExchangeInitializer {
 
   @Override
   public void init(final Grid stage) {
-    ExchangeSettings.load(Settings.properties());
+    final ExchangeSettings exchangeSettings =
+                ExchangeSettings.loadOne(Settings.properties());
 
     <#list exchanges as exchange>
-    final ConnectionSettings ${exchange.settingsName} =
-                ExchangeSettings.one().mapToConnection();
+    final ConnectionSettings ${exchange.settingsName} = exchangeSettings.mapToConnection();
 
     final Exchange ${exchange.variableName} =
-                ExchangeFactory.fanOutInstanceQuietly(${exchange.settingsName}, ExchangeSettings.one().exchangeName, true);
+                ExchangeFactory.fanOutInstanceQuietly(${exchange.settingsName}, exchangeSettings.exchangeName, true);
 
     try {
       <#list exchange.coveys as covey>

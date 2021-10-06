@@ -24,13 +24,14 @@ public class ExchangeBootstrap implements ExchangeInitializer {
 
   @Override
   public void init(final Grid stage) {
-    ExchangeSettings.load(Settings.properties());
+    final ExchangeSettings exchangeSettings =
+                ExchangeSettings.loadOne(Settings.properties());
 
     final ConnectionSettings bookStoreExchangeSettings =
-                ExchangeSettings.one().mapToConnection();
+                exchangeSettings.mapToConnection();
 
     final Exchange bookStoreExchange =
-                ExchangeFactory.fanOutInstanceQuietly(bookStoreExchangeSettings, ExchangeSettings.one().exchangeName, true);
+                ExchangeFactory.fanOutInstanceQuietly(bookStoreExchangeSettings, exchangeSettings.exchangeName, true);
 
     try {
       bookStoreExchange.register(Covey.of(
