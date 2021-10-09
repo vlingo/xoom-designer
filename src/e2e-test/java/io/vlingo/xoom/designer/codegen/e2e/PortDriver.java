@@ -7,8 +7,8 @@
 package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandOutputConsumer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.CommandOutputConsumer;
+import io.vlingo.xoom.terminal.Terminal;
 
 import java.io.IOException;
 import java.net.ServerSocket;

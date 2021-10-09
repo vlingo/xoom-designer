@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.infrastructure.restapi;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.cli.TaskOutput;
+import io.vlingo.xoom.cli.task.TaskOutput;
 import io.vlingo.xoom.designer.codegen.*;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModelFileException;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;

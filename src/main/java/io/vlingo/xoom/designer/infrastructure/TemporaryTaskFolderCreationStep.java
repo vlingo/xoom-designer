@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionException;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionException;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class TemporaryTaskFolderCreationStep implements TaskExecutionStep {
 
   @Override
-  public void process(final TaskExecutionContext context) {
+  public void processTaskWith(final TaskExecutionContext context) {
     try {
       final Path temporaryTaskFolder =
               StagingFolder.path().resolve(context.executionId);

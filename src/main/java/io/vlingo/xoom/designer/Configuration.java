@@ -6,10 +6,9 @@ import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
-import io.vlingo.xoom.designer.codegen.CodeGenerationParametersLoadStep;
 import io.vlingo.xoom.designer.codegen.ProfileActivationStep;
 import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
@@ -43,8 +42,8 @@ import io.vlingo.xoom.designer.infrastructure.InfraResourcesInitializationStep;
 import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
 import io.vlingo.xoom.designer.infrastructure.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.infrastructure.TemporaryTaskFolderCreationStep;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
 import io.vlingo.xoom.designer.infrastructure.userinterface.GenerationTargetRegistrationStep;
 import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
@@ -78,8 +77,15 @@ public class Configuration {
     ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
   }
 
+  public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
+          new ProfileActivationStep(),
+          new InfraResourcesInitializationStep(),
+          new GenerationTargetRegistrationStep(),
+          new UserInterfaceBootstrapStep(),
+          new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
+  );
+
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
-      new CodeGenerationParametersLoadStep(),
       new CodeGenerationParameterValidationStep(),
       new MainClassResolverStep(),
       new StagingFolderCleanUpStep(),
@@ -123,13 +129,6 @@ public class Configuration {
       new ContentCreationStep()
   );
 
-  public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-      new ProfileActivationStep(),
-      new InfraResourcesInitializationStep(),
-      new GenerationTargetRegistrationStep(),
-      new UserInterfaceBootstrapStep(),
-      new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
-  );
 
   public static String resolveDefaultXoomVersion() {
     final String version = Configuration.class.getPackage().getImplementationVersion();

@@ -10,14 +10,14 @@ package io.vlingo.xoom.designer.codegen;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.TaskExecutionContextMapper;
 import io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport;
 
 import java.io.File;
 
-import static io.vlingo.xoom.designer.cli.TaskOutput.PROJECT_GENERATION_REPORT;
+import static io.vlingo.xoom.cli.task.TaskOutput.PROJECT_GENERATION_REPORT;
 import static io.vlingo.xoom.designer.infrastructure.restapi.report.ProjectGenerationReport.*;
 
 public class ProjectGenerationManager {
@@ -45,7 +45,7 @@ public class ProjectGenerationManager {
   private Completes<TaskExecutionContext> validate(final GenerationSettingsData settings, ProjectGenerationInformation information) {
     final String validationErrors = String.join(", ", settings.validate());
     if(validationErrors.isEmpty()) {
-      return Completes.withSuccess(TaskExecutionContext.empty());
+      return Completes.withSuccess(TaskExecutionContext.bare());
     }
     final ProjectGenerationReport report = onValidationFail(validationErrors, information.generationTarget);
     return Completes.withFailure(TaskExecutionContext.withOutput(PROJECT_GENERATION_REPORT, report));
@@ -67,7 +67,7 @@ public class ProjectGenerationManager {
     try {
       Configuration.PROJECT_GENERATION_STEPS.stream()
               .filter(step -> step.shouldProcess(context))
-              .forEach(step -> step.process(context));
+              .forEach(step -> step.processTaskWith(context));
 
       context.addOutput(PROJECT_GENERATION_REPORT, onCodeGenerationSucceed(context, information));
     } catch (final Exception exception) {

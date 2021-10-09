@@ -7,11 +7,12 @@
 package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.designer.cli.CommandExecutionStep;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.infrastructure.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.terminal.CommandExecutor;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
+import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
+import io.vlingo.xoom.terminal.Terminal;
 
 public class SupportingServicesManager {
 
@@ -47,7 +48,7 @@ public class SupportingServicesManager {
     return Integer.valueOf(port);
   }
 
-  private static class SupportingServicesStart extends CommandExecutionStep {
+  private static class SupportingServicesStart extends CommandExecutor implements TaskExecutionStep {
 
     private final CommandObserver observer;
 
@@ -55,7 +56,7 @@ public class SupportingServicesManager {
       final SupportingServicesStart starter =
               new SupportingServicesStart(new CommandObserver());
 
-      starter.process();
+      starter.processTask();
 
       return starter.isRunning();
     }
@@ -78,10 +79,10 @@ public class SupportingServicesManager {
     }
   }
 
-  private static class SupportingServicesShutdown extends CommandExecutionStep {
+  private static class SupportingServicesShutdown extends CommandExecutor implements TaskExecutionStep {
 
     static void handle() {
-      new SupportingServicesShutdown().process();
+      new SupportingServicesShutdown().processTask();
     }
 
     private SupportingServicesShutdown() {

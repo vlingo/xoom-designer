@@ -6,16 +6,14 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure;
 
-import io.vlingo.xoom.turbo.ApplicationProperty;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import static io.vlingo.xoom.designer.cli.Property.DESIGNER_SERVER_PORT;
-
 public class DesignerProperties {
   private final Properties properties;
+  public static final String SERVER_PORT = "designer.server.port";
   private static final String FILENAME = "xoom-designer.properties";
 
   static void resolve(final HomeDirectory homeDirectory) {
@@ -29,12 +27,9 @@ public class DesignerProperties {
   }
 
   public static int retrieveServerPort(final int defaultPort) {
-    final String port =
-            ComponentRegistry.has(DESIGNER_SERVER_PORT.literal()) ?
-                    ComponentRegistry.withName(DESIGNER_SERVER_PORT.literal()).toString() :
-                    ApplicationProperty.readValue(DESIGNER_SERVER_PORT.literal(), properties());
-
-    return port == null ? defaultPort : Integer.valueOf(port);
+    return ComponentRegistry.has(SERVER_PORT) ?
+            Integer.valueOf(ComponentRegistry.withName(SERVER_PORT).toString()) :
+            defaultPort;
   }
 
   public static Properties properties() {

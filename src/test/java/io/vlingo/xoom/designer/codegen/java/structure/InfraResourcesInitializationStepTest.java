@@ -1,7 +1,7 @@
 package io.vlingo.xoom.designer.codegen.java.structure;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.DesignerProperties;
 import io.vlingo.xoom.designer.infrastructure.InfraResourcesInitializationStep;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
@@ -20,8 +20,7 @@ public class InfraResourcesInitializationStepTest {
 
   @Test
   public void testResourceLocationStepWithAlreadyExistingPaths() {
-    resourcesLocationStep.process(context);
-    Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
+    resourcesLocationStep.processTaskWith(context);
     Assertions.assertEquals(Paths.get(System.getProperty("user.dir"), "dist", "designer", "staging"), StagingFolder.path());
   }
 

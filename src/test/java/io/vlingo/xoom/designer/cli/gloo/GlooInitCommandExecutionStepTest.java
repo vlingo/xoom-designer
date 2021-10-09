@@ -7,9 +7,10 @@
 
 package io.vlingo.xoom.designer.cli.gloo;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.gloo.GlooInitCommandExecutionStep;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public class GlooInitCommandExecutionStepTest {
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 
-        new GlooInitCommandExecutionStep(commandRetainer).process(context);
+        new GlooInitCommandExecutionStep(commandRetainer).processTaskWith(context);
 
         final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);

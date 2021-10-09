@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.codegen;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionException;
+import io.vlingo.xoom.cli.task.TaskExecutionException;
 
 public class ProjectGenerationException extends TaskExecutionException {
   private static final long serialVersionUID = -8654681953639807867L;

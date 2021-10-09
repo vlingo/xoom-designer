@@ -1,29 +1,31 @@
 package io.vlingo.xoom.designer.cli;
 
-import io.vlingo.xoom.designer.cli.docker.DockerCommandManager;
-import io.vlingo.xoom.designer.cli.version.VersionDisplayManager;
+import io.vlingo.xoom.cli.task.Task;
+import io.vlingo.xoom.cli.UnknownCommandException;
+import io.vlingo.xoom.cli.task.docker.DockerCommandManager;
+import io.vlingo.xoom.cli.task.version.VersionDisplayManager;
 import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static io.vlingo.xoom.designer.cli.SubTask.*;
-import static io.vlingo.xoom.designer.cli.Task.DOCKER;
+import static io.vlingo.xoom.cli.task.SubTask.*;
+import static io.vlingo.xoom.cli.task.Task.DOCKER;
 
 public class TaskTest {
 
     @Test
     public void testTaskRetrievalByCommand() {
-        Assertions.assertEquals(UserInterfaceManager.class, Task.of("gui", Arrays.asList("0")).getClass());
-        Assertions.assertEquals(DockerCommandManager.class, Task.of("dOckEr", Arrays.asList("0")).getClass());
-        Assertions.assertEquals(VersionDisplayManager.class, Task.of("-version", Arrays.asList("0")).getClass());
+        Assertions.assertEquals(UserInterfaceManager.class, Task.managerOf("gui", Arrays.asList("0")).getClass());
+        Assertions.assertEquals(DockerCommandManager.class, Task.managerOf("dOckEr", Arrays.asList("0")).getClass());
+        Assertions.assertEquals(VersionDisplayManager.class, Task.managerOf("-version", Arrays.asList("0")).getClass());
     }
 
     @Test
     public void testTaskRetrievalByUnknownCommand() {
         Assertions.assertThrows(UnknownCommandException.class, () -> {
-            Task.of("start", Arrays.asList("0"));
+            Task.managerOf("start", Arrays.asList("0"));
         });
     }
 

@@ -1,20 +1,19 @@
 package io.vlingo.xoom.designer.cli.docker;
 
-import io.vlingo.xoom.designer.cli.OptionName;
-import io.vlingo.xoom.designer.cli.OptionValue;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.option.OptionValue;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.docker.DockerCommandException;
+import io.vlingo.xoom.cli.task.docker.DockerPushCommandExecutionStep;
+import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Properties;
-
-import static io.vlingo.xoom.designer.cli.Agent.TERMINAL;
-import static io.vlingo.xoom.designer.cli.Property.DOCKER_IMAGE;
-import static io.vlingo.xoom.designer.cli.Property.DOCKER_REPOSITORY;
 
 public class DockerPushCommandExecutionStepTest {
 
@@ -31,18 +30,17 @@ public class DockerPushCommandExecutionStepTest {
                 OptionValue.with(OptionName.CURRENT_DIRECTORY, "/home/projects/xoom-app");
 
         final Properties properties = new Properties();
-        properties.put(DOCKER_IMAGE.literal(), "xoom-app");
-        properties.put(DOCKER_REPOSITORY.literal(), "vlingo/xoom-app");
+        properties.put(XoomTurboProperties.DOCKER_IMAGE, "xoom-app");
+        properties.put(XoomTurboProperties.DOCKER_REPOSITORY, "vlingo/xoom-app");
 
         final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Arrays.asList(tag, directory));
+                TaskExecutionContext.withOptions(Arrays.asList(tag, directory));
 
         context.onProperties(properties);
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 
-        new DockerPushCommandExecutionStep(commandRetainer).process(context);
+        new DockerPushCommandExecutionStep(commandRetainer).processTaskWith(context);
 
         final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);
@@ -61,13 +59,10 @@ public class DockerPushCommandExecutionStepTest {
         final Properties properties = new Properties();
 
         final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Arrays.asList(tag, directory))
+                TaskExecutionContext.withOptions(Arrays.asList(tag, directory))
                         .onProperties(properties);
 
-        Assertions.assertThrows(DockerCommandException.class, () -> {
-            new DockerPushCommandExecutionStep(new CommandRetainer()).process(context);
-        });
+        Assertions.assertThrows(DockerCommandException.class, () -> new DockerPushCommandExecutionStep(new CommandRetainer()).processTaskWith(context));
     }
 
     @AfterEach

@@ -23,7 +23,7 @@
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <exec.mainClass>io.vlingo.xoom.designer.Initializer</exec.mainClass>
+    <exec.mainClass>io.vlingo.xoom.cli.CommandLineInterfaceInitializer</exec.mainClass>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
     <jar.path>${basedir}\target\xoom-designer-${project.version}.jar</jar.path>

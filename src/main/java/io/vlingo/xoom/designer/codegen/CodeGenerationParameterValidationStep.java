@@ -7,8 +7,8 @@
 package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.java.storage.DatabaseType;
@@ -32,7 +32,7 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
   private static CodeGenerationParameters parameters;
 
   @Override
-  public void process(final TaskExecutionContext context) {
+  public void processTaskWith(final TaskExecutionContext context) {
     parameters = context.codeGenerationParameters();
     List<String> errorStrings = new ArrayList<>();
     if(!retrieve(Label.GROUP_ID).matches(PACKAGE_PATTERN)) errorStrings.add("GroupID must follow package pattern");

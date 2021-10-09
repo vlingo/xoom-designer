@@ -12,9 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class DesignerServer {
-  private static final int DEFAULT_SERVER_PORT = 19090;
-  private static final String DEFAULT_SERVER_HOST = "localhost";
   private final URL url;
+
+  private static final int DEFAULT_PORT = 19090;
+  private static final String DEFAULT_HOST = "localhost";
+  public static final String PORT = "DESIGNER_SERVER_PORT";
 
   static void resolve() {
     if (!ComponentRegistry.has(DesignerServer.class)) {
@@ -24,11 +26,17 @@ public class DesignerServer {
 
   private DesignerServer() {
     try {
-      final int port = DesignerProperties.retrieveServerPort(DEFAULT_SERVER_PORT);
-      this.url = new URL(String.format("http://%s:%s", DEFAULT_SERVER_HOST, port));
+      final int port = retrieveServerPort(DEFAULT_PORT);
+      this.url = new URL(String.format("http://%s:%s", DEFAULT_HOST, port));
     } catch (final MalformedURLException e) {
       throw new IllegalStateException(e);
     }
+  }
+
+  private static int retrieveServerPort(final int defaultPort) {
+    return ComponentRegistry.has(PORT) ?
+            Integer.valueOf(ComponentRegistry.withName(PORT).toString()) :
+            defaultPort;
   }
 
   public static URL url() {

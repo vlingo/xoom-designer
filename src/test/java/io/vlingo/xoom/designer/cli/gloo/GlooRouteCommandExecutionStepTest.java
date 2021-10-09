@@ -6,10 +6,11 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.cli.gloo;
 
-import io.vlingo.xoom.designer.cli.Property;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.gloo.GlooRouteCommandExecutionStep;
+import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ public class GlooRouteCommandExecutionStepTest {
                 TaskExecutionContext.bare();
 
         final Properties properties = new Properties();
-        properties.put(Property.GLOO_UPSTREAM.literal(), "default-banking-8080");
+        properties.put(XoomTurboProperties.GLOO_UPSTREAM, "default-banking-8080");
         properties.put("gloo.resource.balance", "v1/balance");
         properties.put("gloo.resource.account", "v1/account");
         properties.put("gloo.resource.account.type", "v1/account/type");
@@ -39,7 +40,7 @@ public class GlooRouteCommandExecutionStepTest {
         context.onProperties(properties);
 
         final CommandRetainer commandRetainer = new CommandRetainer();
-        new GlooRouteCommandExecutionStep(commandRetainer).process(context);
+        new GlooRouteCommandExecutionStep(commandRetainer).processTaskWith(context);
 
         final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);

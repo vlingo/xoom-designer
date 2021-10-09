@@ -6,19 +6,20 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java;
 
-import io.vlingo.xoom.designer.cli.CommandExecutionStep;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.terminal.CommandExecutor;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
-import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
+import io.vlingo.xoom.terminal.Terminal;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 
-public class JavaAppInitialization extends CommandExecutionStep {
+public class JavaAppInitialization extends CommandExecutor implements TaskExecutionStep {
 
   private final int availablePort;
   private final GenerationSettingsData generationSettings;
@@ -29,7 +30,7 @@ public class JavaAppInitialization extends CommandExecutionStep {
     final JavaAppInitialization appInitialization =
             new JavaAppInitialization(generationSettings, new CommandObserver(), availablePort);
 
-    appInitialization.process();
+    appInitialization.processTask();
 
     return appInitialization;
   }
@@ -44,8 +45,8 @@ public class JavaAppInitialization extends CommandExecutionStep {
   }
 
   @Override
-  public void process() {
-    Executors.newSingleThreadExecutor().submit(() -> super.process());
+  public void processTask() {
+    Executors.newSingleThreadExecutor().submit(() -> processTask());
   }
 
   @Override

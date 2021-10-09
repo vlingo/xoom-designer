@@ -4,7 +4,7 @@ import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class CodeGenerationParameterValidationStepTest {
     final TaskExecutionContext context =
             TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
 
-    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
+    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().processTaskWith(context));
   }
 
   private ContextSettingsData contextSettingsData() {

@@ -7,20 +7,21 @@
 package io.vlingo.xoom.designer.codegen.e2e.java;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.designer.cli.CommandExecutionStep;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.terminal.CommandExecutor;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
-import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
+import io.vlingo.xoom.terminal.Terminal;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class JavaCompilation extends CommandExecutionStep {
+public class JavaCompilation extends CommandExecutor implements TaskExecutionStep {
 
   private final String applicationPath;
   private final CommandObserver commandObserver;
@@ -28,7 +29,7 @@ public class JavaCompilation extends CommandExecutionStep {
 
   public static JavaCompilation run(final String applicationPath) {
     final JavaCompilation compilation = new JavaCompilation(applicationPath, new CommandObserver());
-    compilation.process();
+    compilation.processTask();
     return compilation;
   }
 

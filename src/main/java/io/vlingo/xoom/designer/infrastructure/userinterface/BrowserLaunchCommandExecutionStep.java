@@ -7,15 +7,16 @@
 
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.cli.CommandExecutionStep;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.terminal.CommandExecutor;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.UserInterface;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.terminal.Terminal;
 
-public class BrowserLaunchCommandExecutionStep extends CommandExecutionStep {
+public class BrowserLaunchCommandExecutionStep extends CommandExecutor implements TaskExecutionStep {
 
   public BrowserLaunchCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);

@@ -7,9 +7,8 @@
 
 package io.vlingo.xoom.designer.codegen.java.structure;
 
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.cli.Agent;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.Label;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ public class MainClassResolverStepTest {
     @Test
     public void testThatDefaultMainClassIsResolved() {
         final TaskExecutionContext context = buildContext(false);
-        new MainClassResolverStep().process(context);
+        new MainClassResolverStep().processTaskWith(context);
         final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", mainClass);
     }
@@ -27,7 +26,7 @@ public class MainClassResolverStepTest {
     @Test
     public void testThatAnnotatedMainClassIsResolved() {
         final TaskExecutionContext context = buildContext(true);
-        new MainClassResolverStep().process(context);
+        new MainClassResolverStep().processTaskWith(context);
         final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
         Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", mainClass);
     }
@@ -37,7 +36,7 @@ public class MainClassResolverStepTest {
                 CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                         .add(Label.USE_ANNOTATIONS, useAnnotations);
 
-        return TaskExecutionContext.executedFrom(Agent.WEB).with(parameters);
+        return TaskExecutionContext.bare().with(parameters);
     }
 
 }

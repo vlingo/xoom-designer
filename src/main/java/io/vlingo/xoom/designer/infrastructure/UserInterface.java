@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.infrastructure;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class UserInterface {
-  private static final String USER_INTERFACE_CONTEXT = "context"; // "xoom-designer": This will not work until a resource for it is created.
+  private static final String USER_INTERFACE_CONTEXT = "context";
   private final String rootContext;
 
   static void resolve() {

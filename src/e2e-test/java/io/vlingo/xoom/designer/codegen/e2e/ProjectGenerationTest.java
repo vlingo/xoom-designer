@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.designer.Initializer;
+import io.vlingo.xoom.cli.CommandLineInterfaceInitializer;
 import io.vlingo.xoom.designer.infrastructure.DesignerServer;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -34,7 +34,7 @@ public abstract class ProjectGenerationTest {
     onShutdown();
     if(!isDesignerRunning()) {
       designerPort = portDriver.findAvailable();
-      Initializer.main(new String[]{"gui", "--port", designerPort.toString(), "--profile", "test"});
+      CommandLineInterfaceInitializer.main(new String[]{"gui", "--port", designerPort.toString(), "--profile", "test"});
     }
   }
 

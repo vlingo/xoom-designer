@@ -10,8 +10,8 @@ package io.vlingo.xoom.designer.codegen;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.codegen.template.OutputFileInstantiator;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 
 import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.OFFSET;
@@ -19,7 +19,7 @@ import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.OFFSET;
 public class CodeGenerationExecutionerStep implements TaskExecutionStep {
 
   @Override
-  public void process(final TaskExecutionContext execution) {
+  public void processTaskWith(final TaskExecutionContext execution) {
     final CodeGenerationContext generation =
             CodeGenerationContext.with(execution.codeGenerationParameters())
                     .fileLocationResolver(new ExternalFileLocationResolver())

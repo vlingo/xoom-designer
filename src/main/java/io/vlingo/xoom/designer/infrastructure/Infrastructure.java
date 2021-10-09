@@ -28,8 +28,8 @@ public class Infrastructure {
     UserInterface.resolve();
   }
 
-  public static void resolveExternalResources(final ExternalDirectory externalDirectory) {
-    XoomProperties.resolve(externalDirectory);
+  public static void resolveExternalResources(final ApplicationDirectory applicationDirectory) {
+    XoomTurboProperties.resolve(applicationDirectory);
   }
 
   static Properties loadProperties(final Path path) {
@@ -48,7 +48,7 @@ public class Infrastructure {
 
   public static void clear() {
     ComponentRegistry.unregister(StagingFolder.class, DesignerProperties.class,
-            DesignerServer.class, UserInterface.class, XoomProperties.class);
+            DesignerServer.class, UserInterface.class, XoomTurboProperties.class);
   }
 
 }

@@ -7,8 +7,8 @@
 
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
-import io.vlingo.xoom.designer.cli.OptionValue;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.option.OptionValue;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static io.vlingo.xoom.designer.cli.Agent.TERMINAL;
-import static io.vlingo.xoom.designer.cli.OptionName.TARGET;
+import static io.vlingo.xoom.cli.option.OptionName.TARGET;
 
 public class GenerationTargetRegistrationStepTest {
 
@@ -27,21 +26,21 @@ public class GenerationTargetRegistrationStepTest {
   @Test
   public void testThatGenerationTargetIsRegisteredWithEmptyOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.processTaskWith(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.FILESYSTEM, ComponentRegistry.withType(GenerationTarget.class));
   }
 
   @Test
   public void testThatGenerationTargetIsRegisteredWithZipOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "zip-download");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.processTaskWith(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.ZIP, ComponentRegistry.withType(GenerationTarget.class));
   }
 
   @Test
   public void testThatGenerationTargetIsRegisteredWithFileSystemOption() {
     final OptionValue optionValue = OptionValue.with(TARGET, "filesystem");
-    step.process(TaskExecutionContext.executedFrom(TERMINAL).withOptions(Arrays.asList(optionValue)));
+    step.processTaskWith(TaskExecutionContext.withOptions(Arrays.asList(optionValue)));
     Assertions.assertEquals(GenerationTarget.FILESYSTEM, ComponentRegistry.withType(GenerationTarget.class));
   }
 

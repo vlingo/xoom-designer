@@ -1,14 +1,15 @@
 package io.vlingo.xoom.designer.cli.docker;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.docker.DockerCommandException;
+import io.vlingo.xoom.cli.task.docker.DockerStatusCommandExecutionStep;
+import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
-
-import static io.vlingo.xoom.designer.cli.Property.DOCKER_IMAGE;
 
 public class DockerStatusCommandExecutionStepTest {
 
@@ -17,7 +18,7 @@ public class DockerStatusCommandExecutionStepTest {
   @Test
   public void testDockerStatusCommandResolution() {
     final Properties properties = new Properties();
-    properties.put(DOCKER_IMAGE.literal(), "xoom-app");
+    properties.put(XoomTurboProperties.DOCKER_IMAGE, "xoom-app");
 
     final TaskExecutionContext context =
             TaskExecutionContext.bare();
@@ -26,7 +27,7 @@ public class DockerStatusCommandExecutionStepTest {
 
     final CommandRetainer commandRetainer = new CommandRetainer();
 
-    new DockerStatusCommandExecutionStep(commandRetainer).process(context);
+    new DockerStatusCommandExecutionStep(commandRetainer).processTaskWith(context);
 
     final String[] commandsSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandsSequence[0]);
@@ -40,7 +41,7 @@ public class DockerStatusCommandExecutionStepTest {
             TaskExecutionContext.bare().onProperties(new Properties());
 
     Assertions.assertThrows(DockerCommandException.class, () -> {
-      new DockerStatusCommandExecutionStep(new CommandRetainer()).process(context);
+      new DockerStatusCommandExecutionStep(new CommandRetainer()).processTaskWith(context);
     });
   }
 }

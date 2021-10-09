@@ -6,8 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
 import org.apache.commons.io.FileUtils;
 
@@ -20,7 +20,7 @@ import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
 public class StagingFolderCleanUpStep implements TaskExecutionStep {
 
   @Override
-  public void process(final TaskExecutionContext context) {
+  public void processTaskWith(final TaskExecutionContext context) {
     try {
       Files.list(StagingFolder.path()).filter(Files::isDirectory)
               .filter(dir -> !dir.getFileName().toString().equals(MAVEN_WRAPPER_DIRECTORY))

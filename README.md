@@ -128,12 +128,12 @@ C:\[git-clone-path]> java -jar target\xoom-designer-1.8.8-SNAPSHOT.jar gui
 
 We look forward to your VLINGO XOOM contribution!
 
-### Application Generation
+### Project Generation
 
 In addition to the command-line interface (see below), `xoom-designer` provides a web/graphical user interface for a rapid application generation. Simply open a terminal window and run the Designer.
 
 ``` 
- $ ./xoom gui
+ $ ./xoom designer
 ```
 
 Following this your preferred browser will open with a wizard-fashioned screen, consisting of five steps.

@@ -7,6 +7,8 @@
 
 package io.vlingo.xoom.designer.infrastructure.terminal;
 
+import io.vlingo.xoom.terminal.CommandExecutionProcess;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

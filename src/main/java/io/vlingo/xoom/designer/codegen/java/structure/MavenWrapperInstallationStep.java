@@ -7,11 +7,11 @@
 
 package io.vlingo.xoom.designer.codegen.java.structure;
 
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
     private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw.cmd");
 
     @Override
-    public void process(final TaskExecutionContext context) {
+    public void processTaskWith(final TaskExecutionContext context) {
         final Path projectPath = Paths.get(context.targetFolder());
         copyMavenWrapperFiles(projectPath);
         copyMavenWrapperDirectory(projectPath);

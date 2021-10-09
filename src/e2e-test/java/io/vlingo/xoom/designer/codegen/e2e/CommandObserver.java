@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e;
 
-import io.vlingo.xoom.designer.infrastructure.terminal.ObservableCommandExecutionProcess;
+import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
 
 public class CommandObserver implements ObservableCommandExecutionProcess.CommandExecutionObserver {
 

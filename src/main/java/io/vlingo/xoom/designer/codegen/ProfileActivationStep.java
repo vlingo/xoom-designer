@@ -7,14 +7,14 @@
 package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.designer.cli.OptionName;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 
 public class ProfileActivationStep implements TaskExecutionStep {
 
   @Override
-  public void process(final TaskExecutionContext context) {
+  public void processTaskWith(final TaskExecutionContext context) {
     final String profileName = context.optionValueOf(OptionName.PROFILE);
     if(profileName.equalsIgnoreCase(Profile.TEST.name())) {
       context.logger().info("Enabling Test profile");

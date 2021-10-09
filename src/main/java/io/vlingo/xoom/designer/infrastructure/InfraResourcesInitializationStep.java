@@ -7,16 +7,15 @@
 
 package io.vlingo.xoom.designer.infrastructure;
 
-import io.vlingo.xoom.designer.cli.OptionName;
-import io.vlingo.xoom.designer.cli.Property;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskExecutionStep;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class InfraResourcesInitializationStep implements TaskExecutionStep {
 
   @Override
-  public void process(final TaskExecutionContext context) {
+  public void processTaskWith(final TaskExecutionContext context) {
     resolvePort(context);
     Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
   }
@@ -25,7 +24,7 @@ public class InfraResourcesInitializationStep implements TaskExecutionStep {
     if(context.hasOption(OptionName.PORT)) {
       final Integer port = Integer.valueOf(context.optionValueOf(OptionName.PORT));
       if(port > 0) {
-        ComponentRegistry.register(Property.DESIGNER_SERVER_PORT.literal(), port);
+        ComponentRegistry.register(DesignerServer.PORT, port);
       }
     }
   }

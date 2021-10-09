@@ -1,5 +1,7 @@
 package io.vlingo.xoom.designer.cli;
 
+import io.vlingo.xoom.cli.option.OptionValue;
+import io.vlingo.xoom.cli.task.SubTask;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -7,8 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static io.vlingo.xoom.designer.cli.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.designer.cli.OptionName.TAG;
+import static io.vlingo.xoom.cli.option.OptionName.CURRENT_DIRECTORY;
+import static io.vlingo.xoom.cli.option.OptionName.TAG;
 
 public class SubTaskTest {
 

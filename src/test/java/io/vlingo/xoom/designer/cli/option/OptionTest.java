@@ -1,9 +1,9 @@
 package io.vlingo.xoom.designer.cli.option;
 
 
-import io.vlingo.xoom.designer.cli.Option;
-import io.vlingo.xoom.designer.cli.OptionName;
-import io.vlingo.xoom.designer.cli.RequiredOptionNotFoundException;
+import io.vlingo.xoom.cli.option.Option;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.option.RequiredOptionNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

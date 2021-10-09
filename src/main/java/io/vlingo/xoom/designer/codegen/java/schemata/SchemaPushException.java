@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.java.schemata;
 
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionException;
+import io.vlingo.xoom.terminal.CommandExecutionException;
 
 public class SchemaPushException extends CommandExecutionException {
   private static final long serialVersionUID = 6076113309743794985L;

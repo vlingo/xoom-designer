@@ -23,4 +23,4 @@ FROM jvm
 USER xoom
 VOLUME $XOOM_HOME/$XOOM_PROJECTS_DIR
 COPY --from=designer --chown=xoom:xoom /designer $XOOM_HOME
-CMD xoom gui --target zip-download
+CMD xoom designer --target zip-download

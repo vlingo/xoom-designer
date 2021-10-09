@@ -7,25 +7,22 @@
 
 package io.vlingo.xoom.designer.infrastructure.userinterface;
 
+import io.vlingo.xoom.cli.task.Task;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskManager;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.cli.Task;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
-import io.vlingo.xoom.designer.cli.TaskManager;
 
 import java.util.List;
 
-import static io.vlingo.xoom.designer.cli.Agent.TERMINAL;
-
 public class UserInterfaceManager implements TaskManager<List<String>> {
 
-    @Override
-    public void run(final List<String> args) {
-        final TaskExecutionContext context =
-                TaskExecutionContext.executedFrom(TERMINAL)
-                        .withOptions(Task.GRAPHICAL_USER_INTERFACE.findOptionValues(args));
+  @Override
+  public void run(final List<String> args) {
+    final TaskExecutionContext context =
+            TaskExecutionContext.withOptions(Task.DESIGNER.findOptionValues(args));
 
-        Configuration.GUI_STEPS.stream().filter(step -> step.shouldProcess(context))
-                .forEach(step -> step.process(context));
-    }
+    Configuration.GUI_STEPS.stream().filter(step -> step.shouldProcess(context))
+            .forEach(step -> step.processTaskWith(context));
+  }
 
 }

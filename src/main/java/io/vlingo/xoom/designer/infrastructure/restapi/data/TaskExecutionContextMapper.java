@@ -8,12 +8,12 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.DeploymentType;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
@@ -30,7 +30,6 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static io.vlingo.xoom.designer.cli.Agent.WEB;
 import static io.vlingo.xoom.designer.codegen.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.codegen.Label.*;
 
@@ -54,7 +53,7 @@ public class TaskExecutionContextMapper {
                                      final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.context = TaskExecutionContext.executedFrom(WEB);
+    this.context = TaskExecutionContext.bare();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.logger = logger;

@@ -9,13 +9,13 @@ package io.vlingo.xoom.designer.codegen.java.schemata;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).process(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -50,7 +50,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of(Tuple2.from("vlingo-xoom-schemata", 10009)));
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).process(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -64,7 +64,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("/home/projects/designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).process(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -80,7 +80,7 @@ public class SchemaPullStepTest {
   @BeforeEach
   public void setUp() {
     Infrastructure.clear();
-    this.context = TaskExecutionContext.empty().logger(Logger.noOpLogger());
+    this.context = TaskExecutionContext.bare().logger(Logger.noOpLogger());
   }
 
   private static final String WINDOWS_ROOT_FOLDER = Paths.get("D:", "tools", "designer").toString();

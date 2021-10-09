@@ -6,19 +6,20 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.java.schemata;
 
-import io.vlingo.xoom.designer.cli.CommandExecutionStep;
-import io.vlingo.xoom.designer.cli.TaskExecutionContext;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.terminal.CommandExecutor;
+import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionException;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.terminal.Terminal;
+import io.vlingo.xoom.terminal.CommandExecutionException;
+import io.vlingo.xoom.terminal.CommandExecutionProcess;
+import io.vlingo.xoom.terminal.Terminal;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SchemaPullStep extends CommandExecutionStep {
+public class SchemaPullStep extends CommandExecutor implements TaskExecutionStep {
 
   public SchemaPullStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
