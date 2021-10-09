@@ -71,7 +71,7 @@ java -agentlib:native-image-agent=config-output-dir=src/main/resources/META-INF/
 ```
 <properties>
     ...
-    <exec.mainClass>io.vlingo.xoom.cli.Bootstrap</exec.mainClass>
+    <exec.mainClass>io.vlingo.xoom.cli.CommandLineInterfaceInitializer</exec.mainClass>
     <graalvm.version>21.1.0</graalvm.version>
     ...
 </properties>
