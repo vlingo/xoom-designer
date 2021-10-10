@@ -1,15 +1,17 @@
 package io.vlingo.xoom.designer;
 
+import io.vlingo.xoom.cli.task.CLITask;
+import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.cli.task.designer.DesignerTask;
+import io.vlingo.xoom.cli.task.docker.DockerTask;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
-import io.vlingo.xoom.designer.codegen.ProfileActivationStep;
 import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
@@ -38,15 +40,11 @@ import io.vlingo.xoom.designer.codegen.java.unittest.resource.RestResourceUnitTe
 import io.vlingo.xoom.designer.codegen.reactjs.AggregateManagementGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.StaticFilesGenerationStep;
-import io.vlingo.xoom.designer.infrastructure.InfraResourcesInitializationStep;
 import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
 import io.vlingo.xoom.designer.infrastructure.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.infrastructure.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
-import io.vlingo.xoom.designer.infrastructure.userinterface.BrowserLaunchCommandExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.GenerationTargetRegistrationStep;
-import io.vlingo.xoom.designer.infrastructure.userinterface.UserInterfaceBootstrapStep;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.lang3.StringUtils;
 
@@ -58,7 +56,7 @@ import java.util.Optional;
 
 import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
-public class Configuration {
+public class ComponentsConfiguration {
 
   private static final int DEFAULT_REQUEST_LIMIT = 10;
   public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
@@ -73,17 +71,25 @@ public class Configuration {
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   static {
-    ComponentRegistry.register(CommandExecutionProcess.class, new DefaultCommandExecutionProcess());
-    ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
+    load();
   }
 
-  public static final List<TaskExecutionStep> GUI_STEPS = Arrays.asList(
-          new ProfileActivationStep(),
-          new InfraResourcesInitializationStep(),
-          new GenerationTargetRegistrationStep(),
-          new UserInterfaceBootstrapStep(),
-          new BrowserLaunchCommandExecutionStep(withType(CommandExecutionProcess.class))
-  );
+  private static void load() {
+    final CommandExecutionProcess process =
+            new DefaultCommandExecutionProcess();
+
+    final CodeElementFormatter codeElementFormatter =
+            CodeElementFormatter.with(Dialect.findDefault(),
+                    ReservedWordsHandler.usingSuffix("_"));
+
+    final List<CLITask> cliTasks =
+            Arrays.asList(new DesignerTask(process),
+                    new DockerTask(process));
+
+    ComponentRegistry.register("cliTasks", cliTasks);
+    ComponentRegistry.register(CommandExecutionProcess.class, process);
+    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+  }
 
   public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
       new CodeGenerationParameterValidationStep(),
@@ -129,9 +135,8 @@ public class Configuration {
       new ContentCreationStep()
   );
 
-
   public static String resolveDefaultXoomVersion() {
-    final String version = Configuration.class.getPackage().getImplementationVersion();
+    final String version = ComponentsConfiguration.class.getPackage().getImplementationVersion();
     if (version == null) {
       System.out.println("Unable to find default VLINGO XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
       return XOOM_VERSION_PLACEHOLDER;
@@ -143,7 +148,7 @@ public class Configuration {
     if (Profile.isTestProfileEnabled()) {
       return Paths.get(System.getProperty("user.dir"), "dist", "designer").toString();
     }
-    return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);
+    return System.getenv(ComponentsConfiguration.HOME_ENVIRONMENT_VARIABLE);
   }
 
   public static Environment resolveEnvironment() {
@@ -157,12 +162,12 @@ public class Configuration {
 
   public static int resolveProjectGenerationRequestLimit() {
     final String requestLimit = System.getenv(REQUEST_LIMIT);
-    return requestLimit != null ? Integer.valueOf(requestLimit) : DEFAULT_REQUEST_LIMIT;
+    return requestLimit != null ? Integer.parseInt(requestLimit) : DEFAULT_REQUEST_LIMIT;
   }
 
   public static Duration resolveProjectGenerationRequestCountExpiration() {
     final String expirationSeconds = System.getenv(REQUEST_COUNT_EXPIRATION);
-    return expirationSeconds != null ? Duration.ofSeconds(Long.valueOf(expirationSeconds)) : DEFAULT_REQUEST_COUNT_EXPIRATION;
+    return expirationSeconds != null ? Duration.ofSeconds(Long.parseLong(expirationSeconds)) : DEFAULT_REQUEST_COUNT_EXPIRATION;
   }
 
   public static Optional<Tuple2<String, Integer>> resolveSchemataServiceDNS() {

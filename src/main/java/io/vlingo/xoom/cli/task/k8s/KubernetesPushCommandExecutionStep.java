@@ -15,15 +15,17 @@ import java.nio.file.Paths;
 
 public class KubernetesPushCommandExecutionStep extends CommandExecutor implements TaskExecutionStep {
 
-  private static final String COMMAND_PATTERN = "kubectl apply -f %s";
-
   public KubernetesPushCommandExecutionStep(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
   }
 
   @Override
-  protected String formatCommands(final TaskExecutionContext context) {
-    return String.format(COMMAND_PATTERN, Paths.get("deployment", "k8s"));
+  protected String formatCommands() {
+    return String.format("kubectl apply -f %s", Paths.get("deployment", "k8s"));
   }
 
+  @Override
+  public void processTaskWith(TaskExecutionContext context) {
+
+  }
 }

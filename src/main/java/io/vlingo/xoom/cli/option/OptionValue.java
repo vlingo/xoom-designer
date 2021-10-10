@@ -8,35 +8,41 @@
 package io.vlingo.xoom.cli.option;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class OptionValue {
 
-    private final OptionName name;
-    private final String value;
+  private final OptionName name;
+  private final String value;
 
-    public static List<OptionValue> resolveValues(final List<Option> options,
-                                                  final List<String> args) {
-        return options.stream().map(option -> {
-            final String value = option.findValue(args);
-            return OptionValue.with(option.name(), value);
-        }).collect(Collectors.toList());
-    }
+  public static Map<String, String> mapValues(final List<Option> options,
+                                              final List<String> args) {
+    return resolveValues(options, args).stream().collect(Collectors.toMap(value -> value.name.value(), OptionValue::value));
+  }
 
-    public static OptionValue with(final OptionName name, final String value) {
-        return new OptionValue(name, value);
-    }
+  public static List<OptionValue> resolveValues(final List<Option> options,
+                                                final List<String> args) {
+    return options.stream().map(option -> {
+      final String value = option.findValue(args);
+      return OptionValue.with(option.name(), value);
+    }).collect(Collectors.toList());
+  }
 
-    private OptionValue(final OptionName name, final String value) {
-        this.name = name;
-        this.value = value;
-    }
+  public static OptionValue with(final OptionName name, final String value) {
+    return new OptionValue(name, value);
+  }
 
-    public boolean hasName(final OptionName name) {
-        return this.name.equals(name);
-    }
+  private OptionValue(final OptionName name, final String value) {
+    this.name = name;
+    this.value = value;
+  }
 
-    public String value() {
-        return value;
-    }
+  public boolean hasName(final OptionName name) {
+    return this.name.equals(name);
+  }
+
+  public String value() {
+    return value;
+  }
 }

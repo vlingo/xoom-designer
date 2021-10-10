@@ -48,7 +48,7 @@ public class SupportingServicesManager {
     return Integer.valueOf(port);
   }
 
-  private static class SupportingServicesStart extends CommandExecutor implements TaskExecutionStep {
+  private static class SupportingServicesStart extends CommandExecutor {
 
     private final CommandObserver observer;
 
@@ -56,7 +56,7 @@ public class SupportingServicesManager {
       final SupportingServicesStart starter =
               new SupportingServicesStart(new CommandObserver());
 
-      starter.processTask();
+      starter.execute();
 
       return starter.isRunning();
     }
@@ -67,7 +67,7 @@ public class SupportingServicesManager {
     }
 
     @Override
-    protected String formatCommands(final TaskExecutionContext context) {
+    protected String formatCommands() {
       final String directoryChangeCommand =
               Terminal.supported().resolveDirectoryChangeCommand(ProjectGenerationTest.e2eResourcesPath);
 
@@ -79,10 +79,10 @@ public class SupportingServicesManager {
     }
   }
 
-  private static class SupportingServicesShutdown extends CommandExecutor implements TaskExecutionStep {
+  private static class SupportingServicesShutdown extends CommandExecutor {
 
     static void handle() {
-      new SupportingServicesShutdown().processTask();
+      new SupportingServicesShutdown().execute();
     }
 
     private SupportingServicesShutdown() {
@@ -90,7 +90,7 @@ public class SupportingServicesManager {
     }
 
     @Override
-    protected String formatCommands(final TaskExecutionContext context) {
+    protected String formatCommands() {
       final String directoryChangeCommand =
               Terminal.supported().resolveDirectoryChangeCommand(ProjectGenerationTest.e2eResourcesPath);
 

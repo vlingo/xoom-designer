@@ -9,7 +9,7 @@ package io.vlingo.xoom.cli.task.gloo;
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.cli.task.TaskExecutionException;
 import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
+import io.vlingo.xoom.cli.task.XoomTurboProperties;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 
@@ -27,21 +27,22 @@ public class GlooRouteCommandExecutionStep extends CommandExecutor implements Ta
   }
 
   @Override
-  protected String formatCommands(final TaskExecutionContext context) {
-    if (!context.hasProperty(XoomTurboProperties.GLOO_UPSTREAM)) {
-      throw new TaskExecutionException("Please set the Gloo upstream in xoom-turbo.properties");
-    }
-
-    final Set<String> resources = filterResources(context);
-    final String upstream = context.propertyOf(XoomTurboProperties.GLOO_UPSTREAM);
-
-    if (resources.isEmpty()) {
-      throw new TaskExecutionException("Please check if the Gloo routes are properly mapped in xoom-turbo.properties");
-    }
-
-    return resources.stream()
-            .map(resource -> buildCommand(upstream, resource, context))
-            .collect(Collectors.joining(" && "));
+  protected String formatCommands() {
+//    if (!context.hasProperty(XoomTurboProperties.GLOO_UPSTREAM)) {
+//      throw new TaskExecutionException("Please set the Gloo upstream in xoom-turbo.properties");
+//    }
+//
+//    final Set<String> resources = filterResources(context);
+//    final String upstream = context.propertyOf(XoomTurboProperties.GLOO_UPSTREAM);
+//
+//    if (resources.isEmpty()) {
+//      throw new TaskExecutionException("Please check if the Gloo routes are properly mapped in xoom-turbo.properties");
+//    }
+//
+//    return resources.stream()
+//            .map(resource -> buildCommand(upstream, resource, context))
+//            .collect(Collectors.joining(" && "));
+  return null;
   }
 
   private String buildCommand(final String upstream, final String resource, final TaskExecutionContext context) {
@@ -58,4 +59,8 @@ public class GlooRouteCommandExecutionStep extends CommandExecutor implements Ta
             .collect(Collectors.toSet());
   }
 
+  @Override
+  public void processTaskWith(TaskExecutionContext context) {
+
+  }
 }

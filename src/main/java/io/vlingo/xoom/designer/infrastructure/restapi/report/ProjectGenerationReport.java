@@ -45,7 +45,7 @@ public class ProjectGenerationReport {
             context.codeGenerationParameterOf(Label.DESIGNER_MODEL_JSON);
 
     final String errorDetails =
-            ProjectGenerationReportDetails.format(target.key(), CODEGEN_FAILURE, designerModel, exception);
+            ProjectGenerationReportDetails.format(target.value(), CODEGEN_FAILURE, designerModel, exception);
 
     return new ProjectGenerationReport(TaskStatus.FAILED, target, null, CODEGEN_FAILURE, errorDetails);
   }
@@ -65,7 +65,7 @@ public class ProjectGenerationReport {
             JsonSerialization.serialized(settings);
 
     final String errorDetails =
-            ProjectGenerationReportDetails.format(target.key(), CONTEXT_MAPPING_FAILURE, designerModel, exception);
+            ProjectGenerationReportDetails.format(target.value(), CONTEXT_MAPPING_FAILURE, designerModel, exception);
 
     return new ProjectGenerationReport(target, CONTEXT_MAPPING_FAILURE, errorDetails);
   }
@@ -89,7 +89,7 @@ public class ProjectGenerationReport {
                                   final String errorType,
                                   final String details) {
     this.status = status;
-    this.target = target.key();
+    this.target = target.value();
     this.compressedProject = compressedProject;
     this.errorType = errorType;
     this.details = details;

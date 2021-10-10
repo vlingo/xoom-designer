@@ -10,45 +10,19 @@ package io.vlingo.xoom.designer.infrastructure;
 import io.vlingo.xoom.designer.codegen.InvalidResourcesPathException;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Properties;
-
 public class Infrastructure {
 
-  public static void resolveInternalResources(final HomeDirectory homeDirectory) {
+  public static void setupResources(final HomeDirectory homeDirectory,
+                                    final Integer designerServerPort) {
     if (!homeDirectory.isValid()) {
       throw new InvalidResourcesPathException();
     }
     StagingFolder.resolve(homeDirectory);
-    DesignerProperties.resolve(homeDirectory);
-    DesignerServer.resolve();
-    UserInterface.resolve();
-  }
-
-  public static void resolveExternalResources(final ApplicationDirectory applicationDirectory) {
-    XoomTurboProperties.resolve(applicationDirectory);
-  }
-
-  static Properties loadProperties(final Path path) {
-    try {
-      final File propertiesFile = path.toFile();
-      final Properties properties = new Properties();
-      if (propertiesFile.exists()) {
-        properties.load(new FileInputStream(propertiesFile));
-      }
-      return properties;
-    } catch (final IOException exception) {
-      exception.printStackTrace();
-      throw new ResourceLoadException(path);
-    }
+    DesignerServerConfiguration.on(designerServerPort);
   }
 
   public static void clear() {
-    ComponentRegistry.unregister(StagingFolder.class, DesignerProperties.class,
-            DesignerServer.class, UserInterface.class, XoomTurboProperties.class);
+    ComponentRegistry.unregister(StagingFolder.class, DesignerServerConfiguration.class);
   }
 
 }

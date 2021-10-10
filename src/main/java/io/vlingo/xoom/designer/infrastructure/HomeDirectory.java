@@ -6,14 +6,14 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.infrastructure;
 
-import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.ComponentsConfiguration;
 
 public class HomeDirectory {
 
   public final String path;
 
   public static HomeDirectory fromEnvironment() {
-    return from(Configuration.resolveHomePath());
+    return from(ComponentsConfiguration.resolveHomePath());
   }
 
   public static HomeDirectory from(final String path) {

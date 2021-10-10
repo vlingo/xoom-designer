@@ -7,45 +7,38 @@
 
 package io.vlingo.xoom.terminal;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.terminal.CommandExecutionException;
-import io.vlingo.xoom.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.terminal.Terminal;
+import io.vlingo.xoom.actors.Logger;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class CommandExecutor {
+public abstract class CommandExecutor{
 
+  private final Logger logger = Logger.basicLogger();
   private final CommandExecutionProcess commandExecutionProcess;
 
   protected CommandExecutor(final CommandExecutionProcess commandExecutionProcess) {
     this.commandExecutionProcess = commandExecutionProcess;
   }
 
-  public void processTaskWith(final TaskExecutionContext context) {
+  public void execute() {
     grantPermissions();
-    logPreliminaryMessage(context);
-    logCommandExecutionMessage(context);
+    logPreliminaryMessage();
+    logCommandExecutionMessage();
     try {
-      commandExecutionProcess.handle(formatCommands(context));
+      commandExecutionProcess.handle(formatCommands());
     } catch (final CommandExecutionException exception) {
       throw resolveCommandExecutionException(exception);
     }
   }
 
-  private void logCommandExecutionMessage(final TaskExecutionContext context) {
+  private void logCommandExecutionMessage() {
     final String message = "Executing commands from " + this.getClass().getCanonicalName();
-    if(context.logger() == null) {
-      System.out.println(message);
-    } else {
-      context.logger().info(message);
-    }
+    logger.info(message);
   }
 
-  protected abstract String formatCommands(final TaskExecutionContext context);
+  protected abstract String formatCommands();
 
   protected List<File> executableFiles() {
     return Collections.emptyList();
@@ -59,7 +52,11 @@ public abstract class CommandExecutor {
     return exception;
   }
 
-  protected void logPreliminaryMessage(final TaskExecutionContext context) {
+  protected void logPreliminaryMessage() {
+  }
+
+  protected Logger logger() {
+    return logger;
   }
 
   public CommandExecutionProcess commandExecutionProcess() {

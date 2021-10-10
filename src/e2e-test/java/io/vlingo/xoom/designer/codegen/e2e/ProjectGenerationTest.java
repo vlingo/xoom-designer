@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.codegen.e2e;
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.cli.CommandLineInterfaceInitializer;
-import io.vlingo.xoom.designer.infrastructure.DesignerServer;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 
@@ -56,7 +55,7 @@ public abstract class ProjectGenerationTest {
 
     Assertions.assertEquals(Created.code, pathCreationStatusCode, "Error creating generation path for " + project);
 
-    final int generationStatusCode = given().port(DesignerServer.url().getPort())
+    final int generationStatusCode = given().port(designerPort)
             .accept(JSON).contentType(JSON).body(project.generationSettings).post("/api/generation-settings").statusCode();
 
     Assertions.assertEquals(Ok.code, generationStatusCode, "Error generating " + project);

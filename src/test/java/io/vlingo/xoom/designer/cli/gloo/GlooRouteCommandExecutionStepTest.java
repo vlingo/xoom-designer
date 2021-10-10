@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.cli.gloo;
 
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.cli.task.gloo.GlooRouteCommandExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
+import io.vlingo.xoom.cli.task.XoomTurboProperties;
 import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;

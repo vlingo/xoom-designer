@@ -7,9 +7,11 @@
 package io.vlingo.xoom.cli;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.cli.task.Task;
+import io.vlingo.xoom.cli.task.CLITask;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandLineInterfaceInitializer {
@@ -18,18 +20,20 @@ public class CommandLineInterfaceInitializer {
   private static final Logger logger = Logger.basicLogger();
 
   public static void main(final String[] args) {
+    ComponentRegistry.register(Logger.class, logger);
+
     final List<String> preparedArgs = prepareArgs(args);
 
-    final Task task =
-            Task.of(preparedArgs.get(MAIN_COMMAND_INDEX))
+    final CLITask task =
+            CLITask.triggeredBy(preparedArgs.get(MAIN_COMMAND_INDEX))
                     .orElseThrow(() -> new UnknownCommandException(args));
 
     run(task, preparedArgs);
   }
 
-  private static void run(final Task task, final List<String> args) {
+  private static void run(final CLITask task, final List<String> args) {
     try {
-      task.manager.run(args);
+      task.run(args);
     } catch (final Exception exception) {
       logger.error(exception.getMessage(), exception);
       throw exception;
@@ -42,7 +46,7 @@ public class CommandLineInterfaceInitializer {
 
   private static List<String> prepareArgs(final String[] args) {
     if(args.length  == 0) {
-      return Arrays.asList(Task.resolveDefaultCommand());
+      return Collections.singletonList(CLITask.resolveDefaultCommand());
     }
     return Arrays.asList(args);
   }

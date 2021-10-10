@@ -19,37 +19,49 @@ import io.vlingo.xoom.terminal.Terminal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SchemaPushStep extends CommandExecutor implements TaskExecutionStep {
+public class SchemaPushStep implements TaskExecutionStep {
+
+  private final CommandExecutionProcess commandExecutionProcess;
 
   public SchemaPushStep(final CommandExecutionProcess commandExecutionProcess) {
-    super(commandExecutionProcess);
+    this.commandExecutionProcess = commandExecutionProcess;
   }
 
   @Override
-  protected String formatCommands(final TaskExecutionContext context) {
-    final Terminal terminal =  Terminal.supported();
+  public void processTaskWith(final TaskExecutionContext context) {
+    new CommandExecutor(commandExecutionProcess) {
+      @Override
+      protected String formatCommands() {
+        final Terminal terminal = Terminal.supported();
 
-    final Path projectPath =
-            Paths.get(context.targetFolder());
+        final Path projectPath =
+                Paths.get(context.targetFolder());
 
-    final String directoryChangeCommand =
-            terminal.resolveDirectoryChangeCommand(projectPath);
+        final String directoryChangeCommand =
+                terminal.resolveDirectoryChangeCommand(projectPath);
 
-    final SchemataSettings schemataSettings =
-            context.codeGenerationParameters().retrieveObject(Label.SCHEMATA_SETTINGS);
+        final SchemataSettings schemataSettings =
+                context.codeGenerationParameters().retrieveObject(Label.SCHEMATA_SETTINGS);
 
-    final String schemataServiceProfile =
-            SchemataServiceProfileResolver.resolveSchemataProfile(schemataSettings);
+        final String schemataServiceProfile =
+                SchemataServiceProfileResolver.resolveSchemataProfile(schemataSettings);
 
-    return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:push-schema@push %s",
-            directoryChangeCommand, terminal.mavenCommand(), schemataServiceProfile);
-  }
+        return String.format("%s && %s io.vlingo.xoom:xoom-build-plugins:push-schema@push %s",
+                directoryChangeCommand, terminal.mavenCommand(), schemataServiceProfile);
+      }
 
-  @Override
-  protected void logPreliminaryMessage(final TaskExecutionContext context) {
-    context.logger().info("[INFO] ------------------------------------------------------------------------");
-    context.logger().info("[INFO] PUSHING SCHEMAS MAY REQUIRE A FEW SECONDS");
-    context.logger().info("[INFO] ------------------------------------------------------------------------");
+      @Override
+      protected void logPreliminaryMessage() {
+        logger().info("[INFO] ------------------------------------------------------------------------");
+        logger().info("[INFO] PUSHING SCHEMAS MAY REQUIRE A FEW SECONDS");
+        logger().info("[INFO] ------------------------------------------------------------------------");
+      }
+
+      @Override
+      protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
+        return new SchemaPushException(exception);
+      }
+    }.execute();
   }
 
   @Override
@@ -60,9 +72,6 @@ public class SchemaPushStep extends CommandExecutor implements TaskExecutionStep
             .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isProducer());
   }
 
-  @Override
-  protected CommandExecutionException resolveCommandExecutionException(final CommandExecutionException exception) {
-    return new SchemaPushException(exception);
-  }
+
 
 }

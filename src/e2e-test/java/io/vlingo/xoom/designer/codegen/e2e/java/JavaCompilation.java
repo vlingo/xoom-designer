@@ -7,12 +7,10 @@
 package io.vlingo.xoom.designer.codegen.e2e.java;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.terminal.CommandExecutor;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
+import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.terminal.Terminal;
 
@@ -21,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class JavaCompilation extends CommandExecutor implements TaskExecutionStep {
+public class JavaCompilation extends CommandExecutor {
 
   private final String applicationPath;
   private final CommandObserver commandObserver;
@@ -29,7 +27,7 @@ public class JavaCompilation extends CommandExecutor implements TaskExecutionSte
 
   public static JavaCompilation run(final String applicationPath) {
     final JavaCompilation compilation = new JavaCompilation(applicationPath, new CommandObserver());
-    compilation.processTask();
+    compilation.execute();
     return compilation;
   }
 
@@ -40,7 +38,7 @@ public class JavaCompilation extends CommandExecutor implements TaskExecutionSte
   }
 
   @Override
-  protected String formatCommands(final TaskExecutionContext context) {
+  protected String formatCommands() {
     final Terminal terminal = Terminal.supported();
     final String profileName = resolveMavenProfile();
     final Path pomPath = Paths.get(applicationPath, "pom.xml");

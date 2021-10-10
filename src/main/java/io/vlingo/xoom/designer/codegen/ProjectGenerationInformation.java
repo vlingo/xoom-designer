@@ -6,7 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen;
 
-import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.ComponentsConfiguration;
 
 import java.io.File;
 
@@ -26,10 +26,10 @@ public class ProjectGenerationInformation {
   private ProjectGenerationInformation(final GenerationTarget generationTarget) {
     this.pathSeparator = File.separator;
     this.generationTarget = generationTarget;
-    this.generationTargetKey = generationTarget.key();
+    this.generationTargetKey = generationTarget.value();
     this.userHomePath = System.getProperty("user.home");
-    this.xoomDesignerVersion = Configuration.resolveDefaultXoomVersion();
-    this.xoomDesignerFileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
+    this.xoomDesignerVersion = ComponentsConfiguration.resolveDefaultXoomVersion();
+    this.xoomDesignerFileVersion = ComponentsConfiguration.XOOM_DESIGNER_FILE_VERSION;
   }
 
 }

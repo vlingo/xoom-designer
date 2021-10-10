@@ -18,8 +18,12 @@ public class GlooSuspendCommandExecutionStep extends CommandExecutor implements 
   }
 
   @Override
-  protected String formatCommands(TaskExecutionContext context) {
+  protected String formatCommands() {
     return "glooctl uninstall gateway";
   }
 
+  @Override
+  public void processTaskWith(TaskExecutionContext context) {
+
+  }
 }

@@ -6,10 +6,15 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.cli.task;
 
+import io.vlingo.xoom.cli.CommandNotFoundException;
 import io.vlingo.xoom.cli.option.Option;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.option.OptionValue;
+import io.vlingo.xoom.cli.task.XoomTurboProperties.ApplicationPath;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,25 +22,30 @@ public abstract class CLITask {
 
   public final String command;
   public final String alternativeCommand;
-  private final List<Option> options = new ArrayList<>();
+  protected final List<Option> options = new ArrayList<>();
 
   protected CLITask(final String command,
-                    final List<Option> options) {
+                    final Option ...options) {
     this(command, null, options);
   }
 
   protected CLITask(final String command,
                     final String alternativeCommand,
-                    final List<Option> options) {
+                    final Option ...options) {
     this.command = command;
     this.alternativeCommand = alternativeCommand;
-    this.options.addAll(options);
+    this.options.addAll(Arrays.asList(options));
   }
 
-  public abstract void run();
+  public abstract void run(final List<String> args);
 
   public static Optional<CLITask> triggeredBy(final String command) {
-    return filterByCommand(command, ComponentRegistry.withName("cliTasks"));
+    return filterByCommand(command, allTasks());
+  }
+
+  public static String resolveDefaultCommand() {
+    return allTasks().stream().filter(CLITask::isDefault).map(CLITask::command).findFirst()
+            .orElseThrow(() -> new CommandNotFoundException());
   }
 
   protected static Optional<CLITask> filterByCommand(final String command,
@@ -43,6 +53,17 @@ public abstract class CLITask {
     return tasks.stream()
             .filter(task -> command != null && task.matchCommand(command.trim()))
             .findFirst();
+  }
+
+  protected String propertyOf(final String propertyKey, final List<String> args) {
+    final String path = optionValueOf(OptionName.CURRENT_DIRECTORY, args);
+    return XoomTurboProperties.resolve(ApplicationPath.from(path)).propertyOf(propertyKey);
+  }
+
+  protected String optionValueOf(final OptionName optionName, final List<String> args) {
+    return OptionValue.resolveValues(options, args).stream()
+            .filter(optionValue -> optionValue.hasName(optionName))
+            .map(optionValue -> optionValue.value()).findFirst().get();
   }
 
   private boolean matchCommand(final String command) {
@@ -67,6 +88,10 @@ public abstract class CLITask {
 
   public String command() {
     return command;
+  }
+
+  private static List<CLITask> allTasks() {
+    return ComponentRegistry.withName("cliTasks");
   }
 
 }

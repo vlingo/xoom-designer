@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
+import static io.vlingo.xoom.designer.ComponentsConfiguration.MAVEN_WRAPPER_DIRECTORY;
 
 public class StagingFolderCleanUpStep implements TaskExecutionStep {
 

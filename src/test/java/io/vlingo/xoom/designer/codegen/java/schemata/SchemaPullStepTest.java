@@ -32,11 +32,11 @@ public class SchemaPullStepTest {
   @Test
   @EnabledOnOs({OS.WINDOWS})
   public void testCommandPreparationOnWindows() {
-    Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
+    Infrastructure.setupResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER), 9019);
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).processTaskWith(context);
+    new SchemaPullStep(commandRetainer).execute(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -46,11 +46,11 @@ public class SchemaPullStepTest {
   @Test
   @EnabledOnOs({OS.WINDOWS})
   public void testCommandPreparationWithProfileOnWindows() {
-    Infrastructure.resolveInternalResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER));
+    Infrastructure.setupResources(HomeDirectory.from(WINDOWS_ROOT_FOLDER), 9019);
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of(Tuple2.from("vlingo-xoom-schemata", 10009)));
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).processTaskWith(context);
+    new SchemaPullStep(commandRetainer).execute(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -60,11 +60,11 @@ public class SchemaPullStepTest {
   @Test
   @EnabledOnOs({OS.MAC, OS.LINUX})
   public void testCommandPreparationWithOnUnixBasedOS() {
-    Infrastructure.resolveInternalResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER));
+    Infrastructure.setupResources(HomeDirectory.from(DEFAULT_ROOT_FOLDER), 9019);
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("/home/projects/designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).processTaskWith(context);
+    new SchemaPullStep(commandRetainer).execute(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);

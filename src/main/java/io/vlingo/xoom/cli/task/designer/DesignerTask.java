@@ -7,21 +7,38 @@
 package io.vlingo.xoom.cli.task.designer;
 
 import io.vlingo.xoom.cli.option.Option;
+import io.vlingo.xoom.cli.option.OptionValue;
 import io.vlingo.xoom.cli.task.CLITask;
+import io.vlingo.xoom.designer.DesignerInitializer;
+import io.vlingo.xoom.terminal.CommandExecutionProcess;
 
 import java.util.List;
 
+import static io.vlingo.xoom.cli.option.OptionName.*;
+
 public class DesignerTask extends CLITask {
 
-  protected DesignerTask(final String command,
-                         final String alternativeCommand,
-                         final List<Option> options) {
-    super("designer", "gui", options);
+  private final DesignerInitializer initializer;
+
+  public DesignerTask(final CommandExecutionProcess commandExecutionProcess) {
+    super("designer", "gui", Option.of(PORT, "0"), Option.of(PROFILE, "PRODUCTION"), Option.of(TARGET, "FILESYSTEM"));
+    this.initializer = new DesignerInitializer(commandExecutionProcess);
   }
 
   @Override
-  public void run() {
+  public void run(final List<String> args) {
+    this.initializer.run(OptionValue.mapValues(options, args));
+  }
 
+  @Override
+  public boolean isDefault() {
+    return true;
+  }
+
+  @Override
+  public boolean shouldAutomaticallyExit() {
+    return false;
   }
 
 }
+

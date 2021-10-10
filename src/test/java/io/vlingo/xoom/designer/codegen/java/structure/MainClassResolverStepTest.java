@@ -15,28 +15,28 @@ import org.junit.jupiter.api.Test;
 
 public class MainClassResolverStepTest {
 
-    @Test
-    public void testThatDefaultMainClassIsResolved() {
-        final TaskExecutionContext context = buildContext(false);
-        new MainClassResolverStep().processTaskWith(context);
-        final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", mainClass);
-    }
+  @Test
+  public void testThatDefaultMainClassIsResolved() {
+    final TaskExecutionContext context = buildContext(false);
+    new MainClassResolverStep().processTaskWith(context);
+    final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
+    Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", mainClass);
+  }
 
-    @Test
-    public void testThatAnnotatedMainClassIsResolved() {
-        final TaskExecutionContext context = buildContext(true);
-        new MainClassResolverStep().processTaskWith(context);
-        final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
-        Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", mainClass);
-    }
+  @Test
+  public void testThatAnnotatedMainClassIsResolved() {
+    final TaskExecutionContext context = buildContext(true);
+    new MainClassResolverStep().processTaskWith(context);
+    final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
+    Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", mainClass);
+  }
 
-    private TaskExecutionContext buildContext(final Boolean useAnnotations) {
-        final CodeGenerationParameters parameters =
-                CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
-                        .add(Label.USE_ANNOTATIONS, useAnnotations);
+  private TaskExecutionContext buildContext(final Boolean useAnnotations) {
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
+                    .add(Label.USE_ANNOTATIONS, useAnnotations);
 
-        return TaskExecutionContext.bare().with(parameters);
-    }
+    return TaskExecutionContext.bare().with(parameters);
+  }
 
 }

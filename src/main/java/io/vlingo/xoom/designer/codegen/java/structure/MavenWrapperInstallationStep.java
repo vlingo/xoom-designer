@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
+import static io.vlingo.xoom.designer.ComponentsConfiguration.MAVEN_WRAPPER_DIRECTORY;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class MavenWrapperInstallationStep implements TaskExecutionStep {

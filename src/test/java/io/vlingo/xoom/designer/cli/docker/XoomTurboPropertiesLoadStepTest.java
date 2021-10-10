@@ -6,7 +6,7 @@ import io.vlingo.xoom.cli.task.XoomTurboPropertiesLoadStep;
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.designer.infrastructure.ResourceLoadException;
-import io.vlingo.xoom.designer.infrastructure.XoomTurboProperties;
+import io.vlingo.xoom.cli.task.XoomTurboProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

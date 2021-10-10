@@ -9,9 +9,6 @@ package io.vlingo.xoom.cli.task;
 
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.option.OptionValue;
-import io.vlingo.xoom.cli.task.docker.DockerPackageCommandExecutionStep;
-import io.vlingo.xoom.cli.task.docker.DockerPushCommandExecutionStep;
-import io.vlingo.xoom.cli.task.docker.DockerStatusCommandExecutionStep;
 import io.vlingo.xoom.cli.task.gloo.GlooInitCommandExecutionStep;
 import io.vlingo.xoom.cli.task.gloo.GlooRouteCommandExecutionStep;
 import io.vlingo.xoom.cli.task.gloo.GlooSuspendCommandExecutionStep;
@@ -22,23 +19,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static io.vlingo.xoom.cli.option.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.cli.option.OptionName.TAG;
 
 public enum SubTask {
 
-    DOCKER_STATUS(Task.DOCKER, "status",
-            new DockerStatusCommandExecutionStep(new DefaultCommandExecutionProcess()),
-            Option.required(CURRENT_DIRECTORY)),
-
-    DOCKER_PACKAGE(Task.DOCKER, "package",
-            new DockerPackageCommandExecutionStep(new DefaultCommandExecutionProcess()),
-            Option.required(CURRENT_DIRECTORY),
-            Option.of(TAG, "latest")),
-
-    DOCKER_PUSH(Task.DOCKER, "push",
-            new DockerPushCommandExecutionStep(new DefaultCommandExecutionProcess()),
-            Option.required(CURRENT_DIRECTORY),
-            Option.of(TAG, "latest")),
+//    DOCKER_STATUS(Task.DOCKER, "status",
+//            new DockerStatusCommandExecutionStep(new DefaultCommandExecutionProcess()),
+//            Option.required(CURRENT_DIRECTORY)),
 
     K8S_PUSH(Task.K8S, "push",
             new KubernetesPushCommandExecutionStep(new DefaultCommandExecutionProcess())),

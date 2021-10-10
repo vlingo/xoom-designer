@@ -16,18 +16,18 @@ public enum OptionName {
   CURRENT_DIRECTORY("currentDirectory"),
   PUBLISHER("publisher");
 
-  private final String name;
+  private final String value;
 
-  OptionName(final String name) {
-    this.name = name;
+  OptionName(final String value) {
+    this.value = value;
   }
 
-  public String literal() {
-    return name;
+  public String value() {
+    return value;
   }
 
-  public String withPreffix() {
-    return "--" + name;
+  public String withPrefix() {
+    return "--" + value;
   }
 
 }

@@ -6,12 +6,10 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java;
 
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.terminal.CommandExecutor;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.terminal.Terminal;
 
@@ -19,7 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 
-public class JavaAppInitialization extends CommandExecutor implements TaskExecutionStep {
+public class JavaAppInitialization extends CommandExecutor {
 
   private final int availablePort;
   private final GenerationSettingsData generationSettings;
@@ -44,13 +42,12 @@ public class JavaAppInitialization extends CommandExecutor implements TaskExecut
     this.availablePort = availablePort;
   }
 
-  @Override
   public void processTask() {
-    Executors.newSingleThreadExecutor().submit(() -> processTask());
+    Executors.newSingleThreadExecutor().submit(() -> execute());
   }
 
   @Override
-  protected String formatCommands(final TaskExecutionContext context) {
+  protected String formatCommands() {
     final Path projectBinariesFolder = Paths.get(generationSettings.projectDirectory, "target");
     final String directoryChangeCommand = Terminal.supported().resolveDirectoryChangeCommand(projectBinariesFolder);
     return String.format("%s && java -jar %s-%s.jar", directoryChangeCommand, generationSettings.context.artifactId, generationSettings.context.artifactVersion, availablePort);

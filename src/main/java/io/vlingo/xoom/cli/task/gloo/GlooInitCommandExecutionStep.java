@@ -18,8 +18,12 @@ public class GlooInitCommandExecutionStep extends CommandExecutor implements Tas
   }
 
   @Override
-  protected String formatCommands(TaskExecutionContext context) {
+  protected String formatCommands() {
     return "glooctl install gateway";
   }
 
+  @Override
+  public void processTaskWith(TaskExecutionContext context) {
+
+  }
 }

@@ -2,6 +2,7 @@ package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.designer.codegen.InvalidResourcesPathException;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,37 +12,34 @@ import java.nio.file.Paths;
 
 public class InfrastructureResourcesTest {
 
-    private static final String BASE_PATH = System.getProperty("user.dir");
-    private static final String ROOT_FOLDER = Paths.get(BASE_PATH, "dist", "designer").toString();
+  private static final String BASE_PATH = System.getProperty("user.dir");
+  private static final String ROOT_FOLDER = Paths.get(BASE_PATH, "dist", "designer").toString();
 
-    @Test
-    public void testInfraResourcesAreResolved() {
-        Infrastructure.resolveInternalResources(HomeDirectory.fromEnvironment());
-        Infrastructure.resolveExternalResources(ApplicationDirectory.from(BASE_PATH));
-        Assertions.assertEquals(Paths.get(ROOT_FOLDER, "staging"), StagingFolder.path());
-        Assertions.assertEquals(1, DesignerProperties.retrieveServerPort(1));
-        Assertions.assertEquals("http://localhost:19090", DesignerServer.url().toString());
-        // "xoom-designer": This will not work until a resource for it is created.
-        Assertions.assertEquals("http://localhost:19090/context", UserInterface.rootContext());
-        Assertions.assertFalse(XoomTurboProperties.properties().isEmpty());
-    }
+  @BeforeEach
+  public void setUp() {
+    Profile.enableTestProfile();
+    Infrastructure.clear();
+  }
 
-    @Test
-    public void testNullPathUpdate() {
-        Assertions.assertThrows(InvalidResourcesPathException.class, () -> {
-            Infrastructure.resolveInternalResources(HomeDirectory.from(null));
-        });
-    }
+  @Test
+  public void testInfraResourcesAreResolved() {
+    Infrastructure.setupResources(HomeDirectory.fromEnvironment(), 19090);
+    final DesignerServerConfiguration designerServerConfiguration = ComponentRegistry.withType(DesignerServerConfiguration.class);
+    Assertions.assertEquals(19090, designerServerConfiguration.port());
+    Assertions.assertEquals("http://localhost:19090/context", designerServerConfiguration.resolveUserInterfaceURL());
+    Assertions.assertEquals(Paths.get(ROOT_FOLDER, "staging"), StagingFolder.path());
+  }
 
-    @BeforeEach
-    public void setUp() {
-        Profile.enableTestProfile();
-        Infrastructure.clear();
-    }
+  @Test
+  public void testNullPathUpdate() {
+    Assertions.assertThrows(InvalidResourcesPathException.class, () -> {
+      Infrastructure.setupResources(HomeDirectory.from(null), 9019);
+    });
+  }
 
-    @AfterAll
-    public static void clear() {
-        Profile.disableTestProfile();
-        Infrastructure.clear();
-    }
+  @AfterAll
+  public static void clear() {
+    Profile.disableTestProfile();
+    Infrastructure.clear();
+  }
 }

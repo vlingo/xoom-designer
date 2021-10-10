@@ -7,11 +7,10 @@
 
 package io.vlingo.xoom.designer;
 
-public class ArgumentNotFoundException extends RuntimeException {
-  private static final long serialVersionUID = 2585693425465290555L;
+public class DesignerServerInitializationException extends RuntimeException {
 
-  public ArgumentNotFoundException(final String argumentName) {
-      super(argumentName + " not found");
+  public DesignerServerInitializationException(final Exception cause) {
+    super(cause);
   }
 
 }

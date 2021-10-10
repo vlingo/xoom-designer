@@ -17,11 +17,11 @@ public enum GenerationTarget {
   FILESYSTEM("filesystem", false),
   ZIP("zip-download", true);
 
-  private final String key;
+  private final String value;
   private final boolean supportDownload;
 
-  GenerationTarget(final String key, final boolean supportDownload) {
-    this.key = key;
+  GenerationTarget(final String value, final boolean supportDownload) {
+    this.value = value;
     this.supportDownload = supportDownload;
   }
 
@@ -29,12 +29,12 @@ public enum GenerationTarget {
     if(targetOption.trim().isEmpty()) {
       return FILESYSTEM;
     }
-    return Stream.of(values()).filter(gt -> gt.key.equalsIgnoreCase(targetOption)).findFirst()
+    return Stream.of(values()).filter(gt -> gt.value.equalsIgnoreCase(targetOption)).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(targetOption + " is a invalid value for Generation Target."));
   }
 
-  public String key() {
-    return key;
+  public String value() {
+    return value;
   }
 
   public boolean supportDownload() {
