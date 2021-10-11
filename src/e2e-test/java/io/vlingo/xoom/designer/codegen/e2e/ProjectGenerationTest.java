@@ -33,7 +33,7 @@ public abstract class ProjectGenerationTest {
     onShutdown();
     if(!isDesignerRunning()) {
       designerPort = portDriver.findAvailable();
-      CommandLineInterfaceInitializer.main(new String[]{"gui", "--port", designerPort.toString(), "--profile", "test"});
+      CommandLineInterfaceInitializer.main(new String[]{"designer", "--port", designerPort.toString(), "--profile", "test"});
     }
   }
 

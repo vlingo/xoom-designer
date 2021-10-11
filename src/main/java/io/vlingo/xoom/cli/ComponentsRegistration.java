@@ -15,6 +15,7 @@ import io.vlingo.xoom.cli.task.gloo.GlooInitTask;
 import io.vlingo.xoom.cli.task.gloo.GlooRouteTask;
 import io.vlingo.xoom.cli.task.gloo.GlooSuspendTask;
 import io.vlingo.xoom.cli.task.k8s.KubernetesPushTask;
+import io.vlingo.xoom.cli.task.version.VersionDisplayTask;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -22,16 +23,16 @@ import java.util.Arrays;
 
 public class ComponentsRegistration {
 
-  public static void register(final Logger logger,
-                              final CommandExecutionProcess commandExecutionProcess,
-                              final XoomTurboProperties properties) {
+  public static void registerWith(final Logger logger,
+                                  final CommandExecutionProcess commandExecutionProcess,
+                                  final XoomTurboProperties properties) {
     ComponentRegistry.register(Logger.class, logger)
             .register(CommandExecutionProcess.class, commandExecutionProcess)
             .register("cliTasks", Arrays.asList(new DesignerTask(commandExecutionProcess),
                     new GlooInitTask(commandExecutionProcess), new GlooSuspendTask(commandExecutionProcess),
                     new GlooRouteTask(commandExecutionProcess, properties), new DockerPackageTask(commandExecutionProcess, properties),
                     new DockerPushTask(commandExecutionProcess, properties), new DockerStatusTask(commandExecutionProcess, properties),
-                    new KubernetesPushTask(commandExecutionProcess, properties)));
+                    new KubernetesPushTask(commandExecutionProcess), new VersionDisplayTask()));
   }
 
 }

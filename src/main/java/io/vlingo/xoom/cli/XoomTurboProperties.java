@@ -30,25 +30,39 @@ public class XoomTurboProperties {
 
   public static XoomTurboProperties load(final ProjectPath projectPath) {
     if (!ComponentRegistry.has(XoomTurboProperties.class)) {
-      ComponentRegistry.register(XoomTurboProperties.class, new XoomTurboProperties(projectPath));
+      final Path propertiesPath = buildPath(projectPath);
+      final Properties properties = loadProperties(propertiesPath);
+      ComponentRegistry.register(XoomTurboProperties.class, new XoomTurboProperties(properties));
     }
     return ComponentRegistry.withType(XoomTurboProperties.class);
   }
 
-  private XoomTurboProperties(final ProjectPath projectPath) {
-    this.properties = loadProperties(buildPath(projectPath));
+  private XoomTurboProperties(final Properties properties) {
+    this.properties = properties;
   }
 
   public String get(final String key) {
     return properties.getProperty(key);
   }
 
-  private Path buildPath(final ProjectPath projectPath) {
+  public Stream<Entry<Object, Object>> filterProperties(final Predicate<Entry<Object, Object>> condition) {
+    return properties.entrySet().stream().filter(condition);
+  }
+
+  public boolean hasProperty(final String key) {
+    return properties.containsKey(key);
+  }
+
+  public static XoomTurboProperties empty() {
+    return new XoomTurboProperties(new Properties());
+  }
+
+  private static Path buildPath(final ProjectPath projectPath) {
     final String subFolder = Profile.isTestProfileEnabled() ? "test" : "main";
     return Paths.get(projectPath.path, "src", subFolder, "resources", "xoom-turbo.properties");
   }
 
-  private Properties loadProperties(final Path path) {
+  private static Properties loadProperties(final Path path) {
     try {
       final File propertiesFile = path.toFile();
       final Properties properties = new Properties();
@@ -60,14 +74,6 @@ public class XoomTurboProperties {
       exception.printStackTrace();
       throw new ResourceLoadException(path);
     }
-  }
-
-  public Stream<Entry<Object, Object>> filterProperties(final Predicate<Entry<Object, Object>> condition) {
-    return properties.entrySet().stream().filter(condition);
-  }
-
-  public boolean hasProperty(final String key) {
-    return properties.containsKey(key);
   }
 
   public static class ProjectPath {

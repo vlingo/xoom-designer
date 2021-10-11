@@ -30,7 +30,7 @@ class GlooRouteCommandExecutor extends CommandExecutor {
 
   @Override
   protected String formatCommands() {
-    if (xoomTurboProperties.hasProperty(XoomTurboProperties.GLOO_UPSTREAM)) {
+    if (!xoomTurboProperties.hasProperty(XoomTurboProperties.GLOO_UPSTREAM)) {
       throw new TaskExecutionException("Please set the Gloo upstream in xoom-turbo.properties");
     }
 

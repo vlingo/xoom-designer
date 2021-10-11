@@ -36,7 +36,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).execute(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -50,7 +50,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.of(Tuple2.from("vlingo-xoom-schemata", 10009)));
     context.with(loadGenerationParameters("E:\\projects\\designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).execute(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);
@@ -64,7 +64,7 @@ public class SchemaPullStepTest {
     final SchemataSettings schemataSettings = SchemataSettings.with("localhost", 9019, Optional.empty());
     context.with(loadGenerationParameters("/home/projects/designer-example", schemataSettings));
     final CommandRetainer commandRetainer = new CommandRetainer();
-    new SchemaPullStep(commandRetainer).execute(context);
+    new SchemaPullStep(commandRetainer).processTaskWith(context);
     final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commandSequence[1]);

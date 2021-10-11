@@ -22,7 +22,7 @@ public class CommandLineInterfaceInitializer {
   private static final Logger logger = Logger.basicLogger();
 
   public static void main(final String[] args) {
-    ComponentsRegistration.register(logger, new DefaultCommandExecutionProcess(logger), loadProperties(args));
+    ComponentsRegistration.registerWith(logger, new DefaultCommandExecutionProcess(logger), loadProperties(args));
 
     final Task task =
             Task.triggeredBy(resolveCommand(args))

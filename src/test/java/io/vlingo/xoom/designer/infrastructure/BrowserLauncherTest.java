@@ -1,4 +1,4 @@
-package io.vlingo.xoom.designer.infrastructure.userinterface;
+package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
@@ -18,13 +18,8 @@ public class BrowserLauncherTest {
 
   @Test
   public void testBrowserLaunchCommandResolution() {
-    final TaskExecutionContext context =
-            TaskExecutionContext.bare();
-
     final CommandRetainer commandRetainer = new CommandRetainer();
-
-    new BrowserLauncher(commandRetainer).execute(context);
-
+    new BrowserLauncher(commandRetainer).execute();
     final String[] commands = commandRetainer.retainedCommandsSequence().get(0);
     Assertions.assertEquals(Terminal.supported().initializationCommand(), commands[0]);
     Assertions.assertEquals(Terminal.supported().parameter(), commands[1]);

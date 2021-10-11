@@ -56,11 +56,11 @@ public abstract class Task {
   }
 
   private boolean matchCommand(final String command) {
-    return this.command.equalsIgnoreCase(command) || this.matchAlternativeCommand(command);
+    return this.command.equals(command) || this.matchAlternativeCommand(command);
   }
 
   private boolean matchAlternativeCommand(final String command) {
-    return hasAlternativeCommand() && this.alternativeCommand.equalsIgnoreCase(command);
+    return hasAlternativeCommand() && this.alternativeCommand.equals(command);
   }
 
   private boolean hasAlternativeCommand() {

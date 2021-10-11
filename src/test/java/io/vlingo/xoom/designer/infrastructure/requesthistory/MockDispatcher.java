@@ -1,4 +1,4 @@
-package io.vlingo.xoom.designer.infrastructure.userinterface;
+package io.vlingo.xoom.designer.infrastructure.requesthistory;
 
 import io.vlingo.xoom.actors.testkit.AccessSafely;
 import io.vlingo.xoom.symbio.Entry;

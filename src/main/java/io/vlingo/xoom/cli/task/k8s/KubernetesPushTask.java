@@ -23,7 +23,7 @@ public class KubernetesPushTask extends Task {
 
   private final CommandExecutionProcess commandExecutionProcess;
 
-  public KubernetesPushTask(final CommandExecutionProcess commandExecutionProcess, XoomTurboProperties xoomTurboProperties) {
+  public KubernetesPushTask(final CommandExecutionProcess commandExecutionProcess) {
     super("k8s push", Option.required(CURRENT_DIRECTORY));
     this.commandExecutionProcess = commandExecutionProcess;
   }

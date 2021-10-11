@@ -10,8 +10,10 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.ProjectGenerationContext;
+import io.vlingo.xoom.designer.codegen.ProjectGenerationStep;
+import io.vlingo.xoom.designer.codegen.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
@@ -62,5 +64,4 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
 
     return BasicTemplateData.of(JavaTemplateStandard.MAVEN_SETTINGS, parameters);
   }
-
 }

@@ -9,6 +9,8 @@ import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.codegen.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
+import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
+import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
@@ -38,8 +40,6 @@ import io.vlingo.xoom.designer.codegen.reactjs.AggregateManagementGenerationStep
 import io.vlingo.xoom.designer.codegen.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.StaticFilesGenerationStep;
 import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
-import io.vlingo.xoom.designer.infrastructure.StagingFolderCleanUpStep;
-import io.vlingo.xoom.designer.infrastructure.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.lang3.StringUtils;
@@ -66,11 +66,7 @@ public class Configuration {
   public static final String SCHEMATA_SERVICE_PORT = "SCHEMATA_SERVICE_PORT";
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
-  static {
-    load();
-  }
-
-  private static void load() {
+  public static void load() {
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.findDefault(),
                     ReservedWordsHandler.usingSuffix("_"));
