@@ -11,8 +11,6 @@ import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.ProjectGenerationContext;
-import io.vlingo.xoom.designer.codegen.ProjectGenerationStep;
 import io.vlingo.xoom.designer.codegen.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
