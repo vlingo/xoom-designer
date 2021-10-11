@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
 
-  private Process process;
   private final List<CommandExecutionObserver> observers = new ArrayList<>();
 
   public ObservableCommandExecutionProcess(final CommandExecutionObserver ...observers) {
@@ -24,9 +23,9 @@ public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
   }
 
   @Override
-  protected void execute(final String[] commandSequence) {
+  protected Process execute(final String[] commandSequence) {
     try {
-      this.process = Runtime.getRuntime().exec(commandSequence);
+      return Runtime.getRuntime().exec(commandSequence);
     } catch (final IOException e) {
       e.printStackTrace();
       throw new CommandExecutionException(e);
@@ -34,12 +33,12 @@ public class ObservableCommandExecutionProcess extends CommandExecutionProcess {
   }
 
   @Override
-  protected void log() {
+  protected void log(final Process process) {
     CommandOutputConsumer.of(Logger.basicLogger(), process).tail();
   }
 
   @Override
-  protected void handleCommandExecutionStatus() {
+  protected void handleCommandExecutionStatus(final Process process) {
     try {
       final int commandExecutionStatus = process.waitFor();
       if(commandExecutionStatus == 0) {

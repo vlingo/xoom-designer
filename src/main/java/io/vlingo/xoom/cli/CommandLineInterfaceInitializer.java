@@ -7,31 +7,32 @@
 package io.vlingo.xoom.cli;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.cli.task.CLITask;
-import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.cli.option.Option;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.option.OptionValue;
+import io.vlingo.xoom.cli.task.Task;
+import io.vlingo.xoom.cli.XoomTurboProperties.ProjectPath;
+import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class CommandLineInterfaceInitializer {
 
-  private static final int MAIN_COMMAND_INDEX = 0;
   private static final Logger logger = Logger.basicLogger();
 
   public static void main(final String[] args) {
-    ComponentRegistry.register(Logger.class, logger);
+    ComponentsRegistration.register(logger, new DefaultCommandExecutionProcess(logger), loadProperties(args));
 
-    final List<String> preparedArgs = prepareArgs(args);
-
-    final CLITask task =
-            CLITask.triggeredBy(preparedArgs.get(MAIN_COMMAND_INDEX))
+    final Task task =
+            Task.triggeredBy(resolveCommand(args))
                     .orElseThrow(() -> new UnknownCommandException(args));
 
-    run(task, preparedArgs);
+    runTask(task, Arrays.asList(args));
   }
 
-  private static void run(final CLITask task, final List<String> args) {
+  private static void runTask(final Task task,
+                              final List<String> args) {
     try {
       task.run(args);
     } catch (final Exception exception) {
@@ -44,11 +45,26 @@ public class CommandLineInterfaceInitializer {
     }
   }
 
-  private static List<String> prepareArgs(final String[] args) {
-    if(args.length  == 0) {
-      return Collections.singletonList(CLITask.resolveDefaultCommand());
+  private static String resolveCommand(final String[] args) {
+    if(args.length > 0) {
+      if(args.length == 1) {
+        return args[0];
+      }
+      if(Task.isCommand(args[1])) {
+        return args[0] + " " + args[1];
+      }
     }
-    return Arrays.asList(args);
+    return Task.resolveDefaultCommand();
+  }
+
+  private static XoomTurboProperties loadProperties(final String[] args) {
+    final Option projectDirectory =
+            Option.of(OptionName.CURRENT_DIRECTORY, System.getProperty("user.dir"));
+
+    final OptionValue path =
+            OptionValue.resolveValue(projectDirectory, Arrays.asList(args));
+
+    return XoomTurboProperties.load(ProjectPath.from(path.value()));
   }
 
 }

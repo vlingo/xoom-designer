@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
-import io.vlingo.xoom.designer.ComponentsConfiguration;
+import io.vlingo.xoom.designer.Configuration;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class ModelFileHandlingReport {
     try {
       final String osName = System.getProperty("os.name");
       final String javaVersion = System.getProperty("java.version");
-      final String designerVersion = ComponentsConfiguration.resolveDefaultXoomVersion();
+      final String designerVersion = Configuration.resolveDefaultXoomVersion();
       this.details = String.format(DETAILS_PATTERN, action, osName, javaVersion,
               designerVersion, ExceptionFormatter.format(exception));
     } catch (final IOException e) {

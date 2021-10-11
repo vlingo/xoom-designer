@@ -8,7 +8,7 @@ package io.vlingo.xoom.cli.task.designer;
 
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.option.OptionValue;
-import io.vlingo.xoom.cli.task.CLITask;
+import io.vlingo.xoom.cli.task.Task;
 import io.vlingo.xoom.designer.DesignerInitializer;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.cli.option.OptionName.*;
 
-public class DesignerTask extends CLITask {
+public class DesignerTask extends Task {
 
   private final DesignerInitializer initializer;
 
@@ -27,7 +27,7 @@ public class DesignerTask extends CLITask {
 
   @Override
   public void run(final List<String> args) {
-    this.initializer.run(OptionValue.mapValues(options, args));
+    this.initializer.start(OptionValue.mapValues(options, args));
   }
 
   @Override

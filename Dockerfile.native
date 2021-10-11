@@ -33,4 +33,4 @@ RUN chmod 775 /work /work/xoom-designer \
 EXPOSE 19090
 USER 1001
 
-ENTRYPOINT ["./xoom-designer", "gui", "--target", "zip-download", "-Xmx68m"]
+ENTRYPOINT ["./xoom-designer", "designer", "--target", "zip-download", "-Xmx68m"]

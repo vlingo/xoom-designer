@@ -4,32 +4,28 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-
-package io.vlingo.xoom.cli.task.docker;
+package io.vlingo.xoom.cli.task.k8s;
 
 import io.vlingo.xoom.cli.option.Option;
+import io.vlingo.xoom.cli.option.OptionName;
 import io.vlingo.xoom.cli.task.Task;
 import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.Terminal;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import static io.vlingo.xoom.cli.option.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.cli.option.OptionName.TAG;
-import static io.vlingo.xoom.cli.XoomTurboProperties.DOCKER_IMAGE;
 
-public class DockerPackageTask extends Task {
+public class KubernetesPushTask extends Task {
 
-  private final XoomTurboProperties xoomTurboProperties;
   private final CommandExecutionProcess commandExecutionProcess;
 
-  public DockerPackageTask(final CommandExecutionProcess commandExecutionProcess,
-                           final XoomTurboProperties xoomTurboProperties) {
-    super("docker package", Option.required(CURRENT_DIRECTORY), Option.of(TAG, "latest"));
+  public KubernetesPushTask(final CommandExecutionProcess commandExecutionProcess, XoomTurboProperties xoomTurboProperties) {
+    super("k8s push", Option.required(CURRENT_DIRECTORY));
     this.commandExecutionProcess = commandExecutionProcess;
-    this.xoomTurboProperties = xoomTurboProperties;
   }
 
   @Override
@@ -37,18 +33,14 @@ public class DockerPackageTask extends Task {
     new CommandExecutor(commandExecutionProcess) {
       @Override
       protected String formatCommands() {
-        final String tag = optionValueOf(TAG, args);
-        final String currentDirectory = optionValueOf(CURRENT_DIRECTORY, args);
-        final String dockerImage = xoomTurboProperties.get(DOCKER_IMAGE);
+        final String currentDirectory = optionValueOf(OptionName.CURRENT_DIRECTORY, args);
+
         final String projectDirectoryCommand =
                 Terminal.supported().resolveDirectoryChangeCommand(currentDirectory);
 
-        if (dockerImage == null) {
-          throw new DockerCommandException("Please set the docker.image property in xoom-turbo.properties");
-        }
-
-        return String.format("%s && mvn clean package && docker build ./ -t %s:%s", projectDirectoryCommand, dockerImage, tag);
+        return String.format("%s && kubectl apply -f %s", projectDirectoryCommand, Paths.get("deployment", "k8s"));
       }
     }.execute();
   }
+
 }

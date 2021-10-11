@@ -20,7 +20,7 @@ public enum Profile {
 
   public static void disableTestProfile() {
     ComponentRegistry.unregister(Profile.class);
-    ComponentRegistry.register(Profile.class, Profile.TEST);
+    ComponentRegistry.register(Profile.class, Profile.PRODUCTION);
   }
 
   public static boolean isTestProfileEnabled() {

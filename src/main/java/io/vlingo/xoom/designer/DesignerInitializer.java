@@ -10,7 +10,6 @@ package io.vlingo.xoom.designer;
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
 import io.vlingo.xoom.designer.infrastructure.BrowserLauncher;
-import io.vlingo.xoom.designer.infrastructure.DesignerServerConfiguration;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
@@ -22,13 +21,13 @@ public class DesignerInitializer {
 
   private final BrowserLauncher browserLauncher;
 
-  public DesignerInitializer(final CommandExecutionProcess browserLauncher) {
-    this.browserLauncher = new BrowserLauncher(browserLauncher);
+  public DesignerInitializer(final CommandExecutionProcess commandExecutionProcess) {
+    this.browserLauncher = new BrowserLauncher(commandExecutionProcess);
   }
 
-  public void run(final Map<String, String> options) {
+  public void start(final Map<String, String> options) {
     registerProfile(options);
-    initializeInfraResources(options);
+    initializeResources(options);
     registerGenerationTarget(options);
     startServer();
     launchBrowser();
@@ -44,7 +43,7 @@ public class DesignerInitializer {
     }
   }
 
-  private void initializeInfraResources(final Map<String, String> options) {
+  private void initializeResources(final Map<String, String> options) {
     final Integer designerServerPort = Integer.valueOf(options.get("port"));
     Infrastructure.setupResources(HomeDirectory.fromEnvironment(), designerServerPort);
   }
@@ -63,7 +62,7 @@ public class DesignerInitializer {
   }
 
   private void launchBrowser() {
-    if(ComponentsConfiguration.resolveEnvironment().isLocal() && !Profile.isTestProfileEnabled()) {
+    if(Configuration.resolveEnvironment().isLocal() && !Profile.isTestProfileEnabled()) {
       this.browserLauncher.execute();
     }
   }

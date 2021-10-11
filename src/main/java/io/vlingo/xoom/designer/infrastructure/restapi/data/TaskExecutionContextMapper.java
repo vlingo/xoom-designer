@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.ComponentsConfiguration;
+import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.DeploymentType;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
@@ -234,7 +234,7 @@ public class TaskExecutionContextMapper {
             ClusterSettings.with(data.deployment.clusterPort, data.deployment.clusterTotalNodes);
 
     final SchemataSettings schemataSettings =
-            SchemataSettings.with(data.schemata.host, data.schemata.port, ComponentsConfiguration.resolveSchemataServiceDNS());
+            SchemataSettings.with(data.schemata.host, data.schemata.port, Configuration.resolveSchemataServiceDNS());
 
     final Path definitiveFolder =
             generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
@@ -251,7 +251,7 @@ public class TaskExecutionContextMapper {
             .add(ARTIFACT_ID, data.context.artifactId)
             .add(ARTIFACT_VERSION, data.context.artifactVersion)
             .add(PACKAGE, formatter.rectifyPackageSyntax(data.context.packageName))
-            .add(XOOM_VERSION, ComponentsConfiguration.resolveDefaultXoomVersion())
+            .add(XOOM_VERSION, Configuration.resolveDefaultXoomVersion())
             .add(DEPLOYMENT_SETTINGS, deploymentSettings)
             .add(CLUSTER_SETTINGS, clusterSettings)
             .add(TURBO_SETTINGS, turboSettings)

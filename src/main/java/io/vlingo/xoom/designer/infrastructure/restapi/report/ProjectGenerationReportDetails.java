@@ -8,7 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.designer.ComponentsConfiguration;
+import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class ProjectGenerationReportDetails {
       final String osName = System.getProperty("os.name");
       final String javaVersion = System.getProperty("java.version");
       final String stacktrace = ExceptionFormatter.format(exception);
-      final String designerVersion = ComponentsConfiguration.resolveDefaultXoomVersion();
+      final String designerVersion = Configuration.resolveDefaultXoomVersion();
       final String simpleModelJson = designerModel.replaceAll("\n", "<br>").replaceAll("\\\\\"", "\"");
       return String.format(DETAILS_PATTERN, osName, javaVersion, designerVersion,
               target, errorType, simpleModelJson, stacktrace);

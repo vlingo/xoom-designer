@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
-import io.vlingo.xoom.designer.ComponentsConfiguration;
+import io.vlingo.xoom.designer.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class GenerationSettingsData {
         this.projectDirectory = projectDirectory;
         this.useAnnotations = useAnnotations;
         this.useAutoDispatch = useAutoDispatch;
-        this.fileVersion = ComponentsConfiguration.XOOM_DESIGNER_FILE_VERSION;
+        this.fileVersion = Configuration.XOOM_DESIGNER_FILE_VERSION;
         this.generateUIWith = generateUIWith;
         this.generateUI = generateUI;
     }

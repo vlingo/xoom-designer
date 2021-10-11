@@ -18,20 +18,21 @@ public class SupportingServicesManager {
 
   public static final String SCHEMATA = "schemata";
   public static final String RABBIT_MQ = "rabbitmq";
+  private static final Logger logger = Logger.basicLogger();
 
   public static void run() {
     if(shouldManage()) {
       if(SupportingServicesStart.run()) {
-        Logger.basicLogger().info("Supporting services running...");
+        logger.info("Supporting services running...");
       } else {
-        Logger.basicLogger().warn("Unable to run Supporting Services");
+        logger.warn("Unable to run Supporting Services");
       }
     }
   }
 
   public static void shutdown() {
     if(shouldManage()) {
-      Logger.basicLogger().info("Stopping Supporting services...");
+      logger.info("Stopping Supporting services...");
       SupportingServicesShutdown.handle();
     }
   }
@@ -86,7 +87,7 @@ public class SupportingServicesManager {
     }
 
     private SupportingServicesShutdown() {
-      super(new DefaultCommandExecutionProcess());
+      super(new DefaultCommandExecutionProcess(logger));
     }
 
     @Override

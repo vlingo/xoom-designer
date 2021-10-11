@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.Completes;
-import io.vlingo.xoom.designer.ComponentsConfiguration;
+import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.TaskExecutionContextMapper;
@@ -65,7 +65,7 @@ public class ProjectGenerationManager {
 
   private void processSteps(final TaskExecutionContext context, final ProjectGenerationInformation information) {
     try {
-      ComponentsConfiguration.PROJECT_GENERATION_STEPS.stream()
+      Configuration.PROJECT_GENERATION_STEPS.stream()
               .filter(step -> step.shouldProcess(context))
               .forEach(step -> step.processTaskWith(context));
 

@@ -4,30 +4,24 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-
-package io.vlingo.xoom.cli.task.docker;
+package io.vlingo.xoom.cli.task.gloo;
 
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.task.Task;
-import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 
 import java.util.List;
 
 import static io.vlingo.xoom.cli.option.OptionName.CURRENT_DIRECTORY;
-import static io.vlingo.xoom.cli.XoomTurboProperties.DOCKER_IMAGE;
 
-public class DockerStatusTask extends Task {
+public class GlooInitTask extends Task {
 
-  private final XoomTurboProperties xoomTurboProperties;
   private final CommandExecutionProcess commandExecutionProcess;
 
-  public DockerStatusTask(final CommandExecutionProcess commandExecutionProcess,
-                          final XoomTurboProperties xoomTurboProperties) {
-    super("docker status", Option.required(CURRENT_DIRECTORY));
+  public GlooInitTask(final CommandExecutionProcess commandExecutionProcess) {
+    super("gloo init", Option.required(CURRENT_DIRECTORY));
     this.commandExecutionProcess = commandExecutionProcess;
-    this.xoomTurboProperties = xoomTurboProperties;
   }
 
   @Override
@@ -35,12 +29,9 @@ public class DockerStatusTask extends Task {
     new CommandExecutor(commandExecutionProcess) {
       @Override
       protected String formatCommands() {
-        final String image = xoomTurboProperties.get(DOCKER_IMAGE);
-        if (image == null) {
-          throw new DockerCommandException("Please set the docker.image property in xoom-turbo.properties");
-        }
-        return String.format("docker ps --filter ancestor=%s", image);
+        return "glooctl install gateway";
       }
     }.execute();
   }
+
 }

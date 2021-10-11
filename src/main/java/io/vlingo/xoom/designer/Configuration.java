@@ -1,9 +1,6 @@
 package io.vlingo.xoom.designer;
 
-import io.vlingo.xoom.cli.task.CLITask;
 import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.cli.task.designer.DesignerTask;
-import io.vlingo.xoom.cli.task.docker.DockerTask;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
@@ -44,7 +41,6 @@ import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
 import io.vlingo.xoom.designer.infrastructure.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.infrastructure.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
-import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,7 +52,7 @@ import java.util.Optional;
 
 import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
-public class ComponentsConfiguration {
+public class Configuration {
 
   private static final int DEFAULT_REQUEST_LIMIT = 10;
   public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
@@ -75,19 +71,10 @@ public class ComponentsConfiguration {
   }
 
   private static void load() {
-    final CommandExecutionProcess process =
-            new DefaultCommandExecutionProcess();
-
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.findDefault(),
                     ReservedWordsHandler.usingSuffix("_"));
 
-    final List<CLITask> cliTasks =
-            Arrays.asList(new DesignerTask(process),
-                    new DockerTask(process));
-
-    ComponentRegistry.register("cliTasks", cliTasks);
-    ComponentRegistry.register(CommandExecutionProcess.class, process);
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
   }
 
@@ -136,7 +123,7 @@ public class ComponentsConfiguration {
   );
 
   public static String resolveDefaultXoomVersion() {
-    final String version = ComponentsConfiguration.class.getPackage().getImplementationVersion();
+    final String version = Configuration.class.getPackage().getImplementationVersion();
     if (version == null) {
       System.out.println("Unable to find default VLINGO XOOM version. Using development version: " + XOOM_VERSION_PLACEHOLDER);
       return XOOM_VERSION_PLACEHOLDER;
@@ -148,7 +135,7 @@ public class ComponentsConfiguration {
     if (Profile.isTestProfileEnabled()) {
       return Paths.get(System.getProperty("user.dir"), "dist", "designer").toString();
     }
-    return System.getenv(ComponentsConfiguration.HOME_ENVIRONMENT_VARIABLE);
+    return System.getenv(Configuration.HOME_ENVIRONMENT_VARIABLE);
   }
 
   public static Environment resolveEnvironment() {

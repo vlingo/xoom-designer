@@ -5,7 +5,7 @@ import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.BrowserLauncher;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

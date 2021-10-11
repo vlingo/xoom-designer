@@ -27,7 +27,7 @@ public enum OptionName {
   }
 
   public String withPrefix() {
-    return "--" + value;
+    return Option.prefix + value;
   }
 
 }

@@ -1,9 +1,9 @@
 package io.vlingo.xoom.designer.cli.docker;
 
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.XoomTurboProperties;
+import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.cli.task.docker.DockerCommandException;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -7,6 +7,7 @@
 package io.vlingo.xoom.terminal;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.IOException;
 
@@ -15,12 +16,16 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
   private static final String SUCCESS_MESSAGE = "Done!";
   private static final String FAILURE_MESSAGE = "Failed.";
 
-  private Process process;
+  private final Logger logger;
+
+  public DefaultCommandExecutionProcess(final Logger logger) {
+    this.logger = logger;
+  }
 
   @Override
-  protected void execute(final String[] commandSequence) {
+  protected Process execute(final String[] commandSequence) {
     try {
-      this.process = Runtime.getRuntime().exec(commandSequence);
+      return Runtime.getRuntime().exec(commandSequence);
     } catch (final IOException e) {
       e.printStackTrace();
       throw new CommandExecutionException(e);
@@ -28,12 +33,12 @@ public class DefaultCommandExecutionProcess extends CommandExecutionProcess {
   }
 
   @Override
-  protected void log() {
-    CommandOutputConsumer.of(Logger.basicLogger(), process).tail();
+  protected void log(final Process process) {
+    CommandOutputConsumer.of(logger, process).tail();
   }
 
   @Override
-  protected void handleCommandExecutionStatus() {
+  protected void handleCommandExecutionStatus(final Process process) {
     try {
       final int commandExecutionStatus = process.waitFor();
       if(commandExecutionStatus == 0) {

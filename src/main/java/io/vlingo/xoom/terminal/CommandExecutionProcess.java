@@ -16,15 +16,15 @@ public abstract class CommandExecutionProcess {
   }
 
   public void handle(final String command) {
-      execute(terminal.prepareCommand(command));
-      log();
-      handleCommandExecutionStatus();
+      final Process process = execute(terminal.prepareCommand(command));
+      log(process);
+      handleCommandExecutionStatus(process);
   }
 
-  protected abstract void execute(final String[] commandSequence);
+  protected abstract Process execute(final String[] commandSequence);
 
-  protected abstract void log();
+  protected abstract void log(final Process process);
 
-  protected abstract void handleCommandExecutionStatus();
+  protected abstract void handleCommandExecutionStatus(final Process process);
 
 }

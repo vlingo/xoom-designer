@@ -13,7 +13,7 @@ import io.vlingo.xoom.codegen.template.OutputFileInstantiator;
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.cli.task.TaskExecutionStep;
 
-import static io.vlingo.xoom.designer.ComponentsConfiguration.CODE_GENERATION_STEPS;
+import static io.vlingo.xoom.designer.Configuration.CODE_GENERATION_STEPS;
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.OFFSET;
 
 public class CodeGenerationExecutionerStep implements TaskExecutionStep {

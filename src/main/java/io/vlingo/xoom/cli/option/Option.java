@@ -14,6 +14,7 @@ public class Option {
   private final OptionName name;
   private final String defaultValue;
   private final boolean required;
+  static final String prefix = "--";
 
   public Option(final OptionName name,
                 final String defaultValue,
@@ -51,6 +52,10 @@ public class Option {
 
   public OptionName name() {
     return name;
+  }
+
+  public static boolean isPrefixed(final String arg) {
+    return arg.startsWith(prefix);
   }
 
   private boolean isRequired() {

@@ -5,9 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.infrastructure.terminal;
-
-import io.vlingo.xoom.terminal.CommandExecutionProcess;
+package io.vlingo.xoom.terminal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,15 +16,16 @@ public class CommandRetainer extends CommandExecutionProcess {
   private final List<String[]> retainedCommands = new ArrayList<>();
 
   @Override
-  protected void execute(final String[] commandSequence) {
+  protected Process execute(final String[] commandSequence) {
     this.retainedCommands.add(commandSequence);
+    return null;
   }
 
   @Override
-  protected void log() {}
+  protected void log(final Process process) {}
 
   @Override
-  protected void handleCommandExecutionStatus() {}
+  protected void handleCommandExecutionStatus(final Process process) {}
 
   public List<String[]> retainedCommandsSequence() {
     return Collections.unmodifiableList(retainedCommands);

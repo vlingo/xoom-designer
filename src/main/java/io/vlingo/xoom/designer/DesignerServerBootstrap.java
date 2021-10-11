@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vlingo.xoom.designer.ComponentsConfiguration.*;
+import static io.vlingo.xoom.designer.Configuration.*;
 
 @Xoom(name = "xoom-designer")
 @ResourceHandlers(packages = "io.vlingo.xoom.designer.infrastructure.restapi")

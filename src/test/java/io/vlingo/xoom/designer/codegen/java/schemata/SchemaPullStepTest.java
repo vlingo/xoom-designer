@@ -14,7 +14,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
 import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
 import io.vlingo.xoom.designer.infrastructure.Infrastructure;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

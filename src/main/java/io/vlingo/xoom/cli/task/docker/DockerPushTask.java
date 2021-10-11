@@ -8,8 +8,9 @@
 package io.vlingo.xoom.cli.task.docker;
 
 import io.vlingo.xoom.cli.option.Option;
-import io.vlingo.xoom.cli.task.CLITask;
-import io.vlingo.xoom.cli.task.XoomTurboProperties;
+import io.vlingo.xoom.cli.option.OptionName;
+import io.vlingo.xoom.cli.task.Task;
+import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.Terminal;
@@ -19,16 +20,19 @@ import java.util.List;
 import static io.vlingo.xoom.cli.option.OptionName.CURRENT_DIRECTORY;
 import static io.vlingo.xoom.cli.option.OptionName.TAG;
 
-public class DockerPushTask extends CLITask {
+public class DockerPushTask extends Task {
 
   private static final String LOCAL = "LOCAL";
   private static final String REMOTE = "REMOTE";
 
+  private final XoomTurboProperties xoomTurboProperties;
   private final CommandExecutionProcess commandExecutionProcess;
 
-  protected DockerPushTask(final CommandExecutionProcess commandExecutionProcess) {
-    super("push", Option.required(CURRENT_DIRECTORY), Option.of(TAG, "latest"));
+  public DockerPushTask(final CommandExecutionProcess commandExecutionProcess,
+                        final XoomTurboProperties xoomTurboProperties) {
+    super("docker push", Option.required(CURRENT_DIRECTORY), Option.of(TAG, "latest"));
     this.commandExecutionProcess = commandExecutionProcess;
+    this.xoomTurboProperties = xoomTurboProperties;
   }
 
   @Override
@@ -36,9 +40,9 @@ public class DockerPushTask extends CLITask {
     new CommandExecutor(commandExecutionProcess) {
       @Override
       protected String formatCommands() {
-        final String currentDirectory = optionValueOf(CURRENT_DIRECTORY, args);
-        final String image = propertyOf(XoomTurboProperties.DOCKER_IMAGE, args);
-        final String repo = propertyOf(XoomTurboProperties.DOCKER_REPOSITORY, args);
+        final String image = xoomTurboProperties.get(XoomTurboProperties.DOCKER_IMAGE);
+        final String repo = xoomTurboProperties.get(XoomTurboProperties.DOCKER_REPOSITORY);
+        final String currentDirectory = optionValueOf(OptionName.CURRENT_DIRECTORY, args);
 
         final String projectDirectoryCommand =
                 Terminal.supported().resolveDirectoryChangeCommand(currentDirectory);

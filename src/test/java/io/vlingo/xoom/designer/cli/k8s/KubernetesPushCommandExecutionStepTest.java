@@ -8,8 +8,7 @@
 package io.vlingo.xoom.designer.cli.k8s;
 
 import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.k8s.KubernetesPushCommandExecutionStep;
-import io.vlingo.xoom.designer.infrastructure.terminal.CommandRetainer;
+import io.vlingo.xoom.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ public class KubernetesPushCommandExecutionStepTest {
 
         final CommandRetainer commandRetainer = new CommandRetainer();
 
-        new KubernetesPushCommandExecutionStep(commandRetainer).processTaskWith(context);
+//        new KubernetesPushCommandExecutionStep(commandRetainer).processTaskWith(context);
 
         final String[] commandSequence = commandRetainer.retainedCommandsSequence().get(0);
         Assertions.assertEquals(Terminal.supported().initializationCommand(), commandSequence[0]);

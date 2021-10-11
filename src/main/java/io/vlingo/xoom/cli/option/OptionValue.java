@@ -21,12 +21,15 @@ public class OptionValue {
     return resolveValues(options, args).stream().collect(Collectors.toMap(value -> value.name.value(), OptionValue::value));
   }
 
+
   public static List<OptionValue> resolveValues(final List<Option> options,
                                                 final List<String> args) {
-    return options.stream().map(option -> {
-      final String value = option.findValue(args);
-      return OptionValue.with(option.name(), value);
-    }).collect(Collectors.toList());
+    return options.stream().map(option -> resolveValue(option, args)).collect(Collectors.toList());
+  }
+
+  public static OptionValue resolveValue(final Option option,
+                                         final List<String> args) {
+    return OptionValue.with(option.name(), option.findValue(args));
   }
 
   public static OptionValue with(final OptionName name, final String value) {
