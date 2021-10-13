@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen;
 
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.java.storage.DatabaseType;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class CodeGenerationParameterValidationStep implements TaskExecutionStep {
+public class CodeGenerationParameterValidationStep implements CodeGenerationStep {
 
   //complete: PACKAGE_PATTERN, ARTIFACT_PATTERN, VERSION_PATTERN, IDENTIFIER_PATTERN
   //some of the others are maybe not complete
@@ -29,32 +29,32 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
   private static final String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
   private static final String ROUTE_PATTERN = "^[a-zA-Z_$/?%-]+$";
   private static final String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
-  private static CodeGenerationParameters parameters;
 
   @Override
-  public void processTaskWith(final TaskExecutionContext context) {
-    parameters = context.codeGenerationParameters();
+  public void process(final CodeGenerationContext context) {
     List<String> errorStrings = new ArrayList<>();
-    if(!retrieve(Label.GROUP_ID).matches(PACKAGE_PATTERN)) errorStrings.add("GroupID must follow package pattern");
-    if(!retrieve(Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
-    if(!retrieve(Label.ARTIFACT_VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
-    if(!retrieve(Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
+    final CodeGenerationParameters parameters = context.parameters();
 
-    if(!areValueObjectNamesValid()) errorStrings.add("Value Object names must follow classname pattern");
-    if(!areValueObjectFieldsValid()) errorStrings.add("Value Object fields must follow fieldname pattern");
-    if(!areAggregateNamesValid()) errorStrings.add("Aggregate names must follow classname pattern");
-    if(!areStateFieldsValid()) errorStrings.add("State Fields must follow fieldname pattern");
-    if(!areDomainEventsValid()) errorStrings.add("Domain Events must follow classname pattern");
-    if(!areMethodsValid()) errorStrings.add("Methods are not valid");
-    if(!areRestResourcesValid()) errorStrings.add("Rest Resources are not valid");
+    if(!retrieve(parameters, Label.GROUP_ID).matches(PACKAGE_PATTERN)) errorStrings.add("GroupID must follow package pattern");
+    if(!retrieve(parameters, Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
+    if(!retrieve(parameters, Label.ARTIFACT_VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
+    if(!retrieve(parameters, Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
 
-    if(!isStorageTypeValid()) errorStrings.add("StorageType is not valid");
-    if(!isProjectionValid(retrieve(Label.PROJECTION_TYPE), retrieve(Label.STORAGE_TYPE))) errorStrings.add("ProjectionType is not valid");
-    if(!isDatabaseValid()) errorStrings.add("Database is not valid");
+    if(!areValueObjectNamesValid(parameters)) errorStrings.add("Value Object names must follow classname pattern");
+    if(!areValueObjectFieldsValid(parameters)) errorStrings.add("Value Object fields must follow fieldname pattern");
+    if(!areAggregateNamesValid(parameters)) errorStrings.add("Aggregate names must follow classname pattern");
+    if(!areStateFieldsValid(parameters)) errorStrings.add("State Fields must follow fieldname pattern");
+    if(!areDomainEventsValid(parameters)) errorStrings.add("Domain Events must follow classname pattern");
+    if(!areMethodsValid(parameters)) errorStrings.add("Methods are not valid");
+    if(!areRestResourcesValid(parameters)) errorStrings.add("Rest Resources are not valid");
 
-    if(!isDeploymentValid()) errorStrings.add("Deployment is not valid");
+    if(!isStorageTypeValid(parameters)) errorStrings.add("StorageType is not valid");
+    if(!isProjectionValid(retrieve(parameters, Label.PROJECTION_TYPE), retrieve(parameters, Label.STORAGE_TYPE))) errorStrings.add("ProjectionType is not valid");
+    if(!isDatabaseValid(parameters)) errorStrings.add("Database is not valid");
 
-    if(!isTargetFolderValid(retrieve(Label.TARGET_FOLDER))) errorStrings.add("Target folder is not valid");
+    if(!isDeploymentValid(parameters)) errorStrings.add("Deployment is not valid");
+
+    if(!isTargetFolderValid(retrieve(parameters, Label.TARGET_FOLDER))) errorStrings.add("Target folder is not valid");
 
     if(errorStrings.size() > 0) {
       String errorMessage = String.join(", ", errorStrings);
@@ -62,45 +62,45 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     }
   }
 
-  private String retrieve(Label label) {
+  private String retrieve(final CodeGenerationParameters parameters, final Label label) {
     return parameters.retrieveValue(label);
   }
 
-  private <T> T retrieveObject(Label label) {
+  private <T> T retrieveObject(final CodeGenerationParameters parameters, Label label) {
     return parameters.retrieveObject(label);
   }
 
-  private boolean areValueObjectNamesValid() {
+  private boolean areValueObjectNamesValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.VALUE_OBJECT).allMatch(valueObject -> valueObject.value.matches(CLASSNAME_PATTERN));
   }
 
-  private boolean areValueObjectFieldsValid() {
+  private boolean areValueObjectFieldsValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.VALUE_OBJECT).flatMap(aggregate -> aggregate.retrieveAllRelated(Label.VALUE_OBJECT_FIELD))
             .allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN));
   }
 
-  private boolean areAggregateNamesValid() {
+  private boolean areAggregateNamesValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.AGGREGATE).allMatch(aggregateName -> aggregateName.value.matches(CLASSNAME_PATTERN));
   }
 
-  private boolean areStateFieldsValid() {
+  private boolean areStateFieldsValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.AGGREGATE)
             .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD))
             .allMatch(stateField -> stateField.value.matches(IDENTIFIER_PATTERN));
   }
 
-  private boolean areDomainEventsValid() {
+  private boolean areDomainEventsValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.AGGREGATE)
             .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.DOMAIN_EVENT))
             .allMatch(event -> event.value.matches(CLASSNAME_PATTERN));
   }
 
-  private boolean areMethodsValid() {
+  private boolean areMethodsValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.AGGREGATE).allMatch(
             aggregate -> aggregate.retrieveRelatedValue(Label.AGGREGATE_METHOD).matches(IDENTIFIER_PATTERN));
   }
 
-  private boolean areRestResourcesValid() {
+  private boolean areRestResourcesValid(final CodeGenerationParameters parameters) {
     return parameters.retrieveAll(Label.AGGREGATE)
             .map(aggregate ->
                     aggregate.retrieveAllRelated(Label.REST_RESOURCES).allMatch(rest ->
@@ -114,8 +114,8 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
             ).allMatch(bool -> bool==true);
   }
 
-  private boolean isStorageTypeValid() {
-    return Stream.of(StorageType.STATE_STORE.key, StorageType.JOURNAL.key).anyMatch(retrieve(Label.STORAGE_TYPE)::equals);
+  private boolean isStorageTypeValid(final CodeGenerationParameters parameters) {
+    return Stream.of(StorageType.STATE_STORE.key, StorageType.JOURNAL.key).anyMatch(retrieve(parameters, Label.STORAGE_TYPE)::equals);
   }
 
   private boolean isProjectionValid(String projectionType, String storageType) {
@@ -125,10 +125,10 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     return Stream.of(ProjectionType.NONE.name(), ProjectionType.EVENT_BASED.name(), ProjectionType.OPERATION_BASED.name()).anyMatch(projectionType::equals);
   }
 
-  private boolean isDatabaseValid() {
-    String database = retrieve(Label.DATABASE);
-    String queryDatabase = retrieve(Label.QUERY_MODEL_DATABASE);
-    String commandDatabase = retrieve(Label.COMMAND_MODEL_DATABASE);
+  private boolean isDatabaseValid(final CodeGenerationParameters parameters) {
+    String database = retrieve(parameters, Label.DATABASE);
+    String queryDatabase = retrieve(parameters, Label.QUERY_MODEL_DATABASE);
+    String commandDatabase = retrieve(parameters, Label.COMMAND_MODEL_DATABASE);
     if(database.length()>0) {
       return databases().anyMatch(database::equals);
     }
@@ -139,8 +139,8 @@ public class CodeGenerationParameterValidationStep implements TaskExecutionStep 
     return Stream.of(DatabaseType.values()).map(db -> db.name());
   }
 
-  private boolean isDeploymentValid() {
-    final DeploymentSettings deploymentSettings = retrieveObject(Label.DEPLOYMENT_SETTINGS);
+  private boolean isDeploymentValid(final CodeGenerationParameters parameters) {
+    final DeploymentSettings deploymentSettings = retrieveObject(parameters, Label.DEPLOYMENT_SETTINGS);
     boolean validImage = true;
     //no break, fall through
     switch(deploymentSettings.type) {

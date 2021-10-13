@@ -44,10 +44,10 @@ public class DesignerInitializer {
   }
 
   private void initializeResources(final Map<String, String> options) {
-    Configuration.load();
     final HomeDirectory homeDirectory = HomeDirectory.fromEnvironment();
     final Integer designerServerPort = Integer.valueOf(options.get("port"));
     Infrastructure.setupResources(homeDirectory, designerServerPort);
+    Configuration.load();
   }
 
   private void registerGenerationTarget(final Map<String, String> options) {

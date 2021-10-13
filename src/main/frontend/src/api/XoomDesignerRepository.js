@@ -1,11 +1,11 @@
 import Repository from './Repository'
 
 const resources = Object.freeze({
-	projectGeneration: '/generation-settings',
-	exportationFile: '/generation-settings/exportation-file',
-	importationFile: '/generation-settings/importation-file',
-	pathValidation: '/generation-settings/paths',
-	generationInfo: '/generation-settings/info',
+	projectGeneration: '/model-processing',
+	exportationFile: '/model-processing/exportation-file',
+	importationFile: '/model-processing/importation-file',
+	pathValidation: '/model-processing/paths',
+	generationInfo: '/model-processing/info',
 })
 
 function ensureOk(response) {

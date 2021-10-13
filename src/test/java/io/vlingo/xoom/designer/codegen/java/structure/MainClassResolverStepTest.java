@@ -7,7 +7,7 @@
 
 package io.vlingo.xoom.designer.codegen.java.structure;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.Label;
 import org.junit.jupiter.api.Assertions;
@@ -17,26 +17,26 @@ public class MainClassResolverStepTest {
 
   @Test
   public void testThatDefaultMainClassIsResolved() {
-    final TaskExecutionContext context = buildContext(false);
-    new MainClassResolverStep().processTaskWith(context);
-    final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
+    final CodeGenerationContext context = buildContext(false);
+    new MainClassResolverStep().process(context);
+    final String mainClass = context.parameterOf(Label.APPLICATION_MAIN_CLASS);
     Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.Bootstrap", mainClass);
   }
 
   @Test
   public void testThatAnnotatedMainClassIsResolved() {
-    final TaskExecutionContext context = buildContext(true);
-    new MainClassResolverStep().processTaskWith(context);
-    final String mainClass = context.codeGenerationParameters().retrieveValue(Label.APPLICATION_MAIN_CLASS);
+    final CodeGenerationContext context = buildContext(true);
+    new MainClassResolverStep().process(context);
+    final String mainClass = context.parameterOf(Label.APPLICATION_MAIN_CLASS);
     Assertions.assertEquals("io.vlingo.xoomapp.infrastructure.XoomInitializer", mainClass);
   }
 
-  private TaskExecutionContext buildContext(final Boolean useAnnotations) {
+  private CodeGenerationContext buildContext(final Boolean useAnnotations) {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.USE_ANNOTATIONS, useAnnotations);
 
-    return TaskExecutionContext.bare().with(parameters);
+    return CodeGenerationContext.with(parameters);
   }
 
 }

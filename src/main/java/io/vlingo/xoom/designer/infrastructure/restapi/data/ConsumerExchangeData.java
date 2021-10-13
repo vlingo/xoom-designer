@@ -12,6 +12,6 @@ import java.util.List;
 
 public class ConsumerExchangeData {
 
-    public final List<ReceiverData> receivers = new ArrayList<>();
+  public final List<ReceiverData> receivers = new ArrayList<>();
 
 }

@@ -6,9 +6,9 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.designer.ModelProcessingException;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 import org.apache.commons.io.FileUtils;
 
@@ -18,16 +18,16 @@ import java.nio.file.Path;
 
 import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
 
-public class StagingFolderCleanUpStep implements TaskExecutionStep {
+public class StagingFolderCleanUpStep implements CodeGenerationStep {
 
   @Override
-  public void processTaskWith(final TaskExecutionContext context) {
+  public void process(final CodeGenerationContext context) {
     try {
       Files.list(StagingFolder.path()).filter(Files::isDirectory)
               .filter(dir -> !dir.getFileName().toString().equals(MAVEN_WRAPPER_DIRECTORY))
               .forEach(this::removeDirectory);
     } catch (final IOException e) {
-      throw new ProjectGenerationException(e);
+      throw new ModelProcessingException(e);
     }
   }
 
@@ -35,7 +35,7 @@ public class StagingFolderCleanUpStep implements TaskExecutionStep {
     try {
       FileUtils.deleteDirectory(directory.toFile());
     } catch (final IOException e) {
-      throw new ProjectGenerationException(e);
+      throw new ModelProcessingException(e);
     }
   }
 

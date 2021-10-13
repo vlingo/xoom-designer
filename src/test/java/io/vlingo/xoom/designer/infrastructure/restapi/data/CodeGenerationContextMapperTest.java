@@ -26,7 +26,7 @@ import java.util.List;
 
 import static io.vlingo.xoom.designer.codegen.Label.*;
 
-public class TaskExecutionContextMapperTest {
+public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatTaskExecutionContextIsMapped() {
@@ -35,12 +35,12 @@ public class TaskExecutionContextMapperTest {
 
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
 
-    final GenerationSettingsData data =
-            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+    final DesignerModel data =
+            new DesignerModel(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
-            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger()).codeGenerationParameters();
+            CodeGenerationContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger()).parameters();
 
     assertStructuralOptions(codeGenerationParameters);
     assertPersistenceParameters(codeGenerationParameters);

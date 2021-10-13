@@ -11,24 +11,24 @@ import java.util.List;
 
 public class APIData {
 
-    public final String rootPath;
-    public final List<RouteData> routes;
+  public final String rootPath;
+  public final List<RouteData> routes;
 
-    public APIData(final String rootPath,
-                   final List<RouteData> routes) {
-        this.rootPath = rootPath;
-        this.routes = routes;
-    }
+  public APIData(final String rootPath,
+                 final List<RouteData> routes) {
+    this.rootPath = rootPath;
+    this.routes = routes;
+  }
 
-    public List<String> validate(List<String> errorStrings) {
-        if(rootPath==null) errorStrings.add("APIData.rootPath is null");
-        if(routes==null) {
-            errorStrings.add("APIData.routes is null");
-        } else {
-            routes.forEach(route ->
-                route.validate(errorStrings)
-            );
-        }
-        return errorStrings;
+  public List<String> validate(List<String> errorStrings) {
+    if (rootPath == null) errorStrings.add("APIData.rootPath is null");
+    if (routes == null) {
+      errorStrings.add("APIData.routes is null");
+    } else {
+      routes.forEach(route ->
+              route.validate(errorStrings)
+      );
     }
+    return errorStrings;
+  }
 }

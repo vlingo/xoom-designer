@@ -1,10 +1,10 @@
 package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.*;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Test;
@@ -24,15 +24,15 @@ public class CodeGenerationParameterValidationStepTest {
 
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
 
-    final GenerationSettingsData data =
-            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+    final DesignerModel data =
+            new DesignerModel(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(),
                     "/home/projects", true, false, false, "");
 
-    final TaskExecutionContext context =
-            TaskExecutionContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
+    final CodeGenerationContext context =
+            CodeGenerationContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
 
-    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().processTaskWith(context));
+    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
   }
 
   private ContextSettingsData contextSettingsData() {

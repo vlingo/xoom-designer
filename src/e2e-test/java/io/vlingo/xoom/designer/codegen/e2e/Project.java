@@ -8,8 +8,8 @@ package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModel;
 import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationPath;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -27,7 +27,7 @@ public class Project {
   public final String directory;
   public final String modelFilename;
   public final GenerationPath generationPath;
-  public final GenerationSettingsData generationSettings;
+  public final DesignerModel generationSettings;
   private boolean stopped;
 
   private static List<Project> all =  new ArrayList<>();
@@ -46,9 +46,9 @@ public class Project {
     all.add(this);
   }
 
-  private GenerationSettingsData buildGenerationSettings() {
+  private DesignerModel buildGenerationSettings() {
     final String completeModel = completeDynamicModelProperties();
-    return JsonSerialization.deserialized(completeModel, GenerationSettingsData.class);
+    return JsonSerialization.deserialized(completeModel, DesignerModel.class);
   }
 
   private String completeDynamicModelProperties() {

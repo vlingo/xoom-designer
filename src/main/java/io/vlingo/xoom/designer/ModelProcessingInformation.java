@@ -4,13 +4,13 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.codegen;
+package io.vlingo.xoom.designer;
 
-import io.vlingo.xoom.designer.Configuration;
+import io.vlingo.xoom.designer.codegen.GenerationTarget;
 
 import java.io.File;
 
-public class ProjectGenerationInformation {
+public class ModelProcessingInformation {
 
   public final String userHomePath;
   public final String pathSeparator;
@@ -19,11 +19,11 @@ public class ProjectGenerationInformation {
   public final GenerationTarget generationTarget;
   public final String generationTargetKey;
 
-  public static ProjectGenerationInformation from(final GenerationTarget generationTarget) {
-    return new ProjectGenerationInformation(generationTarget);
+  public static ModelProcessingInformation from(final GenerationTarget generationTarget) {
+    return new ModelProcessingInformation(generationTarget);
   }
 
-  private ProjectGenerationInformation(final GenerationTarget generationTarget) {
+  private ModelProcessingInformation(final GenerationTarget generationTarget) {
     this.pathSeparator = File.separator;
     this.generationTarget = generationTarget;
     this.generationTargetKey = generationTarget.value();

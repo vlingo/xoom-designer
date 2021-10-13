@@ -5,18 +5,18 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen;
+package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.cli.task.TaskExecutionException;
 
-public class ProjectGenerationException extends TaskExecutionException {
+public class ModelProcessingException extends TaskExecutionException {
   private static final long serialVersionUID = -8654681953639807867L;
 
-  public ProjectGenerationException(final Exception exception) {
+  public ModelProcessingException(final Exception exception) {
     super(exception);
   }
 
-  public ProjectGenerationException(final String message) {
+  public ModelProcessingException(final String message) {
     super(message);
   }
 

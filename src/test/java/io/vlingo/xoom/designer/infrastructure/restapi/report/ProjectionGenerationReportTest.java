@@ -25,12 +25,12 @@ public class ProjectionGenerationReportTest {
 
   @Test
   public void testThatCodeGenFailureReportIsCreated() {
-    final GenerationSettingsData data =
-            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+    final DesignerModel data =
+            new DesignerModel(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
-    final ProjectGenerationReport report =
-            ProjectGenerationReport.onContextMappingFail(GenerationTarget.FILESYSTEM, data, new CodeGenerationException("Unable to generate project"));
+    final ModelProcessingReport report =
+            ModelProcessingReport.onContextMappingFail(GenerationTarget.FILESYSTEM, data, new CodeGenerationException("Unable to generate project"));
 
     final int designerModelIndex =
             report.details.indexOf(designerModelLabel) + designerModelLabel.length() + 1;

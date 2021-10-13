@@ -8,8 +8,6 @@
 package io.vlingo.xoom.designer.infrastructure.requesthistory;
 
 import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiter;
-import io.vlingo.xoom.designer.infrastructure.requesthistory.RequestLimiterFilter;
 import io.vlingo.xoom.http.Header.Headers;
 import io.vlingo.xoom.http.Request;
 import io.vlingo.xoom.http.RequestHeader;
@@ -19,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.time.Duration;
 
-import static io.vlingo.xoom.designer.infrastructure.restapi.ProjectGenerationResource.REFUSE_REQUEST_URI;
+import static io.vlingo.xoom.designer.infrastructure.restapi.ModelProcessingResource.REFUSE_REQUEST_URI;
 import static io.vlingo.xoom.http.Body.Empty;
 import static io.vlingo.xoom.http.Method.POST;
 import static io.vlingo.xoom.http.RequestHeader.XForwardedFor;

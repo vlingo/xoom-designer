@@ -5,10 +5,14 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen;
+package io.vlingo.xoom.designer;
 
-public enum ProjectGenerationOutput {
+public enum ModelProcessingStatus {
 
-  COMPRESSED_PROJECT,
-  REPORT
+    SUCCESSFUL,
+    FAILED;
+
+    public boolean failed() {
+        return equals(FAILED);
+    }
 }

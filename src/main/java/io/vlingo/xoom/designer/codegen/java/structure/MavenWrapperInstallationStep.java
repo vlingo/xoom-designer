@@ -7,9 +7,10 @@
 
 package io.vlingo.xoom.designer.codegen.java.structure;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
-import io.vlingo.xoom.designer.codegen.ProjectGenerationException;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.designer.ModelProcessingException;
+import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 import io.vlingo.xoom.terminal.Terminal;
 import org.apache.commons.io.FileUtils;
@@ -25,13 +26,13 @@ import java.util.List;
 import static io.vlingo.xoom.designer.Configuration.MAVEN_WRAPPER_DIRECTORY;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-public final class MavenWrapperInstallationStep implements TaskExecutionStep {
+public final class MavenWrapperInstallationStep implements CodeGenerationStep {
 
     private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw.cmd");
 
     @Override
-    public void processTaskWith(final TaskExecutionContext context) {
-        final Path projectPath = Paths.get(context.targetFolder());
+    public void process(final CodeGenerationContext context) {
+        final Path projectPath = Paths.get(context.parameterOf(Label.TARGET_FOLDER));
         copyMavenWrapperFiles(projectPath);
         copyMavenWrapperDirectory(projectPath);
     }
@@ -45,7 +46,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
                 final File file = destination.toFile();
                 Terminal.grantAllPermissions(file);
             } catch (final IOException e) {
-                throw new ProjectGenerationException(e);
+                throw new ModelProcessingException(e);
             }
         });
     }
@@ -56,7 +57,7 @@ public final class MavenWrapperInstallationStep implements TaskExecutionStep {
             final Path destination = projectPath.resolve(MAVEN_WRAPPER_DIRECTORY);
             FileUtils.copyDirectory(source.toFile(), destination.toFile());
         } catch (final IOException e) {
-            throw new ProjectGenerationException(e);
+            throw new ModelProcessingException(e);
         }
     }
 

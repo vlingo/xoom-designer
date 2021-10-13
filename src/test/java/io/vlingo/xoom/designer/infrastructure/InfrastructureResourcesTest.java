@@ -26,7 +26,7 @@ public class InfrastructureResourcesTest {
     Infrastructure.setupResources(HomeDirectory.fromEnvironment(), 19090);
     final DesignerServerConfiguration designerServerConfiguration = ComponentRegistry.withType(DesignerServerConfiguration.class);
     Assertions.assertEquals(19090, designerServerConfiguration.port());
-    Assertions.assertEquals("http://localhost:19090/context", designerServerConfiguration.resolveUserInterfaceURL());
+    Assertions.assertEquals("http://localhost:19090/context", designerServerConfiguration.resolveUserInterfaceURL().toString());
     Assertions.assertEquals(Paths.get(ROOT_FOLDER, "staging"), StagingFolder.path());
   }
 

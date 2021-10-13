@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen.java.designermodel;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import io.vlingo.xoom.common.serialization.JsonSerialization;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModel;
 
 public class DesignerModelFormatter {
 
@@ -17,8 +17,8 @@ public class DesignerModelFormatter {
     return new GsonBuilder().setPrettyPrinting().create().toJson(JsonParser.parseString(designerModel));
   }
 
-  public static String format(final GenerationSettingsData generationSettingsData) {
-    return format(JsonSerialization.serialized(generationSettingsData));
+  public static String format(final DesignerModel designerModel) {
+    return format(JsonSerialization.serialized(designerModel));
   }
 
 }

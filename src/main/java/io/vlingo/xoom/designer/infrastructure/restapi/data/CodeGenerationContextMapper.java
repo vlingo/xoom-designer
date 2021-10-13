@@ -8,7 +8,7 @@
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -33,27 +33,27 @@ import java.util.Optional;
 import static io.vlingo.xoom.designer.codegen.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.codegen.Label.*;
 
-public class TaskExecutionContextMapper {
+public class CodeGenerationContextMapper {
 
-  private final GenerationSettingsData data;
-  private final TaskExecutionContext context;
+  private final DesignerModel data;
+  private final CodeGenerationContext context;
   private final GenerationTarget generationTarget;
   private final CodeGenerationParameters parameters;
   private final CodeElementFormatter formatter;
   private final Logger logger;
 
-  public static TaskExecutionContext map(final GenerationSettingsData data,
+  public static CodeGenerationContext map(final DesignerModel data,
                                          final GenerationTarget generationTarget,
                                          final Logger logger) {
-    return new TaskExecutionContextMapper(data, generationTarget, logger).map();
+    return new CodeGenerationContextMapper(data, generationTarget, logger).map();
   }
 
-  private TaskExecutionContextMapper(final GenerationSettingsData data,
-                                     final GenerationTarget generationTarget,
-                                     final Logger logger) {
+  private CodeGenerationContextMapper(final DesignerModel data,
+                                      final GenerationTarget generationTarget,
+                                      final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.context = TaskExecutionContext.bare();
+    this.context = CodeGenerationContext.empty();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
     this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.logger = logger;
@@ -64,8 +64,9 @@ public class TaskExecutionContextMapper {
     mapInfrastructureSettings();
   }
 
-  private TaskExecutionContext map() {
-    return context.with(parameters).logger(logger);
+  private CodeGenerationContext map() {
+    context.logger(logger).parameters().addAll(parameters);
+    return context;
   }
 
   private void mapAggregates() {
@@ -237,7 +238,7 @@ public class TaskExecutionContextMapper {
             SchemataSettings.with(data.schemata.host, data.schemata.port, Configuration.resolveSchemataServiceDNS());
 
     final Path definitiveFolder =
-            generationTarget.definitiveFolderFor(context.executionId, data.context.artifactId, data.projectDirectory);
+            generationTarget.definitiveFolderFor(context.generationId, data.context.artifactId, data.projectDirectory);
 
     final DeploymentSettings deploymentSettings =
             DeploymentSettings.with(DeploymentType.of(data.deployment.type),

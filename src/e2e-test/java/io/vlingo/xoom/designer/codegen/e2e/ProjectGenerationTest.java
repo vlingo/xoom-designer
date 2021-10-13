@@ -27,6 +27,7 @@ public abstract class ProjectGenerationTest {
   private static Integer designerPort;
   private static final Logger logger = Logger.basicLogger();
   private static final PortDriver portDriver = PortDriver.init();
+  private static final String apiRootPath = "/api/model-processing";
   public static final Path e2eResourcesPath = Paths.get(System.getProperty("user.dir"), "src", "e2e-test", "resources");
 
   public static void init() {
@@ -51,12 +52,12 @@ public abstract class ProjectGenerationTest {
     removeTargetFolder(project.generationPath.path);
 
     final int pathCreationStatusCode = given().port(designerPort).accept(JSON)
-            .contentType(JSON).body(project.generationPath).post("/api/generation-settings/paths").statusCode();
+            .contentType(JSON).body(project.generationPath).post(apiRootPath + "/paths").statusCode();
 
     Assertions.assertEquals(Created.code, pathCreationStatusCode, "Error creating generation path for " + project);
 
     final int generationStatusCode = given().port(designerPort)
-            .accept(JSON).contentType(JSON).body(project.generationSettings).post("/api/generation-settings").statusCode();
+            .accept(JSON).contentType(JSON).body(project.generationSettings).post(apiRootPath).statusCode();
 
     Assertions.assertEquals(Ok.code, generationStatusCode, "Error generating " + project);
   }

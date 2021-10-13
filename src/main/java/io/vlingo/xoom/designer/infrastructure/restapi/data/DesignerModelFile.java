@@ -20,20 +20,20 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.UUID;
 
-public class GenerationSettingsFile {
+public class DesignerModelFile {
 
   public final String encoded;
 
-  public static GenerationSettingsFile from(final GenerationSettingsData data) {
+  public static DesignerModelFile from(final DesignerModel data) {
     try {
-      return new GenerationSettingsFile(JsonSerialization.serialized(data));
+      return new DesignerModelFile(JsonSerialization.serialized(data));
     } catch (final IOException exception) {
       exception.printStackTrace();
       throw new DesignerModelFileException("Unable to create GenerationSettingsFile", exception);
     }
   }
 
-  private GenerationSettingsFile(final String serializedSettingsJson) throws IOException {
+  private DesignerModelFile(final String serializedSettingsJson) throws IOException {
     this.encoded = encode(createFile(serializedSettingsJson));
   }
 
@@ -52,14 +52,14 @@ public class GenerationSettingsFile {
     return new GsonBuilder().setPrettyPrinting().create().toJson(parsed);
   }
 
-  public GenerationSettingsData mapData() {
+  public DesignerModel mapData() {
     try {
       final ByteArraySupplier byteArraySupplier = ByteArraySupplier.empty();
       try (final ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream(); ) {
         byteArraySupplier.stream(byteArrayStream);
         byteArrayStream.write(Base64.getDecoder().decode(encoded));
       }
-      return JsonSerialization.deserialized(new String(byteArraySupplier.get()), GenerationSettingsData.class);
+      return JsonSerialization.deserialized(new String(byteArraySupplier.get()), DesignerModel.class);
     } catch (final Exception exception) {
       throw new DesignerModelFileException("Unable to map data from encoded file", exception);
     }

@@ -6,22 +6,22 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.cli.task.TaskExecutionException;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class TemporaryTaskFolderCreationStep implements TaskExecutionStep {
+public class TemporaryTaskFolderCreationStep implements CodeGenerationStep {
 
   @Override
-  public void processTaskWith(final TaskExecutionContext context) {
+  public void process(final CodeGenerationContext context) {
     try {
       final Path temporaryTaskFolder =
-              StagingFolder.path().resolve(context.executionId);
+              StagingFolder.path().resolve(context.generationId);
 
       Files.createDirectory(temporaryTaskFolder);
     } catch (final IOException e) {

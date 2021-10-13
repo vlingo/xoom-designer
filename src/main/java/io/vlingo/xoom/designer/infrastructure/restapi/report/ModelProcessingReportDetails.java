@@ -9,11 +9,11 @@ package io.vlingo.xoom.designer.infrastructure.restapi.report;
 
 import io.vlingo.xoom.common.serialization.JsonSerialization;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModel;
 
 import java.io.IOException;
 
-public class ProjectGenerationReportDetails {
+public class ModelProcessingReportDetails {
 
   private final static String DETAILS_PATTERN =
                   "**Action**: Project Generation <br> **OS**:  %s <br> **Java Version**:  %s <br>" +
@@ -23,7 +23,7 @@ public class ProjectGenerationReportDetails {
 
   public static String format(final String target,
                               final String errorType,
-                              final GenerationSettingsData settingsData,
+                              final DesignerModel settingsData,
                               final Exception exception) {
     return format(target, errorType, JsonSerialization.serialized(settingsData), exception);
   }

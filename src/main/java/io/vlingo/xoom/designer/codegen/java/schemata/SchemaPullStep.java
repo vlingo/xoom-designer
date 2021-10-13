@@ -6,8 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.java.schemata;
 
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
@@ -16,10 +16,9 @@ import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.Terminal;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SchemaPullStep implements TaskExecutionStep {
+public class SchemaPullStep implements CodeGenerationStep {
 
   private final CommandExecutionProcess commandExecutionProcess;
 
@@ -28,20 +27,20 @@ public class SchemaPullStep implements TaskExecutionStep {
   }
 
   @Override
-  public void processTaskWith(final TaskExecutionContext context) {
+  public void process(final CodeGenerationContext context) {
     new CommandExecutor(commandExecutionProcess) {
       @Override
       protected String formatCommands() {
         final Terminal terminal = Terminal.supported();
 
-        final Path projectPath =
-                Paths.get(context.targetFolder());
+        final String targetFolder =
+                context.parameterOf(Label.TARGET_FOLDER);
 
         final String directoryChangeCommand =
-                terminal.resolveDirectoryChangeCommand(projectPath);
+                terminal.resolveDirectoryChangeCommand(Paths.get(targetFolder));
 
         final SchemataSettings schemataSettings =
-                context.codeGenerationParameters().retrieveObject(Label.SCHEMATA_SETTINGS);
+                context.parameterObjectOf(Label.SCHEMATA_SETTINGS);
 
         final String schemataServiceProfile =
                 SchemataServiceProfileResolver.resolveSchemataProfile(schemataSettings);
@@ -65,8 +64,8 @@ public class SchemaPullStep implements TaskExecutionStep {
   }
 
   @Override
-  public boolean shouldProcess(final TaskExecutionContext context) {
-    return context.codeGenerationParametersOf(Label.AGGREGATE)
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    return context.parametersOf(Label.AGGREGATE)
             .filter(aggregate -> aggregate.hasAny(Label.EXCHANGE))
             .flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE))
             .anyMatch(exchange -> exchange.retrieveRelatedValue(Label.ROLE, ExchangeRole::of).isConsumer());

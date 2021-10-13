@@ -7,9 +7,7 @@
 package io.vlingo.xoom.designer.codegen.e2e;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.terminal.CommandExecutor;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
 import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
 import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.terminal.Terminal;
@@ -38,7 +36,7 @@ public class SupportingServicesManager {
   }
 
   private static boolean shouldManage() {
-    return Boolean.valueOf(System.getProperty("enable-supporting-services", "false"));
+    return Boolean.parseBoolean(System.getProperty("enable-supporting-services", "false"));
   }
 
   public static int findPortOf(final String serviceName) {
@@ -46,7 +44,7 @@ public class SupportingServicesManager {
     if(port == null) {
       throw new IllegalArgumentException("Unknown port for service " + serviceName);
     }
-    return Integer.valueOf(port);
+    return Integer.parseInt(port);
   }
 
   private static class SupportingServicesStart extends CommandExecutor {

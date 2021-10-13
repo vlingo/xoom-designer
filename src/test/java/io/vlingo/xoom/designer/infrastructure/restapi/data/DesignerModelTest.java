@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerationSettingsDataTest {
+public class DesignerModelTest {
 
   @Test
   public void testThatGenerationSettingsDataIsValidated() {
-    final GenerationSettingsData data =
-            new GenerationSettingsData(contextSettingsData(), modelSettingsData(),
+    final DesignerModel data =
+            new DesignerModel(contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects",
                     true, false, false, "");
 
@@ -27,8 +27,8 @@ public class GenerationSettingsDataTest {
 
   @Test
   public void testThatGenerationSettingsDataValidationFailsDueToRecursiveValueObject() {
-    final GenerationSettingsData data =
-            new GenerationSettingsData(contextSettingsData(), invalidModelSettingsData(),
+    final DesignerModel data =
+            new DesignerModel(contextSettingsData(), invalidModelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final List<String> errors = data.validate();

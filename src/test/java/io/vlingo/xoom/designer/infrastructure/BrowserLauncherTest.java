@@ -1,16 +1,9 @@
 package io.vlingo.xoom.designer.infrastructure;
 
 import io.vlingo.xoom.designer.Profile;
-import io.vlingo.xoom.cli.task.TaskExecutionContext;
-import io.vlingo.xoom.designer.infrastructure.BrowserLauncher;
-import io.vlingo.xoom.designer.infrastructure.HomeDirectory;
-import io.vlingo.xoom.designer.infrastructure.Infrastructure;
 import io.vlingo.xoom.terminal.CommandRetainer;
 import io.vlingo.xoom.terminal.Terminal;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class BrowserLauncherTest {
 
@@ -45,7 +38,13 @@ public class BrowserLauncherTest {
     Terminal.disable();
     Infrastructure.clear();
     Profile.enableTestProfile();
-    Infrastructure.setupResources(HomeDirectory.fromEnvironment(), 9019);
+    Infrastructure.setupResources(HomeDirectory.fromEnvironment(), 19090);
+  }
+
+  @AfterEach
+  public void tearDown() {
+    Infrastructure.clear();
+    Profile.disableTestProfile();
   }
 
   @AfterAll

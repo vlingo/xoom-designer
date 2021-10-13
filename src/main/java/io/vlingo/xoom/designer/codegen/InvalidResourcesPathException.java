@@ -7,7 +7,9 @@
 
 package io.vlingo.xoom.designer.codegen;
 
-public class InvalidResourcesPathException extends ProjectGenerationException {
+import io.vlingo.xoom.designer.ModelProcessingException;
+
+public class InvalidResourcesPathException extends ModelProcessingException {
   private static final long serialVersionUID = -2276075547640096725L;
 
   public InvalidResourcesPathException() {

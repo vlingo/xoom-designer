@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.codegen.e2e.java;
 
 import io.vlingo.xoom.designer.codegen.e2e.CommandObserver;
 import io.vlingo.xoom.designer.codegen.e2e.ExecutionStatus;
-import io.vlingo.xoom.designer.infrastructure.restapi.data.GenerationSettingsData;
+import io.vlingo.xoom.designer.infrastructure.restapi.data.DesignerModel;
 import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.ObservableCommandExecutionProcess;
 import io.vlingo.xoom.terminal.Terminal;
@@ -20,10 +20,10 @@ import java.util.concurrent.Executors;
 public class JavaAppInitialization extends CommandExecutor {
 
   private final int availablePort;
-  private final GenerationSettingsData generationSettings;
+  private final DesignerModel generationSettings;
   private final CommandObserver observer;
 
-  public static JavaAppInitialization run(final GenerationSettingsData generationSettings,
+  public static JavaAppInitialization run(final DesignerModel generationSettings,
                                           final int availablePort) {
     final JavaAppInitialization appInitialization =
             new JavaAppInitialization(generationSettings, new CommandObserver(), availablePort);
@@ -33,7 +33,7 @@ public class JavaAppInitialization extends CommandExecutor {
     return appInitialization;
   }
 
-  private JavaAppInitialization(final GenerationSettingsData generationSettings,
+  private JavaAppInitialization(final DesignerModel generationSettings,
                                 final CommandObserver observer,
                                 final int availablePort) {
     super(new ObservableCommandExecutionProcess(observer));

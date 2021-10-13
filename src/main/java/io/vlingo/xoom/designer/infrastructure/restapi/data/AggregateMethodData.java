@@ -10,25 +10,25 @@ import java.util.List;
 
 public class AggregateMethodData {
 
-    public final String name;
-    public final List<MethodParameterData> parameters;
-    public final Boolean useFactory;
-    public final String event;
+  public final String name;
+  public final List<MethodParameterData> parameters;
+  public final Boolean useFactory;
+  public final String event;
 
-    public AggregateMethodData(final String name,
-                               final List<MethodParameterData> parameters,
-                               final Boolean useFactory,
-                               final String event) {
-        this.name = name;
-        this.event = event;
-        this.useFactory = useFactory;
-        this.parameters = parameters;
-    }
+  public AggregateMethodData(final String name,
+                             final List<MethodParameterData> parameters,
+                             final Boolean useFactory,
+                             final String event) {
+    this.name = name;
+    this.event = event;
+    this.useFactory = useFactory;
+    this.parameters = parameters;
+  }
 
-    public List<String> validate(List<String> errorStrings) {
-        if(name==null) errorStrings.add("AggregateMethodData.name is null");
-        if(parameters==null) errorStrings.add("AggregateMethodData.parameters is null");
-        if(useFactory==null) errorStrings.add("AggregateMethodData.factory is null");
-        return errorStrings;
-    }
+  public List<String> validate(List<String> errorStrings) {
+    if (name == null) errorStrings.add("AggregateMethodData.name is null");
+    if (parameters == null) errorStrings.add("AggregateMethodData.parameters is null");
+    if (useFactory == null) errorStrings.add("AggregateMethodData.factory is null");
+    return errorStrings;
+  }
 }

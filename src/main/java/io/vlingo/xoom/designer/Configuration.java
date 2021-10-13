@@ -1,13 +1,11 @@
 package io.vlingo.xoom.designer;
 
-import io.vlingo.xoom.cli.task.TaskExecutionStep;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
-import io.vlingo.xoom.designer.codegen.CodeGenerationExecutionerStep;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
@@ -39,7 +37,6 @@ import io.vlingo.xoom.designer.codegen.java.unittest.resource.RestResourceUnitTe
 import io.vlingo.xoom.designer.codegen.reactjs.AggregateManagementGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.StaticFilesGenerationStep;
-import io.vlingo.xoom.designer.infrastructure.ProjectCompressionStep;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.apache.commons.lang3.StringUtils;
@@ -72,51 +69,50 @@ public class Configuration {
                     ReservedWordsHandler.usingSuffix("_"));
 
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+    ComponentRegistry.register("codeGenerationSteps",codeGenerationSteps());
   }
 
-  public static final List<TaskExecutionStep> PROJECT_GENERATION_STEPS = Arrays.asList(
-      new CodeGenerationParameterValidationStep(),
-      new MainClassResolverStep(),
-      new StagingFolderCleanUpStep(),
-      new TemporaryTaskFolderCreationStep(),
-      new CodeGenerationExecutionerStep(),
-      new MavenWrapperInstallationStep(),
-      new SchemaPushStep(withType(CommandExecutionProcess.class)),
-      new SchemaPullStep(withType(CommandExecutionProcess.class)),
-      new ProjectCompressionStep(),
-      new StagingFolderCleanUpStep()
-  );
-
-  public static final List<CodeGenerationStep> CODE_GENERATION_STEPS = Arrays.asList(
-      //Java
-      new ReadmeFileGenerationStep(),
-      new ApplicationSettingsGenerationStep(),
-      new ValueObjectGenerationStep(),
-      new ModelGenerationStep(),
-      new DataObjectGenerationStep(),
-      new ProjectionGenerationStep(),
-      new StorageGenerationStep(),
-      new RestResourceGenerationStep(),
-      new AutoDispatchMappingGenerationStep(),
-      new ExchangeGenerationStep(),
-      new SchemataGenerationStep(),
-      new BootstrapGenerationStep(),
-      new EntityUnitTestGenerationStep(),
-      new QueriesUnitTestGenerationStep(),
-      new ProjectionUnitTestGenerationStep(),
-      new RestResourceAbstractUnitTestGenerationStep(),
-      new RestResourceUnitTestGenerationStep(),
-      new ClusterSettingsGenerationStep(),
-      new DesignerModelGenerationStep(),
-      new DockerfileGenerationStep(),
-      new KubernetesManifestFileGenerationStep(),
-      //React
-      new StaticFilesGenerationStep(),
-      new LayoutGenerationStep(),
-      new AggregateManagementGenerationStep(),
-      //Common
-      new ContentCreationStep()
-  );
+  private static List<CodeGenerationStep> codeGenerationSteps() {
+    return Arrays.asList(
+            //Preliminary
+            new CodeGenerationParameterValidationStep(),
+            new MainClassResolverStep(),
+            new StagingFolderCleanUpStep(),
+            new TemporaryTaskFolderCreationStep(),
+            //Java
+            new ReadmeFileGenerationStep(),
+            new ApplicationSettingsGenerationStep(),
+            new ValueObjectGenerationStep(),
+            new ModelGenerationStep(),
+            new DataObjectGenerationStep(),
+            new ProjectionGenerationStep(),
+            new StorageGenerationStep(),
+            new RestResourceGenerationStep(),
+            new AutoDispatchMappingGenerationStep(),
+            new ExchangeGenerationStep(),
+            new SchemataGenerationStep(),
+            new BootstrapGenerationStep(),
+            new EntityUnitTestGenerationStep(),
+            new QueriesUnitTestGenerationStep(),
+            new ProjectionUnitTestGenerationStep(),
+            new RestResourceAbstractUnitTestGenerationStep(),
+            new RestResourceUnitTestGenerationStep(),
+            new ClusterSettingsGenerationStep(),
+            new DesignerModelGenerationStep(),
+            new DockerfileGenerationStep(),
+            new KubernetesManifestFileGenerationStep(),
+            //React
+            new StaticFilesGenerationStep(),
+            new LayoutGenerationStep(),
+            new AggregateManagementGenerationStep(),
+            //Concluding
+            new ContentCreationStep(),
+            new MavenWrapperInstallationStep(),
+            new SchemaPushStep(withType(CommandExecutionProcess.class)),
+            new SchemaPullStep(withType(CommandExecutionProcess.class)),
+            new StagingFolderCleanUpStep()
+    );
+  }
 
   public static String resolveDefaultXoomVersion() {
     final String version = Configuration.class.getPackage().getImplementationVersion();
