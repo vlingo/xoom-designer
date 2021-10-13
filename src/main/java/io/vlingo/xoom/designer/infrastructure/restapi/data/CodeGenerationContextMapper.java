@@ -14,10 +14,7 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.Configuration;
-import io.vlingo.xoom.designer.codegen.CollectionMutation;
-import io.vlingo.xoom.designer.codegen.DeploymentType;
-import io.vlingo.xoom.designer.codegen.GenerationTarget;
-import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.*;
 import io.vlingo.xoom.designer.codegen.java.ClusterSettings;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
@@ -53,8 +50,8 @@ public class CodeGenerationContextMapper {
                                       final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.context = CodeGenerationContext.empty();
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
+    this.context = CodeGenerationContextFactory.build(logger, parameters);
     this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.logger = logger;
 

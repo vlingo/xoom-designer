@@ -30,4 +30,7 @@ public enum Profile {
     return ComponentRegistry.withType(Profile.class).equals(TEST);
   }
 
+  public static String optionName() {
+    return "profile";
+  }
 }

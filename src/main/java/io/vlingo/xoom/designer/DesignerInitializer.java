@@ -35,7 +35,7 @@ public class DesignerInitializer {
 
   private void registerProfile(final Map<String, String> options) {
     final String profileName =
-            options.get(Profile.class.getName().toUpperCase());
+            options.get(Profile.optionName());
 
     if (profileName.equalsIgnoreCase(Profile.TEST.name())) {
       ComponentRegistry.withType(Logger.class).info("Enabling Test profile");

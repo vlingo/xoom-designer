@@ -28,37 +28,37 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public final class MavenWrapperInstallationStep implements CodeGenerationStep {
 
-    private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw.cmd");
+  private static final List<String> MAVEN_WRAPPER_FILES = Arrays.asList("mvnw", "mvnw.cmd");
 
-    @Override
-    public void process(final CodeGenerationContext context) {
-        final Path projectPath = Paths.get(context.parameterOf(Label.TARGET_FOLDER));
-        copyMavenWrapperFiles(projectPath);
-        copyMavenWrapperDirectory(projectPath);
-    }
+  @Override
+  public void process(final CodeGenerationContext context) {
+    final Path projectPath = Paths.get(context.<String>parameterOf(Label.TARGET_FOLDER));
+    copyMavenWrapperFiles(projectPath);
+    copyMavenWrapperDirectory(projectPath);
+  }
 
-    private void copyMavenWrapperFiles(final Path projectPath) {
-        MAVEN_WRAPPER_FILES.forEach(filename -> {
-            try {
-                final Path source = StagingFolder.path().resolve(filename);
-                final Path destination = projectPath.resolve(filename);
-                Files.copy(source, destination, REPLACE_EXISTING);
-                final File file = destination.toFile();
-                Terminal.grantAllPermissions(file);
-            } catch (final IOException e) {
-                throw new ModelProcessingException(e);
-            }
-        });
-    }
+  private void copyMavenWrapperFiles(final Path projectPath) {
+    MAVEN_WRAPPER_FILES.forEach(filename -> {
+      try {
+        final Path source = StagingFolder.path().resolve(filename);
+        final Path destination = projectPath.resolve(filename);
+        Files.copy(source, destination, REPLACE_EXISTING);
+        final File file = destination.toFile();
+        Terminal.grantAllPermissions(file);
+      } catch (final IOException e) {
+        throw new ModelProcessingException(e);
+      }
+    });
+  }
 
-    private void copyMavenWrapperDirectory(final Path projectPath) {
-        try {
-            final Path source = StagingFolder.path().resolve(MAVEN_WRAPPER_DIRECTORY);
-            final Path destination = projectPath.resolve(MAVEN_WRAPPER_DIRECTORY);
-            FileUtils.copyDirectory(source.toFile(), destination.toFile());
-        } catch (final IOException e) {
-            throw new ModelProcessingException(e);
-        }
+  private void copyMavenWrapperDirectory(final Path projectPath) {
+    try {
+      final Path source = StagingFolder.path().resolve(MAVEN_WRAPPER_DIRECTORY);
+      final Path destination = projectPath.resolve(MAVEN_WRAPPER_DIRECTORY);
+      FileUtils.copyDirectory(source.toFile(), destination.toFile());
+    } catch (final IOException e) {
+      throw new ModelProcessingException(e);
     }
+  }
 
 }
