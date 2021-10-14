@@ -8,6 +8,7 @@ import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
+import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep.Phase;
 import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
@@ -77,7 +78,7 @@ public class Configuration {
             //Preliminary
             new CodeGenerationParameterValidationStep(),
             new MainClassResolverStep(),
-            new StagingFolderCleanUpStep(),
+            new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
             new TemporaryTaskFolderCreationStep(),
             //Java
             new ReadmeFileGenerationStep(),
@@ -110,7 +111,7 @@ public class Configuration {
             new MavenWrapperInstallationStep(),
             new SchemaPushStep(withType(CommandExecutionProcess.class)),
             new SchemaPullStep(withType(CommandExecutionProcess.class)),
-            new StagingFolderCleanUpStep()
+            new StagingFolderCleanUpStep(Phase.POST_GENERATION)
     );
   }
 
