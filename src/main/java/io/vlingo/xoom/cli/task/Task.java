@@ -7,6 +7,7 @@
 package io.vlingo.xoom.cli.task;
 
 import io.vlingo.xoom.cli.CommandNotFoundException;
+import io.vlingo.xoom.cli.UnknownCommandException;
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.option.OptionName;
 import io.vlingo.xoom.cli.option.OptionValue;
@@ -38,10 +39,10 @@ public abstract class Task {
 
   public abstract void run(final List<String> args);
 
-  public static Optional<Task> triggeredBy(final String command) {
+  public static Task triggeredBy(final String command) {
     return allTasks().stream()
             .filter(task -> command != null && task.matchCommand(command.trim()))
-            .findFirst();
+            .findFirst().orElseThrow(() -> new UnknownCommandException(command));
   }
 
   public static String resolveDefaultCommand() {

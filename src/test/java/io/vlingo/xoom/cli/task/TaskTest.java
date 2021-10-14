@@ -2,6 +2,7 @@ package io.vlingo.xoom.cli.task;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.cli.ComponentsRegistration;
+import io.vlingo.xoom.cli.UnknownCommandException;
 import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.cli.XoomTurboProperties.ProjectPath;
 import io.vlingo.xoom.cli.task.designer.DesignerTask;
@@ -33,17 +34,17 @@ public class TaskTest {
 
   @Test
   public void testThatTasksAreFoundByCommand() {
-    Assertions.assertEquals(DesignerTask.class, Task.triggeredBy("gui").get().getClass());
-    Assertions.assertEquals(DesignerTask.class, Task.triggeredBy("designer").get().getClass());
-    Assertions.assertEquals(DockerPushTask.class, Task.triggeredBy("docker push").get().getClass());
-    Assertions.assertEquals(DockerPackageTask.class, Task.triggeredBy("docker package").get().getClass());
-    Assertions.assertEquals(DockerStatusTask.class, Task.triggeredBy("docker status").get().getClass());
-    Assertions.assertEquals(GlooInitTask.class, Task.triggeredBy("gloo init").get().getClass());
-    Assertions.assertEquals(GlooRouteTask.class, Task.triggeredBy("gloo route").get().getClass());
-    Assertions.assertEquals(GlooSuspendTask.class, Task.triggeredBy("gloo suspend").get().getClass());
-    Assertions.assertEquals(KubernetesPushTask.class, Task.triggeredBy("k8s push").get().getClass());
-    Assertions.assertEquals(VersionDisplayTask.class, Task.triggeredBy("-version").get().getClass());
-    Assertions.assertFalse(Task.triggeredBy("start").isPresent());
+    Assertions.assertEquals(DesignerTask.class, Task.triggeredBy("gui").getClass());
+    Assertions.assertEquals(DesignerTask.class, Task.triggeredBy("designer").getClass());
+    Assertions.assertEquals(DockerPushTask.class, Task.triggeredBy("docker push").getClass());
+    Assertions.assertEquals(DockerPackageTask.class, Task.triggeredBy("docker package").getClass());
+    Assertions.assertEquals(DockerStatusTask.class, Task.triggeredBy("docker status").getClass());
+    Assertions.assertEquals(GlooInitTask.class, Task.triggeredBy("gloo init").getClass());
+    Assertions.assertEquals(GlooRouteTask.class, Task.triggeredBy("gloo route").getClass());
+    Assertions.assertEquals(GlooSuspendTask.class, Task.triggeredBy("gloo suspend").getClass());
+    Assertions.assertEquals(KubernetesPushTask.class, Task.triggeredBy("k8s push").getClass());
+    Assertions.assertEquals(VersionDisplayTask.class, Task.triggeredBy("-version").getClass());
+    Assertions.assertThrows(UnknownCommandException.class, () -> Task.triggeredBy("start"));
   }
 
   @Test

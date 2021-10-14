@@ -23,12 +23,7 @@ public class CommandLineInterfaceInitializer {
 
   public static void main(final String[] args) {
     ComponentsRegistration.registerWith(logger, new DefaultCommandExecutionProcess(logger), loadProperties(args));
-
-    final Task task =
-            Task.triggeredBy(resolveCommand(args))
-                    .orElseThrow(() -> new UnknownCommandException(args));
-
-    runTask(task, Arrays.asList(args));
+    runTask(Task.triggeredBy(resolveCommand(args)), Arrays.asList(args));
   }
 
   private static void runTask(final Task task,
