@@ -47,12 +47,10 @@ public class CommandLineInterfaceInitializer {
 
   private static String resolveCommand(final String[] args) {
     if(args.length > 0) {
-      if(args.length == 1) {
+      if(args.length == 1 || !Task.isCommand(args[1])) {
         return args[0];
       }
-      if(Task.isCommand(args[1])) {
-        return args[0] + " " + args[1];
-      }
+      return args[0] + " " + args[1];
     }
     return Task.resolveDefaultCommand();
   }

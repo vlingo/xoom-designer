@@ -14,16 +14,15 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 
 public class BrowserLauncher extends CommandExecutor {
 
-  private final DesignerServerConfiguration designerServerConfiguration;
 
   public BrowserLauncher(final CommandExecutionProcess commandExecutionProcess) {
     super(commandExecutionProcess);
-    this.designerServerConfiguration = ComponentRegistry.withType(DesignerServerConfiguration.class);
   }
 
   @Override
   protected String formatCommands() {
     final String browserLaunchCommand = Terminal.supported().browserLaunchCommand();
+    final DesignerServerConfiguration designerServerConfiguration = ComponentRegistry.withType(DesignerServerConfiguration.class);
     return String.format("%s %s", browserLaunchCommand, designerServerConfiguration.resolveUserInterfaceURL());
   }
 
