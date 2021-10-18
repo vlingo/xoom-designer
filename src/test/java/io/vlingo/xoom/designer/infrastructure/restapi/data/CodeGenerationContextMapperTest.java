@@ -53,7 +53,7 @@ public class CodeGenerationContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(ARTIFACT_VERSION));
-    Assertions.assertEquals("1.8.8-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.8.9-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", deploymentSettings.dockerImage);
     Assertions.assertEquals("DOCKER", deploymentSettings.type.name());
     Assertions.assertEquals("", deploymentSettings.kubernetesImage);
