@@ -7,11 +7,11 @@
 package io.vlingo.xoom.cli;
 
 import io.vlingo.xoom.actors.Logger;
+import io.vlingo.xoom.cli.XoomTurboProperties.ProjectPath;
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.option.OptionName;
 import io.vlingo.xoom.cli.option.OptionValue;
 import io.vlingo.xoom.cli.task.Task;
-import io.vlingo.xoom.cli.XoomTurboProperties.ProjectPath;
 import io.vlingo.xoom.terminal.DefaultCommandExecutionProcess;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class CommandLineInterfaceInitializer {
     runTask(Task.triggeredBy(resolveCommand(args)), Arrays.asList(args));
   }
 
-  private static void runTask(final Task task,
+  static void runTask(final Task task,
                               final List<String> args) {
     try {
       task.run(args);
@@ -40,17 +40,21 @@ public class CommandLineInterfaceInitializer {
     }
   }
 
-  private static String resolveCommand(final String[] args) {
+  static String resolveCommand(final String[] args) {
     if(args.length > 0) {
-      if(args.length == 1 || !Task.isCommand(args[1])) {
-        return args[0];
+      if(isCompositeCommand(args)) {
+        return args[0]  + " " + args[1];
       }
-      return args[0] + " " + args[1];
+      return args[0];
     }
     return Task.resolveDefaultCommand();
   }
 
-  private static XoomTurboProperties loadProperties(final String[] args) {
+  static boolean isCompositeCommand(final String[] args) {
+    return args.length > 1 && Task.isCommand(args[1]);
+  }
+
+  static XoomTurboProperties loadProperties(final String[] args) {
     final Option projectDirectory =
             Option.of(OptionName.CURRENT_DIRECTORY, System.getProperty("user.dir"));
 
