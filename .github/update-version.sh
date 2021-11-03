@@ -12,6 +12,6 @@ sed -i'.bkp' -E 's/XOOM_VERSION_PLACEHOLDER = "[1-9]*\.[0-9]*\.[0-9]*(-SNAPSHOT)
 
 git add \
   pom.xml \
-  src/test/java/io/vlingo/xoom/designer/infrastructure/restapi/data/TaskExecutionContextMapperTest.java \
+  src/test/java/io/vlingo/xoom/designer/infrastructure/restapi/data/CodeGenerationContextMapperTest.java \
   src/main/java/io/vlingo/xoom/designer/Configuration.java
 
