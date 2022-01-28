@@ -7,12 +7,6 @@
 
 package io.vlingo.xoom.designer.infrastructure.restapi.data;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.dialect.Dialect;
@@ -20,43 +14,17 @@ import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.GenerationTarget;
-import static io.vlingo.xoom.designer.codegen.Label.AGGREGATE;
-import static io.vlingo.xoom.designer.codegen.Label.AGGREGATE_METHOD;
-import static io.vlingo.xoom.designer.codegen.Label.ARTIFACT_ID;
-import static io.vlingo.xoom.designer.codegen.Label.ARTIFACT_VERSION;
-import static io.vlingo.xoom.designer.codegen.Label.COLLECTION_TYPE;
-import static io.vlingo.xoom.designer.codegen.Label.COMMAND_MODEL_DATABASE;
-import static io.vlingo.xoom.designer.codegen.Label.CQRS;
-import static io.vlingo.xoom.designer.codegen.Label.DATABASE;
-import static io.vlingo.xoom.designer.codegen.Label.DEPLOYMENT_SETTINGS;
-import static io.vlingo.xoom.designer.codegen.Label.DESIGNER_MODEL_JSON;
-import static io.vlingo.xoom.designer.codegen.Label.DOMAIN_EVENT;
-import static io.vlingo.xoom.designer.codegen.Label.EXCHANGE;
-import static io.vlingo.xoom.designer.codegen.Label.FACTORY_METHOD;
-import static io.vlingo.xoom.designer.codegen.Label.FIELD_TYPE;
-import static io.vlingo.xoom.designer.codegen.Label.GROUP_ID;
-import static io.vlingo.xoom.designer.codegen.Label.METHOD_PARAMETER;
-import static io.vlingo.xoom.designer.codegen.Label.MODEL_METHOD;
-import static io.vlingo.xoom.designer.codegen.Label.PROJECTION_TYPE;
-import static io.vlingo.xoom.designer.codegen.Label.QUERY_MODEL_DATABASE;
-import static io.vlingo.xoom.designer.codegen.Label.RECEIVER;
-import static io.vlingo.xoom.designer.codegen.Label.REQUIRE_ENTITY_LOADING;
-import static io.vlingo.xoom.designer.codegen.Label.ROLE;
-import static io.vlingo.xoom.designer.codegen.Label.ROUTE_METHOD;
-import static io.vlingo.xoom.designer.codegen.Label.ROUTE_PATH;
-import static io.vlingo.xoom.designer.codegen.Label.ROUTE_SIGNATURE;
-import static io.vlingo.xoom.designer.codegen.Label.SCHEMA;
-import static io.vlingo.xoom.designer.codegen.Label.SCHEMA_GROUP;
-import static io.vlingo.xoom.designer.codegen.Label.STATE_FIELD;
-import static io.vlingo.xoom.designer.codegen.Label.STORAGE_TYPE;
-import static io.vlingo.xoom.designer.codegen.Label.URI_ROOT;
-import static io.vlingo.xoom.designer.codegen.Label.VALUE_OBJECT;
-import static io.vlingo.xoom.designer.codegen.Label.VALUE_OBJECT_FIELD;
-import static io.vlingo.xoom.designer.codegen.Label.XOOM_VERSION;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.codegen.java.schemata.Schema;
 import io.vlingo.xoom.turbo.ComponentRegistry;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static io.vlingo.xoom.designer.codegen.Label.*;
 
 public class CodeGenerationContextMapperTest {
 
@@ -85,7 +53,7 @@ public class CodeGenerationContextMapperTest {
     Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
     Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
     Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(ARTIFACT_VERSION));
-    Assertions.assertEquals("1.9.1", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertEquals("1.9.1-SNAPSHOT", codeGenerationParameters.retrieveValue(XOOM_VERSION));
     Assertions.assertEquals("xoom-app", deploymentSettings.dockerImage);
     Assertions.assertEquals("DOCKER", deploymentSettings.type.name());
     Assertions.assertEquals("", deploymentSettings.kubernetesImage);

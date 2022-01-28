@@ -1,13 +1,5 @@
 package io.vlingo.xoom.designer;
 
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
@@ -48,6 +40,14 @@ import io.vlingo.xoom.designer.codegen.reactjs.LayoutGenerationStep;
 import io.vlingo.xoom.designer.codegen.reactjs.StaticFilesGenerationStep;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.turbo.ComponentRegistry;
+import org.apache.commons.lang3.StringUtils;
+
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import static io.vlingo.xoom.turbo.ComponentRegistry.withType;
 
 public class Configuration {
@@ -56,7 +56,7 @@ public class Configuration {
   public static final String REQUEST_LIMIT = "REQUEST_LIMIT";
   public static final String MAVEN_WRAPPER_DIRECTORY = ".mvn";
   public static final String XOOM_DESIGNER_FILE_VERSION = "1.7.8";
-  private static final String XOOM_VERSION_PLACEHOLDER = "1.9.1";
+  private static final String XOOM_VERSION_PLACEHOLDER = "1.9.1-SNAPSHOT";
   public static final String REQUEST_COUNT_EXPIRATION = "REQUEST_COUNT_DURATION";
   private static final String HOME_ENVIRONMENT_VARIABLE = "VLINGO_XOOM_DESIGNER_HOME";
   public static final String ENVIRONMENT_TYPE_VARIABLE = "VLINGO_XOOM_DESIGNER_ENV";
