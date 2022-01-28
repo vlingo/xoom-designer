@@ -24,10 +24,4 @@ public class RestResourceUnitTestGenerationStep extends TemplateProcessingStep {
 
     return RestResourceUnitTestTemplateDataFactory.build(context.parameters(), context.contents(), valueObjects);
   }
-
-  @Override
-  public boolean shouldProcess(final CodeGenerationContext context) {
-    //TODO: Remove this method when https://trello.com/c/ikCGH4fb is done.
-    return false;
-  }
 }
