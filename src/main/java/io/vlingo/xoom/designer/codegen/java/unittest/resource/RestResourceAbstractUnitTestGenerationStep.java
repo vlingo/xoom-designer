@@ -19,4 +19,10 @@ public class RestResourceAbstractUnitTestGenerationStep extends TemplateProcessi
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     return Collections.singletonList(RestResourceUnitTestTemplateDataFactory.buildAbstract(context.parameters(), context.contents()));
   }
+
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    //TODO: Remove this method when https://trello.com/c/ikCGH4fb is done.
+    return false;
+  }
 }
