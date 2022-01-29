@@ -462,10 +462,11 @@
               </goals>
               <configuration>
                  <replacementType>file-contents</replacementType>
-                 <baseDir>src/</baseDir>
+                 <baseDir></baseDir>
                  <findRegex>\{\{XOOM_VERSION\}\}</findRegex>
                  <replaceValue>${project.version}</replaceValue>
                  <recursive>true</recursive>
+                 <exclusions>[^.]*</exclusions>
               </configuration>
            </execution>
         </executions>
