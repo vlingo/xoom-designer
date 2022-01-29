@@ -466,7 +466,7 @@
                  <findRegex>\{\{XOOM_VERSION\}\}</findRegex>
                  <replaceValue>${project.version}</replaceValue>
                  <recursive>true</recursive>
-                 <exclusions>[^.]*</exclusions>
+                 <fileMask>.java</fileMask>
               </configuration>
            </execution>
         </executions>
