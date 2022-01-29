@@ -456,7 +456,7 @@
         <executions>
            <execution>
               <id>exec</id>
-              <phase>compile</phase>
+              <phase>generate-resources</phase>
               <goals>
                  <goal>find-and-replace</goal>
               </goals>
