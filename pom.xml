@@ -462,11 +462,10 @@
               </goals>
               <configuration>
                  <replacementType>file-contents</replacementType>
-                 <baseDir></baseDir>
+                 <baseDir>src/</baseDir>
                  <findRegex>\{\{XOOM_VERSION\}\}</findRegex>
                  <replaceValue>${project.version}</replaceValue>
                  <recursive>true</recursive>
-                 <fileMask>.java</fileMask>
               </configuration>
            </execution>
         </executions>
