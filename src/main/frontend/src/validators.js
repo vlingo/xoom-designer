@@ -72,8 +72,8 @@ export const frameworkRule = (v) => frameworks.includes(v) ? undefined : 'framew
 export const methodParametersValidityWithSelectedEventRule = (event, events, parameters) => {
 	const e = events.find(e => e.name === event);
 	if (e) {
-		const check = e.fields.every(f => {
-			return f === "id" || parameters.findIndex(p => f === p.stateField) > -1;
+		const check = parameters.every(p => {
+			return e.fields.findIndex(f => f === p.stateField) > -1;
 		})
 		return check ? undefined : 'do not match the event fields';
 	}
