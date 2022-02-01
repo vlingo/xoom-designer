@@ -42,7 +42,7 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
   @Test
   public void ${testCase.methodName}() {
     ${testCase.dataDeclaration}
-  <#if testCase.isGetRootMethod()>
+  <#if testCase.isRootMethod()>
     firstData = saveExampleData(firstData);
   </#if>
   <#list testCase.preliminaryStatements as statement>

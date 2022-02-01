@@ -13,7 +13,6 @@ import io.restassured.mapper.ObjectMapperType;
 import io.restassured.parsing.Parser;
 import io.restassured.specification.RequestSpecification;
 import io.vlingo.xoom.turbo.ComponentRegistry;
-import io.vlingo.xoom.turbo.exchange.ExchangeInitializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
