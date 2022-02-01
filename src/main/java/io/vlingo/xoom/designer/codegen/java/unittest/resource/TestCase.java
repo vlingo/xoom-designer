@@ -58,9 +58,10 @@ public class TestCase {
         return rootMethod;
     }
 
-    public boolean isGetRootMethod(){
+    public boolean isRootMethod() {
         return !getRootMethod().equals("post");
     }
+
     public String getDataDeclaration() {
         return dataDeclaration;
     }

@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.designer.codegen.Label;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,6 @@ public class RestResourceAbstractUnitTestGenerationStep extends TemplateProcessi
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    //TODO: Remove this method when https://trello.com/c/ikCGH4fb is done.
-    return false;
+    return context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
   }
 }

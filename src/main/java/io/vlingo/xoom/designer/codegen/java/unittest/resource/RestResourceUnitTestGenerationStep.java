@@ -27,7 +27,6 @@ public class RestResourceUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    //TODO: Remove this method when https://trello.com/c/ikCGH4fb is done.
-    return false;
+    return context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
   }
 }
