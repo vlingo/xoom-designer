@@ -1,6 +1,7 @@
 package ${packageName};
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -39,7 +40,7 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
   }
 <#list testCases as testCase>
 
-  @Test
+  @Test<#if testCase.hasMoreThanOneUrlPath()>@Disabled</#if>
   public void ${testCase.methodName}() {
     ${testCase.dataDeclaration}
   <#if testCase.isRootMethod()>

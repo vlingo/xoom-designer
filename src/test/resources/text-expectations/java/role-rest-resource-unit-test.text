@@ -1,0 +1,78 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import .*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class RoleResourceTest extends AbstractRestTest {
+
+  @Test
+  public void testEmptyResponse() {
+    given()
+      .when()
+      .get("/tenants")
+      .then()
+      .statusCode(200)
+      .body(is(equalTo("[]")));
+  }
+
+  private RoleData saveExampleData(RoleData data) {
+    return given()
+      .when()
+      .body(data)
+      .post("/tenants")
+      .then()
+      .statusCode(201)
+      .extract()
+      .body()
+      .as(RoleData.class);
+  }
+
+  @Test
+  public void provisionRole() {
+    RoleData firstData = RoleData.from("1", "first-role-tenantId", "first-role-name", "first-role-description");
+    RoleData result = given()
+        .when()
+        .body(firstData)
+        .post("/tenants/{tenantId}/roles")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(RoleData.class);
+
+    assertNotNull(result.id);
+    assertEquals(result.tenantId, "first-role-tenantId");
+    assertEquals(result.name, "first-role-name");
+    assertEquals(result.description, "first-role-description");
+  }
+
+  @Test@Disabled
+  public void changeDescription() {
+    RoleData firstData = RoleData.from("1", "first-role-tenantId", "first-role-name", "first-role-description");
+    firstData = saveExampleData(firstData);
+    RoleData result = given()
+        .when()
+        .body(firstData)
+        .patch("/tenants/{tenantId}/roles/{roleName}/description")
+        .then()
+        .statusCode(200)
+        .extract()
+        .body()
+        .as(RoleData.class);
+
+    assertNotNull(result.id);
+    assertEquals(result.tenantId, "first-role-tenantId");
+    assertEquals(result.name, "first-role-name");
+    assertEquals(result.description, "first-role-description");
+  }
+}
