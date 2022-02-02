@@ -40,7 +40,7 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
   }
 <#list testCases as testCase>
 
-  @Test<#if testCase.hasMoreThanOneUrlPath()>@Disabled</#if>
+  @Test<#if testCase.isDisabled()>@Disabled</#if>
   public void ${testCase.methodName}() {
     ${testCase.dataDeclaration}
   <#if testCase.isRootMethod()>

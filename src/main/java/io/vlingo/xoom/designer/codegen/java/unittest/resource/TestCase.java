@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
@@ -14,6 +15,7 @@ import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,7 +30,8 @@ public class TestCase {
     private final List<String> preliminaryStatements = new ArrayList<>();
     private final String rootMethod;
 
-		private int urlPathCount;
+		private final int urlPathCount;
+    private CollectionMutation collectionMutation;
 
     public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
         return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
@@ -43,6 +46,18 @@ public class TestCase {
 
         final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
         this.urlPathCount = urlPathCountFor(signature.retrieveRelatedValue(Label.ROUTE_PATH));
+
+        final Optional<CodeGenerationParameter> aggregateMethod = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .filter(m -> m.value.equals(signature.value))
+            .findFirst();
+        aggregateMethod.ifPresent(method -> {
+            final String mutation = method
+                .retrieveOneRelated(Label.METHOD_PARAMETER)
+                .retrieveRelatedValue(Label.COLLECTION_MUTATION);
+            if(!mutation.isEmpty())
+                this.collectionMutation = CollectionMutation.valueOf(mutation);
+        });
+
         this.methodName = signature.value;
         this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
         this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
@@ -77,8 +92,8 @@ public class TestCase {
         return !getRootMethod().equals("post");
     }
 
-    public boolean hasMoreThanOneUrlPath() {
-      return this.urlPathCount > 1;
+    public boolean isDisabled() {
+      return this.urlPathCount > 1 || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
     }
 
     public String getDataDeclaration() {
