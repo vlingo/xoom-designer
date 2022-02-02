@@ -88,8 +88,8 @@
             "parameters": [
               {
                 "stateField": "relatedParts",
-                "parameterName": "relatedParts",
-                "multiplicity": "#"
+                "parameterName": "relatedPart",
+                "multiplicity": "+"
               }
             ],
             "useFactory": false,

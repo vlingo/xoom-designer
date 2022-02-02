@@ -1,6 +1,7 @@
 package io.vlingo.xoomapp.infrastructure.resource;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -85,7 +86,7 @@ public class AuthorResourceTest extends AbstractRestTest {
     assertNotNull(result.relatedAuthors);
   }
 
-  @Test
+  @Test@Disabled
   public void relateAuthor() {
     AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     firstData = saveExampleData(firstData);
@@ -160,7 +161,7 @@ public class AuthorResourceTest extends AbstractRestTest {
     assertNotNull(result.relatedAuthors);
   }
 
-  @Test
+  @Test@Disabled
   public void unrelateAuthor() {
     AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     firstData = saveExampleData(firstData);
@@ -172,7 +173,7 @@ public class AuthorResourceTest extends AbstractRestTest {
 
   }
 
-  @Test
+  @Test@Disabled
   public void addTag() {
     AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     firstData = saveExampleData(firstData);
@@ -247,7 +248,7 @@ public class AuthorResourceTest extends AbstractRestTest {
     assertNotNull(result.relatedAuthors);
   }
 
-  @Test
+  @Test@Disabled
   public void removeTag() {
     AuthorData firstData = AuthorData.from("1", NameData.from("first-author-name-firstName", "first-author-name-lastName"), RankData.from(1, ClassificationData.from("first-author-rank-classification-label", new HashSet<>())), LocalDate.now(), new ArrayList<>(), new HashSet<>());
     firstData = saveExampleData(firstData);

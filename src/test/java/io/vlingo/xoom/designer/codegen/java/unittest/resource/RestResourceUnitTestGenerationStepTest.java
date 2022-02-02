@@ -1,5 +1,10 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 
+import java.nio.file.Paths;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
@@ -11,10 +16,6 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.turbo.OperatingSystem;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.nio.file.Paths;
 
 public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
 
@@ -51,6 +52,23 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertEquals(2, context.contents().size());
     Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
   }
+  
+  @Test
+  public void testThatResourcesUnitTestsWithDisabledTestsAreGenerated() {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParametersWithMultiUriPath();
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    // WHEN
+    new RestResourceUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content roleResourceTest =
+        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "RoleResourceTest");
+    Assertions.assertEquals(2, context.contents().size());
+    Assertions.assertTrue(roleResourceTest.contains(TextExpectation.onJava().read("role-rest-resource-unit-test")));
+  }
 
   private CodeGenerationParameters codeGenerationParameters() {
     return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
@@ -62,6 +80,13 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .add(tagValueObject())
         .add(classificationValueObject())
         .add(classifierValueObject());
+  }
+
+  private CodeGenerationParameters codeGenerationParametersWithMultiUriPath() {
+    return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
+        .add(Label.DIALECT, Dialect.JAVA)
+        .add(Label.CQRS, "true")
+        .add(roleAggregate());
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -260,6 +285,74 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
         .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
         .relate(authorTaggedEvent).relate(authorUntaggedEvent);
+  }
+
+  private CodeGenerationParameter roleAggregate() {
+
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+            
+    final CodeGenerationParameter tenantIdField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "tenantId")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter descriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "description")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter roleProvisionedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "RoleProvisioned")
+            .relate(tenantIdField).relate(nameField);
+
+    final CodeGenerationParameter roleDescriptionChangedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "RoleDescriptionChanged")
+            .relate(tenantIdField).relate(descriptionField);
+
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "provisionRole")
+            .relate(Label.METHOD_PARAMETER, "tenantId")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "description")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(roleProvisionedEvent);
+
+    final CodeGenerationParameter changeDescription =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeDescription")
+            .relate(Label.METHOD_PARAMETER, "tenantId")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "description")
+            .relate(roleDescriptionChangedEvent);
+
+    final CodeGenerationParameter provisionRoleRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "provisionRole")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/tenants/{tenantId}/roles")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    final CodeGenerationParameter changeDescriptionRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "changeDescription")
+            .relate(Label.ROUTE_METHOD, "PATCH")
+            .relate(Label.ROUTE_PATH, "/tenants/{tenantId}/roles/{roleName}/description")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter changeDescriptionMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeDescription")
+            .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tenantId"))
+            .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "name"))
+            .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "description"))
+            .relate(roleDescriptionChangedEvent);
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Role")
+        .relate(Label.URI_ROOT, "/tenants").relate(idField)
+        .relate(tenantIdField).relate(nameField).relate(descriptionField)
+        .relate(factoryMethod).relate(changeDescriptionMethod)
+        .relate(provisionRoleRoute).relate(changeDescriptionRoute)
+        .relate(roleProvisionedEvent).relate(roleDescriptionChangedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {
