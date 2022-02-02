@@ -1,7 +1,7 @@
 version: '3'
 services:
   designer:
-    image: vlingo/xoom-designer:1.9.0
+    image: vlingo/xoom-designer:1.9.1
     container_name: xoom-designer
     ports:
       - 19090:19090
@@ -12,7 +12,7 @@ services:
       SCHEMATA_SERVICE_PORT: 9019
 
   schemata:
-    image: vlingo/xoom-schemata:1.9.0
+    image: vlingo/xoom-schemata:1.9.1
     container_name: xoom-schemata
     ports:
       - 9019:9019
