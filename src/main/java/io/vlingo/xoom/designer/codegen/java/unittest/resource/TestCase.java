@@ -33,6 +33,8 @@ public class TestCase {
 		private final int urlPathCount;
     private CollectionMutation collectionMutation;
 
+    private boolean isModelHasSelfDescribingEvents;
+
     public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
         return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
                 .map(signature -> new TestCase(signature, aggregate, valueObjects))
@@ -58,6 +60,7 @@ public class TestCase {
                 this.collectionMutation = CollectionMutation.valueOf(mutation);
         });
 
+        this.isModelHasSelfDescribingEvents = isModelHasSelfDescribingEvents(aggregate);
         this.methodName = signature.value;
         this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
         this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
@@ -65,7 +68,7 @@ public class TestCase {
         this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
     }
 
-		private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
+    private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
         String uriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
         return signature.retrieveRelatedValue(Label.ROUTE_PATH).startsWith(uriRoot) ? signature.retrieveRelatedValue(Label.ROUTE_PATH) : uriRoot + signature.retrieveRelatedValue(Label.ROUTE_PATH);
     }
@@ -78,6 +81,11 @@ public class TestCase {
           count++;
       }
       return count;
+    }
+
+		private boolean isModelHasSelfDescribingEvents(CodeGenerationParameter aggregate) {
+      return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
+      .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count()==1).count() > 0;
     }
 
     public String getMethodName() {
@@ -94,6 +102,10 @@ public class TestCase {
 
     public boolean isDisabled() {
       return this.urlPathCount > 1 || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
+    }
+
+		public boolean modelHasSelfDescribingEvents() {
+      return isModelHasSelfDescribingEvents;
     }
 
     public String getDataDeclaration() {

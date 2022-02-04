@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+<#if testCases?filter(testCase -> testCase.modelHasSelfDescribingEvents())?has_content>
+// TODO: model uses self-describing event, which may cause test failure based on assumed default values
+</#if>
 public class ${resourceUnitTestName} extends AbstractRestTest {
 
   @Test

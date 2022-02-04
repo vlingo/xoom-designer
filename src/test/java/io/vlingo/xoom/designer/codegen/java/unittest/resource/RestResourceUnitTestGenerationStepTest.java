@@ -70,6 +70,23 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(roleResourceTest.contains(TextExpectation.onJava().read("role-rest-resource-unit-test")));
   }
 
+  @Test
+  public void testThatResourcesUnitTestsWithToDoCommentWhenModelHasSelfDescribingEventsAreGenerated() {
+    // GIVEN
+    final CodeGenerationParameters parameters = codeGenerationParametersWithSelfDescribingEvents();
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    // WHEN
+    new RestResourceUnitTestGenerationStep().process(context);
+
+    // THEN
+    final Content productResourceTest =
+        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "ProductResourceTest");
+    Assertions.assertEquals(2, context.contents().size());
+    Assertions.assertTrue(productResourceTest.contains(TextExpectation.onJava().read("product-rest-resource-unit-test")));
+  }
+
   private CodeGenerationParameters codeGenerationParameters() {
     return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
         .add(Label.DIALECT, Dialect.JAVA)
@@ -87,6 +104,13 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .add(Label.DIALECT, Dialect.JAVA)
         .add(Label.CQRS, "true")
         .add(roleAggregate());
+  }
+
+  private CodeGenerationParameters codeGenerationParametersWithSelfDescribingEvents() {
+    return CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
+        .add(Label.DIALECT, Dialect.JAVA)
+        .add(Label.CQRS, "true")
+        .add(productAggregate());
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -353,6 +377,62 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(factoryMethod).relate(changeDescriptionMethod)
         .relate(provisionRoleRoute).relate(changeDescriptionRoute)
         .relate(roleProvisionedEvent).relate(roleDescriptionChangedEvent);
+  }
+  private CodeGenerationParameter productAggregate() {
+
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter descriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "description")
+            .relate(Label.FIELD_TYPE, "String");
+            
+    final CodeGenerationParameter disabledField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "disabled")
+            .relate(Label.FIELD_TYPE, "boolean");
+
+    final CodeGenerationParameter productDefinedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ProductDefined")
+            .relate(idField).relate(nameField).relate(descriptionField);
+
+    final CodeGenerationParameter productDisabledEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ProductDisabled")
+        .relate(idField);
+
+    final CodeGenerationParameter defineMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "define")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "description")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(productDefinedEvent);
+
+    final CodeGenerationParameter disableMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "disable")
+            .relate(productDisabledEvent);
+
+    final CodeGenerationParameter defineRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "define")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/products")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    final CodeGenerationParameter disableRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "disable")
+            .relate(Label.ROUTE_METHOD, "PATCH")
+            .relate(Label.ROUTE_PATH, "/products/{id}/disable")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Product")
+        .relate(Label.URI_ROOT, "/products").relate(idField)
+        .relate(nameField).relate(descriptionField)
+        .relate(defineMethod).relate(disableMethod)
+        .relate(defineRoute).relate(disableRoute)
+        .relate(productDefinedEvent).relate(productDisabledEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {
