@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-// TODO: model uses self-describing event, which may cause test failure based on assumed default values
+// TODO: model uses self-describing event(s) [ProductDisabled], 
+// which may cause test failure based on assumed default values.
+// Run tests to find any such failed tests and correct the incorrectly
+// assumed defaults and transitions.
 public class ProductResourceTest extends AbstractRestTest {
 
   @Test

@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class TestCase {
   private final int urlPathCount;
   private CollectionMutation collectionMutation;
 
-  private boolean isModelHasSelfDescribingEvents;
+  private List<String> selfDescribingEvents;
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate,
       List<CodeGenerationParameter> valueObjects) {
@@ -52,7 +53,7 @@ public class TestCase {
 
     this.urlPathCount = urlPathCountFor(signature.retrieveRelatedValue(Label.ROUTE_PATH));
     this.collectionMutation = retrieveSignatureCollectionMutation(signature, aggregate);
-    this.isModelHasSelfDescribingEvents = isModelHasSelfDescribingEvents(aggregate);
+    this.selfDescribingEvents = retrieveSelfDescribingEvents(aggregate);
     
     this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
     this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
@@ -94,9 +95,11 @@ public class TestCase {
     return count;
   }
 
-  private boolean isModelHasSelfDescribingEvents(CodeGenerationParameter aggregate) {
+  private List<String> retrieveSelfDescribingEvents(CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
-        .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count() == 1).count() > 0;
+        .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count() == 1)
+        .map(domainEvent -> domainEvent.value)
+        .collect(Collectors.toList());
   }
 
   public String getMethodName() {
@@ -116,8 +119,8 @@ public class TestCase {
         || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
   }
 
-  public boolean modelHasSelfDescribingEvents() {
-    return isModelHasSelfDescribingEvents;
+  public String selfDescribingEvents() {
+    return selfDescribingEvents.isEmpty() ? "" : Arrays.toString(selfDescribingEvents.toArray());
   }
 
   public String getDataDeclaration() {
