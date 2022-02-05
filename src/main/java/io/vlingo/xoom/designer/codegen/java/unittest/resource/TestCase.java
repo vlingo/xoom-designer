@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -22,89 +23,115 @@ import java.util.stream.Collectors;
 
 public class TestCase {
 
-    public static final int TEST_DATA_SET_SIZE = 2;
+  public static final int TEST_DATA_SET_SIZE = 2;
 
-    private final String methodName;
-    private final String dataDeclaration;
-    private final List<TestStatement> statements = new ArrayList<>();
-    private final List<String> preliminaryStatements = new ArrayList<>();
-    private final String rootMethod;
+  private final String methodName;
+  private final String dataDeclaration;
+  private final List<TestStatement> statements = new ArrayList<>();
+  private final List<String> preliminaryStatements = new ArrayList<>();
+  private final String rootMethod;
 
-		private final int urlPathCount;
-    private CollectionMutation collectionMutation;
+  private final int urlPathCount;
+  private CollectionMutation collectionMutation;
 
-    public static List<TestCase> from(final CodeGenerationParameter aggregate, List<CodeGenerationParameter> valueObjects) {
-        return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
-                .map(signature -> new TestCase(signature, aggregate, valueObjects))
-                .collect(Collectors.toList());
+  private List<String> selfDescribingEvents;
+
+  public static List<TestCase> from(final CodeGenerationParameter aggregate,
+      List<CodeGenerationParameter> valueObjects) {
+    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
+        .map(signature -> new TestCase(signature, aggregate, valueObjects))
+        .collect(Collectors.toList());
+  }
+
+  private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
+      List<CodeGenerationParameter> valueObjects) {
+    final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
+        .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
+
+    final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
+    this.methodName = signature.value;
+
+    this.urlPathCount = urlPathCountFor(signature.retrieveRelatedValue(Label.ROUTE_PATH));
+    this.collectionMutation = retrieveSignatureCollectionMutation(signature, aggregate);
+    this.selfDescribingEvents = retrieveSelfDescribingEvents(aggregate);
+    
+    this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
+    this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
+    this.preliminaryStatements.addAll(PreliminaryStatement.with(aggregate.retrieveRelatedValue(Label.URI_ROOT),
+        dataObjectType, rootPath(signature, aggregate), rootMethod));
+    this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
+  }
+
+  private CollectionMutation retrieveSignatureCollectionMutation(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
+    CollectionMutation result = CollectionMutation.NONE;
+    final Optional<CodeGenerationParameter> aggregateMethod = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .filter(method -> method.value.equals(signature.value))
+        .findFirst();
+
+    if (aggregateMethod.isPresent()) {
+      final String mutation = aggregateMethod.get()
+          .retrieveOneRelated(Label.METHOD_PARAMETER)
+          .retrieveRelatedValue(Label.COLLECTION_MUTATION);
+      if (!mutation.isEmpty())
+        result = CollectionMutation.valueOf(mutation);
     }
+    return result;
+  }
 
-    private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
-                     List<CodeGenerationParameter> valueObjects) {
-        final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
-                .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
+  private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
+    String uriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
+    return signature.retrieveRelatedValue(Label.ROUTE_PATH).startsWith(uriRoot)
+        ? signature.retrieveRelatedValue(Label.ROUTE_PATH)
+        : uriRoot + signature.retrieveRelatedValue(Label.ROUTE_PATH);
+  }
 
-        final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
-        this.urlPathCount = urlPathCountFor(signature.retrieveRelatedValue(Label.ROUTE_PATH));
-
-        final Optional<CodeGenerationParameter> aggregateMethod = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-            .filter(m -> m.value.equals(signature.value))
-            .findFirst();
-        aggregateMethod.ifPresent(method -> {
-            final String mutation = method
-                .retrieveOneRelated(Label.METHOD_PARAMETER)
-                .retrieveRelatedValue(Label.COLLECTION_MUTATION);
-            if(!mutation.isEmpty())
-                this.collectionMutation = CollectionMutation.valueOf(mutation);
-        });
-
-        this.methodName = signature.value;
-        this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
-        this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
-        this.preliminaryStatements.addAll(PreliminaryStatement.with(aggregate.retrieveRelatedValue(Label.URI_ROOT), dataObjectType, rootPath(signature, aggregate), rootMethod));
-        this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
+  private int urlPathCountFor(String url) {
+    Pattern pattern = Pattern.compile("\\{(.*?)\\}");
+    Matcher matcher = pattern.matcher(url);
+    int count = 0;
+    while (matcher.find()) {
+      count++;
     }
+    return count;
+  }
 
-		private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
-        String uriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
-        return signature.retrieveRelatedValue(Label.ROUTE_PATH).startsWith(uriRoot) ? signature.retrieveRelatedValue(Label.ROUTE_PATH) : uriRoot + signature.retrieveRelatedValue(Label.ROUTE_PATH);
-    }
+  private List<String> retrieveSelfDescribingEvents(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
+        .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count() == 1)
+        .map(domainEvent -> domainEvent.value)
+        .collect(Collectors.toList());
+  }
 
-    private int urlPathCountFor(String url) {
-      Pattern pattern = Pattern.compile("\\{(.*?)\\}");
-      Matcher matcher = pattern.matcher(url);
-      int count = 0;
-      while (matcher.find()) {
-          count++;
-      }
-      return count;
-    }
+  public String getMethodName() {
+    return methodName;
+  }
 
-    public String getMethodName() {
-        return methodName;
-    }
+  public String getRootMethod() {
+    return rootMethod;
+  }
 
-    public String getRootMethod() {
-        return rootMethod;
-    }
+  public boolean isRootMethod() {
+    return !getRootMethod().equals("post");
+  }
 
-    public boolean isRootMethod() {
-        return !getRootMethod().equals("post");
-    }
+  public boolean isDisabled() {
+    return this.urlPathCount > 1
+        || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
+  }
 
-    public boolean isDisabled() {
-      return this.urlPathCount > 1 || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
-    }
+  public String selfDescribingEvents() {
+    return selfDescribingEvents.isEmpty() ? "" : Arrays.toString(selfDescribingEvents.toArray());
+  }
 
-    public String getDataDeclaration() {
-        return dataDeclaration;
-    }
+  public String getDataDeclaration() {
+    return dataDeclaration;
+  }
 
-    public List<TestStatement> getStatements() {
-        return statements;
-    }
+  public List<TestStatement> getStatements() {
+    return statements;
+  }
 
-    public List<String> getPreliminaryStatements() {
-        return preliminaryStatements;
-    }
+  public List<String> getPreliminaryStatements() {
+    return preliminaryStatements;
+  }
 }

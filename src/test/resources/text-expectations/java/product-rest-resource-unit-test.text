@@ -1,0 +1,80 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import .*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+// TODO: model uses self-describing event(s) [ProductDisabled], 
+// which may cause test failure based on assumed default values.
+// Run tests to find any such failed tests and correct the incorrectly
+// assumed defaults and transitions.
+public class ProductResourceTest extends AbstractRestTest {
+
+  @Test
+  public void testEmptyResponse() {
+    given()
+      .when()
+      .get("/products")
+      .then()
+      .statusCode(200)
+      .body(is(equalTo("[]")));
+  }
+
+  private ProductData saveExampleData(ProductData data) {
+    return given()
+      .when()
+      .body(data)
+      .post("/products")
+      .then()
+      .statusCode(201)
+      .extract()
+      .body()
+      .as(ProductData.class);
+  }
+
+  @Test
+  public void define() {
+    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description");
+    ProductData result = given()
+        .when()
+        .body(firstData)
+        .post("/products")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(ProductData.class);
+
+    assertNotNull(result.id);
+    assertEquals(result.name, "first-product-name");
+    assertEquals(result.description, "first-product-description");
+  }
+
+  @Test
+  public void disable() {
+    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description");
+    firstData = saveExampleData(firstData);
+    ProductData result = given()
+        .when()
+        .body(firstData)
+        .patch("/products/"+firstData.id+"/disable")
+        .then()
+        .statusCode(200)
+        .extract()
+        .body()
+        .as(ProductData.class);
+
+    assertNotNull(result.id);
+    assertEquals(result.name, "first-product-name");
+    assertEquals(result.description, "first-product-description");
+  }
+}
