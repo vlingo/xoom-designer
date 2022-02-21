@@ -53,7 +53,7 @@
       required
       input$autocomplete="off"
       bind:value={event.name}
-      invalid={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name'), isExistInValueObject(event.name, valueObjects, name)].some(f => f)}>
+      invalid={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name'), isExistInValueObject(event.name, valueObjects, 'name')].some(f => f)}>
     </Textfield>
   </div>
   <div style="flex: 1;" class="mb-3 pb-3">
