@@ -23,6 +23,7 @@
   let deleteDialogActive = false;
   let updateValueName = null;
   let selectedValueObjectForDelete = null;
+  export let events;
   let valueObjectForm = {
     name: '',
     fields: [
@@ -107,6 +108,10 @@
   
   const isObjectFieldNameUnique = (value) => {
     if (updateValueName === value) return undefined;
+
+    if(events)
+      return events.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
+
     return $settings.model.valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
   };
 

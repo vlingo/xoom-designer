@@ -14,6 +14,7 @@
   export let i;
   export let events;
   export let stateFields;
+  export let valueObjects;
 
   let menu;
   let anchor;
@@ -21,6 +22,10 @@
   let selectedFields = [];
 
   const dispatch = createEventDispatcher();
+
+  const eventNameExistInValuObjectMessage = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 0 ? undefined : 'must be unique, already defined as value objects';
+  
+  const isExistInValueObject = (value, array, prop) => !isPropertyUniqueRule(value, array, prop);
 
   function remove() {
     dispatch('delete');
@@ -48,7 +53,7 @@
       required
       input$autocomplete="off"
       bind:value={event.name}
-      invalid={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name')].some(f => f)}>
+      invalid={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name'), isExistInValueObject(event.name, valueObjects, 'name')].some(f => f)}>
     </Textfield>
   </div>
   <div style="flex: 1;" class="mb-3 pb-3">
@@ -109,8 +114,8 @@
   </div>
   <div>
     <ErrorWarningTooltip
-      names={['Name', 'Name', 'Name']}
-      messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name')]}
+      names={['Name', 'Name', 'Name', 'Name']}
+      messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name'), eventNameExistInValuObjectMessage(event.name, valueObjects, 'name')]}
     />
   </div>
   <div style="width: 36px;">

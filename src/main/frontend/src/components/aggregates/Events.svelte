@@ -5,6 +5,7 @@
 
   export let events;
   export let stateFields;
+  export let valueObjects;
 
 	const addEvent = () => {
     events = events.concat({ name: "", fields: ["id"] })
@@ -40,6 +41,6 @@
     <div class="text-center">There is no event! Add one.</div>
   {/if}
   {#each events as event, i (i)}
-    <Event bind:event {events} {i} {stateFields} on:delete={() => deleteEvent(i)} />
+    <Event bind:event {events} {i} {stateFields} {valueObjects} on:delete={() => deleteEvent(i)} />
   {/each}
 </FieldsetBox>

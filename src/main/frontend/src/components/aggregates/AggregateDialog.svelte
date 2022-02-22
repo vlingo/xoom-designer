@@ -92,9 +92,10 @@
 		disableSchemaGroup = aggregate.disableSchemaGroup;
 	}
 	const clearFields = () => initFieldsWith(initialAggregate);
+  const isExistInValueObject = (value, array, prop) => !isPropertyUniqueRule(value, array, prop);
 
 	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
-	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name');
+	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name') && !isExistInValueObject(e.name, $settings.model.valueObjectSettings, 'name');
 	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name') && !methodParametersValidityWithSelectedEventRule(m.event, events, m.parameters) && !eventAlreadyInUseRule(m, methods);
 	const validRoute = (r) => r.path && !routeRule(r.path) && r.aggregateMethod;
 	const validProducer = (schema, events) => (schema && !schemaGroupRule(schema) && events.length > 0) || (!schema && events.length === 0);
@@ -107,7 +108,7 @@
 		else editMode ? initFieldsWith(oldAggregate) : clearFields();
 	}
 
-	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod) 
+	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod)
 	&& !rootPathRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(schemaGroup, outgoingEvents) && validConsumer(receivers);
 	$: if(valid) {
 		newAggregate = {
@@ -142,9 +143,9 @@
 			names={['Aggregate Name', 'Aggregate Name', 'Aggregate Name']}
 		/>
 	</div>
-	<ValueObjects />
+	<ValueObjects bind:events />
 	<StateFields bind:stateFields />
-	<Events bind:events  bind:stateFields />
+	<Events bind:events  bind:stateFields bind:valueObjects={$settings.model.valueObjectSettings}/>
 	<Methods bind:methods bind:stateFields bind:events />
 	<Routes bind:routes bind:methods bind:rootPath />
 	<ProducerExchange bind:events bind:producerExchangeName bind:outgoingEvents bind:schemaGroup bind:disableSchemaGroup  />
