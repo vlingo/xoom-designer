@@ -110,7 +110,7 @@
     if (updateValueName === value) return undefined;
 
     if(events)
-      return events.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
+      return events.some((item) => item.name === value) ?  `${value} must be unique but is already defined as an Event` : undefined;
 
     return $settings.model.valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
   };
@@ -232,7 +232,7 @@
       </Col>
       <Col cols="auto" class="pa-0">
         <ErrorWarningTooltip
-          names={['Value Object Name']}
+          names={['Value Object Name', '']}
           messages={[requireRule(valueObjectForm.name), isObjectFieldNameUnique(valueObjectForm.name)]}
         />
       </Col>

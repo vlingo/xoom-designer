@@ -23,7 +23,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const eventNameExistInValuObjectMessage = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 0 ? undefined : 'must be unique, already defined as value objects';
+  const eventNameExistInValuObjectMessage = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 0 ? undefined : 'must be unique but is already defined as a Value Object';
   
   const isExistInValueObject = (value, array, prop) => !isPropertyUniqueRule(value, array, prop);
 
