@@ -114,7 +114,7 @@
     if(events && events.some((item) => item.name === value))
       result = `${value} must be unique but is already defined as an Event`;
     else if($settings.model.valueObjectSettings.some((item) => item.name === value))
-      result = `${value} already exists.`;
+      result = `${value} must be unique but is already defined as a Value Object`;
 
     return result;
   };
