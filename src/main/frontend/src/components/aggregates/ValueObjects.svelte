@@ -107,12 +107,16 @@
   }
   
   const isObjectFieldNameUnique = (value) => {
-    if (updateValueName === value) return undefined;
+    let result = undefined;
 
-    if(events)
-      return events.some((item) => item.name === value) ?  `${value} must be unique but is already defined as an Event` : undefined;
+    if (updateValueName === value) return result;
 
-    return $settings.model.valueObjectSettings.some((item) => item.name === value) ?  `${value} already exists.` : undefined;
+    if(events && events.some((item) => item.name === value))
+      result = `${value} must be unique but is already defined as an Event`;
+    else if($settings.model.valueObjectSettings.some((item) => item.name === value))
+      result = `${value} already exists.`;
+
+    return result;
   };
 
   const isFieldUnique = (value) => {
