@@ -23,10 +23,11 @@
 
   const dispatch = createEventDispatcher();
 
-  const eventNameExistInValuObjectMessage = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 0 ? undefined : 'must be unique but is already defined as a Value Object';
-  
-  const isExistInValueObject = (value, array, prop) => !isPropertyUniqueRule(value, array, prop);
+  const eventNameExistInValuObjectMessage = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 0 ? undefined : `${value} must be unique but is already defined as a Value Object`;
+  const isPropertyUniqueRuleMessage = (value, array, prop) => !isPropertyUniqueRule(value, array, prop) ? undefined : `${value} must be unique but is already defined as a Value Object`;
 
+  const isExistInValueObject = (value, array, prop) => !isPropertyUniqueRule(value, array, prop);
+  
   function remove() {
     dispatch('delete');
   }
@@ -114,8 +115,8 @@
   </div>
   <div>
     <ErrorWarningTooltip
-      names={['Name', 'Name', 'Name', 'Name']}
-      messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRule(event.name, events, 'name'), eventNameExistInValuObjectMessage(event.name, valueObjects, 'name')]}
+      names={['Name', 'Name', '', '']}
+      messages={[requireRule(event.name), classNameRule(event.name), isPropertyUniqueRuleMessage(event.name, events, 'name'), eventNameExistInValuObjectMessage(event.name, valueObjects, 'name')]}
     />
   </div>
   <div style="width: 36px;">
