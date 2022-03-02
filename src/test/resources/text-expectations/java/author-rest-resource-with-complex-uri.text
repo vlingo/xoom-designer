@@ -1,0 +1,223 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Address;
+import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.http.ContentType;
+import io.vlingo.xoom.http.Response;
+import io.vlingo.xoom.http.ResponseHeader;
+import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.lattice.grid.Grid;
+import io.vlingo.xoomapp.model.author.AuthorEntity;
+import io.vlingo.xoomapp.model.author.Author;
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
+import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.xoomapp.model.*;
+
+import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.http.Response.Status.*;
+import static io.vlingo.xoom.http.ResponseHeader.Location;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
+public class AuthorResource extends DynamicResourceHandler {
+  private final Grid grid;
+  private final AuthorQueries $queries;
+
+  public AuthorResource(final Grid grid) {
+      super(grid.world().stage());
+      this.grid = grid;
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).authorQueries;
+  }
+
+  public Completes<Response> withName(final AuthorData data) {
+    final Name name = Name.from(data.name.firstName, data.name.lastName);
+    return Author.withName(grid, name, data.availableOn)
+      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(AuthorData.from(state))))
+      .otherwise(arg -> Response.of(NotFound))
+      .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
+  }
+
+  public Completes<Response> changeRank(final String id, final AuthorData data) {
+    final Classification classification = Classification.from(data.rank.classification.label, data.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+    final Rank rank = Rank.from(data.rank.points, classification);
+    return resolve(id)
+            .andThenTo(author -> author.changeRank(rank))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> relateAuthor(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.relateAuthor(data.relatedAuthors.stream().findFirst().get()))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> relateAuthors(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.relateAuthors(data.relatedAuthors))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> replaceAllRelatedAuthors(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.replaceAllRelatedAuthors(data.relatedAuthors))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> unrelateAuthor(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.unrelateAuthor(data.relatedAuthors.stream().findFirst().get()))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> addTag(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.addTag(data.tags.stream().map(TagData::toTag).findFirst().get()))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> addTags(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.addTags(data.tags.stream().map(TagData::toTag).collect(java.util.stream.Collectors.toList())))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> replaceTags(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.replaceTags(data.tags.stream().map(TagData::toTag).collect(java.util.stream.Collectors.toList())))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> removeTag(final String id, final AuthorData data) {
+    return resolve(id)
+            .andThenTo(author -> author.removeTag(data.tags.stream().map(TagData::toTag).findFirst().get()))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> changeRank(final String id, final AuthorData data) {
+    final Classification classification = Classification.from(data.rank.classification.label, data.rank.classification.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet()));
+    final Rank rank = Rank.from(data.rank.points, classification);
+    return resolve(id)
+            .andThenTo(author -> author.changeRank(rank))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> makeUnavailable(final String id) {
+    return resolve(id)
+            .andThenTo(author -> author.makeUnavailable())
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> authors() {
+    return $queries.authors()
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> authorOf(final String id) {
+    return $queries.authorOf(id)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  @Override
+  public Resource<?> routes() {
+     return resource("AuthorResource",
+        io.vlingo.xoom.http.resource.ResourceBuilder.post("/catalogs/{catalogId}/authors")
+            .body(AuthorData.class)
+            .handle(this::withName),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/rank")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::changeRank),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/related-author")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::relateAuthor),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/related-authors")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::relateAuthors),
+        io.vlingo.xoom.http.resource.ResourceBuilder.put("/catalogs/{catalogId}/authors/{id}/related-authors")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::replaceAllRelatedAuthors),
+        io.vlingo.xoom.http.resource.ResourceBuilder.delete("/catalogs/{catalogId}/authors/{id}/related-author")
+            .param(String.class)
+            .param(AuthorData.class)
+            .handle(this::unrelateAuthor),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/tag")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::addTag),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/tags")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::addTags),
+        io.vlingo.xoom.http.resource.ResourceBuilder.put("/catalogs/{catalogId}/authors/{id}/tags")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::replaceTags),
+        io.vlingo.xoom.http.resource.ResourceBuilder.delete("/catalogs/{catalogId}/authors/{id}/tags")
+            .param(String.class)
+            .param(AuthorData.class)
+            .handle(this::removeTag),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/rank")
+            .param(String.class)
+            .body(AuthorData.class)
+            .handle(this::changeRank),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/catalogs/{catalogId}/authors/{id}/status")
+            .param(String.class)
+            .handle(this::makeUnavailable),
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/catalogs/{catalogId}/authors")
+            .handle(this::authors),
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/catalogs/{catalogId}/authors/{id}")
+            .param(String.class)
+            .handle(this::authorOf)
+     );
+  }
+
+  @Override
+  protected ContentType contentType() {
+    return ContentType.of("application/json", "charset=UTF-8");
+  }
+
+  private String location(final String id) {
+    return "/catalogs/{catalogId}/authors/" + id;
+  }
+
+  private Completes<Author> resolve(final String id) {
+    final Address address = grid.addressFactory().from(id);
+    return grid.actorOf(Author.class, address, Definition.has(AuthorEntity.class, Definition.parameters(id)));
+  }
+
+}
