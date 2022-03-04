@@ -9,7 +9,6 @@ package io.vlingo.xoom.cli.task.k8s;
 import io.vlingo.xoom.cli.option.Option;
 import io.vlingo.xoom.cli.option.OptionName;
 import io.vlingo.xoom.cli.task.Task;
-import io.vlingo.xoom.cli.XoomTurboProperties;
 import io.vlingo.xoom.terminal.CommandExecutionProcess;
 import io.vlingo.xoom.terminal.CommandExecutor;
 import io.vlingo.xoom.terminal.Terminal;
