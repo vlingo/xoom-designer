@@ -32,7 +32,10 @@ public class AnnotatedBootstrapTemplateDataTest extends CodeGenerationTest {
     @Test
     public void testBootstrapTemplateDataGenerationWithCQRSAndProjections() {
         final Map<ParameterLabel, String> codeGenerationParameters =
-                new HashMap<ParameterLabel, String>() {{
+                new HashMap<ParameterLabel, String>() {
+                  private static final long serialVersionUID = 1L;
+
+                {
                     put(Label.PACKAGE, "io.vlingo.xoomapp");
                     put(Label.APPLICATION_NAME, "xoom-app");
                     put(Label.STORAGE_TYPE, StorageType.STATE_STORE.name());
