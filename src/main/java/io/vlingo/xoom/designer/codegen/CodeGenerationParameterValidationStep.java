@@ -149,6 +149,8 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
               deploymentSettings.dockerImage.matches(DOCKER_PATTERN);
       case DOCKER: validImage = validImage &&
               deploymentSettings.dockerImage.matches(DOCKER_PATTERN);
+      default:
+        break;
     }
     return validImage;
   }
