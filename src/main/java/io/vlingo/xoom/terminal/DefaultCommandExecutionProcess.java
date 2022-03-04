@@ -7,7 +7,6 @@
 package io.vlingo.xoom.terminal;
 
 import io.vlingo.xoom.actors.Logger;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.IOException;
 
