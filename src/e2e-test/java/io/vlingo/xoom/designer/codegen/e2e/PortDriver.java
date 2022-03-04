@@ -86,9 +86,8 @@ public abstract class PortDriver {
         getRuntime().exec(terminal.prepareCommand(command)).waitFor();
       } catch (final IOException | InterruptedException exception) {
         exception.printStackTrace();
-      } finally {
-        return isPortAvailable(port, 5, 300, true);
       }
+      return isPortAvailable(port, 5, 300, true);
     }
   }
 
@@ -103,13 +102,13 @@ public abstract class PortDriver {
         killProcessOn(port);
       } catch (final IOException | InterruptedException exception) {
         exception.printStackTrace();
-      } finally {
-        if(isPortAvailable(port, 5, 300, true)) {
-          processIds.remove(port);
-          return true;
-        }
-        return false;
       }
+
+      if(isPortAvailable(port, 5, 300, true)) {
+        processIds.remove(port);
+        return true;
+      }
+      return false;
     }
 
     private void registerPID(final int port) throws IOException, InterruptedException {
