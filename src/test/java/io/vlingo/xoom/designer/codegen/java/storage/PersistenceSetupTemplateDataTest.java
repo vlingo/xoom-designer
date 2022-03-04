@@ -119,7 +119,9 @@ public class PersistenceSetupTemplateDataTest extends CodeGenerationTest {
     }
 
     private static final Map<Model, DatabaseType> databaseTypes() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+          {
             put(Model.COMMAND, DatabaseType.HSQLDB);
             put(Model.QUERY, DatabaseType.IN_MEMORY);
         }};
