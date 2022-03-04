@@ -32,7 +32,7 @@ public class RequestPreservationFilterTest {
   private MockDispatcher dispatcher;
 
   @BeforeEach
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private void setUp() {
     dispatcher = new MockDispatcher();
     world = World.startWithDefaults("request-preservation-filter-test");
@@ -42,6 +42,7 @@ public class RequestPreservationFilterTest {
   }
 
   @Test
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public void testThatRequestIsFilteredAndPreserved() {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
 
