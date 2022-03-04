@@ -27,6 +27,7 @@ import static io.vlingo.xoom.http.Version.Http1_1;
 public class RequestLimiterFilterTest {
 
   @Test
+  @SuppressWarnings("rawtypes")
   public void testThatExceededRequestsAreFiltered() {
     final Headers requestHeader =
             Headers.of(RequestHeader.of(XForwardedFor, "127.0.0.1"));
@@ -56,6 +57,7 @@ public class RequestLimiterFilterTest {
   }
 
   @Test
+  @SuppressWarnings("rawtypes")
   public void testThatRequestCountIsReset() throws Exception {
     final Headers requestHeader =
             Headers.of(RequestHeader.of(XForwardedFor, "127.0.0.1"));
