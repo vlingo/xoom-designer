@@ -196,14 +196,19 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
     }
 
     private static Map<Model, DatabaseType> databaseTypesForCQRS() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+
+          {
            put(Model.COMMAND, DatabaseType.HSQLDB);
            put(Model.QUERY, DatabaseType.IN_MEMORY);
         }};
     }
 
     private static Map<Model, DatabaseType> databaseTypes() {
-        return new HashMap<Model, DatabaseType>() {{
+        return new HashMap<Model, DatabaseType>() {
+          private static final long serialVersionUID = 1L;
+          {
             put(Model.DOMAIN, DatabaseType.POSTGRES);
         }};
     }
