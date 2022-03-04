@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.e2e;
 
 public class RequestAttemptException extends RuntimeException {
+  private static final long serialVersionUID = 1L;
 
   public RequestAttemptException(final String failureMessage) {
     super(failureMessage);
