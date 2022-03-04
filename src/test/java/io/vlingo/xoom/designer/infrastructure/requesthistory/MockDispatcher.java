@@ -15,6 +15,7 @@ public final class MockDispatcher implements Dispatcher<Dispatchable<Entry<Strin
 
   private AccessSafely access;
   private AtomicInteger dispatched = new AtomicInteger(0);
+  @SuppressWarnings("unused")
   private List<Entry<String>> entries = new CopyOnWriteArrayList<>();
 
   public MockDispatcher() {
