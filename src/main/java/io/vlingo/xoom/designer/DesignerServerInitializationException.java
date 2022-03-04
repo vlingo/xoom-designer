@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer;
 
 public class DesignerServerInitializationException extends RuntimeException {
+  private static final long serialVersionUID = 1L;
 
   public DesignerServerInitializationException(final Exception cause) {
     super(cause);
