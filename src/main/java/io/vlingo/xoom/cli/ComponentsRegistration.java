@@ -26,9 +26,12 @@ public class ComponentsRegistration {
   public static void registerWith(final Logger logger,
                                   final CommandExecutionProcess commandExecutionProcess,
                                   final XoomTurboProperties properties) {
-    ComponentRegistry.register(Logger.class, logger)
-            .register(CommandExecutionProcess.class, commandExecutionProcess)
-            .register("cliTasks", Arrays.asList(new DesignerTask(commandExecutionProcess),
+    
+    ComponentRegistry.register(Logger.class, logger);
+    
+    ComponentRegistry.register(CommandExecutionProcess.class, commandExecutionProcess);
+    
+    ComponentRegistry.register("cliTasks", Arrays.asList(new DesignerTask(commandExecutionProcess),
                     new GlooInitTask(commandExecutionProcess), new GlooSuspendTask(commandExecutionProcess),
                     new GlooRouteTask(commandExecutionProcess, properties), new DockerPackageTask(commandExecutionProcess, properties),
                     new DockerPushTask(commandExecutionProcess, properties), new DockerStatusTask(commandExecutionProcess, properties),
