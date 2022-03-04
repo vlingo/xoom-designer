@@ -345,6 +345,7 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
             .relate(Label.FACTORY_METHOD, "true")
             .relate(roleProvisionedEvent);
 
+    @SuppressWarnings("unused")
     final CodeGenerationParameter changeDescription =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeDescription")
             .relate(Label.METHOD_PARAMETER, "tenantId")
@@ -392,6 +393,7 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         CodeGenerationParameter.of(Label.STATE_FIELD, "description")
             .relate(Label.FIELD_TYPE, "String");
             
+    @SuppressWarnings("unused")
     final CodeGenerationParameter disabledField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "disabled")
             .relate(Label.FIELD_TYPE, "boolean");
@@ -483,6 +485,7 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
           Paths.get("D:\\projects", "xoom-app").toString() :
           Paths.get("/home", "xoom-app").toString();
 
+  @SuppressWarnings("unused")
   private static final String MODEL_PACKAGE_PATH =
       Paths.get(PROJECT_PATH, "src", "main", "java",
           "io", "vlingo", "xoomapp", "model").toString();
@@ -493,21 +496,26 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
 
   private static final String PERSISTENCE_PACKAGE_PATH =
       Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "persistence").toString();
+
+  @SuppressWarnings("unused")
   private static final String RESOURCE_PACKAGE_PATH =
       Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "resource").toString();
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model.author; \\n" +
           "public interface Author { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_STATE_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model.author; \\n" +
           "public class AuthorState { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_AGGREGATE_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model.author; \\n" +
           "public class AuthorEntity { \\n" +
@@ -520,36 +528,42 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model; \\n" +
           "public class Name { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model; \\n" +
           "public class Rank { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String TAG_VALUE_OBJECT_CONTENT_TEXT =
       "package io.vlingo.xoomapp.model; \\n" +
           "public class Tag { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_RESOURCE_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure.resource; \\n" +
           "public interface AuthorResource { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String AUTHOR_RESOURCE_HANDLER_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure.resource; \\n" +
           "public class AuthorResourceHandlers { \\n" +
           "... \\n" +
           "}";
 
+  @SuppressWarnings("unused")
   private static final String BOOK_DATA_CONTENT_TEXT =
       "package io.vlingo.xoomapp.infrastructure; \\n" +
           "public class BookData { \\n" +
