@@ -211,6 +211,32 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
   }
 
   @Test
+  public void testThatNotAllEventsWasEmitByMethodsModelIsGenerated()  {
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
+                    CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
+                    CodeGenerationParameter.of(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED),
+                    CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA),
+                    CodeGenerationParameter.of(Label.CQRS, true),
+                    authorAggregateSmall());
+
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
+
+    final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+    Assertions.assertTrue(modelGenerationStep.shouldProcess(context));
+
+    modelGenerationStep.process(context);
+
+    final Content authorEntity = context.findContent(JavaTemplateStandard.AGGREGATE, "AuthorEntity");
+
+    Assertions.assertEquals(7, context.contents().size());
+    Assertions.assertNotNull(authorEntity);
+
+  }
+
+  @Test
   @Disabled
   public void testThatStatefulModelIsGeneratedOnKotlin() {
     final CodeGenerationParameters parameters =
@@ -363,6 +389,35 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
             .relate(relatedAuthorMethod).relate(relatedAuthorsMethod).relate(relatedAuthorRemovalMethod)
             .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
             .relate(authorRelatedEvent).relate(authorsRelatedEvent).relate(authorUnrelatedEvent);
+  }
+
+  private CodeGenerationParameter authorAggregateSmall() {
+    final CodeGenerationParameter idField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                    .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+                    
+    final CodeGenerationParameter authorUpdatedEvent =
+    CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUpdated")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+
+
+    final CodeGenerationParameter factoryMethod =
+    CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "register")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter updateMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "update");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+            .relate(idField)
+            .relate(factoryMethod)
+            .relate(updateMethod)
+            .relate(authorRegisteredEvent).relate(authorUpdatedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {
