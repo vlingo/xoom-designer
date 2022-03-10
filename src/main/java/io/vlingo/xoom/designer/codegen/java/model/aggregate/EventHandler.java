@@ -24,8 +24,10 @@ public class EventHandler {
   public final List<EventMissingField> missingFields = new ArrayList<>();
 
   public static List<EventHandler> from(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).map(EventHandler::new)
-            .distinct().collect(Collectors.toList());
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+      .filter(method -> method.retrieveRelatedValue(Label.DOMAIN_EVENT) != null)
+      .map(EventHandler::new)
+      .distinct().collect(Collectors.toList());
   }
 
   private EventHandler(final CodeGenerationParameter method) {

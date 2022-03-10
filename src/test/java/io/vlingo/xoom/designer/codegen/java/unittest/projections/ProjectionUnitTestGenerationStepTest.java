@@ -11,6 +11,7 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
+import io.vlingo.xoom.designer.codegen.java.storage.StorageType;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,59 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onJava().read("counting-projection-control")));
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onJava().read("counting-read-result-interest")));
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-operation-based-projection-unit-test")));
+  }
+
+  @Test
+  public void testThatNotAllEventsWasEmitByMethodsModelIsGenerated()  {
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
+                    CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
+                    CodeGenerationParameter.of(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED),
+                    CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA),
+                    CodeGenerationParameter.of(Label.CQRS, true),
+                    authorAggregateSmall());
+
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
+
+    
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    final Content authorProjectionTest =
+        context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    Assertions.assertEquals(9, context.contents().size());    
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-simple-operation-based-projection-unit-test")));
+  }
+
+  private CodeGenerationParameter authorAggregateSmall() {
+    final CodeGenerationParameter idField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                    .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+                    
+    final CodeGenerationParameter authorUpdatedEvent =
+    CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUpdated")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+
+
+    final CodeGenerationParameter factoryMethod =
+    CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "register")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter updateMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "update")
+            .relate(CodeGenerationParameter.of(Label.DOMAIN_EVENT, null));
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+            .relate(idField)
+            .relate(factoryMethod)
+            .relate(updateMethod)
+            .relate(authorRegisteredEvent).relate(authorUpdatedEvent);
   }
 
   private CodeGenerationParameters codeGenerationParameters() {
