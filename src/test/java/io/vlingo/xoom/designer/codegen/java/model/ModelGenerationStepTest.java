@@ -233,7 +233,6 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertEquals(7, context.contents().size());
     Assertions.assertNotNull(authorEntity);
-
   }
 
   @Test
@@ -411,7 +410,8 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
             .relate(authorRegisteredEvent);
 
     final CodeGenerationParameter updateMethod =
-            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "update");
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "update")
+            .relate(CodeGenerationParameter.of(Label.DOMAIN_EVENT, null));
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
             .relate(idField)
