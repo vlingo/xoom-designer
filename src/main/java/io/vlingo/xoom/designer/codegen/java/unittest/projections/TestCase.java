@@ -34,6 +34,7 @@ public class TestCase {
                                     final List<CodeGenerationParameter> valueObjects,
                                     final ProjectionType projectionType) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .filter(method -> method.retrieveOneRelated(Label.DOMAIN_EVENT).value != null)
         .map(method -> new TestCase(method, aggregate, valueObjects, projectionType))
         .collect(Collectors.toList());
   }
@@ -49,7 +50,8 @@ public class TestCase {
 
     final CodeGenerationParameter domainEvent =
             DomainEventDetail.eventWithName(domainEventName,
-                    aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).collect(Collectors.toList()));
+                    aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
+                    .collect(Collectors.toList()));
 
     this.methodName = method.value;
     this.domainEventName = domainEventName;
