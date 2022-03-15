@@ -35,7 +35,7 @@ public class CatalogResource extends DynamicResourceHandler {
       this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).catalogQueries;
   }
 
-  public Completes<Response> withName(final CatalogData data) {
+  public Completes<Response> withName(final String authorId, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Catalog.withName(grid, data.authorId, name)
       .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(CatalogData.from(state))))
@@ -43,7 +43,7 @@ public class CatalogResource extends DynamicResourceHandler {
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
-  public Completes<Response> update(final String id, final CatalogData data) {
+  public Completes<Response> update(final String id, final String authorId, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return resolve(id)
             .andThenTo(catalog -> catalog.update(data.id, data.authorId, name))
@@ -70,9 +70,11 @@ public class CatalogResource extends DynamicResourceHandler {
   public Resource<?> routes() {
      return resource("CatalogResource",
         io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors/{authorId}/catalogs")
+            .param(String.class)
             .body(CatalogData.class)
             .handle(this::withName),
         io.vlingo.xoom.http.resource.ResourceBuilder.patch("/authors/{authorId}/catalogs/{id}")
+            .param(String.class)
             .param(String.class)
             .body(CatalogData.class)
             .handle(this::update),
