@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.codegen.java.formatting;
 
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
@@ -74,7 +75,10 @@ public class Member extends Formatters.Fields<List<String>> {
     if (ValueObjectDetail.isValueObject(field)) {
       return fieldType + valueObjectTypeSuffix;
     }
-    return fieldType;
+    if(fieldType.equalsIgnoreCase(CodeGenerationProperties.COMPOSITE_ID_TYPE))
+      return "String";
+    else
+      return fieldType;
   }
 
   private String resolveInstantiation(final CodeGenerationParameter field) {

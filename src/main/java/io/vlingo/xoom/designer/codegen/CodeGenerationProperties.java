@@ -29,7 +29,7 @@ public class CodeGenerationProperties {
   public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "float", "long", "double", "integer");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", CHAR_TYPE, "string"))
           .flatMap(List::stream).collect(Collectors.toList());
-
+  public static final String COMPOSITE_ID_TYPE = "CompositeId";
 
   public static final Map<String, String> SPECIAL_TYPES_IMPORTS =
           Collections.unmodifiableMap(
@@ -40,6 +40,7 @@ public class CodeGenerationProperties {
                     put("Set", "java.util.*");
                     put("ArrayList", "java.util.*");
                     put("HashSet", "java.util.*");
+                    //put("CompositeId", "io.vlingo.xoom.lattice.model");
                   }}
           );
 

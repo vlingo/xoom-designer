@@ -51,7 +51,7 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
   }
 
   @Test
-  public void testThatRestResourceWIthComplexURIIsGenerated() {
+  public void testThatRestResourceWithComplexURIIsGenerated() {
     final CodeGenerationParameter packageParameter = CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp");
 
     final CodeGenerationParameter useCQRSParameter = CodeGenerationParameter.of(Label.CQRS, "true");

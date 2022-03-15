@@ -169,7 +169,8 @@ public enum TemplateParameter implements ParameterKey {
   DEPLOYMENT_SETTINGS("deploymentSettings"),
   KUBERNETES_POD_NAME("kubernetesPodName"),
   KUBERNETES_IMAGE("kubernetesImage"),
-  DOCKERFILE("dockerfile");
+  DOCKERFILE("dockerfile"),
+  COMPOSITE_ID("compositeId");
 
   public final String key;
 

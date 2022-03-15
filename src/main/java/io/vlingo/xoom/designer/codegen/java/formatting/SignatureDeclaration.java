@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
@@ -76,7 +77,10 @@ public class SignatureDeclaration implements Formatters.Arguments {
           return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(Label.ALIAS));
         }
       }
-      return String.format(SIGNATURE_PATTERN, fieldType, field.value);
+      if(fieldType.equalsIgnoreCase(CodeGenerationProperties.COMPOSITE_ID_TYPE))
+        return String.format(SIGNATURE_PATTERN, "String", field.value);
+      else
+        return String.format(SIGNATURE_PATTERN, fieldType, field.value);
     }).collect(Collectors.toList());
   }
 
