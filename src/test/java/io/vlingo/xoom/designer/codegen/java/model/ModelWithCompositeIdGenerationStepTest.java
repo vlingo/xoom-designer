@@ -119,6 +119,39 @@ public class ModelWithCompositeIdGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(catalogUpdated.contains(TextExpectation.onJava().read("catalog-updated")));
   }
 
+  @Test
+  public void testThatSourcedModelIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
+            CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
+            CodeGenerationParameter.of(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED),
+            CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA),
+            CodeGenerationParameter.of(Label.CQRS, true),
+            catalogAggregate(), nameValueObject());
+
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+    Assertions.assertTrue(modelGenerationStep.shouldProcess(context));
+
+    modelGenerationStep.process(context);
+
+    final Content catalogProtocol = context.findContent(JavaTemplateStandard.AGGREGATE_PROTOCOL, "Catalog");
+    final Content catalogEntity = context.findContent(JavaTemplateStandard.AGGREGATE, "CatalogEntity");
+    final Content catalogState = context.findContent(JavaTemplateStandard.AGGREGATE_STATE, "CatalogState");
+    final Content catalogCreated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "CatalogCreated");
+    final Content catalogUpdated = context.findContent(JavaTemplateStandard.DOMAIN_EVENT, "CatalogUpdated");
+
+    Assertions.assertEquals(6, context.contents().size());
+    Assertions.assertTrue(catalogProtocol.contains(TextExpectation.onJava().read("catalog-protocol-with-composite-id")));
+    Assertions.assertTrue(catalogEntity.contains(TextExpectation.onJava().read("sourced-catalog-entity")));
+    Assertions.assertTrue(catalogState.contains(TextExpectation.onJava().read("sourced-catalog-state")));
+    Assertions.assertTrue(catalogCreated.contains(TextExpectation.onJava().read("catalog-created")));
+    Assertions.assertTrue(catalogUpdated.contains(TextExpectation.onJava().read("catalog-updated")));
+  }
+
   private CodeGenerationParameter catalogAggregate() {
     final CodeGenerationParameter idField = CodeGenerationParameter.of(Label.STATE_FIELD, "id")
         .relate(Label.FIELD_TYPE, "String");
