@@ -1,0 +1,79 @@
+package io.vlingo.xoomapp.model.catalog;
+
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.xoom.lattice.model.sourcing.EventSourced;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
+public final class CatalogEntity extends EventSourced implements Catalog {
+  private CatalogState state;
+
+  public CatalogEntity(final String id) {
+    super(id);
+    this.state = CatalogState.identifiedBy(id);
+  }
+
+  static {
+    EventSourced.registerConsumer(CatalogEntity.class, CatalogCreated.class, CatalogEntity::applyCatalogCreated);
+    EventSourced.registerConsumer(CatalogEntity.class, CatalogCreated.class, CatalogEntity::applyCatalogCreated);
+  }
+
+  /*
+   * Returns my current state.
+   *
+   * @return {@code Completes<CatalogState>}
+   */
+  public Completes<CatalogState> currentState() {
+    return Completes.withSuccess(state);
+  }
+
+  @Override
+  public Completes<CatalogState> withName(final String authorId, final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link CatalogState#withName()}
+     */
+    return apply(new CatalogCreated(state.id, authorId, name), () -> state);
+  }
+
+  @Override
+  public Completes<CatalogState> update(final String id, final String authorId, final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link CatalogState#update()}
+     */
+    return apply(new CatalogCreated(id, authorId, name), () -> state);
+  }
+
+  private void applyCatalogCreated(final CatalogCreated event) {
+    state = state.withName(event.authorId, event.name);
+  }
+
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code CatalogState} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  @Override
+  @SuppressWarnings("hiding")
+  protected <CatalogState> void restoreSnapshot(final CatalogState snapshot, final int currentVersion) {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code CatalogState} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return CatalogState
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected CatalogState snapshot() {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+    return null;
+  }
+}
