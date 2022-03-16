@@ -86,7 +86,15 @@ public class TestDataValueGenerator {
       generateForValueObjectFields(dataIndex, path, field);
     } else if(FieldDetail.isScalar(field) || FieldDetail.isCollection(field)) {
       generateScalarFieldAssignment(dataIndex, path, field);
+    } else if(FieldDetail.isCompositeId(field)) {
+      generateCompositeIdFieldAssignment(dataIndex, path, field);
     }
+  }
+
+  private void generateCompositeIdFieldAssignment(int dataIndex, String path, CodeGenerationParameter field) {
+    final String currentPath = resolvePath(path, field);
+    final String fieldType = "String";
+    generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(dataIndex));
   }
 
   private void generateForValueObjectFields(final int dataIndex, final String path, final CodeGenerationParameter field) {
