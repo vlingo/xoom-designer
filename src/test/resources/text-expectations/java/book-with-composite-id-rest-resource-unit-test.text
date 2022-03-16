@@ -1,0 +1,61 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import .*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class BookResourceTest extends AbstractRestTest {
+
+  @Test
+  public void testEmptyResponse() {
+    String authorId = "1";
+    given()
+      .when()
+      .get("/authors/" + authorId + "/books")
+      .then()
+      .statusCode(200)
+      .body(is(equalTo("[]")));
+  }
+
+  private BookData saveExampleData(BookData data) {
+    String authorId = "1";
+    return given()
+      .when()
+      .body(data)
+      .post("/authors/" + authorId + "/books")
+      .then()
+      .statusCode(201)
+      .extract()
+      .body()
+      .as(BookData.class);
+  }
+
+  @Test
+  public void withName() {
+    String authorId = "1";
+    BookData firstData = BookData.from("1", NameData.from("first-book-name-firstName", "first-book-name-lastName"), "1");
+    BookData result = given()
+        .when()
+        .body(firstData)
+        .post("/authors/" + authorId + "/books")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(BookData.class);
+
+    assertNotNull(result.id);
+    assertEquals(result.name.firstName, "first-book-name-firstName");
+    assertEquals(result.name.lastName, "first-book-name-lastName");
+    assertEquals(result.authorId, "1");
+  }
+}

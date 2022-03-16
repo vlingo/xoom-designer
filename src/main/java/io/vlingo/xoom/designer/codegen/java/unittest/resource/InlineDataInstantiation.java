@@ -64,7 +64,7 @@ public class InlineDataInstantiation {
     final String currentFieldPath = fieldPath.isEmpty() ? field.value : fieldPath + "." + field.value;
     if (ValueObjectDetail.isValueObject(field)) {
       generateValueObjectAssignment(currentFieldPath, field);
-    } else if (FieldDetail.isCollection(field) || FieldDetail.isDateTime(field)) {
+    } else if (FieldDetail.isCollection(field) || FieldDetail.isDateTime(field) && !FieldDetail.isCompositeId(field)) {
       final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
       valuesAssignmentExpression.append(defaultValue).append(", ");
     } else {

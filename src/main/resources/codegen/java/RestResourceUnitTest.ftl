@@ -23,6 +23,35 @@ import java.util.HashSet;
 </#if>
 public class ${resourceUnitTestName} extends AbstractRestTest {
 
+<#if compositeId?has_content>
+  @Test
+  public void testEmptyResponse() {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
+    given()
+      .when()
+      .get("${uriRoot}")
+      .then()
+      .statusCode(200)
+      .body(is(equalTo("[]")));
+  }
+
+  private ${dataObjectName} saveExampleData(${dataObjectName} data) {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
+    return given()
+      .when()
+      .body(data)
+      .post("${uriRoot}")
+      .then()
+      .statusCode(201)
+      .extract()
+      .body()
+      .as(${dataObjectName}.class);
+  }
+  <#else>
   @Test
   public void testEmptyResponse() {
     given()
@@ -44,10 +73,14 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
       .body()
       .as(${dataObjectName}.class);
   }
+</#if>
 <#list testCases as testCase>
 
   @Test<#if testCase.isDisabled()>@Disabled</#if>
   public void ${testCase.methodName}() {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
     ${testCase.dataDeclaration}
   <#if testCase.isRootMethod()>
     firstData = saveExampleData(firstData);
