@@ -35,7 +35,7 @@ public class BookEntityTest {
     book = world.actorFor(Book.class, BookEntity.class, "#1");
   }
 
-  private static final CompositeId AUTHOR_ID_FOR_CATALOG_TEST = null;
+  private static final String AUTHOR_ID_FOR_CATALOG_TEST = "updated-1";
   private static final String TITLE_FOR_CATALOG_TEST = "updated-book-title";
   private static final String PUBLISHER_FOR_CATALOG_TEST = "updated-book-publisher";
   private static final char GROUP_FOR_CATALOG_TEST = '1';

@@ -29,6 +29,8 @@ public class FieldDetail {
             .filter(stateField -> stateField.value.equals(fieldName))
             .map(stateField -> {
               final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
+              if(FieldDetail.isCompositeId(stateField))
+                return "String";
               return isCollection(stateField) ? resolveCollectionType(stateField) : fieldType;
             }).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
