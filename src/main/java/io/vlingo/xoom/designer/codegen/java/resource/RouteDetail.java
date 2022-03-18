@@ -83,7 +83,10 @@ public class RouteDetail {
       final String arguments =
           Formatters.Arguments.SIGNATURE_DECLARATION.format(routeSignature);
 
-      return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, arguments);
+      final String compositeIdParameter = compositeIdParameterFrom(routeSignature);
+
+      final String parameters = formatParameters(Stream.of(arguments, compositeIdParameter));
+      return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
     }
 
     return resolveMethodSignatureWithParams(routeSignature);
@@ -101,18 +104,32 @@ public class RouteDetail {
         routeSignature.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
             String.format(METHOD_PARAMETER_PATTERN, "String", "id") : "";
 
-    final String compositeId = extractCompositeIdFrom(routeSignature.retrieveRelatedValue(Label.ROUTE_PATH));
-    final String compositeIdParameter = !compositeId.isEmpty() ? String.format(METHOD_PARAMETER_PATTERN, "String", compositeId) : "";
+    final String compositeIdParameter = compositeIdParameterFrom(routeSignature);
 
     final CodeGenerationParameter method = AggregateDetail.methodWithName(routeSignature.parent(), routeSignature.value);
     final String dataClassname = JavaTemplateStandard.DATA_OBJECT.resolveClassname(routeSignature.parent().value);
     final String dataParameterDeclaration = String.format(METHOD_PARAMETER_PATTERN, dataClassname, "data");
     final String dataParameter = method.hasAny(Label.METHOD_PARAMETER) ? dataParameterDeclaration : "";
-    final String parameters = Stream.of(idParameter, compositeIdParameter, dataParameter)
+
+    final String parameters = formatParameters(Stream.of(idParameter, compositeIdParameter, dataParameter));
+    return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
+  }
+
+  private static String formatParameters(Stream<String> arguments) {
+    return arguments
         .distinct()
         .filter(param -> !param.isEmpty())
         .collect(Collectors.joining(", "));
-    return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
+  }
+
+  private static String compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
+    String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
+    if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
+      routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
+    }
+    final String compositeId = extractCompositeIdFrom(routePath);
+
+    return !compositeId.isEmpty()? String.format(METHOD_PARAMETER_PATTERN, "String", compositeId) : "";
   }
 
   private static String extractCompositeIdFrom(String routePath) {

@@ -78,8 +78,7 @@ public class RestResourceWithCompositeIdGenerationStepTest extends CodeGeneratio
 
     final CodeGenerationParameter withNameRoute = CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
         .relate(Label.ROUTE_METHOD, "POST")
-        .relate(Label.ROUTE_PATH, "/authors/{authorId}/catalogs")
-        .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+        .relate(Label.ROUTE_PATH, "/authors/{authorId}/catalogs");
 
     final CodeGenerationParameter updateRoute = CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "update")
         .relate(Label.ROUTE_METHOD, "PATCH")

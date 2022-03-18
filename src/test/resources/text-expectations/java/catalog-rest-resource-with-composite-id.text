@@ -52,14 +52,14 @@ public class CatalogResource extends DynamicResourceHandler {
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
-  public Completes<Response> catalogs() {
+  public Completes<Response> catalogs(final String authorId) {
     return $queries.catalogs()
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
             .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
-  public Completes<Response> catalogOf(final String id) {
+  public Completes<Response> catalogOf(final String id, final String authorId) {
     return $queries.catalogOf(id)
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
             .otherwise(arg -> Response.of(NotFound))
@@ -79,8 +79,10 @@ public class CatalogResource extends DynamicResourceHandler {
             .body(CatalogData.class)
             .handle(this::update),
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/catalogs")
+            .param(String.class)
             .handle(this::catalogs),
         io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/catalogs/{id}")
+            .param(String.class)
             .param(String.class)
             .handle(this::catalogOf)
      );
