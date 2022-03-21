@@ -27,7 +27,7 @@ function App() {
             <Route path="/app" exact={true}><Home /></Route>
             <Route path="/app/" exact={true}><Home /></Route>
             <Route path="/app/authors" exact={true}><Authors /></Route>
-            <Route path="/app/authors/:id"><Author /></Route>
+            <Route path="/app/authors/:id" exact={true}><Author /></Route>
           </Switch>
           </main>
         </div>

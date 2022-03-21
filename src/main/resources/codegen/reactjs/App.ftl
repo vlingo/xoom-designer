@@ -22,7 +22,7 @@ axios.defaults.baseURL = 'http://localhost:${turboSettings.httpServerPort?c}';
             <Route path="/app${aggregate.apiRootPath?replace("{", ":")?replace("}", "")}/:id" exact={true}><${capitalized} /></Route>
   <#else>
             <Route path="/app${aggregate.apiRootPath}" exact={true}><${pluralCapitalized} /></Route>
-            <Route path="/app${aggregate.apiRootPath}/:id"><${capitalized} /></Route>
+            <Route path="/app${aggregate.apiRootPath}/:id" exact={true}><${capitalized} /></Route>
   </#if>
 </#macro>
 function App() {
