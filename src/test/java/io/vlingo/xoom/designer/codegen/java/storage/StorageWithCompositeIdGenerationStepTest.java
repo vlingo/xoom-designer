@@ -46,6 +46,8 @@ public class StorageWithCompositeIdGenerationStepTest extends CodeGenerationTest
     final Content bookQueries = context.findContent(JavaTemplateStandard.QUERIES, "BookQueries");
     final Content bookQueriesActor = context.findContent(JavaTemplateStandard.QUERIES_ACTOR, "BookQueriesActor");
     final Content authorStateAdapter = context.findContent(JavaTemplateStandard.ADAPTER, "AuthorStateAdapter");
+    final Content authorQueries = context.findContent(JavaTemplateStandard.QUERIES, "AuthorQueries");
+    final Content authorQueriesActor = context.findContent(JavaTemplateStandard.QUERIES_ACTOR, "AuthorQueriesActor");
     final Content commandModelStateStoreProvider = context.findContent(JavaTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
     final Content queryModelStateStoreProvider = context.findContent(JavaTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
     final Content databaseProperties = context.findContent(JavaTemplateStandard.DATABASE_PROPERTIES, "xoom-turbo");
@@ -55,6 +57,8 @@ public class StorageWithCompositeIdGenerationStepTest extends CodeGenerationTest
     Assertions.assertTrue(bookQueries.contains(TextExpectation.onJava().read("book-queries-with-composite-id")));
     Assertions.assertTrue(bookQueriesActor.contains(TextExpectation.onJava().read("book-queries-actor-with-composite-id")));
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onJava().read("author-state-adapter")));
+    Assertions.assertTrue(authorQueries.contains(TextExpectation.onJava().read("author-queries")));
+    Assertions.assertTrue(authorQueriesActor.contains(TextExpectation.onJava().read("author-queries-actor")));
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onJava().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onJava().read("query-model-state-store-provider")));
     Assertions.assertTrue(databaseProperties.contains(TextExpectation.onJava().read("postgres-database-properties")));

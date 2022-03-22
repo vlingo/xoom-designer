@@ -66,7 +66,10 @@ public class QueriesTemplateDataFactory {
                                                     final CodeGenerationParameter aggregate) {
     final TemplateParameters parameters =
         createParameters(persistencePackage, protocol, contents);
-    parameters.and(TemplateParameter.COMPOSITE_ID, resolveCompositeIdFields(aggregate));
+
+    if(protocol.equals(aggregate.value))
+      parameters.and(TemplateParameter.COMPOSITE_ID, resolveCompositeIdFields(aggregate));
+
     return Arrays.asList(new QueriesTemplateData(protocol, parameters),
         new QueriesActorTemplateData(protocol, parameters));
   }

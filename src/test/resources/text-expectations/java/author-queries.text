@@ -1,0 +1,12 @@
+package io.vlingo.infrastructure.persistence;
+
+import java.util.Collection;
+import io.vlingo.xoom.common.Completes;
+
+import io.vlingo.xoomapp.infrastructure.AuthorData;
+
+@SuppressWarnings("all")
+public interface AuthorQueries {
+  Completes<AuthorData> authorOf(String id);
+  Completes<Collection<AuthorData>> authors();
+}
