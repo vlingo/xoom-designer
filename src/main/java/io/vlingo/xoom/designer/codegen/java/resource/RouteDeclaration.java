@@ -54,13 +54,11 @@ public class RouteDeclaration {
       return Collections.emptyList();
     }
 
-    final List<String> parameterTypes = Stream.of(parameters.split(","))
+    return Stream.of(parameters.split(","))
         .map(parameter -> parameter.replaceAll("final", "").trim())
         .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
         .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
         .collect(toList());
-
-    return parameterTypes;
   }
 
 }

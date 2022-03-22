@@ -132,7 +132,7 @@ public class RouteDetail {
     return !compositeId.isEmpty()? String.format(METHOD_PARAMETER_PATTERN, "String", compositeId) : "";
   }
 
-  private static String extractCompositeIdFrom(String routePath) {
+  public static String extractCompositeIdFrom(String routePath) {
     final String regex = "\\{(.*?)\\}";
 
     final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);

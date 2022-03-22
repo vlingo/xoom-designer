@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.java.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
 
@@ -37,6 +38,31 @@ public class StorageTemplateDataFactory {
     if (useAnnotations) {
       templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
               useCQRS, storageType, projectionType, templatesData, contents));
+    }
+
+    return templatesData;
+  }
+
+  public static List<TemplateData> build(final String basePackage,
+                                         final String appName,
+                                         List<Content> contents, final CodeGenerationParameter aggregate,
+                                         final StorageType storageType,
+                                         final Map<Model, DatabaseType> databases,
+                                         final ProjectionType projectionType,
+                                         final Boolean useAnnotations,
+                                         final Boolean useCQRS) {
+    final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
+    final List<TemplateData> templatesData = new ArrayList<>();
+    templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
+    templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents, aggregate));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
+    templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage,
+        useCQRS, useAnnotations, storageType, projectionType, templatesData,
+        contents));
+
+    if (useAnnotations) {
+      templatesData.add(PersistenceSetupTemplateData.from(basePackage, persistencePackage,
+          useCQRS, storageType, projectionType, templatesData, contents));
     }
 
     return templatesData;

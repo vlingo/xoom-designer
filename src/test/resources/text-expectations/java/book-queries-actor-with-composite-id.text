@@ -1,0 +1,33 @@
+package io.vlingo.infrastructure.persistence;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.lattice.query.StateStoreQueryActor;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+
+import io.vlingo.xoomapp.infrastructure.BookData;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
+ */
+@SuppressWarnings("all")
+public class BookQueriesActor extends StateStoreQueryActor implements BookQueries {
+
+  public BookQueriesActor(StateStore store) {
+    super(store);
+  }
+
+  @Override
+  public Completes<BookData> bookOf(String authorId, String id) {
+    String compositeId =  authorId+ ":" + id;
+    return queryStateFor(compositeId, BookData.class, BookData.empty());
+  }
+
+  @Override
+  public Completes<Collection<BookData>> books() {
+    return streamAllOf(BookData.class, new ArrayList<>());
+  }
+
+}

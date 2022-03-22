@@ -38,14 +38,14 @@ public class CatalogResource extends DynamicResourceHandler {
   public Completes<Response> withName(final String authorId, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return Catalog.withName(grid, data.authorId, name)
-      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(state.id))), serialized(CatalogData.from(state))))
+      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(authorId, state.id))), serialized(CatalogData.from(state))))
       .otherwise(arg -> Response.of(NotFound))
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
   public Completes<Response> update(final String id, final String authorId, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
-    return resolve(id)
+    return resolve(authorId, id)
             .andThenTo(catalog -> catalog.update(data.id, data.authorId, name))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(CatalogData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
@@ -53,14 +53,14 @@ public class CatalogResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> catalogs(final String authorId) {
-    return $queries.catalogs()
+    return $queries.catalogs(authorId)
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
             .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
   public Completes<Response> catalogOf(final String id, final String authorId) {
-    return $queries.catalogOf(id)
+    return $queries.catalogOf(authorId, id)
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
             .otherwise(arg -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
@@ -93,13 +93,14 @@ public class CatalogResource extends DynamicResourceHandler {
     return ContentType.of("application/json", "charset=UTF-8");
   }
 
-  private String location(final String id) {
-    return "/authors/{authorId}/catalogs/" + id;
+  private String location(final String authorId,  final String id) {
+    return "/authors/" + authorId + "/catalogs/" + id;
   }
 
-  private Completes<Catalog> resolve(final String id) {
-    final Address address = grid.addressFactory().from(id);
-    return grid.actorOf(Catalog.class, address, Definition.has(CatalogEntity.class, Definition.parameters(id)));
+  private Completes<Catalog> resolve(final String authorId,  final String id) {
+    String compositeId =  authorId+ ":" +  id;
+    final Address address = grid.addressFactory().from(compositeId);
+    return grid.actorOf(Catalog.class, address, Definition.has(CatalogEntity.class, Definition.parameters(compositeId)));
   }
 
 }

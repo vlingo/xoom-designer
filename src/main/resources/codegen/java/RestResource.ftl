@@ -90,20 +90,39 @@ public class ${resourceName} extends DynamicResourceHandler {
     return ContentType.of("application/json", "charset=UTF-8");
   }
 
+  <#if compositeId?has_content>
+  private String location(${compositeId}final String id) {
+    return "${uriRoot?replace("/$", "")?replace("{", "\" + ")?replace("}", " + \"")}/" + id;
+  }
+
+  <#if modelProtocol?has_content>
+  private Completes<${modelProtocol}> resolve(${compositeId}final String id) {
+    String compositeId = ${compositeId?replace("final String", "")?replace(",", "+ \":\" +")}id;
+  <#if useAutoDispatch>
+    final Address address = $stage.addressFactory().from(compositeId);
+    return $stage.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(compositeId)));
+  <#else>
+    final Address address = grid.addressFactory().from(compositeId);
+    return grid.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(compositeId)));
+  </#if>
+  }
+  </#if>
+    <#else>
   private String location(final String id) {
     return "${uriRoot?replace("/$", "")}/" + id;
   }
 
   <#if modelProtocol?has_content>
   private Completes<${modelProtocol}> resolve(final String id) {
-    <#if useAutoDispatch>
+  <#if useAutoDispatch>
     final Address address = $stage.addressFactory().from(id);
     return $stage.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(id)));
-    <#else>
+  <#else>
     final Address address = grid.addressFactory().from(id);
     return grid.actorOf(${modelProtocol}.class, address, Definition.has(${modelActor}.class, Definition.parameters(id)));
-    </#if>
+  </#if>
   }
+  </#if>
   </#if>
 
 }

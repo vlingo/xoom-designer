@@ -21,10 +21,18 @@ public class ${queriesActorName} extends StateStoreQueryActor implements ${queri
     super(store);
   }
 
+  <#if compositeId?has_content>
+  @Override
+  public Completes<${dataName}> ${queryByIdMethodName}(${compositeId}String id) {
+    String compositeId = ${compositeId?replace("String", "")?replace(",", "+ \":\" +")}id;
+    return queryStateFor(compositeId, ${dataName}.class, ${dataName}.empty());
+  }
+  <#else>
   @Override
   public Completes<${dataName}> ${queryByIdMethodName}(String id) {
     return queryStateFor(id, ${dataName}.class, ${dataName}.empty());
   }
+  </#if>
 
   @Override
   public Completes<Collection<${dataName}>> ${queryAllMethodName}() {

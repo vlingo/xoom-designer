@@ -2,7 +2,7 @@ public Completes<Response> ${routeSignature} {
     <#list valueObjectInitializers as initializer>
     ${initializer}
     </#list>
-    return resolve(${idName})
+    return resolve(${compositeId}${idName})
             .andThenTo(${modelAttribute} -> ${routeHandlerInvocation})
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(${adapterHandlerInvocation}))))
             .otherwise(noGreeting -> Response.of(NotFound))
