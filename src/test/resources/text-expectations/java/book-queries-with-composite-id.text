@@ -8,5 +8,5 @@ import io.vlingo.xoomapp.infrastructure.BookData;
 @SuppressWarnings("all")
 public interface BookQueries {
   Completes<BookData> bookOf(String authorId, String id);
-  Completes<Collection<BookData>> books();
+  Completes<Collection<BookData>> books(String authorId);
 }

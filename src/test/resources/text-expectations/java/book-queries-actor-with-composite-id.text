@@ -26,7 +26,7 @@ public class BookQueriesActor extends StateStoreQueryActor implements BookQuerie
   }
 
   @Override
-  public Completes<Collection<BookData>> books() {
+  public Completes<Collection<BookData>> books(String authorId) {
     return streamAllOf(BookData.class, new ArrayList<>());
   }
 
