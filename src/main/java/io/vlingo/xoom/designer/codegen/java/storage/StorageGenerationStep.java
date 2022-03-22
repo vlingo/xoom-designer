@@ -19,7 +19,6 @@ import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class StorageGenerationStep extends TemplateProcessingStep {
@@ -33,15 +32,18 @@ public class StorageGenerationStep extends TemplateProcessingStep {
     final Boolean useAnnotations = context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
     final Boolean useCQRS = context.parameterOf(Label.CQRS, Boolean::valueOf);
 
-    final Optional<CodeGenerationParameter> aggregateWithCompositeId = context.parameters().retrieveAll(Label.AGGREGATE)
+    final List<CodeGenerationParameter> aggregatesWithCompositeId = context.parameters().retrieveAll(Label.AGGREGATE)
         .filter(aggregate -> aggregate.retrieveAllRelated(Label.STATE_FIELD).anyMatch(FieldDetail::isCompositeId))
-        .findFirst();
+        .collect(Collectors.toList());
 
-    List<TemplateData> templatesData = aggregateWithCompositeId.map(codeGenerationParameter ->
-            StorageTemplateDataFactory.build(basePackage, appName, context.contents(), codeGenerationParameter, storageType,
-                databases(context), projectionType, useAnnotations, useCQRS))
-        .orElseGet(() -> StorageTemplateDataFactory.build(basePackage, appName, context.contents(), storageType,
-            databases(context), projectionType, useAnnotations, useCQRS));
+    List<TemplateData> templatesData;
+
+    if(aggregatesWithCompositeId.isEmpty())
+      templatesData = StorageTemplateDataFactory.build(basePackage, appName, context.contents(), storageType,
+          databases(context), projectionType, useAnnotations, useCQRS);
+     else
+      templatesData = StorageTemplateDataFactory.build(basePackage, appName, context.contents(), aggregatesWithCompositeId, storageType,
+          databases(context), projectionType, useAnnotations, useCQRS);
 
     return filterConditionally(useAnnotations, templatesData);
   }

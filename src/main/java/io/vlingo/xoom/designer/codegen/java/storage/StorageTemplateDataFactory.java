@@ -45,7 +45,8 @@ public class StorageTemplateDataFactory {
 
   public static List<TemplateData> build(final String basePackage,
                                          final String appName,
-                                         List<Content> contents, final CodeGenerationParameter aggregate,
+                                         final List<Content> contents,
+                                         final List<CodeGenerationParameter> aggregates,
                                          final StorageType storageType,
                                          final Map<Model, DatabaseType> databases,
                                          final ProjectionType projectionType,
@@ -54,7 +55,7 @@ public class StorageTemplateDataFactory {
     final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
     final List<TemplateData> templatesData = new ArrayList<>();
     templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
-    templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents, aggregate));
+    templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, useCQRS, contents, aggregates));
     templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage,
         useCQRS, useAnnotations, storageType, projectionType, templatesData,

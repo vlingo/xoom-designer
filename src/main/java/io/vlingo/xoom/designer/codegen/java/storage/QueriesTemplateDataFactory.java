@@ -21,6 +21,7 @@ import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -41,12 +42,13 @@ public class QueriesTemplateDataFactory {
   public static List<TemplateData> from(final String persistencePackage,
                                         final Boolean useCQRS,
                                         final List<Content> contents,
-                                        final CodeGenerationParameter aggregate) {
+                                        final List<CodeGenerationParameter> aggregates) {
     if (!useCQRS) {
       return Collections.emptyList();
     }
     return ContentQuery.findClassNames(JavaTemplateStandard.AGGREGATE_PROTOCOL, contents)
-        .stream().map(protocol -> createTemplates(protocol, persistencePackage, contents, aggregate))
+        .stream().map(protocol -> createTemplates(protocol, persistencePackage, contents,
+            aggregates.stream().filter(aggregate -> aggregate.value.equals(protocol)).findFirst()))
         .flatMap(templateData -> templateData.stream()).collect(Collectors.toList());
   }
 
@@ -63,12 +65,12 @@ public class QueriesTemplateDataFactory {
   private static List<TemplateData> createTemplates(final String protocol,
                                                     final String persistencePackage,
                                                     final List<Content> contents,
-                                                    final CodeGenerationParameter aggregate) {
+                                                    final Optional<CodeGenerationParameter> aggregate) {
     final TemplateParameters parameters =
         createParameters(persistencePackage, protocol, contents);
 
-    if(protocol.equals(aggregate.value))
-      parameters.and(TemplateParameter.COMPOSITE_ID, resolveCompositeIdFields(aggregate));
+    aggregate.ifPresent(codeGenerationParameter -> parameters.and(TemplateParameter.COMPOSITE_ID,
+        resolveCompositeIdFields(codeGenerationParameter)));
 
     return Arrays.asList(new QueriesTemplateData(protocol, parameters),
         new QueriesActorTemplateData(protocol, parameters));
