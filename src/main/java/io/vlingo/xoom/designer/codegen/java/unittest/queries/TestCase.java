@@ -7,6 +7,8 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.queries;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
@@ -37,8 +39,21 @@ public class TestCase {
 
     this.methodName = testMethodName;
     this.dataDeclarations.addAll(StaticDataDeclaration.generate(testMethodName, aggregate, valueObjects, testDataValues));
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
+    final List<String> compositeIdFields = compositeIdFieldsFrom(aggregate);
+
+    if(compositeIdFields.isEmpty())
+      this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
+    else
+      this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName, compositeIdFields));
+
     this.statements.addAll(TestStatement.with(testMethodName, aggregate, valueObjects, testDataValues));
+  }
+
+  public static List<String> compositeIdFieldsFrom(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> field.value)
+        .collect(Collectors.toList());
   }
 
   public String getMethodName() {
