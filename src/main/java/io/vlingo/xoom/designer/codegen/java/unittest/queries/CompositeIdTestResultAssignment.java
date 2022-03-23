@@ -65,7 +65,7 @@ class CompositeIdTestResultAssignment {
     if (dataIndex > 1)
       return String.format("results = queries.%s(%s).await();", queryMethodName, compositeId);
 
-    return String.format("final Collection<%s> results = queries.%s(%s).await();", dataObjectName, queryMethodName, compositeId);
+    return String.format("Collection<%s> results = queries.%s(%s).await();", dataObjectName, queryMethodName, compositeId);
   }
 
   private static String resolveQueryAllFilteredResultAssignment(final int dataIndex, final String compositeId, final String aggregateName) {

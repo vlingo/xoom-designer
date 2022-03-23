@@ -66,7 +66,7 @@ public class BookQueriesTest {
     stateStore.write("1:1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
     stateStore.write("2:2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
 
-    final Collection<BookData> results = queries.books("1").await();
+    Collection<BookData> results = queries.books("1").await();
     final BookData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
 
     assertEquals(firstData.id, "1");
