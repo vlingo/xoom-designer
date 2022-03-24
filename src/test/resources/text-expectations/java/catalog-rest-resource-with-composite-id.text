@@ -43,7 +43,7 @@ public class CatalogResource extends DynamicResourceHandler {
       .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
   }
 
-  public Completes<Response> update(final String id, final String authorId, final CatalogData data) {
+  public Completes<Response> update(final String authorId, final String id, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
     return resolve(authorId, id)
             .andThenTo(catalog -> catalog.update(data.id, data.authorId, name))

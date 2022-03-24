@@ -111,7 +111,7 @@ public class RouteDetail {
     final String dataParameterDeclaration = String.format(METHOD_PARAMETER_PATTERN, dataClassname, "data");
     final String dataParameter = method.hasAny(Label.METHOD_PARAMETER) ? dataParameterDeclaration : "";
 
-    final String parameters = formatParameters(Stream.of(idParameter, compositeIdParameter, dataParameter));
+    final String parameters = formatParameters(Stream.of(compositeIdParameter, idParameter, dataParameter));
     return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
   }
 
