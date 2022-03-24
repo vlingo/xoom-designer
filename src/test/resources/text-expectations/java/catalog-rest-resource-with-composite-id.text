@@ -59,7 +59,7 @@ public class CatalogResource extends DynamicResourceHandler {
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
   }
 
-  public Completes<Response> catalogOf(final String id, final String authorId) {
+  public Completes<Response> catalogOf(final String authorId, final String id) {
     return $queries.catalogOf(authorId, id)
             .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
             .otherwise(arg -> Response.of(NotFound))

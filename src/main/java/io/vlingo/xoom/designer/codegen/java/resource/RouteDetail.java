@@ -85,7 +85,7 @@ public class RouteDetail {
 
       final String compositeIdParameter = compositeIdParameterFrom(routeSignature);
 
-      final String parameters = formatParameters(Stream.of(arguments, compositeIdParameter));
+      final String parameters = formatParameters(Stream.of(compositeIdParameter, arguments));
       return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
     }
 
