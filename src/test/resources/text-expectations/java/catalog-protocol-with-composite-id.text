@@ -10,7 +10,7 @@ public interface Catalog {
   Completes<CatalogState> withName(final String authorId, final Name name);
 
   static Completes<CatalogState> withName(final Stage stage, final String authorId, final Name name) {
-    final String prefix = String.format("g-{0}:", authorId);
+    final String prefix = String.format("g-authorId:%s", authorId);
     final io.vlingo.xoom.actors.Address _address = stage.addressFactory().uniquePrefixedWith(prefix);
     final Catalog _catalog = stage.actorFor(Catalog.class, Definition.has(CatalogEntity.class, Definition.parameters(_address.idString())), _address);
     return _catalog.withName(authorId, name);

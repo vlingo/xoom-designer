@@ -1,5 +1,5 @@
 <#if compositeId?has_content>static Completes<${stateName}> ${methodName}(${methodParameters}) {
-    final String prefix = String.format("g-{0}:", ${compositeId});
+    final String prefix = String.format("g-${compositeId?replace(",", ":%s,")+":%s"}", ${compositeId});
     final io.vlingo.xoom.actors.Address _address = stage.addressFactory().uniquePrefixedWith(prefix);
     final ${aggregateProtocolName} _${aggregateProtocolVariable} = stage.actorFor(${aggregateProtocolName}.class, Definition.has(${entityName}.class, Definition.parameters(_address.idString())), _address);
     return _${aggregateProtocolVariable}.${methodName}(${methodInvocationParameters});
