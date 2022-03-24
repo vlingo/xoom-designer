@@ -45,7 +45,7 @@ public class CatalogResource extends DynamicResourceHandler {
 
   public Completes<Response> update(final String authorId, final String id, final CatalogData data) {
     final Name name = Name.from(data.name.firstName, data.name.lastName);
-    return resolve(authorId, id)
+    return resolve(id)
             .andThenTo(catalog -> catalog.update(data.id, data.authorId, name))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(CatalogData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
@@ -97,10 +97,9 @@ public class CatalogResource extends DynamicResourceHandler {
     return "/authors/" + authorId + "/catalogs/" + id;
   }
 
-  private Completes<Catalog> resolve(final String authorId,  final String id) {
-    String compositeId =  authorId+ ":" +  id;
-    final Address address = grid.addressFactory().from(compositeId);
-    return grid.actorOf(Catalog.class, address, Definition.has(CatalogEntity.class, Definition.parameters(compositeId)));
+  private Completes<Catalog> resolve(final String id) {
+    final Address address = grid.addressFactory().from(id);
+    return grid.actorOf(Catalog.class, address, Definition.has(CatalogEntity.class, Definition.parameters(id)));
   }
 
 }
