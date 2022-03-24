@@ -21,8 +21,7 @@ public class BookQueriesActor extends StateStoreQueryActor implements BookQuerie
 
   @Override
   public Completes<BookData> bookOf(String authorId, String id) {
-    String compositeId =  authorId+ ":" + id;
-    return queryStateFor(compositeId, BookData.class, BookData.empty());
+    return queryStateFor(id, BookData.class, BookData.empty());
   }
 
   @Override

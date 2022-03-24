@@ -24,8 +24,7 @@ public class ${queriesActorName} extends StateStoreQueryActor implements ${queri
   <#if compositeId?has_content>
   @Override
   public Completes<${dataName}> ${queryByIdMethodName}(${compositeId}String id) {
-    String compositeId = ${compositeId?replace("String", "")?replace(",", "+ \":\" +")}id;
-    return queryStateFor(compositeId, ${dataName}.class, ${dataName}.empty());
+    return queryStateFor(id, ${dataName}.class, ${dataName}.empty());
   }
 
   @Override
