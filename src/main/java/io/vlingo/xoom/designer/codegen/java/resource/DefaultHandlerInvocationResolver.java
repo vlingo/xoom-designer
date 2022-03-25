@@ -71,7 +71,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
       routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
     }
-    final String compositeId = extractCompositeIdFrom(routePath);
+    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
 
     return !compositeId.isEmpty()? compositeId : "";
   }

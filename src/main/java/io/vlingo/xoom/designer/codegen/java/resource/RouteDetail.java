@@ -15,6 +15,7 @@ import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.java.storage.QueriesDetail;
 import io.vlingo.xoom.http.Method;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -83,7 +84,7 @@ public class RouteDetail {
       final String arguments =
           Formatters.Arguments.SIGNATURE_DECLARATION.format(routeSignature);
 
-      final String compositeIdParameter = compositeIdParameterFrom(routeSignature);
+      final String compositeIdParameter = String.join(",", compositeIdParameterFrom(routeSignature));
 
       final String parameters = formatParameters(Stream.of(compositeIdParameter, arguments));
       return String.format(METHOD_SIGNATURE_PATTERN, routeSignature.value, parameters);
@@ -104,7 +105,7 @@ public class RouteDetail {
         routeSignature.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
             String.format(METHOD_PARAMETER_PATTERN, "String", "id") : "";
 
-    final String compositeIdParameter = compositeIdParameterFrom(routeSignature);
+    final String compositeIdParameter = String.join(",", compositeIdParameterFrom(routeSignature));
 
     final CodeGenerationParameter method = AggregateDetail.methodWithName(routeSignature.parent(), routeSignature.value);
     final String dataClassname = JavaTemplateStandard.DATA_OBJECT.resolveClassname(routeSignature.parent().value);
@@ -122,26 +123,33 @@ public class RouteDetail {
         .collect(Collectors.joining(", "));
   }
 
-  private static String compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
+  private static List<String> compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
     String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
     if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
       routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
     }
-    final String compositeId = extractCompositeIdFrom(routePath);
+    final List<String> compositeIds = extractCompositeIdFrom(routePath);
 
-    return !compositeId.isEmpty()? String.format(METHOD_PARAMETER_PATTERN, "String", compositeId) : "";
+    return compositeIds.stream()
+        .map( compositeId -> String.format(METHOD_PARAMETER_PATTERN, "String", compositeId))
+        .collect(Collectors.toList());
   }
 
-  public static String extractCompositeIdFrom(String routePath) {
+  public static List<String> extractCompositeIdFrom(String routePath) {
+    final List<String> result = new ArrayList<>();
+
     final String regex = "\\{(.*?)\\}";
 
     final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
     final Matcher matcher = pattern.matcher(routePath);
 
-    if(!matcher.find())
-      return "";
+    while (matcher.find()) {
+      final String match = matcher.group(1);
+      if(!match.equals("id"))
+        result.add(match);
+    }
 
-    return matcher.group(1);
+    return result;
   }
 
   private static boolean hasValidMethodSignature(final String signature) {

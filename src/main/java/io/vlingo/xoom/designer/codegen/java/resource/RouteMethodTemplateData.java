@@ -93,7 +93,7 @@ public class RouteMethodTemplateData extends TemplateData {
     if(!routePath.startsWith(routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT))) {
       routePath = routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
     }
-    final String compositeId = extractCompositeIdFrom(routePath);
+    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
 
     return !compositeId.isEmpty() && !compositeId.equals("id")? compositeId + ", " : "";
   }
