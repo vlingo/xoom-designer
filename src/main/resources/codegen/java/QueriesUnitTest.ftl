@@ -57,11 +57,19 @@ public class ${queriesUnitTestName} {
   }
 
   </#list>
+  <#if compositeId?has_content>
+  @Test
+  public void ${queryByIdMethodName}EmptyResult(){
+    final ${dataObjectName} result = queries.${queryByIdMethodName}(${compositeId}"1").await();
+    assertEquals("", result.id);
+  }
+  <#else>
   @Test
   public void ${queryByIdMethodName}EmptyResult(){
     final ${dataObjectName} result = queries.${queryByIdMethodName}("1").await();
     assertEquals("", result.id);
   }
+  </#if>
 
   private static final StateStore.WriteResultInterest NOOP_WRITER = new StateStore.WriteResultInterest() {
     @Override

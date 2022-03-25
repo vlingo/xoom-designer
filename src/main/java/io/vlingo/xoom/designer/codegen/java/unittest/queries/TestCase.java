@@ -39,7 +39,13 @@ public class TestCase {
 
     this.methodName = testMethodName;
     this.dataDeclarations.addAll(StaticDataDeclaration.generate(testMethodName, aggregate, valueObjects, testDataValues));
-    this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
+    final List<String> compositeIdFields = compositeIdFieldsFrom(aggregate);
+
+    if(compositeIdFields.isEmpty())
+      this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName));
+    else
+      this.preliminaryStatements.addAll(PreliminaryStatement.with(testMethodName, compositeIdFields));
+
     this.statements.addAll(TestStatement.with(testMethodName, aggregate, valueObjects, testDataValues));
   }
 

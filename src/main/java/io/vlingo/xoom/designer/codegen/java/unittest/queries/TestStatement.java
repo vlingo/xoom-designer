@@ -10,8 +10,10 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -40,8 +42,24 @@ public class TestStatement {
                         final CodeGenerationParameter aggregate,
                         final List<CodeGenerationParameter> valueObjects,
                         final TestDataValueGenerator.TestDataValues testDataValues) {
-    this.resultAssignment.addAll(generateExecutions(dataIndex, testMethodName, aggregate));
+    final List<String> compositeIdFields = TestCase.compositeIdFieldsFrom(aggregate);
+    if(compositeIdFields.isEmpty())
+      this.resultAssignment.addAll(generateExecutions(dataIndex, testMethodName, aggregate));
+    else
+      this.resultAssignment.addAll(generateExecutionsWithCompositeId(dataIndex, testMethodName, aggregate, compositeIdFields));
     this.assertions.addAll(generateAssertions(dataIndex, aggregate, valueObjects, testDataValues));
+  }
+
+  private Collection<String> generateExecutionsWithCompositeId(int dataIndex, String testMethodName, CodeGenerationParameter aggregate, List<String> compositeIdFields) {
+    final CompositeIdTestResultAssignment formatter =
+        CompositeIdTestResultAssignment.forMethod(testMethodName);
+
+    final String compositeIdConcatenation = compositeIdFields
+        .stream().map(id -> "\"" + dataIndex + "\"").collect(Collectors.joining(","));
+
+    return Stream.of(formatter.formatMainResult(dataIndex, compositeIdConcatenation, aggregate.value),
+            formatter.formatFilteredResult(dataIndex, compositeIdConcatenation, aggregate.value))
+        .filter(assignment -> !assignment.isEmpty()).collect(toList());
   }
 
   private List<String> generateExecutions(final int dataIndex,
