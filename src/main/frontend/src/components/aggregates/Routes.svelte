@@ -9,6 +9,7 @@
   export let rootPath;
   export let routes;
   export let methods;
+  export let stateFields;
 
   const addRoute = () => {
     routes = [...routes, { path: "", httpMethod: "GET", aggregateMethod: "", requireEntityLoad: false }]
@@ -26,17 +27,46 @@
     })
   }
 
-  function resolvePathVariableMessage() {
-    return rootPath.includes("{") ? "Path variables in the root path are valid but need to be manually mapped in the generated code." : "";
+  function resolvePathVariableMessage(rootPath) {
+    return rootPath.includes("{") && !pathVariablesMatchCompositeIdFields(pathVariablesFrom(rootPath)) ?
+      "Path variables name in the root path need to match Composite Id state fields name." : "";
+  }
+
+  const pathVariablesMatchCompositeIdFields = (pathVariables) => {
+    return stateFields
+	    .filter(field => field.type == "CompositeId")
+	    .map(field => field.name)
+	    .every(name => pathVariables.includes(name));
+  }
+
+  const pathVariablesFrom = (rootPath) => {
+		const regex = /\{(.*?)\}/gm;
+		let matches;
+		let result = [];
+
+		while ((matches = regex.exec(rootPath)) !== null) {
+	    if (matches.index === regex.lastIndex) {
+	        regex.lastIndex++;
+	    }
+
+	    matches.forEach((match, groupIndex) => {
+				result.push(match)
+	    });
+		}
+    return result;
   }
 
   function resolveErrorMessages() {
-    return [requireRule(rootPath), rootPathRule(rootPath)];
+    return [requireRule(rootPath), rootPathRule(rootPath), resolvePathVariableMessage(rootPath)];
   }
 
   function hasErrorMessages() {
     const errorMessages = resolveErrorMessages();
     return errorMessages.some(m => m && m.length > 0);
+  }
+
+  export function isValidRootPath(rootPath) {
+    return resolvePathVariableMessage(rootPath).length == 0;
   }
 </script>
 
@@ -47,12 +77,12 @@
       label="Root Path"
       required
       bind:value={rootPath}
-      invalid={[requireRule(rootPath), rootPathRule(rootPath)].some(f => f)}
+      invalid={[requireRule(rootPath), rootPathRule(rootPath), resolvePathVariableMessage(rootPath)].some(f => f)}
     />
     <ErrorWarningTooltip
-      type={hasErrorMessages() ? 'error' : 'warning'}
-      names={hasErrorMessages() ? ['Root path', 'Root path'] : ['', '']} 
-      messages={hasErrorMessages() ? [requireRule(rootPath), rootPathRule(rootPath)] : [resolvePathVariableMessage()]}
+      type={'error'}
+      names={hasErrorMessages() ? ['Root path', 'Root path', ''] : ['', '', '']}
+      messages={hasErrorMessages() ? [requireRule(rootPath), rootPathRule(rootPath), resolvePathVariableMessage(rootPath)] : [undefined]}
     />
   </div>
 

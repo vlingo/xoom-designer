@@ -1,10 +1,10 @@
-import { writable } from 'svelte/store';
-import { defaultContext } from './context';
-import { isMobileStore, createLocalStore } from './utils';
-import { defaultPersistenceSettings } from './persistence';
-import { defaultSettings, defaultGenerationSettings } from './generation';
-import { defaultDeploymentSettings } from './deployment';
-import { defaultSchemataSettings } from './schemata';
+import {writable} from 'svelte/store';
+import {defaultContext} from './context';
+import {createLocalStore, isMobileStore} from './utils';
+import {defaultPersistenceSettings} from './persistence';
+import {defaultGenerationSettings, defaultSettings} from './generation';
+import {defaultDeploymentSettings} from './deployment';
+import {defaultSchemataSettings} from './schemata';
 import Validation from '../util/Validation';
 
 export const isMobile = isMobileStore();
@@ -17,7 +17,7 @@ export const valueObjectTypes = createLocalStore('valueObjectTypes', [])
 export const currentAggregate = writable(getLocalStorage("currentAggregate"));
 export const projectGenerationIndex = createLocalStore('projectGenerationIndex', 1);
 export const generatedProjectsPaths = createLocalStore('generatedProjectsPaths', []);
-export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime'];
+export const simpleTypes = ['int', 'double', 'String', 'float', 'short', 'byte', 'boolean', 'long', 'char', 'Date', 'DateTime', 'CompositeId'];
 export const settings = createWritableSettings('settings', defaultSettings, onSettingsChange);
 export const schemataData = createLocalStore('schemataData', {
 	organizationsStore: [],
