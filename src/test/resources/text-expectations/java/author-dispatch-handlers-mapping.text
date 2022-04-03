@@ -7,8 +7,8 @@ import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Two;
 import io.vlingo.xoom.turbo.annotation.autodispatch.HandlerEntry;
 
 import io.vlingo.xoomapp.infrastructure.*;
-import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
+import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.model.author.AuthorState;
 import io.vlingo.xoomapp.model.*;
 import java.util.Collection;

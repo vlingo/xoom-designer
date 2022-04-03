@@ -17,6 +17,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.java.resource.RouteDetail;
 import io.vlingo.xoom.designer.codegen.java.storage.QueriesDetail;
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard.QUERIES;
 import static io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard.*;
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.*;
+import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
@@ -64,9 +66,21 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                     .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, standard().resolveClassname(aggregateName))
                     .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                     .and(HANDLER_ENTRIES, new ArrayList<String>())
-                    .addImports(resolveImports(aggregate, contents));
+                    .addImports(resolveImports(aggregate, contents))
+                    .and(COMPOSITE_ID, resolveCompositeIdFields(aggregate));
 
     this.dependOn(AutoDispatchHandlerEntryTemplateData.from(dialect, aggregate, valueObjects));
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter method) {
+    final List<String> compositeIdFields = method.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
   @Override
@@ -105,7 +119,10 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
     final Set<String> valueObjectImports =
             ValueObjectDetail.resolveImports(contents, RouteDetail.findInvolvedStateFieldTypes(aggregate));
 
-    return Stream.of(aggregateRelatedImports, valueObjectImports).flatMap(Set::stream).collect(Collectors.toSet());
+    return Stream.of(aggregateRelatedImports, valueObjectImports)
+        .flatMap(Set::stream)
+        .sorted()
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   @SuppressWarnings("serial")

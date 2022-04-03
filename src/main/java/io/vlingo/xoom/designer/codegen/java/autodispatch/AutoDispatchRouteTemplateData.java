@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.*;
+import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchRouteTemplateData extends TemplateData {
 
@@ -47,7 +48,19 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                     .and(REQUIRE_ENTITY_LOADING, route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))
                     .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(route))
                     .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, JavaTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregate.value))
-                    .and(METHOD_NAME, route.value);
+                    .and(METHOD_NAME, route.value)
+                    .and(COMPOSITE_ID, resolveCompositeIdFields(aggregate));
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter method) {
+    final List<String> compositeIdFields = method.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> "@Id final String " + field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
   private boolean isRetrievalRoute(final CodeGenerationParameter route) {

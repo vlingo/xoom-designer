@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import io.vlingo.xoom.designer.codegen.java.model.MethodScope;
 import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.turbo.ComponentRegistry;
@@ -27,6 +28,7 @@ import static io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard.AGGREGAT
 import static io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard.DATA_OBJECT;
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.*;
 import static io.vlingo.xoom.designer.codegen.java.formatting.Formatters.Variables.Style.VALUE_OBJECT_INITIALIZER;
+import static java.util.stream.Collectors.toList;
 
 public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
 
@@ -59,7 +61,19 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                     .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                     .and(INDEX_NAME, formatter.staticConstant(route.value))
                     .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
-                    .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers);
+                    .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers)
+                    .and(COMPOSITE_ID, resolveCompositeIdFields(aggregate));
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter method) {
+    final List<String> compositeIdFields = method.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
   private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
