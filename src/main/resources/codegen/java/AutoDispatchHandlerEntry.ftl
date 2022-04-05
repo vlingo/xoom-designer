@@ -1,11 +1,11 @@
-<#macro compositeIdToString input>
-${input?split(", ")?map(id -> id?trim)?filter(id -> !id?has_content)?map(id -> "String")?join(", ")+", "}</#macro>
+<#macro compositeIdFieldType input>
+${input?split(", ")?map(id -> id?trim)?filter(id -> id?has_content)?map(id -> "String")?join(", ")+", "}</#macro>
 <#macro handlerFrom input>
-  <#assign elements=input?split(", ")?map(id -> id?trim)?filter(id -> !id?has_content) />
-<#if !input?has_content>Three<#elseif elements?size == 1>Four<#else>Five</#if></#macro>
+  <#assign elements=input?split(",")?filter(id -> id?has_content) />
+<#if elements?size == 1>Three<#elseif elements?size == 2>Four<#else>Five</#if></#macro>
 <#if compositeId?has_content>
 <#if factoryMethod>
-public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${stateName}>, Stage, <@compositeIdToString compositeId/>${dataName}>> ${indexName}_HANDLER =
+public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${stateName}>, Stage, <@compositeIdFieldType compositeId/>${dataName}>> ${indexName}_HANDLER =
           HandlerEntry.of(${indexName}, ($stage, ${compositeId}data) -> {
               <#list valueObjectInitializers as initializer>
               ${initializer}
@@ -13,7 +13,7 @@ public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${stateNa
             return ${aggregateProtocolName}.${methodName}(${methodInvocationParameters});
           });
 <#else>
-public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${stateName}>, ${aggregateProtocolName}, <@compositeIdToString compositeId/>${dataName}>> ${indexName}_HANDLER =
+public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${stateName}>, ${aggregateProtocolName}, <@compositeIdFieldType compositeId/>${dataName}>> ${indexName}_HANDLER =
           HandlerEntry.of(${indexName}, (${aggregateProtocolVariable}, ${compositeId}data) -> {
               <#list valueObjectInitializers as initializer>
               ${initializer}
