@@ -4,7 +4,7 @@ import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.common.Completes;
 <#if compositeId?has_content>
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Four;
-  <#if compositeId?length == 2>
+  <#if compositeId?split(", ")?map(id -> id?trim)?filter(id -> id?has_content)?size == 2>
 import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Five;
   </#if>
 </#if>
@@ -19,13 +19,13 @@ import ${import.qualifiedClassName};
 import java.util.Collection;
 </#if>
 
-<#macro compositeIdToString input>
-${input?split(", ")?map(id -> id?trim)?filter(id -> !id?has_content)?map(id -> "String")?join(", ") + ", "}</#macro>
-<#macro compositeIdToLastString input>
-${input?split(", ")?map(id -> id?trim)?filter(id -> !id?has_content)?map(id -> "String")?join(", ")}</#macro>
+<#macro compositeIdFieldType input>
+${input?split(", ")?map(id -> id?trim)?filter(id -> id?has_content)?map(id -> "String")?join(", ") + ", "}</#macro>
+<#macro lastCompositeIdFieldType input>
+${input?split(", ")?map(id -> id?trim)?filter(id -> id?has_content)?map(id -> "String")?join(", ")}</#macro>
 <#macro handlerFrom input>
-  <#assign elements=input?split(", ")?map(id -> id?trim)?filter(id -> !id?has_content) />
-<#if !elements?has_content>Three<#elseif elements?size == 1>Four<#else>Five</#if></#macro>
+  <#assign elements=input?split(",")?filter(id -> id?has_content) />
+<#if elements?size == 1>Three<#elseif elements?size == 2>Four<#else>Five</#if></#macro>
 public class ${autoDispatchHandlersMappingName} {
 
   <#list handlerIndexes as index>
@@ -41,10 +41,10 @@ public class ${autoDispatchHandlersMappingName} {
   <#if compositeId?has_content>
   <#if useCQRS>
     <#assign queryAllCompositeId=compositeId?substring(0, compositeId?length - 2) />
-  public static final HandlerEntry<<@handlerFrom queryAllCompositeId/><Completes<Collection<${dataName}>>, ${queriesName}, <@compositeIdToLastString compositeId/>>> QUERY_ALL_HANDLER =
+  public static final HandlerEntry<<@handlerFrom queryAllCompositeId/><Completes<Collection<${dataName}>>, ${queriesName}, <@lastCompositeIdFieldType compositeId/>>> QUERY_ALL_HANDLER =
           HandlerEntry.of(${queryAllIndexName}, ${queriesName}::${queryAllMethodName});
 
-  public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${dataName}>, ${queriesName}, <@compositeIdToString compositeId/>String>> QUERY_BY_ID_HANDLER =
+  public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${dataName}>, ${queriesName}, <@compositeIdFieldType compositeId/>String>> QUERY_BY_ID_HANDLER =
           HandlerEntry.of(${queryByIdIndexName}, ${queriesName}::${queryByIdMethodName});
   </#if>
   <#else>
