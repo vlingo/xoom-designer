@@ -33,8 +33,12 @@
   }
 
   const pathVariablesMatchCompositeIdFields = (pathVariables) => {
-    return stateFields
-	    .filter(field => field.type == "CompositeId")
+    const compositeIdFields = stateFields .filter(field => field.type == "CompositeId");
+
+    if(compositeIdFields.length != pathVariables.length)
+      return false;
+
+    return compositeIdFields
 	    .map(field => field.name)
 	    .every(name => pathVariables.includes(name));
   }
@@ -48,10 +52,7 @@
 	    if (matches.index === regex.lastIndex) {
 	        regex.lastIndex++;
 	    }
-
-	    matches.forEach((match, groupIndex) => {
-				result.push(match)
-	    });
+	    result.push(matches[1])
 		}
     return result;
   }
