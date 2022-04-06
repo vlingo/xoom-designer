@@ -18,6 +18,7 @@ import io.vlingo.xoom.designer.codegen.java.formatting.AggregateMethodInvocation
 import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
 import io.vlingo.xoom.designer.codegen.java.model.MethodScope;
 import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.codegen.java.resource.RouteDetail;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
@@ -50,6 +51,8 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
     final List<String> valueObjectInitializers =
             Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, dialect, method, valueObjects.stream());
 
+    final String compositeId = AggregateDetail.resolveCompositeIdFieldsNames(aggregate);
+
     this.parameters =
             TemplateParameters.with(METHOD_NAME, route.value)
                     .and(FACTORY_METHOD, factoryMethod)
@@ -60,7 +63,9 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
                     .and(INDEX_NAME, formatter.staticConstant(route.value))
                     .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
                     .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers)
-                    .and(COMPOSITE_ID, AggregateDetail.resolveCompositeIdFieldsNames(aggregate));
+                    .and(COMPOSITE_ID, compositeId)
+                    .and(COMPOSITE_ID_TYPE, RouteDetail.resolveCompositeIdTypeFrom(compositeId))
+                    .and(HANDLER_TYPE, RouteDetail.resolveHandlerTypeFrom(compositeId));
   }
 
   private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {

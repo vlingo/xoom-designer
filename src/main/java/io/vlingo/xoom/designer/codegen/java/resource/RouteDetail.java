@@ -114,6 +114,49 @@ public class RouteDetail {
     return !compositeId.isEmpty()? compositeId : "";
   }
 
+  public static String resolveCompositeIdTypeFrom(String compositeId) {
+    final String types = Arrays.stream(compositeId.split(", "))
+        .map(String::trim).filter(id -> !id.isEmpty()).map(id -> "String").collect(Collectors.joining(", "));
+
+    if(types.isEmpty())
+      return "";
+
+    return String.format("%s, ", types);
+  }
+
+  public static String resolveQueryAllCompositeIdTypeFrom(String compositeId) {
+    final String types = Arrays.stream(compositeId.split(", "))
+        .map(String::trim).filter(id -> !id.isEmpty()).map(id -> "String").collect(Collectors.joining(", "));
+
+    if(types.isEmpty())
+      return "";
+
+    return String.format(", %s", types);
+  }
+  public static String resolveHandlerTypeFrom(String compositeId) {
+    final List<String> elements = Arrays.stream(compositeId.split(",")).filter(id -> !id.isEmpty()).collect(Collectors.toList());
+
+    if(elements.isEmpty() || elements.size() == 1)
+      return "Three";
+    else if(elements.size() == 2)
+      return "Four";
+    else
+      return "Five";
+  }
+
+  public static String resolveQueryAllHandlerTypeFrom(String compositeId) {
+    final List<String> elements = Arrays.stream(compositeId.split(", ")).filter(id -> !id.isEmpty()).collect(Collectors.toList());
+
+    if(elements.isEmpty())
+     return "Two";
+    if(elements.size() == 1)
+      return "Three";
+    else if(elements.size() == 2)
+      return "Four";
+    else
+      return "Five";
+  }
+
   private static String resolveRoutePath(CodeGenerationParameter routeSignatureParameter) {
     String routePath = routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_PATH);
     if(!routePath.startsWith(routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT))) {

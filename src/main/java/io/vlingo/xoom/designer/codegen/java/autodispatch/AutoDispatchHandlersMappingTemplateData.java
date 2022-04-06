@@ -51,6 +51,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                                                     final Boolean useCQRS) {
     this.aggregateName = aggregate.value;
     this.codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
+    final String compositeId = AggregateDetail.resolveCompositeIdFieldsNames(aggregate);
     this.parameters =
             TemplateParameters.with(PACKAGE_NAME, resolvePackage(basePackage))
                     .and(AGGREGATE_PROTOCOL_NAME, aggregateName)
@@ -66,7 +67,11 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
                     .and(HANDLER_INDEXES, resolveHandlerIndexes(aggregate, useCQRS))
                     .and(HANDLER_ENTRIES, new ArrayList<String>())
                     .addImports(resolveImports(aggregate, contents))
-                    .and(COMPOSITE_ID, AggregateDetail.resolveCompositeIdFieldsNames(aggregate));
+                    .and(COMPOSITE_ID, compositeId)
+                    .and(COMPOSITE_ID_TYPE, RouteDetail.resolveCompositeIdTypeFrom(compositeId))
+                    .and(QUERY_ALL_COMPOSITE_ID_TYPE, RouteDetail.resolveQueryAllCompositeIdTypeFrom(compositeId))
+                    .and(QUERY_BY_ID_HANDLER_TYPE, RouteDetail.resolveHandlerTypeFrom(compositeId))
+                    .and(QUERY_ALL_HANDLER_TYPE, RouteDetail.resolveQueryAllHandlerTypeFrom(compositeId));
 
     this.dependOn(AutoDispatchHandlerEntryTemplateData.from(dialect, aggregate, valueObjects));
   }

@@ -170,7 +170,12 @@ public enum TemplateParameter implements ParameterKey {
   KUBERNETES_POD_NAME("kubernetesPodName"),
   KUBERNETES_IMAGE("kubernetesImage"),
   DOCKERFILE("dockerfile"),
-  COMPOSITE_ID("compositeId");
+  COMPOSITE_ID("compositeId"),
+  COMPOSITE_ID_TYPE("compositeIdType"),
+  HANDLER_TYPE("handlerType"),
+  QUERY_BY_ID_HANDLER_TYPE("queryByIdHandlerType"),
+  QUERY_ALL_HANDLER_TYPE("queryAllHandlerType"),
+  QUERY_ALL_COMPOSITE_ID_TYPE("queryAllCompositeIdType");
 
   public final String key;
 

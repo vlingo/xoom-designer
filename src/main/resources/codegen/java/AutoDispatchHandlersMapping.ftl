@@ -19,21 +19,6 @@ import ${import.qualifiedClassName};
 import java.util.Collection;
 </#if>
 
-<#function compositeIdFormatter input>
-<#return input?split(", ")?map(id -> id?trim)?filter(id -> id?has_content)?map(id -> "String")?join(", ") />
-</#function>
-<#macro compositeIdFieldType input>
-  <#assign types=compositeIdFormatter(input) />
-<#if types?has_content>${types + ", "}</#if></#macro>
-<#macro lastCompositeIdFieldType input>
-  <#assign lastType=compositeIdFormatter(input) />
-<#if lastType?has_content>${", " + lastType}</#if></#macro>
-<#macro handlerFrom input>
-  <#assign elements=input?split(",")?filter(id -> id?has_content) />
-<#if !elements?has_content>Three<#elseif elements?size == 1>Three<#elseif elements?size == 2>Four<#else>Five</#if></#macro>
-<#macro queryAllHandlerFrom input>
-  <#assign elements=input?split(",")?filter(id -> id?has_content) />
-<#if !elements?has_content>Two<#elseif elements?size == 1>Three<#elseif elements?size == 2>Four<#else>Five</#if></#macro>
 public class ${autoDispatchHandlersMappingName} {
 
   <#list handlerIndexes as index>
@@ -52,10 +37,10 @@ public class ${autoDispatchHandlersMappingName} {
     <#assign queryAllCompositeId=compositeId />
   </#if>
   <#if useCQRS>
-  public static final HandlerEntry<<@queryAllHandlerFrom queryAllCompositeId/><Completes<Collection<${dataName}>>, ${queriesName}<@lastCompositeIdFieldType compositeId/>>> QUERY_ALL_HANDLER =
+  public static final HandlerEntry<${queryAllHandlerType}<Completes<Collection<${dataName}>>, ${queriesName}${queryAllCompositeIdType}>> QUERY_ALL_HANDLER =
           HandlerEntry.of(${queryAllIndexName}, ${queriesName}::${queryAllMethodName});
 
-  public static final HandlerEntry<<@handlerFrom compositeId/><Completes<${dataName}>, ${queriesName}, <@compositeIdFieldType compositeId/>String>> QUERY_BY_ID_HANDLER =
+  public static final HandlerEntry<${queryByIdHandlerType}<Completes<${dataName}>, ${queriesName}, ${compositeIdType}String>> QUERY_BY_ID_HANDLER =
           HandlerEntry.of(${queryByIdIndexName}, ${queriesName}::${queryByIdMethodName});
   </#if>
 
