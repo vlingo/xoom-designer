@@ -88,6 +88,6 @@ public class AuthorResourceHandlers {
           HandlerEntry.of(AUTHORS, AuthorQueries::authors);
 
   public static final HandlerEntry<Three<Completes<AuthorData>, AuthorQueries, String>> QUERY_BY_ID_HANDLER =
-          HandlerEntry.of(AUTHOR_OF, ($queries, id) -> $queries.authorOf(id));
+          HandlerEntry.of(AUTHOR_OF, AuthorQueries::authorOf);
 
 }
