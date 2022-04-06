@@ -21,8 +21,6 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vlingo.xoom.designer.codegen.java.resource.RouteDetail.extractCompositeIdFrom;
-
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
   private final static String COMMAND_PATTERN = "%s.%s(%s)";
@@ -60,20 +58,10 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     final String arguments =
             Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
 
-    final String compositeIdParameter = compositeIdParameterFrom(route);
+    final String compositeIdParameter = RouteDetail.resolveCompositeIdParameterFrom(route);
 
     final String parameters = formatParameters(Stream.of(compositeIdParameter, arguments));
     return String.format(QUERY_PATTERN, route.value, parameters);
-  }
-
-  private static String compositeIdParameterFrom(CodeGenerationParameter routeSignature) {
-    String routePath = routeSignature.retrieveRelatedValue(Label.ROUTE_PATH);
-    if(!routePath.startsWith(routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT))) {
-      routePath = routeSignature.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
-    }
-    final String compositeId = String.join(",", extractCompositeIdFrom(routePath));
-
-    return !compositeId.isEmpty()? compositeId : "";
   }
 
   public static String formatParameters(Stream<String> arguments) {
