@@ -50,7 +50,7 @@ public class CodeGenerationContextMapper {
                                       final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
+    this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.withName(data.platformSettings.lang.toUpperCase()));
     this.context = CodeGenerationContextFactory.build(logger, parameters);
     this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     this.logger = logger;

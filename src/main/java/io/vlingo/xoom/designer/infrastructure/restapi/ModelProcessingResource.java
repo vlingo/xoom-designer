@@ -9,6 +9,9 @@ package io.vlingo.xoom.designer.infrastructure.restapi;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.ModelProcessingInformation;
 import io.vlingo.xoom.designer.ModelProcessingManager;
@@ -48,6 +51,12 @@ public class ModelProcessingResource extends DynamicResourceHandler {
   }
 
   public Completes<Response> startGeneration(final DesignerModel model) {
+    final CodeElementFormatter codeElementFormatter =
+            CodeElementFormatter.with(Dialect.withName(model.platformSettings.lang.toUpperCase()),
+                    ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+
     if(model.platformSettings.lang.equalsIgnoreCase("java"))
       this.modelProcessingManager = new ModelProcessingManager(ComponentRegistry.withName("codeGenerationSteps"));
     else
