@@ -1,10 +1,7 @@
 package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
-import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
@@ -65,53 +62,63 @@ public class Configuration {
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   public static void load() {
-    final CodeElementFormatter codeElementFormatter =
-            CodeElementFormatter.with(Dialect.findDefault(),
-                    ReservedWordsHandler.usingSuffix("_"));
-
-    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
-    ComponentRegistry.register("codeGenerationSteps",codeGenerationSteps());
+    ComponentRegistry.register("codeGenerationSteps", codeGenerationSteps());
+    ComponentRegistry.register("cSharpCodeGenerationSteps", cSharpCodeGenerationSteps());
   }
 
   private static List<CodeGenerationStep> codeGenerationSteps() {
     return Arrays.asList(
-            //Preliminary
-            new CodeGenerationParameterValidationStep(),
-            new MainClassResolverStep(),
-            new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
-            new TemporaryTaskFolderCreationStep(),
-            //Java
-            new ReadmeFileGenerationStep(),
-            new ApplicationSettingsGenerationStep(),
-            new ValueObjectGenerationStep(),
-            new ModelGenerationStep(),
-            new DataObjectGenerationStep(),
-            new ProjectionGenerationStep(),
-            new StorageGenerationStep(),
-            new RestResourceGenerationStep(),
-            new AutoDispatchMappingGenerationStep(),
-            new ExchangeGenerationStep(),
-            new SchemataGenerationStep(),
-            new BootstrapGenerationStep(),
-            new EntityUnitTestGenerationStep(),
-            new QueriesUnitTestGenerationStep(),
-            new ProjectionUnitTestGenerationStep(),
-            new RestResourceAbstractUnitTestGenerationStep(),
-            new RestResourceUnitTestGenerationStep(),
-            new ClusterSettingsGenerationStep(),
-            new DesignerModelGenerationStep(),
-            new DockerfileGenerationStep(),
-            new KubernetesManifestFileGenerationStep(),
-            //React
-            new StaticFilesGenerationStep(),
-            new LayoutGenerationStep(),
-            new AggregateManagementGenerationStep(),
-            //Concluding
-            new ContentCreationStep(),
-            new MavenWrapperInstallationStep(),
-            new SchemaPushStep(withType(CommandExecutionProcess.class)),
-            new SchemaPullStep(withType(CommandExecutionProcess.class)),
-            new StagingFolderCleanUpStep(Phase.POST_GENERATION)
+        //Preliminary
+        new CodeGenerationParameterValidationStep(),
+        new MainClassResolverStep(),
+        new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
+        new TemporaryTaskFolderCreationStep(),
+        //Java
+        new ReadmeFileGenerationStep(),
+        new ApplicationSettingsGenerationStep(),
+        new ValueObjectGenerationStep(),
+        new ModelGenerationStep(),
+        new DataObjectGenerationStep(),
+        new ProjectionGenerationStep(),
+        new StorageGenerationStep(),
+        new RestResourceGenerationStep(),
+        new AutoDispatchMappingGenerationStep(),
+        new ExchangeGenerationStep(),
+        new SchemataGenerationStep(),
+        new BootstrapGenerationStep(),
+        new EntityUnitTestGenerationStep(),
+        new QueriesUnitTestGenerationStep(),
+        new ProjectionUnitTestGenerationStep(),
+        new RestResourceAbstractUnitTestGenerationStep(),
+        new RestResourceUnitTestGenerationStep(),
+        new ClusterSettingsGenerationStep(),
+        new DesignerModelGenerationStep(),
+        new DockerfileGenerationStep(),
+        new KubernetesManifestFileGenerationStep(),
+        //React
+        new StaticFilesGenerationStep(),
+        new LayoutGenerationStep(),
+        new AggregateManagementGenerationStep(),
+        //Concluding
+        new ContentCreationStep(),
+        new MavenWrapperInstallationStep(),
+        new SchemaPushStep(withType(CommandExecutionProcess.class)),
+        new SchemaPullStep(withType(CommandExecutionProcess.class)),
+        new StagingFolderCleanUpStep(Phase.POST_GENERATION)
+    );
+  }
+
+  private static List<CodeGenerationStep> cSharpCodeGenerationSteps() {
+    return Arrays.asList(
+        //Preliminary
+        new CodeGenerationParameterValidationStep(),
+        new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
+        new TemporaryTaskFolderCreationStep(),
+        //C#
+        new io.vlingo.xoom.designer.codegen.csharp.applicationsettings.ApplicationSettingsGenerationStep(),
+        //Concluding
+        new ContentCreationStep(),
+        new StagingFolderCleanUpStep(Phase.POST_GENERATION)
     );
   }
 

@@ -18,7 +18,7 @@ public class DesignerModelTest {
   @Test
   public void testThatGenerationSettingsDataIsValidated() {
     final DesignerModel data =
-            new DesignerModel(contextSettingsData(), modelSettingsData(),
+            new DesignerModel(platformSettingsData(), contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects",
                     true, false, false, "");
 
@@ -28,12 +28,16 @@ public class DesignerModelTest {
   @Test
   public void testThatGenerationSettingsDataValidationFailsDueToRecursiveValueObject() {
     final DesignerModel data =
-            new DesignerModel(contextSettingsData(), invalidModelSettingsData(),
+            new DesignerModel(platformSettingsData(), contextSettingsData(), invalidModelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final List<String> errors = data.validate();
     Assertions.assertEquals(1, errors.size());
     Assertions.assertEquals("Recursive Value Object relationship", errors.get(0));
+  }
+
+  private PlatformSettingsData platformSettingsData() {
+    return new PlatformSettingsData("JVM", "Java", "8");
   }
 
   private ContextSettingsData contextSettingsData() {

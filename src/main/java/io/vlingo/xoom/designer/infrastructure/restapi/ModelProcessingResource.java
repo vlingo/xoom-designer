@@ -36,7 +36,7 @@ public class ModelProcessingResource extends DynamicResourceHandler {
 
   private final Logger logger;
   private final GenerationTarget generationTarget;
-  private final ModelProcessingManager modelProcessingManager;
+  private ModelProcessingManager modelProcessingManager;
   private final ModelProcessingInformation modelProcessingInformation;
   public static final String REFUSE_REQUEST_URI = "/api/model-processing/request-refusal";
 
@@ -45,10 +45,14 @@ public class ModelProcessingResource extends DynamicResourceHandler {
     this.logger = stage().world().defaultLogger();
     this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
     this.modelProcessingInformation = ModelProcessingInformation.from(generationTarget);
-    this.modelProcessingManager = new ModelProcessingManager(ComponentRegistry.withName("codeGenerationSteps"));
   }
 
   public Completes<Response> startGeneration(final DesignerModel model) {
+    if(model.platformSettings.lang.equalsIgnoreCase("java"))
+      this.modelProcessingManager = new ModelProcessingManager(ComponentRegistry.withName("codeGenerationSteps"));
+    else
+      this.modelProcessingManager = new ModelProcessingManager(ComponentRegistry.withName("cSharpCodeGenerationSteps"));
+
     return modelProcessingManager.generate(model, modelProcessingInformation, logger).andThenTo(scene -> {
               final Response.Status responseStatus = scene.isFailed() ? InternalServerError : Ok;
               return Completes.withSuccess(Response.of(responseStatus, serialized(scene.report)));

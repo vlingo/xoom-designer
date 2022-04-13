@@ -34,11 +34,13 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
     final TemplateData projectSettings =
         BasicTemplateData.of(CsharpTemplateStandard.PROJECT_SETTINGS,
             TemplateParameters.with(TemplateParameter.APPLICATION_NAME, appName)
+                .and(TemplateParameter.PACKAGE_NAME, appName)
                 .and(TemplateParameter.SDK_Version, sdkVersion)
                 .and(TemplateParameter.VLINGO_VERSION, vlingoVersion));
 
     final TemplateData actorSettings =
-        BasicTemplateData.of(CsharpTemplateStandard.ACTOR_SETTINGS);
+        BasicTemplateData.of(CsharpTemplateStandard.ACTOR_SETTINGS,
+            TemplateParameters.with(TemplateParameter.PACKAGE_NAME, appName));
 
     return Arrays.asList(solutionSettings, projectSettings, actorSettings);
   }
