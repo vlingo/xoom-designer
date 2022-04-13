@@ -37,7 +37,7 @@ public class DesignerModelTest {
   }
 
   private PlatformSettingsData platformSettingsData() {
-    return new PlatformSettingsData("JVM", "Java", "8");
+    return new PlatformSettingsData("JVM", "Java", "1.8");
   }
 
   private ContextSettingsData contextSettingsData() {

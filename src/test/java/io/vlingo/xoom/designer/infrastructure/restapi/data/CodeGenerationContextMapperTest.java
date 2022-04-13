@@ -30,7 +30,7 @@ public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatJavaTaskExecutionContextIsMapped() {
-    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "8");
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8");
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
@@ -83,7 +83,7 @@ public class CodeGenerationContextMapperTest {
             "  \"platformSettings\": {\n" +
             "    \"platform\": \"JVM\",\n" +
             "    \"lang\": \"Java\",\n" +
-            "    \"sdkVersion\": \"8\"\n" +
+            "    \"sdkVersion\": \"1.8\"\n" +
             "  },\n" +
             "  \"context\": {\n" +
             "    \"groupId\": \"io.vlingo\",\n" +

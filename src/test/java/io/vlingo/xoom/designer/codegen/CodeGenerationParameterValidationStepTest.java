@@ -19,7 +19,7 @@ public class CodeGenerationParameterValidationStepTest {
 
   @Test()
   public void testThatJavaParametersAreValidated() {
-    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "8");
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8");
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
