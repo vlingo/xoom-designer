@@ -13,11 +13,11 @@ import io.vlingo.xoom.designer.codegen.java.TurboSettings;
 import java.util.Arrays;
 import java.util.List;
 
-public class JavaApplicationSettingsDataFactory extends ApplicationSettingsDataFactory {
+public class JavaApplicationSettingsData extends ApplicationSettingsData {
 
   private final CodeGenerationContext context;
 
-  public JavaApplicationSettingsDataFactory(CodeGenerationContext context) {
+  public JavaApplicationSettingsData(CodeGenerationContext context) {
     this.context = context;
   }
 

@@ -5,7 +5,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ApplicationSettingsDataFactory {
+public abstract class ApplicationSettingsData {
 
   abstract List<TemplateData> projectSettings();
 

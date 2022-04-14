@@ -11,11 +11,11 @@ import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
 import java.util.Arrays;
 import java.util.List;
 
-public class CsharpApplicationSettingsDataFactory extends ApplicationSettingsDataFactory {
+public class CsharpApplicationSettingsData extends ApplicationSettingsData {
 
   private final CodeGenerationContext context;
 
-  public CsharpApplicationSettingsDataFactory(CodeGenerationContext context) {
+  public CsharpApplicationSettingsData(CodeGenerationContext context) {
     this.context = context;
   }
 

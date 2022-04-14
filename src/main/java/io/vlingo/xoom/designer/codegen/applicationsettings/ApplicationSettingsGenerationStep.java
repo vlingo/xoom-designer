@@ -18,21 +18,29 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return applicationSettingsDataFactory(context)
+        .generate();
+  }
 
-    ApplicationSettingsDataFactory applicationSettingsDataFactory;
+  private ApplicationSettingsData applicationSettingsDataFactory(CodeGenerationContext context) {
+    final String dialectName = dialectNameFrom(context);
+
+    ApplicationSettingsData applicationSettingsData;
     if(dialectName.isEmpty() || Dialect.withName(dialectName).isJava()) {
-      applicationSettingsDataFactory = new JavaApplicationSettingsDataFactory(context);
+      applicationSettingsData = new JavaApplicationSettingsData(context);
     } else {
-      applicationSettingsDataFactory = new CsharpApplicationSettingsDataFactory(context);
+      applicationSettingsData = new CsharpApplicationSettingsData(context);
     }
-
-    return applicationSettingsDataFactory.generate();
+    return applicationSettingsData;
   }
 
   @Override
   protected Dialect resolveDialect(CodeGenerationContext context) {
-    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    final String dialectName = dialectNameFrom(context);
     return dialectName.isEmpty()? super.resolveDialect(context) : Dialect.withName(dialectName);
+  }
+
+  private String dialectNameFrom(CodeGenerationContext context) {
+    return context.parameters().retrieveValue(Label.DIALECT);
   }
 }
