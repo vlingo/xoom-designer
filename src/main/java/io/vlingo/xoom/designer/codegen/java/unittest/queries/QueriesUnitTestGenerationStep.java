@@ -30,6 +30,7 @@ public class QueriesUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.parameterOf(Label.CQRS, Boolean::valueOf);
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && context.parameterOf(Label.CQRS, Boolean::valueOf);
   }
 }

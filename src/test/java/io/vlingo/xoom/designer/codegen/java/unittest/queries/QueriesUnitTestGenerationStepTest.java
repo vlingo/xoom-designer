@@ -54,7 +54,8 @@ public class QueriesUnitTestGenerationStepTest extends CodeGenerationTest {
   @Test
   public void testThatQueriesUnitTestGenerationShouldProcess() {
     final CodeGenerationContext context =
-            CodeGenerationContext.with(CodeGenerationParameters.from(Label.CQRS, true));
+            CodeGenerationContext.with(CodeGenerationParameters.from(Label.DIALECT, Dialect.JAVA)
+                    .add(Label.CQRS, true));
 
     Assertions.assertTrue(new QueriesUnitTestGenerationStep().shouldProcess(context));
   }
