@@ -8,13 +8,13 @@ import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep.Phase;
 import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
 import io.vlingo.xoom.designer.codegen.applicationsettings.ApplicationSettingsGenerationStep;
+import io.vlingo.xoom.designer.codegen.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.dataobject.DataObjectGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.DockerfileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.KubernetesManifestFileGenerationStep;
-import io.vlingo.xoom.designer.codegen.java.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ValueObjectGenerationStep;
@@ -73,6 +73,8 @@ public class Configuration {
         new TemporaryTaskFolderCreationStep(),
         // CodeGen
         new ApplicationSettingsGenerationStep(),
+        new DesignerModelGenerationStep(),
+        // JAVA
         new ValueObjectGenerationStep(),
         new ModelGenerationStep(),
         new DataObjectGenerationStep(),
@@ -89,7 +91,6 @@ public class Configuration {
         new RestResourceAbstractUnitTestGenerationStep(),
         new RestResourceUnitTestGenerationStep(),
         new ClusterSettingsGenerationStep(),
-        new DesignerModelGenerationStep(),
         new DockerfileGenerationStep(),
         new KubernetesManifestFileGenerationStep(),
         // React
