@@ -19,7 +19,6 @@ import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ValueObjectGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionGenerationStep;
-import io.vlingo.xoom.designer.codegen.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPullStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPushStep;
@@ -74,7 +73,6 @@ public class Configuration {
         new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
         new TemporaryTaskFolderCreationStep(),
         //Java
-        new ReadmeFileGenerationStep(),
         new ApplicationSettingsGenerationStep(),
         new ValueObjectGenerationStep(),
         new ModelGenerationStep(),

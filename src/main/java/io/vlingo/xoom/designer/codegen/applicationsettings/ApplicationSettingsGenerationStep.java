@@ -26,7 +26,7 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
     final String dialectName = dialectNameFrom(context);
 
     ApplicationSettingsData applicationSettingsData;
-    if(dialectName.isEmpty() || Dialect.withName(dialectName).isJava()) {
+    if (dialectName.isEmpty() || Dialect.withName(dialectName).isJava()) {
       applicationSettingsData = new JavaApplicationSettingsData(context);
     } else {
       applicationSettingsData = new CsharpApplicationSettingsData(context);
@@ -37,7 +37,7 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
   @Override
   protected Dialect resolveDialect(CodeGenerationContext context) {
     final String dialectName = dialectNameFrom(context);
-    return dialectName.isEmpty()? super.resolveDialect(context) : Dialect.withName(dialectName);
+    return dialectName.isEmpty() ? super.resolveDialect(context) : Dialect.withName(dialectName);
   }
 
   private String dialectNameFrom(CodeGenerationContext context) {

@@ -4,6 +4,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
+import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
@@ -15,6 +16,17 @@ import java.util.List;
 
 public class JavaApplicationSettingsData extends ApplicationSettingsData {
 
+  public static final TemplateData NULL_TEMPLATE_DATA = new TemplateData() {
+    @Override
+    public TemplateParameters parameters() {
+      return TemplateParameters.empty();
+    }
+
+    @Override
+    public TemplateStandard standard() {
+      return JavaTemplateStandard.LOGBACK_SETTINGS; // Need to define none TemplateStandard
+    }
+  };
   private final CodeGenerationContext context;
 
   public JavaApplicationSettingsData(CodeGenerationContext context) {
@@ -38,8 +50,19 @@ public class JavaApplicationSettingsData extends ApplicationSettingsData {
         TemplateParameters.with(TemplateParameter.RESOURCE_FILE, true));
   }
 
+  @Override
+  TemplateData readmeFile() {
+    final String packageName = context.parameters().retrieveValue(Label.PACKAGE);
+
+    final TemplateParameters templateParameters =
+        TemplateParameters.with(TemplateParameter.README_FILE, true).and(TemplateParameter.PACKAGE_NAME, packageName);
+    return BasicTemplateData.of(JavaTemplateStandard.README, templateParameters);
+  }
+
   private TemplateData turboSettingsData(final CodeGenerationContext context) {
     final TurboSettings turboSettings = context.parameterObjectOf(Label.TURBO_SETTINGS);
+    if(turboSettings == null)
+      return NULL_TEMPLATE_DATA;
 
     final DeploymentSettings deploymentSettings = context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS);
 

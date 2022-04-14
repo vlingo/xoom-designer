@@ -1,4 +1,4 @@
-package io.vlingo.xoom.designer.codegen;
+package io.vlingo.xoom.designer.codegen.applicationsettings;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
@@ -6,7 +6,9 @@ import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
-import io.vlingo.xoom.designer.codegen.applicationsettings.ApplicationSettingsGenerationStep;
+import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
+import io.vlingo.xoom.designer.codegen.DeploymentType;
+import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
@@ -106,8 +108,25 @@ public class ApplicationSettingsGenerationStepTest extends CodeGenerationTest {
     final Content actorSettings =
         context.findContent(CsharpTemplateStandard.ACTOR_SETTINGS, "vlingo-actors");
 
+    final Content readme =
+        context.findContent(JavaTemplateStandard.README, "README");
+
     Assertions.assertTrue(solutionSettings.contains(TextExpectation.onCSharp().read("solution")));
     Assertions.assertTrue(projectSettings.contains(TextExpectation.onCSharp().read("project")));
     Assertions.assertTrue(actorSettings.contains(TextExpectation.onCSharp().read("xoom-actors")));
+    Assertions.assertTrue(readme.contains(TextExpectation.onCSharp().read("readme")));
+  }
+
+  @Test
+  public void testThatReadmeFileIsGenerated() {
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp"));
+
+    new ApplicationSettingsGenerationStep().process(context);
+
+    final Content readme =
+        context.findContent(JavaTemplateStandard.README, "README");
+
+    Assertions.assertTrue(readme.contains(TextExpectation.onJava().read("readme")));
   }
 }
