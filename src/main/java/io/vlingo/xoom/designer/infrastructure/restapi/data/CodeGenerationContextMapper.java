@@ -52,7 +52,10 @@ public class CodeGenerationContextMapper {
     this.generationTarget = generationTarget;
     this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.withName(data.platformSettings.lang.toUpperCase()));
     this.context = CodeGenerationContextFactory.build(logger, parameters);
-    this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
+    if(Dialect.withName(data.platformSettings.lang.toUpperCase()).isJava())
+      this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
+    else
+      this.formatter = ComponentRegistry.withName("cSharpCodeFormatter");
     this.logger = logger;
 
     mapAggregates();
@@ -243,6 +246,8 @@ public class CodeGenerationContextMapper {
                     data.deployment.kubernetesPod, data.deployment.producerExchangePort);
 
     parameters.add(APPLICATION_NAME, data.context.artifactId)
+            .add(SDK_VERSION, data.platformSettings.sdkVersion)
+            .add(VLINGO_VERSION, data.platformSettings.vlingoVersion)
             .add(USE_ANNOTATIONS, data.useAnnotations)
             .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
             .add(GROUP_ID, data.context.groupId)

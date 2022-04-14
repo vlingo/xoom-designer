@@ -1,7 +1,10 @@
 package io.vlingo.xoom.designer;
 
 import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.ContentCreationStep;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.common.Tuple2;
 import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
@@ -61,6 +64,17 @@ public class Configuration {
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   public static void load() {
+    final CodeElementFormatter defaultCodeElementFormatter =
+        CodeElementFormatter.with(Dialect.findDefault(),
+            ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("defaultCodeFormatter", defaultCodeElementFormatter);
+    final CodeElementFormatter cSharpCodeElementFormatter =
+        CodeElementFormatter.with(Dialect.C_SHARP,
+            ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("defaultCodeFormatter", defaultCodeElementFormatter);
+    ComponentRegistry.register("cSharpCodeFormatter", cSharpCodeElementFormatter);
     ComponentRegistry.register("codeGenerationSteps", codeGenerationSteps());
   }
 
@@ -74,8 +88,8 @@ public class Configuration {
         // CodeGen
         new ApplicationSettingsGenerationStep(),
         new DesignerModelGenerationStep(),
-        // JAVA
         new ValueObjectGenerationStep(),
+        // JAVA
         new ModelGenerationStep(),
         new DataObjectGenerationStep(),
         new ProjectionGenerationStep(),

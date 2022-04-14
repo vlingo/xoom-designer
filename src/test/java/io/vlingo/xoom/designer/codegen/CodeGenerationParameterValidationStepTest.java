@@ -19,7 +19,7 @@ public class CodeGenerationParameterValidationStepTest {
 
   @Test()
   public void testThatJavaParametersAreValidated() {
-    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8");
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
@@ -38,11 +38,11 @@ public class CodeGenerationParameterValidationStepTest {
 
   @Test()
   public void testThatCsharpParametersAreValidated() {
-    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0");
+    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
         CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
-    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+    ComponentRegistry.register("cSharpCodeFormatter", codeElementFormatter);
 
     final DesignerModel data =
         new DesignerModel(platform, contextSettingsData(), modelSettingsData(),

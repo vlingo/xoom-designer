@@ -30,7 +30,7 @@ public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatJavaTaskExecutionContextIsMapped() {
-    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8");
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
@@ -51,11 +51,11 @@ public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatCsharpTaskExecutionContextIsMapped() {
-    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0");
+    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
         CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
-    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
+    ComponentRegistry.register("cSharpCodeFormatter", codeElementFormatter);
 
     // For now c# model support only platform and context settings
     final DesignerModel data =
@@ -83,7 +83,8 @@ public class CodeGenerationContextMapperTest {
             "  \"platformSettings\": {\n" +
             "    \"platform\": \"JVM\",\n" +
             "    \"lang\": \"Java\",\n" +
-            "    \"sdkVersion\": \"1.8\"\n" +
+            "    \"sdkVersion\": \"1.8\",\n" +
+            "    \"vlingoVersion\": \"1.0.0\"\n" +
             "  },\n" +
             "  \"context\": {\n" +
             "    \"groupId\": \"io.vlingo\",\n" +
@@ -103,7 +104,8 @@ public class CodeGenerationContextMapperTest {
         "  \"platformSettings\": {\n" +
         "    \"platform\": \".NET\",\n" +
         "    \"lang\": \"C_SHARP\",\n" +
-        "    \"sdkVersion\": \"net6.0\"\n" +
+        "    \"sdkVersion\": \"net6.0\",\n" +
+        "    \"vlingoVersion\": \"1.0.0\"\n" +
         "  },\n" +
         "  \"context\": {\n" +
         "    \"groupId\": \"io.vlingo\",\n" +
