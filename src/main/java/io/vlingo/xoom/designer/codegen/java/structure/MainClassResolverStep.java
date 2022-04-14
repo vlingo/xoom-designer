@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.java.structure;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.turbo.annotation.codegen.AnnotationBasedTemplateStandard;
@@ -36,4 +37,9 @@ public class MainClassResolverStep implements CodeGenerationStep {
             JavaTemplateStandard.BOOTSTRAP.resolveClassname();
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }
