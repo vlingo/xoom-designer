@@ -38,7 +38,9 @@ public class DockerfileGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(CodeGenerationContext context) {
-    return ((DeploymentSettings) context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS)).useDocker;
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&
+        ((DeploymentSettings) context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS)).useDocker;
   }
 
 }

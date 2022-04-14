@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.java.storage;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -45,7 +46,8 @@ public class StorageGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.parameterOf(Label.STORAGE_TYPE, StorageType::of).isEnabled();
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() && context.parameterOf(Label.STORAGE_TYPE, StorageType::of).isEnabled();
   }
 
   private Map<Model, DatabaseType> databases(final CodeGenerationContext context) {

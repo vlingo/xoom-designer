@@ -62,17 +62,16 @@ public class Configuration {
 
   public static void load() {
     ComponentRegistry.register("codeGenerationSteps", codeGenerationSteps());
-    ComponentRegistry.register("cSharpCodeGenerationSteps", cSharpCodeGenerationSteps());
   }
 
   private static List<CodeGenerationStep> codeGenerationSteps() {
     return Arrays.asList(
-        //Preliminary
+        // Preliminary
         new CodeGenerationParameterValidationStep(),
         new MainClassResolverStep(),
         new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
         new TemporaryTaskFolderCreationStep(),
-        //Java
+        // CodeGen
         new ApplicationSettingsGenerationStep(),
         new ValueObjectGenerationStep(),
         new ModelGenerationStep(),
@@ -93,29 +92,15 @@ public class Configuration {
         new DesignerModelGenerationStep(),
         new DockerfileGenerationStep(),
         new KubernetesManifestFileGenerationStep(),
-        //React
+        // React
         new StaticFilesGenerationStep(),
         new LayoutGenerationStep(),
         new AggregateManagementGenerationStep(),
-        //Concluding
+        // Concluding
         new ContentCreationStep(),
         new MavenWrapperInstallationStep(),
         new SchemaPushStep(withType(CommandExecutionProcess.class)),
         new SchemaPullStep(withType(CommandExecutionProcess.class)),
-        new StagingFolderCleanUpStep(Phase.POST_GENERATION)
-    );
-  }
-
-  private static List<CodeGenerationStep> cSharpCodeGenerationSteps() {
-    return Arrays.asList(
-        //Preliminary
-        new CodeGenerationParameterValidationStep(),
-        new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
-        new TemporaryTaskFolderCreationStep(),
-        //C#
-        new ApplicationSettingsGenerationStep(),
-        //Concluding
-        new ContentCreationStep(),
         new StagingFolderCleanUpStep(Phase.POST_GENERATION)
     );
   }
