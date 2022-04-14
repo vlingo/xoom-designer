@@ -7,7 +7,7 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep.Phase;
 import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
-import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
+import io.vlingo.xoom.designer.codegen.applicationsettings.ApplicationSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.clustersettings.ClusterSettingsGenerationStep;
@@ -115,7 +115,7 @@ public class Configuration {
         new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
         new TemporaryTaskFolderCreationStep(),
         //C#
-        new io.vlingo.xoom.designer.codegen.csharp.applicationsettings.ApplicationSettingsGenerationStep(),
+        new ApplicationSettingsGenerationStep(),
         //Concluding
         new ContentCreationStep(),
         new StagingFolderCleanUpStep(Phase.POST_GENERATION)
