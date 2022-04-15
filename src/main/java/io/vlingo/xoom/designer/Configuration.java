@@ -88,8 +88,8 @@ public class Configuration {
         // CodeGen
         new ApplicationSettingsGenerationStep(),
         new DesignerModelGenerationStep(),
-        new ValueObjectGenerationStep(),
         // JAVA
+        new ValueObjectGenerationStep(),
         new ModelGenerationStep(),
         new DataObjectGenerationStep(),
         new ProjectionGenerationStep(),
