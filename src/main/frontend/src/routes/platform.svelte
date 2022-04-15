@@ -11,22 +11,8 @@
 					name: 'Java',
 					value: 'Java',
 					disabled: false,
-          sdkVersions: [
-            {
-              name: "JDK 8",
-              value: "1.8"
-            },
-            {
-              name: "JDK 10",
-              value: "10"
-            }
-          ],
-           vlingoVersions: [
-             {
-               name: "1.9.3 (Stable)",
-               value: "1.9.3"
-             }
-           ]
+          sdkVersions: [],
+           vlingoVersions: []
 				},
 				{
 					name: 'Kotlin',
@@ -71,31 +57,31 @@
 	]
 
 	let value = $settings.platformSettings && $settings.platformSettings.platform === ".NET";
-  let lang = $settings.platformSettings && $settings.platformSettings.lang;
-  let sdkVersion = $settings.platformSettings && $settings.platformSettings.sdkVersion;
-  let vlingoVersion = $settings.platformSettings && $settings.platformSettings.vlingoVersion;
+	let platform = !$settings.platformSettings ? 'JVM' : $settings.platformSettings.platform;
+  let lang = !$settings.platformSettings ? 'Java' : $settings.platformSettings.lang;
+  let sdkVersion = !$settings.platformSettings ? "" : $settings.platformSettings.sdkVersion;
+  let vlingoVersion = !$settings.platformSettings ? "" : $settings.platformSettings.vlingoVersion;
 	let options = platforms.reduce((acc, cur) => {
 		if ($settings.platformSettings && $settings.platformSettings.platform === cur.name) acc = [...cur.options]
 		return acc;
 	}, []);
 
-	$: $settings.platformSettings = {
-		platform: value ? '.NET' : 'JVM',
-		lang,
-		sdkVersion,
-		vlingoVersion
-	};
-
 	function updateOptions() {
 		const v = value ? '.NET' : 'JVM';
-		const platform = platforms.find(p => p.name === v)
-		if (platform) {
-			options = platform.options
-			lang = platform.options.some(o => o.value === lang) ? lang : platform.default
+		const selectedPlatform = platforms.find(p => p.name === v)
+		if (selectedPlatform) {
+			options = selectedPlatform.options
+			lang = selectedPlatform.options.some(o => o.value === lang) ? lang : selectedPlatform.default
 		}
+		$settings.platformSettings = {
+    		platform,
+    		lang,
+    		sdkVersion,
+    		vlingoVersion
+    	};
 	}
 
-	$: value, updateOptions()
+	$: value || lang, updateOptions()
 </script>
 
 <svelte:head>
@@ -111,29 +97,41 @@
   </div>
 
   <div class="d-flex justify-center mb-8">
-    <fieldset class="mb-8">
+    <fieldset class="mb-8" style="width: 50%;padding: 15px;">
   	<legend>Language: </legend>
+  	  <div class="d-flex justify-center mb-8">
+		    {#each options as option (option)}
+		      <div class="ml-6 mr-6">
+						<Radio bind:group={lang} disabled={option.disabled} value={option.value}>{option.name}</Radio>
+					</div>
+		    {/each}
+      </div>
     {#each options as option (option)}
-      <div class="ml-6 mr-6">
-				<Radio bind:group={lang} disabled={option.disabled} value={option.value}>{option.name}</Radio>
-			</div>
     {#if !option.disabled}
-    <fieldset>
+    {#if option.sdkVersions.length > 0}
+    <fieldset class="mb-8">
   	<legend>SDK Version: </legend>
-		{#each option.sdkVersions as sdk (sdk)}
-      <div class="ml-6 mr-6">
-        <Radio bind:group={sdkVersion} value={sdk.value}>{sdk.name}</Radio> <br />
-      </div>
-    {/each}
+  	<div class="d-flex justify-center mb-8">
+			{#each option.sdkVersions as sdk (sdk)}
+	      <div class="ml-6 mr-6">
+	        <Radio bind:group={sdkVersion} value={sdk.value}>{sdk.name}</Radio> <br />
+	      </div>
+	    {/each}
+    </div>
     </fieldset>
-    <fieldset>
+    {/if}
+    {#if option.vlingoVersions.length > 0}
+    <fieldset class="mb-8">
   	<legend>VLINGO Version: </legend>
-		{#each option.vlingoVersions as vlingo (vlingo)}
-      <div class="ml-6 mr-6">
-        <Radio bind:group={vlingoVersion} value={vlingo.value}>{vlingo.name}</Radio> <br />
-      </div>
-    {/each}
+    <div class="d-flex justify-center mb-8">
+			{#each option.vlingoVersions as vlingo (vlingo)}
+	      <div class="ml-6 mr-6">
+	        <Radio bind:group={vlingoVersion} value={vlingo.value}>{vlingo.name}</Radio> <br />
+	      </div>
+	    {/each}
+    </div>
     </fieldset>
+    {/if}
     {/if}
     {/each}
     </fieldset>
