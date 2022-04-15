@@ -1,0 +1,101 @@
+package io.vlingo.xoomapp.infrastructure.persistence;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.common.Outcome;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.symbio.Source;
+import io.vlingo.xoom.symbio.store.Result;
+import io.vlingo.xoom.symbio.store.StorageException;
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import io.vlingo.xoomapp.infrastructure.*;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BookQueriesTest {
+
+  private World world;
+  private StateStore stateStore;
+  private BookQueries queries;
+
+  @BeforeEach
+  public void setUp(){
+    world = World.startWithDefaults("test-state-store-query");
+    stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(new NoOpDispatcher()));
+    StatefulTypeRegistry.registerAll(world, stateStore, BookData.class);
+    queries = world.actorFor(BookQueries.class, BookQueriesActor.class, stateStore);
+  }
+
+  private static final BookData FIRST_QUERY_BY_ID_TEST_DATA = BookData.from("1", "1", "first-book-title", "first-book-publisher", LocalDate.now());
+  private static final BookData SECOND_QUERY_BY_ID_TEST_DATA = BookData.from("2", "2", "second-book-title", "second-book-publisher", LocalDate.now());
+
+  @Test
+  public void queryById() {
+    stateStore.write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+    stateStore.write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+
+    final BookData firstData = queries.bookOf("1", "1").await();
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.authorId, "1");
+    assertEquals(firstData.title, "first-book-title");
+    assertEquals(firstData.publisher, "first-book-publisher");
+    assertNotNull(firstData.publicationDate);
+
+    final BookData secondData = queries.bookOf("2", "2").await();
+
+    assertEquals(secondData.id, "2");
+    assertEquals(secondData.authorId, "2");
+    assertEquals(secondData.title, "second-book-title");
+    assertEquals(secondData.publisher, "second-book-publisher");
+    assertNotNull(secondData.publicationDate);
+  }
+
+  private static final BookData FIRST_QUERY_ALL_TEST_DATA = BookData.from("1", "1", "first-book-title", "first-book-publisher", LocalDate.now());
+  private static final BookData SECOND_QUERY_ALL_TEST_DATA = BookData.from("2", "2", "second-book-title", "second-book-publisher", LocalDate.now());
+
+  @Test
+  public void queryAll() {
+    stateStore.write("1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+    stateStore.write("2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+
+    Collection<BookData> results = queries.books("1").await();
+    final BookData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
+
+    assertEquals(firstData.id, "1");
+    assertEquals(firstData.authorId, "1");
+    assertEquals(firstData.title, "first-book-title");
+    assertEquals(firstData.publisher, "first-book-publisher");
+    assertNotNull(firstData.publicationDate);
+
+    results = queries.books("2").await();
+    final BookData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
+
+    assertEquals(secondData.id, "2");
+    assertEquals(secondData.authorId, "2");
+    assertEquals(secondData.title, "second-book-title");
+    assertEquals(secondData.publisher, "second-book-publisher");
+    assertNotNull(secondData.publicationDate);
+  }
+
+  @Test
+  public void bookOfEmptyResult(){
+    final BookData result = queries.bookOf("1", "1").await();
+    assertEquals("", result.id);
+  }
+
+  private static final StateStore.WriteResultInterest NOOP_WRITER = new StateStore.WriteResultInterest() {
+    @Override
+    public <S, C> void writeResultedIn(Outcome<StorageException, Result> outcome, String s, S s1, int i, List<Source<C>> list, Object o) {
+
+    }
+  };
+
+}

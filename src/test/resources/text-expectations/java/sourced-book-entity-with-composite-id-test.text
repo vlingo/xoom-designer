@@ -1,0 +1,62 @@
+package io.vlingo.xoomapp.model.book;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.actors.testkit.AccessSafely;
+import io.vlingo.xoom.symbio.BaseEntry;
+import io.vlingo.xoomapp.infrastructure.persistence.MockDispatcher;
+import io.vlingo.xoomapp.infrastructure.persistence.BookCatalogedAdapter;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry;
+import io.vlingo.xoom.lattice.model.sourcing.SourcedTypeRegistry.Info;
+import io.vlingo.xoom.symbio.EntryAdapterProvider;
+import io.vlingo.xoom.symbio.store.journal.Journal;
+import io.vlingo.xoom.symbio.store.journal.inmemory.InMemoryJournalActor;
+import org.junit.jupiter.api.*;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BookEntityTest {
+
+  private World world;
+  private Journal<String> journal;
+  private MockDispatcher dispatcher;
+  private Book book;
+
+  @BeforeEach
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void setUp(){
+    world = World.startWithDefaults("test-es");
+
+    dispatcher = new MockDispatcher();
+
+    EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.instance(world);
+
+    entryAdapterProvider.registerAdapter(BookCataloged.class, new BookCatalogedAdapter());
+
+    journal = world.actorFor(Journal.class, InMemoryJournalActor.class, Collections.singletonList(dispatcher));
+
+    new SourcedTypeRegistry(world).register(new Info(journal, BookEntity.class, BookEntity.class.getSimpleName()));
+
+    book = world.actorFor(Book.class, BookEntity.class, "#1");
+  }
+
+  private static final String AUTHOR_ID_FOR_CATALOG_TEST = "updated-1";
+  private static final String TITLE_FOR_CATALOG_TEST = "updated-book-title";
+  private static final String PUBLISHER_FOR_CATALOG_TEST = "updated-book-publisher";
+  private static final char GROUP_FOR_CATALOG_TEST = '1';
+
+  @Test
+  public void catalog() {
+    final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
+    final BookState state = book.catalog(AUTHOR_ID_FOR_CATALOG_TEST, TITLE_FOR_CATALOG_TEST, PUBLISHER_FOR_CATALOG_TEST, GROUP_FOR_CATALOG_TEST).await();
+
+    assertEquals(state.authorId, "1");
+    assertEquals(state.title, "book-title");
+    assertEquals(state.publisher, "book-publisher");
+    assertEquals(state.group, '1');
+    assertEquals(1, (int) dispatcherAccess.readFrom("entriesCount"));
+    assertEquals(BookCataloged.class.getName(), ((BaseEntry<String>) dispatcherAccess.readFrom("appendedAt", 0)).typeName());
+  }
+
+}

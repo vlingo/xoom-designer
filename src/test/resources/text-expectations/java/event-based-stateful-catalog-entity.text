@@ -1,0 +1,54 @@
+package io.vlingo.xoomapp.model.catalog;
+
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.xoom.lattice.model.stateful.StatefulEntity;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateful">StatefulEntity</a>
+ */
+public final class CatalogEntity extends StatefulEntity<CatalogState> implements Catalog {
+  private CatalogState state;
+
+  public CatalogEntity(final String id) {
+    super(id);
+    this.state = CatalogState.identifiedBy(id);
+  }
+
+  @Override
+  public Completes<CatalogState> withName(final String authorId, final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link CatalogState#withName()}
+     */
+    return apply(state.withName(authorId, name), new CatalogCreated(state.id, authorId, name), () -> state);
+  }
+
+  @Override
+  public Completes<CatalogState> update(final String id, final String authorId, final Name name) {
+    /**
+     * TODO: Implement command logic. See {@link CatalogState#update()}
+     */
+    return apply(state.update(id, authorId, name), new CatalogCreated(id, authorId, name), () -> state);
+  }
+
+  /*
+   * Received when my current state has been applied and restored.
+   *
+   * @param state the CatalogState
+   */
+  @Override
+  protected void state(final CatalogState state) {
+    this.state = state;
+  }
+
+  /*
+   * Received when I must provide my state type.
+   *
+   * @return {@code Class<CatalogState>}
+   */
+  @Override
+  protected Class<CatalogState> stateType() {
+    return CatalogState.class;
+  }
+}

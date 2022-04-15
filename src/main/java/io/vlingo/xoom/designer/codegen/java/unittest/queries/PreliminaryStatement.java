@@ -20,5 +20,4 @@ public class PreliminaryStatement {
       return String.format(STATE_STORE_LOAD_PATTERN, dataIndex, testDataVariableName);
     }).collect(Collectors.toList());
   }
-
 }

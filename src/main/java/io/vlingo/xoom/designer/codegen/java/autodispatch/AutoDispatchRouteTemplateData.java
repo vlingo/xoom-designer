@@ -15,6 +15,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
 import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.java.resource.PathFormatter;
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.ComponentRegistry;
@@ -47,7 +48,8 @@ public class AutoDispatchRouteTemplateData extends TemplateData {
                     .and(REQUIRE_ENTITY_LOADING, route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf))
                     .and(METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(route))
                     .and(AUTO_DISPATCH_HANDLERS_MAPPING_NAME, JavaTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING.resolveClassname(aggregate.value))
-                    .and(METHOD_NAME, route.value);
+                    .and(METHOD_NAME, route.value)
+                    .and(COMPOSITE_ID, AggregateDetail.resolveCompositeIdFields(aggregate));
   }
 
   private boolean isRetrievalRoute(final CodeGenerationParameter route) {

@@ -29,6 +29,8 @@ public class FieldDetail {
             .filter(stateField -> stateField.value.equals(fieldName))
             .map(stateField -> {
               final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
+              if(FieldDetail.isCompositeId(stateField))
+                return "String";
               return isCollection(stateField) ? resolveCollectionType(stateField) : fieldType;
             }).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
@@ -217,5 +219,14 @@ public class FieldDetail {
 
   public static boolean isAssignableToValueObject(final CodeGenerationParameter field) {
     return isMethodParameterAssignableToValueObject(field, field);
+  }
+
+  public static boolean isCompositeId(CodeGenerationParameter field) {
+    final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+    return isCompositeId(fieldType);
+  }
+
+  private static boolean isCompositeId(String fieldType) {
+    return fieldType.equalsIgnoreCase(CodeGenerationProperties.COMPOSITE_ID_TYPE);
   }
 }

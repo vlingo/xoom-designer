@@ -18,6 +18,9 @@ import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.http.Method;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
   private final static String COMMAND_PATTERN = "%s.%s(%s)";
@@ -55,7 +58,16 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     final String arguments =
             Formatters.Arguments.QUERIES_METHOD_INVOCATION.format(route);
 
-    return String.format(QUERY_PATTERN, route.value, arguments);
+    final String compositeIdParameter = RouteDetail.resolveCompositeIdParameterFrom(route);
+
+    final String parameters = formatParameters(Stream.of(compositeIdParameter, arguments));
+    return String.format(QUERY_PATTERN, route.value, parameters);
   }
 
+  public static String formatParameters(Stream<String> arguments) {
+    return arguments
+        .distinct()
+        .filter(param -> !param.isEmpty())
+        .collect(Collectors.joining(", "));
+  }
 }

@@ -1,0 +1,36 @@
+package io.vlingo.xoomapp.model.catalog;
+
+import io.vlingo.xoomapp.model.*;
+
+import io.vlingo.xoom.symbio.store.object.StateObject;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
+ */
+public final class CatalogState extends StateObject {
+
+  public final String id;
+  public final String authorId;
+  public final Name name;
+
+  public static CatalogState identifiedBy(final String id) {
+    return new CatalogState(id, null, null);
+  }
+
+  public CatalogState (final String id, final String authorId, final Name name) {
+    this.id = id;
+    this.authorId = authorId;
+    this.name = name;
+  }
+
+  public CatalogState withName(final String authorId, final Name name) {
+    //TODO: Implement command logic.
+    return new CatalogState(this.id, authorId, name);
+  }
+
+  public CatalogState update(final String id, final String authorId, final Name name) {
+    //TODO: Implement command logic.
+    return new CatalogState(id, authorId, name);
+  }
+
+}

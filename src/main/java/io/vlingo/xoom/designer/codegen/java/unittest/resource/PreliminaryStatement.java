@@ -44,7 +44,10 @@ public class PreliminaryStatement {
 
 	public static List<String> with(final String aggregateUriRoot, final String valueObjectData, final String rootPath, final String rootMethod) {
 		final String testDataVariableName = TestDataFormatter.formatLocalVariableName(1);
-		String rootPathWithId = rootPath.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\"");
+		String rootPathWithId = rootPath
+				.replace("{id}", "\"+" + testDataVariableName + ".id" + "+\"")
+				.replace("{", "\" + ")
+				.replace("}", " + \"");
 		switch (rootMethod) {
 			case "get":
 				if (rootPath.equals(aggregateUriRoot))

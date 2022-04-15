@@ -33,11 +33,17 @@ public class RestResourceUnitTestTemplateData extends TemplateData {
 		return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
 				.and(TemplateParameter.REST_RESOURCE_UNIT_TEST_NAME, standard().resolveClassname(aggregateName))
 				.and(TemplateParameter.DATA_OBJECT_NAME, dataObjectName)
-				.and(TemplateParameter.URI_ROOT, aggregate.retrieveRelatedValue(Label.URI_ROOT))
+				.and(TemplateParameter.URI_ROOT, resolveRootURI(aggregate.retrieveRelatedValue(Label.URI_ROOT)))
+				.and(TemplateParameter.COMPOSITE_ID, DataDeclaration.generate(aggregate, valueObjects))
 				.and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects))
 				.addImport(resolveImports(dataObjectName, contents))
 				.and(TemplateParameter.PRODUCTION_CODE, false)
 				.and(TemplateParameter.UNIT_TEST, true);
+	}
+
+	private String resolveRootURI(String uriRoot) {
+		return uriRoot.replace("{", "\" + ")
+				.replace("}", " + \"");
 	}
 
 	private String resolveImports(final String dataObjectName, final List<Content> contents) {

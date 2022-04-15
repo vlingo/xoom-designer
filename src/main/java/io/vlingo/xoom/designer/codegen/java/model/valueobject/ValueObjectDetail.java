@@ -116,7 +116,7 @@ public class ValueObjectDetail {
 
 
   public static boolean isValueObject(final CodeGenerationParameter field) {
-    return !FieldDetail.isScalar(field) && !FieldDetail.isCollection(field) && !FieldDetail.isDateTime(field);
+    return !FieldDetail.isScalar(field) && !FieldDetail.isCollection(field) && !FieldDetail.isDateTime(field) && !FieldDetail.isCompositeId(field);
   }
 
   public static Set<String> resolveFieldsImports(final CodeGenerationParameter valueObject) {

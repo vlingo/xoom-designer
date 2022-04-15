@@ -1,0 +1,105 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.xoom.actors.Definition;
+import io.vlingo.xoom.actors.Address;
+import io.vlingo.xoom.turbo.ComponentRegistry;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.http.ContentType;
+import io.vlingo.xoom.http.Response;
+import io.vlingo.xoom.http.ResponseHeader;
+import io.vlingo.xoom.http.resource.Resource;
+import io.vlingo.xoom.http.resource.DynamicResourceHandler;
+import io.vlingo.xoom.lattice.grid.Grid;
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.catalog.Catalog;
+import io.vlingo.xoomapp.infrastructure.persistence.CatalogQueries;
+import io.vlingo.xoomapp.model.catalog.CatalogEntity;
+import io.vlingo.xoomapp.infrastructure.persistence.QueryModelStateStoreProvider;
+import io.vlingo.xoomapp.model.*;
+
+import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
+import static io.vlingo.xoom.http.Response.Status.*;
+import static io.vlingo.xoom.http.ResponseHeader.Location;
+import static io.vlingo.xoom.http.resource.ResourceBuilder.resource;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
+public class CatalogResource extends DynamicResourceHandler {
+  private final Grid grid;
+  private final CatalogQueries $queries;
+
+  public CatalogResource(final Grid grid) {
+      super(grid.world().stage());
+      this.grid = grid;
+      this.$queries = ComponentRegistry.withType(QueryModelStateStoreProvider.class).catalogQueries;
+  }
+
+  public Completes<Response> withName(final String authorId, final CatalogData data) {
+    final Name name = Name.from(data.name.firstName, data.name.lastName);
+    return Catalog.withName(grid, data.authorId, name)
+      .andThenTo(state -> Completes.withSuccess(entityResponseOf(Created, ResponseHeader.headers(ResponseHeader.of(Location, location(authorId, state.id))), serialized(CatalogData.from(state))))
+      .otherwise(arg -> Response.of(NotFound))
+      .recoverFrom(e -> Response.of(InternalServerError, e.getMessage())));
+  }
+
+  public Completes<Response> update(final String authorId, final String id, final CatalogData data) {
+    final Name name = Name.from(data.name.firstName, data.name.lastName);
+    return resolve(id)
+            .andThenTo(catalog -> catalog.update(data.id, data.authorId, name))
+            .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(CatalogData.from(state)))))
+            .otherwise(noGreeting -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> catalogs(final String authorId) {
+    return $queries.catalogs(authorId)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  public Completes<Response> catalogOf(final String authorId, final String id) {
+    return $queries.catalogOf(authorId, id)
+            .andThenTo(data -> Completes.withSuccess(entityResponseOf(Ok, serialized(data))))
+            .otherwise(arg -> Response.of(NotFound))
+            .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
+  }
+
+  @Override
+  public Resource<?> routes() {
+     return resource("CatalogResource",
+        io.vlingo.xoom.http.resource.ResourceBuilder.post("/authors/{authorId}/catalogs")
+            .param(String.class)
+            .body(CatalogData.class)
+            .handle(this::withName),
+        io.vlingo.xoom.http.resource.ResourceBuilder.patch("/authors/{authorId}/catalogs/{id}")
+            .param(String.class)
+            .param(String.class)
+            .body(CatalogData.class)
+            .handle(this::update),
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/catalogs")
+            .param(String.class)
+            .handle(this::catalogs),
+        io.vlingo.xoom.http.resource.ResourceBuilder.get("/authors/{authorId}/catalogs/{id}")
+            .param(String.class)
+            .param(String.class)
+            .handle(this::catalogOf)
+     );
+  }
+
+  @Override
+  protected ContentType contentType() {
+    return ContentType.of("application/json", "charset=UTF-8");
+  }
+
+  private String location(final String authorId,  final String id) {
+    return "/authors/" + authorId + "/catalogs/" + id;
+  }
+
+  private Completes<Catalog> resolve(final String id) {
+    final Address address = grid.addressFactory().from(id);
+    return grid.actorOf(Catalog.class, address, Definition.has(CatalogEntity.class, Definition.parameters(id)));
+  }
+
+}

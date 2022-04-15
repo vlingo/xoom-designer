@@ -1,0 +1,46 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Four;
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Three;
+import io.vlingo.xoom.turbo.annotation.autodispatch.Handler.Two;
+import io.vlingo.xoom.turbo.annotation.autodispatch.HandlerEntry;
+
+import io.vlingo.xoomapp.model.catalog.CatalogState;
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.infrastructure.persistence.CatalogQueries;
+import io.vlingo.xoomapp.model.catalog.Catalog;
+import io.vlingo.xoomapp.model.*;
+import java.util.Collection;
+
+public class CatalogResourceHandlers {
+
+  public static final int WITH_NAME = 0;
+  public static final int UPDATE = 1;
+  public static final int CATALOGS = 2;
+  public static final int CATALOG_OF = 3;
+  public static final int ADAPT_STATE = 4;
+
+  public static final HandlerEntry<Four<Completes<CatalogState>, Stage, String, CatalogData>> WITH_NAME_HANDLER =
+          HandlerEntry.of(WITH_NAME, ($stage, authorId, data) -> {
+              final Name name = Name.from(data.name.firstName, data.name.lastName);
+              return Catalog.withName($stage, data.authorId, name);
+          });
+
+  public static final HandlerEntry<Four<Completes<CatalogState>, Catalog, String, CatalogData>> UPDATE_HANDLER =
+          HandlerEntry.of(UPDATE, (catalog, authorId, data) -> {
+              final Name name = Name.from(data.name.firstName, data.name.lastName);
+              return catalog.update(data.id, data.authorId, name);
+          });
+
+  public static final HandlerEntry<Two<CatalogData, CatalogState>> ADAPT_STATE_HANDLER =
+          HandlerEntry.of(ADAPT_STATE, CatalogData::from);
+
+  public static final HandlerEntry<Three<Completes<Collection<CatalogData>>, CatalogQueries, String>> QUERY_ALL_HANDLER =
+          HandlerEntry.of(CATALOGS, CatalogQueries::catalogs);
+
+  public static final HandlerEntry<Four<Completes<CatalogData>, CatalogQueries, String, String>> QUERY_BY_ID_HANDLER =
+          HandlerEntry.of(CATALOG_OF, CatalogQueries::catalogOf);
+
+}

@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import io.vlingo.xoom.designer.codegen.java.model.MethodScope;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -61,9 +62,27 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
                     .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
                     .and(TemplateParameter.METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method, methodScope))
                     .and(TemplateParameter.AGGREGATE_PROTOCOL_VARIABLE, codeElementFormatter.simpleNameToAttribute(method.parent().value))
-                    .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, method.parent().value);
+                    .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, method.parent().value)
+                    .and(TemplateParameter.COMPOSITE_ID, resolveCompositeIdFields(method));
 
     parentParameters.addImports(resolveImports(method, methodScope));
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter method) {
+    final List<String> compositeIdFields = method.retrieveAllRelated(Label.METHOD_PARAMETER)
+        .filter(this::isCompositeId)
+        .map(field -> field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.join(", ", compositeIdFields);
+  }
+
+  private boolean isCompositeId(CodeGenerationParameter codeGenerationParameter) {
+    return codeGenerationParameter.parent().parent().retrieveAllRelated(Label.STATE_FIELD)
+        .filter(field -> field.value.equals(codeGenerationParameter.value))
+        .anyMatch(FieldDetail::isCompositeId);
   }
 
   private Set<String> resolveImports(final CodeGenerationParameter method,

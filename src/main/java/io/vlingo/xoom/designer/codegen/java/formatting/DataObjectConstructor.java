@@ -39,6 +39,9 @@ public class DataObjectConstructor implements Formatters.Arguments {
     if (FieldDetail.isCollection(field)) {
       return DataObjectDetail.resolveCollectionType(field);
     }
+    if (FieldDetail.isCompositeId(field)) {
+      return "String";
+    }
     if (ValueObjectDetail.isValueObject(field)) {
       return JavaTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
     }

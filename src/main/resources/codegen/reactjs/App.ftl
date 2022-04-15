@@ -14,6 +14,17 @@ import ${aggregate.aggregateName} from "./components/${aggPluralDecap}/${aggrega
 
 axios.defaults.baseURL = 'http://localhost:${turboSettings.httpServerPort?c}';
 
+<#macro aggregatesRoutes aggregate>
+  <#assign pluralCapitalized=fns.makePlural("${fns.capitalize(aggregate.aggregateName)}") />
+  <#assign capitalized="${fns.capitalize(aggregate.aggregateName)}" />
+  <#if aggregate.stateFields?filter(field -> field.isCompositeId)?has_content>
+            <Route path="/app${aggregate.apiRootPath?replace("{", ":")?replace("}", "")}" exact={true}><${pluralCapitalized} /></Route>
+            <Route path="/app${aggregate.apiRootPath?replace("{", ":")?replace("}", "")}/:id" exact={true}><${capitalized} /></Route>
+  <#else>
+            <Route path="/app${aggregate.apiRootPath}" exact={true}><${pluralCapitalized} /></Route>
+            <Route path="/app${aggregate.apiRootPath}/:id" exact={true}><${capitalized} /></Route>
+  </#if>
+</#macro>
 function App() {
   return (
     <BrowserRouter>
@@ -31,10 +42,7 @@ function App() {
             <Route path="/app" exact={true}><Home /></Route>
             <Route path="/app/" exact={true}><Home /></Route>
             <#list aggregates as aggregate>
-              <#assign pluralCapitalized=fns.makePlural("${fns.capitalize(aggregate.aggregateName)}") />
-              <#assign capitalized="${fns.capitalize(aggregate.aggregateName)}" />
-            <Route path="/app${aggregate.apiRootPath}" exact={true}><${pluralCapitalized} /></Route>
-            <Route path="/app${aggregate.apiRootPath}/:id"><${capitalized} /></Route>
+              <@aggregatesRoutes aggregate/>
             </#list>
           </Switch>
           </main>

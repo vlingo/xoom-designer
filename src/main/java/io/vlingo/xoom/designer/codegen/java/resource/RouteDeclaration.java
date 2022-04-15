@@ -55,10 +55,10 @@ public class RouteDeclaration {
     }
 
     return Stream.of(parameters.split(","))
-            .map(parameter -> parameter.replaceAll("final", "").trim())
-            .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
-            .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
-            .collect(toList());
+        .map(parameter -> parameter.replaceAll("final", "").trim())
+        .filter(parameter -> !parameter.endsWith(" " + bodyParameterName))
+        .map(parameter -> parameter.substring(0, parameter.indexOf(" ")))
+        .collect(toList());
   }
 
 }

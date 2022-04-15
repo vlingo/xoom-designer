@@ -20,8 +20,11 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 public class AggregateDetail {
 
+  private static final String COMPOSITE_ID_DECLARATION_PATTERN = "@Id final String";
 
   public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
     return String.format("%s.%s.%s", basePackage, "model", aggregateProtocolName).toLowerCase();
@@ -91,6 +94,28 @@ public class AggregateDetail {
     final List<String> paths = new ArrayList<>();
     aggregateFields.forEach(field -> resolveFieldPath(variableName, field, valueObjects, paths));
     return paths;
+  }
+
+  public static String resolveCompositeIdFieldsNames(CodeGenerationParameter aggregate) {
+    final List<String> compositeIdFields = aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
+  }
+
+  public static String resolveCompositeIdFields(CodeGenerationParameter aggregate) {
+    final List<String> compositeIdFields = aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> String.format("%s %s", COMPOSITE_ID_DECLARATION_PATTERN, field.value)).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+
+    return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
   private static void resolveFieldPath(final String relativePath,

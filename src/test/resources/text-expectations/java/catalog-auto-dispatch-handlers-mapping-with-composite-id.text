@@ -1,0 +1,34 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import io.vlingo.xoom.common.Completes;
+import io.vlingo.xoom.turbo.annotation.autodispatch.*;
+import io.vlingo.xoom.http.Response;
+
+import io.vlingo.xoomapp.infrastructure.persistence.CatalogQueriesActor;
+import io.vlingo.xoomapp.infrastructure.persistence.CatalogQueries;
+import io.vlingo.xoomapp.model.catalog.Catalog;
+import io.vlingo.xoomapp.infrastructure.CatalogData;
+import io.vlingo.xoomapp.model.catalog.CatalogEntity;
+
+import static io.vlingo.xoom.http.Method.*;
+
+@AutoDispatch(path="/authors/{authorId}/catalogs", handlers=CatalogResourceHandlers.class)
+@Queries(protocol = CatalogQueries.class, actor = CatalogQueriesActor.class)
+@Model(protocol = Catalog.class, actor = CatalogEntity.class, data = CatalogData.class)
+public interface CatalogResource {
+
+  @Route(method = POST, path = "/authors/{authorId}/catalogs", handler = CatalogResourceHandlers.WITH_NAME)
+  @ResponseAdapter(handler = CatalogResourceHandlers.ADAPT_STATE)
+  Completes<Response> withName(@Id final String authorId, @Body final CatalogData data);
+
+  @Route(method = PATCH, path = "/authors/{authorId}/catalogs/{id}", handler = CatalogResourceHandlers.UPDATE)
+  @ResponseAdapter(handler = CatalogResourceHandlers.ADAPT_STATE)
+  Completes<Response> update(@Id final String authorId, @Id final String id, @Body final CatalogData data);
+
+  @Route(method = GET, handler = CatalogResourceHandlers.CATALOGS)
+  Completes<Response> catalogs(@Id final String authorId);
+
+  @Route(method = GET, path = "/{id}", handler = CatalogResourceHandlers.CATALOG_OF)
+  Completes<Response> catalogOf(@Id final String authorId, final String id);
+
+}

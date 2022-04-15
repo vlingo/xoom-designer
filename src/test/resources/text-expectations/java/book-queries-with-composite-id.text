@@ -1,0 +1,12 @@
+package io.vlingo.infrastructure.persistence;
+
+import java.util.Collection;
+import io.vlingo.xoom.common.Completes;
+
+import io.vlingo.xoomapp.infrastructure.BookData;
+
+@SuppressWarnings("all")
+public interface BookQueries {
+  Completes<BookData> bookOf(String authorId, String id);
+  Completes<Collection<BookData>> books(String authorId);
+}

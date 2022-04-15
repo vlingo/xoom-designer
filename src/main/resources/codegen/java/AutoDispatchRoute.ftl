@@ -3,13 +3,22 @@
 <#else>
 @Route(method = ${routeMethod}, handler = ${autoDispatchHandlersMappingName}.${routeMappingValue})
 </#if>
-<#if retrievalRoute>
-  Completes<Response> ${methodName}(${methodParameters});
+<#if compositeId?has_content>
+  <#assign queryAllCompositeId=compositeId?substring(0, compositeId?length - 2) />
 <#else>
+  <#assign queryAllCompositeId=compositeId />
+</#if>
+<#if retrievalRoute>
+  <#if methodParameters?has_content>
+  Completes<Response> ${methodName}(${compositeId}${methodParameters});
+  <#else>
+  Completes<Response> ${methodName}(${queryAllCompositeId}${methodParameters});
+  </#if>
+  <#else>
   @ResponseAdapter(handler = ${autoDispatchHandlersMappingName}.ADAPT_STATE)
   <#if requireEntityLoading>
-  Completes<Response> ${methodName}(@Id final ${idType} id, @Body final ${dataName} data);
+  Completes<Response> ${methodName}(${compositeId}@Id final ${idType} id, @Body final ${dataName} data);
   <#else>
-  Completes<Response> ${methodName}(@Body final ${dataName} data);
+  Completes<Response> ${methodName}(${compositeId}@Body final ${dataName} data);
   </#if>
 </#if>

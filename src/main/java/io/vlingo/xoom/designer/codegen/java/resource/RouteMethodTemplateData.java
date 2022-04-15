@@ -81,10 +81,12 @@ public class RouteMethodTemplateData extends TemplateData {
                     .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
                     .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers)
                     .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
-                    .and(ID_NAME, resolveIdName(routeSignatureParameter));
+                    .and(ID_NAME, resolveIdName(routeSignatureParameter))
+                    .and(COMPOSITE_ID, RouteDetail.resolveCompositeIdFields(routeSignatureParameter));
 
     parentParameters.addImports(resolveImports(mainParameter, routeSignatureParameter));
   }
+
 
   private Set<String> resolveImports(final CodeGenerationParameter mainParameter,
                                      final CodeGenerationParameter routeSignatureParameter) {

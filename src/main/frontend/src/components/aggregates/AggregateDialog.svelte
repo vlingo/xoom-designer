@@ -21,6 +21,7 @@
 	let newAggregate;
 	let aggregateName, stateFields, events, methods, rootPath, producerExchangeName, consumerExchangeName, schemaGroup, disableSchemaGroup, routes, outgoingEvents, receivers;
 	let aggregateNameElement;
+	let routesComponent, routesHasErrorMessages;
 
 	onMount(() => {
 		aggregateNameElement.focus();
@@ -100,6 +101,7 @@
 	const validRoute = (r) => r.path && !routeRule(r.path) && r.aggregateMethod;
 	const validProducer = (schema, events) => (schema && !schemaGroupRule(schema) && events.length > 0) || (!schema && events.length === 0);
 	const validConsumer = (receivers) => (receivers.length === 0) || (receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
+	const validRootPathRule = (rootPath) => (!rootPathRule(rootPath) && (routesComponent && routesComponent.isValidRootPath(rootPath)));
 
 	$: {
 		const storageState = getLocalStorage("aggregateDialogState");
@@ -109,7 +111,7 @@
 	}
 
 	$: valid = !classNameRule(aggregateName) && stateFields.every(validField) && events.every(validEvent) && methods.every(validMethod)
-	&& !rootPathRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(schemaGroup, outgoingEvents) && validConsumer(receivers);
+	&& validRootPathRule(rootPath) && routes.every(validRoute) && !isAggregateUniqueRule(oldAggregate, aggregateName, $settings.model.aggregateSettings) && validProducer(schemaGroup, outgoingEvents) && validConsumer(receivers);
 	$: if(valid) {
 		newAggregate = {
 			aggregateName, stateFields, events, methods, api: { rootPath, routes }
@@ -145,9 +147,9 @@
 	</div>
 	<ValueObjects bind:events />
 	<StateFields bind:stateFields />
-	<Events bind:events  bind:stateFields bind:valueObjects={$settings.model.valueObjectSettings}/>
+	<Events bind:events bind:stateFields bind:valueObjects={$settings.model.valueObjectSettings}/>
 	<Methods bind:methods bind:stateFields bind:events />
-	<Routes bind:routes bind:methods bind:rootPath />
+	<Routes bind:this={routesComponent} bind:routes bind:methods bind:rootPath bind:stateFields/>
 	<ProducerExchange bind:events bind:producerExchangeName bind:outgoingEvents bind:schemaGroup bind:disableSchemaGroup  />
 	<ConsumerExchange bind:consumerExchangeName bind:receivers bind:methods />
 	<CardActions>

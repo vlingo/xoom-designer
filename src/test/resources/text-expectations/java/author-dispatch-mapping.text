@@ -6,8 +6,8 @@ import io.vlingo.xoom.http.Response;
 
 import io.vlingo.xoomapp.model.author.AuthorEntity;
 import io.vlingo.xoomapp.infrastructure.AuthorData;
-import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueries;
+import io.vlingo.xoomapp.model.author.Author;
 import io.vlingo.xoomapp.infrastructure.persistence.AuthorQueriesActor;
 
 import static io.vlingo.xoom.http.Method.*;

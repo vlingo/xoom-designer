@@ -25,6 +25,9 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
 
   @Test
   public void testEmptyResponse() {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
     given()
       .when()
       .get("${uriRoot}")
@@ -34,6 +37,9 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
   }
 
   private ${dataObjectName} saveExampleData(${dataObjectName} data) {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
     return given()
       .when()
       .body(data)
@@ -48,6 +54,9 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
 
   @Test<#if testCase.isDisabled()>@Disabled</#if>
   public void ${testCase.methodName}() {
+  <#list compositeId as declaration>
+    ${declaration}
+  </#list>
     ${testCase.dataDeclaration}
   <#if testCase.isRootMethod()>
     firstData = saveExampleData(firstData);

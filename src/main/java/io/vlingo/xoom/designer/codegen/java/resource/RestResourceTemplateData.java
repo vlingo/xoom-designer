@@ -16,6 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.java.storage.Model;
 import io.vlingo.xoom.designer.codegen.java.storage.Queries;
@@ -32,6 +33,7 @@ import java.util.stream.Stream;
 import static io.vlingo.xoom.codegen.content.ContentQuery.findFullyQualifiedClassName;
 import static io.vlingo.xoom.codegen.content.ContentQuery.findPackage;
 import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.*;
+import static java.util.stream.Collectors.toList;
 
 public class RestResourceTemplateData extends TemplateData {
 
@@ -77,7 +79,19 @@ public class RestResourceTemplateData extends TemplateData {
             .and(URI_ROOT, PathFormatter.formatRootPath(uriRoot))
             .andResolve(MODEL_PROTOCOL, modelProtocolResolver)
             .and(ROUTE_METHODS, new ArrayList<String>())
+            .and(COMPOSITE_ID, resolveCompositeIdFields(aggregateParameter))
             .and(USE_AUTO_DISPATCH, false);
+  }
+
+  private String resolveCompositeIdFields(CodeGenerationParameter method) {
+    final List<String> compositeIdFields = method.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(FieldDetail::isCompositeId)
+        .map(field -> "final String " + field.value).collect(toList());
+
+    if(compositeIdFields.isEmpty())
+      return "";
+    compositeIdFields.add(" ");
+    return String.join(", ", compositeIdFields);
   }
 
   private Set<String> resolveImports(final CodeGenerationParameter aggregate,

@@ -1,0 +1,300 @@
+{
+  "context": {
+    "groupId": "io.vlingo",
+    "artifactId": "book-store",
+    "artifactVersion": "1.0.0",
+    "packageName": "io.vlingo.bookstore"
+  },
+  "model": {
+    "persistenceSettings": {
+      "storageType": "JOURNAL",
+      "useCQRS": true,
+      "projections": "EVENT_BASED",
+      "database": "IN_MEMORY",
+      "commandModelDatabase": "IN_MEMORY",
+      "queryModelDatabase": "IN_MEMORY"
+    },
+    "aggregateSettings": [
+      {
+        "api": {
+          "rootPath": "/authors",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "from",
+              "requireEntityLoad": false
+            },
+            {
+              "path": "/{id}",
+              "httpMethod": "PATCH",
+              "aggregateMethod": "changeBio",
+              "requireEntityLoad": true
+            }
+          ]
+        },
+        "aggregateName": "Author",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "bio",
+            "type": "String",
+            "collectionType": ""
+          }
+        ],
+        "methods": [
+          {
+            "name": "from",
+            "parameters": [
+              {
+                "stateField": "name",
+                "parameterName": "name",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "bio",
+                "parameterName": "bio",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "AuthorCreated"
+          },
+          {
+            "name": "changeBio",
+            "parameters": [
+              {
+                "stateField": "bio",
+                "parameterName": "bio",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": false,
+            "event": "BioChanged"
+          }
+        ],
+        "events": [
+          {
+            "name": "AuthorCreated",
+            "fields": [
+              "id",
+              "name",
+              "bio"
+            ]
+          },
+          {
+            "name": "BioChanged",
+            "fields": [
+              "id",
+              "bio"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "receivers": []
+        },
+        "producerExchange": {
+          "schemaGroup": "",
+          "outgoingEvents": []
+        }
+      },
+      {
+        "api": {
+          "rootPath": "/authors/{authorId}/books",
+          "routes": [
+            {
+              "path": "*",
+              "httpMethod": "POST",
+              "aggregateMethod": "register",
+              "requireEntityLoad": false
+            },
+            {
+              "path": "/{id}/price",
+              "httpMethod": "PATCH",
+              "aggregateMethod": "changePrice",
+              "requireEntityLoad": true
+            }
+          ]
+        },
+        "aggregateName": "Book",
+        "stateFields": [
+          {
+            "name": "id",
+            "type": "String"
+          },
+          {
+            "name": "title",
+            "type": "String",
+            "collectionType": ""
+          },
+          {
+            "name": "stockCode",
+            "type": "int",
+            "collectionType": ""
+          },
+          {
+            "name": "publicCode",
+            "type": "byte",
+            "collectionType": ""
+          },
+          {
+            "name": "price",
+            "type": "double",
+            "collectionType": ""
+          },
+          {
+            "name": "weight",
+            "type": "float",
+            "collectionType": ""
+          },
+          {
+            "name": "height",
+            "type": "long",
+            "collectionType": ""
+          },
+          {
+            "name": "available",
+            "type": "boolean",
+            "collectionType": ""
+          },
+          {
+            "name": "symbol",
+            "type": "char",
+            "collectionType": ""
+          },
+          {
+            "name": "authorId",
+            "type": "CompositeId",
+            "collectionType": ""
+          }
+        ],
+        "methods": [
+          {
+            "name": "register",
+            "parameters": [
+              {
+                "stateField": "title",
+                "parameterName": "title",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "stockCode",
+                "parameterName": "stockCode",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "publicCode",
+                "parameterName": "publicCode",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "price",
+                "parameterName": "price",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "weight",
+                "parameterName": "weight",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "height",
+                "parameterName": "height",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "available",
+                "parameterName": "available",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "symbol",
+                "parameterName": "symbol",
+                "multiplicity": ""
+              },
+              {
+                "stateField": "authorId",
+                "parameterName": "authorId",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": true,
+            "event": "BookRegistered"
+          },
+          {
+            "name": "changePrice",
+            "parameters": [
+              {
+                "stateField": "price",
+                "parameterName": "price",
+                "multiplicity": ""
+              }
+            ],
+            "useFactory": false,
+            "event": "BookPriceChanged"
+          }
+        ],
+        "events": [
+          {
+            "name": "BookRegistered",
+            "fields": [
+              "id",
+              "title",
+              "stockCode",
+              "publicCode",
+              "price",
+              "weight",
+              "height",
+              "available",
+              "symbol",
+              "authorId"
+            ]
+          },
+          {
+            "name": "BookPriceChanged",
+            "fields": [
+              "id",
+              "price"
+            ]
+          }
+        ],
+        "consumerExchange": {
+          "receivers": []
+        },
+        "producerExchange": {
+          "schemaGroup": "",
+          "outgoingEvents": []
+        }
+      }
+    ],
+    "valueObjectSettings": []
+  },
+  "deployment": {
+    "type": "NONE",
+    "dockerImage": "",
+    "kubernetesImage": "",
+    "kubernetesPod": "",
+    "clusterTotalNodes": 1,
+    "clusterPort": 51011,
+    "producerExchangePort": 19762,
+    "httpServerPort": %s,
+    "pullSchemas": false
+  },
+  "schemata": {
+    "host": "localhost",
+    "port": 9019
+  },
+  "projectDirectory": "%s",
+  "useAnnotations": true,
+  "useAutoDispatch": false,
+  "generateUIWith": "ReactJS",
+  "generateUI": true
+}

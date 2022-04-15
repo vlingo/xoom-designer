@@ -9,17 +9,20 @@ package io.vlingo.xoom.designer.codegen.java;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
 
 public class Field {
 
   public final String name;
   public final String type;
   public final boolean isCollection;
+  public final boolean isCompositeId;
 
   public Field(final CodeGenerationParameter fieldParameter) {
     this.name = fieldParameter.value;
     final String collectionType = fieldParameter.retrieveRelatedValue(Label.COLLECTION_TYPE);
     this.isCollection = collectionType != null && !collectionType.isEmpty();
+    this.isCompositeId = FieldDetail.isCompositeId(fieldParameter);
     this.type = fieldParameter.retrieveRelatedValue(Label.FIELD_TYPE);
   }
 }

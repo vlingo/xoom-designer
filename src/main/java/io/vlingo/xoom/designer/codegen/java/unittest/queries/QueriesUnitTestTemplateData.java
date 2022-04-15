@@ -58,6 +58,7 @@ public class QueriesUnitTestTemplateData extends TemplateData {
                     .and(TemplateParameter.QUERIES_NAME, queriesProtocolName).and(TemplateParameter.DATA_OBJECT_NAME, dataObjectName)
                     .and(TemplateParameter.QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregate.value))
                     .and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects))
+                    .and(TemplateParameter.COMPOSITE_ID, DataDeclaration.generate(aggregate, valueObjects))
                     .addImport(resolveImport(dataObjectName, contents))
                     .addImports(AggregateDetail.resolveImports(aggregate))
                     .and(TemplateParameter.PRODUCTION_CODE, false)
