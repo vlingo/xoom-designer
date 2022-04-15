@@ -15,11 +15,11 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.Configuration;
 import io.vlingo.xoom.designer.codegen.*;
+import io.vlingo.xoom.designer.codegen.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.codegen.java.ClusterSettings;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.SchemataSettings;
 import io.vlingo.xoom.designer.codegen.java.TurboSettings;
-import io.vlingo.xoom.designer.codegen.java.designermodel.DesignerModelFormatter;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.codegen.java.schemata.Schema;
 import io.vlingo.xoom.turbo.ComponentRegistry;
@@ -50,9 +50,14 @@ public class CodeGenerationContextMapper {
                                       final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.JAVA);
+    final Dialect dialect = data.platformSettings != null ?
+            Dialect.withName(data.platformSettings.lang.toUpperCase()) : Dialect.findDefault();
+    this.parameters = CodeGenerationParameters.from(DIALECT, dialect);
     this.context = CodeGenerationContextFactory.build(logger, parameters);
-    this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
+    if(dialect.isJava())
+      this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
+    else
+      this.formatter = ComponentRegistry.withName("cSharpCodeFormatter");
     this.logger = logger;
 
     mapAggregates();
@@ -257,6 +262,10 @@ public class CodeGenerationContextMapper {
             .add(TARGET_FOLDER, definitiveFolder.toString())
             .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data))
             .add(WEB_UI_DIALECT, data.generateUI != null && data.generateUI ? data.generateUIWith : "");
+    if(data.platformSettings != null)
+      parameters
+            .add(SDK_VERSION, data.platformSettings.sdkVersion)
+            .add(VLINGO_VERSION, data.platformSettings.vlingoVersion);
   }
 
 }

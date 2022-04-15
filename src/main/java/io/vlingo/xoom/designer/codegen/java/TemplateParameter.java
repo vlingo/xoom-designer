@@ -175,7 +175,9 @@ public enum TemplateParameter implements ParameterKey {
   HANDLER_TYPE("handlerType"),
   QUERY_BY_ID_HANDLER_TYPE("queryByIdHandlerType"),
   QUERY_ALL_HANDLER_TYPE("queryAllHandlerType"),
-  QUERY_ALL_COMPOSITE_ID_TYPE("queryAllCompositeIdType");
+  QUERY_ALL_COMPOSITE_ID_TYPE("queryAllCompositeIdType"),
+  SDK_Version("sdkVersion"),
+  VLINGO_VERSION("vlingoVersion");
 
   public final String key;
 

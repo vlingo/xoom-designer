@@ -29,14 +29,15 @@ import static io.vlingo.xoom.designer.codegen.Label.*;
 public class CodeGenerationContextMapperTest {
 
   @Test
-  public void testThatTaskExecutionContextIsMapped() {
+  public void testThatJavaTaskExecutionContextIsMapped() {
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
-            CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_"));
+            CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
 
     final DesignerModel data =
-            new DesignerModel(contextSettingsData(), modelSettingsData(),
+            new DesignerModel(platform, contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
 
     final CodeGenerationParameters codeGenerationParameters =
@@ -46,6 +47,25 @@ public class CodeGenerationContextMapperTest {
     assertPersistenceParameters(codeGenerationParameters);
     assertModelParameters(codeGenerationParameters);
     assertExchangeParameters(codeGenerationParameters);
+  }
+
+  @Test
+  public void testThatCsharpTaskExecutionContextIsMapped() {
+    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "1.0.0");
+    final CodeElementFormatter codeElementFormatter =
+        CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("cSharpCodeFormatter", codeElementFormatter);
+
+    // For now c# model support only platform and context settings
+    final DesignerModel data =
+        new DesignerModel(platform, contextSettingsData(), modelSettingsData(),
+            deploymentSettingsData(), schemataSettingsData(), "/home/projects", true, false, false, "");
+
+    final CodeGenerationParameters codeGenerationParameters =
+        CodeGenerationContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger()).parameters();
+
+    assertCsharpStructuralOptions(codeGenerationParameters);
   }
 
   private void assertStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
@@ -60,12 +80,39 @@ public class CodeGenerationContextMapperTest {
     Assertions.assertEquals("", deploymentSettings.kubernetesPod);
     Assertions.assertNotNull(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON));
     Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\n" +
+            "  \"platformSettings\": {\n" +
+            "    \"platform\": \"JVM\",\n" +
+            "    \"lang\": \"Java\",\n" +
+            "    \"sdkVersion\": \"1.8\",\n" +
+            "    \"vlingoVersion\": \"1.0.0\"\n" +
+            "  },\n" +
             "  \"context\": {\n" +
             "    \"groupId\": \"io.vlingo\",\n" +
             "    \"artifactId\": \"xoomapp\",\n" +
             "    \"artifactVersion\": \"1.0\",\n" +
             "    \"packageName\": \"io.vlingo.xoomapp\"\n" +
             "  },\n"));
+  }
+
+  private void assertCsharpStructuralOptions(final CodeGenerationParameters codeGenerationParameters) {
+    Assertions.assertEquals("io.vlingo", codeGenerationParameters.retrieveValue(GROUP_ID));
+    Assertions.assertEquals("xoomapp", codeGenerationParameters.retrieveValue(ARTIFACT_ID));
+    Assertions.assertEquals("1.0", codeGenerationParameters.retrieveValue(ARTIFACT_VERSION));
+    Assertions.assertEquals("{{XOOM_VERSION}}", codeGenerationParameters.retrieveValue(XOOM_VERSION));
+    Assertions.assertNotNull(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON));
+    Assertions.assertTrue(codeGenerationParameters.retrieveValue(DESIGNER_MODEL_JSON).startsWith("{\n" +
+        "  \"platformSettings\": {\n" +
+        "    \"platform\": \".NET\",\n" +
+        "    \"lang\": \"C_SHARP\",\n" +
+        "    \"sdkVersion\": \"net6.0\",\n" +
+        "    \"vlingoVersion\": \"1.0.0\"\n" +
+        "  },\n" +
+        "  \"context\": {\n" +
+        "    \"groupId\": \"io.vlingo\",\n" +
+        "    \"artifactId\": \"xoomapp\",\n" +
+        "    \"artifactVersion\": \"1.0\",\n" +
+        "    \"packageName\": \"io.vlingo.xoomapp\"\n" +
+        "  },\n"));
   }
 
   private void assertPersistenceParameters(final CodeGenerationParameters codeGenerationParameters) {

@@ -10,19 +10,18 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationParameterValidationStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep;
 import io.vlingo.xoom.designer.codegen.StagingFolderCleanUpStep.Phase;
 import io.vlingo.xoom.designer.codegen.TemporaryTaskFolderCreationStep;
-import io.vlingo.xoom.designer.codegen.java.applicationsettings.ApplicationSettingsGenerationStep;
+import io.vlingo.xoom.designer.codegen.applicationsettings.ApplicationSettingsGenerationStep;
+import io.vlingo.xoom.designer.codegen.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.dataobject.DataObjectGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.DockerfileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.KubernetesManifestFileGenerationStep;
-import io.vlingo.xoom.designer.codegen.java.designermodel.DesignerModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ModelGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.model.ValueObjectGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionGenerationStep;
-import io.vlingo.xoom.designer.codegen.java.readme.ReadmeFileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.resource.RestResourceGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPullStep;
 import io.vlingo.xoom.designer.codegen.java.schemata.SchemaPushStep;
@@ -65,53 +64,59 @@ public class Configuration {
   private static final Duration DEFAULT_REQUEST_COUNT_EXPIRATION = Duration.ofSeconds(1);
 
   public static void load() {
-    final CodeElementFormatter codeElementFormatter =
-            CodeElementFormatter.with(Dialect.findDefault(),
-                    ReservedWordsHandler.usingSuffix("_"));
+    final CodeElementFormatter defaultCodeElementFormatter =
+        CodeElementFormatter.with(Dialect.findDefault(),
+            ReservedWordsHandler.usingSuffix("_"));
 
-    ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
-    ComponentRegistry.register("codeGenerationSteps",codeGenerationSteps());
+    ComponentRegistry.register("defaultCodeFormatter", defaultCodeElementFormatter);
+    final CodeElementFormatter cSharpCodeElementFormatter =
+        CodeElementFormatter.with(Dialect.C_SHARP,
+            ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("defaultCodeFormatter", defaultCodeElementFormatter);
+    ComponentRegistry.register("cSharpCodeFormatter", cSharpCodeElementFormatter);
+    ComponentRegistry.register("codeGenerationSteps", codeGenerationSteps());
   }
 
   private static List<CodeGenerationStep> codeGenerationSteps() {
     return Arrays.asList(
-            //Preliminary
-            new CodeGenerationParameterValidationStep(),
-            new MainClassResolverStep(),
-            new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
-            new TemporaryTaskFolderCreationStep(),
-            //Java
-            new ReadmeFileGenerationStep(),
-            new ApplicationSettingsGenerationStep(),
-            new ValueObjectGenerationStep(),
-            new ModelGenerationStep(),
-            new DataObjectGenerationStep(),
-            new ProjectionGenerationStep(),
-            new StorageGenerationStep(),
-            new RestResourceGenerationStep(),
-            new AutoDispatchMappingGenerationStep(),
-            new ExchangeGenerationStep(),
-            new SchemataGenerationStep(),
-            new BootstrapGenerationStep(),
-            new EntityUnitTestGenerationStep(),
-            new QueriesUnitTestGenerationStep(),
-            new ProjectionUnitTestGenerationStep(),
-            new RestResourceAbstractUnitTestGenerationStep(),
-            new RestResourceUnitTestGenerationStep(),
-            new ClusterSettingsGenerationStep(),
-            new DesignerModelGenerationStep(),
-            new DockerfileGenerationStep(),
-            new KubernetesManifestFileGenerationStep(),
-            //React
-            new StaticFilesGenerationStep(),
-            new LayoutGenerationStep(),
-            new AggregateManagementGenerationStep(),
-            //Concluding
-            new ContentCreationStep(),
-            new MavenWrapperInstallationStep(),
-            new SchemaPushStep(withType(CommandExecutionProcess.class)),
-            new SchemaPullStep(withType(CommandExecutionProcess.class)),
-            new StagingFolderCleanUpStep(Phase.POST_GENERATION)
+        // Preliminary
+        new CodeGenerationParameterValidationStep(),
+        new MainClassResolverStep(),
+        new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
+        new TemporaryTaskFolderCreationStep(),
+        // CodeGen
+        new ApplicationSettingsGenerationStep(),
+        new DesignerModelGenerationStep(),
+        new ValueObjectGenerationStep(),
+        // JAVA
+        new ModelGenerationStep(),
+        new DataObjectGenerationStep(),
+        new ProjectionGenerationStep(),
+        new StorageGenerationStep(),
+        new RestResourceGenerationStep(),
+        new AutoDispatchMappingGenerationStep(),
+        new ExchangeGenerationStep(),
+        new SchemataGenerationStep(),
+        new BootstrapGenerationStep(),
+        new EntityUnitTestGenerationStep(),
+        new QueriesUnitTestGenerationStep(),
+        new ProjectionUnitTestGenerationStep(),
+        new RestResourceAbstractUnitTestGenerationStep(),
+        new RestResourceUnitTestGenerationStep(),
+        new ClusterSettingsGenerationStep(),
+        new DockerfileGenerationStep(),
+        new KubernetesManifestFileGenerationStep(),
+        // React
+        new StaticFilesGenerationStep(),
+        new LayoutGenerationStep(),
+        new AggregateManagementGenerationStep(),
+        // Concluding
+        new ContentCreationStep(),
+        new MavenWrapperInstallationStep(),
+        new SchemaPushStep(withType(CommandExecutionProcess.class)),
+        new SchemaPullStep(withType(CommandExecutionProcess.class)),
+        new StagingFolderCleanUpStep(Phase.POST_GENERATION)
     );
   }
 

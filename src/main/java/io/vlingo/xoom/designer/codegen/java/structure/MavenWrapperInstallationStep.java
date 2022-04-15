@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.java.structure;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.designer.ModelProcessingException;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.infrastructure.StagingFolder;
@@ -61,4 +62,9 @@ public final class MavenWrapperInstallationStep implements CodeGenerationStep {
     }
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }
