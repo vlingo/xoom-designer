@@ -98,7 +98,7 @@
   </div>
 
   <div class="d-flex justify-center mb-8">
-    <fieldset class="mb-8" style="width: 50%;padding: 15px;">
+    <fieldset class="mb-8" style="width: 50%;padding: 15px; border: none">
       <legend>Language: </legend>
       <div class="d-flex justify-center mb-8">
         {#each options as option (option)}
@@ -110,7 +110,7 @@
       {#each options as option (option)}
         {#if !option.disabled}
           {#if option.sdkVersions.length > 0}
-            <fieldset class="mb-8">
+            <fieldset class="mb-8" style="border: none">
               <legend>SDK Version: </legend>
               <div class="d-flex justify-center mb-8">
                 {#each option.sdkVersions as sdk (sdk)}
@@ -122,7 +122,7 @@
             </fieldset>
           {/if}
           {#if option.vlingoVersions.length > 0}
-            <fieldset class="mb-8">
+            <fieldset class="mb-8" style="border: none">
               <legend>VLINGO Version: </legend>
               <div class="d-flex justify-center mb-8">
                 {#each option.vlingoVersions as vlingo (vlingo)}
