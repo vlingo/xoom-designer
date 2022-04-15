@@ -50,9 +50,11 @@ public class CodeGenerationContextMapper {
                                       final Logger logger) {
     this.data = data;
     this.generationTarget = generationTarget;
-    this.parameters = CodeGenerationParameters.from(DIALECT, Dialect.withName(data.platformSettings.lang.toUpperCase()));
+    final Dialect dialect = data.platformSettings != null ?
+            Dialect.withName(data.platformSettings.lang.toUpperCase()) : Dialect.findDefault();
+    this.parameters = CodeGenerationParameters.from(DIALECT, dialect);
     this.context = CodeGenerationContextFactory.build(logger, parameters);
-    if(Dialect.withName(data.platformSettings.lang.toUpperCase()).isJava())
+    if(dialect.isJava())
       this.formatter = ComponentRegistry.withName("defaultCodeFormatter");
     else
       this.formatter = ComponentRegistry.withName("cSharpCodeFormatter");
@@ -246,8 +248,6 @@ public class CodeGenerationContextMapper {
                     data.deployment.kubernetesPod, data.deployment.producerExchangePort);
 
     parameters.add(APPLICATION_NAME, data.context.artifactId)
-            .add(SDK_VERSION, data.platformSettings.sdkVersion)
-            .add(VLINGO_VERSION, data.platformSettings.vlingoVersion)
             .add(USE_ANNOTATIONS, data.useAnnotations)
             .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
             .add(GROUP_ID, data.context.groupId)
@@ -262,6 +262,10 @@ public class CodeGenerationContextMapper {
             .add(TARGET_FOLDER, definitiveFolder.toString())
             .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data))
             .add(WEB_UI_DIALECT, data.generateUI != null && data.generateUI ? data.generateUIWith : "");
+    if(data.platformSettings != null)
+      parameters
+            .add(SDK_VERSION, data.platformSettings.sdkVersion)
+            .add(VLINGO_VERSION, data.platformSettings.vlingoVersion);
   }
 
 }
