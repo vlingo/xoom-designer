@@ -98,9 +98,9 @@
   </div>
 
   <div class="d-flex justify-center mb-8">
-    <fieldset class="mb-8" style="width: 50%;padding: 15px; border: none">
+    <fieldset style="width: 50%;padding: 15px; border: none">
       <legend>Language: </legend>
-      <div class="d-flex justify-center mb-8">
+      <div class="d-flex justify-center">
         {#each options as option (option)}
           <div class="ml-6 mr-6">
             <Radio bind:group={lang} disabled={option.disabled} value={option.value}>{option.name}</Radio>
@@ -110,9 +110,9 @@
       {#each options as option (option)}
         {#if !option.disabled}
           {#if option.sdkVersions.length > 0}
-            <fieldset class="mb-8" style="border: none">
+            <fieldset style="border: none">
               <legend>SDK Version: </legend>
-              <div class="d-flex justify-center mb-8">
+              <div class="d-flex">
                 {#each option.sdkVersions as sdk (sdk)}
                   <div class="ml-6 mr-6">
                     <Radio bind:group={sdkVersion} value={sdk.value}>{sdk.name}</Radio>
@@ -122,9 +122,9 @@
             </fieldset>
           {/if}
           {#if option.vlingoVersions.length > 0}
-            <fieldset class="mb-8" style="border: none">
+            <fieldset style="border: none">
               <legend>VLINGO Version: </legend>
-              <div class="d-flex justify-center mb-8">
+              <div class="d-flex">
                 {#each option.vlingoVersions as vlingo (vlingo)}
                   <div class="ml-6 mr-6">
                     <Radio bind:group={vlingoVersion} value={vlingo.value}>{vlingo.name}</Radio>
