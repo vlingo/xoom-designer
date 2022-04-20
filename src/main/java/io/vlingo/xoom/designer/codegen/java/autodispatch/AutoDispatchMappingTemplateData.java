@@ -77,7 +77,7 @@ public class AutoDispatchMappingTemplateData extends TemplateData {
       } catch (final IllegalArgumentException exception) {
         return null;
       }
-    }).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+    }).filter(Objects::nonNull).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   @SuppressWarnings("serial")

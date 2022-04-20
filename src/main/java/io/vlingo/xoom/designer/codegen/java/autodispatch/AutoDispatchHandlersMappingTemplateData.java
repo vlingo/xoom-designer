@@ -114,6 +114,7 @@ public class AutoDispatchHandlersMappingTemplateData extends TemplateData {
 
     return Stream.of(aggregateRelatedImports, valueObjectImports)
         .flatMap(Set::stream)
+        .filter(Objects::nonNull)
         .sorted()
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
