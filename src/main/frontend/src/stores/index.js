@@ -96,7 +96,7 @@ function updateContext(currentSettings, updatedSettings) {
 }
 
 const resolveContext = (settings) => {
-	return settings.paltformSettings && settings.paltformSettings === '.Net' ? dotNetContext : defaultContext;
+	return settings.paltformSettings && settings.paltformSettings === '.NET' ? dotNetContext : defaultContext;
 }
 
 
