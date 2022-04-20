@@ -1,5 +1,5 @@
 import {writable} from 'svelte/store';
-import {defaultContext} from './context';
+import {defaultContext, dotNetContext} from './context';
 import {createLocalStore, isMobileStore} from './utils';
 import {defaultPersistenceSettings} from './persistence';
 import {defaultGenerationSettings, defaultSettings} from './generation';
@@ -91,9 +91,14 @@ function updateSettings(newSettings) {
 }
 
 function updateContext(currentSettings, updatedSettings) {
-	let updatedContext = updatedSettings.context ? updatedSettings.context : defaultContext;
+	let updatedContext = updatedSettings.context ? updatedSettings.context : resolveContext(currentSettings);
 	currentSettings.context = { ...currentSettings.context, ...updatedContext };
 }
+
+const resolveContext = (settings) => {
+	return settings.paltformSettings && settings.paltformSettings === '.Net' ? dotNetContext : defaultContext;
+}
+
 
 function updateAggregates(currentSettings, updatedSettings) {
 	if(!updatedSettings.model ||

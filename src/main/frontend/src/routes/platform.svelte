@@ -73,6 +73,7 @@
     if (selectedPlatform) {
       options = selectedPlatform.options;
       lang = selectedPlatform.options.some((o) => o.value === lang) ? lang : selectedPlatform.default;
+      platform = selectedPlatform.name;
     }
     $settings.platformSettings = {
       platform,
