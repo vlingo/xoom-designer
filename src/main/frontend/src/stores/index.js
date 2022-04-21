@@ -151,10 +151,19 @@ function updateGeneration(currentSettings, updatedSettings) {
 	currentSettings.projectDirectory = updatedSettings.projectDirectory;
 }
 
-export function isSettingsComplete(currentSettings) {
-	return currentSettings.context && currentSettings.context.groupId && currentSettings.context.artifactId &&
+const isContextSettingsComplete = (currentSettings) => {
+	if(!currentSettings.platformSettings || currentSettings.platformSettings.platform === 'JVM')
+		return currentSettings.context.groupId && currentSettings.context.artifactId &&
 			currentSettings.context.packageName && currentSettings.context.artifactVersion &&
-			Validation.validateContext(currentSettings) && currentSettings.model &&
+			Validation.validateContext(currentSettings);
+	else
+		return currentSettings.context.solutionName && currentSettings.context.projectName &&
+			currentSettings.context.projectVersion && currentSettings.context.namespace &&
+			Validation.validatePlatformWithContext(currentSettings, currentSettings.context);
+}
+
+export function isSettingsComplete(currentSettings) {
+	return currentSettings.context && isContextSettingsComplete(currentSettings) && currentSettings.model &&
 			currentSettings.model.aggregateSettings && currentSettings.model.aggregateSettings.length > 0 &&
 			currentSettings.model.persistenceSettings && Validation.validateDeployment(currentSettings)
 			&& currentSettings.projectDirectory;
