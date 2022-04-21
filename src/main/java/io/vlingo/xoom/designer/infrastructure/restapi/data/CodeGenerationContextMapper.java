@@ -241,9 +241,8 @@ public class CodeGenerationContextMapper {
 
     final Dialect dialect = data.platformSettings == null ? Dialect.findDefault() : Dialect.withName(data.platformSettings.lang);
 
-    final Path definitiveFolder = dialect.isJava() ?
-        generationTarget.definitiveFolderFor(context.generationId, data.context.artifactId, data.projectDirectory) :
-        generationTarget.definitiveFolderFor(context.generationId, data.context.solutionName, data.projectDirectory);
+    final String artifactName = dialect.isJava() ? data.context.artifactId : data.context.solutionName;
+    final Path definitiveFolder =  generationTarget.definitiveFolderFor(context.generationId, artifactName, data.projectDirectory);
 
     final DeploymentSettings deploymentSettings =
             DeploymentSettings.with(DeploymentType.of(data.deployment.type),
