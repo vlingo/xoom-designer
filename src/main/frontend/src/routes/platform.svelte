@@ -83,7 +83,7 @@
     };
   }
 
-  $: value || lang, updateOptions();
+  $: value || (lang || sdkVersion || xoomVersion), updateOptions();
 </script>
 
 <svelte:head>

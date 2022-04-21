@@ -28,12 +28,13 @@ public class CsharpApplicationSettingsData extends ApplicationSettingsData {
     final String xoomVersion = context.parameters().retrieveValue(Label.XOOM_VERSION);
 
     final TemplateData solutionSettings = BasicTemplateData.of(CsharpTemplateStandard.SOLUTION_SETTINGS,
-        TemplateParameters.with(TemplateParameter.APPLICATION_NAME, solutionName));
+        TemplateParameters.with(TemplateParameter.APPLICATION_NAME, solutionName)
+            .and(TemplateParameter.ARTIFACT_ID, projectName));
 
     final TemplateData projectSettings = BasicTemplateData.of(CsharpTemplateStandard.PROJECT_SETTINGS,
         namespaceFrom(TemplateParameter.APPLICATION_NAME)
             .and(TemplateParameter.PACKAGE_NAME, projectName)
-            .and(TemplateParameter.SDK_Version, sdkVersion)
+            .and(TemplateParameter.SDK_VERSION, sdkVersion)
             .and(TemplateParameter.XOOM_VERSION, xoomVersion));
 
     return Arrays.asList(solutionSettings, projectSettings);

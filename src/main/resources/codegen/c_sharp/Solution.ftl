@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "${appName}", "${appName}\${appName}.csproj", "{432CF1A8-D025-4F2F-91A9-5716BD1A2587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "${appName}", "${artifactId}\${artifactId}.csproj", "{432CF1A8-D025-4F2F-91A9-5716BD1A2587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
