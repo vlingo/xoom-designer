@@ -239,15 +239,16 @@ public class CodeGenerationContextMapper {
     final SchemataSettings schemataSettings =
             SchemataSettings.with(data.schemata.host, data.schemata.port, Configuration.resolveSchemataServiceDNS());
 
-    final Path definitiveFolder =
-            generationTarget.definitiveFolderFor(context.generationId, data.context.artifactId, data.projectDirectory);
+    final Dialect dialect = data.platformSettings == null ? Dialect.findDefault() : Dialect.withName(data.platformSettings.lang);
+
+    final Path definitiveFolder = dialect.isJava() ?
+        generationTarget.definitiveFolderFor(context.generationId, data.context.artifactId, data.projectDirectory) :
+        generationTarget.definitiveFolderFor(context.generationId, data.context.solutionName, data.projectDirectory);
 
     final DeploymentSettings deploymentSettings =
             DeploymentSettings.with(DeploymentType.of(data.deployment.type),
                     data.deployment.dockerImage, data.deployment.kubernetesImage,
                     data.deployment.kubernetesPod, data.deployment.producerExchangePort);
-
-    final Dialect dialect = data.platformSettings == null ? Dialect.findDefault() : Dialect.withName(data.platformSettings.lang);
 
     parameters
         .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(dialect, data))
