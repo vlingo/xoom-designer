@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.designermodel;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -21,7 +22,8 @@ public class DesignerModelGenerationStep extends TemplateProcessingStep {
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String appName = context.parameterOf(Label.APPLICATION_NAME);
     final String designerModel = context.parameterOf(Label.DESIGNER_MODEL_JSON);
-    return Arrays.asList(new DesignerModelTemplateData(appName, designerModel));
+    final Dialect dialect = context.parameterObjectOf(Label.DIALECT) == null ? Dialect.findDefault() : context.parameterObjectOf(Label.DIALECT);
+    return Arrays.asList(new DesignerModelTemplateData(dialect, appName, designerModel));
 
   }
 }
