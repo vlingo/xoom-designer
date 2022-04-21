@@ -8,6 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Vlingo.Xoom.Actors" Version="${vlingoVersion}" />
+		<PackageReference Include="Vlingo.Xoom.Actors" Version="${xoomVersion}" />
 	</ItemGroup>
 </Project>

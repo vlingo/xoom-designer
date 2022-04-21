@@ -41,6 +41,6 @@ public class ApplicationSettingsGenerationStep extends TemplateProcessingStep {
   }
 
   private String dialectNameFrom(CodeGenerationContext context) {
-    return context.parameters().retrieveValue(Label.DIALECT);
+    return context.parameterOf(Label.DIALECT);
   }
 }

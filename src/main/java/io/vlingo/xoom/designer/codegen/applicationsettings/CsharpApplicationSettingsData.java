@@ -22,36 +22,36 @@ public class CsharpApplicationSettingsData extends ApplicationSettingsData {
 
   @Override
   List<TemplateData> projectSettings() {
-    final String appName = context.parameters().retrieveValue(Label.APPLICATION_NAME);
+    final String solutionName = context.parameters().retrieveValue(Label.GROUP_ID);
+    final String projectName = context.parameters().retrieveValue(Label.ARTIFACT_ID);
     final String sdkVersion = context.parameters().retrieveValue(Label.SDK_VERSION);
-    final String vlingoVersion = context.parameters().retrieveValue(Label.VLINGO_VERSION);
+    final String xoomVersion = context.parameters().retrieveValue(Label.XOOM_VERSION);
 
     final TemplateData solutionSettings = BasicTemplateData.of(CsharpTemplateStandard.SOLUTION_SETTINGS,
-        namespaceFrom(TemplateParameter.APPLICATION_NAME));
+        TemplateParameters.with(TemplateParameter.APPLICATION_NAME, solutionName));
 
     final TemplateData projectSettings = BasicTemplateData.of(CsharpTemplateStandard.PROJECT_SETTINGS,
         namespaceFrom(TemplateParameter.APPLICATION_NAME)
-            .and(TemplateParameter.PACKAGE_NAME, appName)
+            .and(TemplateParameter.PACKAGE_NAME, projectName)
             .and(TemplateParameter.SDK_Version, sdkVersion)
-            .and(TemplateParameter.VLINGO_VERSION, vlingoVersion));
+            .and(TemplateParameter.XOOM_VERSION, xoomVersion));
 
     return Arrays.asList(solutionSettings, projectSettings);
   }
 
   @Override
   TemplateData actorSettings() {
-
     return BasicTemplateData.of(CsharpTemplateStandard.ACTOR_SETTINGS, namespaceFrom(TemplateParameter.PACKAGE_NAME));
   }
 
   private TemplateParameters namespaceFrom(TemplateParameter packageName) {
-    final String appName = context.parameters().retrieveValue(Label.APPLICATION_NAME);
-    return TemplateParameters.with(packageName, appName);
+    final String projectName = context.parameters().retrieveValue(Label.ARTIFACT_ID);
+    return TemplateParameters.with(packageName, projectName);
   }
 
   @Override
   TemplateData readmeFile() {
-    final String appName = context.parameters().retrieveValue(Label.APPLICATION_NAME);
+    final String appName = context.parameters().retrieveValue(Label.GROUP_ID);
 
     final TemplateParameters templateParameters =
         TemplateParameters.with(TemplateParameter.README_FILE, true).and(TemplateParameter.PACKAGE_NAME, appName);

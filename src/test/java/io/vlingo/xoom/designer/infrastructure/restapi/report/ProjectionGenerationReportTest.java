@@ -20,7 +20,7 @@ public class ProjectionGenerationReportTest {
   private static final String stacktraceLabel = "<br> **Stacktrace**: <br><pre>";
   private static final String designerModelLabel = "<br>**Designer Model**: <br><pre>";
   private static final String expectedExceptionMessage = "io.vlingo.xoom.codegen.CodeGenerationException: Unable to generate project";
-  private static final String expectedModelFirstNode = "{\"platformSettings\":{\"platform\":\"JVM\",\"lang\":\"Java\",\"sdkVersion\":\"1.8\",\"vlingoVersion\":\"1.0.0\"},\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\",\"packageName\":\"io.vlingo.xoomapp\"}";
+  private static final String expectedModelFirstNode = "{\"platformSettings\":{\"platform\":\"JVM\",\"lang\":\"Java\",\"sdkVersion\":\"1.8\",\"xoomVersion\":\"1.0.0\"},\"context\":{\"groupId\":\"io.vlingo\",\"artifactId\":\"xoomapp\",\"artifactVersion\":\"1.0\",\"packageName\":\"io.vlingo.xoomapp\",\"solutionName\":\"io.vlingo\",\"projectName\":\"xoomapp\",\"projectVersion\":\"1.0\",\"namespace\":\"io.vlingo.xoomapp\"}";
   private static final String expectedAction = "**Action**: Project Generation";
 
   @Test

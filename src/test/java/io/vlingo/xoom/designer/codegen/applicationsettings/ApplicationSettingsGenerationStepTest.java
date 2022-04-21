@@ -85,15 +85,17 @@ public class ApplicationSettingsGenerationStepTest extends CodeGenerationTest {
   @Test
   public void testThatCsharpSolutionIsGenerated() {
     final String namespace = "Io.Vlingo.Xoomapp";
-    final String appName = "Xoomapp";
+    final String solutionName = "Xoomapp";
+    final String projectName = "Xoomapp";
     final String sdkVersion = "net6.0";
-    final String vlingoVersion = "1.9.3";
+    final String xoomVersion = "1.9.3";
 
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, namespace),
-            CodeGenerationParameter.of(Label.APPLICATION_NAME, appName),
-            CodeGenerationParameter.of(Label.SDK_VERSION, sdkVersion),
-            CodeGenerationParameter.of(Label.VLINGO_VERSION, vlingoVersion),
-            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP));
+        CodeGenerationParameter.of(Label.GROUP_ID, solutionName),
+        CodeGenerationParameter.of(Label.ARTIFACT_ID, projectName),
+        CodeGenerationParameter.of(Label.SDK_VERSION, sdkVersion),
+        CodeGenerationParameter.of(Label.XOOM_VERSION, xoomVersion),
+        CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP));
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 

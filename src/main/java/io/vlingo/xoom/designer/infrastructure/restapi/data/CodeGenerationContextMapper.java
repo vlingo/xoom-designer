@@ -247,25 +247,35 @@ public class CodeGenerationContextMapper {
                     data.deployment.dockerImage, data.deployment.kubernetesImage,
                     data.deployment.kubernetesPod, data.deployment.producerExchangePort);
 
-    parameters.add(APPLICATION_NAME, data.context.artifactId)
-            .add(USE_ANNOTATIONS, data.useAnnotations)
-            .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
-            .add(GROUP_ID, data.context.groupId)
-            .add(ARTIFACT_ID, data.context.artifactId)
-            .add(ARTIFACT_VERSION, data.context.artifactVersion)
-            .add(PACKAGE, formatter.rectifyPackageSyntax(data.context.packageName))
-            .add(XOOM_VERSION, Configuration.resolveDefaultXoomVersion())
-            .add(DEPLOYMENT_SETTINGS, deploymentSettings)
-            .add(CLUSTER_SETTINGS, clusterSettings)
-            .add(TURBO_SETTINGS, turboSettings)
-            .add(SCHEMATA_SETTINGS, schemataSettings)
-            .add(TARGET_FOLDER, definitiveFolder.toString())
-            .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(data))
-            .add(WEB_UI_DIALECT, data.generateUI != null && data.generateUI ? data.generateUIWith : "");
-    if(data.platformSettings != null)
+    final Dialect dialect = data.platformSettings == null ? Dialect.findDefault() : Dialect.withName(data.platformSettings.lang);
+
+    parameters
+        .add(DESIGNER_MODEL_JSON, DesignerModelFormatter.format(dialect, data))
+        .add(TARGET_FOLDER, definitiveFolder.toString());
+
+    if(dialect.isJava())
+      parameters.add(APPLICATION_NAME, data.context.artifactId)
+          .add(USE_ANNOTATIONS, data.useAnnotations)
+          .add(USE_AUTO_DISPATCH, data.useAutoDispatch)
+          .add(GROUP_ID, data.context.groupId)
+          .add(ARTIFACT_ID, data.context.artifactId)
+          .add(ARTIFACT_VERSION, data.context.artifactVersion)
+          .add(PACKAGE, formatter.rectifyPackageSyntax(data.context.packageName))
+          .add(XOOM_VERSION, Configuration.resolveDefaultXoomVersion())
+          .add(DEPLOYMENT_SETTINGS, deploymentSettings)
+          .add(CLUSTER_SETTINGS, clusterSettings)
+          .add(TURBO_SETTINGS, turboSettings)
+          .add(SCHEMATA_SETTINGS, schemataSettings)
+          .add(WEB_UI_DIALECT, data.generateUI != null && data.generateUI ? data.generateUIWith : "");
+    else
       parameters
-            .add(SDK_VERSION, data.platformSettings.sdkVersion)
-            .add(VLINGO_VERSION, data.platformSettings.vlingoVersion);
+          .add(APPLICATION_NAME, data.context.solutionName)
+          .add(GROUP_ID, data.context.solutionName)
+          .add(ARTIFACT_ID, data.context.projectName)
+          .add(ARTIFACT_VERSION, data.context.projectVersion)
+          .add(PACKAGE, formatter.rectifyPackageSyntax(data.context.namespace))
+          .add(SDK_VERSION, data.platformSettings.sdkVersion)
+          .add(XOOM_VERSION, data.platformSettings.xoomVersion);
   }
 
 }

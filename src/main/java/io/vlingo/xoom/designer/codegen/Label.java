@@ -84,9 +84,7 @@ public enum Label implements ParameterLabel {
   AGGREGATE_STATE("aggregateState"),
   VALUE_OBJECT_FIELD("valueObjectField"),
   UI_TYPE("uiType"),
-  SDK_VERSION("sdkVersion"),
-  VLINGO_VERSION("vlingoVersion");
-
+  SDK_VERSION("sdkVersion");
   @SuppressWarnings("unused")
   private final String key;
 

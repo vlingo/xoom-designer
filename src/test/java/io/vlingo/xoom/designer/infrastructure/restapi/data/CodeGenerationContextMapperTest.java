@@ -30,7 +30,7 @@ public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatJavaTaskExecutionContextIsMapped() {
-    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "1.0.0");
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "{{XOOM_VERSION}}");
     final CodeElementFormatter codeElementFormatter =
             CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
@@ -51,7 +51,7 @@ public class CodeGenerationContextMapperTest {
 
   @Test
   public void testThatCsharpTaskExecutionContextIsMapped() {
-    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "1.0.0");
+    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "{{XOOM_VERSION}}");
     final CodeElementFormatter codeElementFormatter =
         CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
@@ -84,7 +84,7 @@ public class CodeGenerationContextMapperTest {
             "    \"platform\": \"JVM\",\n" +
             "    \"lang\": \"Java\",\n" +
             "    \"sdkVersion\": \"1.8\",\n" +
-            "    \"vlingoVersion\": \"1.0.0\"\n" +
+            "    \"xoomVersion\": \"{{XOOM_VERSION}}\"\n" +
             "  },\n" +
             "  \"context\": {\n" +
             "    \"groupId\": \"io.vlingo\",\n" +
@@ -105,13 +105,13 @@ public class CodeGenerationContextMapperTest {
         "    \"platform\": \".NET\",\n" +
         "    \"lang\": \"C_SHARP\",\n" +
         "    \"sdkVersion\": \"net6.0\",\n" +
-        "    \"vlingoVersion\": \"1.0.0\"\n" +
+        "    \"xoomVersion\": \"{{XOOM_VERSION}}\"\n" +
         "  },\n" +
         "  \"context\": {\n" +
-        "    \"groupId\": \"io.vlingo\",\n" +
-        "    \"artifactId\": \"xoomapp\",\n" +
-        "    \"artifactVersion\": \"1.0\",\n" +
-        "    \"packageName\": \"io.vlingo.xoomapp\"\n" +
+        "    \"solutionName\": \"io.vlingo\",\n" +
+        "    \"projectName\": \"xoomapp\",\n" +
+        "    \"projectVersion\": \"1.0\",\n" +
+        "    \"namespace\": \"io.vlingo.xoomapp\"\n" +
         "  },\n"));
   }
 
