@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.queries;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -30,7 +31,7 @@ public class QueriesUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
-    return !dialectName.isEmpty() && context.parameterOf(Label.CQRS, Boolean::valueOf);
+    final Dialect dialect = context.parameterObjectOf(Label.DIALECT);
+    return (dialect == null || dialect.isJava()) && context.parameterOf(Label.CQRS, Boolean::valueOf);
   }
 }
