@@ -12,14 +12,14 @@
           value: "Java",
           disabled: false,
           sdkVersions: [],
-          vlingoVersions: [],
+          xoomVersions: [],
         },
         {
           name: "Kotlin",
           value: "Kotlin",
           disabled: true,
           sdkVersions: [],
-          vlingoVersions: [],
+          xoomVersions: [],
         },
       ],
       default: "Java",
@@ -37,7 +37,7 @@
               value: "net6.0",
             },
           ],
-          vlingoVersions: [
+          xoomVersions: [
             {
               name: "1.9.3 (Stable)",
               value: "1.9.3",
@@ -49,7 +49,7 @@
           value: "F_SHARP",
           disabled: true,
           sdkVersions: [],
-          vlingoVersions: [],
+          xoomVersions: [],
         },
       ],
       default: "C#",
@@ -60,7 +60,7 @@
   let platform = !$settings.platformSettings ? "JVM" : $settings.platformSettings.platform;
   let lang = !$settings.platformSettings ? "Java" : $settings.platformSettings.lang;
   let sdkVersion = !$settings.platformSettings ? "" : $settings.platformSettings.sdkVersion;
-  let vlingoVersion = !$settings.platformSettings ? "" : $settings.platformSettings.vlingoVersion;
+  let xoomVersion = !$settings.platformSettings ? "" : $settings.platformSettings.xoomVersion;
   let options = platforms.reduce((acc, cur) => {
     if ( $settings.platformSettings &&  $settings.platformSettings.platform === cur.name)
       acc = [...cur.options];
@@ -79,7 +79,7 @@
       platform,
       lang,
       sdkVersion,
-      vlingoVersion,
+      xoomVersion,
     };
   }
 
@@ -122,13 +122,13 @@
               </div>
             </fieldset>
           {/if}
-          {#if option.vlingoVersions.length > 0}
+          {#if option.xoomVersions.length > 0}
             <fieldset style="border: none">
               <legend>VLINGO Version: </legend>
               <div class="d-flex">
-                {#each option.vlingoVersions as vlingo (vlingo)}
+                {#each option.xoomVersions as vlingo (vlingo)}
                   <div class="ml-6 mr-6">
-                    <Radio bind:group={vlingoVersion} value={vlingo.value}>{vlingo.name}</Radio>
+                    <Radio bind:group={xoomVersion} value={vlingo.value}>{vlingo.name}</Radio>
                   </div>
                 {/each}
               </div>
