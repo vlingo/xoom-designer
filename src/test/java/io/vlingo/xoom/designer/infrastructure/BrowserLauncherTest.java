@@ -7,7 +7,7 @@ import org.junit.jupiter.api.*;
 
 public class BrowserLauncherTest {
 
-  private static final String EXPECTED_URL = "http://localhost:19090/context";
+  private static final String EXPECTED_URL = "http://localhost:19090/platform";
 
   @Test
   public void testBrowserLaunchCommandResolution() {

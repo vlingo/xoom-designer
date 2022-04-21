@@ -87,7 +87,7 @@
 </script>
 
 <svelte:head>
-  <title>Context</title>
+  <title>Platform</title>
 </svelte:head>
 
 <!-- add newbie tooltips -->
