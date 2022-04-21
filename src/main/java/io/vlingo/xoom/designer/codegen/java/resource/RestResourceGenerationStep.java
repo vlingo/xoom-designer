@@ -25,7 +25,8 @@ public class RestResourceGenerationStep extends TemplateProcessingStep {
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
     final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
-    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&  !context.hasParameter(Label.USE_AUTO_DISPATCH) || !context.parameterOf(Label.USE_AUTO_DISPATCH, Boolean::valueOf);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&
+        (!context.hasParameter(Label.USE_AUTO_DISPATCH) || !context.parameterOf(Label.USE_AUTO_DISPATCH, Boolean::valueOf));
   }
 
 }
