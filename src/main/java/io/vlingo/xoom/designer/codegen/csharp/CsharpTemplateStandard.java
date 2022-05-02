@@ -1,12 +1,23 @@
+// Copyright © 2012-2022 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.model.MethodScope;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.designer.codegen.csharp.Template.AGGREGATE_PROTOCOL_INSTANCE_METHOD;
+import static io.vlingo.xoom.designer.codegen.csharp.Template.AGGREGATE_PROTOCOL_STATIC_METHOD;
+import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.APPLICATION_NAME;
+import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.METHOD_SCOPE;
 
 public enum CsharpTemplateStandard implements TemplateStandard {
 
@@ -16,8 +27,20 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   PROJECT_SETTINGS(parameters -> Template.PROJECT_SETTINGS.filename,
       (name, parameters) -> parameters.find(APPLICATION_NAME) + ".csproj"),
 
-  ACTOR_SETTINGS(parameters -> Template.ACTOR_SETTINGS.filename,
-      (name, parameters) -> "vlingo-actors.json");
+  ACTOR_SETTINGS(parameters -> Template.ACTOR_SETTINGS.filename, (name, parameters) -> "vlingo-actors.json"),
+
+  AGGREGATE_PROTOCOL(parameters -> Template.AGGREGATE_PROTOCOL.filename, (name, parameters) -> "I" + name),
+
+  AGGREGATE_PROTOCOL_METHOD(parameters -> parameters.<MethodScope>find(METHOD_SCOPE).isStatic() ?
+      AGGREGATE_PROTOCOL_STATIC_METHOD.filename : AGGREGATE_PROTOCOL_INSTANCE_METHOD.filename),
+
+  AGGREGATE(parameters -> Template.STATEFUL_ENTITY.filename, (name, parameters) -> name + "Entity"),
+
+  AGGREGATE_STATE(parameters -> Template.AGGREGATE_STATE.filename, (name, parameters) -> name + "State"),
+
+  AGGREGATE_METHOD(parameters -> Template.STATEFUL_ENTITY_METHOD.filename),
+
+  AGGREGATE_STATE_METHOD(parameters -> Template.AGGREGATE_STATE_METHOD.filename);
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

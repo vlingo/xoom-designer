@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen.java.model;
+package io.vlingo.xoom.designer.codegen.csharp.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.dialect.Dialect;
@@ -24,8 +24,17 @@ public class ModelGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    final Dialect dialect = context.parameterObjectOf(Label.DIALECT);
-    return (dialect == null || dialect.isJava()) && context.hasParameter(Label.AGGREGATE);
+    final String dialectName = dialectNameFrom(context);
+    return dialectName != null && Dialect.withName(dialectName).equals(Dialect.C_SHARP) && context.hasParameter(Label.AGGREGATE);
   }
 
+  @Override
+  protected Dialect resolveDialect(CodeGenerationContext context) {
+    final String dialectName = dialectNameFrom(context);
+    return dialectName.isEmpty() ? super.resolveDialect(context) : Dialect.withName(dialectName);
+  }
+
+  private String dialectNameFrom(CodeGenerationContext context) {
+    return context.parameterOf(Label.DIALECT);
+  }
 }

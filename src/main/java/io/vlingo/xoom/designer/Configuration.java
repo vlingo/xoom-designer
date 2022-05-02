@@ -76,6 +76,7 @@ public class Configuration {
     ComponentRegistry.register("defaultCodeFormatter", defaultCodeElementFormatter);
     ComponentRegistry.register("cSharpCodeFormatter", cSharpCodeElementFormatter);
     ComponentRegistry.register("codeGenerationSteps", codeGenerationSteps());
+    ComponentRegistry.register("cSharpCodeGenerationSteps", cSharpCodeGenerationSteps());
   }
 
   private static List<CodeGenerationStep> codeGenerationSteps() {
@@ -116,6 +117,21 @@ public class Configuration {
         new MavenWrapperInstallationStep(),
         new SchemaPushStep(withType(CommandExecutionProcess.class)),
         new SchemaPullStep(withType(CommandExecutionProcess.class)),
+        new StagingFolderCleanUpStep(Phase.POST_GENERATION)
+    );
+  }
+
+  private static List<CodeGenerationStep> cSharpCodeGenerationSteps() {
+    return Arrays.asList(
+        // Preliminary
+        new CodeGenerationParameterValidationStep(),
+        new StagingFolderCleanUpStep(Phase.PRE_GENERATION),
+        new TemporaryTaskFolderCreationStep(),
+        // CodeGen
+        new ApplicationSettingsGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.model.ModelGenerationStep(),
+        // Concluding
+        new ContentCreationStep(),
         new StagingFolderCleanUpStep(Phase.POST_GENERATION)
     );
   }

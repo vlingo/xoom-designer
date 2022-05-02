@@ -10,7 +10,14 @@ package io.vlingo.xoom.designer.codegen.csharp;
 public enum Template {
   SOLUTION_SETTINGS("Solution"),
   PROJECT_SETTINGS("Project"),
-  ACTOR_SETTINGS("ActorSettings");
+  ACTOR_SETTINGS("ActorSettings"),
+  AGGREGATE_PROTOCOL("AggregateProtocol"),
+  AGGREGATE_PROTOCOL_INSTANCE_METHOD("AggregateProtocolInstanceMethod"),
+  AGGREGATE_PROTOCOL_STATIC_METHOD("AggregateProtocolStaticMethod"),
+  AGGREGATE_STATE("AggregateState"),
+  AGGREGATE_STATE_METHOD("AggregateStateMethod"),
+  STATEFUL_ENTITY("StatefulEntity"),
+  STATEFUL_ENTITY_METHOD("StatefulEntityMethod");
 
   public final String filename;
 

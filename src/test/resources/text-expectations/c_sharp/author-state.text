@@ -1,0 +1,44 @@
+using Vlingo.Xoom.Symbio.Store.Object;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
+ */
+public sealed class AuthorState : StateObject
+{
+  public String id {get; set;}
+  public String name {get; set;}
+  public List<Double> rank = new List<Double>();
+
+  public static AuthorState IdentifiedBy(String id)
+  {
+    return new AuthorState(id, null, new List<Double>());
+  }
+
+  public AuthorState (String id, String name, List<Double> rank)
+  {
+    this.id = id;
+    this.name = name;
+    this.rank.AddRange(rank);
+  }
+
+  public AuthorState withName(String name)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, name, this.rank);
+  }
+
+  public AuthorState changeRank(List<Double> rank)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, rank);
+  }
+
+  public AuthorState hide()
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(this.id, this.name, this.rank);
+  }
+
+}

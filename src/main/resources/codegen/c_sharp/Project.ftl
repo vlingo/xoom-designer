@@ -9,5 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Vlingo.Xoom.Actors" Version="${xoomVersion}" />
+		<PackageReference Include="Vlingo.Xoom.Symbio" Version="${xoomVersion}" />
+		<PackageReference Include="Vlingo.Xoom.Lattice" Version="${xoomVersion}" />
 	</ItemGroup>
 </Project>
