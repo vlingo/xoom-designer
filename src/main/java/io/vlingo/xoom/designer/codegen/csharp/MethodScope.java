@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen.csharp.model;
+package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.actors.Definition;
 import io.vlingo.xoom.actors.Stage;

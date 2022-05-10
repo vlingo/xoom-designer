@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen.csharp.formatting;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.model.FieldDetail;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 
 import java.util.List;
 import java.util.stream.Stream;

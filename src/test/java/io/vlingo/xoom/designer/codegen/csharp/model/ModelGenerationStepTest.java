@@ -42,11 +42,15 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     final Content authorProtocol = context.findContent(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "IAuthor");
     final Content authorEntity = context.findContent(CsharpTemplateStandard.AGGREGATE, "AuthorEntity");
     final Content authorState = context.findContent(CsharpTemplateStandard.AGGREGATE_STATE, "AuthorState");
+    final Content authorRegistered = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
+    final Content authorRanked = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
 
-    Assertions.assertEquals(3, context.contents().size());
+    Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("author-state")));
+    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
+    Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked")));
   }
 
   private CodeGenerationParameter authorAggregate() {

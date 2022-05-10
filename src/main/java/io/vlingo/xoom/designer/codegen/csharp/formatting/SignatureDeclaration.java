@@ -9,8 +9,8 @@ package io.vlingo.xoom.designer.codegen.csharp.formatting;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.model.FieldDetail;
-import io.vlingo.xoom.designer.codegen.csharp.model.MethodScope;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
+import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -61,18 +61,22 @@ public class SignatureDeclaration implements Formatters.Arguments {
   }
 
   private List<String> applyAggregateBasedFormatting(final CodeGenerationParameter parent, final Label relatedParameter) {
-    return parent.retrieveAllRelated(relatedParameter).map(field -> {
-      final String fieldType = FieldDetail.typeOf(field.parent(Label.AGGREGATE), field.value);
+    return parent.retrieveAllRelated(relatedParameter)
+        .map(this::fieldSignature)
+        .collect(Collectors.toList());
+  }
 
-      if(FieldDetail.isCollection(fieldType)) {
-        final CollectionMutation collectionMutation = field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+  private String fieldSignature(CodeGenerationParameter field) {
+    final String fieldType = FieldDetail.typeOf(field.parent(Label.AGGREGATE), field.value);
 
-        if(collectionMutation.isSingleParameterBased()) {
-          return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(Label.ALIAS));
-        }
+    if(FieldDetail.isCollection(fieldType)) {
+      final CollectionMutation collectionMutation = field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+
+      if(collectionMutation.isSingleParameterBased()) {
+        return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(Label.ALIAS));
       }
-      return String.format(SIGNATURE_PATTERN, fieldType, field.value);
-    }).collect(Collectors.toList());
+    }
+    return String.format(SIGNATURE_PATTERN, fieldType, field.value);
   }
 
 }

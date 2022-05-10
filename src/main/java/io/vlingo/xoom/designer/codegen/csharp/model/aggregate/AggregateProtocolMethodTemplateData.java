@@ -14,9 +14,9 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
-import io.vlingo.xoom.designer.codegen.csharp.model.MethodScope;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.HashSet;

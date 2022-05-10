@@ -8,7 +8,7 @@ package io.vlingo.xoom.designer.codegen.csharp.formatting;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.model.MethodScope;
+import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
 
 import java.util.Collection;
 import java.util.Collections;

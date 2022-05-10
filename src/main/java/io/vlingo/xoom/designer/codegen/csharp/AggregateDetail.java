@@ -5,12 +5,13 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen.csharp.model.aggregate;
+package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.model.FieldDetail;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -32,12 +33,37 @@ public class AggregateDetail {
     return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found"));
   }
 
+  public static List<String> resolveFieldsPaths(final String variableName, final CodeGenerationParameter aggregate) {
+    return resolveFieldsPaths(variableName, aggregate.retrieveAllRelated(Label.STATE_FIELD));
+  }
+
+  public static List<String> resolveFieldsPaths(final String variableName, final Stream<CodeGenerationParameter> aggregateFields) {
+    final List<String> paths = new ArrayList<>();
+    aggregateFields.forEach(field -> resolveFieldPath(variableName, field, paths));
+    return paths;
+  }
+
+  public static String stateFieldType(final CodeGenerationParameter aggregate, final String fieldPath) {
+    return stateFieldAtPath(1, aggregate, fieldPath.split("\\."));
+  }
+
+  private static String stateFieldAtPath(final int pathIndex, final CodeGenerationParameter parent, final String[] fieldPathParts) {
+    final String fieldName = fieldPathParts[pathIndex];
+    final CodeGenerationParameter field = stateFieldWithName(parent, fieldName);
+
+    return field.hasAny(Label.COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(Label.FIELD_TYPE);
+  }
+
   public static Set<String> resolveImports(final CodeGenerationParameter aggregate) {
     return resolveImports(aggregate.retrieveAllRelated(Label.STATE_FIELD));
   }
 
   public static Set<String> resolveImports(final Stream<CodeGenerationParameter> stateFields) {
     return stateFields.map(FieldDetail::resolveImportForType).collect(Collectors.toSet());
+  }
+  private static void resolveFieldPath(final String relativePath, final CodeGenerationParameter field, final List<String> paths) {
+    final String currentRelativePath = relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
+    paths.add(currentRelativePath);
   }
 
   public static Stream<CodeGenerationParameter> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName) {

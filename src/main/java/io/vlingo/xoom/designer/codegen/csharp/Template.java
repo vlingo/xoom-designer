@@ -19,7 +19,14 @@ public enum Template {
   AGGREGATE_STATE("AggregateState"),
   AGGREGATE_STATE_METHOD("AggregateStateMethod"),
   STATEFUL_ENTITY("StatefulEntity"),
-  STATEFUL_ENTITY_METHOD("StatefulEntityMethod");
+  STATEFUL_ENTITY_METHOD("StatefulEntityMethod"),
+  DOMAIN_EVENT("DomainEvent"),
+  EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
+  STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
+  OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
+  EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
+  STATE_ADAPTER("StateAdapter"),
+  DEFAULT_BOOTSTRAP("DefaultBootstrap");
 
   public final String filename;
 

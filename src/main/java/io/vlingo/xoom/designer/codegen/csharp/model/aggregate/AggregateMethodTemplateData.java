@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
@@ -28,17 +29,17 @@ public class AggregateMethodTemplateData extends TemplateData {
 
   public static List<TemplateData> from(final TemplateParameters parentParameters, final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-            .map(method -> new AggregateMethodTemplateData(parentParameters, method))
-            .collect(toList());
+        .map(method -> new AggregateMethodTemplateData(parentParameters, method))
+        .collect(toList());
   }
 
   private AggregateMethodTemplateData(final TemplateParameters parentParameters, final CodeGenerationParameter method) {
 
     this.parameters = TemplateParameters.with(TemplateParameter.METHOD_NAME, method.value)
-                .and(TemplateParameter.DOMAIN_EVENT_NAME, method.retrieveRelatedValue(Label.DOMAIN_EVENT))
-                .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
-                .and(TemplateParameter.METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
-                .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(Label.AGGREGATE).value));
+        .and(TemplateParameter.DOMAIN_EVENT_NAME, method.retrieveRelatedValue(Label.DOMAIN_EVENT))
+        .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
+        .and(TemplateParameter.METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
+        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent(Label.AGGREGATE).value));
 
     parentParameters.addImports(resolveImports(method));
   }
@@ -48,7 +49,6 @@ public class AggregateMethodTemplateData extends TemplateData {
 
     return AggregateDetail.resolveImports(involvedStateFields);
   }
-
 
   @Override
   public TemplateParameters parameters() {

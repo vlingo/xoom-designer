@@ -5,7 +5,7 @@
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
 
-package io.vlingo.xoom.designer.codegen.csharp.model;
+package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
@@ -13,7 +13,7 @@ import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.function.Function;
+import java.util.Locale;
 
 public class FieldDetail {
 
@@ -21,14 +21,21 @@ public class FieldDetail {
 
   public static String typeOf(final CodeGenerationParameter parent, final String fieldName, final CollectionMutation collectionMutation) {
     final String type = typeOf(parent, fieldName);
-    return collectionMutation.isSingleParameterBased() ? genericTypeOf(type) : type;
+    return collectionMutation.isSingleParameterBased() ? genericTypeOf(type) : primitiveOrValueObjectTypeOf(type);
+  }
+
+  private static String primitiveOrValueObjectTypeOf(String type) {
+    if(isString(type))
+      return type.toLowerCase(Locale.ROOT);
+    else
+      return type;
   }
 
   @SuppressWarnings("static-access")
   public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
     return parent.retrieveAllRelated(resolveFieldTypeLabel(parent))
             .filter(stateField -> stateField.value.equals(fieldName))
-            .map(resolveStateFieldType()).findFirst()
+            .map(FieldDetail::resolveStateFieldType).findFirst()
             .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
   }
 
@@ -74,11 +81,27 @@ public class FieldDetail {
     return type.contains("<") && type.endsWith(">");
   }
 
+  public static boolean isScalar(final CodeGenerationParameter field) {
+    if(field.hasAny(Label.COLLECTION_TYPE)) {
+      return false;
+    }
+    return isScalar(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
   public static boolean isScalar(final String fieldType) {
     if (fieldType == null || fieldType.isEmpty()) {
       throw new IllegalArgumentException("Unable to find field type");
     }
     return CodeGenerationProperties.SCALAR_TYPES.contains(fieldType.toLowerCase());
+  }
+
+  public static boolean isMethodParameterAssignableToScalar(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
+    final String type = typeOf(field.parent(), field.value);
+    if(isScalar(type)) {
+      return true;
+    }
+    final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+    return isScalarTypedCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
   public static String resolveCollectionType(final CodeGenerationParameter field) {
@@ -96,7 +119,7 @@ public class FieldDetail {
 
   public static Boolean requireImmediateInstantiation(final CodeGenerationParameter field) {
     final CollectionMutation collectionMutation =
-            field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+        field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
     return field.hasAny(Label.COLLECTION_TYPE) && !collectionMutation.isSingleParameterBased();
   }
@@ -105,8 +128,28 @@ public class FieldDetail {
     return fieldType.equalsIgnoreCase("int") ? "int" : fieldType;
   }
 
+  public static boolean hasStringType(final CodeGenerationParameter field) {
+    return isString(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
+  public static boolean hasNumericType(final CodeGenerationParameter field) {
+    return isNumeric(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
+  public static boolean hasBooleanType(final CodeGenerationParameter field) {
+    return isBoolean(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
+  public static boolean hasCharType(final CodeGenerationParameter field) {
+    return isChar(field.retrieveRelatedValue(Label.FIELD_TYPE));
+  }
+
   public static boolean isCollection(final CodeGenerationParameter field) {
     return field.hasAny(Label.COLLECTION_TYPE);
+  }
+
+  public static boolean isScalarTypedCollection(final CodeGenerationParameter field) {
+    return isCollection(field) && !isValueObjectCollection(field);
   }
 
   public static boolean isCollection(final String fieldType) {
@@ -154,11 +197,9 @@ public class FieldDetail {
     return fieldType.equalsIgnoreCase(CodeGenerationProperties.CHAR_TYPE);
   }
 
-  private static Function<CodeGenerationParameter, String> resolveStateFieldType() {
-    return stateField -> {
+  private static String resolveStateFieldType(CodeGenerationParameter stateField) {
       final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
       return isCollection(stateField) ? resolveCollectionType(stateField) : fieldType;
-    };
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {

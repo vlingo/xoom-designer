@@ -9,7 +9,7 @@ package io.vlingo.xoom.designer.codegen.csharp.formatting;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.model.FieldDetail;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 
 import java.util.List;
 import java.util.function.Function;
@@ -53,16 +53,17 @@ public class AlternateReference extends Formatters.Fields<String> {
 
   private boolean isPresent(final CodeGenerationParameter field, final List<CodeGenerationParameter> presentFields) {
 
-    return presentFields.stream().anyMatch(present -> {
+    return presentFields.stream().anyMatch(present -> isPresentField(field, present));
+  }
 
-      final CollectionMutation collectionMutation =
-              present.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+  private boolean isPresentField(CodeGenerationParameter field, CodeGenerationParameter present) {
+    final CollectionMutation collectionMutation =
+            present.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
-      if(supportSelfReferencedFields && !collectionMutation.shouldReplaceWithMethodParameter()) {
-        return false;
-      }
+    if(supportSelfReferencedFields && !collectionMutation.shouldReplaceWithMethodParameter()) {
+      return false;
+    }
 
-      return present.value.equals(field.value);
-    });
+    return present.value.equals(field.value);
   }
 }

@@ -9,10 +9,13 @@ package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.template.ParameterKey;
 
+import static io.vlingo.xoom.codegen.template.TemplateParameters.PRODUCTION_CODE_KEY;
+
 public enum TemplateParameter implements ParameterKey {
 
   PACKAGE_NAME("packageName"),
   APPLICATION_NAME("appName"),
+  SDK_VERSION("sdkVersion"),
   COLLECTION_MUTATIONS("collectionMutations"),
   AGGREGATES("aggregates"),
   AGGREGATE_PROTOCOL_NAME("aggregateProtocolName"),
@@ -34,7 +37,18 @@ public enum TemplateParameter implements ParameterKey {
   METHOD_SCOPE("methodScope"),
   METHOD_PARAMETERS("methodParameters"),
   METHOD_INVOCATION_PARAMETERS("methodInvocationParameters"),
-  CONSTRUCTOR_PARAMETERS("constructorParameters");
+  CONSTRUCTOR_PARAMETERS("constructorParameters"),
+  DEFAULT_SCHEMA_VERSION("defaultSchemaVersion"),
+  DISPATCHER_NAME("dispatcherName"),
+  ADAPTER_NAME("adapterName"),
+  SOURCE_NAME("sourceName"),
+  STORAGE_TYPE("storageType"),
+  ENTITY_UNIT_TEST_NAME("entityUnitTestName"),
+  PRODUCTION_CODE(PRODUCTION_CODE_KEY),
+  UNIT_TEST("unitTest"),
+  TEST_CASES("testCases"),
+  AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
+  ;
 
   public final String key;
 

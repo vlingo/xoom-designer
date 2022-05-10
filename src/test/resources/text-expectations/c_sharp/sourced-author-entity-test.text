@@ -1,0 +1,71 @@
+using System.Collections.Generic;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Tests.Model.Author;
+
+public class AuthorEntityTest
+{
+  private readonly World _world;
+  private readonly IStateStore _store;
+  private readonly MockDispatcher _dispatcher;
+  private readonly IAuthor _author;
+
+  public AuthorEntityTest()
+  {
+    _dispatcher = new MockDispatcher();
+    _world = World.StartWithDefaults("test-stateful");
+    new StateAdapterProvider(_world).RegisterAdapter(new AuthorStateAdapter());
+    _store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<IState>), new []{_dispatcher});
+    new StatefulTypeRegistry(_world).Register(new Info(_store, typeof(AuthorState), typeof(AuthorState).FullName));
+    _author = _world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
+  }
+
+  private static string NAME_FOR_WITH_NAME_TEST = "author-name";
+
+  [Fact]
+  public void withName()
+  {
+    var dispatcherAccess = _dispatcher.AfterCompleting(1);
+    var state = _author.withName(NAME_FOR_WITH_NAME_TEST).Await();
+
+    Assert.Equal(state.name, "author-name");
+    Assert.Equal(1, dispatcherAccess.ReadFrom<int>("entriesCount"));
+    Assert.Equal(typeof(AuthorRegistered).Name, dispatcherAccess.ReadFrom<BaseEntry<string>>("appendedAt").GetType().Name);
+  }
+
+  private static List<Double> RANK_FOR_CHANGE_RANK_TEST = new List<Double>();
+
+  [Fact]
+  public void changeRank()
+  {
+    _createEntity();
+    var dispatcherAccess = _dispatcher.AfterCompleting(1);
+    var state = _author.changeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
+
+    Assert.Equal(state.name, "author-name");
+    Assert.NotNull(state.rank);
+    Assert.Equal(2, dispatcherAccess.ReadFrom<int>("entriesCount"));
+    Assert.Equal(typeof(AuthorRanked).Name, dispatcherAccess.ReadFrom<BaseEntry<string>>("appendedAt").GetType().Name);
+  }
+
+
+  [Fact]
+  public void hide()
+  {
+    _author.hide().Await();
+
+  }
+
+  private static string NAME_FOR_ENTITY_CREATION = "author-name";
+
+  private void _createEntity()
+  {
+    _author.withName(NAME_FOR_ENTITY_CREATION).Await();
+  }
+}

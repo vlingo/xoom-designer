@@ -14,8 +14,8 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
-import io.vlingo.xoom.designer.codegen.csharp.model.FieldDetail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
