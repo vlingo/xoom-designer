@@ -14,6 +14,8 @@ import io.vlingo.xoom.designer.codegen.csharp.model.MethodScope;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static io.vlingo.xoom.designer.codegen.csharp.Template.AGGREGATE_PROTOCOL_INSTANCE_METHOD;
+import static io.vlingo.xoom.designer.codegen.csharp.Template.AGGREGATE_PROTOCOL_STATIC_METHOD;
 import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.APPLICATION_NAME;
 import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.METHOD_SCOPE;
 
@@ -39,6 +41,10 @@ public enum CsharpTemplateStandard implements TemplateStandard {
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;
+
+  CsharpTemplateStandard(final Function<TemplateParameters, String> templateFileRetriever) {
+    this(templateFileRetriever, (name, parameters) -> name);
+  }
 
   CsharpTemplateStandard(final Function<TemplateParameters, String> templateFileRetriever,
                          final BiFunction<String, TemplateParameters, String> nameResolver) {
