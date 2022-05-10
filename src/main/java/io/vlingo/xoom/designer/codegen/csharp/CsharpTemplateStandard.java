@@ -1,3 +1,10 @@
+// Copyright © 2012-2021 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+
 package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -12,19 +19,16 @@ public enum CsharpTemplateStandard implements TemplateStandard {
 
   SOLUTION_SETTINGS(parameters -> Template.SOLUTION_SETTINGS.filename,
       (name, parameters) -> parameters.find(APPLICATION_NAME) + ".sln"),
-
   PROJECT_SETTINGS(parameters -> Template.PROJECT_SETTINGS.filename,
       (name, parameters) -> parameters.find(APPLICATION_NAME) + ".csproj"),
-
+  README(parameters -> Template.README.filename, (name, parameters) -> "README.md"),
+  UNIT_TEST_PROJECT_SETTINGS(parameters -> Template.UNIT_TEST_PROJECT_SETTINGS.filename,
+      (name, parameters) -> parameters.find(APPLICATION_NAME) + ".Tests.csproj"),
   ACTOR_SETTINGS(parameters -> Template.ACTOR_SETTINGS.filename,
       (name, parameters) -> "vlingo-actors.json");
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;
-
-  CsharpTemplateStandard(final Function<TemplateParameters, String> templateFileRetriever) {
-    this(templateFileRetriever, (name, parameters) -> name);
-  }
 
   CsharpTemplateStandard(final Function<TemplateParameters, String> templateFileRetriever,
                          final BiFunction<String, TemplateParameters, String> nameResolver) {

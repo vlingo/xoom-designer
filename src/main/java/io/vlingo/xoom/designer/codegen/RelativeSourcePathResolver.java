@@ -133,7 +133,12 @@ public interface RelativeSourcePathResolver {
         return dialect.sourceFolder;
       }
       final String packageName = templateData.parameters().find(PACKAGE_NAME);
-      return ArrayUtils.addAll(dialect.sourceFolder, packageName.split("\\."));
+      if (dialect.equals(Dialect.C_SHARP)) {
+        final String basePackage = context.parameterOf(Label.PACKAGE);
+        return ArrayUtils.addAll(new String[]{basePackage}, packageName.replaceAll(basePackage, "").split("\\."));
+      }
+      else
+        return ArrayUtils.addAll(dialect.sourceFolder, packageName.split("\\."));
     }
 
     @Override
@@ -148,7 +153,13 @@ public interface RelativeSourcePathResolver {
     @Override
     public String[] resolve(final CodeGenerationContext context, final Dialect dialect, final TemplateData templateData) {
       final String packageName = templateData.parameters().find(PACKAGE_NAME);
-      return ArrayUtils.addAll(dialect.testSourceFolder, packageName.split("\\."));
+      if (dialect.equals(Dialect.C_SHARP)) {
+        final String basePackage = context.parameterOf(Label.PACKAGE);
+        final String testBasePackage = basePackage + ".Tests";
+        return ArrayUtils.addAll(new String[]{testBasePackage}, packageName.replaceAll(testBasePackage, "").split( "\\."));
+      }
+      else
+        return ArrayUtils.addAll(dialect.testSourceFolder, packageName.split("\\."));
     }
 
     @Override
