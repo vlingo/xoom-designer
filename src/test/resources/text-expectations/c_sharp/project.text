@@ -12,4 +12,9 @@
 		<PackageReference Include="Vlingo.Xoom.Symbio" Version="1.9.3" />
 		<PackageReference Include="Vlingo.Xoom.Lattice" Version="1.9.3" />
 	</ItemGroup>
+	<ItemGroup>
+		<Content Include="vlingo-actors.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

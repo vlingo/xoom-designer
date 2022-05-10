@@ -10,6 +10,8 @@ package io.vlingo.xoom.designer.codegen.csharp;
 public enum Template {
   SOLUTION_SETTINGS("Solution"),
   PROJECT_SETTINGS("Project"),
+  README("Readme"),
+  UNIT_TEST_PROJECT_SETTINGS("UnitTestProject"),
   ACTOR_SETTINGS("ActorSettings"),
   AGGREGATE_PROTOCOL("AggregateProtocol"),
   AGGREGATE_PROTOCOL_INSTANCE_METHOD("AggregateProtocolInstanceMethod"),

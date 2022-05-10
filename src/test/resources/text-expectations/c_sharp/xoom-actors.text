@@ -12,7 +12,7 @@
 		},
 		"consoleLogger": {
 			"classname": "Vlingo.Xoom.Actors.Plugin.Logging.Console.ConsoleLoggerPlugin",
-			"name": "vlingo-net/streams",
+			"name": "vlingo-net/actors",
 			"defaultLogger": true
 		},
 		"jdkLogger": {
