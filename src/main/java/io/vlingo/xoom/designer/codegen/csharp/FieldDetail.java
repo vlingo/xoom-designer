@@ -163,9 +163,10 @@ public class FieldDetail {
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
     if(isCollection(field)) {
-      return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.get(field.retrieveRelatedValue(Label.COLLECTION_TYPE));
+      return "System.Collections.Generic";
     }
-    return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(field.retrieveRelatedValue(Label.FIELD_TYPE), "");
+    final String key = field.retrieveRelatedValue(Label.FIELD_TYPE);
+    return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
   }
 
   public static boolean isDateTime(final CodeGenerationParameter field) {

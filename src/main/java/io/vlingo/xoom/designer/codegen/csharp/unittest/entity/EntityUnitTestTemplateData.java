@@ -74,9 +74,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.TEST_CASES, testCases)
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true)
-        .addImports(resolveTestCaseImports(testCases))
-        .addImport(resolveMockDispatcherImport(formatter, basePackage))
-        .addImports(resolveMethodParameterImports(aggregate));
+        .addImports(resolveImports(basePackage, aggregate, testCases));
   }
 
   private Set<String> resolveMethodParameterImports(final CodeGenerationParameter aggregate) {
@@ -87,18 +85,26 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .collect(Collectors.toSet());
   }
 
-  private String resolveMockDispatcherImport(CodeElementFormatter codeElementFormatter, final String basePackage) {
-    final String mockDispatcherName = CsharpTemplateStandard.MOCK_DISPATCHER.resolveClassname();
-    final String mockDispatcherPackage = MockDispatcherDetail.resolvePackage(basePackage);
-    return codeElementFormatter.qualifiedNameOf(mockDispatcherPackage, mockDispatcherName);
+  private String resolveMockDispatcherImport(final String basePackage) {
+    return MockDispatcherDetail.resolvePackage(basePackage);
   }
 
-  private Set<String> resolveTestCaseImports(final List<TestCase> testCases) {
-    return testCases.stream()
+  private Set<String> resolveImports(final String basePackage, final CodeGenerationParameter aggregate,
+                                     final List<TestCase> testCases) {
+    final Set<String> imports = testCases.stream()
         .map(TestCase::involvedSpecialTypes)
         .flatMap(Set::stream)
         .map(CodeGenerationProperties.SPECIAL_TYPES_IMPORTS::get)
         .collect(toSet());
+
+    imports.add(resolveMockDispatcherImport(basePackage));
+    imports.addAll(resolveMethodParameterImports(aggregate));
+    imports.add(resolveModelImports(basePackage, aggregate));
+    return imports;
+  }
+
+  private String resolveModelImports(final String basePackage, final CodeGenerationParameter aggregate) {
+    return AggregateDetail.resolvePackage(basePackage, aggregate.value);
   }
 
   private Optional<String> resolveDefaultFactoryMethodName(final CodeGenerationParameter aggregate) {

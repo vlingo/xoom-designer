@@ -33,6 +33,7 @@ public class StorageGenerationStepTest {
     Assertions.assertEquals(3, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
   }
+
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter idField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "id")

@@ -1,10 +1,11 @@
-using System.Collections.Generic;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
 using Vlingo.Xoom.Lattice.Model.Stateful;
-using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Model.Author;

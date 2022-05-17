@@ -9,14 +9,15 @@ package io.vlingo.xoom.designer.codegen.csharp.storage;
 
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
-import io.vlingo.xoom.codegen.parameter.ImportParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AdapterTemplateData extends TemplateData {
@@ -41,14 +42,17 @@ public class AdapterTemplateData extends TemplateData {
   }
 
   private TemplateParameters loadParameters(final String packageName, final StorageType storageType, final List<Content> contents) {
-    final String sourceQualifiedClassName =
-        ContentQuery.findFullyQualifiedClassName(sourceClassStandard, sourceClassName, contents);
 
     return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
-        .and(TemplateParameter.IMPORTS, ImportParameter.of(sourceQualifiedClassName))
+        .addImports(resolveImports(contents))
         .and(TemplateParameter.ADAPTER_NAME, CsharpTemplateStandard.ADAPTER.resolveClassname(sourceClassName))
         .and(TemplateParameter.SOURCE_NAME, sourceClassName)
         .and(TemplateParameter.STORAGE_TYPE, storageType);
+  }
+
+  private Set<String> resolveImports(final List<Content> contents) {
+    final String sourceQualifiedClassName = ContentQuery.findPackage(sourceClassStandard, contents);
+    return Collections.singleton(sourceQualifiedClassName);
   }
 
   @Override

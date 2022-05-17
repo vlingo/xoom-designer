@@ -33,10 +33,6 @@ public class AggregateDetail {
     return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found"));
   }
 
-  public static List<String> resolveFieldsPaths(final String variableName, final CodeGenerationParameter aggregate) {
-    return resolveFieldsPaths(variableName, aggregate.retrieveAllRelated(Label.STATE_FIELD));
-  }
-
   public static List<String> resolveFieldsPaths(final String variableName, final Stream<CodeGenerationParameter> aggregateFields) {
     final List<String> paths = new ArrayList<>();
     aggregateFields.forEach(field -> resolveFieldPath(variableName, field, paths));
@@ -61,6 +57,7 @@ public class AggregateDetail {
   public static Set<String> resolveImports(final Stream<CodeGenerationParameter> stateFields) {
     return stateFields.map(FieldDetail::resolveImportForType).collect(Collectors.toSet());
   }
+
   private static void resolveFieldPath(final String relativePath, final CodeGenerationParameter field, final List<String> paths) {
     final String currentRelativePath = relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
     paths.add(currentRelativePath);
