@@ -18,10 +18,12 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.PersistenceDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -97,9 +99,10 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .map(CodeGenerationProperties.SPECIAL_TYPES_IMPORTS::get)
         .collect(toSet());
 
-    imports.add(resolveMockDispatcherImport(basePackage));
     imports.addAll(resolveMethodParameterImports(aggregate));
+    imports.addAll(resolveAdapterImports(basePackage));
     imports.add(resolveModelImports(basePackage, aggregate));
+    imports.add(resolveMockDispatcherImport(basePackage));
     return imports;
   }
 
@@ -112,6 +115,10 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .filter(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
         .map(method -> method.value)
         .findFirst();
+  }
+
+  private Set<String> resolveAdapterImports(final String basePackage) {
+    return Collections.singleton(PersistenceDetail.resolvePackage(basePackage));
   }
 
   @Override

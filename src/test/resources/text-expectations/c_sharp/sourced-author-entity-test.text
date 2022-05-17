@@ -6,6 +6,7 @@ using Vlingo.Xoom.Lattice.Model.Stateful;
 using System.Collections.Generic;
 using Io.Vlingo.Xoomapp.Model.Author;
 using Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Model.Author;
