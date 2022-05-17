@@ -20,6 +20,7 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +29,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExternalFileLocationResolverTest extends CodeGenerationTest{
+
+  private final String separator = File.separator;
 
   @Test
   public void testThatProductionCodeRelativeSourcePathForJavaIsGenerated() {
@@ -44,7 +47,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
     String result = context.fileLocationResolver().resolve(context, Dialect.JAVA, templateData);
 
-    assertEquals("src/main/java/io/vlingo/xoomapp/model/author", result);
+    assertEquals("src" + separator + "main" + separator + "java" + separator + "io" + separator + "vlingo" + separator + "xoomapp" + separator + "model" + separator + "author", result);
   }
 
   @Test
@@ -63,7 +66,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
     String result = context.fileLocationResolver().resolve(context, Dialect.JAVA, templateData);
 
-    assertEquals("src/test/java/io/vlingo/xoomapp/model/author", result);
+    assertEquals("src" + separator + "test" + separator + "java" + separator + "io" + separator + "vlingo" + separator + "xoomapp" + separator + "model" + separator + "author", result);
   }
 
 
@@ -82,7 +85,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
     String result = context.fileLocationResolver().resolve(context, Dialect.C_SHARP, templateData);
 
-    assertEquals("Io.Vlingo.Xoomapp/Model/Author", result);
+    assertEquals("Io.Vlingo.Xoomapp" + separator + "Model" + separator + "Author", result);
   }
 
 
@@ -102,7 +105,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
     String result = context.fileLocationResolver().resolve(context, Dialect.C_SHARP, templateData);
 
-    assertEquals("Io.Vlingo.Xoomapp.Tests/Model/Author", result);
+    assertEquals("Io.Vlingo.Xoomapp.Tests" + separator + "Model" + separator + "Author", result);
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -156,7 +159,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
   private Content[] cSharpContents() {
     return new Content[]{
-        Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile("/Projects/", "IAuthor.cs"), null, null, C_SHARP_AUTHOR_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(separator + "Projects" + separator + "", "IAuthor.cs"), null, null, C_SHARP_AUTHOR_CONTENT_TEXT),
     };
   }
 
