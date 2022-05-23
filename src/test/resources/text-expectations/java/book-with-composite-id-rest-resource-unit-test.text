@@ -54,8 +54,8 @@ public class BookResourceTest extends AbstractRestTest {
         .as(BookData.class);
 
     assertNotNull(result.id);
-    assertEquals(result.name.firstName, "first-book-name-firstName");
-    assertEquals(result.name.lastName, "first-book-name-lastName");
-    assertEquals(result.authorId, "1");
+    assertEquals("first-book-name-firstName", result.name.firstName);
+    assertEquals("first-book-name-lastName", result.name.lastName);
+    assertEquals("1", result.authorId);
   }
 }

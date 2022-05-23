@@ -55,8 +55,8 @@ public class ProductResourceTest extends AbstractRestTest {
         .as(ProductData.class);
 
     assertNotNull(result.id);
-    assertEquals(result.name, "first-product-name");
-    assertEquals(result.description, "first-product-description");
+    assertEquals("first-product-name", result.name);
+    assertEquals("first-product-description", result.description);
   }
 
   @Test
@@ -74,7 +74,7 @@ public class ProductResourceTest extends AbstractRestTest {
         .as(ProductData.class);
 
     assertNotNull(result.id);
-    assertEquals(result.name, "first-product-name");
-    assertEquals(result.description, "first-product-description");
+    assertEquals("first-product-name", result.name);
+    assertEquals("first-product-description", result.description);
   }
 }
