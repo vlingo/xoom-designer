@@ -70,14 +70,14 @@ public class AuthorProjectionTest {
     stateStore.read(firstData.id, AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", firstData.id);
 
-    assertEquals(item.id, "1");
+    assertEquals("1", item.id);
 
     interest = new CountingReadResultInterest();
     interestAccess = interest.afterCompleting(1);
     stateStore.read(secondData.id, AuthorData.class, interest);
     item = interestAccess.readFrom("item", secondData.id);
     assertEquals(secondData.id, item.id);
-    assertEquals(item.id, "2");
+    assertEquals("2", item.id);
   }
 
   private int valueOfProjectionIdFor(final String valueText, final Map<String, Integer> confirmations) {
