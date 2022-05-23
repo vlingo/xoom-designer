@@ -44,20 +44,20 @@ public class AuthorQueriesTest {
 
     final AuthorData firstData = queries.authorOf("1").await();
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals("1", firstData.id);
+    assertEquals("first-author-name-firstName", firstData.name.firstName);
+    assertEquals("first-author-name-lastName", firstData.name.lastName);
     assertNotNull(firstData.rank);
-    assertEquals(firstData.status, true);
+    assertEquals(true, firstData.status);
     assertNotNull(firstData.availableOn);
 
     final AuthorData secondData = queries.authorOf("2").await();
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.name.firstName, "second-author-name-firstName");
-    assertEquals(secondData.name.lastName, "second-author-name-lastName");
+    assertEquals("2", secondData.id);
+    assertEquals("second-author-name-firstName", secondData.name.firstName);
+    assertEquals("second-author-name-lastName", secondData.name.lastName);
     assertNotNull(secondData.rank);
-    assertEquals(secondData.status, true);
+    assertEquals(true, secondData.status);
     assertNotNull(secondData.availableOn);
   }
 
@@ -72,20 +72,20 @@ public class AuthorQueriesTest {
     final Collection<AuthorData> results = queries.authors().await();
     final AuthorData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.name.firstName, "first-author-name-firstName");
-    assertEquals(firstData.name.lastName, "first-author-name-lastName");
+    assertEquals("1", firstData.id);
+    assertEquals("first-author-name-firstName", firstData.name.firstName);
+    assertEquals("first-author-name-lastName", firstData.name.lastName);
     assertNotNull(firstData.rank);
-    assertEquals(firstData.status, true);
+    assertEquals(true, firstData.status);
     assertNotNull(firstData.availableOn);
 
     final AuthorData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.name.firstName, "second-author-name-firstName");
-    assertEquals(secondData.name.lastName, "second-author-name-lastName");
+    assertEquals("2", secondData.id);
+    assertEquals("second-author-name-firstName", secondData.name.firstName);
+    assertEquals("second-author-name-lastName", secondData.name.lastName);
     assertNotNull(secondData.rank);
-    assertEquals(secondData.status, true);
+    assertEquals(true, secondData.status);
     assertNotNull(secondData.availableOn);
   }
 
