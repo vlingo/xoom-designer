@@ -25,9 +25,9 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
   private static final String PACKAGE_PATTERN = "^[a-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
   private static final String ARTIFACT_PATTERN = "^[a-z-]+$";
   private static final String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
-  private static final String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
-  private static final String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-  private static final String ROUTE_PATTERN = "^[a-zA-Z_$/?%-]+$";
+  private static final String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-zÀ-ÖØ-öø-ÿ]*$";
+  private static final String IDENTIFIER_PATTERN = "^[a-zA-Z_$][a-zA-ZÀ-ÖØ-öø-ÿ_$0-9]*$";
+  private static final String ROUTE_PATTERN = "^[a-zA-ZÀ-ÖØ-öø-ÿ_$/?%-]+$";
   private static final String DOCKER_PATTERN = "^[a-zA-Z]+[a-zA-Z._\\d-]*$";
 
   @Override
@@ -157,7 +157,6 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
 
   private boolean isTargetFolderValid(String targetFolder) {
     //TODO: ping the filesystem and only return true if the folder is available/usable
-    if(targetFolder.length()<2) return false;
-    return true;
+    return targetFolder.length() >= 2;
   }
 }
