@@ -12,7 +12,7 @@ public final class CatalogState {
     return new CatalogState(id, null, null);
   }
 
-  public CatalogState (final String id, final String authorId, final Name name) {
+  public CatalogState(final String id, final String authorId, final Name name) {
     this.id = id;
     this.authorId = authorId;
     this.name = name;
