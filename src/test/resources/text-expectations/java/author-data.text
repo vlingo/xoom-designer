@@ -38,7 +38,7 @@ public class AuthorData {
     return from(AuthorState.identifiedBy(""));
   }
 
-  private AuthorData (final String id, final NameData name, final RankData rank, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
+  private AuthorData(final String id, final NameData name, final RankData rank, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
     this.id = id;
     this.name = name;
     this.rank = rank;

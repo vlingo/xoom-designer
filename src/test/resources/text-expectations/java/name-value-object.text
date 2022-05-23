@@ -14,7 +14,7 @@ public final class Name {
     return new Name(firstName, lastName);
   }
 
-  private Name (final String firstName, final String lastName) {
+  private Name(final String firstName, final String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
   }

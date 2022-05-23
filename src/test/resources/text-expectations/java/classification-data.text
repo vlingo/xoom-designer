@@ -37,7 +37,7 @@ public class ClassificationData {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(ClassificationData::from).collect(Collectors.toList());
   }
 
-  private ClassificationData (final String label, final Set<ClassifierData> classifier) {
+  private ClassificationData(final String label, final Set<ClassifierData> classifier) {
     this.label = label;
     this.classifier.addAll(classifier);
   }
