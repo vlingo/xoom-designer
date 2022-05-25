@@ -78,7 +78,8 @@ public enum Template {
   LOGBACK_SETTINGS("LogbackSettings"),
   MAVEN_SETTINGS("MavenSettings"),
   DOCKERFILE("Dockerfile"),
-  KUBERNETES_MANIFEST_FILE("KubernetesManifestFile");
+  KUBERNETES_MANIFEST_FILE("KubernetesManifestFile"),
+  DOCKER_COMPOSE("DockerCompose");
 
   public final String filename;
 

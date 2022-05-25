@@ -1,4 +1,11 @@
 # ${packageName}
+
+## Run RabbitMq
+
+```
+docker-compose up -d
+```
+
 ## Convert to Gradle Build
 
 ```

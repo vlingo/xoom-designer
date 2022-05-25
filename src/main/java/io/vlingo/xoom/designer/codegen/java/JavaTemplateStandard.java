@@ -226,7 +226,8 @@ public enum JavaTemplateStandard implements TemplateStandard {
           (name, parameters) -> parameters.find(TemplateParameter.KUBERNETES_POD_NAME) + ".yaml"),
 
   README(parameters -> Template.README.filename, (name, parameters) -> "README.md"),
-  DOCKERFILE(parameters -> Template.DOCKERFILE.filename, (name, parameters) -> "Dockerfile");
+  DOCKERFILE(parameters -> Template.DOCKERFILE.filename, (name, parameters) -> "Dockerfile"),
+  DOCKER_COMPOSE(parameters -> Template.DOCKER_COMPOSE.filename, (name, parameters) -> "docker-compose.yml");
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

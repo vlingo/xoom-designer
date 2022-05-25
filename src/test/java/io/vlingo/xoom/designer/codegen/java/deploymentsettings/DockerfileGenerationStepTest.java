@@ -34,4 +34,20 @@ public class DockerfileGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(manifestFile.contains(TextExpectation.onJava().read("dockerfile")));
   }
 
+  @Test
+  public void testThatDockerComposeIsGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(Label.ARTIFACT_ID, "xoom-app");
+
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters);
+
+    new DockerComposeGenerationStep().process(context);
+
+    final Content dockerCompose =
+        context.findContent(JavaTemplateStandard.DOCKER_COMPOSE, "docker-compose");
+
+    Assertions.assertTrue(dockerCompose.contains(TextExpectation.onJava().read("docker-compose")));
+  }
+
 }
