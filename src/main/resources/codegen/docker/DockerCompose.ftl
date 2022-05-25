@@ -10,7 +10,7 @@ services:
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_VHOST=/
     ports:
-      - 5762:5672
+      - 5672:5672
       - 15672:15672
     volumes:
       - 'rabbitmq'
