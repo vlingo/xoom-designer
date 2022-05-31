@@ -13,17 +13,21 @@ import java.util.List;
 public class DockerComposeTemplateData extends TemplateData {
     private final TemplateParameters parameters;
 
-    public DockerComposeTemplateData(String appName, Boolean useCQRS, DatabaseType commandDatabaseType,
-                                     DatabaseType queryDatabaseType) {
+    public DockerComposeTemplateData(String appName, DatabaseType commandDatabaseType, DatabaseType queryDatabaseType) {
         parameters = TemplateParameters.with(TemplateParameter.DOCKER_COMPOSE_FILE, true)
                 .and(TemplateParameter.DOCKER_COMPOSE_SERVICES, new ArrayList<String>());
-
-        if (!useCQRS) return;
 
         if(!commandDatabaseType.equals(DatabaseType.IN_MEMORY))
             this.dependOn(DockerComposeCommandDatabaseTemplateData.from(appName, commandDatabaseType));
         if(!queryDatabaseType.equals(DatabaseType.IN_MEMORY))
             this.dependOn(DockerComposeQueryDatabaseTemplateData.from(appName, queryDatabaseType));
+    }
+
+    public DockerComposeTemplateData(String appName, DatabaseType databaseType) {
+        parameters = TemplateParameters.with(TemplateParameter.DOCKER_COMPOSE_FILE, true)
+            .and(TemplateParameter.DOCKER_COMPOSE_SERVICES, new ArrayList<String>());
+
+        this.dependOn(DockerComposeDatabaseTemplateData.from(appName, databaseType));
     }
 
     @Override

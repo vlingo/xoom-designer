@@ -36,6 +36,7 @@ public class DockerfileGenerationStepTest extends CodeGenerationTest {
   @Test
   public void testThatDockerComposeIsGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.ARTIFACT_ID, "xoom-app")
+        .add(Label.CQRS, true)
         .add(Label.COMMAND_MODEL_DATABASE, DatabaseType.IN_MEMORY)
         .add(Label.QUERY_MODEL_DATABASE, DatabaseType.IN_MEMORY);
 
@@ -46,6 +47,21 @@ public class DockerfileGenerationStepTest extends CodeGenerationTest {
     final Content dockerCompose = context.findContent(JavaTemplateStandard.DOCKER_COMPOSE, "docker-compose");
 
     Assertions.assertTrue(dockerCompose.contains(TextExpectation.onJava().read("docker-compose")));
+  }
+
+  @Test
+  public void testThatDockerComposeWithUseCqrsDisabledAndMySqlDatabaseIsGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo")
+        .add(Label.APPLICATION_NAME, "xoomapp")
+        .add(Label.DATABASE, DatabaseType.MYSQL);
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    new DockerComposeGenerationStep().process(context);
+
+    final Content dockerCompose = context.findContent(JavaTemplateStandard.DOCKER_COMPOSE, "docker-compose");
+
+    Assertions.assertTrue(dockerCompose.contains(TextExpectation.onJava().read("docker-compose-with-no-cqrs-mysql")));
   }
 
   @Test
@@ -83,6 +99,7 @@ public class DockerfileGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertTrue(dockerCompose.contains(TextExpectation.onJava().read("docker-compose-with-postgres-mysql")));
   }
+
   @Test
   public void testThatDockerComposeWithMySqlDatabaseIsGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo")

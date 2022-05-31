@@ -6,7 +6,7 @@ postgres:
     volumes:
       - 'postgres'
     environment:
-      POSTGRES_DB: ${appName}-${modelCategory}
+      POSTGRES_DB: ${appName}<#if modelCategory?has_content>-${modelCategory}</#if>
       POSTGRES_USER: postgres
       ALLOW_EMPTY_PASSWORD: "yes"
       POSTGRES_HOST_AUTH_METHOD: "trust"

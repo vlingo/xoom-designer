@@ -14,7 +14,7 @@ hsqldb:
       # HSQLDB Remote Connections
       ENV HSQLDB_REMOTE=true
       # Database name and alias for jdbc url: jdbc:hsqldb:hsql://localhost/test
-      ENV HSQLDB_DATABASE_NAME=${appName}-${modelCategory}
+      ENV HSQLDB_DATABASE_NAME= ${appName}<#if modelCategory?has_content>-${modelCategory}</#if>
       ENV HSQLDB_DATABASE_ALIAS=hsqldb
       # Specify the host if using boot2docker, e.g. 192.168.99.100
       ENV HSQLDB_DATABASE_HOST=localhost
