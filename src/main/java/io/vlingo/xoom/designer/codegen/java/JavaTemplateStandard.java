@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.codegen.java.formatting.DataObjectDetail;
 import io.vlingo.xoom.designer.codegen.java.model.MethodScope;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
+import io.vlingo.xoom.designer.codegen.java.storage.DatabaseType;
 import io.vlingo.xoom.designer.codegen.java.storage.Model;
 import io.vlingo.xoom.designer.codegen.java.storage.StorageType;
 import io.vlingo.xoom.http.Method;
@@ -227,7 +228,16 @@ public enum JavaTemplateStandard implements TemplateStandard {
 
   README(parameters -> Template.README.filename, (name, parameters) -> "README.md"),
   DOCKERFILE(parameters -> Template.DOCKERFILE.filename, (name, parameters) -> "Dockerfile"),
-  DOCKER_COMPOSE(parameters -> Template.DOCKER_COMPOSE.filename, (name, parameters) -> "docker-compose.yml");
+  DOCKER_COMPOSE(parameters -> Template.DOCKER_COMPOSE.filename, (name, parameters) -> "docker-compose.yml"),
+  DOCKER_COMPOSE_DATABASE(parameters -> {
+    if(parameters.find(DATABASE_SERVICE).equals(DatabaseType.POSTGRES.label))
+      return DOCKER_COMPOSE_POSTGRES_SERVICE.filename;
+    else if(parameters.find(DATABASE_SERVICE).equals(DatabaseType.MYSQL.label))
+      return DOCKER_COMPOSE_MYSQL_SERVICE.filename;
+    else if(parameters.find(DATABASE_SERVICE).equals(DatabaseType.HSQLDB.label))
+      return DOCKER_COMPOSE_HSQLDB_SERVICE.filename;
+    return DOCKER_COMPOSE_YUGABYTEDB_SERVICE.filename;
+  }),;
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

@@ -8,25 +8,18 @@ package io.vlingo.xoom.designer.codegen.java.deploymentsettings;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
-import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
-import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
-import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
 
-import java.util.Collections;
 import java.util.List;
 
 public class DockerComposeGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-    final TemplateParameters templateParameters =
-        TemplateParameters.with(TemplateParameter.DOCKER_COMPOSE_FILE, true);
-
-    return Collections.singletonList(BasicTemplateData.of(JavaTemplateStandard.DOCKER_COMPOSE, templateParameters));
+    return DockerComposeDataFactory.from(context);
   }
+
 
   @Override
   protected Dialect resolveDialect(final CodeGenerationContext context) {

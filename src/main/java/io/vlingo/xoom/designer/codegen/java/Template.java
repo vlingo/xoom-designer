@@ -79,7 +79,11 @@ public enum Template {
   MAVEN_SETTINGS("MavenSettings"),
   DOCKERFILE("Dockerfile"),
   KUBERNETES_MANIFEST_FILE("KubernetesManifestFile"),
-  DOCKER_COMPOSE("DockerCompose");
+  DOCKER_COMPOSE("DockerCompose"),
+  DOCKER_COMPOSE_POSTGRES_SERVICE("DockerComposePostgresService"),
+  DOCKER_COMPOSE_MYSQL_SERVICE("DockerComposeMySqlService"),
+  DOCKER_COMPOSE_HSQLDB_SERVICE("DockerComposeHsqlDbService"),
+  DOCKER_COMPOSE_YUGABYTEDB_SERVICE("DockerComposeYugaByteDbService");
 
   public final String filename;
 
