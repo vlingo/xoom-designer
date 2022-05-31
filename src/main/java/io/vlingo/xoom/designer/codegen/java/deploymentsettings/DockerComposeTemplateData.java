@@ -18,10 +18,12 @@ public class DockerComposeTemplateData extends TemplateData {
         parameters = TemplateParameters.with(TemplateParameter.DOCKER_COMPOSE_FILE, true)
                 .and(TemplateParameter.DOCKER_COMPOSE_SERVICES, new ArrayList<String>());
 
-        if (useCQRS) {
+        if (!useCQRS) return;
+
+        if(!commandDatabaseType.equals(DatabaseType.IN_MEMORY))
             this.dependOn(DockerComposeCommandDatabaseTemplateData.from(appName, commandDatabaseType));
+        if(!queryDatabaseType.equals(DatabaseType.IN_MEMORY))
             this.dependOn(DockerComposeQueryDatabaseTemplateData.from(appName, queryDatabaseType));
-        }
     }
 
     @Override

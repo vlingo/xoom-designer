@@ -20,7 +20,6 @@ public class DockerComposeGenerationStep extends TemplateProcessingStep {
     return DockerComposeDataFactory.from(context);
   }
 
-
   @Override
   protected Dialect resolveDialect(final CodeGenerationContext context) {
     return Dialect.DOCKER;
