@@ -101,6 +101,30 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-simple-operation-based-projection-unit-test")));
   }
 
+  @Test
+  public void testThatEntityStateProjectionsUnitTestWithoutFactoryMethodAreGenerated()  {
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "io.vlingo.xoomapp"),
+                    CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
+                    CodeGenerationParameter.of(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED),
+                    CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA),
+                    CodeGenerationParameter.of(Label.CQRS, true),
+                    authorAggregateWithoutFactoryMethod());
+
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
+
+
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    final Content authorProjectionTest =
+            context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    Assertions.assertEquals(9, context.contents().size());
+
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-without-factory-method-operation-based-projection-unit-test")));
+  }
+
   private CodeGenerationParameter authorAggregateSmall() {
     final CodeGenerationParameter idField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "id")
@@ -127,6 +151,35 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
             .relate(idField)
             .relate(factoryMethod)
+            .relate(updateMethod)
+            .relate(authorRegisteredEvent).relate(authorUpdatedEvent);
+  }
+
+  private CodeGenerationParameter authorAggregateWithoutFactoryMethod() {
+    final CodeGenerationParameter idField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                    .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+
+    final CodeGenerationParameter authorUpdatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUpdated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+
+
+    final CodeGenerationParameter commandMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "register")
+                    .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter updateMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "update")
+                    .relate(CodeGenerationParameter.of(Label.DOMAIN_EVENT, null));
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+            .relate(idField)
+            .relate(commandMethod)
             .relate(updateMethod)
             .relate(authorRegisteredEvent).relate(authorUpdatedEvent);
   }

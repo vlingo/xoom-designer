@@ -1,0 +1,90 @@
+package io.vlingo.xoomapp.infrastructure.persistence;
+
+import io.vlingo.xoom.actors.World;
+import io.vlingo.xoom.actors.testkit.AccessSafely;
+import io.vlingo.xoom.common.serialization.JsonSerialization;
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.Projection;
+import io.vlingo.xoom.lattice.model.projection.TextProjectable;
+import io.vlingo.xoom.lattice.model.stateful.StatefulTypeRegistry;
+import io.vlingo.xoom.symbio.BaseEntry;
+import io.vlingo.xoom.symbio.Metadata;
+import io.vlingo.xoom.symbio.store.dispatch.NoOpDispatcher;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.symbio.store.state.inmemory.InMemoryStateStoreActor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import java.time.LocalDateTime;
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.author.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class AuthorProjectionTest {
+
+  private World world;
+  private StateStore stateStore;
+  private Projection projection;
+  private Map<String, String> valueToProjectionId;
+
+  @BeforeEach
+  public void setUp() {
+    world = World.startWithDefaults("test-state-store-projection");
+    NoOpDispatcher dispatcher = new NoOpDispatcher();
+    valueToProjectionId = new ConcurrentHashMap<>();
+    stateStore = world.actorFor(StateStore.class, InMemoryStateStoreActor.class, Collections.singletonList(dispatcher));
+    StatefulTypeRegistry statefulTypeRegistry = StatefulTypeRegistry.registerAll(world, stateStore, AuthorData.class);
+    QueryModelStateStoreProvider.using(world.stage(), statefulTypeRegistry);
+    projection = world.actorFor(Projection.class, AuthorProjectionActor.class, stateStore);
+  }
+
+  private void registerExampleAuthor(AuthorState firstData, AuthorState secondData) {
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(2);
+    projection.projectWith(createAuthorRegistered(firstData), control);
+    projection.projectWith(createAuthorRegistered(secondData), control);
+  }
+
+  @Test
+  public void register() {
+    final AuthorData firstData = AuthorData.from("1");
+    final AuthorData secondData = AuthorData.from("2");
+    registerExampleAuthor(firstData.toAuthorState(), secondData.toAuthorState());
+
+    final CountingProjectionControl control = new CountingProjectionControl();
+    final AccessSafely access = control.afterCompleting(1);
+    projection.projectWith(createAuthorRegistered(firstData.toAuthorState()), control);
+    final Map<String, Integer> confirmations = access.readFrom("confirmations");
+
+    assertEquals(1, confirmations.size());
+    assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
+
+    CountingReadResultInterest interest = new CountingReadResultInterest();
+    AccessSafely interestAccess = interest.afterCompleting(1);
+    stateStore.read(firstData.id, AuthorData.class, interest);
+    AuthorData item = interestAccess.readFrom("item", firstData.id);
+
+    assertEquals("1", item.id);
+  }
+
+  private int valueOfProjectionIdFor(final String valueText, final Map<String, Integer> confirmations) {
+    return confirmations.get(valueToProjectionId.get(valueText));
+  }
+
+  private Projectable createAuthorRegistered(AuthorState data) {
+    final AuthorRegistered eventData = new AuthorRegistered(data.id);
+
+    BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(AuthorRegistered.class, 1, JsonSerialization.serialized(eventData), 2, Metadata.withObject(eventData));
+
+    final String projectionId = UUID.randomUUID().toString();
+    valueToProjectionId.put(data.id, projectionId);
+
+    return new TextProjectable(null, Collections.singletonList(textEntry), projectionId);
+  }
+
+}

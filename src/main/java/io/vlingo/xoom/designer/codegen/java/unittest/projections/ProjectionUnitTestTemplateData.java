@@ -43,7 +43,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 		final CodeGenerationParameter signature = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
 				.filter(sig -> sig.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
 				.findFirst()
-				.orElseThrow(UnsupportedOperationException::new);
+				.orElse(aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).findFirst().get());
 
 		final String domainEventName = signature.retrieveOneRelated(Label.DOMAIN_EVENT).value;
 		final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
