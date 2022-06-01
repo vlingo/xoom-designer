@@ -23,7 +23,7 @@ services:
     volumes:
       - 'postgres'
     environment:
-      POSTGRES_DB: xoomapp-command
+      POSTGRES_DB: xoomapp-command-model
       POSTGRES_USER: postgres
       ALLOW_EMPTY_PASSWORD: "yes"
       POSTGRES_HOST_AUTH_METHOD: "trust"
@@ -36,7 +36,7 @@ services:
     volumes:
       - 'postgres'
     environment:
-      POSTGRES_DB: xoomapp-query
+      POSTGRES_DB: xoomapp-query-model
       POSTGRES_USER: postgres
       ALLOW_EMPTY_PASSWORD: "yes"
       POSTGRES_HOST_AUTH_METHOD: "trust"

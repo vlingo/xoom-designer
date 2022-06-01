@@ -5,4 +5,4 @@ mysql:
       - 'mysql'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      MYSQL_DATABASE: ${appName}<#if modelCategory?has_content>-${modelCategory}</#if>
+      MYSQL_DATABASE: ${appName}<#if modelCategory?has_content>-${modelCategory}-model</#if>
