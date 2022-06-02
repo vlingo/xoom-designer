@@ -43,18 +43,11 @@ public class AuthorProjectionTest {
     projection = world.actorFor(Projection.class, AuthorProjectionActor.class, stateStore);
   }
 
-  private void registerExampleAuthor(AuthorState firstData, AuthorState secondData) {
-    final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(2);
-    projection.projectWith(createAuthorRegistered(firstData), control);
-    projection.projectWith(createAuthorRegistered(secondData), control);
-  }
 
   @Test
   public void register() {
     final AuthorData firstData = AuthorData.from("1");
     final AuthorData secondData = AuthorData.from("2");
-    registerExampleAuthor(firstData.toAuthorState(), secondData.toAuthorState());
 
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(1);

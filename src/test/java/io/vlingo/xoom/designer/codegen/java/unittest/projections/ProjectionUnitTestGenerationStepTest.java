@@ -98,7 +98,7 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
         context.findContent(JavaTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
 
     Assertions.assertEquals(9, context.contents().size());    
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-simple-operation-based-projection-unit-test")));
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-simple-event-based-projection-unit-test")));
   }
 
   @Test
@@ -122,7 +122,7 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertEquals(9, context.contents().size());
 
-    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-without-factory-method-operation-based-projection-unit-test")));
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onJava().read("author-without-factory-method-event-based-projection-unit-test")));
   }
 
   private CodeGenerationParameter authorAggregateSmall() {

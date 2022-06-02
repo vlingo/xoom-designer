@@ -66,8 +66,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     assertEquals(secondData.id, item.id);
 </#macro>
 
-<#macro updateTestStatements domainEventName>
+<#macro updateTestStatements domainEventName withExampleRegistration>
+  <#if withExampleRegistration>
     registerExample${aggregateProtocolName}(firstData.to${dataName}(), secondData.to${dataName}());
+  </#if>
 
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(1);
@@ -100,12 +102,14 @@ public class ${projectionUnitTestName} {
     projection = world.actorFor(Projection.class, ${projectionName}.class, stateStore);
   }
 
+<#if testCases?filter(testCase -> testCase.factoryMethod)?has_content>
   private void registerExample${aggregateProtocolName}(${dataName} firstData, ${dataName} secondData) {
     final CountingProjectionControl control = new CountingProjectionControl();
     final AccessSafely access = control.afterCompleting(2);
     projection.projectWith(create${domainEventName}(firstData), control);
     projection.projectWith(create${domainEventName}(secondData), control);
   }
+</#if>
 
   <#list testCases as testCase>
   @Test
@@ -116,7 +120,7 @@ public class ${projectionUnitTestName} {
     <#if testCase.factoryMethod>
       <@factoryMethodTestStatements testCase.domainEventName />
     <#else>
-      <@updateTestStatements testCase.domainEventName />
+      <@updateTestStatements testCase.domainEventName testCases?filter(testCase -> testCase.factoryMethod)?has_content/>
     </#if>
 
     <#list testCase.statements as statement>
