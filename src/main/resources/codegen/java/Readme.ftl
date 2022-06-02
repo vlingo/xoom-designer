@@ -1,9 +1,15 @@
 # ${packageName}
 
-## Run RabbitMq
+## Run Infrastructure
 
 ```
 docker-compose up -d
+```
+
+## Running Services
+
+```
+docker-compose ps
 ```
 
 ## Convert to Gradle Build
