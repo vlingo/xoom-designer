@@ -55,7 +55,7 @@ public class AuthorResource extends DynamicResourceHandler {
 
   public Completes<Response> relateAuthor(final String id, final AuthorData data) {
     return resolve(id)
-            .andThenTo(author -> author.relateAuthor(data.relatedAuthors.stream().findFirst().get()))
+            .andThenTo(author -> author.relateAuthor(data.relatedAuthors.stream().findFirst().orElse(null)))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
@@ -79,7 +79,7 @@ public class AuthorResource extends DynamicResourceHandler {
 
   public Completes<Response> unrelateAuthor(final String id, final AuthorData data) {
     return resolve(id)
-            .andThenTo(author -> author.unrelateAuthor(data.relatedAuthors.stream().findFirst().get()))
+            .andThenTo(author -> author.unrelateAuthor(data.relatedAuthors.stream().findFirst().orElse(null)))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));

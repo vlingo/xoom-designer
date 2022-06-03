@@ -37,7 +37,7 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> RELATE_AUTHOR_HANDLER =
           HandlerEntry.of(RELATE_AUTHOR, (author, data) -> {
-              return author.relateAuthor(data.relatedAuthors.stream().findFirst().get());
+              return author.relateAuthor(data.relatedAuthors.stream().findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> RELATE_AUTHORS_HANDLER =
@@ -52,7 +52,7 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> UNRELATE_AUTHOR_HANDLER =
           HandlerEntry.of(UNRELATE_AUTHOR, (author, data) -> {
-              return author.unrelateAuthor(data.relatedAuthors.stream().findFirst().get());
+              return author.unrelateAuthor(data.relatedAuthors.stream().findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> ADD_TAG_HANDLER =
