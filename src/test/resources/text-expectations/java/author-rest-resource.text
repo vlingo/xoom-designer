@@ -87,7 +87,7 @@ public class AuthorResource extends DynamicResourceHandler {
 
   public Completes<Response> addTag(final String id, final AuthorData data) {
     return resolve(id)
-            .andThenTo(author -> author.addTag(data.tags.stream().map(TagData::toTag).findFirst().get()))
+            .andThenTo(author -> author.addTag(data.tags.stream().map(TagData::toTag).findFirst().orElse(null)))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
@@ -111,7 +111,7 @@ public class AuthorResource extends DynamicResourceHandler {
 
   public Completes<Response> removeTag(final String id, final AuthorData data) {
     return resolve(id)
-            .andThenTo(author -> author.removeTag(data.tags.stream().map(TagData::toTag).findFirst().get()))
+            .andThenTo(author -> author.removeTag(data.tags.stream().map(TagData::toTag).findFirst().orElse(null)))
             .andThenTo(state -> Completes.withSuccess(entityResponseOf(Ok, serialized(AuthorData.from(state)))))
             .otherwise(noGreeting -> Response.of(NotFound))
             .recoverFrom(e -> Response.of(InternalServerError, e.getMessage()));
