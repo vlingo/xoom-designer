@@ -1,21 +1,9 @@
 
-exchange.names=otherapp-exchange;book-exchange;author-exchange
+exchange.names=book-store-exchange
 
-exchange.otherapp-exchange.hostname=localhost
-exchange.otherapp-exchange.username=guest
-exchange.otherapp-exchange.password=guest
-exchange.otherapp-exchange.port=5672
-exchange.otherapp-exchange.virtual.host=/
-
-exchange.book-exchange.hostname=localhost
-exchange.book-exchange.username=guest
-exchange.book-exchange.password=guest
-exchange.book-exchange.port=5672
-exchange.book-exchange.virtual.host=/
-
-exchange.author-exchange.hostname=localhost
-exchange.author-exchange.username=guest
-exchange.author-exchange.password=guest
-exchange.author-exchange.port=5672
-exchange.author-exchange.virtual.host=/
+exchange.book-store-exchange.hostname=localhost
+exchange.book-store-exchange.username=guest
+exchange.book-store-exchange.password=guest
+exchange.book-store-exchange.port=5672
+exchange.book-store-exchange.virtual.host=/
 
