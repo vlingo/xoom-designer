@@ -27,9 +27,11 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private final String stageVariableName;
   private final ParametersOwner parametersOwner;
+  private CodeGenerationParameter valueObject;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
   private static final String SCALAR_TYPED_SINGLETON_COLLECTION_PATTERN = "%s.%s.stream().findFirst().orElse(null)";
-  private CodeGenerationParameter valueObject;
+  private static final String STATIC_VALUE_OBJECT_INSTANTIATION = "%s, %s.from(%s)";
+  private static final String VALUE_OBJECT_INSTANTIATION = "%s.from(%s)";
 
   public AggregateMethodInvocation(String stageVariableName, ParametersOwner consumedEvent, CodeGenerationParameter valueObject) {
     this(stageVariableName, consumedEvent);
@@ -66,9 +68,9 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
               .flatMap(Collection::stream)
               .collect(Collectors.joining(", "));
       if(scope.isStatic())
-        return String.format("%s, %s.from(%s)", stageVariableName, valueObject.value, collect);
+        return String.format(STATIC_VALUE_OBJECT_INSTANTIATION, stageVariableName, valueObject.value, collect);
 
-      return String.format("%s.from(%s)", valueObject.value, collect);
+      return String.format(VALUE_OBJECT_INSTANTIATION, valueObject.value, collect);
     } else
       return Stream.of(args, formatMethodParameters(method))
               .flatMap(Collection::stream)
