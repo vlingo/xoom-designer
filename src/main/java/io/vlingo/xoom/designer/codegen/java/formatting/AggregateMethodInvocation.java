@@ -77,8 +77,12 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private List<String> getCollect(final String fieldPath, final CodeGenerationParameter valueObject, MethodScope scope) {
     return Arrays.stream(Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject, scope).split(", "))
-            .map(param -> Arrays.stream(String.format("%s.%s", fieldPath, param).split("\\.")).distinct().collect(Collectors.joining(".")))
+            .map(param -> resolveParameterFieldPathWithoutDuplication(fieldPath, param))
             .collect(toList());
+  }
+
+  private String resolveParameterFieldPathWithoutDuplication(String fieldPath, String param) {
+    return Arrays.stream(String.format("%s.%s", fieldPath, param).split("\\.")).distinct().collect(Collectors.joining("."));
   }
 
   private List<String> formatMethodParameters(final CodeGenerationParameter method) {
