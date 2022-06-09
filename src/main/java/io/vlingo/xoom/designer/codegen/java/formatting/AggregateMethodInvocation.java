@@ -82,7 +82,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   }
 
   private String resolveParameterFieldPathWithoutDuplication(String fieldPath, String param) {
-    return Arrays.stream(String.format("%s.%s", fieldPath, param).split("\\.")).distinct().collect(Collectors.joining("."));
+   return String.format("%s.%s", fieldPath, param.substring(param.indexOf(".") + 1));
   }
 
   private List<String> formatMethodParameters(final CodeGenerationParameter method) {
