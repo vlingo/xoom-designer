@@ -70,9 +70,13 @@ public class RouteDetail {
   }
 
   public static boolean requireModelFactory(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
-            .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
-            .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+    try{
+      return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
+              .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
+              .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+    } catch (IllegalArgumentException e){
+      return false;
+    }
   }
 
   public static String resolveMethodSignature(final CodeGenerationParameter routeSignature) {
