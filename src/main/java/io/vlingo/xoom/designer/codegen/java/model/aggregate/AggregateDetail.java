@@ -154,4 +154,9 @@ public class AggregateDetail {
             .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
             .findFirst();
   }
+
+  public static boolean hasFactoryMethod(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+            .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+  }
 }
