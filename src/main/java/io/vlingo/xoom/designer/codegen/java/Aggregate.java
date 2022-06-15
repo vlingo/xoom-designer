@@ -52,7 +52,10 @@ public class Aggregate {
   }
 
   private AggregateMethod resolveFactoryMethod() {
-    return methods.stream().filter(method -> method.useFactory).findFirst().get();
+    if (methods.stream().anyMatch(method -> method.useFactory))
+      return methods.stream().filter(method -> method.useFactory).findFirst().get();
+
+    return methods.stream().findFirst().get();
   }
 
   private List<Route> resolveRoutes(final CodeGenerationParameter aggregate) {

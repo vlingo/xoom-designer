@@ -47,7 +47,7 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
     final CodeGenerationParameter aggregate = route.parent(Label.AGGREGATE);
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, route.value);
     final CodeElementFormatter formatter = ComponentRegistry.withName("defaultCodeFormatter");
-    final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+    final boolean factoryMethod = isFactoryMethod(method);
     final List<String> valueObjectInitializers =
             Formatters.Variables.format(VALUE_OBJECT_INITIALIZER, dialect, method, valueObjects.stream());
 
@@ -56,22 +56,27 @@ public class AutoDispatchHandlerEntryTemplateData extends TemplateData {
     this.parameters =
             TemplateParameters.with(METHOD_NAME, route.value)
                     .and(FACTORY_METHOD, factoryMethod)
+                    .and(REQUIRE_ENTITY_LOADING, RouteDetail.resolveEntityLoading(route))
                     .and(AGGREGATE_PROTOCOL_NAME, aggregate.value)
                     .and(STATE_DATA_OBJECT_NAME, DATA_OBJECT.resolveClassname(aggregate.value))
                     .and(AGGREGATE_PROTOCOL_VARIABLE, formatter.simpleNameToAttribute(aggregate.value))
                     .and(STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
                     .and(INDEX_NAME, formatter.staticConstant(route.value))
-                    .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method))
+                    .and(METHOD_INVOCATION_PARAMETERS, resolveMethodInvocationParameters(method, route))
                     .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers)
                     .and(COMPOSITE_ID, compositeId)
                     .and(COMPOSITE_ID_TYPE, RouteDetail.resolveCompositeIdTypeFrom(compositeId))
                     .and(HANDLER_TYPE, RouteDetail.resolveHandlerTypeFrom(compositeId));
   }
 
-  private String resolveMethodInvocationParameters(final CodeGenerationParameter method) {
-    final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
+  private String resolveMethodInvocationParameters(final CodeGenerationParameter method, CodeGenerationParameter route) {
+    final boolean factoryMethod = isFactoryMethod(method) && !RouteDetail.resolveEntityLoading(route);
     final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
     return AggregateMethodInvocation.accessingParametersFromDataObject("$stage").format(method, methodScope);
+  }
+
+  private boolean isFactoryMethod(CodeGenerationParameter method) {
+    return method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) || !AggregateDetail.hasFactoryMethod(method.parent());
   }
 
   @Override
