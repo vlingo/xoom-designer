@@ -175,7 +175,11 @@ public enum TemplateParameter implements ParameterKey {
   HANDLER_TYPE("handlerType"),
   QUERY_BY_ID_HANDLER_TYPE("queryByIdHandlerType"),
   QUERY_ALL_HANDLER_TYPE("queryAllHandlerType"),
-  QUERY_ALL_COMPOSITE_ID_TYPE("queryAllCompositeIdType");
+  QUERY_ALL_COMPOSITE_ID_TYPE("queryAllCompositeIdType"),
+  DOCKER_COMPOSE_FILE("dockerComposeFile"),
+  DOCKER_COMPOSE_SERVICES("dockerComposeServices"),
+  MODEL_CATEGORY("modelCategory"),
+  DATABASE_SERVICE("databaseService");
 
   public final String key;
 
