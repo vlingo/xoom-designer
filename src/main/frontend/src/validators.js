@@ -63,7 +63,7 @@ export const routeRule = (value) => /(^\*|(^\/?(([0-9a-zA-Z\-]+|{[0-9a-zA-Z]+})\
 export const rootPathRule = (value) => /(^\/{1}(([0-9a-zA-Z\-]+|{[0-9a-zA-Z]+})\/?)+)$/.test(value) ? undefined : errors.ROOTPATH;
 export const xoomVersionRule = (value) => ["1.4.1-SNAPSHOT", "1.4.0"].some(v => v == value) ? undefined : errors.XOOMVERSION;
 export const schemaGroupRule = (value) => /^([A-Za-z]+\.*)+\:[A-Za-z]+\:([a-z_]\d*(\.[a-z_])?)+$/.test(value) ? undefined : errors.SCHEMAGROUP;
-export const schemaRule = (value) => /^[A-Za-z]+\:[A-Za-z]+\:[A-Za-z.]+\:[A-Za-z]+\:\d+\.\d+\.\d+$/.test(value) ? undefined : errors.SCHEMA;
+export const schemaRule = (value) => /^([A-Za-z]+\.*)+\:[A-Za-z]+\:[A-Za-z.]+\:[A-Za-z]+\:\d+\.\d+\.\d+$/.test(value) ? undefined : errors.SCHEMA;
 export const isPropertyUniqueRule = (value, array, prop) => array.filter(obj => obj[prop] === value).length === 1 ? undefined : 'must be unique';
 export const isAggregateUniqueRule = (oldAggregate, aggregateName, aggregateSettings) => aggregateSettings.filter(a => JSON.stringify(a) !== JSON.stringify(oldAggregate) && a.aggregateName === aggregateName).length === 0 ? undefined : `Aggregate name must be unique`;
 export const pathShouldHaveId = (v) => /\{id\}/.test(v) ? undefined : 'Must have {id}';

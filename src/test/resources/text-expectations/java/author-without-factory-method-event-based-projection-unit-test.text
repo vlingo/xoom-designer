@@ -43,12 +43,6 @@ public class AuthorProjectionTest {
     projection = world.actorFor(Projection.class, AuthorProjectionActor.class, stateStore);
   }
 
-  private void registerExampleAuthor(AuthorState firstData, AuthorState secondData) {
-    final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(2);
-    projection.projectWith(createAuthorRegistered(firstData), control);
-    projection.projectWith(createAuthorRegistered(secondData), control);
-  }
 
   @Test
   public void register() {
@@ -56,28 +50,19 @@ public class AuthorProjectionTest {
     final AuthorData secondData = AuthorData.from("2");
 
     final CountingProjectionControl control = new CountingProjectionControl();
-    final AccessSafely access = control.afterCompleting(2);
+    final AccessSafely access = control.afterCompleting(1);
     projection.projectWith(createAuthorRegistered(firstData.toAuthorState()), control);
-    projection.projectWith(createAuthorRegistered(secondData.toAuthorState()), control);
     final Map<String, Integer> confirmations = access.readFrom("confirmations");
 
-    assertEquals(2, confirmations.size());
+    assertEquals(1, confirmations.size());
     assertEquals(1, valueOfProjectionIdFor(firstData.id, confirmations));
-    assertEquals(1, valueOfProjectionIdFor(secondData.id, confirmations));
 
     CountingReadResultInterest interest = new CountingReadResultInterest();
     AccessSafely interestAccess = interest.afterCompleting(1);
     stateStore.read(firstData.id, AuthorData.class, interest);
     AuthorData item = interestAccess.readFrom("item", firstData.id);
 
-    assertEquals(item.id, "1");
-
-    interest = new CountingReadResultInterest();
-    interestAccess = interest.afterCompleting(1);
-    stateStore.read(secondData.id, AuthorData.class, interest);
-    item = interestAccess.readFrom("item", secondData.id);
-    assertEquals(secondData.id, item.id);
-    assertEquals(item.id, "2");
+    assertEquals("1", item.id);
   }
 
   private int valueOfProjectionIdFor(final String valueText, final Map<String, Integer> confirmations) {
@@ -87,7 +72,7 @@ public class AuthorProjectionTest {
   private Projectable createAuthorRegistered(AuthorState data) {
     final AuthorRegistered eventData = new AuthorRegistered(data.id);
 
-    BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(AuthorRegistered.class, 1, JsonSerialization.serialized(eventData), 1, Metadata.withObject(eventData));
+    BaseEntry.TextEntry textEntry = new BaseEntry.TextEntry(AuthorRegistered.class, 1, JsonSerialization.serialized(eventData), 2, Metadata.withObject(eventData));
 
     final String projectionId = UUID.randomUUID().toString();
     valueToProjectionId.put(data.id, projectionId);

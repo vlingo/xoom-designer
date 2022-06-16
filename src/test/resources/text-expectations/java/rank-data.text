@@ -36,7 +36,7 @@ public class RankData {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(RankData::from).collect(Collectors.toList());
   }
 
-  private RankData (final int points, final ClassificationData classification) {
+  private RankData(final int points, final ClassificationData classification) {
     this.points = points;
     this.classification = classification;
   }

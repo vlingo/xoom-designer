@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 public class ValueObjectDetail {
 
+  private static final String SINGLE_PARAMETER_COLLECTION_PATTERN = "%s.stream().map(%s::to%s).findFirst().orElse(null)";
+
   public static String resolvePackage(final String basePackage) {
     return String.format("%s.%s", basePackage, "model");
   }
@@ -151,7 +153,7 @@ public class ValueObjectDetail {
               methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(collectionMutation.isSingleParameterBased()) {
-        return String.format("%s.stream().map(%s::to%s).findFirst().get()", fieldPath, dataObjectName, fieldType);
+        return String.format(SINGLE_PARAMETER_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType);
       }
     }
 

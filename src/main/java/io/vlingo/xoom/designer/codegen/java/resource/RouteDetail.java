@@ -70,9 +70,13 @@ public class RouteDetail {
   }
 
   public static boolean requireModelFactory(final CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
-            .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
-            .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+    try{
+      return !AggregateDetail.hasFactoryMethod(aggregate) || aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
+              .map(methodSignature -> AggregateDetail.methodWithName(aggregate, methodSignature.value))
+              .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+    } catch (IllegalArgumentException e){
+      return false;
+    }
   }
 
   public static String resolveMethodSignature(final CodeGenerationParameter routeSignature) {
@@ -147,27 +151,32 @@ public class RouteDetail {
   public static String resolveQueryAllHandlerTypeFrom(String compositeId) {
     final List<String> elements = Arrays.stream(compositeId.split(", ")).filter(id -> !id.isEmpty()).collect(Collectors.toList());
 
-    if(elements.isEmpty())
-     return "Two";
-    if(elements.size() == 1)
+    if (elements.isEmpty())
+      return "Two";
+    if (elements.size() == 1)
       return "Three";
-    else if(elements.size() == 2)
+    else if (elements.size() == 2)
       return "Four";
     else
       return "Five";
   }
 
+  public static Boolean resolveEntityLoading(final CodeGenerationParameter route) {
+    return route.retrieveRelatedValue(Label.ROUTE_PATH).contains("{id}") || AggregateDetail.hasFactoryMethod(route.parent()) &&
+            (route.hasAny(Label.REQUIRE_ENTITY_LOADING) && route.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
+  }
+
   private static String resolveRoutePath(CodeGenerationParameter routeSignatureParameter) {
     String routePath = routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_PATH);
-    if(!routePath.startsWith(routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT))) {
+    if (!routePath.startsWith(routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT))) {
       routePath = routeSignatureParameter.parent().retrieveRelatedValue(Label.URI_ROOT) + routePath;
     }
     return routePath;
   }
 
   private static String resolveMethodSignatureWithParams(final CodeGenerationParameter routeSignature) {
-    final String idParameter =
-        routeSignature.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
+    final String idParameter = requireModelFactory(routeSignature.parent()) &&
+            routeSignature.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf) ?
             String.format(METHOD_PARAMETER_PATTERN, "String", "id") : "";
 
     final String compositeIdParameter = String.join(",", compositeIdParameterFrom(routeSignature));

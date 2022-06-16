@@ -35,7 +35,7 @@ public class Assertions {
               if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType) || fieldPath.equals(variableName+".id")) {
                 return String.format("assertNotNull(%s);", fieldPath);
               }
-              return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve(dataIndex, variableName, fieldPath));
+              return String.format("assertEquals(%s, %s);", testDataValues.retrieve(dataIndex, variableName, fieldPath), fieldPath);
             };
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());

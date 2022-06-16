@@ -51,9 +51,9 @@ public class RoleResourceTest extends AbstractRestTest {
         .as(RoleData.class);
 
     assertNotNull(result.id);
-    assertEquals(result.tenantId, "first-role-tenantId");
-    assertEquals(result.name, "first-role-name");
-    assertEquals(result.description, "first-role-description");
+    assertEquals("first-role-tenantId", result.tenantId);
+    assertEquals("first-role-name", result.name);
+    assertEquals("first-role-description", result.description);
   }
 
   @Test@Disabled
@@ -71,8 +71,8 @@ public class RoleResourceTest extends AbstractRestTest {
         .as(RoleData.class);
 
     assertNotNull(result.id);
-    assertEquals(result.tenantId, "first-role-tenantId");
-    assertEquals(result.name, "first-role-name");
-    assertEquals(result.description, "first-role-description");
+    assertEquals("first-role-tenantId", result.tenantId);
+    assertEquals("first-role-name", result.name);
+    assertEquals("first-role-description", result.description);
   }
 }

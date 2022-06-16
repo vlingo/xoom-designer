@@ -23,8 +23,11 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
     final List<CodeGenerationParameter> aggregates =
             context.parametersOf(Label.AGGREGATE).filter(aggregate -> aggregate.hasAny(Label.EXCHANGE))
                     .collect(Collectors.toList());
+    final List<CodeGenerationParameter> valueObjects =
+            context.parametersOf(Label.VALUE_OBJECT)
+                    .collect(Collectors.toList());
 
-    return ExchangeTemplateDataFactory.build(resolvePackage(context), aggregates, context.contents());
+    return ExchangeTemplateDataFactory.build(resolvePackage(context), aggregates, valueObjects, context.contents());
   }
 
   private String resolvePackage(final CodeGenerationContext context) {

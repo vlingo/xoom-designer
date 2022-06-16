@@ -20,7 +20,7 @@ public final class ${valueObjectName} {
     return new ${valueObjectName}(${constructorInvocationParameters});
   }
 
-  private ${valueObjectName} (${constructorParameters}) {
+  private ${valueObjectName}(${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

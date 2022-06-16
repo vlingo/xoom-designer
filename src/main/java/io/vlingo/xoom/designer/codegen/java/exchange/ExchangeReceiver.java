@@ -14,6 +14,7 @@ import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.formatting.AggregateMethodInvocation;
 import io.vlingo.xoom.designer.codegen.java.model.MethodScope;
 import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.java.schemata.Schema;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -32,16 +33,15 @@ public class ExchangeReceiver {
   public final String localTypeQualifiedName;
   public final boolean dispatchToFactoryMethod;
 
-  public static List<ExchangeReceiver> from(final CodeGenerationParameter exchange) {
+  public static List<ExchangeReceiver> from(final CodeGenerationParameter exchange, List<CodeGenerationParameter> valueObjects) {
     return exchange.retrieveAllRelated(Label.RECEIVER)
-            .map(receiver -> new ExchangeReceiver(exchange, receiver))
+            .map(receiver -> new ExchangeReceiver(exchange, receiver, valueObjects))
             .collect(Collectors.toList());
   }
 
   private ExchangeReceiver(final CodeGenerationParameter exchange,
-                           final CodeGenerationParameter receiver) {
-    final CodeElementFormatter codeElementFormatter =
-            ComponentRegistry.withName("defaultCodeFormatter");
+                           final CodeGenerationParameter receiver, List<CodeGenerationParameter> valueObjects) {
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("defaultCodeFormatter");
 
     final CodeGenerationParameter aggregateMethod =
             AggregateDetail.methodWithName(exchange.parent(), receiver.retrieveRelatedValue(Label.MODEL_METHOD));
@@ -54,15 +54,29 @@ public class ExchangeReceiver {
     this.innerClassName = schema.innerReceiverClassName();
     this.modelActor = JavaTemplateStandard.AGGREGATE.resolveClassname(modelProtocol);
     this.modelVariable = codeElementFormatter.simpleNameToAttribute(modelProtocol);
-    this.modelMethodParameters = resolveModelMethodParameters(aggregateMethod);
+    this.modelMethodParameters = resolveModelMethodParameters(aggregateMethod, valueObjects);
     this.dispatchToFactoryMethod = aggregateMethod.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     this.localTypeQualifiedName = schema.qualifiedName();
   }
 
-  private String resolveModelMethodParameters(final CodeGenerationParameter method) {
+  private String resolveModelMethodParameters(final CodeGenerationParameter method, List<CodeGenerationParameter> valueObjects) {
     final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf);
     final MethodScope methodScope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
-    return AggregateMethodInvocation.accessingParametersFromConsumedEvent("stage").format(method, methodScope);
+
+    CodeGenerationParameter stateField = AggregateDetail.stateFieldWithName(method.parent(), method.retrieveRelatedValue(Label.METHOD_PARAMETER));
+    if(isNullObjectOrNotValueObject(stateField, valueObjects))
+      return AggregateMethodInvocation.accessingParametersFromConsumedEvent("stage").format(method, methodScope);
+
+    CodeGenerationParameter valueObject = ValueObjectDetail.valueObjectOf(stateField.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
+    return AggregateMethodInvocation.accessingValueObjectParametersFromConsumedEvent("stage", valueObject).format(method, methodScope);
   }
+
+  private boolean isNullObjectOrNotValueObject(CodeGenerationParameter stateField, List<CodeGenerationParameter> valueObjects) {
+    if(stateField == null)
+      return true;
+
+    return valueObjects.stream().noneMatch(vo -> vo.value.equals((stateField.retrieveRelatedValue(Label.FIELD_TYPE)))) && !ValueObjectDetail.isValueObject(stateField);
+  }
+
 
 }

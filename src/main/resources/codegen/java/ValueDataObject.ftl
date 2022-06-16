@@ -48,7 +48,7 @@ public class ${dataValueObjectName} {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(${dataValueObjectName}::from).collect(Collectors.toList());
   }
 
-  private ${dataValueObjectName} (${constructorParameters}) {
+  private ${dataValueObjectName}(${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

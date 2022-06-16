@@ -15,6 +15,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
 import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.java.model.domainevent.DomainEventDetail;
 import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 
@@ -136,7 +137,7 @@ public class ProjectionSource {
 
   private String resolveSourceFieldsCarrierName(final CodeGenerationParameter event) {
     final CodeGenerationParameter aggregate = event.parent(Label.AGGREGATE);
-    if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
+    if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate) || !AggregateDetail.hasFactoryMethod(aggregate)) {
       return "currentData";
     }
     return "previousData";

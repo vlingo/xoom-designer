@@ -43,18 +43,18 @@ public class BookQueriesTest {
 
     final BookData firstData = queries.bookOf("1", "1").await();
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.authorId, "1");
-    assertEquals(firstData.title, "first-book-title");
-    assertEquals(firstData.publisher, "first-book-publisher");
+    assertEquals("1", firstData.id);
+    assertEquals("1", firstData.authorId);
+    assertEquals("first-book-title", firstData.title);
+    assertEquals("first-book-publisher", firstData.publisher);
     assertNotNull(firstData.publicationDate);
 
     final BookData secondData = queries.bookOf("2", "2").await();
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.authorId, "2");
-    assertEquals(secondData.title, "second-book-title");
-    assertEquals(secondData.publisher, "second-book-publisher");
+    assertEquals("2", secondData.id);
+    assertEquals("2", secondData.authorId);
+    assertEquals("second-book-title", secondData.title);
+    assertEquals("second-book-publisher", secondData.publisher);
     assertNotNull(secondData.publicationDate);
   }
 
@@ -69,19 +69,19 @@ public class BookQueriesTest {
     Collection<BookData> results = queries.books("1").await();
     final BookData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.authorId, "1");
-    assertEquals(firstData.title, "first-book-title");
-    assertEquals(firstData.publisher, "first-book-publisher");
+    assertEquals("1", firstData.id);
+    assertEquals("1", firstData.authorId);
+    assertEquals("first-book-title", firstData.title);
+    assertEquals("first-book-publisher", firstData.publisher);
     assertNotNull(firstData.publicationDate);
 
     results = queries.books("2").await();
     final BookData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.authorId, "2");
-    assertEquals(secondData.title, "second-book-title");
-    assertEquals(secondData.publisher, "second-book-publisher");
+    assertEquals("2", secondData.id);
+    assertEquals("2", secondData.authorId);
+    assertEquals("second-book-title", secondData.title);
+    assertEquals("second-book-publisher", secondData.publisher);
     assertNotNull(secondData.publicationDate);
   }
 

@@ -47,6 +47,28 @@ public class AutoDispatchMappingGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(authorHandlersMappingContent.contains(TextExpectation.onJava().read("author-dispatch-handlers-mapping")));
   }
 
+  @Test
+  public void testThatAggregateWithoutFactoryMethodAutoDispatchMappingsAreGenerated() {
+    final String basePackage = "io.vlingo.xoomapp";
+
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, basePackage),
+                    CodeGenerationParameter.of(Label.CQRS, true), CodeGenerationParameter.of(Label.DIALECT, Dialect.JAVA),
+                    authorAggregateWhoutFactoryMethod(), nameValueObject(), rankValueObject(), tagValueObject());
+
+    final CodeGenerationContext context =
+            CodeGenerationContext.with(parameters).contents(contents());
+
+    new AutoDispatchMappingGenerationStep().process(context);
+
+    final Content authorMappingContent = context.findContent(JavaTemplateStandard.AUTO_DISPATCH_MAPPING, "AuthorResource");
+    final Content authorHandlersMappingContent = context.findContent(JavaTemplateStandard.AUTO_DISPATCH_HANDLERS_MAPPING, "AuthorResourceHandlers");
+
+    Assertions.assertEquals(11, context.contents().size());
+    Assertions.assertTrue(authorMappingContent.contains(TextExpectation.onJava().read("author-dispatch-mapping")));
+    Assertions.assertTrue(authorHandlersMappingContent.contains(TextExpectation.onJava().read("author-dispatch-handlers-mapping")));
+  }
+
   private Content[] contents() {
     return new Content[]{
             Content.with(JavaTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "Author.java"), null, null, AUTHOR_CONTENT_TEXT),
@@ -184,6 +206,197 @@ public class AutoDispatchMappingGenerationStepTest extends CodeGenerationTest {
                     .relate(Label.ROUTE_METHOD, "POST")
                     .relate(Label.ROUTE_PATH, "/")
                     .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    final CodeGenerationParameter changeRankRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "changeRank")
+                    .relate(Label.ROUTE_METHOD, "PATCH")
+                    .relate(Label.ROUTE_PATH, "/{id}/rank")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter addTagRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "addTag")
+                    .relate(Label.ROUTE_METHOD, "PATCH")
+                    .relate(Label.ROUTE_PATH, "/{id}/tag")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter addTagsRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "addTags")
+                    .relate(Label.ROUTE_METHOD, "PATCH")
+                    .relate(Label.ROUTE_PATH, "/{id}/tags")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter replaceTagsRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "replaceTags")
+                    .relate(Label.ROUTE_METHOD, "PUT")
+                    .relate(Label.ROUTE_PATH, "/{id}/tags")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter removeTagsRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "removeTag")
+                    .relate(Label.ROUTE_METHOD, "DELETE")
+                    .relate(Label.ROUTE_PATH, "/{id}/tags")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter relatedAuthorRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "relateAuthor")
+                    .relate(Label.ROUTE_METHOD, "PATCH")
+                    .relate(Label.ROUTE_PATH, "/{id}/related-author")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter relatedAuthorsRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "relateAuthors")
+                    .relate(Label.ROUTE_METHOD, "PATCH")
+                    .relate(Label.ROUTE_PATH, "/{id}/related-authors")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter relatedAuthorsReplacementRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "replaceAllRelatedAuthors")
+                    .relate(Label.ROUTE_METHOD, "PUT")
+                    .relate(Label.ROUTE_PATH, "/{id}/related-authors")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    final CodeGenerationParameter relatedAuthorRemovalRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "unrelateAuthor")
+                    .relate(Label.ROUTE_METHOD, "DELETE")
+                    .relate(Label.ROUTE_PATH, "/{id}/related-author")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+            .relate(Label.URI_ROOT, "/authors").relate(idField).relate(nameField)
+            .relate(rankField).relate(tagsField).relate(relatedAuthorsField).relate(factoryMethod)
+            .relate(rankMethod).relate(withNameRoute).relate(addTagMethod).relate(addTagsMethod)
+            .relate(replaceTagsMethod).relate(removeTagMethod).relate(relateAuthorMethod)
+            .relate(relateAuthorsMethod).relate(unrelateAuthorMethod).relate(replaceAuthorsMethod)
+            .relate(relatedAuthorRoute).relate(relatedAuthorsRoute).relate(relatedAuthorsReplacementRoute)
+            .relate(relatedAuthorRemovalRoute).relate(addTagRoute).relate(addTagsRoute)
+            .relate(replaceTagsRoute).relate(removeTagsRoute).relate(changeRankRoute)
+            .relate(authorRegisteredEvent).relate(authorRankedEvent)
+            .relate(authorTaggedEvent).relate(authorUntaggedEvent);
+  }
+
+  private CodeGenerationParameter authorAggregateWhoutFactoryMethod() {
+    final CodeGenerationParameter idField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                    .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                    .relate(Label.FIELD_TYPE, "Name");
+
+    final CodeGenerationParameter rankField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                    .relate(Label.FIELD_TYPE, "Rank");
+
+    final CodeGenerationParameter tagsField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "tags")
+                    .relate(Label.FIELD_TYPE, "Tag")
+                    .relate(Label.COLLECTION_TYPE, "List");
+
+    final CodeGenerationParameter relatedAuthorsField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
+                    .relate(Label.FIELD_TYPE, "String")
+                    .relate(Label.COLLECTION_TYPE, "Set");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+                    .relate(idField).relate(nameField);
+
+    final CodeGenerationParameter authorRankedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+                    .relate(idField).relate(rankField);
+
+    final CodeGenerationParameter authorTaggedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorTagged")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+
+    final CodeGenerationParameter authorUntaggedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUntagged")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "tags"));
+
+    final CodeGenerationParameter authorRelatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+
+    final CodeGenerationParameter authorUnrelatedEvent =
+            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorUnrelated")
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+                    .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors"));
+
+    final CodeGenerationParameter factoryMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+                    .relate(Label.METHOD_PARAMETER, "name")
+                    .relate(Label.FACTORY_METHOD, "false")
+                    .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter rankMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+                    .relate(Label.METHOD_PARAMETER, "rank")
+                    .relate(authorRankedEvent);
+
+    final CodeGenerationParameter addTagMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTag")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
+                            .relate(Label.ALIAS, "tag")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter addTagsMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter replaceTagsMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter removeTagMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
+                            .relate(Label.ALIAS, "tag")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
+                    .relate(authorUnrelatedEvent);
+
+    final CodeGenerationParameter relateAuthorMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "ADDITION"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter relateAuthorsMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthors")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "MERGE"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter replaceAuthorsMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceAllRelatedAuthors")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "relatedAuthors")
+                            .relate(Label.ALIAS, "")
+                            .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
+                    .relate(authorRelatedEvent);
+
+    final CodeGenerationParameter unrelateAuthorMethod =
+            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "unrelateAuthor")
+                    .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "relatedAuthors")
+                            .relate(Label.ALIAS, "relatedAuthor")
+                            .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
+                    .relate(authorUnrelatedEvent);
+
+    final CodeGenerationParameter withNameRoute =
+            CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "withName")
+                    .relate(Label.ROUTE_METHOD, "POST")
+                    .relate(Label.ROUTE_PATH, "/")
+                    .relate(Label.REQUIRE_ENTITY_LOADING, "true");
 
     final CodeGenerationParameter changeRankRoute =
             CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "changeRank")

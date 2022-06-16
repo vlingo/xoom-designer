@@ -77,7 +77,7 @@ public class RouteMethodTemplateData extends TemplateData {
             TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
                     .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter, Label.MODEL_PROTOCOL))
                     .and(ROUTE_METHOD, routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD))
-                    .and(REQUIRE_ENTITY_LOADING, resolveEntityLoading(routeSignatureParameter))
+                    .and(REQUIRE_ENTITY_LOADING, RouteDetail.resolveEntityLoading(routeSignatureParameter))
                     .and(ADAPTER_HANDLER_INVOCATION, adapterHandlerInvocation)
                     .and(VALUE_OBJECT_INITIALIZERS, valueObjectInitializers)
                     .and(ROUTE_HANDLER_INVOCATION, routeHandlerInvocation)
@@ -98,12 +98,6 @@ public class RouteMethodTemplateData extends TemplateData {
             mainParameter.retrieveRelatedValue(Label.MODEL_DATA))
             .filter(qualifiedName -> !qualifiedName.isEmpty())
             .collect(Collectors.toSet());
-  }
-
-  private Boolean resolveEntityLoading(final CodeGenerationParameter routeSignatureParameter) {
-    return routeSignatureParameter.hasAny(Label.ID) ||
-            (routeSignatureParameter.hasAny(Label.REQUIRE_ENTITY_LOADING) &&
-                    routeSignatureParameter.retrieveRelatedValue(Label.REQUIRE_ENTITY_LOADING, Boolean::valueOf));
   }
 
   private String resolveIdName(final CodeGenerationParameter routeSignatureParameter) {
