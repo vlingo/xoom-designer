@@ -1,0 +1,95 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.stream.Collectors;
+import java.util.*;
+import io.vlingo.xoomapp.model.author.AuthorState;
+import java.time.LocalDateTime;
+import io.vlingo.xoomapp.model.*;
+
+@SuppressWarnings("all")
+public class AuthorData {
+  public final String id;
+  public final NameData name;
+  public final RankData rank;
+  public final PricingData pricing;
+  public final boolean status;
+  public final List<Integer> bookIds = new ArrayList<>();
+  public final LocalDateTime updatedOn;
+
+  public static AuthorData from(final AuthorState authorState) {
+    final NameData name = authorState.name != null ? NameData.from(authorState.name) : null;
+    final RankData rank = authorState.rank != null ? RankData.from(authorState.rank) : null;
+    final PricingData pricing = authorState.pricing != null ? PricingData.from(authorState.pricing) : null;
+    final List<Integer> bookIds = authorState.bookIds != null ? authorState.bookIds : new ArrayList<>();
+    return from(authorState.id, name, rank, pricing, authorState.status, bookIds, authorState.updatedOn);
+  }
+
+  public static AuthorData from(final String id, final NameData name, final RankData rank, final PricingData pricing, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
+    return new AuthorData(id, name, rank, pricing, status, bookIds, updatedOn);
+  }
+
+  public static List<AuthorData> fromAll(final List<AuthorState> states) {
+    return states.stream().map(AuthorData::from).collect(Collectors.toList());
+  }
+
+  public static AuthorData empty() {
+    return from(AuthorState.identifiedBy(""));
+  }
+
+  private AuthorData(final String id, final NameData name, final RankData rank, final PricingData pricing, final boolean status, final List<Integer> bookIds, final LocalDateTime updatedOn) {
+    this.id = id;
+    this.name = name;
+    this.rank = rank;
+    this.pricing = pricing;
+    this.status = status;
+    this.bookIds.addAll(bookIds);
+    this.updatedOn = updatedOn;
+  }
+
+  public AuthorState toAuthorState() {
+    final Name name = Name.from(this.name.firstName, this.name.lastName);
+    final Rank rank = Rank.from(this.rank.points, Classification.from(this.rank.classification.label, this.rank.classification.classifier));
+    final RetailPrice retailPrice = RetailPrice.from(Money.from(this.pricing.retailPrice.price.amount));
+    final WholesalePrice wholesalePrice = WholesalePrice.from(Money.from(this.pricing.wholesalePrice.price.amount));
+    final Pricing pricing = Pricing.from(retailPrice, wholesalePrice);
+    return new AuthorState(id, name, rank, pricing, status, bookIds, updatedOn);
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    AuthorData another = (AuthorData) other;
+    return new EqualsBuilder()
+              .append(this.id, another.id)
+              .append(this.name, another.name)
+              .append(this.rank, another.rank)
+              .append(this.pricing, another.pricing)
+              .append(this.status, another.status)
+              .append(this.bookIds, another.bookIds)
+              .append(this.updatedOn, another.updatedOn)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("id", id)
+              .append("name", name)
+              .append("rank", rank)
+              .append("pricing", pricing)
+              .append("status", status)
+              .append("bookIds", bookIds)
+              .append("updatedOn", updatedOn)
+              .toString();
+  }
+
+}

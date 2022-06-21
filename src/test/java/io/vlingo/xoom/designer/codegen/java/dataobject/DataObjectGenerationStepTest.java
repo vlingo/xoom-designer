@@ -59,7 +59,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.DIALECT, Dialect.JAVA)
-                    .add(authorAggregate()).add(nameValueObject()).add(rankValueObject())
+                    .add(authorAggregateWithMultiNestetValueObject()).add(nameValueObject()).add(rankValueObject())
                     .add(classificationValueObject()).add(classifierValueObject())
                     .add(moneyValueObject()).add(retailPriceValueObject())
                     .add(wholesalePriceValueObject()).add(pricingValueObject());
@@ -69,9 +69,11 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
 
     new DataObjectGenerationStep().process(context);
 
+    final Content authorData = context.findContent(JavaTemplateStandard.DATA_OBJECT, "AuthorData");
     final Content pricingData = context.findContent(JavaTemplateStandard.DATA_OBJECT, "PricingData");
 
     Assertions.assertEquals(17, context.contents().size());
+    Assertions.assertEquals(((TextBasedContent) authorData).text, (TextExpectation.onJava().read("author-nested-value-object-data")));
     Assertions.assertEquals(((TextBasedContent) pricingData).text, (TextExpectation.onJava().read("pricing-data")));
     Assertions.assertTrue(pricingData.contains(TextExpectation.onJava().read("pricing-data")));
   }
@@ -104,6 +106,40 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
             .relate(idField).relate(nameField).relate(rankField)
+            .relate(statusField).relate(bookIds).relate(updatedOn);
+  }
+  private CodeGenerationParameter authorAggregateWithMultiNestetValueObject() {
+    final CodeGenerationParameter idField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+                    .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+                    .relate(Label.FIELD_TYPE, "Name");
+
+    final CodeGenerationParameter rankField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+                    .relate(Label.FIELD_TYPE, "Rank");
+
+    final CodeGenerationParameter pricingField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "pricing")
+                    .relate(Label.FIELD_TYPE, "Pricing");
+
+    final CodeGenerationParameter statusField =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "status")
+                    .relate(Label.FIELD_TYPE, "boolean");
+
+    final CodeGenerationParameter bookIds =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "bookIds")
+                    .relate(Label.FIELD_TYPE, "int")
+                    .relate(Label.COLLECTION_TYPE, "List");
+
+    final CodeGenerationParameter updatedOn =
+            CodeGenerationParameter.of(Label.STATE_FIELD, "updatedOn")
+                    .relate(Label.FIELD_TYPE, "LocalDateTime");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+            .relate(idField).relate(nameField).relate(rankField).relate(pricingField)
             .relate(statusField).relate(bookIds).relate(updatedOn);
   }
 
