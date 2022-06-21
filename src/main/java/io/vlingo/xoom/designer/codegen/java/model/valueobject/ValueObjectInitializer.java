@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,9 +32,24 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
   public List<String> format(final CodeGenerationParameter parent,
                              final Stream<CodeGenerationParameter> valueObjectsStream) {
     final List<CodeGenerationParameter> valueObjects = valueObjectsStream.collect(Collectors.toList());
+    if(hasMultiNestedValueObjects(findInvolvedFields(parent).collect(Collectors.toList()), valueObjects))
+      return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
+              .flatMap(field -> buildExpressionsForMultiNestedValueObjects(field, valueObjects).stream())
+              .collect(Collectors.toList());
+
     return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
         .flatMap(field -> buildExpressions(field, valueObjects).stream())
         .collect(Collectors.toList());
+  }
+
+  private boolean hasMultiNestedValueObjects(List<CodeGenerationParameter> involvedFields, List<CodeGenerationParameter> valueObjects) {
+    return involvedFields.stream()
+            .filter(ValueObjectDetail::isValueObject)
+            .map(field -> ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream()))
+            .flatMap(vo -> vo.retrieveAllRelated(Label.VALUE_OBJECT_FIELD))
+            .map(vo->vo.value)
+            .collect(Collectors.toMap(Function.identity(), v -> 1L, Long::sum))
+            .values().stream().anyMatch(count -> count > 1);
   }
 
   private Stream<CodeGenerationParameter> findInvolvedFields(final CodeGenerationParameter parent) {
@@ -56,6 +72,34 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
     return expressions;
   }
 
+  private List<String> buildExpressionsForMultiNestedValueObjects(final CodeGenerationParameter stateField,
+                                        final List<CodeGenerationParameter> valueObjects) {
+    final List<String> expressions = new ArrayList<>();
+    buildExpressionForMultiNestedValueObjects(carrierName, stateField, valueObjects, expressions);
+    return expressions;
+  }
+
+  private void buildExpressionForMultiNestedValueObjects(final String carrierReferencePath,
+                               final CodeGenerationParameter field,
+                               final List<CodeGenerationParameter> valueObjects,
+                               final List<String> expressions) {
+    final CodeGenerationParameter valueObject =
+            ValueObjectDetail.valueObjectOf(field.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
+
+    final String fieldReferencePath =
+            String.format("%s.%s", carrierReferencePath, field.value);
+
+    final String args =
+            valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+                    .map(valueObjectField -> resolveArgumentForMultiNestedValueObjects(fieldReferencePath, valueObjectField, valueObjects))
+                    .collect(Collectors.joining(", "));
+
+    final String expression =
+            String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
+
+    expressions.add(expression);
+  }
+
   private void buildExpression(final String carrierReferencePath,
                                final CodeGenerationParameter field,
                                final List<CodeGenerationParameter> valueObjects,
@@ -72,7 +116,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
 
     final String args =
         valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
-            .map(valueObjectField -> resolveArgument(fieldReferencePath, valueObjectField))
+            .map(valueObjectField -> resolveArgument(fieldReferencePath, valueObjectField, valueObjects))
             .collect(Collectors.joining(", "));
 
     final String expression =
@@ -82,7 +126,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
   }
 
   private String resolveArgument(final String fieldReferencePath,
-                                 final CodeGenerationParameter valueObjectField) {
+                                 final CodeGenerationParameter valueObjectField, List<CodeGenerationParameter> valueObjects) {
     final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
     if (ValueObjectDetail.isValueObject(valueObjectField)) {
       return valueObjectField.value;
@@ -97,6 +141,19 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
       }
 
       return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
+    }
+    return String.format("%s.%s", fieldReferencePath, valueObjectField.value);
+  }
+
+  private String resolveArgumentForMultiNestedValueObjects(final String fieldReferencePath,
+                                 final CodeGenerationParameter valueObjectField, List<CodeGenerationParameter> valueObjects) {
+    final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
+    if (ValueObjectDetail.isValueObject(valueObjectField)) {
+      final String args = ValueObjectDetail.valueObjectOf(valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream())
+              .retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+              .map(valueObject -> String.format("%s.%s.%s", fieldReferencePath, valueObjectField.value, valueObject.value))
+              .collect(Collectors.joining(", "));
+      return String.format("%s.from(%s)", fieldType, args);
     }
     return String.format("%s.%s", fieldReferencePath, valueObjectField.value);
   }

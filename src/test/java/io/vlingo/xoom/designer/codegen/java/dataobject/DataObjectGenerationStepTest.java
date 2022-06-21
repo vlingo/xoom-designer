@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.java.dataobject;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -51,6 +52,28 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(rankDataContent.contains(TextExpectation.onJava().read("rank-data")));
     Assertions.assertTrue(classificationDataContent.contains(TextExpectation.onJava().read("classification-data")));
     Assertions.assertTrue(classifierDataContent.contains(TextExpectation.onJava().read("classifier-data")));
+  }
+
+  @Test
+  public void testThatDataObjectsWithNoDuplicationAreGenerated() {
+    final CodeGenerationParameters parameters =
+            CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
+                    .add(Label.DIALECT, Dialect.JAVA)
+                    .add(authorAggregate()).add(nameValueObject()).add(rankValueObject())
+                    .add(classificationValueObject()).add(classifierValueObject())
+                    .add(moneyValueObject()).add(retailPriceValueObject())
+                    .add(wholesalePriceValueObject()).add(pricingValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters)
+                    .contents(contents());
+
+    new DataObjectGenerationStep().process(context);
+
+    final Content pricingData = context.findContent(JavaTemplateStandard.DATA_OBJECT, "PricingData");
+
+    Assertions.assertEquals(17, context.contents().size());
+    Assertions.assertEquals(((TextBasedContent) pricingData).text, (TextExpectation.onJava().read("pricing-data")));
+    Assertions.assertTrue(pricingData.contains(TextExpectation.onJava().read("pricing-data")));
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -134,6 +157,32 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
             .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
                     .relate(Label.FIELD_TYPE, "String"));
 
+  }
+
+  private CodeGenerationParameter moneyValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Money")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "amount")
+                    .relate(Label.FIELD_TYPE, "int"));
+  }
+
+  private CodeGenerationParameter retailPriceValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "RetailPrice")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+                    .relate(Label.FIELD_TYPE, "Money"));
+  }
+
+  private CodeGenerationParameter wholesalePriceValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "WholesalePrice")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "price")
+                    .relate(Label.FIELD_TYPE, "Money"));
+  }
+
+  private CodeGenerationParameter pricingValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Pricing")
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "retailPrice")
+                    .relate(Label.FIELD_TYPE, "RetailPrice"))
+            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "wholesalePrice")
+                    .relate(Label.FIELD_TYPE, "WholesalePrice"));
   }
 
   private Content[] contents() {
