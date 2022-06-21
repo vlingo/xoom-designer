@@ -155,6 +155,17 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
               .collect(Collectors.joining(", "));
       return String.format("%s.from(%s)", fieldType, args);
     }
+    if (FieldDetail.isValueObjectCollection(valueObjectField)) {
+      final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
+      final String collectionType = valueObjectField.retrieveRelatedValue(Label.COLLECTION_TYPE);
+
+      if (FieldDetail.isValueObjectCollection(valueObjectField.parent().retrieveOneRelated(Label.VALUE_OBJECT_FIELD))) {
+        final String dataObjectFieldName = valueObjectField.parent().retrieveRelatedValue(Label.VALUE_OBJECT_FIELD);
+        return String.format("%s.%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectFieldName, dataObjectName, fieldType, collectionType);
+      }
+
+      return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
+    }
     return String.format("%s.%s", fieldReferencePath, valueObjectField.value);
   }
 
