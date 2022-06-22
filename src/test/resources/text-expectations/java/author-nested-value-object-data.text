@@ -52,7 +52,7 @@ public class AuthorData {
 
   public AuthorState toAuthorState() {
     final Name name = Name.from(this.name.firstName, this.name.lastName);
-    final Rank rank = Rank.from(this.rank.points, Classification.from(this.rank.classification.label, this.rank.classification.classifier));
+    final Rank rank = Rank.from(this.rank.points, Classification.from(this.rank.label, this.rank.stream().map(ClassifierData::toClassifier).collect(java.util.stream.Collectors.toSet())));
     final RetailPrice retailPrice = RetailPrice.from(Money.from(this.pricing.retailPrice.price.amount));
     final WholesalePrice wholesalePrice = WholesalePrice.from(Money.from(this.pricing.wholesalePrice.price.amount));
     final Pricing pricing = Pricing.from(retailPrice, wholesalePrice);

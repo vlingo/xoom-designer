@@ -190,7 +190,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
       final String fieldReferencePath =
               String.format("%s.%s", carrierReferencePath, field.value);
       if(hasMultiNestedValueObjects(valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).collect(Collectors.toList()), valueObjects) ||
-              valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).anyMatch(FieldDetail::isValueObjectCollection))
+              FieldDetail.isValueObjectCollection(field))
           valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
                   .filter(ValueObjectDetail::isValueObject)
                   .forEach(valueObjectField -> buildExpression(fieldReferencePath, valueObjectField, valueObjects, expressions));
@@ -210,13 +210,19 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
       final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
       if (ValueObjectDetail.isValueObject(valueObjectField)) {
         final CodeGenerationParameter valueObject = ValueObjectDetail.valueObjectOf(valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE), valueObjects.stream());
-        if(valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).anyMatch(ValueObjectDetail::isValueObject))
+        if (valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).anyMatch(ValueObjectDetail::isValueObject)) {
           return valueObjectField.value;
+        }
+        Function<CodeGenerationParameter, String> mapper = vo -> String.format("%s.%s.%s", fieldReferencePath, valueObjectField.value, vo.value);
+
+        if (valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).anyMatch(FieldDetail::isValueObjectCollection))
+          mapper = vo -> super.resolveArgument(fieldReferencePath, vo, valueObjects);
 
         final String args = valueObject
                 .retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
-                .map(vo -> String.format("%s.%s.%s", fieldReferencePath, valueObjectField.value, vo.value))
+                .map(mapper)
                 .collect(Collectors.joining(", "));
+
         return String.format("%s.from(%s)", fieldType, args);
       }
 

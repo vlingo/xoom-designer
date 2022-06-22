@@ -59,7 +59,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
     final CodeGenerationParameters parameters =
             CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
                     .add(Label.DIALECT, Dialect.JAVA)
-                    .add(authorAggregateWithMultiNestetValueObject()).add(nameValueObject()).add(rankValueObject())
+                    .add(authorAggregateWithMultiNestedValueObject()).add(nameValueObject()).add(rankValueObject())
                     .add(classificationValueObject()).add(classifierValueObject())
                     .add(moneyValueObject()).add(retailPriceValueObject())
                     .add(wholesalePriceValueObject()).add(pricingValueObject());
@@ -108,7 +108,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
             .relate(idField).relate(nameField).relate(rankField)
             .relate(statusField).relate(bookIds).relate(updatedOn);
   }
-  private CodeGenerationParameter authorAggregateWithMultiNestetValueObject() {
+  private CodeGenerationParameter authorAggregateWithMultiNestedValueObject() {
     final CodeGenerationParameter idField =
             CodeGenerationParameter.of(Label.STATE_FIELD, "id")
                     .relate(Label.FIELD_TYPE, "String");
