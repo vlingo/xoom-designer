@@ -125,8 +125,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
       final String collectionType = valueObjectField.retrieveRelatedValue(Label.COLLECTION_TYPE);
 
       if (FieldDetail.isValueObjectCollection(valueObjectField.parent().retrieveOneRelated(Label.VALUE_OBJECT_FIELD))) {
-        final String dataObjectFieldName = valueObjectField.parent().retrieveRelatedValue(Label.VALUE_OBJECT_FIELD);
-        return String.format("%s.%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectFieldName, dataObjectName, fieldType, collectionType);
+        return String.format("%s.%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, valueObjectField.value, dataObjectName, fieldType, collectionType);
       }
 
       return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
