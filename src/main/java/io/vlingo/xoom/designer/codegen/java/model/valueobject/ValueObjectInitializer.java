@@ -33,13 +33,14 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
   public List<String> format(final CodeGenerationParameter parent,
                              final Stream<CodeGenerationParameter> valueObjectsStream) {
     final List<CodeGenerationParameter> valueObjects = valueObjectsStream.collect(Collectors.toList());
+    Function<CodeGenerationParameter, Stream<? extends String>> mapper =
+            field -> buildExpressions(field, valueObjects).stream();
+
     if(hasMultiNestedValueObjects(findInvolvedFields(parent).collect(Collectors.toList()), valueObjects))
-      return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
-              .flatMap(field -> initializer.buildExpressions(field, valueObjects).stream())
-              .collect(Collectors.toList());
+      mapper = field -> initializer.buildExpressions(field, valueObjects).stream();
 
     return findInvolvedFields(parent).filter(ValueObjectDetail::isValueObject)
-        .flatMap(field -> buildExpressions(field, valueObjects).stream())
+        .flatMap(mapper)
         .collect(Collectors.toList());
   }
 
