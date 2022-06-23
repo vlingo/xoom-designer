@@ -64,7 +64,9 @@
 
     method.parameters = [...method.parameters.filter(p => p.stateField !== fName), param]
   }
-
+  const optionalMethodParametersValidityWithSelectedEventRule = (event, events, parameters) => {
+    return methodParametersValidityWithSelectedEventRule(event, events, parameters) ? "One or more parameters do not map to the event fields. Related aggregate and test code will be commented." : "";
+  }
   function updateEvent(eName) {
     if (eName === method.event) {
       method.event = null
@@ -229,7 +231,7 @@
 <div style="align-self: flex-start;">
   <ErrorWarningTooltip
     type={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0? 'error' : 'warning'}
-    messages={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected', methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters)]}
-    names={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0 ? ['Name', 'Name', 'Name', 'Parameters', 'Event'] : ['No paramaters', 'No event']}
+    messages={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected', optionalMethodParametersValidityWithSelectedEventRule(method.event, events, method.parameters)]}
+    names={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0 ? ['Name', 'Name', 'Name', 'Parameters', 'Event'] : ['No paramaters', 'No event', ""]}
   />
 </div>
