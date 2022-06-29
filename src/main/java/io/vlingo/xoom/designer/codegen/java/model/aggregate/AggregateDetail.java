@@ -159,4 +159,8 @@ public class AggregateDetail {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
             .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
   }
+
+  public static boolean hasMethodWithName(CodeGenerationParameter aggregate, String methodName) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).anyMatch(method -> methodName.equals(method.value));
+  }
 }

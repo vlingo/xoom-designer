@@ -1,10 +1,5 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 
-import java.nio.file.Paths;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
@@ -16,20 +11,21 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.turbo.OperatingSystem;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.nio.file.Paths;
 
 public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatAbstractResourcesUnitTestsAreGenerated() {
-    // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters();
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(contents());
 
-    // WHEN
     new RestResourceAbstractUnitTestGenerationStep().process(context);
 
-    // THEN
     final Content abstractRestTest =
         context.findContent(JavaTemplateStandard.ABSTRACT_REST_RESOURCE_UNIT_TEST, "AbstractRestTest");
     Assertions.assertEquals(2, context.contents().size());
@@ -38,32 +34,26 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatResourcesUnitTestsAreGenerated() {
-    // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParameters();
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(contents());
 
-    // WHEN
     new RestResourceUnitTestGenerationStep().process(context);
 
-    // THEN
     final Content authorResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "AuthorResourceTest");
     Assertions.assertEquals(2, context.contents().size());
     Assertions.assertTrue(authorResourceTest.contains(TextExpectation.onJava().read("author-rest-resource-unit-test")));
   }
-  
+
   @Test
   public void testThatResourcesUnitTestsWithDisabledTestsAreGenerated() {
-    // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParametersWithMultiUriPath();
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(contents());
 
-    // WHEN
     new RestResourceUnitTestGenerationStep().process(context);
 
-    // THEN
     final Content roleResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "RoleResourceTest");
     Assertions.assertEquals(2, context.contents().size());
@@ -71,16 +61,31 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
   }
 
   @Test
+  public void testThatResourcesUnitTestsWithMethodParametersNotMapAggregateStateFieldsAreGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "io.vlingo.xoomapp")
+        .add(Label.DIALECT, Dialect.JAVA)
+        .add(Label.CQRS, "true")
+        .add(productWithMinimalMethodParamsAggregate());
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    new RestResourceUnitTestGenerationStep().process(context);
+
+    final Content productResourceTest =
+        context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "ProductResourceTest");
+    Assertions.assertEquals(2, context.contents().size());
+    Assertions.assertTrue(productResourceTest.contains(TextExpectation.onJava().read("product-with-minimal-method-params-rest-resource-unit-test")));
+  }
+
+
+  @Test
   public void testThatResourcesUnitTestsWithToDoCommentWhenModelHasSelfDescribingEventsAreGenerated() {
-    // GIVEN
     final CodeGenerationParameters parameters = codeGenerationParametersWithSelfDescribingEvents();
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(contents());
 
-    // WHEN
     new RestResourceUnitTestGenerationStep().process(context);
 
-    // THEN
     final Content productResourceTest =
         context.findContent(JavaTemplateStandard.REST_RESOURCE_UNIT_TEST, "ProductResourceTest");
     Assertions.assertEquals(2, context.contents().size());
@@ -197,28 +202,28 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "ADDITION"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter addTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "MERGE"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter replaceTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter removeTagMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
-            .relate(authorUnrelatedEvent);
+            .relate(authorUntaggedEvent);
 
     final CodeGenerationParameter relatedAuthorMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")
@@ -379,6 +384,7 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(provisionRoleRoute).relate(changeDescriptionRoute)
         .relate(roleProvisionedEvent).relate(roleDescriptionChangedEvent);
   }
+
   private CodeGenerationParameter productAggregate() {
 
     final CodeGenerationParameter idField =
@@ -435,6 +441,56 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(defineMethod).relate(disableMethod)
         .relate(defineRoute).relate(disableRoute)
         .relate(productDefinedEvent).relate(productDisabledEvent);
+  }
+
+  private CodeGenerationParameter productWithMinimalMethodParamsAggregate() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter descriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "description")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter priceField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "price")
+            .relate(Label.FIELD_TYPE, "Double");
+
+    final CodeGenerationParameter productDefinedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "ProductDefined")
+            .relate(idField).relate(nameField).relate(descriptionField).relate(priceField);
+
+    final CodeGenerationParameter priceChangedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "PriceChangedEvent")
+            .relate(idField).relate(priceField);
+
+    final CodeGenerationParameter defineMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "define")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.METHOD_PARAMETER, "description")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(productDefinedEvent);
+
+    final CodeGenerationParameter changePriceMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changePrice")
+            .relate(Label.METHOD_PARAMETER, "price")
+            .relate(priceChangedEvent);
+
+    final CodeGenerationParameter defineRoute =
+        CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "define")
+            .relate(Label.ROUTE_METHOD, "POST")
+            .relate(Label.ROUTE_PATH, "/products")
+            .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Product")
+        .relate(Label.URI_ROOT, "/products").relate(idField)
+        .relate(nameField).relate(descriptionField).relate(priceField)
+        .relate(defineMethod).relate(changePriceMethod).relate(defineRoute)
+        .relate(productDefinedEvent).relate(productDefinedEvent);
   }
 
   private CodeGenerationParameter nameValueObject() {

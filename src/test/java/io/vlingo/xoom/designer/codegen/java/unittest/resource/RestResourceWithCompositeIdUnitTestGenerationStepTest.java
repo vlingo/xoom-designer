@@ -139,21 +139,21 @@ public class RestResourceWithCompositeIdUnitTestGenerationStepTest extends CodeG
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "MERGE"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter replaceTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "replaceTags")
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "")
                 .relate(Label.COLLECTION_MUTATION, "REPLACEMENT"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter removeTagMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "removeTag")
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "REMOVAL"))
-            .relate(authorUnrelatedEvent);
+            .relate(authorUntaggedEvent);
 
     final CodeGenerationParameter relatedAuthorMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "relateAuthor")

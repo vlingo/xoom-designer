@@ -10,16 +10,15 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class TestCase {
 
@@ -32,9 +31,10 @@ public class TestCase {
   private final String rootMethod;
 
   private final int urlPathCount;
-  private CollectionMutation collectionMutation;
+  private final CollectionMutation collectionMutation;
 
-  private List<String> selfDescribingEvents;
+  private final List<String> selfDescribingEvents;
+  private boolean isMethodParametersMapDomainEventParameters;
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate,
       List<CodeGenerationParameter> valueObjects) {
@@ -44,9 +44,12 @@ public class TestCase {
   }
 
   private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
-      List<CodeGenerationParameter> valueObjects) {
+      final List<CodeGenerationParameter> valueObjects) {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
+
+      if(AggregateDetail.hasMethodWithName(aggregate, signature.value))
+        this.isMethodParametersMapDomainEventParameters = isMethodParametersMapDomainEventParameters(AggregateDetail.methodWithName(aggregate, signature.value), aggregate);
 
     final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
     this.methodName = signature.value;
@@ -60,6 +63,19 @@ public class TestCase {
     this.preliminaryStatements.addAll(PreliminaryStatement.with(aggregate.retrieveRelatedValue(Label.URI_ROOT),
         dataObjectType, rootPath(signature, aggregate), rootMethod));
     this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
+  }
+
+  private boolean isMethodParametersMapDomainEventParameters(CodeGenerationParameter method, CodeGenerationParameter aggregate) {
+    final List<CodeGenerationParameter> involvedStateFieldTypes = method
+        .retrieveAllRelated(Label.METHOD_PARAMETER)
+        .map(parameter -> AggregateDetail.stateFieldWithName(aggregate, parameter.value))
+        .collect(toList());
+    final List<CodeGenerationParameter> involvedEventStateFieldTypes = method.retrieveOneRelated(Label.DOMAIN_EVENT)
+        .retrieveAllRelated(Label.STATE_FIELD)
+        .map(parameter -> AggregateDetail.stateFieldWithName(aggregate, parameter.value))
+        .filter(param -> !param.value.equals("id"))
+        .collect(toList());
+    return new HashSet<>(involvedStateFieldTypes).containsAll(involvedEventStateFieldTypes);
   }
 
   private CollectionMutation retrieveSignatureCollectionMutation(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
@@ -115,8 +131,9 @@ public class TestCase {
   }
 
   public boolean isDisabled() {
-    return this.urlPathCount > 1
-        || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
+    return this.urlPathCount > 1 ||
+            (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased()) ||
+        !isMethodParametersMapDomainEventParameters;
   }
 
   public String selfDescribingEvents() {
