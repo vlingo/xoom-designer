@@ -79,7 +79,7 @@ public class AggregateDetail {
   }
 
   public static Set<String> resolveImports(final Stream<CodeGenerationParameter> stateFields) {
-    return stateFields.map(field -> FieldDetail.resolveImportForType(field)).collect(Collectors.toSet());
+    return stateFields.map(FieldDetail::resolveImportForType).collect(Collectors.toSet());
   }
 
   public static List<String> resolveFieldsPaths(final String variableName,
@@ -96,7 +96,7 @@ public class AggregateDetail {
     return paths;
   }
 
-  public static String resolveCompositeIdFieldsNames(CodeGenerationParameter aggregate) {
+  public static String resolveCompositeIdFieldsNames(final CodeGenerationParameter aggregate) {
     final List<String> compositeIdFields = aggregate.retrieveAllRelated(Label.STATE_FIELD)
         .filter(FieldDetail::isCompositeId)
         .map(field -> field.value).collect(toList());
@@ -107,7 +107,7 @@ public class AggregateDetail {
     return String.format("%s, ", String.join(", ", compositeIdFields));
   }
 
-  public static String resolveCompositeIdFields(CodeGenerationParameter aggregate) {
+  public static String resolveCompositeIdFields(final CodeGenerationParameter aggregate) {
     final List<String> compositeIdFields = aggregate.retrieveAllRelated(Label.STATE_FIELD)
         .filter(FieldDetail::isCompositeId)
         .map(field -> String.format("%s %s", COMPOSITE_ID_DECLARATION_PATTERN, field.value)).collect(toList());
@@ -143,7 +143,8 @@ public class AggregateDetail {
     return findInvolvedStateFields(aggregate, methodName, (methodParameter, stateField) -> stateField);
   }
 
-  public static <T> Stream<T> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName, final BiFunction<CodeGenerationParameter, CodeGenerationParameter, T> converter) {
+  public static <T> Stream<T> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName,
+                                                      final BiFunction<CodeGenerationParameter, CodeGenerationParameter, T> converter) {
     final CodeGenerationParameter method = methodWithName(aggregate, methodName);
     final Stream<CodeGenerationParameter> methodParameters = method.retrieveAllRelated(Label.METHOD_PARAMETER);
     return methodParameters.map(parameter -> converter.apply(parameter, stateFieldWithName(aggregate, parameter.value)));
@@ -155,12 +156,24 @@ public class AggregateDetail {
             .findFirst();
   }
 
-  public static boolean hasFactoryMethod(CodeGenerationParameter aggregate) {
+  public static boolean hasFactoryMethod(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
             .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
   }
 
-  public static boolean hasMethodWithName(CodeGenerationParameter aggregate, String methodName) {
+  public static boolean hasMethodWithName(final CodeGenerationParameter aggregate, final String methodName) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD).anyMatch(method -> methodName.equals(method.value));
   }
+
+  public static List<String> retrieveSelfDescribingEvents(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
+        .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count() == 1)
+        .map(domainEvent -> domainEvent.value)
+        .collect(Collectors.toList());
+  }
+
+  public static Object resolveRootURI(final CodeGenerationParameter aggregate) {
+     return aggregate.retrieveRelatedValue(Label.URI_ROOT).replace("{", "\" + ")
+          .replace("}", " + \"");
+    }
 }

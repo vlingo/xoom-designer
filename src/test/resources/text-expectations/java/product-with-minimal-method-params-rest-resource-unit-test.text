@@ -37,7 +37,13 @@ public class ProductResourceTest extends AbstractRestTest {
       .as(ProductData.class);
   }
 
-  @Test@Disabled
+  // TODO:
+  // This test is disabled and in need of custom code modifications. The
+  // parameters to command message define of Aggregate type
+  // Product do not map explicitly to state or event.
+  // You must provide some test case values in this method.
+  @Disabled
+  @Test
   public void define() {
     ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description", 1);
     ProductData result = given()

@@ -132,7 +132,7 @@ public class RestResourceWithCompositeIdUnitTestGenerationStepTest extends CodeG
             .relate(CodeGenerationParameter.of(Label.METHOD_PARAMETER, "tags")
                 .relate(Label.ALIAS, "tag")
                 .relate(Label.COLLECTION_MUTATION, "ADDITION"))
-            .relate(authorRelatedEvent);
+            .relate(authorTaggedEvent);
 
     final CodeGenerationParameter addTagsMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "addTags")

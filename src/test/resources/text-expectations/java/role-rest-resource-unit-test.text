@@ -56,7 +56,7 @@ public class RoleResourceTest extends AbstractRestTest {
     assertEquals("first-role-description", result.description);
   }
 
-  @Test@Disabled
+  @Test
   public void changeDescription() {
     RoleData firstData = RoleData.from("1", "first-role-tenantId", "first-role-name", "first-role-description");
     firstData = saveExampleData(firstData);

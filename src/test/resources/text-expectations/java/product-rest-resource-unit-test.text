@@ -59,6 +59,7 @@ public class ProductResourceTest extends AbstractRestTest {
     assertEquals("first-product-description", result.description);
   }
 
+  @Disabled
   @Test
   public void disable() {
     ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description");

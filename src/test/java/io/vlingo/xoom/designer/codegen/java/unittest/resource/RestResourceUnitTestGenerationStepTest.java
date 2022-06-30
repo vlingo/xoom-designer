@@ -77,7 +77,6 @@ public class RestResourceUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(productResourceTest.contains(TextExpectation.onJava().read("product-with-minimal-method-params-rest-resource-unit-test")));
   }
 
-
   @Test
   public void testThatResourcesUnitTestsWithToDoCommentWhenModelHasSelfDescribingEventsAreGenerated() {
     final CodeGenerationParameters parameters = codeGenerationParametersWithSelfDescribingEvents();
