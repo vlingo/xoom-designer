@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-<#if testCases?has_content && testCases[0].selfDescribingEvents()?has_content>
+<#if testCases?filter(testCase -> testCase.selfDescribingEvents()?has_content)?has_content>
 // TODO: model uses self-describing event(s) ${testCases[0].selfDescribingEvents()}, 
 // which may cause test failure based on assumed default values.
 // Run tests to find any such failed tests and correct the incorrectly
@@ -52,7 +52,17 @@ public class ${resourceUnitTestName} extends AbstractRestTest {
   }
 <#list testCases as testCase>
 
-  @Test<#if testCase.isDisabled()>@Disabled</#if>
+  <#if testCase.isDisabled()>
+  // TODO:
+  // This test is disabled and in need of custom code modifications. The
+  // parameters to command message ${testCase.getMethodName()} of Aggregate type
+  // ${aggregateProtocolName} do not map explicitly to state or event.
+  // You must provide some test case values in this method.
+  @Disabled
+  <#elseif testCase.isMethodEmitSelfDescribingEvent()>
+  @Disabled
+  </#if>
+  @Test
   public void ${testCase.methodName}() {
   <#list compositeId as declaration>
     ${declaration}

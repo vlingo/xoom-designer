@@ -13,10 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-// TODO: model uses self-describing event(s) [ProductDisabled], 
-// which may cause test failure based on assumed default values.
-// Run tests to find any such failed tests and correct the incorrectly
-// assumed defaults and transitions.
 public class ProductResourceTest extends AbstractRestTest {
 
   @Test
@@ -41,9 +37,15 @@ public class ProductResourceTest extends AbstractRestTest {
       .as(ProductData.class);
   }
 
+  // TODO:
+  // This test is disabled and in need of custom code modifications. The
+  // parameters to command message define of Aggregate type
+  // Product do not map explicitly to state or event.
+  // You must provide some test case values in this method.
+  @Disabled
   @Test
   public void define() {
-    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description");
+    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description", 1);
     ProductData result = given()
         .when()
         .body(firstData)
@@ -57,25 +59,6 @@ public class ProductResourceTest extends AbstractRestTest {
     assertNotNull(result.id);
     assertEquals("first-product-name", result.name);
     assertEquals("first-product-description", result.description);
-  }
-
-  @Disabled
-  @Test
-  public void disable() {
-    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description");
-    firstData = saveExampleData(firstData);
-    ProductData result = given()
-        .when()
-        .body(firstData)
-        .patch("/products/"+firstData.id+"/disable")
-        .then()
-        .statusCode(200)
-        .extract()
-        .body()
-        .as(ProductData.class);
-
-    assertNotNull(result.id);
-    assertEquals("first-product-name", result.name);
-    assertEquals("first-product-description", result.description);
+    assertEquals(1, result.price);
   }
 }

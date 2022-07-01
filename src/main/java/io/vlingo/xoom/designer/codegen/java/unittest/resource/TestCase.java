@@ -7,19 +7,15 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
-import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.java.unittest.TestDataValueGenerator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class TestCase {
 
@@ -30,31 +26,33 @@ public class TestCase {
   private final List<TestStatement> statements = new ArrayList<>();
   private final List<String> preliminaryStatements = new ArrayList<>();
   private final String rootMethod;
-
-  private final int urlPathCount;
-  private CollectionMutation collectionMutation;
-
-  private List<String> selfDescribingEvents;
+  private final List<String> selfDescribingEvents;
+  private boolean isMethodEmitSelfDescribingEvent;
+  private boolean isMethodParametersMapDomainEventFields;
 
   public static List<TestCase> from(final CodeGenerationParameter aggregate,
-      List<CodeGenerationParameter> valueObjects) {
+      final List<CodeGenerationParameter> valueObjects) {
     return aggregate.retrieveAllRelated(Label.ROUTE_SIGNATURE)
         .map(signature -> new TestCase(signature, aggregate, valueObjects))
         .collect(Collectors.toList());
   }
 
   private TestCase(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate,
-      List<CodeGenerationParameter> valueObjects) {
+      final List<CodeGenerationParameter> valueObjects) {
     final TestDataValueGenerator.TestDataValues testDataValues = TestDataValueGenerator
         .with(TEST_DATA_SET_SIZE, "data", aggregate, valueObjects).generate();
+
 
     final String dataObjectType = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
     this.methodName = signature.value;
 
-    this.urlPathCount = urlPathCountFor(signature.retrieveRelatedValue(Label.ROUTE_PATH));
-    this.collectionMutation = retrieveSignatureCollectionMutation(signature, aggregate);
-    this.selfDescribingEvents = retrieveSelfDescribingEvents(aggregate);
-    
+    this.selfDescribingEvents = AggregateDetail.retrieveSelfDescribingEvents(aggregate);
+
+    if(AggregateDetail.hasMethodWithName(aggregate, signature.value)) {
+      this.isMethodParametersMapDomainEventFields = isMethodParametersMapDomainEventFields(AggregateDetail.methodWithName(aggregate, signature.value), aggregate);
+      this.isMethodEmitSelfDescribingEvent = isMethodEmitSelfDescribingEvent(AggregateDetail.methodWithName(aggregate, signature.value));
+    }
+
     this.dataDeclaration = DataDeclaration.generate(signature.value, aggregate, valueObjects, testDataValues);
     this.rootMethod = signature.retrieveRelatedValue(Label.ROUTE_METHOD).toLowerCase(Locale.ROOT);
     this.preliminaryStatements.addAll(PreliminaryStatement.with(aggregate.retrieveRelatedValue(Label.URI_ROOT),
@@ -62,46 +60,31 @@ public class TestCase {
     this.statements.addAll(TestStatement.with(rootPath(signature, aggregate), rootMethod, aggregate, valueObjects, testDataValues));
   }
 
-  private CollectionMutation retrieveSignatureCollectionMutation(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
-    CollectionMutation result = CollectionMutation.NONE;
-    final Optional<CodeGenerationParameter> aggregateMethod = aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-        .filter(method -> method.value.equals(signature.value))
-        .findFirst();
-
-    if (aggregateMethod.isPresent()) {
-      final String mutation = aggregateMethod.get()
-          .retrieveOneRelated(Label.METHOD_PARAMETER)
-          .retrieveRelatedValue(Label.COLLECTION_MUTATION);
-      if (!mutation.isEmpty())
-        result = CollectionMutation.valueOf(mutation);
-    }
-    return result;
+  private boolean isMethodEmitSelfDescribingEvent(final CodeGenerationParameter method) {
+    return selfDescribingEvents.contains(method.retrieveRelatedValue(Label.DOMAIN_EVENT));
   }
 
-  private String rootPath(CodeGenerationParameter signature, CodeGenerationParameter aggregate) {
+  private boolean isMethodParametersMapDomainEventFields(final CodeGenerationParameter method,
+                                                         final CodeGenerationParameter aggregate) {
+    final List<CodeGenerationParameter> involvedStateFieldTypes = method
+        .retrieveAllRelated(Label.METHOD_PARAMETER)
+        .map(parameter -> AggregateDetail.stateFieldWithName(aggregate, parameter.value))
+        .collect(toList());
+    final List<CodeGenerationParameter> involvedEventStateFieldTypes = method.retrieveOneRelated(Label.DOMAIN_EVENT)
+        .retrieveAllRelated(Label.STATE_FIELD)
+        .map(parameter -> AggregateDetail.stateFieldWithName(aggregate, parameter.value))
+        .filter(param -> !param.value.equals("id"))
+        .collect(toList());
+    return new HashSet<>(involvedStateFieldTypes).containsAll(involvedEventStateFieldTypes);
+  }
+
+  private String rootPath(final CodeGenerationParameter signature, final CodeGenerationParameter aggregate) {
     String uriRoot = aggregate.retrieveRelatedValue(Label.URI_ROOT);
     return signature.retrieveRelatedValue(Label.ROUTE_PATH).startsWith(uriRoot)
         ? signature.retrieveRelatedValue(Label.ROUTE_PATH)
         : uriRoot + signature.retrieveRelatedValue(Label.ROUTE_PATH);
   }
-
-  private int urlPathCountFor(String url) {
-    Pattern pattern = Pattern.compile("\\{(.*?)\\}");
-    Matcher matcher = pattern.matcher(url);
-    int count = 0;
-    while (matcher.find()) {
-      count++;
-    }
-    return count;
-  }
-
-  private List<String> retrieveSelfDescribingEvents(CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT)
-        .filter(domainEvent -> domainEvent.retrieveAllRelated(Label.STATE_FIELD).count() == 1)
-        .map(domainEvent -> domainEvent.value)
-        .collect(Collectors.toList());
-  }
-
+  
   public String getMethodName() {
     return methodName;
   }
@@ -115,8 +98,11 @@ public class TestCase {
   }
 
   public boolean isDisabled() {
-    return this.urlPathCount > 1
-        || (this.collectionMutation != null && this.collectionMutation.isSingleParameterBased());
+    return !isMethodParametersMapDomainEventFields;
+  }
+
+  public boolean isMethodEmitSelfDescribingEvent() {
+    return isMethodEmitSelfDescribingEvent;
   }
 
   public String selfDescribingEvents() {

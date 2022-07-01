@@ -64,7 +64,9 @@
 
     method.parameters = [...method.parameters.filter(p => p.stateField !== fName), param]
   }
-
+  const optionalMethodParametersValidityWithSelectedEventRule = (event, events, parameters) => {
+    return methodParametersValidityWithSelectedEventRule(event, events, parameters) ? "One or more parameters do not map to the event fields. Related aggregate and test code will be commented." : "";
+  }
   function updateEvent(eName) {
     if (eName === method.event) {
       method.event = null
@@ -73,7 +75,8 @@
     }
   }
 
-  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters), eventAlreadyInUseRule(method, methods)];
+  $: validation = [requireRule(method.name), identifierRule(method.name), isPropertyUniqueRule(method.name, methods, 'name'), eventAlreadyInUseRule(method, methods)];
+  $: warnings = [methodParametersValidityWithSelectedEventRule(method.event, events, method.parameters)]
   $: isAnyCollectionParameterSelected = method.parameters.some(p => p.multiplicity);
   $: selectedParameters = method.parameters && method.parameters.length > 0 ? method.parameters.map(p => p.parameterName).join(', ') : '(none)';
 </script>
@@ -227,8 +230,8 @@
 </div>
 <div style="align-self: flex-start;">
   <ErrorWarningTooltip
-    type={validation && validation.filter(v => v).length > 0 ? 'error' : 'warning'}
-    messages={validation && validation.filter(v => v).length > 0 ? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected']}
-    names={validation && validation.filter(v => v).length > 0 ? ['Name', 'Name', 'Name', 'Parameters', 'Event'] : ['No paramaters', 'No event']}
+    type={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0? 'error' : 'warning'}
+    messages={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0? validation : [method.parameters && method.parameters.length > 0 ? '' : 'are selected', method.event ? '' : 'is selected', optionalMethodParametersValidityWithSelectedEventRule(method.event, events, method.parameters)]}
+    names={validation && validation.filter(v => v).length > 0 && warnings.filter(v => v).length == 0 ? ['Name', 'Name', 'Name', 'Parameters', 'Event'] : ['No paramaters', 'No event', ""]}
   />
 </div>

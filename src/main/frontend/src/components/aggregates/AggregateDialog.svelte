@@ -97,7 +97,7 @@
 
 	const validField = (f) => !identifierRule(f.name) && f.type && !isPropertyUniqueRule(f.name, stateFields, 'name');
 	const validEvent = (e) => !classNameRule(e.name) && e.fields.length > 0 && !isPropertyUniqueRule(e.name, events, 'name') && !isExistInValueObject(e.name, $settings.model.valueObjectSettings, 'name');
-	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name') && !methodParametersValidityWithSelectedEventRule(m.event, events, m.parameters) && !eventAlreadyInUseRule(m, methods);
+	const validMethod = (m) => !identifierRule(m.name) && !isPropertyUniqueRule(m.name, methods, 'name') && !eventAlreadyInUseRule(m, methods);
 	const validRoute = (r) => r.path && !routeRule(r.path) && r.aggregateMethod;
 	const validProducer = (schema, events) => (schema && !schemaGroupRule(schema) && events.length > 0) || (!schema && events.length === 0);
 	const validConsumer = (receivers) => (receivers.length === 0) || (receivers.length > 0 && receivers.every(r => r.schema && !schemaRule(r.schema) && r.aggregateMethod));
