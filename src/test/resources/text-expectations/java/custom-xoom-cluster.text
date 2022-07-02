@@ -55,6 +55,8 @@ cluster.seedNodes = node1
 
 # -- uncomment the following to enable all cluster nodes
 # cluster.seedNodes = node1,node2,node3,node4,node5,node6,node7
+cluster.nodes.quorum = 4
+cluster.startup.period = 5000
 
 ################################
 # individual node configurations

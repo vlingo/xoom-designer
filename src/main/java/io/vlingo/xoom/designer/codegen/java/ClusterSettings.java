@@ -18,6 +18,7 @@ public class ClusterSettings {
   public final String seedNodes;
   public final List<ClusterNode> nodes;
   public final int nodeCount;
+  public final int quorum;
 
   public static ClusterSettings with(final int startPortRange,
                                      final int clusterTotalNodes) {
@@ -30,5 +31,6 @@ public class ClusterSettings {
     this.nodeCount = nodes.size();
     this.oneSeedNode = nodes.get(0).name;
     this.seedNodes = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
+    this.quorum = nodeCount / 2 + 1;
   }
 }

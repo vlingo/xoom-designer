@@ -59,6 +59,8 @@ cluster.seedNodes = ${clusterSettings.oneSeedNode}
 <#else>
 cluster.seedNodes = ${clusterSettings.oneSeedNode}
 </#if>
+cluster.nodes.quorum = ${clusterSettings.quorum}
+cluster.startup.period = 5000
 
 ################################
 # individual node configurations
