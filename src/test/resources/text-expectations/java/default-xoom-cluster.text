@@ -60,6 +60,7 @@ cluster.startup.period = 5000
 
 node.node1.id = 1
 node.node1.name = node1
+node.node1.seed = 0
 node.node1.host = localhost
 node.node1.op.port = 49120
 node.node1.app.port = 49121
