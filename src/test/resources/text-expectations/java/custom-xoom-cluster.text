@@ -85,28 +85,24 @@ node.node1.app.port = 42334
 
 #node.node4.id = 4
 #node.node4.name = node4
-#node.node4.seed = true
 #node.node4.host = localhost
 #node.node4.op.port = 42339
 #node.node4.app.port = 42340
 
 #node.node5.id = 5
 #node.node5.name = node5
-#node.node5.seed = true
 #node.node5.host = localhost
 #node.node5.op.port = 42341
 #node.node5.app.port = 42342
 
 #node.node6.id = 6
 #node.node6.name = node6
-#node.node6.seed = true
 #node.node6.host = localhost
 #node.node6.op.port = 42343
 #node.node6.app.port = 42344
 
 #node.node7.id = 7
 #node.node7.name = node7
-#node.node7.seed = true
 #node.node7.host = localhost
 #node.node7.op.port = 42345
 #node.node7.app.port = 42346

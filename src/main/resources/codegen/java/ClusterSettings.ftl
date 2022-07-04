@@ -68,8 +68,8 @@ cluster.startup.period = 5000
 
 <#list clusterSettings.nodes as node>
 <#if (node.id > 1)>#</#if>node.${node.name}.id = ${node.id}
-<#if (node.id > 1)>#</#if>node.${node.name}.name = ${node.name}
-<#if (node.id > 1)>#</#if>node.${node.name}.seed = true
+<#if (node.id > 1)>#</#if>node.${node.name}.name = ${node.name}<#if (clusterSettings.seed - node.id >= 0)>
+<#if (node.id > 1)>#</#if>node.${node.name}.seed = true</#if>
 <#if (node.id > 1)>#</#if>node.${node.name}.host = localhost
 <#if (node.id > 1)>#</#if>node.${node.name}.op.port = ${node.operationalPort?c}
 <#if (node.id > 1)>#</#if>node.${node.name}.app.port = ${node.applicationPort?c}

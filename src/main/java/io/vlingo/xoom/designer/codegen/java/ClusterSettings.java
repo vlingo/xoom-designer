@@ -33,6 +33,6 @@ public class ClusterSettings {
     this.oneSeedNode = nodes.get(0).name;
     this.seedNodes = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
     this.quorum = nodeCount / 2 + 1;
-    this.seed = (int) (((double) nodeCount) / 3.0d + 0.5d);
+    this.seed = (int)Math.round (((double) nodeCount) / 3.0d + 0.5d);
   }
 }
