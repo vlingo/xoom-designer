@@ -64,49 +64,49 @@ cluster.startup.period = 5000
 
 node.node1.id = 1
 node.node1.name = node1
-node.node1.seed = 2
+node.node1.seed = true
 node.node1.host = localhost
 node.node1.op.port = 42333
 node.node1.app.port = 42334
 
 #node.node2.id = 2
 #node.node2.name = node2
-#node.node2.seed = 2
+#node.node2.seed = true
 #node.node2.host = localhost
 #node.node2.op.port = 42335
 #node.node2.app.port = 42336
 
 #node.node3.id = 3
 #node.node3.name = node3
-#node.node3.seed = 2
+#node.node3.seed = true
 #node.node3.host = localhost
 #node.node3.op.port = 42337
 #node.node3.app.port = 42338
 
 #node.node4.id = 4
 #node.node4.name = node4
-#node.node4.seed = 2
+#node.node4.seed = true
 #node.node4.host = localhost
 #node.node4.op.port = 42339
 #node.node4.app.port = 42340
 
 #node.node5.id = 5
 #node.node5.name = node5
-#node.node5.seed = 2
+#node.node5.seed = true
 #node.node5.host = localhost
 #node.node5.op.port = 42341
 #node.node5.app.port = 42342
 
 #node.node6.id = 6
 #node.node6.name = node6
-#node.node6.seed = 2
+#node.node6.seed = true
 #node.node6.host = localhost
 #node.node6.op.port = 42343
 #node.node6.app.port = 42344
 
 #node.node7.id = 7
 #node.node7.name = node7
-#node.node7.seed = 2
+#node.node7.seed = true
 #node.node7.host = localhost
 #node.node7.op.port = 42345
 #node.node7.app.port = 42346
