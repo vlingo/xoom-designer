@@ -50,7 +50,7 @@ cluster.live.node.timeout = 20000
 cluster.quorum.timeout = 60000
 
 # currently all active nodes must be listed as seed nodes
-cluster.seedNodes = node1
+cluster.nodes = node1
 cluster.nodes.quorum = 1
 cluster.startup.period = 5000
 
