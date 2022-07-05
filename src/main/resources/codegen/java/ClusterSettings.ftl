@@ -52,12 +52,16 @@ cluster.quorum.timeout = 60000
 # currently all active nodes must be listed as seed nodes
 <#if (clusterSettings.nodeCount > 1)>
 # -- comment the following to disable developer single-node cluster
-cluster.seedNodes = ${clusterSettings.oneSeedNode}
+cluster.nodes = ${clusterSettings.oneNode}
 
 # -- uncomment the following to enable all cluster nodes
-# cluster.seedNodes = ${clusterSettings.seedNodes}
+# cluster.nodes = ${clusterSettings.nodeNames}
+# cluster.nodes.quorum = ${clusterSettings.quorum}
+# cluster.startup.period = 5000
 <#else>
-cluster.seedNodes = ${clusterSettings.oneSeedNode}
+cluster.nodes = ${clusterSettings.nodeNames}
+cluster.nodes.quorum = ${clusterSettings.quorum}
+cluster.startup.period = 5000
 </#if>
 
 ################################
@@ -66,7 +70,8 @@ cluster.seedNodes = ${clusterSettings.oneSeedNode}
 
 <#list clusterSettings.nodes as node>
 <#if (node.id > 1)>#</#if>node.${node.name}.id = ${node.id}
-<#if (node.id > 1)>#</#if>node.${node.name}.name = ${node.name}
+<#if (node.id > 1)>#</#if>node.${node.name}.name = ${node.name}<#if (clusterSettings.seed - node.id >= 0)>
+<#if (node.id > 1)>#</#if>node.${node.name}.seed = true</#if>
 <#if (node.id > 1)>#</#if>node.${node.name}.host = localhost
 <#if (node.id > 1)>#</#if>node.${node.name}.op.port = ${node.operationalPort?c}
 <#if (node.id > 1)>#</#if>node.${node.name}.app.port = ${node.applicationPort?c}

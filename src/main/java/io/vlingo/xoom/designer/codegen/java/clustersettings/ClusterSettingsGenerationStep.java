@@ -28,7 +28,7 @@ public class ClusterSettingsGenerationStep extends TemplateProcessingStep {
 
     final TemplateParameters clusterSettingsTemplateParameters =
             TemplateParameters.with(TemplateParameter.CLUSTER_SETTINGS, clusterSettings)
-                    .and(TemplateParameter.RESOURCE_FILE, true);
+                .and(TemplateParameter.RESOURCE_FILE, true);
 
     final TemplateData clusterSettingsTemplateData =
             BasicTemplateData.of(JavaTemplateStandard.CLUSTER_SETTINGS, clusterSettingsTemplateParameters);
