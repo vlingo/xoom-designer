@@ -14,8 +14,8 @@ import static java.util.Collections.unmodifiableList;
 
 public class ClusterSettings {
 
-  public final String oneSeedNode;
-  public final String seedNodes;
+  public final String oneNode;
+  public final String nodeNames;
   public final List<ClusterNode> nodes;
   public final int nodeCount;
   public final int quorum;
@@ -30,8 +30,8 @@ public class ClusterSettings {
                           final int clusterTotalNodes) {
     this.nodes = unmodifiableList(ClusterNode.from(startPortRange, clusterTotalNodes));
     this.nodeCount = nodes.size();
-    this.oneSeedNode = nodes.get(0).name;
-    this.seedNodes = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
+    this.oneNode = nodes.get(0).name;
+    this.nodeNames = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
     this.quorum = nodeCount / 2 + 1;
     this.seed = (int)Math.round (((double) nodeCount) / 3.0d + 0.5d);
   }

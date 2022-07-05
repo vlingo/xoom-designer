@@ -52,15 +52,17 @@ cluster.quorum.timeout = 60000
 # currently all active nodes must be listed as seed nodes
 <#if (clusterSettings.nodeCount > 1)>
 # -- comment the following to disable developer single-node cluster
-cluster.nodes = ${clusterSettings.oneSeedNode}
+cluster.nodes = ${clusterSettings.oneNode}
 
 # -- uncomment the following to enable all cluster nodes
-# cluster.nodes = ${clusterSettings.seedNodes}
+# cluster.nodes = ${clusterSettings.nodeNames}
+# cluster.nodes.quorum = ${clusterSettings.quorum}
+# cluster.startup.period = 5000
 <#else>
-cluster.nodes = ${clusterSettings.oneSeedNode}
-</#if>
+cluster.nodes = ${clusterSettings.nodeNames}
 cluster.nodes.quorum = ${clusterSettings.quorum}
 cluster.startup.period = 5000
+</#if>
 
 ################################
 # individual node configurations
