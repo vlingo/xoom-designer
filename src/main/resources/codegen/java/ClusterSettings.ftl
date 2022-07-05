@@ -56,11 +56,13 @@ cluster.nodes = ${clusterSettings.oneNode}
 
 # -- uncomment the following to enable all cluster nodes
 # cluster.nodes = ${clusterSettings.nodeNames}
+# cluster.nodes.quorum = ${clusterSettings.quorum}
+# cluster.startup.period = 5000
 <#else>
 cluster.nodes = ${clusterSettings.nodeNames}
-</#if>
 cluster.nodes.quorum = ${clusterSettings.quorum}
 cluster.startup.period = 5000
+</#if>
 
 ################################
 # individual node configurations
