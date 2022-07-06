@@ -42,15 +42,15 @@ public class BookQueriesTest {
 
     final BookData firstData = queries.bookOf("1").await();
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.title, "first-book-title");
-    assertEquals(firstData.publisher, "first-book-publisher");
+    assertEquals("1", firstData.id);
+    assertEquals("first-book-title", firstData.title);
+    assertEquals("first-book-publisher", firstData.publisher);
 
     final BookData secondData = queries.bookOf("2").await();
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.title, "second-book-title");
-    assertEquals(secondData.publisher, "second-book-publisher");
+    assertEquals("2", secondData.id);
+    assertEquals("second-book-title", secondData.title);
+    assertEquals("second-book-publisher", secondData.publisher);
   }
 
   private static final BookData FIRST_QUERY_ALL_TEST_DATA = BookData.from("1", "first-book-title", "first-book-publisher");
@@ -64,15 +64,15 @@ public class BookQueriesTest {
     final Collection<BookData> results = queries.books().await();
     final BookData firstData = results.stream().filter(data -> data.id.equals("1")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(firstData.id, "1");
-    assertEquals(firstData.title, "first-book-title");
-    assertEquals(firstData.publisher, "first-book-publisher");
+    assertEquals("1", firstData.id);
+    assertEquals("first-book-title", firstData.title);
+    assertEquals("first-book-publisher", firstData.publisher);
 
     final BookData secondData = results.stream().filter(data -> data.id.equals("2")).findFirst().orElseThrow(RuntimeException::new);
 
-    assertEquals(secondData.id, "2");
-    assertEquals(secondData.title, "second-book-title");
-    assertEquals(secondData.publisher, "second-book-publisher");
+    assertEquals("2", secondData.id);
+    assertEquals("second-book-title", secondData.title);
+    assertEquals("second-book-publisher", secondData.publisher);
   }
 
   @Test

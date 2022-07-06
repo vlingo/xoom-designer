@@ -34,7 +34,7 @@ public class ClassifierData {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(ClassifierData::from).collect(Collectors.toList());
   }
 
-  private ClassifierData (final String name) {
+  private ClassifierData(final String name) {
     this.name = name;
   }
 

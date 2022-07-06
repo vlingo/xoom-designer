@@ -35,7 +35,7 @@ public class NameData {
     return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(NameData::from).collect(Collectors.toList());
   }
 
-  private NameData (final String firstName, final String lastName) {
+  private NameData(final String firstName, final String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
   }

@@ -1,0 +1,64 @@
+package io.vlingo.xoomapp.infrastructure.resource;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import .*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class ProductResourceTest extends AbstractRestTest {
+
+  @Test
+  public void testEmptyResponse() {
+    given()
+      .when()
+      .get("/products")
+      .then()
+      .statusCode(200)
+      .body(is(equalTo("[]")));
+  }
+
+  private ProductData saveExampleData(ProductData data) {
+    return given()
+      .when()
+      .body(data)
+      .post("/products")
+      .then()
+      .statusCode(201)
+      .extract()
+      .body()
+      .as(ProductData.class);
+  }
+
+  // TODO:
+  // This test is disabled and in need of custom code modifications. The
+  // parameters to command message define of Aggregate type
+  // Product do not map explicitly to state or event.
+  // You must provide some test case values in this method.
+  @Disabled
+  @Test
+  public void define() {
+    ProductData firstData = ProductData.from("1", "first-product-name", "first-product-description", 1);
+    ProductData result = given()
+        .when()
+        .body(firstData)
+        .post("/products")
+        .then()
+        .statusCode(201)
+        .extract()
+        .body()
+        .as(ProductData.class);
+
+    assertNotNull(result.id);
+    assertEquals("first-product-name", result.name);
+    assertEquals("first-product-description", result.description);
+    assertEquals(1, result.price);
+  }
+}

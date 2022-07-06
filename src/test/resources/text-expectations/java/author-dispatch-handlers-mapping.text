@@ -37,7 +37,7 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> RELATE_AUTHOR_HANDLER =
           HandlerEntry.of(RELATE_AUTHOR, (author, data) -> {
-              return author.relateAuthor(data.relatedAuthors.stream().findFirst().get());
+              return author.relateAuthor(data.relatedAuthors.stream().findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> RELATE_AUTHORS_HANDLER =
@@ -52,12 +52,12 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> UNRELATE_AUTHOR_HANDLER =
           HandlerEntry.of(UNRELATE_AUTHOR, (author, data) -> {
-              return author.unrelateAuthor(data.relatedAuthors.stream().findFirst().get());
+              return author.unrelateAuthor(data.relatedAuthors.stream().findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> ADD_TAG_HANDLER =
           HandlerEntry.of(ADD_TAG, (author, data) -> {
-              return author.addTag(data.tags.stream().map(TagData::toTag).findFirst().get());
+              return author.addTag(data.tags.stream().map(TagData::toTag).findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> ADD_TAGS_HANDLER =
@@ -72,7 +72,7 @@ public class AuthorResourceHandlers {
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> REMOVE_TAG_HANDLER =
           HandlerEntry.of(REMOVE_TAG, (author, data) -> {
-              return author.removeTag(data.tags.stream().map(TagData::toTag).findFirst().get());
+              return author.removeTag(data.tags.stream().map(TagData::toTag).findFirst().orElse(null));
           });
 
   public static final HandlerEntry<Three<Completes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER =

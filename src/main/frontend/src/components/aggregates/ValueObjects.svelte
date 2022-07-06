@@ -115,6 +115,8 @@
       result = `${value} must be unique but is already defined as an Event`;
     else if($settings.model.valueObjectSettings.some((item) => item.name === value))
       result = `${value} must be unique but is already defined as a Value Object`;
+    else if($settings.model.aggregateSettings.some((item) => item.aggregateName === value))
+      result = `${value} must be unique but is already defined as a Aggregate`;
 
     return result;
   };

@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.java.autodispatch.AutoDispatchMappingGene
 import io.vlingo.xoom.designer.codegen.java.bootstrap.BootstrapGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.clustersettings.ClusterSettingsGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.dataobject.DataObjectGenerationStep;
+import io.vlingo.xoom.designer.codegen.java.deploymentsettings.DockerComposeGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.DockerfileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.deploymentsettings.KubernetesManifestFileGenerationStep;
 import io.vlingo.xoom.designer.codegen.java.exchange.ExchangeGenerationStep;
@@ -107,6 +108,7 @@ public class Configuration {
         new RestResourceUnitTestGenerationStep(),
         new ClusterSettingsGenerationStep(),
         new DockerfileGenerationStep(),
+        new DockerComposeGenerationStep(),
         new KubernetesManifestFileGenerationStep(),
         // React
         new StaticFilesGenerationStep(),

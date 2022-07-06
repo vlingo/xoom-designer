@@ -34,7 +34,7 @@ public class ${dataName} {
     return from(${stateName}.identifiedBy(""));
   }
 
-  private ${dataName} (${constructorParameters}) {
+  private ${dataName}(${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

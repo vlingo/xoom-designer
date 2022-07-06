@@ -7,9 +7,9 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
@@ -19,31 +19,27 @@ public class RestResourceUnitTestTemplateData extends TemplateData {
 	private final String aggregateName;
 	private final TemplateParameters parameters;
 
-	public RestResourceUnitTestTemplateData(String basePackage, CodeGenerationParameter aggregateParameter,
-	                                        List<Content> contents, List<CodeGenerationParameter> valueObjects) {
+	public RestResourceUnitTestTemplateData(final String basePackage, final CodeGenerationParameter aggregateParameter,
+	                                        final List<Content> contents, final List<CodeGenerationParameter> valueObjects) {
 		this.aggregateName = aggregateParameter.value;
 		this.packageName = resolvePackage(basePackage);
 		this.parameters = loadParameters(aggregateParameter, contents, valueObjects);
 	}
 
 	private TemplateParameters loadParameters(final CodeGenerationParameter aggregate, final List<Content> contents,
-	                                          List<CodeGenerationParameter> valueObjects) {
+	                                          final List<CodeGenerationParameter> valueObjects) {
 		final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 
 		return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
+				.and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value)
 				.and(TemplateParameter.REST_RESOURCE_UNIT_TEST_NAME, standard().resolveClassname(aggregateName))
 				.and(TemplateParameter.DATA_OBJECT_NAME, dataObjectName)
-				.and(TemplateParameter.URI_ROOT, resolveRootURI(aggregate.retrieveRelatedValue(Label.URI_ROOT)))
+				.and(TemplateParameter.URI_ROOT, AggregateDetail.resolveRootURI(aggregate))
 				.and(TemplateParameter.COMPOSITE_ID, DataDeclaration.generate(aggregate, valueObjects))
 				.and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects))
 				.addImport(resolveImports(dataObjectName, contents))
 				.and(TemplateParameter.PRODUCTION_CODE, false)
 				.and(TemplateParameter.UNIT_TEST, true);
-	}
-
-	private String resolveRootURI(String uriRoot) {
-		return uriRoot.replace("{", "\" + ")
-				.replace("}", " + \"");
 	}
 
 	private String resolveImports(final String dataObjectName, final List<Content> contents) {

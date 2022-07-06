@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-designer</artifactId>
-  <version>1.9.3-SNAPSHOT</version>
+  <version>1.9.4-SNAPSHOT</version>
   <name>xoom-designer</name>
   <url>http://maven.apache.org</url>
 
@@ -54,12 +54,6 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.5.2</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>4.3.20.RELEASE</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.graalvm.sdk</groupId>

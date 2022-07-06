@@ -16,7 +16,7 @@ public final class AuthorState {
     return new AuthorState(id, null, new ArrayList<>(), new HashSet<>(), LocalDate.now());
   }
 
-  public AuthorState (final String id, final Name name, final List<Rank> rank, final Set<String> relatedAuthors, final LocalDate availableOn) {
+  public AuthorState(final String id, final Name name, final List<Rank> rank, final Set<String> relatedAuthors, final LocalDate availableOn) {
     this.id = id;
     this.name = name;
     this.rank.addAll(rank);

@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.java.clustersettings;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -32,6 +33,7 @@ public class ClusterSettingsGenerationStepTest extends CodeGenerationTest {
     final Content clusterSettings =
             context.findContent(JavaTemplateStandard.CLUSTER_SETTINGS, "xoom-cluster");
 
+    Assertions.assertEquals(((TextBasedContent)clusterSettings).text, (TextExpectation.onJava().read("custom-xoom-cluster")));
     Assertions.assertTrue(clusterSettings.contains(TextExpectation.onJava().read("custom-xoom-cluster")));
   }
 
@@ -47,6 +49,7 @@ public class ClusterSettingsGenerationStepTest extends CodeGenerationTest {
     final Content clusterSettings =
             context.findContent(JavaTemplateStandard.CLUSTER_SETTINGS, "xoom-cluster");
 
+    Assertions.assertEquals(((TextBasedContent)clusterSettings).text, (TextExpectation.onJava().read("default-xoom-cluster")));
     Assertions.assertTrue(clusterSettings.contains(TextExpectation.onJava().read("default-xoom-cluster")));
   }
 

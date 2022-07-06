@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.java.exchange;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -18,6 +19,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExchangeGenerationStepTest extends CodeGenerationTest  {
 
@@ -34,7 +37,7 @@ public class ExchangeGenerationStepTest extends CodeGenerationTest  {
 
     new ExchangeGenerationStep().process(context);
 
-    Assertions.assertEquals(23, context.contents().size());
+    Assertions.assertEquals(25, context.contents().size());
 
     final Content exchangeBootstrap =
             context.findContent(JavaTemplateStandard.EXCHANGE_BOOTSTRAP, "ExchangeBootstrap");
@@ -75,18 +78,19 @@ public class ExchangeGenerationStepTest extends CodeGenerationTest  {
     final Content exchangeProperties =
             context.findContent(JavaTemplateStandard.EXCHANGE_PROPERTIES, "xoom-turbo");
 
-    exchangeBootstrap.contains(TextExpectation.onJava().read("exchange-bootstrap"));
-    authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers"));
-    otherAggregateDefinedAdapter.contains(TextExpectation.onJava().read("other-aggregate-defined-adapter"));
-    otherAggregateUpdatedAdapter.contains(TextExpectation.onJava().read("other-aggregate-updated-adapter"));
-    otherAggregateRemovedAdapter.contains(TextExpectation.onJava().read("other-aggregate-removed-adapter"));
-    authorProducerAdapter.contains(TextExpectation.onJava().read("author-producer-adapter"));
-    otherAggregateDefinedMapper.contains(TextExpectation.onJava().read("other-aggregate-defined-mapper"));
-    otherAggregateUpdatedMapper.contains(TextExpectation.onJava().read("other-aggregate-updated-mapper"));
-    otherAggregateRemovedMapper.contains(TextExpectation.onJava().read("other-aggregate-removed-mapper"));
-    bookProducerAdapter.contains(TextExpectation.onJava().read("book-producer-adapter"));
-    domainEventMapper.contains(TextExpectation.onJava().read("domain-event-mapper"));
-    exchangeDispatcher.contains(TextExpectation.onJava().read("exchange-dispatcher"));
-    exchangeProperties.contains((TextExpectation.onJava().read("exchange-properties")));
+    assertEquals(((TextBasedContent)authorExchangeReceivers).text, (TextExpectation.onJava().read("author-exchange-receivers")));
+    assertTrue(exchangeBootstrap.contains(TextExpectation.onJava().read("exchange-bootstrap")));
+    assertTrue(authorExchangeReceivers.contains(TextExpectation.onJava().read("author-exchange-receivers")));
+    assertTrue(otherAggregateDefinedAdapter.contains(TextExpectation.onJava().read("other-aggregate-defined-adapter")));
+    assertTrue(otherAggregateUpdatedAdapter.contains(TextExpectation.onJava().read("other-aggregate-updated-adapter")));
+    assertTrue(otherAggregateRemovedAdapter.contains(TextExpectation.onJava().read("other-aggregate-removed-adapter")));
+    assertTrue(authorProducerAdapter.contains(TextExpectation.onJava().read("author-producer-adapter")));
+    assertTrue(otherAggregateDefinedMapper.contains(TextExpectation.onJava().read("other-aggregate-defined-mapper")));
+    assertTrue(otherAggregateUpdatedMapper.contains(TextExpectation.onJava().read("other-aggregate-updated-mapper")));
+    assertTrue(otherAggregateRemovedMapper.contains(TextExpectation.onJava().read("other-aggregate-removed-mapper")));
+    assertTrue(bookProducerAdapter.contains(TextExpectation.onJava().read("book-producer-adapter")));
+    assertTrue(domainEventMapper.contains(TextExpectation.onJava().read("domain-event-mapper")));
+    assertTrue(exchangeDispatcher.contains(TextExpectation.onJava().read("exchange-dispatcher")));
+    assertTrue(exchangeProperties.contains((TextExpectation.onJava().read("exchange-properties"))));
   }
 }

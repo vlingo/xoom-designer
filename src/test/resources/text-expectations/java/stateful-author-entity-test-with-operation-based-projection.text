@@ -45,8 +45,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.withName(NAME_FOR_WITH_NAME_TEST, AVAILABLE_ON_FOR_WITH_NAME_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertEquals(1, (int) dispatcherAccess.readFrom("storeCount"));
     assertEquals(AuthorState.class.getName(), dispatcherAccess.readFrom("storedAt", 0));
@@ -60,8 +60,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.changeRank(RANK_FOR_CHANGE_RANK_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.rank);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -83,8 +83,8 @@ public class AuthorEntityTest {
   public void makeAvailableOn() {
     final AuthorState state = author.makeAvailableOn(AVAILABLE_ON_FOR_MAKE_AVAILABLE_ON_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
     assertEquals(AuthorState.class.getName(), dispatcherAccess.readFrom("storedAt", 1));
@@ -98,8 +98,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.addTag(TAGS_FOR_ADD_TAG_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -114,8 +114,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.addTags(TAGS_FOR_ADD_TAGS_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -130,8 +130,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.replaceTags(TAGS_FOR_REPLACE_TAGS_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -146,8 +146,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.removeTag(TAGS_FOR_REMOVE_TAG_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.tags);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -162,8 +162,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.relateAuthor(RELATED_AUTHORS_FOR_RELATE_AUTHOR_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -178,8 +178,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.relateAuthors(RELATED_AUTHORS_FOR_RELATE_AUTHORS_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -194,8 +194,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.unrelateAuthor(RELATED_AUTHORS_FOR_UNRELATE_AUTHOR_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));
@@ -210,8 +210,8 @@ public class AuthorEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final AuthorState state = author.replaceAllRelatedAuthors(RELATED_AUTHORS_FOR_REPLACE_ALL_RELATED_AUTHORS_TEST).await();
 
-    assertEquals(state.name.firstName, "author-name-firstName");
-    assertEquals(state.name.lastName, "author-name-lastName");
+    assertEquals("author-name-firstName", state.name.firstName);
+    assertEquals("author-name-lastName", state.name.lastName);
     assertNotNull(state.availableOn);
     assertNotNull(state.relatedAuthors);
     assertEquals(2, (int) dispatcherAccess.readFrom("storeCount"));

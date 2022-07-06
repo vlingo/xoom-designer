@@ -32,7 +32,7 @@ public class BookData {
     return from(BookState.identifiedBy(""));
   }
 
-  private BookData (final String id, final String title, final String publisher, final LocalDate publicationDate) {
+  private BookData(final String id, final String title, final String publisher, final LocalDate publicationDate) {
     this.id = id;
     this.title = title;
     this.publisher = publisher;
