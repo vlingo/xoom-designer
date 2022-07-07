@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AggregateStateTemplateData extends TemplateData {
@@ -35,14 +36,15 @@ public class AggregateStateTemplateData extends TemplateData {
     this.protocolName = aggregate.value;
 
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
-            .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate))
-            .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, aggregate))
-            .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
-            .addImports(resolveImports(contents, aggregate))
-            .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
-            .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(aggregate))
-            .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(dialect, aggregate))
-            .and(TemplateParameter.METHODS, new ArrayList<String>());
+        .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate))
+        .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, aggregate))
+        .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
+        .addImports(resolveImports(contents, aggregate))
+        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
+        .and(TemplateParameter.MEMBER_NAMES, aggregate.retrieveAllRelated(Label.STATE_FIELD).map(stateField -> stateField.value).collect(Collectors.toList()))
+        .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(aggregate))
+        .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(dialect, aggregate))
+        .and(TemplateParameter.METHODS, new ArrayList<String>());
 
     this.dependOn(AggregateStateMethodTemplateData.from(dialect, aggregate));
   }

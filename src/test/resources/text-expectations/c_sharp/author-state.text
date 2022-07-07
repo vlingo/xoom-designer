@@ -1,11 +1,13 @@
+using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Object;
+using Vlingo.Xoom.Wire.Nodes;
 
 namespace Io.Vlingo.Xoomapp.Model.Author;
 
 /**
  * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
  */
-public sealed class AuthorState : StateObject
+public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 {
   public String id {get; set;}
   public String name {get; set;}
@@ -16,7 +18,7 @@ public sealed class AuthorState : StateObject
     return new AuthorState(id, null, new List<Double>());
   }
 
-  public AuthorState (String id, String name, List<Double> rank)
+  public AuthorState(String id, String name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData)
   {
     this.id = id;
     this.name = name;
@@ -41,4 +43,16 @@ public sealed class AuthorState : StateObject
     return new AuthorState(this.id, this.name, this.rank);
   }
 
+  public override IEntry WithId(string id) => IdentifiedBy(id);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherState = (AuthorState) obj;
+    return id == otherState.id && name == otherState.name && rank == otherState.rank;
+  }
+
+  public bool Equals(AuthorState other) => id == other.id && name == other.name && rank == other.rank;
+  public override int GetHashCode() => HashCode.Combine(id, name, rank);
 }
