@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.vlingo.xoom</groupId>
   <artifactId>xoom-designer</artifactId>
-  <version>1.9.4-SNAPSHOT</version>
+  <version>1.10.1</version>
   <name>xoom-designer</name>
   <url>http://maven.apache.org</url>
 
