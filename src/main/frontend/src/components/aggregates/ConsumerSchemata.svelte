@@ -1,13 +1,12 @@
 <script>
   import IconButton from '@smui/icon-button';
-  import { schemataData, subscribeToSchemataChanges } from "../../stores";
+  import {schemataData, settings, subscribeToSchemataChanges} from "../../stores";
   import Textfield from '@smui/textfield/Textfield.svelte';
   import Button from '@smui/button';
 
-  import Menu, { SelectionGroup } from '@smui/menu';
-  import List, { Item, Text } from '@smui/list';
-  import { Anchor } from '@smui/menu-surface';
-  import { settings } from "../../stores";
+  import Menu, {SelectionGroup} from '@smui/menu';
+  import List, {Item, Text} from '@smui/list';
+  import {Anchor} from '@smui/menu-surface';
 
   import SchemataEmded from './SchemataEmded.svelte';
 
@@ -15,6 +14,7 @@
   let anchorClasses = {};
   let menu;
   let showSchemataModal = false;
+  let reloadSchemataModal = false;
 
   export let schema;
   export let invalid;
@@ -68,7 +68,9 @@ $: selectedOrg, selectedUnit, selectedContext, selectedSchema, loadSchemataLists
     value={schema}
     input$readonly={true}
     {invalid}
-    on:click={() => menu.setOpen(true)}
+    on:focus={() => reloadSchemataModal = menu.isOpen()}
+    on:click={() => {menu.setOpen(true);  reloadSchemataModal = menu.isOpen()}}
+    on:blur={() => reloadSchemataModal = menu.isOpen()}
   >
     <svelte:fragment slot="trailingIcon">
       {#if selectedOrg}
@@ -222,5 +224,5 @@ $: selectedOrg, selectedUnit, selectedContext, selectedSchema, loadSchemataLists
 </div>
 
 {#if $settings && $settings.schemata}
-<SchemataEmded bind:show={showSchemataModal} limitless={true} />
+  <SchemataEmded bind:show={showSchemataModal} bind:reload={reloadSchemataModal} limitless={true} />
 {/if}

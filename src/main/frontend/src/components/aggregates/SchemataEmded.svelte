@@ -1,16 +1,16 @@
 <script>
-  import { onMount } from "svelte";
-  import Dialog, { Title, Content, Header } from '@smui/dialog';
+  import {onMount} from "svelte";
+  import Dialog, {Content, Header, Title} from '@smui/dialog';
   import IconButton from '@smui/icon-button';
   import Portal from "svelte-portal/src/Portal.svelte";
-  import { schemataData, settings } from "../../stores";
+  import {schemataData, settings} from "../../stores";
 
   export let show = false;
+  export let reload = false;
   export let limitless = false;
 
   let iframe;
   let origin, src;
-
 
   onMount(() => {
     window.addEventListener("message", (event) => {
@@ -23,9 +23,19 @@
     }
   })
 
+  const reloadIFrame = () => {
+    document.querySelector('iframe').remove();
+    const newIframe = document.createElement('iframe');
+    newIframe.src = src;
+    document.getElementsByClassName("schemata-content")[0].appendChild(newIframe);
+  }
+
   $: origin = `http://${$settings.schemata.host}:${$settings.schemata.port}`;
   $: src = `${origin}/organization${limitless ? '' : '#producer=true'}`;
   $: console.log($settings.schemata);
+  $: if(reload) {
+    reloadIFrame();
+  }
 </script>
 
 <Portal target=".s-app">
