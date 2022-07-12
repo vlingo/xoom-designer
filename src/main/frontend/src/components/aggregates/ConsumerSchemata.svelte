@@ -223,6 +223,6 @@ $: selectedOrg, selectedUnit, selectedContext, selectedSchema, loadSchemataLists
   </Menu>
 </div>
 
-{#if $settings && $settings.schemata}
+{#if $settings && $settings.schemata && reloadSchemataModal}
   <SchemataEmded bind:show={showSchemataModal} bind:reload={reloadSchemataModal} limitless={true} />
 {/if}

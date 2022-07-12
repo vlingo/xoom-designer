@@ -13,6 +13,7 @@
   let origin, src;
 
   onMount(() => {
+    clearSchemataDataWhenSchemataNotAvailable();
     window.addEventListener("message", (event) => {
       if (event.origin !== origin) return;
 
@@ -28,6 +29,18 @@
     const newIframe = document.createElement('iframe');
     newIframe.src = src;
     document.getElementsByClassName("schemata-content")[0].appendChild(newIframe);
+  }
+
+  const clearSchemataDataWhenSchemataNotAvailable = () => {
+    fetch(src, {mode: "no-cors"}).catch(error => {
+      $schemataData = {
+        organizationsStore: [],
+        unitsStore: [],
+        contextsStore: [],
+        schemasStore: [],
+        schemaVersionsStore: [],
+      }
+    })
   }
 
   $: origin = `http://${$settings.schemata.host}:${$settings.schemata.port}`;
