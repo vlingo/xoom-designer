@@ -40,8 +40,8 @@ public class Assertions {
 
     if (eventName != null && !eventName.isEmpty()) {
       return Arrays.asList(
-          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"entriesCount\"));", expectedNumberOfEntries),
-          String.format("Assert.Equal(typeof(%s).Name, dispatcherAccess.ReadFrom<BaseEntry<string>>(\"appendedAt\").GetType().Name);", eventName)
+          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"dispatchedStateCount\"));", expectedNumberOfEntries),
+          String.format("// Assert.Equal(nameof(%s), dispatcherAccess.ReadFrom<BaseEntry<string>>(\"appendedAt\").GetType().Name);", eventName)
       );
     }
 
@@ -87,14 +87,14 @@ public class Assertions {
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
   }
 
-  private final static String assertionByStateFieldType(final CodeGenerationParameter aggregate,
-                                                        final TestDataValueGenerator.TestDataValues testDataValues,
-                                                        final String fieldPath) {
+  private static String assertionByStateFieldType(final CodeGenerationParameter aggregate,
+                                                  final TestDataValueGenerator.TestDataValues testDataValues,
+                                                  final String fieldPath) {
     final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath);
     if (FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
       return String.format("Assert.NotNull(%s);", fieldPath);
     }
-    return String.format("Assert.Equal(%s, %s);", fieldPath, testDataValues.retrieve("state", fieldPath));
+    return String.format("Assert.Equal(%s, %s);",  testDataValues.retrieve("state", fieldPath), fieldPath);
   }
 
   private static Stream<CodeGenerationParameter> filterExclusiveFactoryMethodFields(final Stream<CodeGenerationParameter> factoryMethodFields,

@@ -12,18 +12,16 @@ namespace ${packageName};
 
 public class ${entityUnitTestName}
 {
-  private readonly World _world;
-  private readonly IStateStore _store;
   private readonly ${dispatcherName} _dispatcher;
   private readonly ${aggregateProtocolName} _${aggregateProtocolVariable};
 
   public ${entityUnitTestName}()
   {
     _dispatcher = new ${dispatcherName}();
-    _world = World.StartWithDefaults("test-stateful");
+    var _world = World.StartWithDefaults("test-stateful");
     new StateAdapterProvider(_world).RegisterAdapter(new ${adapterName}());
-    _store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<IState>), new []{_dispatcher});
-    new StatefulTypeRegistry(_world).Register(new Info(_store, typeof(${stateName}), typeof(${stateName}).FullName));
+    var _store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new []{_dispatcher});
+    new StatefulTypeRegistry(_world).Register(new Info(_store, typeof(${stateName}), typeof(${stateName}).FullName!));
     _${aggregateProtocolVariable} = _world.ActorFor<${aggregateProtocolName}>(typeof(${entityName}), "#1");
   }
 

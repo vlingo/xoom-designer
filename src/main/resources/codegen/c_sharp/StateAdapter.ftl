@@ -21,7 +21,7 @@ public class ${adapterName} : StateAdapter<${sourceName}, TextState>
 
   public override ST FromRawState<ST>(TextState raw) => JsonSerialization.Deserialized<ST>(raw.Data);
 
-  public TextState ToRawState(string id, ${sourceName} state, int stateVersion, Metadata metadata) {
+  public override TextState ToRawState(string id, ${sourceName} state, int stateVersion, Metadata metadata) {
     var serialization = JsonSerialization.Serialized(state);
     return new TextState(id, typeof(${sourceName}), TypeVersion, serialization, stateVersion, metadata);
   }
