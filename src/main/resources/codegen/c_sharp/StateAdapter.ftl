@@ -17,7 +17,7 @@ public class ${adapterName} : StateAdapter<${sourceName}, TextState>
 
   public override int TypeVersion => 1;
 
-  public override ${sourceName} FromRawState(TextState raw) => (${sourceName}) JsonSerialization.Deserialized(raw.Data, raw.Typed);
+  public override ${sourceName} FromRawState(TextState raw) => (${sourceName}) JsonSerialization.Deserialized(raw.Data, raw.Typed)!;
 
   public override ST FromRawState<ST>(TextState raw) => JsonSerialization.Deserialized<ST>(raw.Data);
 

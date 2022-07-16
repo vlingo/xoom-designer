@@ -15,7 +15,7 @@ public class AuthorStateAdapter : StateAdapter<AuthorState, TextState>
 
   public override int TypeVersion => 1;
 
-  public override AuthorState FromRawState(TextState raw) => (AuthorState) JsonSerialization.Deserialized(raw.Data, raw.Typed);
+  public override AuthorState FromRawState(TextState raw) => (AuthorState) JsonSerialization.Deserialized(raw.Data, raw.Typed)!;
 
   public override ST FromRawState<ST>(TextState raw) => JsonSerialization.Deserialized<ST>(raw.Data);
 

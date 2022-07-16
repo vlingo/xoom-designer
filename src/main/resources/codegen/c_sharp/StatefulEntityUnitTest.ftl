@@ -18,11 +18,11 @@ public class ${entityUnitTestName}
   public ${entityUnitTestName}()
   {
     _dispatcher = new ${dispatcherName}();
-    var _world = World.StartWithDefaults("test-stateful");
-    new StateAdapterProvider(_world).RegisterAdapter(new ${adapterName}());
-    var _store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new []{_dispatcher});
-    new StatefulTypeRegistry(_world).Register(new Info(_store, typeof(${stateName}), typeof(${stateName}).FullName!));
-    _${aggregateProtocolVariable} = _world.ActorFor<${aggregateProtocolName}>(typeof(${entityName}), "#1");
+    var world = World.StartWithDefaults("test-stateful");
+    new StateAdapterProvider(world).RegisterAdapter(new ${adapterName}());
+    var store = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), _dispatcher);
+    new StatefulTypeRegistry(world).Register(new Info(store, typeof(${stateName}), typeof(${stateName}).FullName!));
+    _${aggregateProtocolVariable} = world.ActorFor<${aggregateProtocolName}>(typeof(${entityName}), "#1");
   }
 
   <#list testCases as testCase>

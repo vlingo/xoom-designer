@@ -40,7 +40,7 @@ public class Assertions {
 
     if (eventName != null && !eventName.isEmpty()) {
       return Arrays.asList(
-          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"dispatchedStateCount\"));", expectedNumberOfEntries),
+          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"entriesCount\"));", expectedNumberOfEntries),
           String.format("// Assert.Equal(nameof(%s), dispatcherAccess.ReadFrom<BaseEntry<string>>(\"appendedAt\").GetType().Name);", eventName)
       );
     }
