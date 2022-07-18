@@ -118,7 +118,7 @@ public class Assertions {
               if(FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
                 return String.format("assertNotNull(%s);", fieldPath);
               }
-              return String.format("assertEquals(%s, %s);", fieldPath, testDataValues.retrieve("state", fieldPath));
+              return String.format("assertEquals(%s, %s);", testDataValues.retrieve("state", fieldPath), fieldPath);
             };
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());

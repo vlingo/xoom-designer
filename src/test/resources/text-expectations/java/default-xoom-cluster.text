@@ -50,7 +50,9 @@ cluster.live.node.timeout = 20000
 cluster.quorum.timeout = 60000
 
 # currently all active nodes must be listed as seed nodes
-cluster.seedNodes = node1
+cluster.nodes = node1
+cluster.nodes.quorum = 1
+cluster.startup.period = 5000
 
 ################################
 # individual node configurations
@@ -58,6 +60,7 @@ cluster.seedNodes = node1
 
 node.node1.id = 1
 node.node1.name = node1
+node.node1.seed = true
 node.node1.host = localhost
 node.node1.op.port = 49120
 node.node1.app.port = 49121

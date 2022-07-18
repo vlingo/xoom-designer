@@ -55,10 +55,18 @@ public class ContentBuilder {
         return Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile("", "Name.java"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT);
     }
 
+    public static Content classificationValueObject() {
+        return Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile("", "Classification.java"), null, null, CLASSIFICATION_VALUE_OBJECT_CONTENT_TEXT);
+    }
+
+    public static Content classifierValueObject() {
+        return Content.with(JavaTemplateStandard.VALUE_OBJECT, new OutputFile("", "Classifier.java"), null, null, CLASSIFIER_VALUE_OBJECT_CONTENT_TEXT);
+    }
+
     public static List<Content> contents() {
         return Arrays.asList(authorContent(), authorEntityContent(), bookContent(), authorDataObjectContent(),
                 authorRatedEvent(), authorBlockedEvent(), bookSoldOutEvent(), bookPurchasedEvent(),
-                rankValueObject(), nameValueObject());
+                rankValueObject(), nameValueObject(), classificationValueObject(), classifierValueObject());
     }
 
     private static final String AUTHOR_CONTENT_TEXT =
@@ -114,7 +122,16 @@ public class ContentBuilder {
                     "public class Name { \\n" +
                     "... \\n" +
                     "}";
-
+    private static final String CLASSIFICATION_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Classification { \\n" +
+                    "... \\n" +
+                    "}";
+    private static final String CLASSIFIER_VALUE_OBJECT_CONTENT_TEXT =
+            "package io.vlingo.xoomapp.model; \\n" +
+                    "public class Classifier { \\n" +
+                    "... \\n" +
+                    "}";
     private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
             "package io.vlingo.xoomapp.model; \\n" +
                     "public class Rank { \\n" +

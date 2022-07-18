@@ -1,0 +1,95 @@
+package io.vlingo.xoomapp.infrastructure.persistence;
+
+import io.vlingo.xoomapp.infrastructure.*;
+import io.vlingo.xoomapp.model.author.*;
+
+import io.vlingo.xoom.lattice.model.projection.Projectable;
+import io.vlingo.xoom.lattice.model.projection.StateStoreProjectionActor;
+import io.vlingo.xoom.symbio.Source;
+import io.vlingo.xoom.symbio.store.state.StateStore;
+import io.vlingo.xoom.turbo.ComponentRegistry;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor extends StateStoreProjectionActor<AuthorData> {
+
+  private static final AuthorData Empty = AuthorData.empty();
+
+  public AuthorProjectionActor() {
+    this(ComponentRegistry.withType(QueryModelStateStoreProvider.class).store);
+  }
+
+  public AuthorProjectionActor(final StateStore stateStore) {
+    super(stateStore);
+  }
+
+  @Override
+  protected AuthorData currentDataFor(final Projectable projectable) {
+    return Empty;
+  }
+
+  @Override
+  protected AuthorData merge(final AuthorData previousData, final int previousVersion, final AuthorData currentData, final int currentVersion) {
+
+    if (previousVersion == currentVersion) return currentData;
+
+    AuthorData merged = previousData;
+
+    for (final Source<?> event : sources()) {
+      switch (Events.valueOf(event.typeName())) {
+        case AuthorRegistered: {
+          final AuthorRegistered typedEvent = typed(event);
+          final NameData name = NameData.from(typedEvent.name);
+          final RankData rank = RankData.from(typedEvent.rank);
+          currentData.ranks.add(rank);
+          merged = AuthorData.from(typedEvent.id, name, currentData.ranks, currentData.relatedAuthors, typedEvent.availableOn);
+          break;
+        }
+
+        case AuthorRanked: {
+          final AuthorRanked typedEvent = typed(event);
+          final RankData rank = RankData.from(typedEvent.rank);
+          currentData.ranks.add(rank);
+          merged = AuthorData.from(typedEvent.id, currentData.name, currentData.ranks, currentData.relatedAuthors, currentData.availableOn);
+          break;
+        }
+
+        case AuthorBulkRanked: {
+          final AuthorBulkRanked typedEvent = typed(event);
+          merged = AuthorData.from(typedEvent.id, currentData.name, RankData.fromAll(typedEvent.ranks), currentData.relatedAuthors, currentData.availableOn);
+          break;
+        }
+
+        case AuthorRelated: {
+          final AuthorRelated typedEvent = typed(event);
+          currentData.relatedAuthors.add(typedEvent.relatedAuthor);
+          merged = AuthorData.from(typedEvent.id, currentData.name, currentData.ranks, currentData.relatedAuthors, currentData.availableOn);
+          break;
+        }
+
+        case AuthorsRelated: {
+          final AuthorsRelated typedEvent = typed(event);
+          merged = AuthorData.from(typedEvent.id, currentData.name, currentData.ranks, typedEvent.relatedAuthors, currentData.availableOn);
+          break;
+        }
+
+        case AuthorUnrelated: {
+          final AuthorUnrelated typedEvent = typed(event);
+          currentData.relatedAuthors.remove(typedEvent.relatedAuthor);
+          merged = AuthorData.from(typedEvent.id, currentData.name, currentData.ranks, currentData.relatedAuthors, currentData.availableOn);
+          break;
+        }
+
+        default:
+          logger().warn("Event of type " + event.typeName() + " was not matched.");
+          break;
+      }
+    }
+
+    return merged;
+  }
+}

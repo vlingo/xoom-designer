@@ -12,6 +12,7 @@ import io.vlingo.xoom.actors.Stage;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 
 import java.util.stream.Stream;
 
@@ -35,7 +36,7 @@ public enum MethodScope {
   }
 
   public static Stream<MethodScope> infer(final CodeGenerationParameter method) {
-    if (method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf)) {
+    if (method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) || !AggregateDetail.hasFactoryMethod(method.parent())) {
       return Stream.of(values());
     }
     return Stream.of(INSTANCE);

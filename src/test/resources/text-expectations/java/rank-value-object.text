@@ -14,7 +14,7 @@ public final class Rank {
     return new Rank(points, classification);
   }
 
-  private Rank (final int points, final String classification) {
+  private Rank(final int points, final String classification) {
     this.points = points;
     this.classification = classification;
   }

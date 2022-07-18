@@ -23,7 +23,7 @@ public class ExchangeTemplateDataFactory {
 
   public static List<TemplateData> build(final String exchangePackage,
                                          final List<CodeGenerationParameter> aggregates,
-                                         final List<Content> contents) {
+                                         List<CodeGenerationParameter> valueObjects, final List<Content> contents) {
     final Supplier<Stream<CodeGenerationParameter>> filteredAggregates = () ->
             aggregates.stream().filter(aggregate -> aggregate.hasAny(Label.EXCHANGE));
 
@@ -34,7 +34,7 @@ public class ExchangeTemplateDataFactory {
             ExchangeMapperTemplateData.from(exchangePackage, filteredAggregates.get());
 
     final List<TemplateData> holders =
-            ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates.get(), contents);
+            ExchangeReceiverHolderTemplateData.from(exchangePackage, filteredAggregates.get(), valueObjects, contents);
 
     final List<TemplateData> adapters =
             ExchangeAdapterTemplateData.from(exchangePackage, filteredAggregates.get());

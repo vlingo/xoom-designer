@@ -25,7 +25,7 @@ public final class ${stateName} extends StateObject {
     return new ${stateName}(${methodInvocationParameters});
   }
 
-  public ${stateName} (${constructorParameters}) {
+  public ${stateName}(${constructorParameters}) {
     <#list membersAssignment as assignment>
     ${assignment}
     </#list>

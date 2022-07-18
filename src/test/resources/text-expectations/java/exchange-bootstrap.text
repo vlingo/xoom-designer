@@ -27,8 +27,7 @@ public class ExchangeBootstrap implements ExchangeInitializer {
     final ExchangeSettings exchangeSettings =
                 ExchangeSettings.loadOne(Settings.properties());
 
-    final ConnectionSettings bookStoreExchangeSettings =
-                exchangeSettings.mapToConnection();
+    final ConnectionSettings bookStoreExchangeSettings = exchangeSettings.mapToConnection();
 
     final Exchange bookStoreExchange =
                 ExchangeFactory.fanOutInstanceQuietly(bookStoreExchangeSettings, exchangeSettings.exchangeName, true);

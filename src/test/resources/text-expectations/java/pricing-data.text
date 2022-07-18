@@ -1,0 +1,85 @@
+package io.vlingo.xoomapp.infrastructure;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import io.vlingo.xoomapp.model.*;
+
+public class PricingData {
+
+  public final RetailPriceData retailPrice;
+  public final WholesalePriceData wholesalePrice;
+
+  public static PricingData from(final Pricing pricing) {
+    if (pricing == null) {
+      return PricingData.empty();
+    } else {
+      final RetailPriceData retailPrice = pricing.retailPrice != null ? RetailPriceData.from(pricing.retailPrice) : null;
+      final WholesalePriceData wholesalePrice = pricing.wholesalePrice != null ? WholesalePriceData.from(pricing.wholesalePrice) : null;
+      return from(retailPrice, wholesalePrice);
+    }
+  }
+
+  public static PricingData from(final RetailPriceData retailPrice, final WholesalePriceData wholesalePrice) {
+    return new PricingData(retailPrice, wholesalePrice);
+  }
+
+  public static Set<PricingData> fromAll(final Set<Pricing> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptySet() : correspondingObjects.stream().map(PricingData::from).collect(Collectors.toSet());
+  }
+
+  public static List<PricingData> fromAll(final List<Pricing> correspondingObjects) {
+    return correspondingObjects == null ? Collections.emptyList() : correspondingObjects.stream().map(PricingData::from).collect(Collectors.toList());
+  }
+
+  private PricingData(final RetailPriceData retailPrice, final WholesalePriceData wholesalePrice) {
+    this.retailPrice = retailPrice;
+    this.wholesalePrice = wholesalePrice;
+  }
+
+  public Pricing toPricing() {
+    final RetailPrice retailPrice = RetailPrice.from(Money.from(this.retailPrice.price.amount));
+    final WholesalePrice wholesalePrice = WholesalePrice.from(Money.from(this.wholesalePrice.price.amount));
+    return Pricing.from(retailPrice, wholesalePrice);
+  }
+
+  public static PricingData empty() {
+    return new PricingData(null, null);
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(31, 17)
+              .append(retailPrice)
+              .append(wholesalePrice)
+              .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    PricingData another = (PricingData) other;
+    return new EqualsBuilder()
+              .append(this.retailPrice, another.retailPrice)
+              .append(this.wholesalePrice, another.wholesalePrice)
+              .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+              .append("retailPrice", retailPrice)
+              .append("wholesalePrice", wholesalePrice)
+              .toString();
+  }
+}

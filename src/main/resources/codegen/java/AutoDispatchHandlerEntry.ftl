@@ -1,4 +1,4 @@
-<#if factoryMethod>
+<#if factoryMethod && !requireEntityLoading>
 public static final HandlerEntry<${handlerType}<Completes<${stateName}>, Stage, ${compositeIdType}${dataName}>> ${indexName}_HANDLER =
           HandlerEntry.of(${indexName}, ($stage, ${compositeId}data) -> {
               <#list valueObjectInitializers as initializer>

@@ -43,9 +43,9 @@ public class BookEntityTest {
     final AccessSafely dispatcherAccess = dispatcher.afterCompleting(1);
     final BookState state = book.catalog(TITLE_FOR_CATALOG_TEST, PUBLISHER_FOR_CATALOG_TEST, GROUP_FOR_CATALOG_TEST).await();
 
-    assertEquals(state.title, "book-title");
-    assertEquals(state.publisher, "book-publisher");
-    assertEquals(state.group, '1');
+    assertEquals("book-title", state.title);
+    assertEquals("book-publisher", state.publisher);
+    assertEquals('1', state.group);
     assertEquals(1, (int) dispatcherAccess.readFrom("storeCount"));
     assertEquals(BookState.class.getName(), dispatcherAccess.readFrom("storedAt", 0));
   }
