@@ -39,7 +39,7 @@ public class ${dispatcherName} : IDispatcher
 
   public void Dispatch(Dispatchable dispatchable)
   {
-    _access.WriteUsing("appendedAll", dispatchable.Entries);
+    _access.WriteUsing("appendedEntriesAll", dispatchable.Entries);
     _access.WriteUsing("appendedState", dispatchable.State.Get());
   }
 }
