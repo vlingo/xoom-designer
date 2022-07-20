@@ -35,8 +35,8 @@ public class AuthorEntityTest
     var state = _author.withName(NAME_FOR_WITH_NAME_TEST).Await();
 
     Assert.Equal("author-name", state.name);
-    Assert.Equal(1, dispatcherAccess.ReadFrom<int>("entriesCount"));
-    // Assert.Equal(nameof(AuthorRegistered), dispatcherAccess.ReadFrom<int, BaseEntry<string>>("appendedAt", 0).TypeName);
+    Assert.Equal(1, dispatcherAccess.ReadFrom<int>("statesCount"));
+    Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
 
   private static List<Double> RANK_FOR_CHANGE_RANK_TEST = new List<Double>();
@@ -50,8 +50,8 @@ public class AuthorEntityTest
 
     Assert.Equal("author-name", state.name);
     Assert.NotNull(state.rank);
-    Assert.Equal(2, dispatcherAccess.ReadFrom<int>("entriesCount"));
-    // Assert.Equal(nameof(AuthorRanked), dispatcherAccess.ReadFrom<int, BaseEntry<string>>("appendedAt", 0).TypeName);
+    Assert.Equal(2, dispatcherAccess.ReadFrom<int>("statesCount"));
+    Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
 
 

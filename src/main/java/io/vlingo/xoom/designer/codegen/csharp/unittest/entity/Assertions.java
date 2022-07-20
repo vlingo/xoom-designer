@@ -36,12 +36,12 @@ public class Assertions {
   private static List<String> resolveDispatcherAssertions(final CodeGenerationParameter method,
                                                           final Optional<String> defaultFactoryMethod) {
     final String eventName = method.retrieveRelatedValue(Label.DOMAIN_EVENT);
-    final int expectedNumberOfEntries = AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethod) ? 2 : 1;
+    final int expectedNumberOfStates = AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethod) ? 2 : 1;
 
     if (eventName != null && !eventName.isEmpty()) {
       return Arrays.asList(
-          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"entriesCount\"));", expectedNumberOfEntries),
-          String.format("// Assert.Equal(nameof(%s), dispatcherAccess.ReadFrom<int, BaseEntry<string>>(\"appendedAt\", 0).TypeName);", eventName)
+          String.format("Assert.Equal(%s, dispatcherAccess.ReadFrom<int>(\"statesCount\"));", expectedNumberOfStates),
+          "Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>(\"appendedStateAt\", 0).Typed);"
       );
     }
 
