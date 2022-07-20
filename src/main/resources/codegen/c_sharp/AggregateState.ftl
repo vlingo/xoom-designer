@@ -18,7 +18,7 @@ public sealed class ${stateName} : BaseEntry<string>, IEquatable<${stateName}>
     return new ${stateName}(${methodInvocationParameters});
   }
 
-  public ${stateName}(${constructorParameters}) : base(id, typeof(string), 1, EmptyObjectData)
+  private ${stateName}(${constructorParameters}) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     <#list membersAssignment as assignment>
     ${assignment}

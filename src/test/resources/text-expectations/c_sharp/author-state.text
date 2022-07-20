@@ -18,7 +18,7 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     return new AuthorState(id, null, new List<Double>());
   }
 
-  public AuthorState(String id, String name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData)
+  private AuthorState(String id, String name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     this.id = id;
     this.name = name;
