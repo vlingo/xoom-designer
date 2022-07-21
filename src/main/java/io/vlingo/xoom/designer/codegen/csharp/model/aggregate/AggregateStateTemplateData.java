@@ -17,12 +17,12 @@ import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AggregateStateTemplateData extends TemplateData {
@@ -41,7 +41,7 @@ public class AggregateStateTemplateData extends TemplateData {
         .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
         .addImports(resolveImports(contents, aggregate))
         .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
-        .and(TemplateParameter.MEMBER_NAMES, aggregate.retrieveAllRelated(Label.STATE_FIELD).map(stateField -> stateField.value).collect(Collectors.toList()))
+        .and(TemplateParameter.MEMBER_NAMES, AggregateDetail.resolveStateFieldsNames(aggregate))
         .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(aggregate))
         .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(dialect, aggregate))
         .and(TemplateParameter.METHODS, new ArrayList<String>());

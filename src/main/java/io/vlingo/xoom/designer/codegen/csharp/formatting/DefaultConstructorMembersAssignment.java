@@ -14,6 +14,8 @@ import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static java.util.stream.Collectors.toList;
 
 public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<String>> {
@@ -24,12 +26,12 @@ public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<
       final CollectionMutation collectionMutation = field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(FieldDetail.isCollection(field) && !collectionMutation.isSingleParameterBased()) {
-        return String.format("this.%s.AddRange(%s);", field.value, field.value);
+        return String.format("this.%s.AddRange(%s);", toPascalCase(field.value), toCamelCase(field.value));
       }
 
       final String fieldAlias = field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
 
-      return String.format("this.%s = %s;", fieldAlias, fieldAlias);
+      return String.format("this.%s = %s;", toPascalCase(fieldAlias), toCamelCase(fieldAlias));
     }).collect(toList());
   }
 

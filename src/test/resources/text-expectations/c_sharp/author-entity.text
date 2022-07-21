@@ -20,19 +20,19 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
     return Completes().With(_state);
   }
 
-  public ICompletes<AuthorState> withName(string name)
+  public ICompletes<AuthorState> WithName(string name)
   {
-    return Apply(_state.withName(name), () => _state);
+    return Apply(_state.WithName(name), () => _state);
   }
 
-  public ICompletes<AuthorState> changeRank(List<Double> rank)
+  public ICompletes<AuthorState> ChangeRank(List<Double> rank)
   {
-    return Apply(_state.changeRank(rank), () => _state);
+    return Apply(_state.ChangeRank(rank), () => _state);
   }
 
-  public ICompletes<AuthorState> hide()
+  public ICompletes<AuthorState> Hide()
   {
-    return Apply(_state.hide(), () => _state);
+    return Apply(_state.Hide(), () => _state);
   }
 
   protected override void State(AuthorState state)

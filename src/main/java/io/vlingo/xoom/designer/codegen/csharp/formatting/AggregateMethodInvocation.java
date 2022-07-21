@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
@@ -47,7 +48,8 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   }
 
   private String resolveFieldAccess(final CodeGenerationParameter methodParameter) {
-    return parametersOwner.isNone() ? methodParameter.value : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, methodParameter.value);
+    final String parameterName = toCamelCase(methodParameter.value);
+    return parametersOwner.isNone() ? parameterName : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, parameterName);
   }
 
   private enum ParametersOwner {

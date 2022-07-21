@@ -12,14 +12,14 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 public class AuthorRanked : IdentifiedDomainEvent
 {
 
-  public string id {get; set;}
-  public List<Double> rank = new List<Double>();
+  public string Id {get; set;}
+  public List<Double> Rank = new List<Double>();
 
   public AuthorRanked(string id, List<Double> rank) : base(SemanticVersion.From("1.0.0").ToValue())
   {
-    this.id = id;
-    this.rank.AddRange(rank);
+    this.Id = id;
+    this.Rank.AddRange(rank);
   }
 
-  public override string Identity => id;
+  public override string Identity => Id;
 }

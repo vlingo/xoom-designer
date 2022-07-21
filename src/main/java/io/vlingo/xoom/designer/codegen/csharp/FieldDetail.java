@@ -197,8 +197,15 @@ public class FieldDetail {
   public static boolean isChar(final String fieldType) {
     return fieldType.equalsIgnoreCase(CodeGenerationProperties.CHAR_TYPE);
   }
+  public static String toCamelCase(String name) {
+    return toCamelCase(name, false);
+  }
 
-  public static String toCamelCase(String name, boolean capNext) {
+  public static String toPascalCase(String name) {
+    return toCamelCase(name, true);
+  }
+
+  private static String toCamelCase(String name, boolean capNext) {
     StringBuilder sb = new StringBuilder();
 
     for(int i = 0; i < name.length(); ++i) {

@@ -23,5 +23,5 @@ public class ${domainEventName} : IdentifiedDomainEvent
     </#list>
   }
 
-  public override string Identity => id;
+  public override string Identity => Id;
 }

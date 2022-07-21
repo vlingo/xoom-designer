@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+
 public class SignatureDeclaration implements Formatters.Arguments {
 
   private static final String SIGNATURE_PATTERN = "%s %s";
@@ -76,7 +78,7 @@ public class SignatureDeclaration implements Formatters.Arguments {
         return String.format(SIGNATURE_PATTERN, FieldDetail.genericTypeOf(fieldType), field.retrieveRelatedValue(Label.ALIAS));
       }
     }
-    return String.format(SIGNATURE_PATTERN, fieldType, field.value);
+    return String.format(SIGNATURE_PATTERN, fieldType, toCamelCase(field.value));
   }
 
 }

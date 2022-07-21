@@ -9,9 +9,9 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
  */
 public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 {
-  public string id {get; set;}
-  public string name {get; set;}
-  public List<Double> rank = new List<Double>();
+  public string Id {get; set;}
+  public string Name {get; set;}
+  public List<Double> Rank = new List<Double>();
 
   public static AuthorState IdentifiedBy(string id)
   {
@@ -20,27 +20,27 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 
   private AuthorState(string id, string name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
-    this.id = id;
-    this.name = name;
-    this.rank.AddRange(rank);
+    this.Id = id;
+    this.Name = name;
+    this.Rank.AddRange(rank);
   }
 
-  public AuthorState withName(string name)
+  public AuthorState WithName(string name)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.id, name, this.rank);
+    return new AuthorState(this.Id, name, this.Rank);
   }
 
-  public AuthorState changeRank(List<Double> rank)
+  public AuthorState ChangeRank(List<Double> rank)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.id, this.name, rank);
+    return new AuthorState(this.Id, this.Name, rank);
   }
 
-  public AuthorState hide()
+  public AuthorState Hide()
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.id, this.name, this.rank);
+    return new AuthorState(this.Id, this.Name, this.Rank);
   }
 
   public override IEntry WithId(string id) => IdentifiedBy(id);
@@ -50,9 +50,9 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherState = (AuthorState) obj;
-    return id == otherState.id && name == otherState.name && rank == otherState.rank;
+    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank;
   }
 
-  public bool Equals(AuthorState other) => id == other.id && name == other.name && rank == other.rank;
-  public override int GetHashCode() => HashCode.Combine(id, name, rank);
+  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank);
 }

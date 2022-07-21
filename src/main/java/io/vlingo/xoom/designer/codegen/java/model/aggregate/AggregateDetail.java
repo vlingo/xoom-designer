@@ -20,6 +20,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateDetail {
@@ -176,4 +177,10 @@ public class AggregateDetail {
      return aggregate.retrieveRelatedValue(Label.URI_ROOT).replace("{", "\" + ")
           .replace("}", " + \"");
     }
+
+  public static List<String> resolveStateFieldsNames(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .map(stateField -> toPascalCase(stateField.value))
+        .collect(Collectors.toList());
+  }
 }

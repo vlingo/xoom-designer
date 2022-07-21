@@ -6,17 +6,17 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 public interface IAuthor
 {
 
-  ICompletes<AuthorState> withName(string name);
+  ICompletes<AuthorState> WithName(string name);
 
-  static ICompletes<AuthorState> withName(Stage stage, string name)
+  static ICompletes<AuthorState> WithName(Stage stage, string name)
   {
     var _address = stage.AddressFactory.UniquePrefixedWith("g-");
     var _author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(_address.IdString)), _address);
-    return _author.withName(name);
+    return _author.WithName(name);
   }
 
-  ICompletes<AuthorState> changeRank(List<Double> rank);
+  ICompletes<AuthorState> ChangeRank(List<Double> rank);
 
-  ICompletes<AuthorState> hide();
+  ICompletes<AuthorState> Hide();
 
 }
