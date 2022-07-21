@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.dialect.Dialect.*;
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
 import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail.stateFieldWithName;
 
 public class Member extends Formatters.Fields<List<String>> {
@@ -61,7 +62,7 @@ public class Member extends Formatters.Fields<List<String>> {
       return FieldDetail.resolveCollectionType(field);
     }
 
-    return fieldType;
+    return toCamelCase(fieldType, false);
   }
 
   private String resolveInstantiation(final CodeGenerationParameter field) {
@@ -76,7 +77,7 @@ public class Member extends Formatters.Fields<List<String>> {
       new HashMap<Dialect, BiFunction<String, String, String>>() {{
         put(JAVA, (fieldType, fieldName) -> String.format("public final %s %s;", fieldType, fieldName));
         put(KOTLIN, (fieldType, fieldName) -> String.format("val %s: %s;", fieldName, fieldType));
-        put(C_SHARP, (fieldType, fieldName) -> FieldDetail.isCollection(fieldType) ?String.format("public %s %s;", fieldType, fieldName) : String.format("public %s %s {get; set;}", fieldType, fieldName));
+        put(C_SHARP, (fieldType, fieldName) -> FieldDetail.isCollection(fieldType) ? String.format("public %s %s;", fieldType, fieldName) : String.format("public %s %s {get; set;}", fieldType, fieldName));
       }};
 
 }

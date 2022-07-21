@@ -10,7 +10,7 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
 {
   private AuthorState _state;
 
-  public AuthorEntity(String id) : base(id)
+  public AuthorEntity(string id) : base(id)
   {
     this._state = AuthorState.IdentifiedBy(id);
   }
@@ -20,7 +20,7 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
     return Completes().With(_state);
   }
 
-  public ICompletes<AuthorState> withName(String name)
+  public ICompletes<AuthorState> withName(string name)
   {
     return Apply(_state.withName(name), () => _state);
   }

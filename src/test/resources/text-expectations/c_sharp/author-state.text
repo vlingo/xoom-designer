@@ -9,23 +9,23 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
  */
 public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 {
-  public String id {get; set;}
-  public String name {get; set;}
+  public string id {get; set;}
+  public string name {get; set;}
   public List<Double> rank = new List<Double>();
 
-  public static AuthorState IdentifiedBy(String id)
+  public static AuthorState IdentifiedBy(string id)
   {
     return new AuthorState(id, null, new List<Double>());
   }
 
-  private AuthorState(String id, String name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  private AuthorState(string id, string name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     this.id = id;
     this.name = name;
     this.rank.AddRange(rank);
   }
 
-  public AuthorState withName(String name)
+  public AuthorState withName(string name)
   {
     //TODO: Implement command logic.
     return new AuthorState(this.id, name, this.rank);

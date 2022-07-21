@@ -6,9 +6,9 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 public interface IAuthor
 {
 
-  ICompletes<AuthorState> withName(String name);
+  ICompletes<AuthorState> withName(string name);
 
-  static ICompletes<AuthorState> withName(Stage stage, String name)
+  static ICompletes<AuthorState> withName(Stage stage, string name)
   {
     var _address = stage.AddressFactory.UniquePrefixedWith("g-");
     var _author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(_address.IdString)), _address);

@@ -198,9 +198,41 @@ public class FieldDetail {
     return fieldType.equalsIgnoreCase(CodeGenerationProperties.CHAR_TYPE);
   }
 
+  public static String toCamelCase(String name, boolean capNext) {
+    StringBuilder sb = new StringBuilder();
+
+    for(int i = 0; i < name.length(); ++i) {
+      char c = name.charAt(i);
+      if ('a' <= c && c <= 'z') {
+        if (capNext) {
+          sb.append((char)(c + -32));
+        } else {
+          sb.append(c);
+        }
+
+        capNext = false;
+      } else if ('A' <= c && c <= 'Z') {
+        if (i == 0 && !capNext) {
+          sb.append((char)(c - -32));
+        } else {
+          sb.append(c);
+        }
+
+        capNext = false;
+      } else if ('0' <= c && c <= '9') {
+        sb.append(c);
+        capNext = true;
+      } else {
+        capNext = true;
+      }
+    }
+
+    return sb.toString();
+  }
+
   private static String resolveStateFieldType(CodeGenerationParameter stateField) {
       final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
-      return isCollection(stateField) ? resolveCollectionType(stateField) : fieldType;
+      return isCollection(stateField) ? resolveCollectionType(stateField) : toCamelCase(fieldType, false);
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {
