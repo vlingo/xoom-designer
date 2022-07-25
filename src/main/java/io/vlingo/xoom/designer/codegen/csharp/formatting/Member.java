@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.dialect.Dialect.*;
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
-import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail.stateFieldWithName;
 
 public class Member extends Formatters.Fields<List<String>> {
@@ -70,7 +69,7 @@ public class Member extends Formatters.Fields<List<String>> {
     if (FieldDetail.requireImmediateInstantiation(field)) {
       return String.format("%s = %s", field.value, FieldDetail.resolveDefaultValue(field.parent(), field.value));
     }
-    return field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : toPascalCase(field.value);
+    return field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
   }
 
   @SuppressWarnings("serial")

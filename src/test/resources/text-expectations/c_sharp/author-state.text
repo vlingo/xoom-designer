@@ -12,35 +12,37 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public string Id {get; set;}
   public string Name {get; set;}
   public List<Double> Rank = new List<Double>();
+  public string shortDescription {get; set;}
 
   public static AuthorState IdentifiedBy(string id)
   {
-    return new AuthorState(id, null, new List<Double>());
+    return new AuthorState(id, null, new List<Double>(), null);
   }
 
-  private AuthorState(string id, string name, List<Double> rank) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  private AuthorState(string id, string name, List<Double> rank, string shortDescription) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     this.Id = id;
     this.Name = name;
     this.Rank.AddRange(rank);
+    this.shortDescription = shortDescription;
   }
 
   public AuthorState WithName(string name)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, name, this.Rank);
+    return new AuthorState(this.Id, name, this.Rank, this.shortDescription);
   }
 
   public AuthorState ChangeRank(List<Double> rank)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, rank);
+    return new AuthorState(this.Id, this.Name, rank, this.shortDescription);
   }
 
   public AuthorState Hide()
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, this.Rank);
+    return new AuthorState(this.Id, this.Name, this.Rank, this.shortDescription);
   }
 
   public override IEntry WithId(string id) => IdentifiedBy(id);
@@ -50,9 +52,9 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherState = (AuthorState) obj;
-    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank;
+    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank && shortDescription == otherState.shortDescription;
   }
 
-  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank;
-  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank);
+  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank && shortDescription == other.shortDescription;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, shortDescription);
 }

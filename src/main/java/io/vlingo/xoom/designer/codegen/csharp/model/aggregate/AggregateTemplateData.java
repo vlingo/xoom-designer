@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class AggregateTemplateData extends TemplateData {
         .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, protocolName)
         .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
         .and(TemplateParameter.ENTITY_NAME, CsharpTemplateStandard.AGGREGATE.resolveClassname(protocolName))
-        .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
+        .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, AggregateDetail.findIdField(aggregate).value))
         .addImports(resolveImports(aggregate))
         .and(TemplateParameter.METHODS, new ArrayList<String>())
         .and(TemplateParameter.USE_CQRS, useCQRS);

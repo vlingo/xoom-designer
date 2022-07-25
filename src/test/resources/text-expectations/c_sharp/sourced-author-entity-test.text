@@ -27,14 +27,16 @@ public class AuthorEntityTest
   }
 
   private static string NAME_FOR_WITH_NAME_TEST = "author-name";
+  private static string SHORT_DESCRIPTION_FOR_WITH_NAME_TEST = "author-short-description";
 
   [Fact]
-  public void withName()
+  public void WithName()
   {
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
-    var state = _author.withName(NAME_FOR_WITH_NAME_TEST).Await();
+    var state = _author.WithName(NAME_FOR_WITH_NAME_TEST, SHORT_DESCRIPTION_FOR_WITH_NAME_TEST).Await();
 
-    Assert.Equal("author-name", state.name);
+    Assert.Equal("author-name", state.Name);
+    Assert.Equal("author-short-description", state.ShortDescription);
     Assert.Equal(1, dispatcherAccess.ReadFrom<int>("statesCount"));
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
@@ -42,30 +44,32 @@ public class AuthorEntityTest
   private static List<Double> RANK_FOR_CHANGE_RANK_TEST = new List<Double>();
 
   [Fact]
-  public void changeRank()
+  public void ChangeRank()
   {
     _createEntity();
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
-    var state = _author.changeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
+    var state = _author.ChangeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
 
-    Assert.Equal("author-name", state.name);
-    Assert.NotNull(state.rank);
+    Assert.Equal("author-name", state.Name);
+    Assert.Equal("author-short-description", state.ShortDescription);
+    Assert.NotNull(state.Rank);
     Assert.Equal(2, dispatcherAccess.ReadFrom<int>("statesCount"));
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
 
 
   [Fact]
-  public void hide()
+  public void Hide()
   {
-    _author.hide().Await();
+    _author.Hide().Await();
 
   }
 
   private static string NAME_FOR_ENTITY_CREATION = "author-name";
+  private static string SHORT_DESCRIPTION_FOR_ENTITY_CREATION = "author-short-description";
 
   private void _createEntity()
   {
-    _author.withName(NAME_FOR_ENTITY_CREATION).Await();
+    _author.WithName(NAME_FOR_ENTITY_CREATION, SHORT_DESCRIPTION_FOR_ENTITY_CREATION).Await();
   }
 }

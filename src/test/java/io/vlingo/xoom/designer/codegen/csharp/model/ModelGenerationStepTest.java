@@ -41,22 +41,28 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     final Content authorState = context.findContent(CsharpTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+    final Content authorShortDescriptionChanged= context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorShortDescriptionChanged");
 
-    Assertions.assertEquals(5, context.contents().size());
+    Assertions.assertEquals(6, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked")));
+    Assertions.assertTrue(authorShortDescriptionChanged.contains(TextExpectation.onCSharp().read("author-short-description-changed")));
   }
 
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter idField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+        CodeGenerationParameter.of(Label.STATE_FIELD, "Id")
             .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter nameField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "Name")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter shortDescriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "shortDescription")
             .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter rankField =
@@ -66,12 +72,17 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter authorRegisteredEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "Id"));
 
     final CodeGenerationParameter authorRankedEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "Id"))
             .relate(rankField);
+
+    final CodeGenerationParameter authorShortDescriptionChangedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorShortDescriptionChanged")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "Id"))
+            .relate(shortDescriptionField);
 
     final CodeGenerationParameter factoryMethod =
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "WithName")
@@ -88,9 +99,9 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
         CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "Hide");
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-        .relate(idField).relate(nameField).relate(rankField)
+        .relate(idField).relate(nameField).relate(rankField).relate(shortDescriptionField)
         .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
-        .relate(authorRegisteredEvent).relate(authorRankedEvent);
+        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorShortDescriptionChangedEvent);
   }
 
 }

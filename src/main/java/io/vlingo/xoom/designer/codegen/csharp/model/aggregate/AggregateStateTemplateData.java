@@ -12,7 +12,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
@@ -34,11 +33,10 @@ public class AggregateStateTemplateData extends TemplateData {
   public AggregateStateTemplateData(final String packageName, final Dialect dialect,
                                     final CodeGenerationParameter aggregate, final List<Content> contents) {
     this.protocolName = aggregate.value;
-
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
         .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate))
         .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, aggregate))
-        .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, "id"))
+        .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, AggregateDetail.findIdField(aggregate).value))
         .addImports(resolveImports(contents, aggregate))
         .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
         .and(TemplateParameter.MEMBER_NAMES, AggregateDetail.resolveStateFieldsNames(aggregate))
@@ -54,7 +52,7 @@ public class AggregateStateTemplateData extends TemplateData {
   }
 
   private String resolveIdBasedConstructorParameters(final Dialect dialect, final CodeGenerationParameter aggregate) {
-    final CodeGenerationParameter idField = CodeGenerationParameter.of(Label.STATE_FIELD, "id");
+    final CodeGenerationParameter idField = AggregateDetail.findIdField(aggregate);
     return Formatters.Fields.format(Formatters.Fields.Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, dialect, aggregate, Stream.of(idField));
   }
 

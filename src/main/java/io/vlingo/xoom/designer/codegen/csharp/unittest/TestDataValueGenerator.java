@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -89,7 +91,7 @@ public class TestDataValueGenerator {
     } else if (FieldDetail.hasStringType(field)) {
       final String alias = valuePrefix.toLowerCase();
       final String ordinalIndex = NumberFormat.toOrdinal(dataIndex);
-      final String hyphenatedPath = currentPath.replaceAll("\\.", "-");
+      final String hyphenatedPath = hyphenPath(currentPath);
       final String value = formatStringValue(ordinalIndex, alias, hyphenatedPath);
       generatedValues.add(dataIndex, fieldType, currentPath, quoteValue(value));
     } else {
@@ -106,6 +108,14 @@ public class TestDataValueGenerator {
       value.insert(0, ordinalIndex.concat("-"));
     }
     return value.toString();
+  }
+  
+  private static String hyphenPath(String path) {
+    return Pattern.compile("(?=\\p{Upper})")
+        .splitAsStream(path)
+        .map(String::toLowerCase)
+        .collect(Collectors.joining("-"))
+        .replaceAll("\\.", "-");
   }
 
   private String quoteValue(final Object value) {

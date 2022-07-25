@@ -51,11 +51,15 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
             .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter nameField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+        CodeGenerationParameter.of(Label.STATE_FIELD, "Name")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter shortDescriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "ShortDescription")
             .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter rankField =
-        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+        CodeGenerationParameter.of(Label.STATE_FIELD, "Rank")
             .relate(Label.FIELD_TYPE, "Double")
             .relate(Label.COLLECTION_TYPE, "List");
 
@@ -68,24 +72,30 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
             .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
             .relate(rankField);
 
+    final CodeGenerationParameter authorShortDescriptionChangedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorShortDescriptionChanged")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+            .relate(shortDescriptionField);
+
     final CodeGenerationParameter factoryMethod =
-        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
-            .relate(Label.METHOD_PARAMETER, "name")
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "WithName")
+            .relate(Label.METHOD_PARAMETER, "Name")
+            .relate(Label.METHOD_PARAMETER, "ShortDescription")
             .relate(Label.FACTORY_METHOD, "true")
             .relate(authorRegisteredEvent);
 
     final CodeGenerationParameter rankMethod =
-        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
-            .relate(Label.METHOD_PARAMETER, "rank")
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "ChangeRank")
+            .relate(Label.METHOD_PARAMETER, "Rank")
             .relate(authorRankedEvent);
 
     final CodeGenerationParameter hideMethod =
-        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "hide");
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "Hide");
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-        .relate(idField).relate(nameField).relate(rankField)
+        .relate(idField).relate(nameField).relate(rankField).relate(shortDescriptionField)
         .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
-        .relate(authorRegisteredEvent).relate(authorRankedEvent);
+        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorShortDescriptionChangedEvent);
   }
 
   private Content[] contents() {
