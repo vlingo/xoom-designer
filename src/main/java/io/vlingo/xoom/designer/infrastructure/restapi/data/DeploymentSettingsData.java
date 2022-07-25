@@ -44,11 +44,12 @@ public class DeploymentSettingsData {
   }
 
   public List<String> validate(List<String> errorStrings) {
-    if(type==null) errorStrings.add("DeploymentSettingsData.type is null");
-    if(type.equals(DeploymentType.DOCKER.name()) && dockerImage==null) errorStrings.add("DeploymentSettingsData.dockerImage is null");
-    if(type.equals(DeploymentType.KUBERNETES.name())) {
-      if(kubernetesImage==null) errorStrings.add("DeploymentSettingsData.kubernetesImage is null");
-      if(kubernetesPod==null) errorStrings.add("DeploymentSettingsData.kubernetesPod is null");
+    if (type == null) errorStrings.add("DeploymentSettingsData.type is null");
+    if (type.equals(DeploymentType.DOCKER.name()) && dockerImage == null)
+      errorStrings.add("DeploymentSettingsData.dockerImage is null");
+    if (type.equals(DeploymentType.KUBERNETES.name())) {
+      if (kubernetesImage == null) errorStrings.add("DeploymentSettingsData.kubernetesImage is null");
+      if (kubernetesPod == null) errorStrings.add("DeploymentSettingsData.kubernetesPod is null");
     }
     return errorStrings;
   }

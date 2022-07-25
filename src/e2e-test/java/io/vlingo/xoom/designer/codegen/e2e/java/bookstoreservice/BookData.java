@@ -6,6 +6,8 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.e2e.java.bookstoreservice;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 public class BookData {
@@ -27,15 +29,16 @@ public class BookData {
     return new BookData("", "IDDD", 987, (byte) 1, 478.25, 150, 10, true, 'a');
   }
 
-  private BookData(final String id,
-                   final String title,
-                   final int stockCode,
-                   final byte publicCode,
-                   final double price,
-                   final float weight,
-                   final long height,
-                   final boolean available,
-                   final char symbol) {
+  @JsonCreator
+  private BookData(@JsonProperty("id") final String id,
+                   @JsonProperty("title") final String title,
+                   @JsonProperty("stockCode") final int stockCode,
+                   @JsonProperty("publicCode") final byte publicCode,
+                   @JsonProperty("price") final double price,
+                   @JsonProperty("weight") final float weight,
+                   @JsonProperty("height") final long height,
+                   @JsonProperty("available") final boolean available,
+                   @JsonProperty("symbol") final char symbol) {
     this.id = id;
     this.title = title;
     this.stockCode = stockCode;
