@@ -1,5 +1,7 @@
 package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -11,7 +13,9 @@ public class FreighterPartData {
   public final String partNumber;
   public final Set<ComponentData> dependentComponents = new HashSet<>();
 
-  public FreighterPartData (final String partNumber, final Set<ComponentData> dependentComponents) {
+  @JsonCreator
+  public FreighterPartData(@JsonProperty("partNumber") final String partNumber,
+                           @JsonProperty("dependentComponents") final Set<ComponentData> dependentComponents) {
     this.partNumber = partNumber;
     this.dependentComponents.addAll(dependentComponents);
   }
