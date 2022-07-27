@@ -24,12 +24,11 @@ public class ClusterNode {
 
   public static List<ClusterNode> from(final Integer startPortRange,
                                        final Integer totalNodes) {
-    final AtomicInteger resolvedStartPortRange =
-            startPortRange > 0 ? new AtomicInteger(startPortRange) :
-                    new AtomicInteger(DEFAULT_START_PORT_RANGE);
+    final AtomicInteger resolvedStartPortRange = startPortRange > 0
+            ? new AtomicInteger(startPortRange)
+            : new AtomicInteger(DEFAULT_START_PORT_RANGE);
 
-    final Integer resolvedTotalNodes =
-            (totalNodes > 0 ? totalNodes : DEFAULT_TOTAL_NODES) + 1;
+    final Integer resolvedTotalNodes = (totalNodes > 0 ? totalNodes : DEFAULT_TOTAL_NODES) + 1;
 
     return IntStream.range(1, resolvedTotalNodes)
             .mapToObj(nodeId -> new ClusterNode(nodeId, resolvedStartPortRange))
