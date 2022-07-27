@@ -10,12 +10,14 @@ package io.vlingo.xoom.designer.codegen.csharp.unittest;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
+import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.NumberFormat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,34 +30,40 @@ public class TestDataValueGenerator {
   private final String valuePrefix;
   private final TestDataValues generatedValues = new TestDataValues();
   private final List<CodeGenerationParameter> stateFields = new ArrayList<>();
+  private final List<CodeGenerationParameter> valueObjects = new ArrayList<>();
   private boolean currentBooleanValue;
   private int currentNumericValue;
   private char currentCharValue;
 
-  public static TestDataValueGenerator with(final CodeGenerationParameter aggregate) {
-    return with(1, "", aggregate);
+  public static TestDataValueGenerator with(final CodeGenerationParameter aggregate,
+                                            final List<CodeGenerationParameter> valueObjects) {
+    return with(1, aggregate.value, aggregate, valueObjects);
   }
 
   public static TestDataValueGenerator with(final int dataSetSize, final String valuePrefix,
-                                            final CodeGenerationParameter aggregate) {
+                                            final CodeGenerationParameter aggregate,
+                                            final List<CodeGenerationParameter> valueObjects) {
     final List<CodeGenerationParameter> stateFields = aggregate
         .retrieveAllRelated(Label.STATE_FIELD)
         .collect(toList());
 
-    return with(dataSetSize, valuePrefix, aggregate.value, stateFields);
+    return with(dataSetSize, valuePrefix, stateFields, valueObjects);
   }
 
-  public static TestDataValueGenerator with(final int dataSetSize, final String valuePrefix, final String aggregateName,
-                                            final List<CodeGenerationParameter> stateFields) {
-    return new TestDataValueGenerator(dataSetSize, aggregateName, valuePrefix, stateFields);
+  public static TestDataValueGenerator with(final int dataSetSize, final String valuePrefix,
+                                            final List<CodeGenerationParameter> stateFields,
+                                            final List<CodeGenerationParameter> valueObjects) {
+    return new TestDataValueGenerator(dataSetSize, valuePrefix, stateFields, valueObjects);
   }
 
-  private TestDataValueGenerator(final int dataSetSize, final String valuePrefix, final String aggregateName,
-                                 final List<CodeGenerationParameter> stateFields) {
+  private TestDataValueGenerator(final int dataSetSize, final String valuePrefix,
+                                 final List<CodeGenerationParameter> stateFields,
+                                 final List<CodeGenerationParameter> valueObjects) {
 
     this.dataSetSize = dataSetSize;
     this.valuePrefix = valuePrefix;
     this.stateFields.addAll(stateFields);
+    this.valueObjects.addAll(valueObjects);
   }
 
   public TestDataValues generate() {
@@ -72,6 +80,8 @@ public class TestDataValueGenerator {
     if(FieldDetail.isScalar(field) || FieldDetail.isCollection(field)) {
       generateScalarFieldAssignment(dataIndex, path, field);
     }
+    else if (ValueObjectDetail.isValueObject(field))
+      generateForValueObjectFields(dataIndex, path, field);
   }
 
   private void generateScalarFieldAssignment(final int dataIndex, final String path, final CodeGenerationParameter field) {
@@ -99,6 +109,18 @@ public class TestDataValueGenerator {
     }
   }
 
+  private void generateForValueObjectFields(final int dataIndex, final String path, final CodeGenerationParameter field) {
+    final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+
+    final CodeGenerationParameter valueObject = ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
+
+    final String currentPath = resolvePath(path, field);
+
+    final Consumer<CodeGenerationParameter> valueObjectFieldAssignment =
+        valueObjectField -> generateValue(dataIndex, currentPath, valueObjectField);
+
+    valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).forEach(valueObjectFieldAssignment);
+  }
   private String formatStringValue(final String ordinalIndex, final String alias, final String hyphenatedPath) {
     final StringBuilder value = new StringBuilder(hyphenatedPath);
     if (!alias.isEmpty()) {

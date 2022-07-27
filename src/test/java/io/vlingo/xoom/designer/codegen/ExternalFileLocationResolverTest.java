@@ -99,7 +99,7 @@ class ExternalFileLocationResolverTest extends CodeGenerationTest{
 
     final CodeGenerationContext context = CodeGenerationContextFactory.build(Logger.noOpLogger(), parameters);
 
-    final List<TemplateData> from = io.vlingo.xoom.designer.codegen.csharp.unittest.entity.EntityUnitTestTemplateData.from("Io.Vlingo.Xoomapp", Collections.singletonList(authorAggregate()), Arrays.asList(cSharpContents()));
+    final List<TemplateData> from = io.vlingo.xoom.designer.codegen.csharp.unittest.entity.EntityUnitTestTemplateData.from("Io.Vlingo.Xoomapp", Collections.singletonList(authorAggregate()), Collections.emptyList(), Arrays.asList(cSharpContents()));
     final TemplateData templateData = from
         .stream().filter(template -> template.hasStandard(CsharpTemplateStandard.ENTITY_UNIT_TEST)).findFirst().get();
 

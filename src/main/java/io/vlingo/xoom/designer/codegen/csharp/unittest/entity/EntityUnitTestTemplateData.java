@@ -36,13 +36,14 @@ public class EntityUnitTestTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final String basePackage, final List<CodeGenerationParameter> aggregates,
-                                        final List<Content> contents) {
+                                        final List<CodeGenerationParameter> valueObjects, final List<Content> contents) {
     return aggregates.stream()
-        .map(aggregate -> new EntityUnitTestTemplateData(basePackage, aggregate, contents))
+        .map(aggregate -> new EntityUnitTestTemplateData(basePackage, aggregate, valueObjects, contents))
         .collect(Collectors.toList());
   }
 
   private EntityUnitTestTemplateData(final String basePackage, final CodeGenerationParameter aggregate,
+                                     final List<CodeGenerationParameter> valueObjects,
                                      final List<Content> contents) {
     final String entityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregate.value);
 
@@ -54,7 +55,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "I" + aggregate.value, contents)
         .replace(basePackage, basePackage + ".Tests");
 
-    final TestDataValueGenerator.TestDataValues initialTestDataValues = TestDataValueGenerator.with(aggregate).generate();
+    final TestDataValueGenerator.TestDataValues initialTestDataValues = TestDataValueGenerator.with(aggregate, valueObjects).generate();
 
     final Optional<String> defaultFactoryMethod = resolveDefaultFactoryMethodName(aggregate);
 

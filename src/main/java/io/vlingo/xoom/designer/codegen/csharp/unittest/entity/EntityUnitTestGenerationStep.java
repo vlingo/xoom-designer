@@ -21,11 +21,14 @@ public class EntityUnitTestGenerationStep  extends TemplateProcessingStep {
     final List<CodeGenerationParameter> aggregates = context.parametersOf(Label.AGGREGATE)
         .collect(Collectors.toList());
 
+    final List<CodeGenerationParameter> valueObjects =
+        context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
+
     final List<Content> contents = context.contents();
 
     final List<TemplateData> templatesData = new ArrayList<>();
     templatesData.add(new MockDispatcherTemplateData(basePackage));
-    templatesData.addAll(EntityUnitTestTemplateData.from(basePackage, aggregates, contents));
+    templatesData.addAll(EntityUnitTestTemplateData.from(basePackage, aggregates, valueObjects, contents));
     return templatesData;
   }
 
