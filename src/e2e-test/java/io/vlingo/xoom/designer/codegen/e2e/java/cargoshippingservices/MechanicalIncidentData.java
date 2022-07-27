@@ -1,5 +1,7 @@
 package io.vlingo.xoom.designer.codegen.e2e.java.cargoshippingservices;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.util.HashSet;
@@ -25,10 +27,11 @@ public class MechanicalIncidentData {
     return incident;
   }
 
-  public MechanicalIncidentData (final String freighterId,
-                                 final String freighterPartNumber,
-                                 final Long occurredOn,
-                                 final Set<FreighterPartData> relatedParts) {
+  @JsonCreator
+  public MechanicalIncidentData (@JsonProperty("freighterId") final String freighterId,
+                                 @JsonProperty("freighterPartNumber") final String freighterPartNumber,
+                                 @JsonProperty("occurredOn") final Long occurredOn,
+                                 @JsonProperty("relatedParts") final Set<FreighterPartData> relatedParts) {
     this.freighterId = freighterId;
     this.freighterPartNumber = freighterPartNumber;
     this.occurredOn = occurredOn;

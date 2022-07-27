@@ -7,16 +7,9 @@
 
 package io.vlingo.xoom.designer.codegen.java;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.unmodifiableList;
-
 public class ClusterSettings {
 
-  public final String oneNode;
-  public final String nodeNames;
-  public final List<ClusterNode> nodes;
+  public final int startPortRange;
   public final int nodeCount;
   public final int quorum;
   public final int seed;
@@ -28,10 +21,8 @@ public class ClusterSettings {
 
   private ClusterSettings(final int startPortRange,
                           final int clusterTotalNodes) {
-    this.nodes = unmodifiableList(ClusterNode.from(startPortRange, clusterTotalNodes));
-    this.nodeCount = nodes.size();
-    this.oneNode = nodes.get(0).name;
-    this.nodeNames = nodes.stream().map(node -> node.name).collect(Collectors.joining(","));
+    this.startPortRange = startPortRange;
+    this.nodeCount = clusterTotalNodes;
     this.quorum = nodeCount / 2 + 1;
     this.seed = (int)Math.round (((double) nodeCount) / 3.0d + 0.5d);
   }
