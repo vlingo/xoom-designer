@@ -104,6 +104,14 @@ public class FieldDetail {
     return isScalarTypedCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
+  public static boolean isMethodParameterAssignableToValueObject(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
+    if(ValueObjectDetail.isValueObject(field)) {
+      return true;
+    }
+    final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
+    return isValueObjectCollection(field) && collectionMutation.isSingleParameterBased();
+  }
+
   public static String resolveCollectionType(final CodeGenerationParameter field) {
     if(!field.hasAny(Label.COLLECTION_TYPE)) {
       throw new UnsupportedOperationException(field.value + " is not a Collection");
@@ -154,6 +162,10 @@ public class FieldDetail {
 
   public static boolean isCollection(final String fieldType) {
     return isList(fieldType) || isSet(fieldType);
+  }
+
+  public static boolean isCollectionOrDate(final CodeGenerationParameter field) {
+    return isCollection(field) || isDateTime(field);
   }
 
   public static boolean isValueObjectCollection(final CodeGenerationParameter field) {
@@ -239,7 +251,9 @@ public class FieldDetail {
 
   private static String resolveStateFieldType(CodeGenerationParameter stateField) {
       final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
-      return isCollection(stateField) ? resolveCollectionType(stateField) : toCamelCase(fieldType, false);
+    if (isCollection(stateField)) return resolveCollectionType(stateField);
+    if (ValueObjectDetail.isValueObject(stateField)) return fieldType;
+    return toCamelCase(fieldType, false);
   }
 
   private static Label resolveFieldTypeLabel(final CodeGenerationParameter parent) {

@@ -77,11 +77,11 @@ public class TestDataValueGenerator {
   }
 
   private void generateValue(final int dataIndex, final String path, final CodeGenerationParameter field) {
-    if(FieldDetail.isScalar(field) || FieldDetail.isCollection(field)) {
+    if (ValueObjectDetail.isValueObject(field))
+      generateForValueObjectFields(dataIndex, path, field);
+    else if(FieldDetail.isScalar(field) || FieldDetail.isCollection(field)) {
       generateScalarFieldAssignment(dataIndex, path, field);
     }
-    else if (ValueObjectDetail.isValueObject(field))
-      generateForValueObjectFields(dataIndex, path, field);
   }
 
   private void generateScalarFieldAssignment(final int dataIndex, final String path, final CodeGenerationParameter field) {
@@ -121,6 +121,7 @@ public class TestDataValueGenerator {
 
     valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).forEach(valueObjectFieldAssignment);
   }
+
   private String formatStringValue(final String ordinalIndex, final String alias, final String hyphenatedPath) {
     final StringBuilder value = new StringBuilder(hyphenatedPath);
     if (!alias.isEmpty()) {

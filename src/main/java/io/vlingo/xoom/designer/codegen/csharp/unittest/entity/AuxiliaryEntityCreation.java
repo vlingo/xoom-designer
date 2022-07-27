@@ -30,21 +30,24 @@ public class AuxiliaryEntityCreation {
   private final List<String> dataDeclarations = new ArrayList<>();
   private final boolean required;
 
-  public static AuxiliaryEntityCreation from(final CodeGenerationParameter aggregate, final Optional<String> defaultFactoryMethod,
+  public static AuxiliaryEntityCreation from(final CodeGenerationParameter aggregate,
+                                             final List<CodeGenerationParameter> valueObjects,
+                                             final Optional<String> defaultFactoryMethod,
                                              final TestDataValueGenerator.TestDataValues testDataValues) {
     return defaultFactoryMethod
-        .map(s -> new AuxiliaryEntityCreation(s, aggregate, testDataValues))
+        .map(methodName -> new AuxiliaryEntityCreation(methodName, aggregate, valueObjects, testDataValues))
         .orElseGet(AuxiliaryEntityCreation::new);
   }
 
   public AuxiliaryEntityCreation(final String factoryMethodName, final CodeGenerationParameter aggregate,
+                                 final List<CodeGenerationParameter> valueObjects,
                                  final TestDataValueGenerator.TestDataValues testDataValues) {
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregate, factoryMethodName);
 
     this.methodName = METHOD_NAME;
     this.defaultFactoryMethodName = factoryMethodName;
     this.statement = resolveStatement(method, aggregate);
-    this.dataDeclarations.addAll(resolveDataDeclarations(method, aggregate, testDataValues));
+    this.dataDeclarations.addAll(resolveDataDeclarations(method, aggregate, valueObjects, testDataValues));
     this.required = true;
   }
 
@@ -62,8 +65,9 @@ public class AuxiliaryEntityCreation {
   }
 
   private List<String> resolveDataDeclarations(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                                               final List<CodeGenerationParameter> valueObjects,
                                                final TestDataValueGenerator.TestDataValues testDataValues) {
-    final List<String> declarations = StaticDataDeclaration.generate(method, aggregate, testDataValues);
+    final List<String> declarations = StaticDataDeclaration.generate(method, aggregate, valueObjects, testDataValues);
 
     return declarations.stream().map(this::fixStaticDataVariablesName).collect(Collectors.toList());
   }

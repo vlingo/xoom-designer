@@ -22,12 +22,14 @@ public class StaticDataDeclaration {
   private static final String TEST_DATA_DECLARATION_PATTERN = "private static %s %s = %s;";
 
   public static List<String> generate(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                                      final List<CodeGenerationParameter> valueObjects,
                                       final TestDataValueGenerator.TestDataValues initialTestDataValues) {
-    return generate(method, aggregate, initialTestDataValues, null);
+    return generate(method, aggregate, valueObjects, initialTestDataValues, null);
   }
 
   public static List<String> generate(final CodeGenerationParameter method,
                                       final CodeGenerationParameter aggregate,
+                                      final List<CodeGenerationParameter> valueObjects,
                                       final TestDataValueGenerator.TestDataValues initialTestDataValues,
                                       final TestDataValueGenerator.TestDataValues updatedTestDataValues) {
     final TestDataValueGenerator.TestDataValues currentTestDataValues =
@@ -35,13 +37,14 @@ public class StaticDataDeclaration {
 
 
     return AggregateDetail.findInvolvedStateFields(aggregate, method.value, Tuple2::from)
-            .map(tuple -> testDataDeclaration(method, aggregate, currentTestDataValues, tuple))
+            .map(tuple -> testDataDeclaration(method, aggregate, valueObjects, currentTestDataValues, tuple))
         .collect(Collectors.toList());
   }
 
-  private static String testDataDeclaration(CodeGenerationParameter method, CodeGenerationParameter aggregate,
-                                            TestDataValueGenerator.TestDataValues currentTestDataValues,
-                                            Tuple2<CodeGenerationParameter, CodeGenerationParameter> tuple) {
+  private static String testDataDeclaration(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                                            final List<CodeGenerationParameter> valueObjects,
+                                            final TestDataValueGenerator.TestDataValues currentTestDataValues,
+                                            final Tuple2<CodeGenerationParameter, CodeGenerationParameter> tuple) {
     final CodeGenerationParameter methodParameter = tuple._1;
     final CodeGenerationParameter stateField = tuple._2;
 
@@ -53,7 +56,7 @@ public class StaticDataDeclaration {
     final String testDataVariableName =  TestDataFormatter.formatStaticVariableName(method, stateField);
 
     final String dataInstantiation = InlineDataInstantiationFormatter
-        .with(methodParameter, stateField, currentTestDataValues).format();
+        .with(methodParameter, stateField, valueObjects, currentTestDataValues).format();
 
     return String.format(TEST_DATA_DECLARATION_PATTERN, stateFieldType, testDataVariableName, dataInstantiation);
   }

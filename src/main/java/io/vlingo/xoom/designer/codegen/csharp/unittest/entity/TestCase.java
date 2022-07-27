@@ -27,25 +27,28 @@ public class TestCase {
   public final List<String> assertions = new ArrayList<>();
   public final boolean disabled;
 
-  public static List<TestCase> from(final CodeGenerationParameter aggregate, final Optional<String> defaultFactoryMethod,
+  public static List<TestCase> from(final CodeGenerationParameter aggregate,
+                                    final List<CodeGenerationParameter> valueObjects,
+                                    final Optional<String> defaultFactoryMethod,
                                     final TestDataValueGenerator.TestDataValues initialTestDataValues) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-        .map(method -> new TestCase(method, aggregate, defaultFactoryMethod, initialTestDataValues))
+        .map(method -> new TestCase(method, aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues))
         .collect(Collectors.toList());
   }
 
   private TestCase(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                   final List<CodeGenerationParameter> valueObjects,
                    final Optional<String> defaultFactoryMethod, final TestDataValueGenerator.TestDataValues initialTestDataValues) {
     this.methodName = method.value;
     final TestDataValueGenerator.TestDataValues updatedTestDataValues = initialTestDataValues.updateAllValues();
 
-    final List<String> dataDeclarations = StaticDataDeclaration.generate(method, aggregate, initialTestDataValues, updatedTestDataValues);
+    final List<String> dataDeclarations = StaticDataDeclaration.generate(method, aggregate, valueObjects, initialTestDataValues, updatedTestDataValues);
 
     final List<String> preliminaryStatements = PreliminaryStatement.resolve(method, defaultFactoryMethod);
 
     final String resultAssignmentStatement = ResultAssignmentStatement.resolve(aggregate, method);
 
-    final List<String> assertions = Assertions.from(method, aggregate, defaultFactoryMethod, initialTestDataValues, updatedTestDataValues);
+    final List<String> assertions = Assertions.from(method, aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues, updatedTestDataValues);
 
     this.resultAssignmentStatement = resultAssignmentStatement;
     this.preliminaryStatements.addAll(preliminaryStatements);

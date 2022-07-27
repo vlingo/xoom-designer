@@ -26,7 +26,7 @@ public class AuthorEntityTest
     _author = world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
   }
 
-  private static string NAME_FOR_WITH_NAME_TEST = "author-name";
+  private static Name NAME_FOR_WITH_NAME_TEST = Name.From("author-name-first-name", "author-name-last-name");
   private static string SHORT_DESCRIPTION_FOR_WITH_NAME_TEST = "author-short-description";
 
   [Fact]
@@ -35,7 +35,8 @@ public class AuthorEntityTest
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
     var state = _author.WithName(NAME_FOR_WITH_NAME_TEST, SHORT_DESCRIPTION_FOR_WITH_NAME_TEST).Await();
 
-    Assert.Equal("author-name", state.Name);
+    Assert.Equal("author-name-first-name", state.Name.firstName);
+    Assert.Equal("author-name-last-name", state.Name.lastName);
     Assert.Equal("author-short-description", state.ShortDescription);
     Assert.Equal(1, dispatcherAccess.ReadFrom<int>("statesCount"));
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
@@ -50,7 +51,8 @@ public class AuthorEntityTest
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
     var state = _author.ChangeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
 
-    Assert.Equal("author-name", state.Name);
+    Assert.Equal("author-name-first-name", state.Name.firstName);
+    Assert.Equal("author-name-last-name", state.Name.lastName);
     Assert.Equal("author-short-description", state.ShortDescription);
     Assert.NotNull(state.Rank);
     Assert.Equal(2, dispatcherAccess.ReadFrom<int>("statesCount"));
@@ -65,7 +67,7 @@ public class AuthorEntityTest
 
   }
 
-  private static string NAME_FOR_ENTITY_CREATION = "author-name";
+  private static Name NAME_FOR_ENTITY_CREATION = Name.From("author-name-first-name", "author-name-last-name");
   private static string SHORT_DESCRIPTION_FOR_ENTITY_CREATION = "author-short-description";
 
   private void _createEntity()

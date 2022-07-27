@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,19 @@ public class AggregateDetail {
     return paths;
   }
 
+  public static List<String> resolveFieldsPaths(final String variableName,
+                                                final Stream<CodeGenerationParameter> aggregateFields,
+                                                final List<CodeGenerationParameter> valueObjects) {
+    final List<String> paths = new ArrayList<>();
+    aggregateFields.forEach(field -> resolveFieldPath(variableName, field, valueObjects, paths));
+    return paths;
+  }
+  public static String stateFieldType(final CodeGenerationParameter aggregate,
+                                      final String fieldPath,
+                                      final List<CodeGenerationParameter> valueObjects) {
+    return stateFieldAtPath(1, aggregate, fieldPath.split("\\."), valueObjects);
+  }
+
   public static String stateFieldType(final CodeGenerationParameter aggregate, final String fieldPath) {
     return stateFieldAtPath(1, aggregate, fieldPath.split("\\."));
   }
@@ -56,6 +70,26 @@ public class AggregateDetail {
     final CodeGenerationParameter field = stateFieldWithName(parent, fieldName);
 
     return field.hasAny(Label.COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(Label.FIELD_TYPE);
+  }
+  private static String stateFieldAtPath(final int pathIndex,
+                                         final CodeGenerationParameter parent,
+                                         final String[] fieldPathParts,
+                                         final List<CodeGenerationParameter> valueObjects) {
+    final String fieldName = fieldPathParts[pathIndex];
+    final CodeGenerationParameter field =
+        parent.isLabeled(Label.AGGREGATE) ? stateFieldWithName(parent, fieldName) :
+            ValueObjectDetail.valueObjectFieldWithName(parent, fieldName);
+
+    final String fieldType = field.hasAny(Label.COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(Label.FIELD_TYPE);
+
+    if (pathIndex == fieldPathParts.length - 1) {
+      return fieldType;
+    }
+
+    final CodeGenerationParameter valueObject =
+        ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
+
+    return stateFieldAtPath(pathIndex + 1, valueObject, fieldPathParts, valueObjects);
   }
 
   public static Set<String> resolveImports(final CodeGenerationParameter aggregate) {
@@ -69,6 +103,27 @@ public class AggregateDetail {
   private static void resolveFieldPath(final String relativePath, final CodeGenerationParameter field, final List<String> paths) {
     final String currentRelativePath = relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
     paths.add(currentRelativePath);
+  }
+
+  private static void resolveFieldPath(final String relativePath,
+                                       final CodeGenerationParameter field,
+                                       final List<CodeGenerationParameter> valueObjects,
+                                       final List<String> paths) {
+    final String currentRelativePath =
+        relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
+
+    if (ValueObjectDetail.isValueObject(field)) {
+      final String valueObjectType =
+          field.retrieveRelatedValue(Label.FIELD_TYPE);
+
+      final CodeGenerationParameter valueObject =
+          ValueObjectDetail.valueObjectOf(valueObjectType, valueObjects.stream());
+
+      valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+          .forEach(voField -> resolveFieldPath(currentRelativePath, voField, valueObjects, paths));
+    } else {
+      paths.add(currentRelativePath);
+    }
   }
 
   public static Stream<CodeGenerationParameter> findInvolvedStateFields(final CodeGenerationParameter aggregate, final String methodName) {

@@ -30,8 +30,9 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
   @Test
   public void testThatSourcedEntitiesUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
-            .add(Label.DIALECT, Dialect.C_SHARP)
-            .add(authorAggregate());
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(authorAggregate())
+        .add(nameValueObject());
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
 
@@ -40,7 +41,7 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
     final Content mockDispatcher = context.findContent(CsharpTemplateStandard.MOCK_DISPATCHER, "MockDispatcher");
     final Content authorEntityTest = context.findContent(CsharpTemplateStandard.ENTITY_UNIT_TEST, "AuthorEntityTest");
 
-    Assertions.assertEquals(3, context.contents().size());
+    Assertions.assertEquals(4, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
     Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-test")));
   }
@@ -52,7 +53,7 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter nameField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "Name")
-            .relate(Label.FIELD_TYPE, "String");
+            .relate(Label.FIELD_TYPE, "Name");
 
     final CodeGenerationParameter shortDescriptionField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "ShortDescription")
@@ -98,9 +99,18 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorShortDescriptionChangedEvent);
   }
 
+  private CodeGenerationParameter nameValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+            .relate(Label.FIELD_TYPE, "String"));
+  }
+
   private Content[] contents() {
     return new Content[]{
         Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "IAuthor").toString(), "IAuthor.cs"), null, null, AUTHOR_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Name.cs"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
     };
   }
 
@@ -117,4 +127,10 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
           "public interface IAuthor { \\n" +
           "... \\n" +
           "}";
+  private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model; \\n" +
+          "public class Name { \\n" +
+          "... \\n" +
+          "}";
+
 }

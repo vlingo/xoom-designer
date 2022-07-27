@@ -59,10 +59,10 @@ public class EntityUnitTestTemplateData extends TemplateData {
 
     final Optional<String> defaultFactoryMethod = resolveDefaultFactoryMethodName(aggregate);
 
-    final AuxiliaryEntityCreation auxiliaryEntityCreation = AuxiliaryEntityCreation.from(aggregate,
+    final AuxiliaryEntityCreation auxiliaryEntityCreation = AuxiliaryEntityCreation.from(aggregate, valueObjects,
         defaultFactoryMethod, initialTestDataValues);
 
-    final List<TestCase> testCases = TestCase.from(aggregate, defaultFactoryMethod, initialTestDataValues);
+    final List<TestCase> testCases = TestCase.from(aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues);
 
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
         .and(TemplateParameter.DISPATCHER_NAME, CsharpTemplateStandard.MOCK_DISPATCHER.resolveClassname())

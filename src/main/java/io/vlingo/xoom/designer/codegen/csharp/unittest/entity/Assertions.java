@@ -20,13 +20,14 @@ import java.util.stream.Stream;
 public class Assertions {
 
   public static List<String> from(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                                  final List<CodeGenerationParameter> valueObjects,
                                   final Optional<String> defaultFactoryMethod,
                                   final TestDataValueGenerator.TestDataValues initialTestDataValues,
                                   final TestDataValueGenerator.TestDataValues updatedTestDataValues) {
 
     final List<String> entityFieldAssertions = AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethod) ?
-        mergeEntityFieldAssertions(defaultFactoryMethod.get(), method, aggregate, initialTestDataValues, updatedTestDataValues) :
-        resolveEntityFieldAssertions(method, aggregate, initialTestDataValues);
+        mergeEntityFieldAssertions(defaultFactoryMethod.get(), method, aggregate, valueObjects, initialTestDataValues, updatedTestDataValues) :
+        resolveEntityFieldAssertions(method, aggregate, valueObjects, initialTestDataValues);
 
     final List<String> dispatcherAssertions = resolveDispatcherAssertions(method, defaultFactoryMethod);
 
@@ -49,13 +50,15 @@ public class Assertions {
   }
 
   private static List<String> resolveEntityFieldAssertions(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+                                                           final List<CodeGenerationParameter> valueObjects,
                                                            final TestDataValueGenerator.TestDataValues testDataValues) {
     final Stream<CodeGenerationParameter> stateFields = AggregateDetail.findInvolvedStateFields(aggregate, method.value);
-    return formatAssertions(aggregate, stateFields, testDataValues);
+    return formatAssertions(aggregate, valueObjects, stateFields, testDataValues);
   }
 
   private static List<String> mergeEntityFieldAssertions(final String defaultFactoryMethod, final CodeGenerationParameter updateMethod,
                                                          final CodeGenerationParameter aggregate,
+                                                         final List<CodeGenerationParameter> valueObjects,
                                                          final TestDataValueGenerator.TestDataValues initialTestDataValues,
                                                          final TestDataValueGenerator.TestDataValues updatedTestDataValues) {
     if (!updateMethod.hasAny(Label.METHOD_PARAMETER)) {
@@ -70,18 +73,20 @@ public class Assertions {
 
     final Stream<CodeGenerationParameter> exclusiveFactoryMethodFields = filterExclusiveFactoryMethodFields(factoryMethodFields, updateMethodFields);
 
-    final List<String> factoryMethodAssertions = formatAssertions(aggregate, exclusiveFactoryMethodFields, initialTestDataValues);
+    final List<String> factoryMethodAssertions = formatAssertions(aggregate, valueObjects, exclusiveFactoryMethodFields, initialTestDataValues);
 
-    final List<String> updateMethodAssertions = formatAssertions(aggregate, updateMethodFields.stream(), updatedTestDataValues);
+    final List<String> updateMethodAssertions = formatAssertions(aggregate, valueObjects, updateMethodFields.stream(), updatedTestDataValues);
 
     return Stream.of(factoryMethodAssertions, updateMethodAssertions)
         .flatMap(List::stream)
         .collect(Collectors.toList());
   }
 
-  private static List<String> formatAssertions(final CodeGenerationParameter aggregate, final Stream<CodeGenerationParameter> stateFields,
+  private static List<String> formatAssertions(final CodeGenerationParameter aggregate,
+                                               final List<CodeGenerationParameter> valueObjects,
+                                               final Stream<CodeGenerationParameter> stateFields,
                                                final TestDataValueGenerator.TestDataValues testDataValues) {
-    final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths("state", stateFields);
+    final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths("state", stateFields, valueObjects);
     final Function<String, String> mapper = fieldPath -> assertionByStateFieldType(aggregate, testDataValues, fieldPath);
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
