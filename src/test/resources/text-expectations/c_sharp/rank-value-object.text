@@ -1,0 +1,30 @@
+namespace Io.Vlingo.Xoomapp.model;
+
+public class Rank : IEquatable<Rank>
+{
+
+  public int points {get; set;}
+  public string classification {get; set;}
+
+  public static Rank From(int points, string classification)
+  {
+    return new Rank(points, classification);
+  }
+
+  private Rank(int points, string classification)
+  {
+    this.points = points;
+    this.classification = classification;
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherState = (Rank) obj;
+    return points == other.points && classification == other.classification;
+  }
+
+  public bool Equals(Rank other) => points == other.points && classification == other.classification;
+  public override int GetHashCode() => HashCode.Combine(points, classification);
+}

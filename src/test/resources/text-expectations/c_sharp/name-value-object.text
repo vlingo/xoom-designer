@@ -1,0 +1,30 @@
+namespace Io.Vlingo.Xoomapp.model;
+
+public class Name : IEquatable<Name>
+{
+
+  public string firstName {get; set;}
+  public string lastName {get; set;}
+
+  public static Name From(string firstName, string lastName)
+  {
+    return new Name(firstName, lastName);
+  }
+
+  private Name(string firstName, string lastName)
+  {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherState = (Name) obj;
+    return firstName == other.firstName && lastName == other.lastName;
+  }
+
+  public bool Equals(Name other) => firstName == other.firstName && lastName == other.lastName;
+  public override int GetHashCode() => HashCode.Combine(firstName, lastName);
+}

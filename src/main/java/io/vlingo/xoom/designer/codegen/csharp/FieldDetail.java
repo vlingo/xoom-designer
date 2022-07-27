@@ -246,6 +246,9 @@ public class FieldDetail {
     if (parent.isLabeled(Label.AGGREGATE) || parent.isLabeled(Label.DOMAIN_EVENT)) {
       return Label.STATE_FIELD;
     }
+    if (parent.isLabeled(Label.VALUE_OBJECT)) {
+      return Label.VALUE_OBJECT_FIELD;
+    }
     throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
   }
 }

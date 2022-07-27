@@ -45,6 +45,8 @@ public class SignatureDeclaration implements Formatters.Arguments {
         return formatRouteMethodParameters(parameter);
       case AGGREGATE_METHOD:
         return formatAggregateMethodParameters(parameter);
+      case VALUE_OBJECT:
+        return formatValueObjectFields(parameter);
       default:
         throw new UnsupportedOperationException("Unable to format fields of " + parameter.label);
     }
@@ -79,6 +81,13 @@ public class SignatureDeclaration implements Formatters.Arguments {
       }
     }
     return String.format(SIGNATURE_PATTERN, fieldType, toCamelCase(field.value));
+  }
+
+  private List<String> formatValueObjectFields(final CodeGenerationParameter valueObject) {
+    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(field -> {
+      final String fieldType = FieldDetail.typeOf(valueObject, field.value);
+      return String.format(SIGNATURE_PATTERN, fieldType, field.value);
+    }).collect(Collectors.toList());
   }
 
 }

@@ -22,6 +22,7 @@ public class Formatters {
   public interface Arguments {
     Arguments AGGREGATE_METHOD_INVOCATION = new AggregateMethodInvocation("stage");
     Arguments SIGNATURE_DECLARATION = new SignatureDeclaration();
+    Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
 
     default String format(final CodeGenerationParameter parameter) {
       return format(parameter, MethodScope.INSTANCE);
@@ -58,6 +59,8 @@ public class Formatters {
     public static <T> T format(final Style style, final Dialect dialect, final CodeGenerationParameter parent) {
       if (parent.isLabeled(Label.AGGREGATE) || parent.isLabeled(Label.DOMAIN_EVENT)) {
         return format(style, dialect, parent, parent.retrieveAllRelated(Label.STATE_FIELD));
+      } else if (parent.isLabeled(Label.VALUE_OBJECT)) {
+        return format(style, dialect, parent, parent.retrieveAllRelated(Label.VALUE_OBJECT_FIELD));
       }
       throw new UnsupportedOperationException("Unable to format fields from " + parent.label);
     }

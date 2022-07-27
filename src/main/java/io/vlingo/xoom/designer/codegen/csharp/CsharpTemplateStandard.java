@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.codegen.java.formatting.DataObjectDetail;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -16,6 +17,8 @@ import java.util.function.Function;
 import static io.vlingo.xoom.designer.codegen.csharp.Template.*;
 import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.APPLICATION_NAME;
 import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.METHOD_SCOPE;
+import static io.vlingo.xoom.designer.codegen.java.Template.VALUE_DATA_OBJECT;
+import static io.vlingo.xoom.designer.codegen.java.TemplateParameter.STATE_DATA_OBJECT_NAME;
 
 public enum CsharpTemplateStandard implements TemplateStandard {
 
@@ -40,7 +43,11 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   MOCK_DISPATCHER(parameters -> Template.EVENT_BASED_MOCK_DISPATCHER.filename, (name, parameters) -> "MockDispatcher"),
   ADAPTER(parameters -> Template.STATE_ADAPTER.filename, (name, parameters) -> name + "Adapter"),
   BOOTSTRAP(parameters -> DEFAULT_BOOTSTRAP.filename,
-      (name, parameters) -> "Bootstrap");
+      (name, parameters) -> "Bootstrap"),
+  VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
+  DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ?
+      Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
+      (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX);
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

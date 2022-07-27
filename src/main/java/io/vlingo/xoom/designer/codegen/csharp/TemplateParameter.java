@@ -38,6 +38,7 @@ public enum TemplateParameter implements ParameterKey {
   METHOD_PARAMETERS("methodParameters"),
   METHOD_INVOCATION_PARAMETERS("methodInvocationParameters"),
   CONSTRUCTOR_PARAMETERS("constructorParameters"),
+  CONSTRUCTOR_INVOCATION_PARAMETERS("constructorInvocationParameters"),
   DEFAULT_SCHEMA_VERSION("defaultSchemaVersion"),
   DISPATCHER_NAME("dispatcherName"),
   ADAPTER_NAME("adapterName"),
@@ -48,7 +49,9 @@ public enum TemplateParameter implements ParameterKey {
   UNIT_TEST("unitTest"),
   TEST_CASES("testCases"),
   AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
-  ;
+  DATA_OBJECT_NAME("dataObjectName"),
+  VALUE_OBJECT_NAME("valueObjectName"),
+  DATA_VALUE_OBJECT_NAME("dataValueObjectName");
 
   public final String key;
 

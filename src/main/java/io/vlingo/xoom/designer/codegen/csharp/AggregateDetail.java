@@ -33,6 +33,14 @@ public class AggregateDetail {
     return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found"));
   }
 
+  public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
+    if(eventName == null || eventName.isEmpty()) {
+      return CodeGenerationParameter.of(Label.DOMAIN_EVENT, "");
+    }
+    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
+        .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
+  }
+
   public static List<String> resolveFieldsPaths(final String variableName, final Stream<CodeGenerationParameter> aggregateFields) {
     final List<String> paths = new ArrayList<>();
     aggregateFields.forEach(field -> resolveFieldPath(variableName, field, paths));
