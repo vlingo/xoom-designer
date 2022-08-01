@@ -4,6 +4,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -46,6 +47,7 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     Assertions.assertEquals(6, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("author-entity")));
+    Assertions.assertEquals(((TextBasedContent)authorState).text, (TextExpectation.onCSharp().read("author-state")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("author-state")));
     Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked")));

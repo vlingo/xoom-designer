@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
 public class AggregateDetail {
 
   private static final String COMPOSITE_ID_DECLARATION_PATTERN = "@Id final String";
-  private final static String ID_VALUE = "id";
 
   public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
     return String.format("%s.%s.%s", basePackage, "model", aggregateProtocolName).toLowerCase();
@@ -177,16 +176,4 @@ public class AggregateDetail {
      return aggregate.retrieveRelatedValue(Label.URI_ROOT).replace("{", "\" + ")
           .replace("}", " + \"");
     }
-
-  public static List<String> resolveStateFieldsNames(CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
-        .map(stateField -> stateField.value)
-        .collect(Collectors.toList());
-  }
-
-  public static CodeGenerationParameter findIdField(CodeGenerationParameter aggregate) {
-    return aggregate.retrieveAllRelated()
-        .filter(field -> field.value.equalsIgnoreCase(ID_VALUE))
-        .findFirst().orElseGet(() -> CodeGenerationParameter.of(Label.STATE_FIELD, ID_VALUE));
-  }
 }

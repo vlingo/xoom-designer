@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AggregateDetail {
+  private final static String ID_VALUE = "id";
 
   public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
     return String.format("%s.%s.%s", basePackage, "Model", aggregateProtocolName);
@@ -141,5 +142,17 @@ public class AggregateDetail {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
             .filter(method -> methodName.equals(method.value) || method.value.startsWith(methodName + "("))
             .findFirst();
+  }
+
+  public static CodeGenerationParameter findIdField(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated()
+        .filter(field -> field.value.equalsIgnoreCase(ID_VALUE))
+        .findFirst().orElseGet(() -> CodeGenerationParameter.of(Label.STATE_FIELD, ID_VALUE));
+  }
+
+  public static List<String> resolveStateFieldsNames(CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .map(stateField -> stateField.value)
+        .collect(Collectors.toList());
   }
 }

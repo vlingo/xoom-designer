@@ -12,16 +12,14 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
-import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
-import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.*;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
-import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AggregateStateTemplateData extends TemplateData {
@@ -48,7 +46,8 @@ public class AggregateStateTemplateData extends TemplateData {
   }
 
   private Set<String> resolveImports(final List<Content> contents, final CodeGenerationParameter aggregate) {
-    return new HashSet<>();
+    return Stream.of(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)),
+        AggregateDetail.resolveImports(aggregate)).flatMap(Set::stream).collect(Collectors.toSet());
   }
 
   private String resolveIdBasedConstructorParameters(final Dialect dialect, final CodeGenerationParameter aggregate) {

@@ -1,6 +1,11 @@
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Object;
 using Vlingo.Xoom.Wire.Nodes;
+<#if imports?has_content>
+<#list imports as import>
+using ${import.qualifiedClassName};
+</#list>
+</#if>
 
 namespace ${packageName};
 
