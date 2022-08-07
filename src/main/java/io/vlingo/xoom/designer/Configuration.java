@@ -132,8 +132,8 @@ public class Configuration {
         // CodeGen
         new ApplicationSettingsGenerationStep(),
         new DesignerModelGenerationStep(),
-        new io.vlingo.xoom.designer.codegen.csharp.model.ModelGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.model.ValueObjectGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.model.ModelGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.storage.StorageGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.unittest.entity.EntityUnitTestGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.bootstrap.BootstrapGenerationStep(),

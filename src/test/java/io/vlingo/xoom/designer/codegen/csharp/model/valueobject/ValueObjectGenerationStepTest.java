@@ -22,16 +22,15 @@ import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
 public class ValueObjectGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatValueObjectsAreGenerated() {
     final CodeGenerationParameters parameters =
-            CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
-                    CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
-                    CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
-                    authorAggregate(), bookAggregate(), nameValueObject(), rankValueObject());
+        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
+            CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
+            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
+            authorAggregate(), bookAggregate(), nameValueObject(), rankValueObject());
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters);
 
@@ -51,74 +50,72 @@ public class ValueObjectGenerationStepTest extends CodeGenerationTest {
   }
 
   private CodeGenerationParameter authorAggregate() {
-    final CodeGenerationParameter idField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-                    .relate(Label.FIELD_TYPE, "String");
+    final CodeGenerationParameter idField = CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+        .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter nameField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "name")
-                    .relate(Label.FIELD_TYPE, "Name");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "Name");
 
     final CodeGenerationParameter rankField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                    .relate(Label.FIELD_TYPE, "Rank");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+            .relate(Label.FIELD_TYPE, "Rank");
 
     final CodeGenerationParameter authorRegisteredEvent =
-            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-                    .relate(idField).relate(nameField);
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+            .relate(idField).relate(nameField);
 
     final CodeGenerationParameter authorRankedEvent =
-            CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
-                    .relate(idField).relate(rankField);
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+            .relate(idField).relate(rankField);
 
     final CodeGenerationParameter factoryMethod =
-            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
-                    .relate(Label.METHOD_PARAMETER, "name")
-                    .relate(Label.FACTORY_METHOD, "true")
-                    .relate(authorRegisteredEvent);
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "withName")
+            .relate(Label.METHOD_PARAMETER, "name")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
 
     final CodeGenerationParameter rankMethod =
-            CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
-                    .relate(Label.METHOD_PARAMETER, "rank")
-                    .relate(authorRankedEvent);
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "changeRank")
+            .relate(Label.METHOD_PARAMETER, "rank")
+            .relate(authorRankedEvent);
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
-            .relate(idField).relate(nameField).relate(rankField)
-            .relate(factoryMethod).relate(rankMethod)
-            .relate(authorRegisteredEvent).relate(authorRankedEvent);
+        .relate(idField).relate(nameField).relate(rankField)
+        .relate(factoryMethod).relate(rankMethod)
+        .relate(authorRegisteredEvent).relate(authorRankedEvent);
   }
-
 
   private CodeGenerationParameter bookAggregate() {
     final CodeGenerationParameter idField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "id")
-                    .relate(Label.FIELD_TYPE, "String");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter nameField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "title")
-                    .relate(Label.FIELD_TYPE, "String");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+            .relate(Label.FIELD_TYPE, "String");
 
     final CodeGenerationParameter rankField =
-            CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
-                    .relate(Label.FIELD_TYPE, "Rank");
+        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+            .relate(Label.FIELD_TYPE, "Rank");
 
     return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
-            .relate(idField).relate(nameField).relate(rankField);
+        .relate(idField).relate(nameField).relate(rankField);
   }
 
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
-                    .relate(Label.FIELD_TYPE, "String"))
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
-                    .relate(Label.FIELD_TYPE, "String"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
+            .relate(Label.FIELD_TYPE, "String"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
+            .relate(Label.FIELD_TYPE, "String"));
   }
 
   private CodeGenerationParameter rankValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
-                    .relate(Label.FIELD_TYPE, "int"))
-            .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
-                    .relate(Label.FIELD_TYPE, "String"));
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
+            .relate(Label.FIELD_TYPE, "int"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
+            .relate(Label.FIELD_TYPE, "String"));
   }
 }

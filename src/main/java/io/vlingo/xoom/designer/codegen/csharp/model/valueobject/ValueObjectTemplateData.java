@@ -39,15 +39,14 @@ public class ValueObjectTemplateData extends TemplateData {
   private ValueObjectTemplateData(final String basePackage,
                                   final Dialect dialect,
                                   final CodeGenerationParameter valueObject) {
-    this.parameters =
-            TemplateParameters.with(TemplateParameter.PACKAGE_NAME, ValueObjectDetail.resolvePackage(basePackage))
-                    .and(TemplateParameter.VALUE_OBJECT_NAME, valueObject.value)
-                    .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
-                    .and(TemplateParameter.CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))
-                    .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, valueObject))
-                    .and(TemplateParameter.MEMBER_NAMES, valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList()))
-                    .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, valueObject))
-                    .addImports(ValueObjectDetail.resolveFieldsImports(valueObject));
+    this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, ValueObjectDetail.resolvePackage(basePackage))
+        .and(TemplateParameter.VALUE_OBJECT_NAME, valueObject.value)
+        .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(valueObject))
+        .and(TemplateParameter.CONSTRUCTOR_INVOCATION_PARAMETERS, Formatters.Arguments.VALUE_OBJECT_CONSTRUCTOR_INVOCATION.format(valueObject))
+        .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, valueObject))
+        .and(TemplateParameter.MEMBER_NAMES, valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList()))
+        .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, valueObject))
+        .addImports(ValueObjectDetail.resolveFieldsImports(valueObject));
   }
 
   @Override

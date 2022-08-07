@@ -26,31 +26,31 @@ public class ValueObjectDetail {
 
   public static Set<String> resolveImports(final List<Content> contents,
                                            final Stream<CodeGenerationParameter> arguments) {
-    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("csharpCodeFormatter");
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
 
-    final Optional<String> anyQualifiedName =
-            arguments.filter(field -> ValueObjectDetail.isValueObject(field) || FieldDetail.isValueObjectCollection(field))
-                    .map(arg -> arg.retrieveRelatedValue(Label.FIELD_TYPE))
-                    .map(valueObjectName -> resolveTypeImport(valueObjectName, contents))
-                    .findAny();
+    final Optional<String> anyQualifiedName = arguments
+        .filter(field -> isValueObject(field) || FieldDetail.isValueObjectCollection(field))
+        .map(arg -> arg.retrieveRelatedValue(Label.FIELD_TYPE))
+        .map(valueObjectName -> resolveTypeImport(valueObjectName, contents))
+        .findAny();
 
     if (anyQualifiedName.isPresent()) {
       final String packageName = codeElementFormatter.packageOf(anyQualifiedName.get());
-      return Stream.of(codeElementFormatter.simpleNameOf(packageName)).collect(Collectors.toSet());
+      return Stream.of(codeElementFormatter.packageOf(packageName)).collect(Collectors.toSet());
     }
 
     return Collections.emptySet();
   }
 
-  public static String resolveTypeImport(final String valueObjectName,
-                                         final List<Content> contents) {
+  public static String resolveTypeImport(final String valueObjectName, final List<Content> contents) {
     return ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.VALUE_OBJECT, valueObjectName, contents);
   }
 
   public static CodeGenerationParameter valueObjectOf(final String valueObjectType,
                                                       final Stream<CodeGenerationParameter> valueObjects) {
-    return valueObjects.filter(valueObject -> valueObject.value.equals(valueObjectType)).findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unable to find " + valueObjectType));
+    return valueObjects.filter(valueObject -> valueObject.value.equals(valueObjectType))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Unable to find " + valueObjectType));
   }
 
   public static boolean isValueObject(final CodeGenerationParameter field) {
@@ -59,9 +59,8 @@ public class ValueObjectDetail {
 
   public static Set<String> resolveFieldsImports(final CodeGenerationParameter valueObject) {
     final Set<String> imports = new HashSet<>();
-    valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).forEach(field -> {
-      imports.add(FieldDetail.resolveImportForType(field));
-    });
+    valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+        .forEach(field -> imports.add(FieldDetail.resolveImportForType(field)));
     return imports;
   }
 }

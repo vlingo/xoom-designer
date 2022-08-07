@@ -9,11 +9,10 @@ package io.vlingo.xoom.designer.codegen.csharp.model.valueobject;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
-import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
-import io.vlingo.xoom.designer.codegen.java.formatting.Formatters;
-import io.vlingo.xoom.designer.codegen.java.model.FieldDetail;
-import io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail;
+import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,8 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
 
   private final String carrierName;
   private ValueObjectInitializer initializer;
+  private static final String VALUE_OBJECT_INSTANTIATION = "%s %s = %s.From(%s);";
+  private static final String VALUE_OBJECT_FACTORY_METHOD = "%s.From(%s)";
 
   public ValueObjectInitializer(final String carrierName) {
     this.carrierName = carrierName;
@@ -111,7 +112,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
             .collect(Collectors.joining(", "));
 
     final String expression =
-        String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
+        String.format(VALUE_OBJECT_INSTANTIATION, valueObject.value, field.value, valueObject.value, args);
 
     expressions.add(expression);
   }
@@ -121,16 +122,6 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
     final String fieldType = valueObjectField.retrieveRelatedValue(Label.FIELD_TYPE);
     if (ValueObjectDetail.isValueObject(valueObjectField)) {
       return valueObjectField.value;
-    }
-    if (FieldDetail.isValueObjectCollection(valueObjectField)) {
-      final String dataObjectName = JavaTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
-      final String collectionType = valueObjectField.retrieveRelatedValue(Label.COLLECTION_TYPE);
-
-      if (FieldDetail.isValueObjectCollection(valueObjectField.parent().retrieveOneRelated(Label.VALUE_OBJECT_FIELD))) {
-        return String.format("%s.%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, valueObjectField.value, dataObjectName, fieldType, collectionType);
-      }
-
-      return String.format("%s.stream().map(%s::to%s).collect(java.util.stream.Collectors.to%s())", fieldReferencePath, dataObjectName, fieldType, collectionType);
     }
     return String.format("%s.%s", fieldReferencePath, valueObjectField.value);
   }
@@ -156,7 +147,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                       .collect(Collectors.joining(", "));
 
       final String expression =
-              String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
+              String.format(VALUE_OBJECT_INSTANTIATION, valueObject.value, field.value, valueObject.value, args);
 
       expressions.add(expression);
     }
@@ -168,7 +159,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                 .retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
                 .map(valueObject -> String.format("%s.%s.%s", fieldReferencePath, valueObjectField.value, valueObject.value))
                 .collect(Collectors.joining(", "));
-        return String.format("%s.from(%s)", fieldType, args);
+        return String.format(VALUE_OBJECT_FACTORY_METHOD, fieldType, args);
       }
 
       return super.resolveArgument(fieldReferencePath, valueObjectField, valueObjects);
@@ -202,7 +193,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                       .collect(Collectors.joining(", "));
 
       final String expression =
-              String.format("final %s %s = %s.from(%s);", valueObject.value, field.value, valueObject.value, args);
+              String.format(VALUE_OBJECT_INSTANTIATION, valueObject.value, field.value, valueObject.value, args);
 
       expressions.add(expression);
     }
@@ -224,7 +215,7 @@ public class ValueObjectInitializer extends Formatters.Variables<List<String>> {
                 .map(mapper)
                 .collect(Collectors.joining(", "));
 
-        return String.format("%s.from(%s)", fieldType, args);
+        return String.format(VALUE_OBJECT_FACTORY_METHOD, fieldType, args);
       }
 
       return super.resolveArgument(fieldReferencePath, valueObjectField, valueObjects);
