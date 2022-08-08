@@ -23,7 +23,7 @@ public class ${valueObjectName} : IEquatable<${valueObjectName}>
   {
     if (obj == null || obj.GetType() != GetType()) return false;
 
-    var otherState = (${valueObjectName}) obj;
+    var other = (${valueObjectName}) obj;
     return ${memberNames?map(member -> member + " == other." + member)?join(" && ")};
   }
 
