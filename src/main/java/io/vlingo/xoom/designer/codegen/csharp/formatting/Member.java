@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
+import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.dialect.Dialect.*;
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail.stateFieldWithName;
 
 public class Member extends Formatters.Fields<List<String>> {
@@ -61,6 +63,9 @@ public class Member extends Formatters.Fields<List<String>> {
     if (!collectionMutation.isSingleParameterBased() && FieldDetail.isCollection(field)) {
       return FieldDetail.resolveCollectionType(field);
     }
+    
+    if(ValueObjectDetail.isValueObject(field))
+      return toPascalCase(fieldType);
 
     return toCamelCase(fieldType);
   }
