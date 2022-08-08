@@ -21,7 +21,7 @@ public class Rank : IEquatable<Rank>
   {
     if (obj == null || obj.GetType() != GetType()) return false;
 
-    var otherState = (Rank) obj;
+    var other = (Rank) obj;
     return points == other.points && classification == other.classification;
   }
 

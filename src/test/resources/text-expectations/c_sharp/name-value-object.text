@@ -21,7 +21,7 @@ public class Name : IEquatable<Name>
   {
     if (obj == null || obj.GetType() != GetType()) return false;
 
-    var otherState = (Name) obj;
+    var other = (Name) obj;
     return firstName == other.firstName && lastName == other.lastName;
   }
 
