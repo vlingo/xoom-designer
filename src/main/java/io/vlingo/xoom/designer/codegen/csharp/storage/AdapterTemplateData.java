@@ -51,7 +51,7 @@ public class AdapterTemplateData extends TemplateData {
   }
 
   private Set<String> resolveImports(final List<Content> contents) {
-    final String sourceQualifiedClassName = ContentQuery.findPackage(sourceClassStandard, contents);
+    final String sourceQualifiedClassName = ContentQuery.findPackage(sourceClassStandard, sourceClassName, contents);
     return Collections.singleton(sourceQualifiedClassName);
   }
 
