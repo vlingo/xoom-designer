@@ -16,10 +16,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
-import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
-import io.vlingo.xoom.designer.codegen.csharp.PersistenceDetail;
-import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.csharp.*;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -77,7 +74,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.TEST_CASES, testCases)
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true)
-        .addImports(resolveImports(basePackage, aggregate, testCases));
+        .addImports(resolveImports(basePackage, aggregate, testCases, contents));
   }
 
   private Set<String> resolveMethodParameterImports(final CodeGenerationParameter aggregate) {
@@ -92,8 +89,15 @@ public class EntityUnitTestTemplateData extends TemplateData {
     return MockDispatcherDetail.resolvePackage(basePackage);
   }
 
+  private String resolveValueObjectImports(final CodeGenerationParameter aggregate, final List<Content> contents) {
+    if (!ValueObjectDetail.useValueObject(aggregate)) {
+      return "";
+    }
+    return ContentQuery.findPackage(CsharpTemplateStandard.VALUE_OBJECT, contents);
+  }
+
   private Set<String> resolveImports(final String basePackage, final CodeGenerationParameter aggregate,
-                                     final List<TestCase> testCases) {
+                                     final List<TestCase> testCases, List<Content> contents) {
     final Set<String> imports = testCases.stream()
         .map(TestCase::involvedSpecialTypes)
         .flatMap(Set::stream)
@@ -102,6 +106,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
 
     imports.addAll(resolveMethodParameterImports(aggregate));
     imports.addAll(resolveAdapterImports(basePackage));
+    imports.add(resolveValueObjectImports(aggregate, contents));
     imports.add(resolveModelImports(basePackage, aggregate));
     imports.add(resolveMockDispatcherImport(basePackage));
     return imports;

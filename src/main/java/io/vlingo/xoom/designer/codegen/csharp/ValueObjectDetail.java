@@ -63,4 +63,9 @@ public class ValueObjectDetail {
         .forEach(field -> imports.add(FieldDetail.resolveImportForType(field)));
     return imports;
   }
+
+  public static boolean useValueObject(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .anyMatch(field -> FieldDetail.isValueObjectCollection(field) || ValueObjectDetail.isValueObject(field));
+  }
 }
