@@ -1,0 +1,78 @@
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Io.Vlingo.Xoomapp.Model;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Tests.Model.Author;
+
+public class AuthorEntityTest
+{
+  private readonly MockDispatcher _dispatcher;
+  private readonly IAuthor _author;
+
+  public AuthorEntityTest()
+  {
+    _dispatcher = new MockDispatcher();
+    var world = World.StartWithDefaults("test-stateful");
+    new StateAdapterProvider(world).RegisterAdapter(new AuthorStateAdapter());
+    var store = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), _dispatcher);
+    new StatefulTypeRegistry(world).Register(new Info(store, typeof(AuthorState), typeof(AuthorState).FullName!));
+    _author = world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
+  }
+
+  private static Name NAME_FOR_WITH_NAME_TEST = Name.From("author-name-first-name", "author-name-last-name");
+  private static string SHORT_DESCRIPTION_FOR_WITH_NAME_TEST = "author-short-description";
+
+  [Fact]
+  public void WithName()
+  {
+    var dispatcherAccess = _dispatcher.AfterCompleting(1);
+    var state = _author.WithName(NAME_FOR_WITH_NAME_TEST, SHORT_DESCRIPTION_FOR_WITH_NAME_TEST).Await();
+
+    Assert.Equal("author-name-first-name", state.Name.firstName);
+    Assert.Equal("author-name-last-name", state.Name.lastName);
+    Assert.Equal("author-short-description", state.ShortDescription);
+    Assert.Equal(1, dispatcherAccess.ReadFrom<int>("statesCount"));
+    Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
+  }
+
+  private static List<Rank> RANK_FOR_CHANGE_RANK_TEST = new List<Rank>();
+
+  [Fact]
+  public void ChangeRank()
+  {
+    _createEntity();
+    var dispatcherAccess = _dispatcher.AfterCompleting(1);
+    var state = _author.ChangeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
+
+    Assert.Equal("author-name-first-name", state.Name.firstName);
+    Assert.Equal("author-name-last-name", state.Name.lastName);
+    Assert.Equal("author-short-description", state.ShortDescription);
+    Assert.NotNull(state.Rank);
+    Assert.Equal(2, dispatcherAccess.ReadFrom<int>("statesCount"));
+    Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
+  }
+
+
+  [Fact]
+  public void Hide()
+  {
+    _author.Hide().Await();
+
+  }
+
+  private static Name NAME_FOR_ENTITY_CREATION = Name.From("author-name-first-name", "author-name-last-name");
+  private static string SHORT_DESCRIPTION_FOR_ENTITY_CREATION = "author-short-description";
+
+  private void _createEntity()
+  {
+    _author.WithName(NAME_FOR_ENTITY_CREATION, SHORT_DESCRIPTION_FOR_ENTITY_CREATION).Await();
+  }
+}

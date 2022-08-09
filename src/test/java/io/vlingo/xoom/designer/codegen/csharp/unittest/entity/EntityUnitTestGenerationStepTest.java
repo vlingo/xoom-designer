@@ -41,9 +41,27 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
     final Content mockDispatcher = context.findContent(CsharpTemplateStandard.MOCK_DISPATCHER, "MockDispatcher");
     final Content authorEntityTest = context.findContent(CsharpTemplateStandard.ENTITY_UNIT_TEST, "AuthorEntityTest");
 
-    Assertions.assertEquals(4, context.contents().size());
+    Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
     Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-test")));
+  }
+  @Test
+  public void testThatSourcedEntitiesWithValueObjectCollectionUnitTestsAreGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(authorAggregateWithValueObjectCollection())
+        .add(nameValueObject()).add(rankValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new EntityUnitTestGenerationStep().process(context);
+
+    final Content mockDispatcher = context.findContent(CsharpTemplateStandard.MOCK_DISPATCHER, "MockDispatcher");
+    final Content authorEntityTest = context.findContent(CsharpTemplateStandard.ENTITY_UNIT_TEST, "AuthorEntityTest");
+
+    Assertions.assertEquals(5, context.contents().size());
+    Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
+    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-with-vo-collection-test")));
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -98,6 +116,58 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
         .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorShortDescriptionChangedEvent);
   }
+  private CodeGenerationParameter authorAggregateWithValueObjectCollection() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "Name")
+            .relate(Label.FIELD_TYPE, "Name");
+
+    final CodeGenerationParameter shortDescriptionField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "ShortDescription")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter rankField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "Rank")
+            .relate(Label.FIELD_TYPE, "Rank")
+            .relate(Label.COLLECTION_TYPE, "List");
+
+    final CodeGenerationParameter authorRegisteredEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+
+    final CodeGenerationParameter authorRankedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+            .relate(rankField);
+
+    final CodeGenerationParameter authorShortDescriptionChangedEvent =
+        CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorShortDescriptionChanged")
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+            .relate(shortDescriptionField);
+
+    final CodeGenerationParameter factoryMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "WithName")
+            .relate(Label.METHOD_PARAMETER, "Name")
+            .relate(Label.METHOD_PARAMETER, "ShortDescription")
+            .relate(Label.FACTORY_METHOD, "true")
+            .relate(authorRegisteredEvent);
+
+    final CodeGenerationParameter rankMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "ChangeRank")
+            .relate(Label.METHOD_PARAMETER, "Rank")
+            .relate(authorRankedEvent);
+
+    final CodeGenerationParameter hideMethod =
+        CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "Hide");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Author")
+        .relate(idField).relate(nameField).relate(rankField).relate(shortDescriptionField)
+        .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
+        .relate(authorRegisteredEvent).relate(authorRankedEvent).relate(authorShortDescriptionChangedEvent);
+  }
 
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
@@ -106,11 +176,17 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
             .relate(Label.FIELD_TYPE, "String"));
   }
+  private CodeGenerationParameter rankValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
+            .relate(Label.FIELD_TYPE, "Double"));
+  }
 
   private Content[] contents() {
     return new Content[]{
         Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "IAuthor").toString(), "IAuthor.cs"), null, null, AUTHOR_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Name.cs"), null, null, NAME_VALUE_OBJECT_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.VALUE_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH).toString(), "Rank.cs"), null, null, RANK_VALUE_OBJECT_CONTENT_TEXT),
     };
   }
 
@@ -130,6 +206,11 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
   private static final String NAME_VALUE_OBJECT_CONTENT_TEXT =
       "namespace Io.Vlingo.Xoomapp.Model; \\n" +
           "public class Name { \\n" +
+          "... \\n" +
+          "}";
+  private static final String RANK_VALUE_OBJECT_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model; \\n" +
+          "public class Rank { \\n" +
           "... \\n" +
           "}";
 
