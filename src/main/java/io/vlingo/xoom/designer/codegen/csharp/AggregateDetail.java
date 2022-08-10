@@ -157,4 +157,8 @@ public class AggregateDetail {
         .map(stateField -> toPascalCase(stateField.value))
         .collect(Collectors.toList());
   }
+
+  public static String methodNameFrom(CodeGenerationParameter method) {
+    return toPascalCase(method.value);
+  }
 }

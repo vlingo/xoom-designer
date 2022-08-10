@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
@@ -35,7 +36,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
 
   private AggregateStateMethodTemplateData(final Dialect dialect, final CodeGenerationParameter aggregate,
                                            final CodeGenerationParameter method) {
-    this.parameters = TemplateParameters.with(TemplateParameter.METHOD_NAME, method.value)
+    this.parameters = TemplateParameters.with(TemplateParameter.METHOD_NAME, AggregateDetail.methodNameFrom(method))
         .and(TemplateParameter.COLLECTION_MUTATIONS, resolveCollectionMutations(dialect, method))
         .and(TemplateParameter.METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
         .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, resolveConstructorParameters(dialect, method))

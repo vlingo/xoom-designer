@@ -13,6 +13,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
@@ -58,7 +59,7 @@ public class AggregateProtocolMethodTemplateData extends TemplateData {
     final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
 
     this.parameters = TemplateParameters.with(TemplateParameter.METHOD_SCOPE, methodScope)
-        .and(TemplateParameter.METHOD_NAME, method.value)
+        .and(TemplateParameter.METHOD_NAME, AggregateDetail.methodNameFrom(method))
         .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(method.parent().value))
         .and(TemplateParameter.ENTITY_NAME, CsharpTemplateStandard.AGGREGATE.resolveClassname(method.parent().value))
         .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))

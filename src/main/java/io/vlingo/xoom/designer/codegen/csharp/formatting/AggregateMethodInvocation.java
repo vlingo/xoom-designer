@@ -48,8 +48,8 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   }
 
   private String resolveFieldAccess(final CodeGenerationParameter methodParameter) {
-    final String parameterName = toCamelCase(methodParameter.value);
-    return parametersOwner.isNone() ? parameterName : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, parameterName);
+    final String parameterName = methodParameter.hasAny(Label.ALIAS) ? methodParameter.retrieveRelatedValue(Label.ALIAS) : methodParameter.value;
+    return parametersOwner.isNone() ? toCamelCase(parameterName) : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, toCamelCase(parameterName));
   }
 
   private enum ParametersOwner {

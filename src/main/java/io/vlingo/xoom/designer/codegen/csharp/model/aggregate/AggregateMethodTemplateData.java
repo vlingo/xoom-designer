@@ -35,7 +35,7 @@ public class AggregateMethodTemplateData extends TemplateData {
 
   private AggregateMethodTemplateData(final TemplateParameters parentParameters, final CodeGenerationParameter method) {
 
-    this.parameters = TemplateParameters.with(TemplateParameter.METHOD_NAME, method.value)
+    this.parameters = TemplateParameters.with(TemplateParameter.METHOD_NAME, AggregateDetail.methodNameFrom(method))
         .and(TemplateParameter.DOMAIN_EVENT_NAME, method.retrieveRelatedValue(Label.DOMAIN_EVENT))
         .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, Formatters.Arguments.AGGREGATE_METHOD_INVOCATION.format(method))
         .and(TemplateParameter.METHOD_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(method))
