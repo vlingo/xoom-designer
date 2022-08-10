@@ -72,7 +72,7 @@ public class Member extends Formatters.Fields<List<String>> {
 
   private String resolveInstantiation(final CodeGenerationParameter field) {
     if (FieldDetail.requireImmediateInstantiation(field)) {
-      return String.format("%s = %s", field.value, FieldDetail.resolveDefaultValue(field.parent(), field.value));
+      return String.format("%s = %s", toPascalCase(field.value), FieldDetail.resolveDefaultValue(field.parent(), field.value));
     }
     final String instanceName = field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
     return toPascalCase(instanceName);
