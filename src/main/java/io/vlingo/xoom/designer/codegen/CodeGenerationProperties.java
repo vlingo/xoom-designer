@@ -108,4 +108,10 @@ public class CodeGenerationProperties {
     return COMMAND_MODEL_STORE_TEMPLATES;
   }
 
+  public static String resoleDateTimeFieldType(String fieldType, String platform) {
+    if(fieldType.equals("DateTime") &&  platform.equals(".NET"))
+      return "DateTime";
+    return FIELD_TYPE_TRANSLATION.getOrDefault(fieldType, fieldType);
+  }
+
 }
