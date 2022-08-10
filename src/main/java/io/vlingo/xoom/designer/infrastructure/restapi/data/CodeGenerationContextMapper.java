@@ -27,7 +27,6 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static io.vlingo.xoom.designer.codegen.CodeGenerationProperties.FIELD_TYPE_TRANSLATION;
 import static io.vlingo.xoom.designer.codegen.CodeGenerationProperties.resoleDateTimeFieldType;
 import static io.vlingo.xoom.designer.codegen.Label.*;
 
@@ -114,7 +113,7 @@ public class CodeGenerationContextMapper {
     aggregateData.stateFields.forEach(stateField -> {
       aggregateParameter.relate(
               CodeGenerationParameter.of(STATE_FIELD, formatter.rectifySyntax(stateField.name))
-                      .relate(FIELD_TYPE, formatter.rectifySyntax(FIELD_TYPE_TRANSLATION.getOrDefault(stateField.type, stateField.type)))
+                      .relate(FIELD_TYPE, formatter.rectifySyntax(resoleDateTimeFieldType(stateField.type, resolvePlatform())))
                       .relate(COLLECTION_TYPE, stateField.collectionType));
     });
   }
