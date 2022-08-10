@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
-import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,10 +63,10 @@ public class Member extends Formatters.Fields<List<String>> {
       return FieldDetail.resolveCollectionType(field);
     }
     
-    if(ValueObjectDetail.isValueObject(field) || FieldDetail.isDateTime(field))
-      return toPascalCase(fieldType);
+    if(FieldDetail.isScalar(field))
+      return toCamelCase(fieldType);
 
-    return toCamelCase(fieldType);
+    return toPascalCase(fieldType);
   }
 
   private String resolveInstantiation(final CodeGenerationParameter field) {
