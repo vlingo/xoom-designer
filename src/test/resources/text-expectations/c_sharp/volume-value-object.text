@@ -3,8 +3,8 @@ namespace Io.Vlingo.Xoomapp.Model;
 public class Volume : IEquatable<Volume>
 {
 
-  public int number {get; set;}
-  public DateTime publicationDate {get; set;}
+  public int Number {get; set;}
+  public DateTime PublicationDate {get; set;}
 
   public static Volume From(int number, DateTime publicationDate)
   {
@@ -13,8 +13,8 @@ public class Volume : IEquatable<Volume>
 
   private Volume(int number, DateTime publicationDate)
   {
-    this.number = number;
-    this.publicationDate = publicationDate;
+    this.Number = number;
+    this.PublicationDate = publicationDate;
   }
 
   public override bool Equals(object obj)
@@ -22,9 +22,9 @@ public class Volume : IEquatable<Volume>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var other = (Volume) obj;
-    return number == other.number && publicationDate == other.publicationDate;
+    return Number == other.Number && PublicationDate == other.PublicationDate;
   }
 
-  public bool Equals(Volume other) => number == other.number && publicationDate == other.publicationDate;
-  public override int GetHashCode() => HashCode.Combine(number, publicationDate);
+  public bool Equals(Volume other) => Number == other.Number && PublicationDate == other.PublicationDate;
+  public override int GetHashCode() => HashCode.Combine(Number, PublicationDate);
 }

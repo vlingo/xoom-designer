@@ -3,8 +3,8 @@ namespace Io.Vlingo.Xoomapp.Model;
 public class Rank : IEquatable<Rank>
 {
 
-  public int points {get; set;}
-  public string classification {get; set;}
+  public int Points {get; set;}
+  public string Classification {get; set;}
 
   public static Rank From(int points, string classification)
   {
@@ -13,8 +13,8 @@ public class Rank : IEquatable<Rank>
 
   private Rank(int points, string classification)
   {
-    this.points = points;
-    this.classification = classification;
+    this.Points = points;
+    this.Classification = classification;
   }
 
   public override bool Equals(object obj)
@@ -22,9 +22,9 @@ public class Rank : IEquatable<Rank>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var other = (Rank) obj;
-    return points == other.points && classification == other.classification;
+    return Points == other.Points && Classification == other.Classification;
   }
 
-  public bool Equals(Rank other) => points == other.points && classification == other.classification;
-  public override int GetHashCode() => HashCode.Combine(points, classification);
+  public bool Equals(Rank other) => Points == other.Points && Classification == other.Classification;
+  public override int GetHashCode() => HashCode.Combine(Points, Classification);
 }

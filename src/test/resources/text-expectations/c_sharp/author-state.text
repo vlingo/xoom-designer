@@ -13,7 +13,7 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public string Id {get; set;}
   public string Name {get; set;}
   public List<Double> Rank = new List<Double>();
-  public string shortDescription {get; set;}
+  public string ShortDescription {get; set;}
 
   public static AuthorState IdentifiedBy(string id)
   {
@@ -25,7 +25,7 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     this.Id = id;
     this.Name = name;
     this.Rank.AddRange(rank);
-    this.shortDescription = shortDescription;
+    this.ShortDescription = shortDescription;
   }
 
   public AuthorState WithName(string name)
@@ -53,9 +53,9 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherState = (AuthorState) obj;
-    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank && shortDescription == otherState.shortDescription;
+    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank && ShortDescription == otherState.ShortDescription;
   }
 
-  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank && shortDescription == other.shortDescription;
-  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, shortDescription);
+  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank && ShortDescription == other.ShortDescription;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, ShortDescription);
 }

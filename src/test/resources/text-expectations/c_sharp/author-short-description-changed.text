@@ -13,12 +13,12 @@ public class AuthorShortDescriptionChanged : IdentifiedDomainEvent
 {
 
   public string Id {get; set;}
-  public string shortDescription {get; set;}
+  public string ShortDescription {get; set;}
 
   public AuthorShortDescriptionChanged(string id, string shortDescription) : base(SemanticVersion.From("1.0.0").ToValue())
   {
     this.Id = id;
-    this.shortDescription = shortDescription;
+    this.ShortDescription = shortDescription;
   }
 
   public override string Identity => Id;

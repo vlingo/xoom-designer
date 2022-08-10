@@ -18,6 +18,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public class ValueObjectDetail {
 
   public static String resolvePackage(final String basePackage) {
@@ -67,5 +69,11 @@ public class ValueObjectDetail {
   public static boolean useValueObject(final CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.STATE_FIELD)
         .anyMatch(field -> FieldDetail.isValueObjectCollection(field) || ValueObjectDetail.isValueObject(field));
+  }
+
+  public static List<String> retrieveAllMemberNames(CodeGenerationParameter valueObject) {
+    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+        .map(p -> toPascalCase(p.value))
+        .collect(Collectors.toList());
   }
 }

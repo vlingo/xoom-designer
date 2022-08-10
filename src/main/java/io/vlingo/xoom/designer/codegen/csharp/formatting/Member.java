@@ -74,7 +74,8 @@ public class Member extends Formatters.Fields<List<String>> {
     if (FieldDetail.requireImmediateInstantiation(field)) {
       return String.format("%s = %s", field.value, FieldDetail.resolveDefaultValue(field.parent(), field.value));
     }
-    return field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
+    final String instanceName = field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
+    return toPascalCase(instanceName);
   }
 
   @SuppressWarnings("serial")

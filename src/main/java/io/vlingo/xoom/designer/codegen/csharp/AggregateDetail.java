@@ -19,6 +19,8 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public class AggregateDetail {
   private final static String ID_VALUE = "id";
 
@@ -152,7 +154,7 @@ public class AggregateDetail {
 
   public static List<String> resolveStateFieldsNames(CodeGenerationParameter aggregate) {
     return aggregate.retrieveAllRelated(Label.STATE_FIELD)
-        .map(stateField -> stateField.value)
+        .map(stateField -> toPascalCase(stateField.value))
         .collect(Collectors.toList());
   }
 }

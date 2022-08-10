@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
-import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -69,7 +68,6 @@ public class ValueObjectGenerationStepTest extends CodeGenerationTest {
 
     final Content volumeValueObject = context.findContent(CsharpTemplateStandard.VALUE_OBJECT, "Volume");
 
-    Assertions.assertEquals(((TextBasedContent)volumeValueObject).text, (TextExpectation.onCSharp().read("volume-value-object")));
     Assertions.assertTrue(volumeValueObject.contains(TextExpectation.onCSharp().read("volume-value-object")));
   }
 

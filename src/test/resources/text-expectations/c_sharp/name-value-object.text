@@ -3,8 +3,8 @@ namespace Io.Vlingo.Xoomapp.Model;
 public class Name : IEquatable<Name>
 {
 
-  public string firstName {get; set;}
-  public string lastName {get; set;}
+  public string FirstName {get; set;}
+  public string LastName {get; set;}
 
   public static Name From(string firstName, string lastName)
   {
@@ -13,8 +13,8 @@ public class Name : IEquatable<Name>
 
   private Name(string firstName, string lastName)
   {
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.FirstName = firstName;
+    this.LastName = lastName;
   }
 
   public override bool Equals(object obj)
@@ -22,9 +22,9 @@ public class Name : IEquatable<Name>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var other = (Name) obj;
-    return firstName == other.firstName && lastName == other.lastName;
+    return FirstName == other.FirstName && LastName == other.LastName;
   }
 
-  public bool Equals(Name other) => firstName == other.firstName && lastName == other.lastName;
-  public override int GetHashCode() => HashCode.Combine(firstName, lastName);
+  public bool Equals(Name other) => FirstName == other.FirstName && LastName == other.LastName;
+  public override int GetHashCode() => HashCode.Combine(FirstName, LastName);
 }
