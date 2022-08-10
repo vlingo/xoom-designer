@@ -34,7 +34,7 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public AuthorState WithName(string name, String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.relatedAuthors.Add(relatedAuthor);
+    this.RelatedAuthors.Add(relatedAuthor);
     return new AuthorState(this.Id, name, this.Rank, this.RelatedAuthors, this.AvailableOn);
   }
 
@@ -53,14 +53,14 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public AuthorState RelateAuthor(String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.relatedAuthors.Add(relatedAuthor);
+    this.RelatedAuthors.Add(relatedAuthor);
     return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
   }
 
   public AuthorState RelateAuthors(List<String> relatedAuthors)
   {
     //TODO: Implement command logic.
-    this.relatedAuthors.RemoveAll(relatedAuthors);
+    this.RelatedAuthors.RemoveAll(relatedAuthors);
     this.relatedAuthors.AddRange(relatedAuthors);
     return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
   }
@@ -68,7 +68,7 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public AuthorState UnrelateAuthor(String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.relatedAuthors.Remove(relatedAuthor);
+    this.RelatedAuthors.Remove(relatedAuthor);
     return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
   }
 

@@ -16,15 +16,20 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public enum CollectionMutation {
 
   NONE("", (dialect, param) -> Collections.emptyList()),
   REPLACEMENT("*", (dialect, param) -> Collections.emptyList()),
-  ADDITION("+", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", param.value, resolveAddMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
-  REMOVAL("-", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", param.value, resolveRemoveMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
-  MERGE("#", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", param.value, resolveRemoveAllMemberFrom(dialect), param.value),
+  ADDITION("+", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveAddMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
+  REMOVAL("-", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
+  MERGE("#", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveAllMemberFrom(dialect), param.value),
       String.format("%s.%s(%s);", param.value, resolveAddAllMemberFrom(dialect), param.value)));
 
+  private static String resolveMemberParamFrom(Dialect dialect, String param) {
+    return dialect.equals(Dialect.C_SHARP) ? toPascalCase(param) : param;
+  }
   private static String resolveAddMemberFrom(Dialect dialect) {
     return dialect.isJava() ? "add" : "Add";
   }
