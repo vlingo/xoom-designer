@@ -95,7 +95,7 @@ public class CodeGenerationContextMapper {
       valueObject.fields.forEach(field -> {
         final CodeGenerationParameter fieldParameter =
                 CodeGenerationParameter.of(VALUE_OBJECT_FIELD, formatter.rectifySyntax(field.name))
-                        .relate(FIELD_TYPE, formatter.rectifySyntax(resoleDateTimeFieldType(field.type, data.platformSettings.platform)))
+                        .relate(FIELD_TYPE, formatter.rectifySyntax(resoleDateTimeFieldType(field.type, resolvePlatform())))
                         .relate(COLLECTION_TYPE, field.collectionType);
 
         valueObjectParameter.relate(fieldParameter);
@@ -103,6 +103,10 @@ public class CodeGenerationContextMapper {
 
       parameters.add(valueObjectParameter);
     });
+  }
+
+  private String resolvePlatform() {
+    return data.platformSettings == null ? "JVM" : data.platformSettings.platform;
   }
 
   private void mapStateFields(final AggregateData aggregateData,
