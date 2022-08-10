@@ -45,6 +45,7 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
     Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-test")));
   }
+
   @Test
   public void testThatSourcedEntitiesWithValueObjectCollectionUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")

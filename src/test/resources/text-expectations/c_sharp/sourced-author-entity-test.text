@@ -36,8 +36,8 @@ public class AuthorEntityTest
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
     var state = _author.WithName(NAME_FOR_WITH_NAME_TEST, SHORT_DESCRIPTION_FOR_WITH_NAME_TEST).Await();
 
-    Assert.Equal("author-name-first-name", state.Name.firstName);
-    Assert.Equal("author-name-last-name", state.Name.lastName);
+    Assert.Equal("author-name-first-name", state.Name.FirstName);
+    Assert.Equal("author-name-last-name", state.Name.LastName);
     Assert.Equal("author-short-description", state.ShortDescription);
     Assert.Equal(1, dispatcherAccess.ReadFrom<int>("statesCount"));
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
@@ -52,8 +52,8 @@ public class AuthorEntityTest
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
     var state = _author.ChangeRank(RANK_FOR_CHANGE_RANK_TEST).Await();
 
-    Assert.Equal("author-name-first-name", state.Name.firstName);
-    Assert.Equal("author-name-last-name", state.Name.lastName);
+    Assert.Equal("author-name-first-name", state.Name.FirstName);
+    Assert.Equal("author-name-last-name", state.Name.LastName);
     Assert.Equal("author-short-description", state.ShortDescription);
     Assert.NotNull(state.Rank);
     Assert.Equal(2, dispatcherAccess.ReadFrom<int>("statesCount"));
