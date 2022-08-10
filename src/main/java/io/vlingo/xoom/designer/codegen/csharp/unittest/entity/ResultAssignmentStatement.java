@@ -14,6 +14,8 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public class ResultAssignmentStatement {
 
   public static String resolve(final CodeGenerationParameter aggregate, final CodeGenerationParameter method) {
@@ -35,7 +37,7 @@ public class ResultAssignmentStatement {
         .map(param -> TestDataFormatter.formatStaticVariableName(method, param))
         .collect(Collectors.joining(", "));
 
-    return String.format("%s.%s(%s).Await();", variableName, method.value, methodParameters);
+    return String.format("%s.%s(%s).Await();", variableName, toPascalCase(method.value), methodParameters);
   }
 
 }
