@@ -64,7 +64,7 @@ public class Member extends Formatters.Fields<List<String>> {
       return FieldDetail.resolveCollectionType(field);
     }
     
-    if(ValueObjectDetail.isValueObject(field))
+    if(ValueObjectDetail.isValueObject(field) || FieldDetail.isDateTime(field))
       return toPascalCase(fieldType);
 
     return toCamelCase(fieldType);

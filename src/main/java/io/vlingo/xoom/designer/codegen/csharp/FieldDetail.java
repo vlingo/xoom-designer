@@ -25,7 +25,7 @@ public class FieldDetail {
   }
 
   private static String primitiveOrValueObjectTypeOf(String type) {
-    if(isString(type))
+    if (isString(type))
       return type.toLowerCase(Locale.ROOT);
     else
       return type;
@@ -34,9 +34,9 @@ public class FieldDetail {
   @SuppressWarnings("static-access")
   public static String typeOf(final CodeGenerationParameter parent, final String fieldName) {
     return parent.retrieveAllRelated(resolveFieldTypeLabel(parent))
-            .filter(stateField -> stateField.value.equals(fieldName))
-            .map(FieldDetail::resolveStateFieldType).findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
+        .filter(stateField -> stateField.value.equals(fieldName))
+        .map(FieldDetail::resolveStateFieldType).findFirst()
+        .orElseThrow(() -> new IllegalArgumentException(UNKNOWN_FIELD_MESSAGE.format(fieldName, parent.value)));
   }
 
   public static String genericTypeOf(final String fieldType) {
@@ -58,7 +58,7 @@ public class FieldDetail {
       return "new " + type + "()";
     }
     if (isSet(type)) {
-      return "new Hash"+ type.substring(1) +"()";
+      return "new Hash" + type.substring(1) + "()";
     }
     if (isDateTime(type)) {
       return type + ".Now";
@@ -82,7 +82,7 @@ public class FieldDetail {
   }
 
   public static boolean isScalar(final CodeGenerationParameter field) {
-    if(field.hasAny(Label.COLLECTION_TYPE)) {
+    if (field.hasAny(Label.COLLECTION_TYPE)) {
       return false;
     }
     return isScalar(field.retrieveRelatedValue(Label.FIELD_TYPE));
@@ -97,7 +97,7 @@ public class FieldDetail {
 
   public static boolean isMethodParameterAssignableToScalar(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
     final String type = typeOf(field.parent(), field.value);
-    if(isScalar(type)) {
+    if (isScalar(type)) {
       return true;
     }
     final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
@@ -105,7 +105,7 @@ public class FieldDetail {
   }
 
   public static boolean isMethodParameterAssignableToValueObject(final CodeGenerationParameter field, final CodeGenerationParameter methodParameter) {
-    if(ValueObjectDetail.isValueObject(field)) {
+    if (ValueObjectDetail.isValueObject(field)) {
       return true;
     }
     final CollectionMutation collectionMutation = methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
@@ -113,13 +113,13 @@ public class FieldDetail {
   }
 
   public static String resolveCollectionType(final CodeGenerationParameter field) {
-    if(!field.hasAny(Label.COLLECTION_TYPE)) {
+    if (!field.hasAny(Label.COLLECTION_TYPE)) {
       throw new UnsupportedOperationException(field.value + " is not a Collection");
     }
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     final String collectionType = field.retrieveRelatedValue(Label.COLLECTION_TYPE);
     final String genericsType = StringUtils.capitalize(resolveWrapperType(fieldType));
-    if(collectionType.contains("Set"))
+    if (collectionType.contains("Set"))
       return String.format("I%s<%s>", collectionType, genericsType);
     else
       return String.format("%s<%s>", collectionType, genericsType);
@@ -174,7 +174,7 @@ public class FieldDetail {
   }
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
-    if(isCollection(field)) {
+    if (isCollection(field)) {
       return "System.Collections.Generic";
     }
     final String key = field.retrieveRelatedValue(Label.FIELD_TYPE);
@@ -209,6 +209,7 @@ public class FieldDetail {
   public static boolean isChar(final String fieldType) {
     return fieldType.equalsIgnoreCase(CodeGenerationProperties.CHAR_TYPE);
   }
+
   public static String toCamelCase(String name) {
     return toCamelCase(name, false);
   }
@@ -220,11 +221,11 @@ public class FieldDetail {
   private static String toCamelCase(String name, boolean capNext) {
     StringBuilder sb = new StringBuilder();
 
-    for(int i = 0; i < name.length(); ++i) {
+    for (int i = 0; i < name.length(); ++i) {
       char c = name.charAt(i);
       if ('a' <= c && c <= 'z') {
         if (capNext) {
-          sb.append((char)(c + -32));
+          sb.append((char) (c + -32));
         } else {
           sb.append(c);
         }
@@ -232,7 +233,7 @@ public class FieldDetail {
         capNext = false;
       } else if ('A' <= c && c <= 'Z') {
         if (i == 0 && !capNext) {
-          sb.append((char)(c - -32));
+          sb.append((char) (c - -32));
         } else {
           sb.append(c);
         }
@@ -250,9 +251,9 @@ public class FieldDetail {
   }
 
   private static String resolveStateFieldType(CodeGenerationParameter stateField) {
-      final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
+    final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
     if (isCollection(stateField)) return resolveCollectionType(stateField);
-    if (ValueObjectDetail.isValueObject(stateField)) return fieldType;
+    if (ValueObjectDetail.isValueObject(stateField) || isDateTime(stateField)) return fieldType;
     return toCamelCase(fieldType, false);
   }
 

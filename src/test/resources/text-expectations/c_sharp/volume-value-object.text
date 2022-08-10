@@ -1,0 +1,30 @@
+namespace Io.Vlingo.Xoomapp.Model;
+
+public class Volume : IEquatable<Volume>
+{
+
+  public int number {get; set;}
+  public DateTime publicationDate {get; set;}
+
+  public static Volume From(int number, DateTime publicationDate)
+  {
+    return new Volume(number, publicationDate);
+  }
+
+  private Volume(int number, DateTime publicationDate)
+  {
+    this.number = number;
+    this.publicationDate = publicationDate;
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var other = (Volume) obj;
+    return number == other.number && publicationDate == other.publicationDate;
+  }
+
+  public bool Equals(Volume other) => number == other.number && publicationDate == other.publicationDate;
+  public override int GetHashCode() => HashCode.Combine(number, publicationDate);
+}

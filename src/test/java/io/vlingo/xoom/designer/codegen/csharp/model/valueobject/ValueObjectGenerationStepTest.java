@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -47,6 +48,29 @@ public class ValueObjectGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertTrue(nameValueObject.contains(TextExpectation.onCSharp().read("name-value-object")));
     Assertions.assertTrue(rankValueObject.contains(TextExpectation.onCSharp().read("rank-value-object")));
+  }
+  @Test
+  public void testThatValueObjectsWithDateTimeAreGenerated() {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
+            CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.STATE_STORE),
+            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
+            bookAggregateWithVolumes(), volumeValueObject(), rankValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters);
+
+    final CodeGenerationStep codeGenerationStep = new ValueObjectGenerationStep();
+
+    Assertions.assertTrue(codeGenerationStep.shouldProcess(context));
+
+    codeGenerationStep.process(context);
+
+    Assertions.assertEquals(2, context.contents().size());
+
+    final Content volumeValueObject = context.findContent(CsharpTemplateStandard.VALUE_OBJECT, "Volume");
+
+    Assertions.assertEquals(((TextBasedContent)volumeValueObject).text, (TextExpectation.onCSharp().read("volume-value-object")));
+    Assertions.assertTrue(volumeValueObject.contains(TextExpectation.onCSharp().read("volume-value-object")));
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -103,6 +127,29 @@ public class ValueObjectGenerationStepTest extends CodeGenerationTest {
         .relate(idField).relate(nameField).relate(rankField);
   }
 
+  private CodeGenerationParameter bookAggregateWithVolumes() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter nameField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter rankField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "rank")
+            .relate(Label.FIELD_TYPE, "Rank");
+
+    final CodeGenerationParameter volumesField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "volumes")
+            .relate(Label.FIELD_TYPE, "Volume")
+            .relate(Label.COLLECTION_TYPE, "List");
+
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+        .relate(idField).relate(nameField).relate(rankField).relate(volumesField);
+  }
+
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
@@ -117,5 +164,13 @@ public class ValueObjectGenerationStepTest extends CodeGenerationTest {
             .relate(Label.FIELD_TYPE, "int"))
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
             .relate(Label.FIELD_TYPE, "String"));
+  }
+
+  private CodeGenerationParameter volumeValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Volume")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "number")
+            .relate(Label.FIELD_TYPE, "int"))
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "publicationDate")
+            .relate(Label.FIELD_TYPE, "DateTime"));
   }
 }
