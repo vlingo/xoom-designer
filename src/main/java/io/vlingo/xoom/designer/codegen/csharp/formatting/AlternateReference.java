@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static java.util.stream.Collectors.toList;
 
 public class AlternateReference extends Formatters.Fields<String> {
@@ -35,7 +36,7 @@ public class AlternateReference extends Formatters.Fields<String> {
   }
 
   static AlternateReference handlingSelfReferencedFields() {
-    return new AlternateReference(field -> "this." + field.value);
+    return new AlternateReference(field -> "this." + toPascalCase(field.value));
   }
 
   static AlternateReference handlingDefaultFieldsValue() {

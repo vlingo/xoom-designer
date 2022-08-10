@@ -31,19 +31,19 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public AuthorState WithName(string name)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, name, this.Rank, this.shortDescription);
+    return new AuthorState(this.Id, name, this.Rank, this.ShortDescription);
   }
 
   public AuthorState ChangeRank(List<Double> rank)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, rank, this.shortDescription);
+    return new AuthorState(this.Id, this.Name, rank, this.ShortDescription);
   }
 
   public AuthorState Hide()
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, this.Rank, this.shortDescription);
+    return new AuthorState(this.Id, this.Name, this.Rank, this.ShortDescription);
   }
 
   public override IEntry WithId(string id) => IdentifiedBy(id);
