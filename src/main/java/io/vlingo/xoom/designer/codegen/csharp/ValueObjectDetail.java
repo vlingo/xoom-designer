@@ -76,4 +76,11 @@ public class ValueObjectDetail {
         .map(p -> toPascalCase(p.value))
         .collect(Collectors.toList());
   }
+
+  public static CodeGenerationParameter valueObjectFieldWithName(final CodeGenerationParameter parent,
+                                                                 final String fieldName) {
+    return parent.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+        .filter(field -> field.value.equals(fieldName))
+        .findFirst().orElseThrow(() -> new IllegalArgumentException("Unable to find " + fieldName));
+  }
 }

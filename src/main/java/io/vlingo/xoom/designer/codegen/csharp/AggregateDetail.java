@@ -9,7 +9,6 @@ package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +46,32 @@ public class AggregateDetail {
 
   public static String stateFieldType(final CodeGenerationParameter aggregate, final String fieldPath) {
     return stateFieldAtPath(1, aggregate, fieldPath.split("\\."));
+  }
+
+  public static String stateFieldType(final CodeGenerationParameter aggregate,
+                                      final String fieldPath,
+                                      final List<CodeGenerationParameter> valueObjects) {
+    return stateFieldAtPath(1, aggregate, fieldPath.split("\\."), valueObjects);
+  }
+
+  private static String stateFieldAtPath(final int pathIndex,
+                                         final CodeGenerationParameter parent,
+                                         final String[] fieldPathParts,
+                                         final List<CodeGenerationParameter> valueObjects) {
+    final String fieldName = fieldPathParts[pathIndex];
+    final CodeGenerationParameter field = parent.isLabeled(Label.AGGREGATE) ? stateFieldWithName(parent, fieldName) :
+            ValueObjectDetail.valueObjectFieldWithName(parent, fieldName);
+
+    final String fieldType = field.hasAny(Label.COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(Label.FIELD_TYPE);
+
+    if (pathIndex == fieldPathParts.length - 1) {
+      return fieldType;
+    }
+
+    final CodeGenerationParameter valueObject =
+        ValueObjectDetail.valueObjectOf(fieldType, valueObjects.stream());
+
+    return stateFieldAtPath(pathIndex + 1, valueObject, fieldPathParts, valueObjects);
   }
 
   private static String stateFieldAtPath(final int pathIndex, final CodeGenerationParameter parent, final String[] fieldPathParts) {

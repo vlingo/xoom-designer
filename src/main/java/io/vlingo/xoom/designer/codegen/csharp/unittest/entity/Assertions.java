@@ -93,18 +93,19 @@ public class Assertions {
                                                final Stream<CodeGenerationParameter> stateFields,
                                                final TestDataValueGenerator.TestDataValues testDataValues) {
     final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths(VARIABLE_NAME, stateFields, valueObjects);
-    final Function<String, String> mapper = fieldPath -> assertionByStateFieldType(aggregate, testDataValues, fieldPath);
+    final Function<String, String> mapper = fieldPath -> assertionByStateFieldType(aggregate, valueObjects, testDataValues, fieldPath);
 
     return fieldPaths.stream().map(mapper).collect(Collectors.toList());
   }
 
   private static String assertionByStateFieldType(final CodeGenerationParameter aggregate,
+                                                  final List<CodeGenerationParameter> valueObjects,
                                                   final TestDataValueGenerator.TestDataValues testDataValues,
                                                   final String fieldPath) {
     final Function<String, String> toPascalCaseMapper = path -> Arrays.stream(path.split("\\."))
         .skip(1)
         .map(FieldDetail::toPascalCase).collect(Collectors.joining("."));
-    final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath);
+    final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
     if (FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
       return String.format(ASSERT_NOT_NULL_PLACEHOLDER, VARIABLE_NAME, toPascalCaseMapper.apply(fieldPath));
     }
