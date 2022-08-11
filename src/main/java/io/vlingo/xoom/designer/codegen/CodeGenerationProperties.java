@@ -27,21 +27,31 @@ public class CodeGenerationProperties {
   public static final String CHAR_TYPE = "char";
   public static final String COMPOSITE_ID_TYPE = "CompositeId";
   public static final List<String> DATE_TIME_TYPES = Arrays.asList("LocalDate", "LocalDateTime", "DateTime");
+  public static final List<String> COLLECTION_TYPES = Arrays.asList("List", "ISet", "HashSet");
   public static final List<String> SCALAR_NUMERIC_TYPES = Arrays.asList("byte", "short", "int", "float", "long", "double", "integer");
   public static final List<String> SCALAR_TYPES = Stream.of(SCALAR_NUMERIC_TYPES, Arrays.asList("boolean", CHAR_TYPE, "string", "bool"))
           .flatMap(List::stream).collect(Collectors.toList());
 
   public static final Map<String, String> SPECIAL_TYPES_IMPORTS =
-          Collections.unmodifiableMap(
-                  new HashMap<String, String>() {{
-                    put("LocalDate", "java.time.LocalDate");
-                    put("LocalDateTime", "java.time.LocalDateTime");
-                    put("List", "java.util.*");
-                    put("Set", "java.util.*");
-                    put("ArrayList", "java.util.*");
-                    put("HashSet", "java.util.*");
-                  }}
-          );
+      Collections.unmodifiableMap(
+          new HashMap<String, String>() {{
+            put("LocalDate", "java.time.LocalDate");
+            put("LocalDateTime", "java.time.LocalDateTime");
+            put("List", "java.util.*");
+            put("Set", "java.util.*");
+            put("ArrayList", "java.util.*");
+            put("HashSet", "java.util.*");
+          }}
+      );
+
+  public static final Map<String, String> CSHARP_SPECIAL_TYPES_IMPORTS =
+      Collections.unmodifiableMap(
+          new HashMap<String, String>() {{
+            put("List", "System.Collections.Generic");
+            put("ISet", "System.Collections.Generic");
+            put("HashSet", "System.Collections.Generic");
+          }}
+      );
 
   public static final Map<String, String> FIELD_TYPE_TRANSLATION =
           Collections.unmodifiableMap(

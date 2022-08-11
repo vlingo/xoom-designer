@@ -1,3 +1,4 @@
+using System;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 

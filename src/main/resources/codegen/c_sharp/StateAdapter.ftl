@@ -1,8 +1,9 @@
-using Vlingo.Xoom.Common.Serialization;
-using Vlingo.Xoom.Symbio;
+using System;
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
 
 namespace ${packageName};
 

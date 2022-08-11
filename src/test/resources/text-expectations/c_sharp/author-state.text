@@ -1,7 +1,7 @@
+using System;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Object;
 using Vlingo.Xoom.Wire.Nodes;
-using System.Collections.Generic;
 
 namespace Io.Vlingo.Xoomapp.Model.Author;
 

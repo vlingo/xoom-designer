@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TestCase {
 
@@ -58,8 +59,8 @@ public class TestCase {
   }
 
   public Set<String> involvedSpecialTypes() {
-    return CodeGenerationProperties.DATE_TIME_TYPES.stream()
-        .filter(dateTimeType -> this.dataDeclarations.stream().anyMatch(declaration -> declaration.contains(dateTimeType)))
+    return Stream.concat(CodeGenerationProperties.DATE_TIME_TYPES.stream(), CodeGenerationProperties.COLLECTION_TYPES.stream())
+        .filter(specialType -> this.dataDeclarations.stream().anyMatch(declaration -> declaration.contains(specialType)))
         .collect(Collectors.toSet());
   }
 }

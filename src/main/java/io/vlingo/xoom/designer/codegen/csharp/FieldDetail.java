@@ -174,9 +174,6 @@ public class FieldDetail {
   }
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
-    if (isCollection(field)) {
-      return "System.Collections.Generic";
-    }
     final String key = field.retrieveRelatedValue(Label.FIELD_TYPE);
     return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
   }

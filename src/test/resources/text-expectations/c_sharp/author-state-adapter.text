@@ -1,6 +1,7 @@
+using System;
+using Io.Vlingo.Xoomapp.Model.Author;
 using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Symbio;
-using Io.Vlingo.Xoomapp.Model.Author;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 

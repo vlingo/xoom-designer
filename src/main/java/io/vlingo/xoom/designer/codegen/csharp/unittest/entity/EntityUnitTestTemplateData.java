@@ -101,7 +101,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
     final Set<String> imports = testCases.stream()
         .map(TestCase::involvedSpecialTypes)
         .flatMap(Set::stream)
-        .map(CodeGenerationProperties.SPECIAL_TYPES_IMPORTS::get)
+        .map(CodeGenerationProperties.CSHARP_SPECIAL_TYPES_IMPORTS::get)
         .collect(toSet());
 
     imports.addAll(resolveMethodParameterImports(aggregate));

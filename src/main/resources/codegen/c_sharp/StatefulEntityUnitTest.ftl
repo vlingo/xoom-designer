@@ -1,11 +1,12 @@
+using System;
+<#list imports as import>
+using ${import.qualifiedClassName};
+</#list>
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
 using Vlingo.Xoom.Lattice.Model.Stateful;
-<#list imports as import>
-using ${import.qualifiedClassName};
-</#list>
 using Xunit;
 
 namespace ${packageName};

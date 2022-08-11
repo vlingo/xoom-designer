@@ -1,8 +1,7 @@
+using System;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Object;
 using Vlingo.Xoom.Wire.Nodes;
-using java.time.LocalDate;
-using System.Collections.Generic;
 
 namespace Io.Vlingo.Xoomapp.Model.Author;
 
@@ -15,14 +14,14 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
   public string Name {get; set;}
   public List<Double> Rank = new List<Double>();
   public List<String> RelatedAuthors = new List<String>();
-  public LocalDate AvailableOn {get; set;}
+  public DateTime AvailableOn {get; set;}
 
   public static AuthorState IdentifiedBy(string id)
   {
-    return new AuthorState(id, null, new List<Double>(), new List<String>(), LocalDate.Now);
+    return new AuthorState(id, null, new List<Double>(), new List<String>(), DateTime.Now);
   }
 
-  private AuthorState(string id, string name, List<Double> rank, List<String> relatedAuthors, LocalDate availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  private AuthorState(string id, string name, List<Double> rank, List<String> relatedAuthors, DateTime availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     this.Id = id;
     this.Name = name;
