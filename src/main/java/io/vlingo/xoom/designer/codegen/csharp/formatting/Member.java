@@ -31,10 +31,6 @@ public class Member extends Formatters.Fields<List<String>> {
   private final BiFunction<String, String, String> declarationResolver;
 
   Member(final Dialect dialect) {
-    this(dialect, "");
-  }
-
-  Member(final Dialect dialect, final String valueObjectTypeSuffix) {
     if (!RESOLVERS.containsKey(dialect)) {
       throw new IllegalArgumentException("Unable to format members on " + dialect);
     }
