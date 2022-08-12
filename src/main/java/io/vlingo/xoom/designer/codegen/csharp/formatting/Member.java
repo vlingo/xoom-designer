@@ -26,6 +26,8 @@ import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDeta
 
 public class Member extends Formatters.Fields<List<String>> {
 
+  private static final String FIELD_MEMBER_INSTANTIATION = "%s {get; private set;} = %s;";
+  private static final String FIELD_MEMBER_DECLARATION = "%s {get; private set;}";
   private final BiFunction<String, String, String> declarationResolver;
 
   Member(final Dialect dialect) {
@@ -71,18 +73,17 @@ public class Member extends Formatters.Fields<List<String>> {
 
   private String resolveInstantiation(final CodeGenerationParameter field) {
     if (FieldDetail.requireImmediateInstantiation(field)) {
-      return String.format("%s = %s", toPascalCase(field.value), FieldDetail.resolveDefaultValue(field.parent(), field.value));
+      return String.format(FIELD_MEMBER_INSTANTIATION, toPascalCase(field.value), FieldDetail.resolveDefaultValue(field.parent(), field.value));
     }
     final String instanceName = field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
-    return toPascalCase(instanceName);
+    return String.format(FIELD_MEMBER_DECLARATION, toPascalCase(instanceName));
   }
 
-  @SuppressWarnings("serial")
   private static final Map<Dialect, BiFunction<String, String, String>> RESOLVERS =
       new HashMap<Dialect, BiFunction<String, String, String>>() {{
         put(JAVA, (fieldType, fieldName) -> String.format("public final %s %s;", fieldType, fieldName));
         put(KOTLIN, (fieldType, fieldName) -> String.format("val %s: %s;", fieldName, fieldType));
-        put(C_SHARP, (fieldType, fieldName) -> FieldDetail.isCollection(fieldType) ? String.format("public %s %s;", fieldType, fieldName) : String.format("public %s %s {get; set;}", fieldType, fieldName));
+        put(C_SHARP, (fieldType, fieldName) -> String.format("public %s %s", fieldType, fieldName));
       }};
 
 }

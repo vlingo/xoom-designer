@@ -3,8 +3,8 @@ namespace Io.Vlingo.Xoomapp.Model;
 public class Volume : IEquatable<Volume>
 {
 
-  public int Number {get; set;}
-  public DateTime PublicationDate {get; set;}
+  public int Number {get; private set;}
+  public DateTime PublicationDate {get; private set;}
 
   public static Volume From(int number, DateTime publicationDate)
   {

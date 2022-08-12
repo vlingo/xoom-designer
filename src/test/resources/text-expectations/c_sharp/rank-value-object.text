@@ -3,8 +3,8 @@ namespace Io.Vlingo.Xoomapp.Model;
 public class Rank : IEquatable<Rank>
 {
 
-  public int Points {get; set;}
-  public string Classification {get; set;}
+  public int Points {get; private set;}
+  public string Classification {get; private set;}
 
   public static Rank From(int points, string classification)
   {
