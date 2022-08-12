@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -73,9 +74,7 @@ public enum CollectionMutation {
   }
 
   public List<String> resolveStatements(final Dialect dialect, final CodeGenerationParameter methodParameter) {
-    return statementsResolver.apply(dialect, methodParameter).stream()
-        .map(statement -> statement)
-        .collect(Collectors.toList());
+    return new ArrayList<>(statementsResolver.apply(dialect, methodParameter));
   }
 
   public List<String> resolveStatements(final String collectionOwner, final String elementOwner, final CodeGenerationParameter methodParameter) {
