@@ -45,7 +45,12 @@ public class Assertions {
     final String eventName = method.retrieveRelatedValue(Label.DOMAIN_EVENT);
     final int expectedNumberOfStates = AuxiliaryEntityCreation.isRequiredFor(method, defaultFactoryMethod) ? 2 : 1;
 
-    if (eventName != null && !eventName.isEmpty()) {
+    if (!method.hasAny(Label.METHOD_PARAMETER) && eventName != null && !eventName.isEmpty())
+      return Collections.singletonList(
+          String.format(ASSERT_EQUAL_DISPATCHER_ACCESS_STATES_COUNT, expectedNumberOfStates)
+      );
+
+    if(eventName != null && !eventName.isEmpty()) {
       return Arrays.asList(
           String.format(ASSERT_EQUAL_DISPATCHER_ACCESS_STATES_COUNT, expectedNumberOfStates),
           ASSERT_EQUAL_STATE_GET_TYPE_DISPATCHER_ACCESS_READ_STATE_TYPE
