@@ -13,8 +13,8 @@ public class Rank : IEquatable<Rank>
 
   private Rank(int points, string classification)
   {
-    this.Points = points;
-    this.Classification = classification;
+    Points = points;
+    Classification = classification;
   }
 
   public override bool Equals(object obj)

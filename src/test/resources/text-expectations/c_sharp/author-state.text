@@ -22,28 +22,28 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 
   private AuthorState(string id, string name, List<Double> rank, string shortDescription) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
-    this.Id = id;
-    this.Name = name;
-    this.Rank.AddRange(rank);
-    this.ShortDescription = shortDescription;
+    Id = id;
+    Name = name;
+    Rank.AddRange(rank);
+    ShortDescription = shortDescription;
   }
 
   public AuthorState WithName(string name)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, name, this.Rank, this.ShortDescription);
+    return new AuthorState(Id, name, Rank, ShortDescription);
   }
 
   public AuthorState ChangeRank(List<Double> rank)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, rank, this.ShortDescription);
+    return new AuthorState(Id, Name, rank, ShortDescription);
   }
 
   public AuthorState Hide()
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, this.Rank, this.ShortDescription);
+    return new AuthorState(Id, Name, Rank, ShortDescription);
   }
 
   public override IEntry WithId(string id) => IdentifiedBy(id);

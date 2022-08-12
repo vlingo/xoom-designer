@@ -72,9 +72,9 @@ public enum CollectionMutation {
         .collect(Collectors.toList());
   }
 
-  public List<String> resolveStatements(final String collectionOwner, final Dialect dialect, final CodeGenerationParameter methodParameter) {
+  public List<String> resolveStatements(final Dialect dialect, final CodeGenerationParameter methodParameter) {
     return statementsResolver.apply(dialect, methodParameter).stream()
-        .map(statement -> collectionOwner + "." + statement)
+        .map(statement -> statement)
         .collect(Collectors.toList());
   }
 

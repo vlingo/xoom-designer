@@ -36,7 +36,7 @@ public class AlternateReference extends Formatters.Fields<String> {
   }
 
   static AlternateReference handlingSelfReferencedFields() {
-    return new AlternateReference(field -> "this." + toPascalCase(field.value));
+    return new AlternateReference(field -> toPascalCase(field.value));
   }
 
   static AlternateReference handlingDefaultFieldsValue() {

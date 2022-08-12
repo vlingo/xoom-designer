@@ -51,7 +51,7 @@ public class AggregateStateMethodTemplateData extends TemplateData {
     return method.retrieveAllRelated(Label.METHOD_PARAMETER).flatMap(methodParameter -> {
       final CollectionMutation collectionMutation =
           methodParameter.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
-      return collectionMutation.resolveStatements("this", dialect, methodParameter).stream();
+      return collectionMutation.resolveStatements(dialect, methodParameter).stream();
     }).collect(Collectors.toList());
   }
 

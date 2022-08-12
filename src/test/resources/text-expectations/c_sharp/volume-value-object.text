@@ -13,8 +13,8 @@ public class Volume : IEquatable<Volume>
 
   private Volume(int number, DateTime publicationDate)
   {
-    this.Number = number;
-    this.PublicationDate = publicationDate;
+    Number = number;
+    PublicationDate = publicationDate;
   }
 
   public override bool Equals(object obj)

@@ -10,9 +10,9 @@ public interface IAuthor
 
   static ICompletes<AuthorState> WithName(Stage stage, string name, String relatedAuthor)
   {
-    var _address = stage.AddressFactory.UniquePrefixedWith("g-");
-    var _author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(_address.IdString)), _address);
-    return _author.WithName(name, relatedAuthor);
+    var address = stage.AddressFactory.UniquePrefixedWith("g-");
+    var author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(address.IdString)), address);
+    return author.WithName(name, relatedAuthor);
   }
 
   ICompletes<AuthorState> ChangeRank(List<Double> rank);

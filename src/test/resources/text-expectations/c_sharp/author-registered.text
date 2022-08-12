@@ -16,7 +16,7 @@ public class AuthorRegistered : IdentifiedDomainEvent
 
   public AuthorRegistered(string id) : base(SemanticVersion.From("1.0.0").ToValue())
   {
-    this.Id = id;
+    Id = id;
   }
 
   public override string Identity => Id;

@@ -20,8 +20,8 @@ import static java.util.stream.Collectors.toList;
 
 public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<String>> {
 
-  private static final String LIST_ADD_ASSIGNMENT = "this.%s.AddRange(%s);";
-  private static final String MEMBER_ASSIGMENT = "this.%s = %s;";
+  private static final String LIST_ADD_ASSIGNMENT = "%s.AddRange(%s);";
+  private static final String MEMBER_ASSIGMENT = "%s = %s;";
 
   @Override
   public List<String> format(final CodeGenerationParameter aggregate, final Stream<CodeGenerationParameter> fields) {

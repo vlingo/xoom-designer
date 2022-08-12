@@ -13,7 +13,7 @@ public sealed class ${entityName} : StatefulEntity<${stateName}>, I${aggregatePr
 
   public ${entityName}(${idType} id) : base(id)
   {
-    this._state = ${stateName}.IdentifiedBy(id);
+    _state = ${stateName}.IdentifiedBy(id);
   }
 
   public ICompletes<${stateName}> CurrentState()
@@ -26,7 +26,7 @@ public sealed class ${entityName} : StatefulEntity<${stateName}>, I${aggregatePr
   </#list>
   protected override void State(${stateName} state)
   {
-    this._state = state;
+    _state = state;
   }
 
   protected Type StateType() => typeof(${stateName});

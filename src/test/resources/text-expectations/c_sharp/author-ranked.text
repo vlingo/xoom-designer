@@ -17,8 +17,8 @@ public class AuthorRanked : IdentifiedDomainEvent
 
   public AuthorRanked(string id, List<Double> rank) : base(SemanticVersion.From("1.0.0").ToValue())
   {
-    this.Id = id;
-    this.Rank.AddRange(rank);
+    Id = id;
+    Rank.AddRange(rank);
   }
 
   public override string Identity => Id;

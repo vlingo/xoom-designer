@@ -23,58 +23,58 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 
   private AuthorState(string id, string name, List<Double> rank, List<String> relatedAuthors, DateTime availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
-    this.Id = id;
-    this.Name = name;
-    this.Rank.AddRange(rank);
-    this.RelatedAuthors.AddRange(relatedAuthors);
-    this.AvailableOn = availableOn;
+    Id = id;
+    Name = name;
+    Rank.AddRange(rank);
+    RelatedAuthors.AddRange(relatedAuthors);
+    AvailableOn = availableOn;
   }
 
   public AuthorState WithName(string name, String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.RelatedAuthors.Add(relatedAuthor);
-    return new AuthorState(this.Id, name, this.Rank, this.RelatedAuthors, this.AvailableOn);
+    RelatedAuthors.Add(relatedAuthor);
+    return new AuthorState(Id, name, Rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState ChangeRank(List<Double> rank)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, rank, this.RelatedAuthors, this.AvailableOn);
+    return new AuthorState(Id, Name, rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState Hide()
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState RelateAuthor(String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.RelatedAuthors.Add(relatedAuthor);
-    return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
+    RelatedAuthors.Add(relatedAuthor);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState RelateAuthors(List<String> relatedAuthors)
   {
     //TODO: Implement command logic.
-    this.RelatedAuthors.RemoveAll(relatedAuthors);
-    this.relatedAuthors.AddRange(relatedAuthors);
-    return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
+    RelatedAuthors.RemoveAll(relatedAuthors);
+    relatedAuthors.AddRange(relatedAuthors);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState UnrelateAuthor(String relatedAuthor)
   {
     //TODO: Implement command logic.
-    this.RelatedAuthors.Remove(relatedAuthor);
-    return new AuthorState(this.Id, this.Name, this.Rank, this.RelatedAuthors, this.AvailableOn);
+    RelatedAuthors.Remove(relatedAuthor);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
   public AuthorState ReplaceAllRelatedAuthors(List<String> relatedAuthors)
   {
     //TODO: Implement command logic.
-    return new AuthorState(this.Id, this.Name, this.Rank, relatedAuthors, this.AvailableOn);
+    return new AuthorState(Id, Name, Rank, relatedAuthors, AvailableOn);
   }
 
   public override IEntry WithId(string id) => IdentifiedBy(id);

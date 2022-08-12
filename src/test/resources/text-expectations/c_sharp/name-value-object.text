@@ -13,8 +13,8 @@ public class Name : IEquatable<Name>
 
   private Name(string firstName, string lastName)
   {
-    this.FirstName = firstName;
-    this.LastName = lastName;
+    FirstName = firstName;
+    LastName = lastName;
   }
 
   public override bool Equals(object obj)

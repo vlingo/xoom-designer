@@ -17,8 +17,8 @@ public class AuthorShortDescriptionChanged : IdentifiedDomainEvent
 
   public AuthorShortDescriptionChanged(string id, string shortDescription) : base(SemanticVersion.From("1.0.0").ToValue())
   {
-    this.Id = id;
-    this.ShortDescription = shortDescription;
+    Id = id;
+    ShortDescription = shortDescription;
   }
 
   public override string Identity => Id;

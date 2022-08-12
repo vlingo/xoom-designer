@@ -1,3 +1,4 @@
+using System;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 
@@ -12,7 +13,7 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
 
   public AuthorEntity(string id) : base(id)
   {
-    this._state = AuthorState.IdentifiedBy(id);
+    _state = AuthorState.IdentifiedBy(id);
   }
 
   public ICompletes<AuthorState> CurrentState()
@@ -57,7 +58,7 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
 
   protected override void State(AuthorState state)
   {
-    this._state = state;
+    _state = state;
   }
 
   protected Type StateType() => typeof(AuthorState);
