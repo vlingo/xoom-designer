@@ -12,8 +12,8 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 public class AuthorShortDescriptionChanged : IdentifiedDomainEvent
 {
 
-  public string Id {get; private set;}
-  public string ShortDescription {get; private set;}
+  public string Id {get;}
+  public string ShortDescription {get;}
 
   public AuthorShortDescriptionChanged(string id, string shortDescription) : base(SemanticVersion.From("1.0.0").ToValue())
   {

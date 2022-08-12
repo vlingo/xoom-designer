@@ -26,8 +26,8 @@ import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDeta
 
 public class Member extends Formatters.Fields<List<String>> {
 
-  private static final String FIELD_MEMBER_INSTANTIATION = "%s {get; private set;} = %s;";
-  private static final String FIELD_MEMBER_DECLARATION = "%s {get; private set;}";
+  private static final String FIELD_MEMBER_INSTANTIATION = "%s {get;} = %s;";
+  private static final String FIELD_MEMBER_DECLARATION = "%s {get;}";
   private final BiFunction<String, String, String> declarationResolver;
 
   Member(final Dialect dialect) {

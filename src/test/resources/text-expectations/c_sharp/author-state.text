@@ -10,10 +10,10 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
  */
 public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 {
-  public string Id {get; private set;}
-  public string Name {get; private set;}
-  public List<Double> Rank {get; private set;} = new List<Double>();
-  public string ShortDescription {get; private set;}
+  public string Id {get;}
+  public string Name {get;}
+  public List<Double> Rank {get;} = new List<Double>();
+  public string ShortDescription {get;}
 
   public static AuthorState IdentifiedBy(string id)
   {

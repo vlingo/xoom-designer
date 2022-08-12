@@ -12,7 +12,7 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 public class AuthorRegistered : IdentifiedDomainEvent
 {
 
-  public string Id {get; private set;}
+  public string Id {get;}
 
   public AuthorRegistered(string id) : base(SemanticVersion.From("1.0.0").ToValue())
   {
