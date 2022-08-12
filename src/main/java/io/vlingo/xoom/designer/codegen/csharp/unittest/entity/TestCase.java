@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.csharp.unittest.entity;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class TestCase {
   private TestCase(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
                    final List<CodeGenerationParameter> valueObjects,
                    final Optional<String> defaultFactoryMethod, final TestDataValueGenerator.TestDataValues initialTestDataValues) {
-    this.methodName = method.value;
+    this.methodName = AggregateDetail.methodNameFrom(method);
     final TestDataValueGenerator.TestDataValues updatedTestDataValues = initialTestDataValues.updateAllValues();
 
     final List<String> dataDeclarations = StaticDataDeclaration.generate(method, aggregate, valueObjects, initialTestDataValues, updatedTestDataValues);
