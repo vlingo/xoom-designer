@@ -1,0 +1,45 @@
+using Io.Vlingo.Xoomapp.Model.Author.AuthorState;
+
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public class CommandModelStateStoreProvider
+{
+
+  public IStateStore Store {get;}
+
+  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
+  {
+    return Using(stage, registry, new [] { new NoOpDispatcher() });
+  }
+
+  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher[] dispatchers)
+  {
+    if (ComponentRegistry.Has<CommandModelStateStoreProvider>())
+    {
+      return ComponentRegistry.WithType<CommandModelStateStoreProvider>;
+    }
+
+    var stateAdapterProvider = new StateAdapterProvider(stage.World);
+
+    new EntryAdapterProvider(stage.World); // future use
+
+    StateTypeStateStoreMap.StateTypeToStoreName<AuthorState>(nameof(AuthorState));
+
+    var store = StoreActorBuilder.From(stage, Model.COMMAND, dispatchers, StorageType.STATE_STORE, Settings.Properties, true);
+
+    return new CommandModelStateStoreProvider(stage, store);
+  }
+
+  private CommandModelStateStoreProvider(Stage stage, IStateStore store)
+  {
+    Store = store;
+    ComponentRegistry.Register(GetType(), this);
+  }
+}

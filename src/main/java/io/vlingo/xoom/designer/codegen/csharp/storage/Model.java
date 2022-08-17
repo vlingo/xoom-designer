@@ -21,10 +21,11 @@ public enum Model {
     this.title = title;
   }
 
-  public static Stream<Model> applicableTo(final Boolean useCQRS) {
-    if (useCQRS) {
-      return Stream.of(QUERY, COMMAND);
-    }
+  public static Stream<Model> applicableToQueryAndCommand() {
+    return Stream.of(QUERY, COMMAND);
+  }
+
+  public static Stream<Model> applicableToDomain() {
     return Stream.of(DOMAIN);
   }
 

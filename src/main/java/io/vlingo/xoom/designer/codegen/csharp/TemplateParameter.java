@@ -51,7 +51,20 @@ public enum TemplateParameter implements ParameterKey {
   AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
   DATA_OBJECT_NAME("dataObjectName"),
   VALUE_OBJECT_NAME("valueObjectName"),
-  DATA_VALUE_OBJECT_NAME("dataValueObjectName");
+  DATA_VALUE_OBJECT_NAME("dataValueObjectName"),
+  MODEL("model"),
+  QUERY_BY_ID_METHOD_NAME("queryByIdMethodName"),
+  QUERY_ALL_METHOD_NAME("queryAllMethodName"),
+  REQUIRE_ADAPTERS("requireAdapters"),
+  USE_PROJECTIONS("useProjections"),
+  USE_ANNOTATIONS("useAnnotations"),
+  PROJECTION_TYPE("projectionType"),
+  ADAPTERS("adapters"),
+  PERSISTENT_TYPES("persistentTypes"),
+  STORE_PROVIDER_NAME("storeProviderName"),
+  QUERIES("queries"),
+  QUERIES_NAME("queriesName"),
+  QUERIES_ACTOR_NAME("queriesActorName");
 
   public final String key;
 

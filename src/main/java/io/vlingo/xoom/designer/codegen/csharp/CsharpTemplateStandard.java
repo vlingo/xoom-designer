@@ -9,13 +9,15 @@ package io.vlingo.xoom.designer.codegen.csharp;
 
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
+import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static io.vlingo.xoom.designer.codegen.csharp.Template.*;
-import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.APPLICATION_NAME;
-import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.METHOD_SCOPE;
+import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.*;
 
 public enum CsharpTemplateStandard implements TemplateStandard {
 
@@ -39,9 +41,21 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   ENTITY_UNIT_TEST(parameters -> Template.STATEFUL_ENTITY_UNIT_TEST.filename, (name, parameters) -> name + "Test"),
   MOCK_DISPATCHER(parameters -> Template.EVENT_BASED_MOCK_DISPATCHER.filename, (name, parameters) -> "MockDispatcher"),
   ADAPTER(parameters -> Template.STATE_ADAPTER.filename, (name, parameters) -> name + "Adapter"),
-  BOOTSTRAP(parameters -> DEFAULT_BOOTSTRAP.filename,
-      (name, parameters) -> "Bootstrap"),
-  VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename);
+  BOOTSTRAP(parameters -> DEFAULT_BOOTSTRAP.filename, (name, parameters) -> "Bootstrap"),
+  VALUE_OBJECT(parameters -> Template.VALUE_OBJECT.filename),
+  STORE_PROVIDER(parameters -> CodeGenerationProperties.storeProviderCsharpTemplatesFrom(parameters.find(MODEL)).get(parameters.find(STORAGE_TYPE)),
+      (name, parameters) -> {
+        final StorageType storageType = parameters.find(STORAGE_TYPE);
+        final Model model = parameters.find(MODEL);
+        if (model.isQueryModel()) {
+          return StorageType.STATE_STORE.resolveProviderNameFrom(model);
+        }
+        return storageType.resolveProviderNameFrom(model);
+      }),
+  QUERIES(parameters -> Template.QUERIES.filename, (name, parameters) -> name + "Queries"),
+  QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename, (name, parameters) -> name + "QueriesActor"),
+  DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ? Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
+      (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),;
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

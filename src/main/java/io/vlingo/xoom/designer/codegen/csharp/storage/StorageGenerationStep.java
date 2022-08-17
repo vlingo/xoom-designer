@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 
 import java.util.List;
 
@@ -21,8 +22,13 @@ public class StorageGenerationStep extends TemplateProcessingStep {
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String basePackage = context.parameterOf(Label.PACKAGE);
     final StorageType storageType = context.parameterOf(Label.STORAGE_TYPE, StorageType::of);
+    final ProjectionType projectionType = context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf);
+    final Boolean useAnnotations = context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
+    final Boolean useCQRS = context.parameterOf(Label.CQRS, Boolean::valueOf);
+    if(!useCQRS && !useAnnotations)
+      return StorageTemplateDataFactory.build(basePackage, context.contents(), storageType, projectionType);
 
-    return StorageTemplateDataFactory.build(basePackage, context.contents(), storageType);
+    return StorageTemplateDataFactory.buildWithCqrs(basePackage, context.contents(), storageType, projectionType);
   }
 
   @Override

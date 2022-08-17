@@ -1,0 +1,65 @@
+<#list imports as import>
+using ${import.qualifiedClassName};
+</#list>
+
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
+
+namespace ${packageName};
+
+public class ${storeProviderName}
+{
+
+  public IStateStore Store {get;}
+  <#list queries as query>
+  public ${query.protocolName} ${query.attributeName} {get;}
+  </#list>
+
+  public static ${storeProviderName} Using(Stage stage, StatefulTypeRegistry registry)
+  {
+    return Using(stage, registry, new [] { new NoOpDispatcher() });
+  }
+
+  public static ${storeProviderName} Using(Stage stage, StatefulTypeRegistry registry, IDispatcher[] dispatchers)
+  {
+    if (ComponentRegistry.Has<${storeProviderName}>())
+    {
+      return ComponentRegistry.WithType<${storeProviderName}>;
+    }
+
+<#if requireAdapters>
+    var stateAdapterProvider = new StateAdapterProvider(stage.World);
+<#list adapters as stateAdapter>
+    stateAdapterProvider.RegisterAdapter<${stateAdapter.sourceClass}>(new ${stateAdapter.adapterClass}());
+</#list>
+
+</#if>
+    new EntryAdapterProvider(stage.World); // future use
+
+<#list persistentTypes as persistentType>
+    StateTypeStateStoreMap.StateTypeToStoreName<${persistentType}>(nameof(${persistentType}));
+</#list>
+
+    var store = StoreActorBuilder.From(stage, Model.${model}, dispatchers, StorageType.STATE_STORE, Settings.Properties, true);
+<#if requireAdapters>
+<#list adapters as stateAdapter>
+    registry.Register(new Info(store, typeof(${stateAdapter.sourceClass}), nameof(${stateAdapter.sourceClass})));
+</#list>
+</#if>
+
+    return new ${storeProviderName}(stage, store);
+  }
+
+  private ${storeProviderName}(Stage stage, IStateStore store)
+  {
+    Store = store;
+    <#list queries as query>
+    ${query.attributeName} = stage.ActorFor<${query.protocolName}>(typeof(${query.actorName}), store);
+    </#list>
+    ComponentRegistry.Register(GetType(), this);
+  }
+}

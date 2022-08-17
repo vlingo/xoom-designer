@@ -96,26 +96,47 @@ public class CodeGenerationProperties {
           );
 
   public static final Map<StorageType, String> COMMAND_MODEL_STORE_TEMPLATES =
-          Collections.unmodifiableMap(
-                  new HashMap<StorageType, String>() {{
-                    put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
-                    put(StorageType.JOURNAL, JOURNAL_PROVIDER.filename);
-                  }}
-          );
+      Collections.unmodifiableMap(
+          new HashMap<StorageType, String>() {{
+            put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
+            put(StorageType.JOURNAL, JOURNAL_PROVIDER.filename);
+          }}
+      );
 
   public static final Map<StorageType, String> QUERY_MODEL_STORE_TEMPLATES =
-          Collections.unmodifiableMap(
-                  new HashMap<StorageType, String>() {{
-                    put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
-                    put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
-                  }}
-          );
+      Collections.unmodifiableMap(
+          new HashMap<StorageType, String>() {{
+            put(StorageType.STATE_STORE, STATE_STORE_PROVIDER.filename);
+            put(StorageType.JOURNAL, STATE_STORE_PROVIDER.filename);
+          }}
+      );
 
-  public static Map<StorageType, String> storeProviderTemplatesFrom(final Model model) {
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> CSHARP_COMMAND_MODEL_STORE_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATE_STORE_PROVIDER.filename);
+          }}
+      );
+
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> CSHARP_QUERY_MODEL_STORE_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATE_STORE_PROVIDER.filename);
+          }}
+      );
+
+  public static Map<StorageType, String> storeProviderTemplatesFrom(final Model  model) {
     if (model.isQueryModel()) {
       return QUERY_MODEL_STORE_TEMPLATES;
     }
     return COMMAND_MODEL_STORE_TEMPLATES;
+  }
+
+  public static Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> storeProviderCsharpTemplatesFrom(final io.vlingo.xoom.designer.codegen.csharp.storage.Model  model) {
+    if (model.isQueryModel()) {
+      return CSHARP_QUERY_MODEL_STORE_TEMPLATES;
+    }
+    return CSHARP_COMMAND_MODEL_STORE_TEMPLATES;
   }
 
   public static String resoleDateTimeFieldType(String fieldType, String platform) {

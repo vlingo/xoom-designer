@@ -28,7 +28,12 @@ public enum Template {
   STATE_ADAPTER("StateAdapter"),
   DEFAULT_BOOTSTRAP("DefaultBootstrap"),
   VALUE_OBJECT("ValueObject"),
-  STATE_DATA_OBJECT("StateDataObject");
+  STATE_DATA_OBJECT("StateDataObject"),
+  VALUE_DATA_OBJECT("ValueDataObject"),
+  STATE_STORE_PROVIDER("StateStoreProvider"),
+  JOURNAL_PROVIDER("JournalProvider"),
+  QUERIES("Queries"),
+  QUERIES_ACTOR("QueriesActor");
 
   public final String filename;
 
