@@ -5,6 +5,10 @@ using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+using Vlingo.Xoom.Turbo.Actors;
+using Vlingo.Xoom.Turbo.Annotation.Codegen.Storage;
+using Vlingo.Xoom.Turbo.Storage;
 using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
@@ -12,18 +16,18 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 public class CommandModelStateStoreProvider
 {
 
-  public IStateStore Store {get;}
+  public IStateStore Store { get; }
 
   public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
   {
-    return Using(stage, registry, new [] { new NoOpDispatcher() });
+    return Using(stage, registry, new NoOpDispatcher());
   }
 
-  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher[] dispatchers)
+  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher dispatcher)
   {
     if (ComponentRegistry.Has<CommandModelStateStoreProvider>())
     {
-      return ComponentRegistry.WithType<CommandModelStateStoreProvider>;
+      return ComponentRegistry.WithType<CommandModelStateStoreProvider>();
     }
 
     var stateAdapterProvider = new StateAdapterProvider(stage.World);
@@ -32,7 +36,7 @@ public class CommandModelStateStoreProvider
 
     StateTypeStateStoreMap.StateTypeToStoreName<AuthorState>(nameof(AuthorState));
 
-    var store = StoreActorBuilder.From(stage, Model.COMMAND, dispatchers, StorageType.STATE_STORE, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Model("COMMAND"), dispatcher, StorageType.StateStore, Settings.Properties, true);
 
     return new CommandModelStateStoreProvider(stage, store);
   }

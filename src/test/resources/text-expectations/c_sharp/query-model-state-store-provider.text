@@ -5,6 +5,10 @@ using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+using Vlingo.Xoom.Turbo.Actors;
+using Vlingo.Xoom.Turbo.Annotation.Codegen.Storage;
+using Vlingo.Xoom.Turbo.Storage;
 using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
@@ -12,25 +16,25 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 public class QueryModelStateStoreProvider
 {
 
-  public IStateStore Store {get;}
+  public IStateStore Store { get; }
 
   public static QueryModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
   {
-    return Using(stage, registry, new [] { new NoOpDispatcher() });
+    return Using(stage, registry, new NoOpDispatcher());
   }
 
-  public static QueryModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher[] dispatchers)
+  public static QueryModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher dispatcher)
   {
     if (ComponentRegistry.Has<QueryModelStateStoreProvider>())
     {
-      return ComponentRegistry.WithType<QueryModelStateStoreProvider>;
+      return ComponentRegistry.WithType<QueryModelStateStoreProvider>();
     }
 
     new EntryAdapterProvider(stage.World); // future use
 
     StateTypeStateStoreMap.StateTypeToStoreName<AuthorData>(nameof(AuthorData));
 
-    var store = StoreActorBuilder.From(stage, Model.QUERY, dispatchers, StorageType.STATE_STORE, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Model("QUERY"), dispatcher, StorageType.StateStore, Settings.Properties, true);
 
     return new QueryModelStateStoreProvider(stage, store);
   }
