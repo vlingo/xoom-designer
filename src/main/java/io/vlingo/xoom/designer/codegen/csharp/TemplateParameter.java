@@ -64,7 +64,9 @@ public enum TemplateParameter implements ParameterKey {
   STORE_PROVIDER_NAME("storeProviderName"),
   QUERIES("queries"),
   QUERIES_NAME("queriesName"),
-  QUERIES_ACTOR_NAME("queriesActorName");
+  QUERIES_ACTOR_NAME("queriesActorName"),
+  PROJECTION_NAME("projectionName"),
+  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),;
 
   public final String key;
 

@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.csharp;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
@@ -55,7 +56,25 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   QUERIES(parameters -> Template.QUERIES.filename, (name, parameters) -> name + "Queries"),
   QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename, (name, parameters) -> name + "QueriesActor"),
   DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ? Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
-      (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),;
+      (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),
+  PROJECTION(parameters -> CodeGenerationProperties.PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
+      (name, parameters) -> name + "ProjectionActor"),
+  PROJECTION_UNIT_TEST(parameters -> {
+    final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+    if (!projectionType.isProjectionEnabled()) {
+      return NO_PROJECTION_UNIT_TEST.filename;
+    }
+    if (projectionType.isEventBased()) {
+      return Template.EVENT_BASED_PROJECTION_UNIT_TEST.filename;
+    }
+    return Template.OPERATION_BASED_PROJECTION_UNIT_TEST.filename;
+  }, (name, parameters) -> name + "Test"),
+  COUNTING_READ_RESULT(parameters -> Template.COUNTING_READ_RESULT.filename,
+      (name, parameters) -> "CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL(parameters -> Template.COUNTING_PROJECTION_CTL.filename,
+      (name, parameters) -> "CountingProjectionControl"),
+  PERSISTENCE_SETUP(parameters -> Template.PERSISTENCE_SETUP.filename,
+      (name, parameters) -> "PersistenceSetup"),;
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

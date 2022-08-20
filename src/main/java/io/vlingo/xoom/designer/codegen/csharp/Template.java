@@ -33,7 +33,13 @@ public enum Template {
   STATE_STORE_PROVIDER("StateStoreProvider"),
   JOURNAL_PROVIDER("JournalProvider"),
   QUERIES("Queries"),
-  QUERIES_ACTOR("QueriesActor");
+  QUERIES_ACTOR("QueriesActor"),
+  NO_PROJECTION_UNIT_TEST("NoProjectionUnitTest"),
+  OPERATION_BASED_PROJECTION_UNIT_TEST("OperationBasedProjectionUnitTest"),
+  EVENT_BASED_PROJECTION_UNIT_TEST("EventBasedProjectionUnitTest"),
+  COUNTING_READ_RESULT("CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL("CountingProjectionControl"),
+  PERSISTENCE_SETUP("PersistenceSetup"),;
 
   public final String filename;
 

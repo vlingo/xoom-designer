@@ -1,0 +1,409 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+using Io.Vlingo.Xoomapp.Model;
+using Io.Vlingo.Xoomapp;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+
+public class AuthorProjectionTest: IDisposable
+{
+  private readonly World _world;
+  private readonly IProjection _projection;
+  private readonly Dictionary<string, string> _valueToProjectionId;
+
+  public AuthorProjectionTest()
+  {
+    _world = World.StartWithDefaults("test-state-store-projection");
+    var store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
+    _projection = _world.ActorFor<IProjection>(typeof(AuthorProjectionActor), store);
+    StatefulTypeRegistry.RegisterAll<AuthorData>(_world, store);
+    _valueToProjectionId = new Dictionary<string, string>();
+  }
+
+  [Fact]
+  public void WithName()
+  {
+		var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+		var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+		var control = new CountingProjectionControl();
+    var access = control.AfterCompleting(2);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    var confirmations = access.ReadFrom("confirmations");
+
+    Assert.Equal(2, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(2, ((IDictionary) access.ReadFrom("confirmations")).Count);
+  }
+
+  [Fact]
+	public void ChangeRank()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorRanked(firstData, 2, "AuthorRanked"), control);
+    _projection.ProjectWith(CreateAuthorRanked(secondData, 2, "AuthorRanked"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void AddTag()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorTagged(firstData, 2, "AuthorTagged"), control);
+    _projection.ProjectWith(CreateAuthorTagged(secondData, 2, "AuthorTagged"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void AddTags()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorBulkTagged(firstData, 2, "AuthorBulkTagged"), control);
+    _projection.ProjectWith(CreateAuthorBulkTagged(secondData, 2, "AuthorBulkTagged"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void ReplaceTags()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorTagsReplacedEvent(firstData, 2, "AuthorTagsReplacedEvent"), control);
+    _projection.ProjectWith(CreateAuthorTagsReplacedEvent(secondData, 2, "AuthorTagsReplacedEvent"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void RemoveTag()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorUntagged(firstData, 2, "AuthorUntagged"), control);
+    _projection.ProjectWith(CreateAuthorUntagged(secondData, 2, "AuthorUntagged"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void RelateAuthor()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorRelated(firstData, 2, "AuthorRelated"), control);
+    _projection.ProjectWith(CreateAuthorRelated(secondData, 2, "AuthorRelated"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void RelateAuthors()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorsRelated(firstData, 2, "AuthorsRelated"), control);
+    _projection.ProjectWith(CreateAuthorsRelated(secondData, 2, "AuthorsRelated"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void UnrelateAuthor()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateAuthorUnrelated(firstData, 2, "AuthorUnrelated"), control);
+    _projection.ProjectWith(CreateAuthorUnrelated(secondData, 2, "AuthorUnrelated"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  [Fact]
+	public void ReplaceAllRelatedAuthors()
+  {
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+	  var control = new CountingProjectionControl();
+
+		var accessControl = control.AfterCompleting(4);
+
+    _projection.ProjectWith(CreateAuthorRegistered(firstData, 1, "AuthorRegistered"), control);
+    _projection.ProjectWith(CreateAuthorRegistered(secondData, 1, "AuthorRegistered"), control);
+
+    _projection.ProjectWith(CreateRelatedAuthorsReplacedEvent(firstData, 2, "RelatedAuthorsReplacedEvent"), control);
+    _projection.ProjectWith(CreateRelatedAuthorsReplacedEvent(secondData, 2, "RelatedAuthorsReplacedEvent"), control);
+
+		var confirmations = accessControl.ReadFrom("confirmations");
+
+    Assert.Equal(4, confirmations.Count);
+
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.id, confirmations));
+
+    Assert.Equal(4, ((IDictionary) accessControl.ReadFrom("confirmations")).Count);
+	}
+
+  public void Dispose()
+  {
+    _world.Terminate();
+  }
+
+  private int ValueOfProjectionIdFor(string valueText, Dictionary<string, int> confirmations)
+  {
+    return confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
+  }
+
+	private IProjectable CreateAuthorRegistered(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorRanked(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorTagged(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorBulkTagged(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorTagsReplacedEvent(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorUntagged(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorRelated(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorsRelated(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateAuthorUnrelated(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+
+	private IProjectable CreateRelatedAuthorsReplacedEvent(AuthorData data, int version, String operation)
+  {
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		Metadata.With(data.ToAuthorState(), data.Id, operation));
+
+		var projectionId = Guid.NewGuid().ToString();
+
+    _valueToProjectionId.Add(data.Id, projectionId);
+
+		return new TextProjectable(state, new List<IEntry>(), projectionId);
+	}
+}
