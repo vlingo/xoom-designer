@@ -1,3 +1,5 @@
+using System;
+
 namespace Io.Vlingo.Xoomapp.Model;
 
 public class Name : IEquatable<Name>

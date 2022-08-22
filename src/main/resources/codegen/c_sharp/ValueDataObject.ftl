@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
 <#if imports?has_content>
 <#list imports as import>
 using ${import.qualifiedClassName};

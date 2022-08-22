@@ -1,3 +1,5 @@
+using System;
+
 namespace ${packageName};
 
 public class ${valueObjectName} : IEquatable<${valueObjectName}>
