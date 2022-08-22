@@ -22,14 +22,14 @@ public class ClassifierData : IEquatable<ClassifierData>
     return new ClassifierData(name);
   }
 
-  public static Set<ClassifierData> FromAll(Set<Classifier> correspondingObjects)
+  public static ISet<ClassifierData> FromAll(ISet<Classifier> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<ClassifierData>() : correspondingObjects.Select(ClassifierData::From).ToSet();
+    return correspondingObjects == null ? new HashSet<ClassifierData>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<ClassifierData> FromAll(List<Classifier> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<ClassifierData>() : correspondingObjects.Select(ClassifierData::From).ToList();
+    return correspondingObjects == null ? new List<ClassifierData>() : correspondingObjects.Select(From).ToList();
   }
 
   private ClassifierData(String name)
@@ -39,7 +39,7 @@ public class ClassifierData : IEquatable<ClassifierData>
 
   public Classifier ToClassifier()
   {
-    return Classifier.From(name);
+    return Classifier.From(Name);
   }
 
   public static ClassifierData Empty => new ClassifierData(null);
@@ -49,9 +49,9 @@ public class ClassifierData : IEquatable<ClassifierData>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherData = (ClassifierData) obj;
-    return name == otherData.name;
+    return Name == otherData.Name;
   }
 
-  public bool Equals(ClassifierData other) => name == other.name;
-  public override int GetHashCode() => HashCode.Combine(name);
+  public bool Equals(ClassifierData other) => Name == other.Name;
+  public override int GetHashCode() => HashCode.Combine(Name);
 }

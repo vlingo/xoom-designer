@@ -25,14 +25,14 @@ public class PricingData : IEquatable<PricingData>
     return new PricingData(retailPrice, wholesalePrice);
   }
 
-  public static Set<PricingData> FromAll(Set<Pricing> correspondingObjects)
+  public static ISet<PricingData> FromAll(ISet<Pricing> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<PricingData>() : correspondingObjects.Select(PricingData::From).ToSet();
+    return correspondingObjects == null ? new HashSet<PricingData>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<PricingData> FromAll(List<Pricing> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<PricingData>() : correspondingObjects.Select(PricingData::From).ToList();
+    return correspondingObjects == null ? new List<PricingData>() : correspondingObjects.Select(From).ToList();
   }
 
   private PricingData(RetailPriceData retailPrice, WholesalePriceData wholesalePrice)
@@ -55,9 +55,9 @@ public class PricingData : IEquatable<PricingData>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherData = (PricingData) obj;
-    return retailPrice == otherData.retailPrice && wholesalePrice == otherData.wholesalePrice;
+    return RetailPrice == otherData.RetailPrice && WholesalePrice == otherData.WholesalePrice;
   }
 
-  public bool Equals(PricingData other) => retailPrice == other.retailPrice && wholesalePrice == other.wholesalePrice;
-  public override int GetHashCode() => HashCode.Combine(retailPrice, wholesalePrice);
+  public bool Equals(PricingData other) => RetailPrice == other.RetailPrice && WholesalePrice == other.WholesalePrice;
+  public override int GetHashCode() => HashCode.Combine(RetailPrice, WholesalePrice);
 }

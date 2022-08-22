@@ -23,14 +23,14 @@ public class NameData : IEquatable<NameData>
     return new NameData(firstName, lastName);
   }
 
-  public static Set<NameData> FromAll(Set<Name> correspondingObjects)
+  public static ISet<NameData> FromAll(ISet<Name> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<NameData>() : correspondingObjects.Select(NameData::From).ToSet();
+    return correspondingObjects == null ? new HashSet<NameData>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<NameData> FromAll(List<Name> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<NameData>() : correspondingObjects.Select(NameData::From).ToList();
+    return correspondingObjects == null ? new List<NameData>() : correspondingObjects.Select(From).ToList();
   }
 
   private NameData(String firstName, String lastName)
@@ -41,7 +41,7 @@ public class NameData : IEquatable<NameData>
 
   public Name ToName()
   {
-    return Name.From(firstName, lastName);
+    return Name.From(FirstName, LastName);
   }
 
   public static NameData Empty => new NameData(null, null);
@@ -51,9 +51,9 @@ public class NameData : IEquatable<NameData>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherData = (NameData) obj;
-    return firstName == otherData.firstName && lastName == otherData.lastName;
+    return FirstName == otherData.FirstName && LastName == otherData.LastName;
   }
 
-  public bool Equals(NameData other) => firstName == other.firstName && lastName == other.lastName;
-  public override int GetHashCode() => HashCode.Combine(firstName, lastName);
+  public bool Equals(NameData other) => FirstName == other.FirstName && LastName == other.LastName;
+  public override int GetHashCode() => HashCode.Combine(FirstName, LastName);
 }

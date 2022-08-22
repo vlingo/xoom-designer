@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 
 public class ValueObjectDetail {
@@ -106,7 +107,8 @@ public class ValueObjectDetail {
         return String.format(SINGLE_PARAMETER_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType);
       }
     }
-
+    if(FieldDetail.isSetTypedCollection(valueObjectField))
+      return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType, "Hash" + collectionType);
     return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType, collectionType);
   }
 
@@ -114,11 +116,12 @@ public class ValueObjectDetail {
     return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
         .map(field -> FieldDetail.resolveDefaultValue(field.parent(), field.value))
         .collect(Collectors.joining(JOINING_STRING_ARGUMENTS_DELIMITER));
-
   }
 
   public static List<String> resolveFieldsNames(final CodeGenerationParameter valueObject) {
-    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD).map(p -> p.value).collect(Collectors.toList());
+    return valueObject.retrieveAllRelated(Label.VALUE_OBJECT_FIELD)
+        .map(p -> toPascalCase(p.value))
+        .collect(Collectors.toList());
   }
 
   public static String joinValueObjectFields(final CodeGenerationParameter valueObject) {
@@ -129,8 +132,10 @@ public class ValueObjectDetail {
 
   private static String translateDataObjectField(final CodeGenerationParameter field) {
     if (FieldDetail.isValueObjectCollection(field))
-      return ValueObjectDetail.translateDataObjectCollection(field.value, field);
+      return ValueObjectDetail.translateDataObjectCollection(toPascalCase(field.value), field);
+    if (ValueObjectDetail.isValueObject(field))
+      return toCamelCase(field.value);
 
-    return field.value;
+    return toPascalCase(field.value);
   }
 }

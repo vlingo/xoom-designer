@@ -160,6 +160,10 @@ public class FieldDetail {
     return isCollection(field) && !isValueObjectCollection(field);
   }
 
+  public static boolean isSetTypedCollection(final CodeGenerationParameter field) {
+    return isCollection(field) && field.retrieveRelatedValue(Label.COLLECTION_TYPE).equalsIgnoreCase("Set");
+  }
+
   public static boolean isCollection(final String fieldType) {
     return isList(fieldType) || isSet(fieldType);
   }

@@ -35,14 +35,14 @@ public class ${dataValueObjectName} : IEquatable<${dataValueObjectName}>
   }
 
   </#list>
-  public static Set<${dataValueObjectName}> FromAll(Set<${valueObjectName}> correspondingObjects)
+  public static ISet<${dataValueObjectName}> FromAll(ISet<${valueObjectName}> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<${dataValueObjectName}>() : correspondingObjects.Select(${dataValueObjectName}::From).ToSet();
+    return correspondingObjects == null ? new HashSet<${dataValueObjectName}>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<${dataValueObjectName}> FromAll(List<${valueObjectName}> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<${dataValueObjectName}>() : correspondingObjects.Select(${dataValueObjectName}::From).ToList();
+    return correspondingObjects == null ? new List<${dataValueObjectName}>() : correspondingObjects.Select(From).ToList();
   }
 
   private ${dataValueObjectName}(${constructorParameters})

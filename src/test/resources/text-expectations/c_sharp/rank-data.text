@@ -24,14 +24,14 @@ public class RankData : IEquatable<RankData>
     return new RankData(points, classification);
   }
 
-  public static Set<RankData> FromAll(Set<Rank> correspondingObjects)
+  public static ISet<RankData> FromAll(ISet<Rank> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<RankData>() : correspondingObjects.Select(RankData::From).ToSet();
+    return correspondingObjects == null ? new HashSet<RankData>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<RankData> FromAll(List<Rank> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<RankData>() : correspondingObjects.Select(RankData::From).ToList();
+    return correspondingObjects == null ? new List<RankData>() : correspondingObjects.Select(From).ToList();
   }
 
   private RankData(int points, ClassificationData classification)
@@ -43,7 +43,7 @@ public class RankData : IEquatable<RankData>
   public Rank ToRank()
   {
     var classification = Classification.From(this.Classification.Label, this.Classification.Classifier);
-    return Rank.From(points, classification);
+    return Rank.From(Points, classification);
   }
 
   public static RankData Empty => new RankData(0, null);
@@ -53,9 +53,9 @@ public class RankData : IEquatable<RankData>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherData = (RankData) obj;
-    return points == otherData.points && classification == otherData.classification;
+    return Points == otherData.Points && Classification == otherData.Classification;
   }
 
-  public bool Equals(RankData other) => points == other.points && classification == other.classification;
-  public override int GetHashCode() => HashCode.Combine(points, classification);
+  public bool Equals(RankData other) => Points == other.Points && Classification == other.Classification;
+  public override int GetHashCode() => HashCode.Combine(Points, Classification);
 }

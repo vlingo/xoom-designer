@@ -14,7 +14,7 @@ public class ClassificationData : IEquatable<ClassificationData>
       return ClassificationData.Empty;
     else
     {
-      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToSet() : new HashSet<Classifier>();
+      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToHashSet() : new HashSet<Classifier>();
       return From(classification.Label, classifier);
     }
   }
@@ -24,14 +24,14 @@ public class ClassificationData : IEquatable<ClassificationData>
     return new ClassificationData(label, classifier);
   }
 
-  public static Set<ClassificationData> FromAll(Set<Classification> correspondingObjects)
+  public static ISet<ClassificationData> FromAll(ISet<Classification> correspondingObjects)
   {
-    return correspondingObjects == null ? new HashSet<ClassificationData>() : correspondingObjects.Select(ClassificationData::From).ToSet();
+    return correspondingObjects == null ? new HashSet<ClassificationData>() : correspondingObjects.Select(From).ToHashSet();
   }
 
   public static List<ClassificationData> FromAll(List<Classification> correspondingObjects)
   {
-    return correspondingObjects == null ? new List<ClassificationData>() : correspondingObjects.Select(ClassificationData::From).ToList();
+    return correspondingObjects == null ? new List<ClassificationData>() : correspondingObjects.Select(From).ToList();
   }
 
   private ClassificationData(String label, ISet<ClassifierData> classifier)
@@ -42,7 +42,7 @@ public class ClassificationData : IEquatable<ClassificationData>
 
   public Classification ToClassification()
   {
-    return Classification.From(label, classifier.Select(ClassifierData.toClassifier).ToSet());
+    return Classification.From(Label, Classifier.Select(ClassifierData.toClassifier).ToHashSet());
   }
 
   public static ClassificationData Empty => new ClassificationData(null, new HashSet<Classifier>());
@@ -52,9 +52,9 @@ public class ClassificationData : IEquatable<ClassificationData>
     if (obj == null || obj.GetType() != GetType()) return false;
 
     var otherData = (ClassificationData) obj;
-    return label == otherData.label && classifier == otherData.classifier;
+    return Label == otherData.Label && Classifier == otherData.Classifier;
   }
 
-  public bool Equals(ClassificationData other) => label == other.label && classifier == other.classifier;
-  public override int GetHashCode() => HashCode.Combine(label, classifier);
+  public bool Equals(ClassificationData other) => Label == other.Label && Classifier == other.Classifier;
+  public override int GetHashCode() => HashCode.Combine(Label, Classifier);
 }
