@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Io.Vlingo.Xoomapp.Model.Book.BookState;
 
-namespace io.vlingo.xoomapp.infrastructure;
+namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class BookData : IEquatable<BookData>
 {

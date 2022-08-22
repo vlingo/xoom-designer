@@ -28,8 +28,7 @@ import static java.util.stream.Collectors.toList;
 
 public class StateDataObjectTemplateData extends TemplateData {
 
-  private final static String PACKAGE_PATTERN = "%s.%s";
-  private final static String INFRA_PACKAGE_NAME = "Infrastructure";
+  private final static String PACKAGE_PATTERN = "%s.Infrastructure";
 
   private final String protocolName;
   private final TemplateParameters parameters;
@@ -48,7 +47,7 @@ public class StateDataObjectTemplateData extends TemplateData {
                                       final List<CodeGenerationParameter> valueObjects, final List<Content> contents) {
     this.protocolName = aggregate.value;
     this.codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
-    this.parameters = loadParameters(resolvePackage(basePackage), dialect, aggregate, valueObjects, contents);
+    this.parameters = loadParameters(String.format(PACKAGE_PATTERN, basePackage), dialect, aggregate, valueObjects, contents);
   }
 
   private TemplateParameters loadParameters(final String packageName, final Dialect dialect,
@@ -79,10 +78,6 @@ public class StateDataObjectTemplateData extends TemplateData {
         .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
         .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)))
         .addImport(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_STATE, stateName, contents));
-  }
-
-  private String resolvePackage(final String basePackage) {
-    return String.format(PACKAGE_PATTERN, basePackage, INFRA_PACKAGE_NAME).toLowerCase();
   }
 
   @Override

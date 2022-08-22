@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Io.Vlingo.Xoomapp.Model.Author.AuthorState;
 using Io.Vlingo.Xoomapp;
 
-namespace io.vlingo.xoomapp.infrastructure;
+namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class AuthorData : IEquatable<AuthorData>
 {
