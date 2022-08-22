@@ -1,0 +1,60 @@
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class ClassificationData : IEquatable<ClassificationData>
+{
+
+  public string Label {get;}
+  public ISet<Classifier> Classifier {get;} = new HashSet<Classifier>();
+
+  public static ClassificationData From(Classification classification)
+  {
+    if (classification == null)
+      return ClassificationData.Empty;
+    else
+    {
+      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToSet() : new HashSet<Classifier>();
+      return From(classification.Label, classifier);
+    }
+  }
+
+  public static ClassificationData From(String label, ISet<ClassifierData> classifier)
+  {
+    return new ClassificationData(label, classifier);
+  }
+
+  public static Set<ClassificationData> FromAll(Set<Classification> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<ClassificationData>() : correspondingObjects.Select(ClassificationData::From).ToSet();
+  }
+
+  public static List<ClassificationData> FromAll(List<Classification> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<ClassificationData>() : correspondingObjects.Select(ClassificationData::From).ToList();
+  }
+
+  private ClassificationData(String label, ISet<ClassifierData> classifier)
+  {
+    Label = label;
+    Classifier.AddRange(classifier);
+  }
+
+  public Classification ToClassification()
+  {
+    return Classification.From(label, classifier.Select(ClassifierData.toClassifier).ToSet());
+  }
+
+  public static ClassificationData Empty => new ClassificationData(null, new HashSet<Classifier>());
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (ClassificationData) obj;
+    return label == otherData.label && classifier == otherData.classifier;
+  }
+
+  public bool Equals(ClassificationData other) => label == other.label && classifier == other.classifier;
+  public override int GetHashCode() => HashCode.Combine(label, classifier);
+}

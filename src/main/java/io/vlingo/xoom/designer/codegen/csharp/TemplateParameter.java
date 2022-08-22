@@ -65,6 +65,12 @@ public enum TemplateParameter implements ParameterKey {
   QUERIES("queries"),
   QUERIES_NAME("queriesName"),
   QUERIES_ACTOR_NAME("queriesActorName"),
+  DATA_OBJECT_QUALIFIED_NAME("dataQualifiedName"),
+  VALUE_OBJECT_TRANSLATIONS("valueObjectTranslations"),
+  STATIC_FACTORY_METHODS("staticFactoryMethods"),
+  STATE_FIELDS("stateFields"),
+  VALUE_OBJECT_FIELDS("valueObjectFields"),
+  EMPTY_OBJECT_ARGUMENTS("emptyObjectArguments"),
   PROJECTION_NAME("projectionName"),
   PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),;
 

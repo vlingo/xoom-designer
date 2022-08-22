@@ -1,0 +1,57 @@
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class ClassifierData : IEquatable<ClassifierData>
+{
+
+  public string Name {get;}
+
+  public static ClassifierData From(Classifier classifier)
+  {
+    if (classifier == null)
+      return ClassifierData.Empty;
+    else
+    {
+      return From(classifier.Name);
+    }
+  }
+
+  public static ClassifierData From(String name)
+  {
+    return new ClassifierData(name);
+  }
+
+  public static Set<ClassifierData> FromAll(Set<Classifier> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<ClassifierData>() : correspondingObjects.Select(ClassifierData::From).ToSet();
+  }
+
+  public static List<ClassifierData> FromAll(List<Classifier> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<ClassifierData>() : correspondingObjects.Select(ClassifierData::From).ToList();
+  }
+
+  private ClassifierData(String name)
+  {
+    Name = name;
+  }
+
+  public Classifier ToClassifier()
+  {
+    return Classifier.From(name);
+  }
+
+  public static ClassifierData Empty => new ClassifierData(null);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (ClassifierData) obj;
+    return name == otherData.name;
+  }
+
+  public bool Equals(ClassifierData other) => name == other.name;
+  public override int GetHashCode() => HashCode.Combine(name);
+}

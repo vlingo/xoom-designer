@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
+import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,12 +30,18 @@ public class Member extends Formatters.Fields<List<String>> {
   private static final String FIELD_MEMBER_INSTANTIATION = "%s {get;} = %s;";
   private static final String FIELD_MEMBER_DECLARATION = "%s {get;}";
   private final BiFunction<String, String, String> declarationResolver;
+  private final String valueObjectTypeSuffix;
 
   Member(final Dialect dialect) {
+    this(dialect, "");
+  }
+
+  public Member(Dialect dialect, String valueObjectTypeSuffix) {
     if (!RESOLVERS.containsKey(dialect)) {
       throw new IllegalArgumentException("Unable to format members on " + dialect);
     }
     this.declarationResolver = RESOLVERS.get(dialect);
+    this.valueObjectTypeSuffix = valueObjectTypeSuffix;
   }
 
   @Override
@@ -63,6 +70,9 @@ public class Member extends Formatters.Fields<List<String>> {
     
     if(FieldDetail.isScalar(field))
       return toCamelCase(fieldType);
+
+    if (ValueObjectDetail.isValueObject(field))
+      return toPascalCase(fieldType) + valueObjectTypeSuffix;
 
     return toPascalCase(fieldType);
   }

@@ -1,0 +1,61 @@
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class RankData : IEquatable<RankData>
+{
+
+  public int Points {get;}
+  public ClassificationData Classification {get;}
+
+  public static RankData From(Rank rank)
+  {
+    if (rank == null)
+      return RankData.Empty;
+    else
+    {
+      var classification = rank.Classification != null ? ClassificationData.From(rank.Classification) : null;
+      return From(rank.Points, classification);
+    }
+  }
+
+  public static RankData From(int points, ClassificationData classification)
+  {
+    return new RankData(points, classification);
+  }
+
+  public static Set<RankData> FromAll(Set<Rank> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<RankData>() : correspondingObjects.Select(RankData::From).ToSet();
+  }
+
+  public static List<RankData> FromAll(List<Rank> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<RankData>() : correspondingObjects.Select(RankData::From).ToList();
+  }
+
+  private RankData(int points, ClassificationData classification)
+  {
+    Points = points;
+    Classification = classification;
+  }
+
+  public Rank ToRank()
+  {
+    var classification = Classification.From(this.Classification.Label, this.Classification.Classifier);
+    return Rank.From(points, classification);
+  }
+
+  public static RankData Empty => new RankData(0, null);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (RankData) obj;
+    return points == otherData.points && classification == otherData.classification;
+  }
+
+  public bool Equals(RankData other) => points == other.points && classification == other.classification;
+  public override int GetHashCode() => HashCode.Combine(points, classification);
+}

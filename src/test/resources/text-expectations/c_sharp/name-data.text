@@ -1,0 +1,59 @@
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class NameData : IEquatable<NameData>
+{
+
+  public string FirstName {get;}
+  public string LastName {get;}
+
+  public static NameData From(Name name)
+  {
+    if (name == null)
+      return NameData.Empty;
+    else
+    {
+      return From(name.FirstName, name.LastName);
+    }
+  }
+
+  public static NameData From(String firstName, String lastName)
+  {
+    return new NameData(firstName, lastName);
+  }
+
+  public static Set<NameData> FromAll(Set<Name> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<NameData>() : correspondingObjects.Select(NameData::From).ToSet();
+  }
+
+  public static List<NameData> FromAll(List<Name> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<NameData>() : correspondingObjects.Select(NameData::From).ToList();
+  }
+
+  private NameData(String firstName, String lastName)
+  {
+    FirstName = firstName;
+    LastName = lastName;
+  }
+
+  public Name ToName()
+  {
+    return Name.From(firstName, lastName);
+  }
+
+  public static NameData Empty => new NameData(null, null);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (NameData) obj;
+    return firstName == otherData.firstName && lastName == otherData.lastName;
+  }
+
+  public bool Equals(NameData other) => firstName == other.firstName && lastName == other.lastName;
+  public override int GetHashCode() => HashCode.Combine(firstName, lastName);
+}
