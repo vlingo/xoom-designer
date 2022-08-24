@@ -54,8 +54,12 @@ public class DataObjectStaticFactoryMethodAssignment extends Formatters.Variable
                                               final String fieldAccessExpression) {
     if (FieldDetail.isCollection(field)) {
       final String collectionType = field.retrieveRelatedValue(Label.COLLECTION_TYPE);
-      final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
+      String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
       if (FieldDetail.isValueObjectCollection(field)) {
+        if(!FieldDetail.isScalar(field)) {
+          final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+          defaultValue=defaultValue.replace(fieldType, fieldType + "Data");
+        }
         if(FieldDetail.isSetTypedCollection(field))
           return String.format("%s.Select(%s.From).ToHash%s() : %s", fieldAccessExpression, dataObjectName,
               collectionType, defaultValue);

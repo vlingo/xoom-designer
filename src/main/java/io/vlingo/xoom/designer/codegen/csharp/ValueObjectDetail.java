@@ -27,7 +27,7 @@ import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 
 public class ValueObjectDetail {
   private static final String SINGLE_PARAMETER_COLLECTION_PATTERN = "%s.Select(%s.To%s)";
-  private static final String MULTI_PARAMETERS_COLLECTION_PATTERN = "%s.Select(%s.to%s).To%s()";
+  private static final String MULTI_PARAMETERS_COLLECTION_PATTERN = "%s.Select(x => x.To%s()).To%s()";
   private static final String JOINING_STRING_ARGUMENTS_DELIMITER = ", ";
 
   public static String resolvePackage(final String basePackage) {
@@ -90,7 +90,7 @@ public class ValueObjectDetail {
   }
 
   public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField) {
-    return translateDataObjectCollection(fieldPath, valueObjectField, null);
+    return translateDataObjectCollection(toPascalCase(fieldPath), valueObjectField, null);
   }
 
   public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField,
@@ -108,8 +108,8 @@ public class ValueObjectDetail {
       }
     }
     if(FieldDetail.isSetTypedCollection(valueObjectField))
-      return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType, "Hash" + collectionType);
-    return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, dataObjectName, fieldType, collectionType);
+      return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, fieldType, "Hash" + collectionType);
+    return String.format(MULTI_PARAMETERS_COLLECTION_PATTERN, fieldPath, fieldType, collectionType);
   }
 
   public static String resolveEmptyObjectArguments(final CodeGenerationParameter valueObject) {

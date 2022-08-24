@@ -64,7 +64,8 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
   public void testThatDataObjectsWithNoDuplicationAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
         .add(Label.DIALECT, Dialect.C_SHARP)
-        .add(authorAggregateWithMultiNestedValueObject()).add(nameValueObject()).add(rankValueObject())
+        .add(authorAggregateWithMultiNestedValueObject()).add(bookIdValueObject())
+        .add(nameValueObject()).add(rankValueObject())
         .add(classificationValueObject()).add(classifierValueObject())
         .add(moneyValueObject()).add(retailPriceValueObject())
         .add(wholesalePriceValueObject()).add(pricingValueObject());
@@ -77,7 +78,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
     final Content authorData = context.findContent(CsharpTemplateStandard.DATA_OBJECT, "AuthorData");
     final Content pricingData = context.findContent(CsharpTemplateStandard.DATA_OBJECT, "PricingData");
 
-    Assertions.assertEquals(17, context.contents().size());
+    Assertions.assertEquals(18, context.contents().size());
     Assertions.assertTrue(authorData.contains(TextExpectation.onCSharp().read("author-nested-value-object-data")));
     Assertions.assertTrue(pricingData.contains(TextExpectation.onCSharp().read("pricing-data")));
   }
@@ -136,7 +137,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter bookIds =
         CodeGenerationParameter.of(Label.STATE_FIELD, "bookIds")
-            .relate(Label.FIELD_TYPE, "int")
+            .relate(Label.FIELD_TYPE, "BookId")
             .relate(Label.COLLECTION_TYPE, "List");
 
     final CodeGenerationParameter updatedOn =
@@ -169,6 +170,11 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
         .relate(idField).relate(nameField).relate(rankField).relate(publicationDate);
   }
 
+  private CodeGenerationParameter bookIdValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "BookId")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "value")
+            .relate(Label.FIELD_TYPE, "int"));
+  }
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")

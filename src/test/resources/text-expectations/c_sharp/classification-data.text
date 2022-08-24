@@ -9,7 +9,7 @@ public class ClassificationData : IEquatable<ClassificationData>
 {
 
   public string Label {get;}
-  public ISet<Classifier> Classifier {get;} = new HashSet<Classifier>();
+  public ISet<ClassifierData> Classifier {get;} = new HashSet<ClassifierData>();
 
   public static ClassificationData From(Classification classification)
   {
@@ -17,7 +17,7 @@ public class ClassificationData : IEquatable<ClassificationData>
       return ClassificationData.Empty;
     else
     {
-      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToHashSet() : new HashSet<Classifier>();
+      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToHashSet() : new HashSet<ClassifierData>();
       return From(classification.Label, classifier);
     }
   }
@@ -45,7 +45,7 @@ public class ClassificationData : IEquatable<ClassificationData>
 
   public Classification ToClassification()
   {
-    return Classification.From(Label, Classifier.Select(ClassifierData.toClassifier).ToHashSet());
+    return Classification.From(Label, Classifier.Select(x => x.ToClassifier()).ToHashSet());
   }
 
   public static ClassificationData Empty => new ClassificationData(null, new HashSet<Classifier>());
