@@ -12,18 +12,18 @@ public class AuthorData : IEquatable<AuthorData>
   public NameData Name {get;}
   public RankData Rank {get;}
   public boolean Status {get;}
-  public List<Int> BookIds {get;} = new List<Int>();
+  public List<int> BookIds {get;} = new List<int>();
   public DateTime UpdatedOn {get;}
 
   public static AuthorData From(AuthorState authorState)
   {
     var name = authorState.Name != null ? NameData.From(authorState.Name) : null;
     var rank = authorState.Rank != null ? RankData.From(authorState.Rank) : null;
-    var bookIds = authorState.BookIds != null ? authorState.BookIds : new List<Int>();
+    var bookIds = authorState.BookIds != null ? authorState.BookIds : new List<int>();
     return From(authorState.Id, name, rank, authorState.Status, bookIds, authorState.UpdatedOn);
   }
 
-  public static AuthorData From(String id, NameData name, RankData rank, boolean status, List<Int> bookIds, DateTime updatedOn)
+  public static AuthorData From(string id, NameData name, RankData rank, boolean status, List<int> bookIds, DateTime updatedOn)
   {
     return new AuthorData(id, name, rank, status, bookIds, updatedOn);
   }
@@ -32,7 +32,7 @@ public class AuthorData : IEquatable<AuthorData>
 
   public static AuthorData Empty => From(AuthorState.IdentifiedBy(""));
 
-  private AuthorData(String id, NameData name, RankData rank, boolean status, List<Int> bookIds, DateTime updatedOn)
+  private AuthorData(string id, NameData name, RankData rank, boolean status, List<int> bookIds, DateTime updatedOn)
   {
     Id = id;
     Name = name;

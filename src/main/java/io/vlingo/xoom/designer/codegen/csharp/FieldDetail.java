@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
@@ -118,7 +117,7 @@ public class FieldDetail {
     }
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     final String collectionType = field.retrieveRelatedValue(Label.COLLECTION_TYPE);
-    final String genericsType = StringUtils.capitalize(resolveWrapperType(fieldType));
+    final String genericsType = resolveWrapperType(fieldType);
     if (collectionType.contains("Set"))
       return String.format("I%s<%s>", collectionType, genericsType);
     else

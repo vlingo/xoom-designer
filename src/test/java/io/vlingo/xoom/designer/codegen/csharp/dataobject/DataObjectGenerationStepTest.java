@@ -34,10 +34,10 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
   @Test
   public void testThatDataObjectsAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
-            .add(Label.DIALECT, Dialect.C_SHARP)
-            .add(authorAggregate()).add(bookAggregate())
-            .add(nameValueObject()).add(rankValueObject())
-            .add(classificationValueObject()).add(classifierValueObject());
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(authorAggregate()).add(bookAggregate())
+        .add(nameValueObject()).add(rankValueObject())
+        .add(classificationValueObject()).add(classifierValueObject());
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters)
         .contents(contents());

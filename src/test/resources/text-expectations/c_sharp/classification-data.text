@@ -22,7 +22,7 @@ public class ClassificationData : IEquatable<ClassificationData>
     }
   }
 
-  public static ClassificationData From(String label, ISet<ClassifierData> classifier)
+  public static ClassificationData From(string label, ISet<ClassifierData> classifier)
   {
     return new ClassificationData(label, classifier);
   }
@@ -37,7 +37,7 @@ public class ClassificationData : IEquatable<ClassificationData>
     return correspondingObjects == null ? new List<ClassificationData>() : correspondingObjects.Select(From).ToList();
   }
 
-  private ClassificationData(String label, ISet<ClassifierData> classifier)
+  private ClassificationData(string label, ISet<ClassifierData> classifier)
   {
     Label = label;
     Classifier.AddRange(classifier);

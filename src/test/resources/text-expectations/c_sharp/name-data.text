@@ -21,7 +21,7 @@ public class NameData : IEquatable<NameData>
     }
   }
 
-  public static NameData From(String firstName, String lastName)
+  public static NameData From(string firstName, string lastName)
   {
     return new NameData(firstName, lastName);
   }
@@ -36,7 +36,7 @@ public class NameData : IEquatable<NameData>
     return correspondingObjects == null ? new List<NameData>() : correspondingObjects.Select(From).ToList();
   }
 
-  private NameData(String firstName, String lastName)
+  private NameData(string firstName, string lastName)
   {
     FirstName = firstName;
     LastName = lastName;

@@ -12,6 +12,8 @@ import io.vlingo.xoom.designer.codegen.csharp.*;
 
 import java.util.stream.Collectors;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+
 public class DataObjectConstructor implements Formatters.Arguments {
 
   @Override
@@ -29,6 +31,8 @@ public class DataObjectConstructor implements Formatters.Arguments {
     if (ValueObjectDetail.isValueObject(field)) {
       return CsharpTemplateStandard.DATA_OBJECT.resolveClassname(fieldType);
     }
+    if(FieldDetail.isScalar(field))
+      return toCamelCase(fieldType);
     return fieldType;
   }
 

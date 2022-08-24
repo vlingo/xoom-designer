@@ -20,7 +20,7 @@ public class ClassifierData : IEquatable<ClassifierData>
     }
   }
 
-  public static ClassifierData From(String name)
+  public static ClassifierData From(string name)
   {
     return new ClassifierData(name);
   }
@@ -35,7 +35,7 @@ public class ClassifierData : IEquatable<ClassifierData>
     return correspondingObjects == null ? new List<ClassifierData>() : correspondingObjects.Select(From).ToList();
   }
 
-  private ClassifierData(String name)
+  private ClassifierData(string name)
   {
     Name = name;
   }

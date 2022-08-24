@@ -17,7 +17,7 @@ public class BookData : IEquatable<BookData>
     return From(bookState.Id, bookState.Title, bookState.Publisher, bookState.PublicationDate);
   }
 
-  public static BookData From(String id, String title, String publisher, DateTime publicationDate)
+  public static BookData From(string id, string title, string publisher, DateTime publicationDate)
   {
     return new BookData(id, title, publisher, publicationDate);
   }
@@ -26,7 +26,7 @@ public class BookData : IEquatable<BookData>
 
   public static BookData Empty => From(BookState.IdentifiedBy(""));
 
-  private BookData(String id, String title, String publisher, DateTime publicationDate)
+  private BookData(string id, string title, string publisher, DateTime publicationDate)
   {
     Id = id;
     Title = title;
