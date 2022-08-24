@@ -77,7 +77,7 @@ public class StateDataObjectTemplateData extends TemplateData {
         .and(TemplateParameter.DATA_OBJECT_QUALIFIED_NAME, codeElementFormatter.qualifiedNameOf(packageName, dataName))
         .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.DATA_OBJECT_CONSTRUCTOR.format(aggregate))
         .addImports(ValueObjectDetail.resolveImports(contents, aggregate.retrieveAllRelated(Label.STATE_FIELD)))
-        .addImport(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_STATE, stateName, contents));
+        .addImport(codeElementFormatter.packageOf(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_STATE, stateName, contents)));
   }
 
   @Override
