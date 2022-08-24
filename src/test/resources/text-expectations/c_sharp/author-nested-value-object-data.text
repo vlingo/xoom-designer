@@ -13,7 +13,7 @@ public class AuthorData : IEquatable<AuthorData>
   public RankData Rank {get;}
   public PricingData Pricing {get;}
   public boolean Status {get;}
-  public List<int> BookIds {get;} = new List<int>();
+  public List<BookIdData> BookIds {get;} = new List<BookIdData>();
   public DateTime UpdatedOn {get;}
 
   public static AuthorData From(AuthorState authorState)
@@ -21,11 +21,11 @@ public class AuthorData : IEquatable<AuthorData>
     var name = authorState.Name != null ? NameData.From(authorState.Name) : null;
     var rank = authorState.Rank != null ? RankData.From(authorState.Rank) : null;
     var pricing = authorState.Pricing != null ? PricingData.From(authorState.Pricing) : null;
-    var bookIds = authorState.BookIds != null ? authorState.BookIds : new List<int>();
+    var bookIds = authorState.BookIds != null ? authorState.BookIds.Select(BookIdData.From).ToList() : new List<BookIdData>();
     return From(authorState.Id, name, rank, pricing, authorState.Status, bookIds, authorState.UpdatedOn);
   }
 
-  public static AuthorData From(string id, NameData name, RankData rank, PricingData pricing, boolean status, List<int> bookIds, DateTime updatedOn)
+  public static AuthorData From(string id, NameData name, RankData rank, PricingData pricing, boolean status, List<BookIdData> bookIds, DateTime updatedOn)
   {
     return new AuthorData(id, name, rank, pricing, status, bookIds, updatedOn);
   }
@@ -34,7 +34,7 @@ public class AuthorData : IEquatable<AuthorData>
 
   public static AuthorData Empty => From(AuthorState.IdentifiedBy(""));
 
-  private AuthorData(string id, NameData name, RankData rank, PricingData pricing, boolean status, List<int> bookIds, DateTime updatedOn)
+  private AuthorData(string id, NameData name, RankData rank, PricingData pricing, boolean status, List<BookIdData> bookIds, DateTime updatedOn)
   {
     Id = id;
     Name = name;
@@ -52,7 +52,7 @@ public class AuthorData : IEquatable<AuthorData>
     var retailPrice = RetailPrice.From(Money.From(this.Pricing.RetailPrice.Price.Amount));
     var wholesalePrice = WholesalePrice.From(Money.From(this.Pricing.WholesalePrice.Price.Amount));
     var pricing = Pricing.From(retailPrice, wholesalePrice);
-    return new AuthorState(Id, name, rank, pricing, Status, BookIds, UpdatedOn);
+    return new AuthorState(Id, name, rank, pricing, Status, BookIds.Select(BookIdData.toBookId).ToList(), UpdatedOn);
   }
 
   public override bool Equals(object obj)

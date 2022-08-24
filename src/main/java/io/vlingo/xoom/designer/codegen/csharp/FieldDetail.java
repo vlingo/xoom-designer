@@ -250,7 +250,7 @@ public class FieldDetail {
     return sb.toString();
   }
 
-  private static String resolveStateFieldType(CodeGenerationParameter stateField) {
+  private static String resolveStateFieldType(final CodeGenerationParameter stateField) {
     final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
     if (isCollection(stateField)) return resolveCollectionType(stateField);
     if (ValueObjectDetail.isValueObject(stateField) || isDateTime(stateField)) return fieldType;

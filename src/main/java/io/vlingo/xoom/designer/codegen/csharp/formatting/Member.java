@@ -10,8 +10,9 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.DataObjectDetail;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
-import io.vlingo.xoom.designer.codegen.java.model.valueobject.ValueObjectDetail;
+import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.codegen.dialect.Dialect.*;
+import static io.vlingo.xoom.designer.codegen.csharp.AggregateDetail.stateFieldWithName;
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
-import static io.vlingo.xoom.designer.codegen.java.model.aggregate.AggregateDetail.stateFieldWithName;
 
 public class Member extends Formatters.Fields<List<String>> {
 
@@ -36,7 +37,7 @@ public class Member extends Formatters.Fields<List<String>> {
     this(dialect, "");
   }
 
-  public Member(Dialect dialect, String valueObjectTypeSuffix) {
+  public Member(final Dialect dialect, final String valueObjectTypeSuffix) {
     if (!RESOLVERS.containsKey(dialect)) {
       throw new IllegalArgumentException("Unable to format members on " + dialect);
     }
@@ -65,7 +66,11 @@ public class Member extends Formatters.Fields<List<String>> {
         field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
     if (!collectionMutation.isSingleParameterBased() && FieldDetail.isCollection(field)) {
-      return FieldDetail.resolveCollectionType(field);
+      final String collectionType = FieldDetail.resolveCollectionType(field);
+      if(DataObjectDetail.isValidSuffix(valueObjectTypeSuffix))  {
+        return DataObjectDetail.adaptCollectionGenericsType(collectionType);
+      }
+      return collectionType;
     }
     
     if(FieldDetail.isScalar(field))
@@ -79,7 +84,12 @@ public class Member extends Formatters.Fields<List<String>> {
 
   private String resolveInstantiation(final CodeGenerationParameter field) {
     if (FieldDetail.requireImmediateInstantiation(field)) {
-      return String.format(FIELD_MEMBER_INSTANTIATION, toPascalCase(field.value), FieldDetail.resolveDefaultValue(field.parent(), field.value));
+      final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
+      if(FieldDetail.isValueObjectCollection(field)) {
+        final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
+        return String.format(FIELD_MEMBER_INSTANTIATION, toPascalCase(field.value), defaultValue.replace(fieldType, fieldType + valueObjectTypeSuffix));
+      }
+      return String.format(FIELD_MEMBER_INSTANTIATION, toPascalCase(field.value), defaultValue);
     }
     final String instanceName = field.hasAny(Label.ALIAS) ? field.retrieveRelatedValue(Label.ALIAS) : field.value;
     return String.format(FIELD_MEMBER_DECLARATION, toPascalCase(instanceName));

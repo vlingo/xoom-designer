@@ -90,7 +90,7 @@ public class ValueObjectDetail {
   }
 
   public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField) {
-    return translateDataObjectCollection(fieldPath, valueObjectField, null);
+    return translateDataObjectCollection(toPascalCase(fieldPath), valueObjectField, null);
   }
 
   public static String translateDataObjectCollection(final String fieldPath, final CodeGenerationParameter valueObjectField,
