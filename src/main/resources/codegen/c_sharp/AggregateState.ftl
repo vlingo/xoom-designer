@@ -19,12 +19,9 @@ public sealed class ${stateName} : BaseEntry<string>, IEquatable<${stateName}>
   ${member}
   </#list>
 
-  public static ${stateName} IdentifiedBy(${idType} id)
-  {
-    return new ${stateName}(${methodInvocationParameters});
-  }
+  public static ${stateName} IdentifiedBy(${idType} id) => new ${stateName}(${methodInvocationParameters});
 
-  private ${stateName}(${constructorParameters}) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  public ${stateName}(${constructorParameters}) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     <#list membersAssignment as assignment>
     ${assignment}
