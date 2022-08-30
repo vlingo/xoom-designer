@@ -115,6 +115,7 @@ public class CodeGenerationProperties {
       Collections.unmodifiableMap(
           new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
             put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATE_STORE_PROVIDER.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.JOURNAL, io.vlingo.xoom.designer.codegen.csharp.Template.JOURNAL_PROVIDER.filename);
           }}
       );
 
@@ -122,6 +123,15 @@ public class CodeGenerationProperties {
       Collections.unmodifiableMap(
           new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
             put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATE_STORE_PROVIDER.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.JOURNAL, io.vlingo.xoom.designer.codegen.csharp.Template.JOURNAL_PROVIDER.filename);
+          }}
+      );
+
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> CSHARP_ADAPTER_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATE_ADAPTER.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.JOURNAL, io.vlingo.xoom.designer.codegen.csharp.Template.ENTRY_ADAPTER.filename);
           }}
       );
 

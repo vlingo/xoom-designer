@@ -1,0 +1,46 @@
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Sourcing;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.Journal;
+using Vlingo.Xoom.Turbo;
+using Vlingo.Xoom.Turbo.Actors;
+using Vlingo.Xoom.Turbo.Annotation.Codegen.Storage;
+using Vlingo.Xoom.Turbo.Storage;
+using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public class CommandModelJournalProvider
+{
+
+  public IJournal<string> Journal { get; }
+
+  public static CommandModelJournalProvider Using(Stage stage, SourcedTypeRegistry registry)
+  {
+    return Using(stage, registry, new NoOpDispatcher());
+  }
+
+  public static CommandModelJournalProvider Using(Stage stage, SourcedTypeRegistry registry, IDispatcher dispatcher)
+  {
+    if (ComponentRegistry.Has<CommandModelJournalProvider>())
+    {
+      return ComponentRegistry.WithType<CommandModelJournalProvider>();
+    }
+
+    var entryAdapterProvider = EntryAdapterProvider.Instance(stage.World);
+
+
+    var journal = StoreActorBuilder.From(stage, new Model("COMMAND"), dispatcher, StorageType.Journal, Settings.Properties, true);
+
+
+    return new CommandModelJournalProvider(journal);
+  }
+
+  private CommandModelJournalProvider(IJournal<string> journal)
+  {
+    Journal = journal;
+    ComponentRegistry.Register(GetType(), this);
+  }
+
+}

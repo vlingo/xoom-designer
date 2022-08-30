@@ -1,6 +1,8 @@
-<#list imports as import>
+<#if imports?has_content>
+  <#list imports as import>
 using ${import.qualifiedClassName};
-</#list>
+  </#list>
+</#if>
 
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Stateful;

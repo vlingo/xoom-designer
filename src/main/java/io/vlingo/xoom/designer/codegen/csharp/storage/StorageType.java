@@ -17,7 +17,10 @@ public enum StorageType {
   NONE(),
 
   STATE_STORE("STATE_STORE", "StateStore", "StatefulTypeRegistry","",
-      CsharpTemplateStandard.AGGREGATE_STATE);
+      CsharpTemplateStandard.AGGREGATE_STATE),
+
+  JOURNAL("JOURNAL", "Journal", "SourcedTypeRegistry", "",
+      CsharpTemplateStandard.DOMAIN_EVENT);
   private static final String STORE_PROVIDER_NAME_SUFFIX = "Provider";
 
   public final String key;
@@ -76,7 +79,7 @@ public enum StorageType {
   }
 
   public boolean isSourced() {
-    return false;
+    return equals(JOURNAL);
   }
 
   public String typeRegistryObjectName() {

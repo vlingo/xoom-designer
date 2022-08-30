@@ -36,7 +36,6 @@ public class StorageProviderTemplateData extends TemplateData {
                                         final List<TemplateData> stateAdaptersTemplateData,
                                         final List<Content> contents, final Stream<Model> models) {
     return models.sorted()
-        .filter(StorageProviderTemplateData::supportModel)
         .map(model -> new StorageProviderTemplateData(persistencePackage, storageType, projectionType,
             stateAdaptersTemplateData, contents, model))
         .collect(Collectors.toList());
@@ -87,13 +86,9 @@ public class StorageProviderTemplateData extends TemplateData {
     final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
             ContentQuery.findFullyQualifiedClassNames(CsharpTemplateStandard.AGGREGATE, contents) : new HashSet<>();
 
-    return Stream.of(sourceClassQualifiedNames, queriesQualifiedNames,
-            aggregateActorQualifiedNames, persistentTypes).flatMap(Collection::stream)
-            .collect(Collectors.toSet());
-  }
-
-  private static boolean supportModel(final Model model) {
-    return true;
+    return Stream.of(sourceClassQualifiedNames, queriesQualifiedNames, aggregateActorQualifiedNames, persistentTypes)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toSet());
   }
 
   @Override

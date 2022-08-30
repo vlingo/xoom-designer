@@ -41,7 +41,7 @@ public class StorageGenerationStepTest {
 
     final Content authorStateAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorStateAdapter");
 
-    Assertions.assertEquals(5, context.contents().size());
+    Assertions.assertEquals(6, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
   }
 
@@ -64,10 +64,33 @@ public class StorageGenerationStepTest {
     final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
     final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
 
-    Assertions.assertEquals(8, context.contents().size());
+    Assertions.assertEquals(9, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
+  }
+
+  @Test
+  public void testJournalStoreGenerationWithProjections() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.STORAGE_TYPE, StorageType.JOURNAL)
+        .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED)
+        .add(Label.CQRS, true)
+        .add(Label.COMMAND_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(Label.QUERY_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(authorAggregate());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new StorageGenerationStep().process(context);
+
+    final Content authorRegisteredAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorRegisteredAdapter");
+    final Content commandModelJournalProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelJournalProvider");
+
+    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertTrue(authorRegisteredAdapter.contains(TextExpectation.onCSharp().read("author-registered-adapter")));
+    Assertions.assertTrue(commandModelJournalProvider.contains(TextExpectation.onCSharp().read("command-model-journal-provider")));
   }
 
   private CodeGenerationParameter authorAggregate() {
@@ -117,6 +140,7 @@ public class StorageGenerationStepTest {
         Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "IAuthor").toString(), "IAuthor.cs"), null, null, AUTHOR_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorState").toString(), "AuthorState.cs"), null, null, AUTHOR_STATE_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorData").toString(), "AuthorData.cs"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorRegistered").toString(), "AuthorRegistered.cs"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT)
     };
   }
 
@@ -141,6 +165,11 @@ public class StorageGenerationStepTest {
   private static final String AUTHOR_DATA_CONTENT_TEXT =
       "namespace Io.Vlingo.Xoomapp.Model.Author; \\n" +
           "public class AuthorData { \\n" +
+          "... \\n" +
+          "}";
+  private static final String AUTHOR_REGISTERED_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model.Author; \\n" +
+          "public class AuthorRegistered { \\n" +
           "... \\n" +
           "}";
 }

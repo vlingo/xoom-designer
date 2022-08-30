@@ -1,0 +1,36 @@
+using System;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#entryadapter-and-entryadapterprovider">
+ *   EntryAdapter and EntryAdapterProvider
+ * </a>
+ */
+public class AuthorRegisteredAdapter : EntryAdapter<AuthorRegistered, TextEntry>
+{
+
+  public AuthorRegistered FromEntry(TextEntry entry) => JsonSerialization.Deserialized(entry.EntryData, entry.Typed);
+
+  public TextEntry ToEntry(AuthorRegistered source, Metadata metadata)
+  {
+    var serialization = JsonSerialization.Serialized(source);
+    return new TextEntry<AuthorRegistered>(1, serialization, metadata);
+  }
+
+  public TextEntry ToEntry(AuthorRegistered source, string id, Metadata metadata)
+  {
+    var serialization = JsonSerialization.Serialized(source);
+    return new TextEntry<AuthorRegistered>(id, 1, serialization, metadata);
+  }
+
+  public TextEntry ToEntry(AuthorRegistered source, int version, string id, Metadata metadata)
+  {
+    var serialization = JsonSerialization.Serialized(source);
+    return new TextEntry<AuthorRegistered>(id, 1, serialization, version, metadata);
+  }
+}

@@ -39,7 +39,8 @@ public enum Template {
   EVENT_BASED_PROJECTION_UNIT_TEST("EventBasedProjectionUnitTest"),
   COUNTING_READ_RESULT("CountingReadResultInterest"),
   COUNTING_PROJECTION_CTL("CountingProjectionControl"),
-  PERSISTENCE_SETUP("PersistenceSetup"),;
+  PERSISTENCE_SETUP("PersistenceSetup"),
+  ENTRY_ADAPTER("EntryAdapter");
 
   public final String filename;
 

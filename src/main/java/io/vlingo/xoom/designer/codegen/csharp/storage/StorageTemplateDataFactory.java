@@ -47,7 +47,7 @@ public class StorageTemplateDataFactory {
                                                                     final List<TemplateData> templatesData,
                                                                     final List<Content> contents,
                                                                     final Stream<Model> models) {
-    return StorageProviderTemplateData.
-        from(persistencePackage, storageType, projectionType, templatesData, contents, models);
+    return StorageProviderTemplateData.from(persistencePackage, storageType, projectionType,
+        templatesData, contents, models);
   }
 }

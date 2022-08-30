@@ -30,19 +30,20 @@ public class AdapterTemplateData extends TemplateData {
                                         final List<Content> contents) {
     return ContentQuery.findClassNames(storageType.adapterSourceClassStandard, contents).stream()
         .map(sourceClassName -> new AdapterTemplateData(sourceClassName, storageType.adapterSourceClassStandard,
-                persistencePackage, storageType, contents))
+            persistencePackage, storageType, contents))
         .collect(Collectors.toList());
   }
 
   public AdapterTemplateData(final String sourceClassName, final TemplateStandard sourceClassStandard,
-                             final String persistencePackage, final StorageType storageType, final List<Content> contents) {
+                             final String persistencePackage, final StorageType storageType,
+                             final List<Content> contents) {
     this.sourceClassName = sourceClassName;
     this.sourceClassStandard = sourceClassStandard;
     this.parameters = loadParameters(persistencePackage, storageType, contents);
   }
 
-  private TemplateParameters loadParameters(final String packageName, final StorageType storageType, final List<Content> contents) {
-
+  private TemplateParameters loadParameters(final String packageName, final StorageType storageType,
+                                            final List<Content> contents) {
     return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
         .addImports(resolveImports(contents))
         .and(TemplateParameter.ADAPTER_NAME, CsharpTemplateStandard.ADAPTER.resolveClassname(sourceClassName))
