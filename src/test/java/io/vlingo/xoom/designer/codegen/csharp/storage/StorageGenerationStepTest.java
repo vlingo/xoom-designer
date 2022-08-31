@@ -69,7 +69,30 @@ public class StorageGenerationStepTest {
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
   }
+  @Test
+  public void testStateStoreGenerationWithOperationBasedProjections() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.STORAGE_TYPE, StorageType.STATE_STORE)
+        .add(Label.PROJECTION_TYPE, ProjectionType.OPERATION_BASED)
+        .add(Label.CQRS, true)
+        .add(Label.COMMAND_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(Label.QUERY_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(authorAggregate());
 
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new StorageGenerationStep().process(context);
+
+    final Content authorStateAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorStateAdapter");
+    final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
+    final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
+
+    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
+    Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
+    Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
+  }
   @Test
   public void testJournalStoreGenerationWithProjections() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")

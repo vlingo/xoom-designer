@@ -11,6 +11,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 
 import java.util.ArrayList;
@@ -29,19 +30,24 @@ public class TestCase {
   public final List<String> assertions = new ArrayList<>();
   public final boolean disabled;
 
-  public static List<TestCase> from(final CodeGenerationParameter aggregate,
+  public static List<TestCase> from(final StorageType storageType, final CodeGenerationParameter aggregate,
                                     final List<CodeGenerationParameter> valueObjects,
                                     final Optional<String> defaultFactoryMethod,
                                     final TestDataValueGenerator.TestDataValues initialTestDataValues) {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
-        .map(method -> new TestCase(method, aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues))
+        .map(method -> new TestCase(method, storageType, aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues))
         .collect(Collectors.toList());
   }
 
-  private TestCase(final CodeGenerationParameter method, final CodeGenerationParameter aggregate,
+  private TestCase(final CodeGenerationParameter method, final StorageType storageType, final CodeGenerationParameter aggregate,
                    final List<CodeGenerationParameter> valueObjects,
                    final Optional<String> defaultFactoryMethod, final TestDataValueGenerator.TestDataValues initialTestDataValues) {
     this.methodName = AggregateDetail.methodNameFrom(method);
+    if (storageType.isSourced() && !method.hasAny(Label.DOMAIN_EVENT)) {
+      this.disabled = true;
+      this.resultAssignmentStatement = null;
+      return;
+    }
     final TestDataValueGenerator.TestDataValues updatedTestDataValues = initialTestDataValues.updateAllValues();
 
     final List<String> dataDeclarations = StaticDataDeclaration.generate(method, aggregate, valueObjects, initialTestDataValues, updatedTestDataValues);

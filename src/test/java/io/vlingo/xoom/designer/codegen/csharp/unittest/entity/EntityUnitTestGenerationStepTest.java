@@ -12,6 +12,8 @@ import io.vlingo.xoom.codegen.template.OutputFile;
 import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
@@ -63,6 +65,27 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
     Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-with-vo-collection-test")));
+  }
+
+  @Test
+  public void testThatOperationBasedStatefulEntitiesUnitTestsAreGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.STORAGE_TYPE, StorageType.STATE_STORE)
+        .add(Label.PROJECTION_TYPE, ProjectionType.OPERATION_BASED)
+        .add(authorAggregate())
+        .add(nameValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new EntityUnitTestGenerationStep().process(context);
+
+    final Content mockDispatcher = context.findContent(CsharpTemplateStandard.MOCK_DISPATCHER, "MockDispatcher");
+    final Content authorEntityTest = context.findContent(CsharpTemplateStandard.ENTITY_UNIT_TEST, "AuthorEntityTest");
+
+    Assertions.assertEquals(5, context.contents().size());
+    Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("operation-based-mock-dispatcher")));
+    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("operation-based-stateful-author-entity-test")));
   }
 
   private CodeGenerationParameter authorAggregate() {

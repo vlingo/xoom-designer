@@ -135,6 +135,14 @@ public class CodeGenerationProperties {
           }}
       );
 
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType, String> CSHARP_PROJECTION_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType.EVENT_BASED, io.vlingo.xoom.designer.codegen.csharp.Template.EVENT_BASED_PROJECTION.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType.OPERATION_BASED, io.vlingo.xoom.designer.codegen.csharp.Template.OPERATION_BASED_PROJECTION.filename);
+          }}
+      );
+
   public static Map<StorageType, String> storeProviderTemplatesFrom(final Model  model) {
     if (model.isQueryModel()) {
       return QUERY_MODEL_STORE_TEMPLATES;

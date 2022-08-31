@@ -7,6 +7,8 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,14 @@ public class EntityUnitTestGenerationStep  extends TemplateProcessingStep {
 
     final List<Content> contents = context.contents();
 
+    final StorageType storageType =
+        context.parameterOf(Label.STORAGE_TYPE, StorageType::of);
+    final ProjectionType projectionType =
+        context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::of);
+
     final List<TemplateData> templatesData = new ArrayList<>();
-    templatesData.add(new MockDispatcherTemplateData(basePackage));
-    templatesData.addAll(EntityUnitTestTemplateData.from(basePackage, aggregates, valueObjects, contents));
+    templatesData.add(new MockDispatcherTemplateData(basePackage, projectionType));
+    templatesData.addAll(EntityUnitTestTemplateData.from(basePackage, storageType, aggregates, valueObjects, contents));
     return templatesData;
   }
 

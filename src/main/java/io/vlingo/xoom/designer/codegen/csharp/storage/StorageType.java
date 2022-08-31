@@ -1,11 +1,9 @@
 package io.vlingo.xoom.designer.codegen.csharp.storage;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -43,6 +41,8 @@ public enum StorageType {
   }
 
   public static StorageType of(final String storage) {
+    if(storage.isEmpty())
+      return NONE;
     return valueOf(storage.toUpperCase());
   }
 
@@ -80,18 +80,6 @@ public enum StorageType {
 
   public boolean isSourced() {
     return equals(JOURNAL);
-  }
-
-  public String typeRegistryObjectName() {
-    return codeElementFormatter().simpleNameToAttribute(typeRegistryClassName);
-  }
-
-  private String typeRegistryQualifiedClassName() {
-    return codeElementFormatter().qualifiedNameOf(typeRegistryPackage, typeRegistryClassName);
-  }
-
-  private static CodeElementFormatter codeElementFormatter() {
-    return ComponentRegistry.withName("cSharpCodeFormatter");
   }
 
 }

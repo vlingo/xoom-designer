@@ -14,6 +14,7 @@ import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -39,8 +40,20 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   AGGREGATE_METHOD(parameters -> Template.STATEFUL_ENTITY_METHOD.filename),
   AGGREGATE_STATE_METHOD(parameters -> Template.AGGREGATE_STATE_METHOD.filename),
   DOMAIN_EVENT(parameters -> Template.DOMAIN_EVENT.filename),
-  ENTITY_UNIT_TEST(parameters -> Template.STATEFUL_ENTITY_UNIT_TEST.filename, (name, parameters) -> name + "Test"),
-  MOCK_DISPATCHER(parameters -> Template.EVENT_BASED_MOCK_DISPATCHER.filename, (name, parameters) -> "MockDispatcher"),
+  ENTITY_UNIT_TEST(parameters -> {
+    final StorageType storageType = parameters.find(STORAGE_TYPE);
+    if (Objects.nonNull(storageType) && storageType.isSourced()) {
+      return Template.EVENT_SOURCED_ENTITY_UNIT_TEST.filename;
+    }
+    return Template.STATEFUL_ENTITY_UNIT_TEST.filename;
+  }, (name, parameters) -> name + "Test"),
+  MOCK_DISPATCHER(parameters -> {
+    final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+    if (Objects.nonNull(projectionType) && projectionType.isOperationBased()) {
+      return Template.OPERATION_BASED_MOCK_DISPATCHER.filename;
+    }
+    return Template.EVENT_BASED_MOCK_DISPATCHER.filename;
+  }, (name, parameters) -> "MockDispatcher"),
   ADAPTER(parameters -> CodeGenerationProperties.CSHARP_ADAPTER_TEMPLATES.get(parameters.find(STORAGE_TYPE)),
       (name, parameters) -> name + "Adapter"),
   BOOTSTRAP(parameters -> DEFAULT_BOOTSTRAP.filename, (name, parameters) -> "Bootstrap"),
@@ -58,7 +71,7 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   QUERIES_ACTOR(parameters -> Template.QUERIES_ACTOR.filename, (name, parameters) -> name + "QueriesActor"),
   DATA_OBJECT(parameters -> parameters.has(STATE_DATA_OBJECT_NAME) ? Template.STATE_DATA_OBJECT.filename : VALUE_DATA_OBJECT.filename,
       (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),
-  PROJECTION(parameters -> CodeGenerationProperties.PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
+  PROJECTION(parameters -> CodeGenerationProperties.CSHARP_PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
       (name, parameters) -> name + "ProjectionActor"),
   PROJECTION_UNIT_TEST(parameters -> {
     final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);

@@ -17,6 +17,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.*;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
@@ -32,14 +33,17 @@ public class EntityUnitTestTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public static List<TemplateData> from(final String basePackage, final List<CodeGenerationParameter> aggregates,
-                                        final List<CodeGenerationParameter> valueObjects, final List<Content> contents) {
+  public static List<TemplateData> from(final String basePackage, final StorageType storageType,
+                                        final List<CodeGenerationParameter> aggregates,
+                                        final List<CodeGenerationParameter> valueObjects,
+                                        final List<Content> contents) {
     return aggregates.stream()
-        .map(aggregate -> new EntityUnitTestTemplateData(basePackage, aggregate, valueObjects, contents))
+        .map(aggregate -> new EntityUnitTestTemplateData(basePackage, storageType, aggregate, valueObjects, contents))
         .collect(Collectors.toList());
   }
 
-  private EntityUnitTestTemplateData(final String basePackage, final CodeGenerationParameter aggregate,
+  private EntityUnitTestTemplateData(final String basePackage, final StorageType storageType,
+                                     final CodeGenerationParameter aggregate,
                                      final List<CodeGenerationParameter> valueObjects,
                                      final List<Content> contents) {
     final String entityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregate.value);
@@ -59,7 +63,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
     final AuxiliaryEntityCreation auxiliaryEntityCreation = AuxiliaryEntityCreation.from(aggregate, valueObjects,
         defaultFactoryMethod, initialTestDataValues);
 
-    final List<TestCase> testCases = TestCase.from(aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues);
+    final List<TestCase> testCases = TestCase.from(storageType, aggregate, valueObjects, defaultFactoryMethod, initialTestDataValues);
 
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
         .and(TemplateParameter.DISPATCHER_NAME, CsharpTemplateStandard.MOCK_DISPATCHER.resolveClassname())
