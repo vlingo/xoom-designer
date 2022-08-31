@@ -13,6 +13,12 @@ public enum ProjectionType {
     this.sourceName = sourceName;
   }
 
+  public static ProjectionType of(final String projection) {
+    if(projection.isEmpty())
+      return NONE;
+    return valueOf(projection.toUpperCase());
+  }
+
   public boolean isEventBased() {
     return equals(EVENT_BASED);
   }
