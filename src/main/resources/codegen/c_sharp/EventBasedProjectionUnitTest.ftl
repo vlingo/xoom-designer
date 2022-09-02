@@ -1,6 +1,7 @@
 using System;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Projection;
 using Vlingo.Xoom.Lattice.Model.Stateful;
@@ -14,19 +15,19 @@ using ${import.qualifiedClassName};
 </#list>
 using Xunit;
 
-package ${packageName};
+namespace ${packageName};
 
 <#macro textWarbleProjectable domainEventName dataObjectParams version>
   private IProjectable Create${domainEventName}(${dataName} data)
   {
     var eventData = new ${domainEventName}(${dataObjectParams});
 
-    var textEntry = new BaseEntry.TextEntry<${domainEventName}>(1, JsonSerialization.Serialized(eventData), ${version}, Metadata.WithObject(eventData));
+    var textEntry = new TextEntry(typeof(${domainEventName}), 1, JsonSerialization.Serialized(eventData), ${version}, Metadata.WithObject(eventData));
 
     var projectionId = Guid.NewGuid().ToString();
-    _valueToProjectionId.Add(dataId, projectionId);
+    _valueToProjectionId.TryAdd(data.Id, projectionId);
 
-    return new TextProjectable(null, new List<IEntry>(textEntry), projectionId);
+    return new TextProjectable(null, new[] { textEntry }, projectionId);
   }
 </#macro>
 
@@ -34,9 +35,9 @@ package ${packageName};
 
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(2);
-    projection.ProjectWith(Create${domainEventName}(firstData.To${dataName}()), control);
-    projection.ProjectWith(Create${domainEventName}(secondData.To${dataName}()), control);
-    var confirmations = access.ReadFrom("confirmations");
+    _projection.ProjectWith(Create${domainEventName}(firstData.To${dataName}()), control);
+    _projection.ProjectWith(Create${domainEventName}(secondData.To${dataName}()), control);
+    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
 
     Assert.Equal(2, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -45,7 +46,7 @@ package ${packageName};
     var interest = new CountingReadResultInterest();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
-    var item = interestAccess.ReadFrom("item", firstData.Id);
+    var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);
 </#macro>
 
 <#macro factoryMethodTestAssertion>
@@ -53,7 +54,7 @@ package ${packageName};
     interest = new CountingReadResultInterest();
     interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(secondData.Id, interest);
-    item = interestAccess.ReadFrom("item", secondData.Id);
+    item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", secondData.Id);
     Assert.Equal(secondData.Id, item.Id);
 </#macro>
 
@@ -65,33 +66,33 @@ package ${packageName};
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(Create${domainEventName}(firstData.To${dataName}()), control);
-    var confirmations = access.ReadFrom("confirmations");
+    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
 
-    assertEquals(1, confirmations.size());
-    assertEquals(1, ValueOfProjectionIdFor(firstData.id, confirmations));
+    Assert.Equal(1, confirmations.Count);
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
     var interest = new CountingReadResultInterest();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
-    var item = interestAccess.ReadFrom("item", firstData.Id);
+    var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);
 </#macro>
 public class ${projectionUnitTestName}
 {
 
   private readonly World _world;
-  private readonly StateStore _stateStore;
+  private readonly IStateStore _stateStore;
   private readonly IProjection _projection;
-  private readonly Dictionary<string, String> _valueToProjectionId;
+  private readonly ConcurrentDictionary<string, string> _valueToProjectionId;
 
   public ${projectionUnitTestName}()
   {
     _world = World.StartWithDefaults("test-state-store-projection");
     var dispatcher = new NoOpDispatcher();
-    _valueToProjectionId = new ConcurrentHashMap<>();
-    _stateStore = world.ActorFor<StateStore>(typeof(InMemoryStateStoreActor), dispatcher);
+    _valueToProjectionId = new ConcurrentDictionary<string, string>();
+    _stateStore =_world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), dispatcher);
     var statefulTypeRegistry = StatefulTypeRegistry.RegisterAll(_world, _stateStore, typeof(${dataObjectName}));
-    QueryModelStateStoreProvider.Using(_world.stage(), statefulTypeRegistry);
-    _projection = world.ActorFor<IProjection>(typeof(${projectionName}), _stateStore);
+    QueryModelStateStoreProvider.Using(_world.Stage, statefulTypeRegistry);
+    _projection = _world.ActorFor<IProjection>(typeof(${projectionName}), _stateStore);
   }
 
 <#if testCases?filter(testCase -> testCase.factoryMethod)?has_content>

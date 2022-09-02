@@ -9,8 +9,9 @@ using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
 using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Symbio;
-using Io.Vlingo.Xoomapp.Model;
-using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
@@ -33,8 +34,8 @@ public class AuthorProjectionTest: IDisposable
   [Fact]
   public void WithName()
   {
-		var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-		var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+		var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+		var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 		var control = new CountingProjectionControl();
     var access = control.AfterCompleting(2);
 
@@ -54,8 +55,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void ChangeRank()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -79,8 +80,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void AddTag()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -104,8 +105,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void AddTags()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -129,8 +130,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void ReplaceTags()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -154,8 +155,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void RemoveTag()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -179,8 +180,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void RelateAuthor()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -204,8 +205,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void RelateAuthors()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -229,8 +230,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void UnrelateAuthor()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -254,8 +255,8 @@ public class AuthorProjectionTest: IDisposable
 	[Fact]
 	public void ReplaceAllRelatedAuthors()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), DateTime.Now, new List<Tag>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
 	  var control = new CountingProjectionControl();
 
 		var accessControl = control.AfterCompleting(4);
@@ -282,125 +283,125 @@ public class AuthorProjectionTest: IDisposable
   }
 
   private int ValueOfProjectionIdFor(String valueText, Dictionary<string, int> confirmations) {
-    return confirmations.GetValueOrDefault(valueToProjectionId.GetValueOrDefault(valueText));
+    return confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
   }
 
 	private IProjectable CreateAuthorRegistered(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorRanked(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorTagged(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorBulkTagged(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorTagsReplacedEvent(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorUntagged(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorRelated(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorsRelated(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateAuthorUnrelated(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
 
 	private IProjectable CreateRelatedAuthorsReplacedEvent(AuthorData data, int version, string operation) {
 
-		var state = new TextState<AuthorState>(data.Id, 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
+		var state = new TextState(data.Id, typeof(AuthorState), 1, JsonSerialization.Serialized(data.ToAuthorState()), version,
 		Metadata.With(data.ToAuthorState(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}

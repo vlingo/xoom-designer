@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.designer.codegen.csharp.unittest.projections;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -18,7 +17,6 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -56,8 +54,9 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.STATE_DATA_OBJECT_NAME, aggregateState)
         .and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects, projectionType))
         .and(TemplateParameter.PROJECTION_TYPE, projectionType)
-        .addImport(resolveImport(dataObjectName, CsharpTemplateStandard.DATA_OBJECT, contents))
-        .addImport(resolveImport(aggregateState, CsharpTemplateStandard.AGGREGATE_STATE, contents))
+        .addImport(resolveImport(CsharpTemplateStandard.DATA_OBJECT, contents))
+        .addImport(resolveImport(CsharpTemplateStandard.AGGREGATE_STATE, contents))
+        .addImport(resolveImport(CsharpTemplateStandard.PROJECTION, contents))
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true);
   }
@@ -78,12 +77,8 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
     return basePackage + ".Tests.Infrastructure.Persistence";
   }
 
-  private String resolveImport(final String dataObjectName, final CsharpTemplateStandard dataObject, final List<Content> contents) {
-    final String dataObjectPackage = ContentQuery.findPackage(dataObject, dataObjectName, contents);
-
-    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
-
-    return codeElementFormatter.packageOf(dataObjectPackage);
+  private String resolveImport(final CsharpTemplateStandard dataObject, final List<Content> contents) {
+    return ContentQuery.findPackage(dataObject, contents);
   }
 
   @Override

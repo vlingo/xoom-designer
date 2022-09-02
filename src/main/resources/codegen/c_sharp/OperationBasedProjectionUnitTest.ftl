@@ -18,12 +18,12 @@ namespace ${packageName};
 <#macro textWarbleProjectable operation>
 	private IProjectable Create${operation}(${dataObjectName} data, int version, string operation) {
 
-		var state = new TextState<${dataName}>(data.Id, 1, JsonSerialization.Serialized(data.To${dataName}()), version,
+		var state = new TextState(data.Id, typeof(${dataName}), 1, JsonSerialization.Serialized(data.To${dataName}()), version,
 		Metadata.With(data.To${dataName}(), data.Id, operation));
 
 		var projectionId = Guid.NewGuid().ToString();
 
-		_valueToProjectionId.Add(data.id, projectionId);
+		_valueToProjectionId.Add(data.Id, projectionId);
 
 		return new TextProjectable(state, new List<IEntry>(), projectionId);
 	}
@@ -103,7 +103,7 @@ public class ${projectionUnitTestName}: IDisposable
   }
 
   private int ValueOfProjectionIdFor(String valueText, Dictionary<string, int> confirmations) {
-    return confirmations.GetValueOrDefault(valueToProjectionId.GetValueOrDefault(valueText));
+    return confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
   }
 <#list testCases as testCase>
 

@@ -25,7 +25,7 @@ public class QueriesTemplateDataFactory {
                                                     final List<Content> contents) {
     final TemplateParameters parameters = createParameters(persistencePackage, protocol, contents);
 
-    return Arrays.asList(new QueriesTemplateData(protocol, parameters), new QueriesActorTemplateData(protocol, parameters));
+    return Arrays.asList(new QueriesTemplateData(protocol, parameters), new QueriesActorTemplateData(protocol.substring(1), parameters));
   }
 
   private static TemplateParameters createParameters(final String persistencePackage, final String aggregateProtocol,
@@ -37,8 +37,8 @@ public class QueriesTemplateDataFactory {
 
     return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, persistencePackage)
         .and(TemplateParameter.STATE_DATA_OBJECT_NAME, dataObjectName)
-        .and(TemplateParameter.QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateProtocol))
-        .and(TemplateParameter.QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateProtocol))
+        .and(TemplateParameter.QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregateProtocol.substring(1)))
+        .and(TemplateParameter.QUERY_ALL_METHOD_NAME, QueriesDetail.resolveQueryAllMethodName(aggregateProtocol.substring(1)))
         .and(TemplateParameter.IMPORTS, ImportParameter.of(dataObjectQualifiedName));
   }
 

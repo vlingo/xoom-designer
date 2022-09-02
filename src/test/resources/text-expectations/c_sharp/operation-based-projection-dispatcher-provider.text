@@ -1,3 +1,4 @@
+using Io.Vlingo.Xoomapp.Model.Author;
 using Io.Vlingo.Xoomapp.Infrastructure;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Projection;
@@ -18,8 +19,8 @@ public class ProjectionDispatcherProvider
     }
 
     var descriptions = new List<ProjectToDescription>(
-                    ProjectToDescription.With<IBookProjectionActor>(nameof(BookCataloged)),
-                    ProjectToDescription.With<IAuthorProjectionActor>(nameof(AuthorRanked), nameof(AuthorRegistered))
+                    ProjectToDescription.With<BookProjectionActor>(nameof(BookCataloged)),
+                    ProjectToDescription.With<AuthorProjectionActor>(nameof(AuthorRanked), nameof(AuthorRegistered))
                     );
 
     var dispatcherProtocols = stage.ActorFor(new [] { typeof(IDispatcher), typeof(IProjectionDispatcher) },

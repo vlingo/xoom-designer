@@ -39,7 +39,7 @@ public class ${storeProviderName}
 <#if requireAdapters>
     var stateAdapterProvider = new StateAdapterProvider(stage.World);
 <#list adapters as stateAdapter>
-    stateAdapterProvider.RegisterAdapter<${stateAdapter.sourceClass}>(new ${stateAdapter.adapterClass}());
+    stateAdapterProvider.RegisterAdapter(new ${stateAdapter.adapterClass}());
 </#list>
 
 </#if>

@@ -30,12 +30,14 @@ public class CommandModelStateStoreProvider
     }
 
     var stateAdapterProvider = new StateAdapterProvider(stage.World);
+    stateAdapterProvider.RegisterAdapter(new AuthorStateAdapter());
 
     new EntryAdapterProvider(stage.World); // future use
 
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorState), typeof(AuthorState));
 
     var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    registry.Register(new Info(store, typeof(AuthorState), nameof(AuthorState)));
 
     return new CommandModelStateStoreProvider(stage, store);
   }

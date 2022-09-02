@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public class TestCase {
 
   public static final int TEST_DATA_SET_SIZE = 2;
@@ -69,9 +71,9 @@ public class TestCase {
       final CollectionMutation collectionMutation =
           field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
       if (collectionMutation.isSingleParameterBased()) {
-        return String.format("data.%s.stream().findFirst().orElse(null)", field.value);
+        return String.format("data.%s.FirstOrDefault()", toPascalCase(field.value));
       }
-      return "data." + field.value;
+      return "data." + toPascalCase(field.value);
     }).collect(Collectors.joining(", "));
   }
 

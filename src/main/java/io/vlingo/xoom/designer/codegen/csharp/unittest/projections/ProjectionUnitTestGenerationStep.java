@@ -17,18 +17,16 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
     final String basePackage = context.parameterOf(Label.PACKAGE);
-
     final List<CodeGenerationParameter> aggregates =
         context.parametersOf(Label.AGGREGATE).collect(Collectors.toList());
-
     final ProjectionType projectionType =
         context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf);
     final List<CodeGenerationParameter> valueObjects =
         context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
+
     final List<TemplateData> templatesData = new ArrayList<>();
     templatesData.add(new CountingProjectionControlTemplateData(basePackage));
     templatesData.add(new CountingReadResultInterestTemplateData(basePackage));
-
     templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), basePackage, projectionType, aggregates, valueObjects));
 
     return templatesData;

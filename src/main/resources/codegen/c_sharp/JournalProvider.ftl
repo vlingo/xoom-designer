@@ -36,10 +36,10 @@ public class ${storeProviderName}
     var entryAdapterProvider = EntryAdapterProvider.Instance(stage.World);
 
 <#list adapters as entryAdapter>
-    entryAdapterProvider.RegisterAdapter<${entryAdapter.sourceClass}>(new ${entryAdapter.adapterClass}());
+    entryAdapterProvider.RegisterAdapter(new ${entryAdapter.adapterClass}());
 </#list>
 
-    var journal = StoreActorBuilder.From(stage, new Model("${model}"), dispatcher, StorageType.Journal, Settings.Properties, true);
+    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.Journal, Settings.Properties, true);
 
 <#list aggregates as aggregate>
     registry.Register(new Info(journal, typeof(${aggregate}), nameof(${aggregate})));
@@ -51,7 +51,7 @@ public class ${storeProviderName}
   private ${storeProviderName}(IJournal<string> journal)
   {
     Journal = journal;
-    ComponentRegistry.Register(GetType(), this);
+    ComponentRegistry.Register<${storeProviderName}>(this);
   }
 
 }

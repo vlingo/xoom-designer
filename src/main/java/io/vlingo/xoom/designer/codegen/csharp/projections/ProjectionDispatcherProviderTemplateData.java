@@ -16,6 +16,7 @@ import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.ProjectionSourceTypesDetail;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,6 +59,8 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
   private Set<String> resolveImports(final String basePackage, final ProjectionType projectionType,
                                      final List<Content> contents) {
+    final String domainEventsPackage = ContentQuery.findPackage(CsharpTemplateStandard.DOMAIN_EVENT, contents);
+
     if (projectionType.isOperationBased()) {
       final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
 
@@ -67,10 +70,10 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
       final String allSourceTypes =
           codeElementFormatter.packageOf(projectionSourceTypesQualifiedName);
 
-      return Stream.of(allSourceTypes).collect(Collectors.toSet());
+      return Stream.of(domainEventsPackage, allSourceTypes).collect(Collectors.toSet());
     }
 
-    return ContentQuery.findFullyQualifiedClassNames(CsharpTemplateStandard.DOMAIN_EVENT, contents);
+    return Collections.singleton(domainEventsPackage);
   }
 
   @Override

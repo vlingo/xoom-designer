@@ -25,7 +25,7 @@ public class DataDeclaration {
       final String testDataVariableName =
           TestDataFormatter.formatLocalVariableName(dataIndex);
 
-      final String dataInstantiation = InlineDataInstantiation.with(dataIndex, CsharpTemplateStandard.DATA_OBJECT, aggregate,
+      final String dataInstantiation = InlineDataInstantiation.with(dataIndex, "Data", CsharpTemplateStandard.DATA_OBJECT, aggregate,
               valueObjects, testDataValues).generate();
 
       return String.format(TEST_DATA_DECLARATION_PATTERN, testDataVariableName, dataInstantiation);

@@ -14,27 +14,33 @@ import io.vlingo.xoom.designer.codegen.csharp.DomainEventDetail;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Assertions {
 
+  private static final String ASSERT_NOT_NULL_PLACEHOLDER = "Assert.NotNull(%s);";
+  private static final String ASSERT_EQUAL_PLACEHOLDER = "Assert.Equal(%s, %s);";
   public static List<String> from(final int dataIndex, final CodeGenerationParameter aggregate,
                                   final CodeGenerationParameter domainEvent,
                                   final List<CodeGenerationParameter> valueObjects,
                                   final TestDataValueGenerator.TestDataValues testDataValues) {
     final String variableName = "item";
 
+    final Function<String, String> toPascalCaseMapper = path -> Arrays.stream(path.split("\\."))
+        .skip(1)
+        .map(FieldDetail::toPascalCase).collect(Collectors.joining("."));
     final List<String> fieldPaths = AggregateDetail.resolveFieldsPaths(variableName, aggregate.retrieveAllRelated(Label.STATE_FIELD), valueObjects);
 
     final Function<String, String> mapper =
         fieldPath -> {
           final String fieldType = AggregateDetail.stateFieldType(aggregate, fieldPath, valueObjects);
           if (FieldDetail.isCollection(fieldType) || FieldDetail.isDateTime(fieldType)) {
-            return String.format("assertNotNull(%s);", fieldPath);
+            return String.format(ASSERT_NOT_NULL_PLACEHOLDER, variableName + "." + toPascalCaseMapper.apply(fieldPath));
           }
-          return String.format("assertEquals(%s, %s);", testDataValues.retrieve(dataIndex, variableName, fieldPath), fieldPath);
+          return String.format(ASSERT_EQUAL_PLACEHOLDER, testDataValues.retrieve(dataIndex, variableName, fieldPath), variableName + "." + toPascalCaseMapper.apply(fieldPath));
         };
 
     return fieldPaths.stream()

@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
-import io.vlingo.xoom.designer.codegen.csharp.formatting.NumberFormat;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
 
 import java.util.List;
@@ -20,23 +19,22 @@ import java.util.function.Consumer;
 public class InlineDataInstantiation {
 
   private final int dataIndex;
-  @SuppressWarnings("unused")
-  private final String ordinalIndex;
+  private final String dataObjectPrefix;
   private final TemplateStandard standard;
   private final CodeGenerationParameter aggregate;
   private final List<CodeGenerationParameter> valueObjects;
   private final StringBuilder valuesAssignmentExpression;
   private final TestDataValueGenerator.TestDataValues testDataValues;
 
-  public static InlineDataInstantiation with(final int dataIndex,
+  public static InlineDataInstantiation with(final int dataIndex, final String dataObjectPrefix,
                                              final TemplateStandard standard,
                                              final CodeGenerationParameter aggregate,
                                              final List<CodeGenerationParameter> valueObjects,
                                              final TestDataValueGenerator.TestDataValues testDataValues) {
-    return new InlineDataInstantiation(dataIndex, standard, aggregate, valueObjects, testDataValues);
+    return new InlineDataInstantiation(dataIndex, dataObjectPrefix, standard, aggregate, valueObjects, testDataValues);
   }
 
-  private InlineDataInstantiation(final int dataIndex,
+  private InlineDataInstantiation(final int dataIndex, final String dataObjectPrefix,
                                   final TemplateStandard standard,
                                   final CodeGenerationParameter aggregate,
                                   final List<CodeGenerationParameter> valueObjects,
@@ -45,7 +43,7 @@ public class InlineDataInstantiation {
     this.standard = standard;
     this.aggregate = aggregate;
     this.valueObjects = valueObjects;
-    this.ordinalIndex = NumberFormat.toOrdinal(dataIndex);
+    this.dataObjectPrefix = dataObjectPrefix;
     this.valuesAssignmentExpression = new StringBuilder();
     this.testDataValues = testDataValues;
   }
@@ -53,7 +51,7 @@ public class InlineDataInstantiation {
   public String generate() {
     generateFieldsAssignment();
     return String.format("%s.From(%s)", standard.resolveClassname(aggregate.value),
-        valuesAssignmentExpression.toString()).replaceAll(", \\)", ")");
+        valuesAssignmentExpression).replaceAll(", \\)", ")");
   }
 
   private void generateFieldsAssignment() {
@@ -64,6 +62,9 @@ public class InlineDataInstantiation {
     final String currentFieldPath = fieldPath.isEmpty() ? field.value : fieldPath + "." + field.value;
     if (ValueObjectDetail.isValueObject(field)) {
       generateValueObjectAssignment(currentFieldPath, field);
+    } else if (FieldDetail.isValueObjectCollection(field)) {
+      final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
+      valuesAssignmentExpression.append(defaultValue.replace(">", dataObjectPrefix+">")).append(", ");
     } else if (FieldDetail.isCollection(field) || FieldDetail.isDateTime(field)) {
       final String defaultValue = FieldDetail.resolveDefaultValue(field.parent(), field.value);
       valuesAssignmentExpression.append(defaultValue).append(", ");

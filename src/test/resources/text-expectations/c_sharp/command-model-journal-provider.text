@@ -1,3 +1,4 @@
+using Io.Vlingo.Xoomapp.Model.Author;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Sourcing;
 using Vlingo.Xoom.Symbio;
@@ -30,8 +31,9 @@ public class CommandModelJournalProvider
 
     var entryAdapterProvider = EntryAdapterProvider.Instance(stage.World);
 
+    entryAdapterProvider.RegisterAdapter(new AuthorRegisteredAdapter());
 
-    var journal = StoreActorBuilder.From(stage, new Model("COMMAND"), dispatcher, StorageType.Journal, Settings.Properties, true);
+    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher, StorageType.Journal, Settings.Properties, true);
 
 
     return new CommandModelJournalProvider(journal);
@@ -40,7 +42,7 @@ public class CommandModelJournalProvider
   private CommandModelJournalProvider(IJournal<string> journal)
   {
     Journal = journal;
-    ComponentRegistry.Register(GetType(), this);
+    ComponentRegistry.Register<CommandModelJournalProvider>(this);
   }
 
 }

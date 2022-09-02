@@ -100,8 +100,7 @@ public class ProjectionDispatcherProviderGenerationStepTest extends CodeGenerati
 
     Assertions.assertEquals(12, context.contents().size());
 
-    Assertions.assertEquals(((TextBasedContent) authorProjection).text, (TextExpectation.onCSharp().read("author-without-factory-method-event-based-projection-actor")));
-    Assertions.assertEquals(((TextBasedContent) authorProjection).text, (TextExpectation.onCSharp().read("author-without-factory-method-event-based-projection-actor")));
+    Assertions.assertTrue(authorProjection.contains(TextExpectation.onCSharp().read("author-without-factory-method-event-based-projection-actor")));
   }
 
   @Test

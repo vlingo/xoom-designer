@@ -6,6 +6,7 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.csharp.projections;
 
+import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -16,6 +17,7 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
+import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.Map;
@@ -74,10 +76,10 @@ public class ProjectionTemplateData extends TemplateData {
 
   private Set<String> resolveImports(final String dataObjectName, final List<ProjectionSource> projectionSources,
                                      final List<Content> contents) {
-
+    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
+    String packageof = codeElementFormatter.packageOf(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "I"+protocolName, contents));
     final Stream<String> defaultImports =
-        Stream.of(ContentQuery.findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, protocolName, contents),
-                ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents));
+        Stream.of(packageof, ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents));
 
     final Stream<String> specialTypesImports = projectionSources.stream()
         .map(projectionSource -> projectionSource.mergeParameters)

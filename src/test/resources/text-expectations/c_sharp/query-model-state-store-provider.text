@@ -42,7 +42,7 @@ public class QueryModelStateStoreProvider
   private QueryModelStateStoreProvider(Stage stage, IStateStore store)
   {
     Store = store;
-    IAuthorQueries = stage.ActorFor<IAuthorQueries>(typeof(IAuthorQueriesActor), store);
+    IAuthorQueries = stage.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), store);
     ComponentRegistry.Register<QueryModelStateStoreProvider>(this);
   }
 }

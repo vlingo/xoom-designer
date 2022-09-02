@@ -17,7 +17,7 @@ namespace ${packageName};
 public class ${projectionName} : StateStoreProjectionActor<${dataName}>
 {
 
-  private const ${dataName} Empty = ${dataName}.Empty;
+  private static readonly ${dataName} Empty = ${dataName}.Empty;
 
   public ${projectionName}() : this(ComponentRegistry.WithType<${storeProviderName}>().Store)
   {
@@ -39,13 +39,13 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}>
 
     var merged = previousData;
 
-    forEach (var event in sources()) {
-      switch (Enum.Parse<${projectionSourceTypesName}>(event.TypeName))
+    foreach (var @event in Sources) {
+      switch (Enum.Parse<${projectionSourceTypesName}>(nameof(@event)))
       {
       <#list sources as source>
         case ${projectionSourceTypesName}.${source.name}:
         {
-          var typedEvent = typed(event);
+          var typedEvent = Typed<${source.name}>(@event);
           <#list source.dataObjectInitializers as initializer>
           ${initializer}
           </#list>
@@ -58,7 +58,7 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}>
 
       </#list>
         default:
-          Logger.Warn("Event of type " + event.TypeName + " was not matched.");
+          Logger.Warn($"Event of type {nameof(@event)} was not matched.");
           break;
       }
     }

@@ -69,6 +69,7 @@ public enum StorageType {
     }
     return new HashSet<>();
   }
+
   public Set<String> findPersistentPackage(final Model model, final List<Content> contents) {
     if (model.isQueryModel() || isStateful()) {
       final TemplateStandard typeStandard = model.isQueryModel() ? CsharpTemplateStandard.DATA_OBJECT : CsharpTemplateStandard.AGGREGATE_STATE;

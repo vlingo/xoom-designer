@@ -40,7 +40,7 @@ public class ProjectToDescription {
       final String aggregateProtocol = iterator.next();
 
       final String projectionName =
-          CsharpTemplateStandard.PROJECTION.resolveClassname(aggregateProtocol);
+          CsharpTemplateStandard.PROJECTION.resolveClassname(aggregateProtocol.substring(1));
 
       final String becauseOf =
               buildCauseTypesExpression(aggregateProtocol, projectionType, contents);

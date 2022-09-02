@@ -70,6 +70,31 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onCSharp().read("counting-read-result-interest")));
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onCSharp().read("author-operation-based-projection-unit-test")));
   }
+  @Test
+  public void testThatEntityStateEventBasedPjectionsUnitTestAreGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED)
+        .add(authorAggregate()).add(nameValueObject()).add(rankValueObject())
+        .add(tagValueObject()).add(classificationValueObject()).add(classifierValueObject());
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    new ProjectionUnitTestGenerationStep().process(context);
+
+    final Content authorProjectionTest =
+        context.findContent(CsharpTemplateStandard.PROJECTION_UNIT_TEST, "AuthorProjectionTest");
+
+    final Content countingProjectionControl =
+        context.findContent(CsharpTemplateStandard.COUNTING_PROJECTION_CTL, "CountingProjectionControl");
+    final Content countingReadResultInterest =
+        context.findContent(CsharpTemplateStandard.COUNTING_READ_RESULT, "CountingReadResultInterest");
+
+    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertTrue(countingProjectionControl.contains(TextExpectation.onCSharp().read("counting-projection-control")));
+    Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onCSharp().read("counting-read-result-interest")));
+    Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onCSharp().read("author-event-based-projection-unit-test")));
+  }
 
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter idField =
@@ -321,7 +346,7 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
 
 
   private static final String AUTHOR_PROJECTION_CONTENT_TEXT =
-      "package Io.Vlingo.Xoomapp.Infrastructure.Persistence; \\n" +
+      "namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence; \\n" +
           "public class AuthorProjectionActor { \\n" +
           "... \\n" +
           "}";
@@ -334,7 +359,6 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
         Content.with(CsharpTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "author").toString(), "AuthorRanked.cs"), null, null, AUTHOR_RANKED_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.PROJECTION, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "AuthorProjectionActor.cs"), null, null, AUTHOR_PROJECTION_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.PERSISTENCE_SETUP, new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "PersistenceSetup.cs"), null, null, PERSISTENCE_SETUP_CONTENT_TEXT),
-
     };
   }
 }

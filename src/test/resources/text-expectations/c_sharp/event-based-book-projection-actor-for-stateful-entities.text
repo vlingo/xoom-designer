@@ -1,3 +1,4 @@
+using Io.Vlingo.Xoomapp.Model.Book;
 using Io.Vlingo.Xoomapp.Infrastructure;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Projection;
@@ -15,7 +16,7 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 public class BookProjectionActor : StateStoreProjectionActor<BookData>
 {
 
-  private const BookData Empty = BookData.Empty;
+  private static readonly BookData Empty = BookData.Empty;
 
   public BookProjectionActor() : this(ComponentRegistry.WithType<QueryModelStateStoreProvider>().Store)
   {
@@ -37,18 +38,18 @@ public class BookProjectionActor : StateStoreProjectionActor<BookData>
 
     var merged = previousData;
 
-    forEach (var event in sources()) {
-      switch (Enum.Parse<Events>(event.TypeName))
+    foreach (var @event in Sources) {
+      switch (Enum.Parse<Events>(nameof(@event)))
       {
         case Events.BookCataloged:
         {
-          var typedEvent = typed(event);
+          var typedEvent = Typed<BookCataloged>(@event);
           merged = BookData.From(typedEvent.Id, typedEvent.Title, typedEvent.Publisher);
           break;
         }
 
         default:
-          Logger.Warn("Event of type " + event.TypeName + " was not matched.");
+          Logger.Warn($"Event of type {nameof(@event)} was not matched.");
           break;
       }
     }
