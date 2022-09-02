@@ -13,7 +13,7 @@ using Io.Vlingo.Xoomapp.Model;
 using Io.Vlingo.Xoomapp;
 using Xunit;
 
-namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 
 public class AuthorProjectionTest: IDisposable
 {
@@ -26,7 +26,7 @@ public class AuthorProjectionTest: IDisposable
     _world = World.StartWithDefaults("test-state-store-projection");
     var store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
     _projection = _world.ActorFor<IProjection>(typeof(AuthorProjectionActor), store);
-    StatefulTypeRegistry.RegisterAll<AuthorData>(_world, store);
+    StatefulTypeRegistry.RegisterAll(_world, store, typeof(AuthorData));
     _valueToProjectionId = new Dictionary<string, string>();
   }
 

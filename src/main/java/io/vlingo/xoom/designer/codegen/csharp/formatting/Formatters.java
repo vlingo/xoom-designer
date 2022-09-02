@@ -10,6 +10,7 @@ import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
+import io.vlingo.xoom.designer.codegen.csharp.dataobject.EventBasedDataObjectInitializer;
 import io.vlingo.xoom.designer.codegen.csharp.model.valueobject.ValueObjectInitializer;
 
 import java.util.Collections;
@@ -57,13 +58,14 @@ public class Formatters {
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
     public enum Style {
-      DATA_TO_VALUE_OBJECT_TRANSLATION, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT
+      DATA_TO_VALUE_OBJECT_TRANSLATION, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, EVENT_BASED_DATA_OBJECT_INITIALIZER
     }
 
     private static final Map<Style, Function<Dialect, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
         new HashMap<Style, Function<Dialect, Variables<?>>>() {{
           put(Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, lang -> new ValueObjectInitializer("this"));
           put(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, dialect -> new DataObjectStaticFactoryMethodAssignment());
+          put(Variables.Style.EVENT_BASED_DATA_OBJECT_INITIALIZER, lang -> new EventBasedDataObjectInitializer("typedEvent"));
         }});
   }
 

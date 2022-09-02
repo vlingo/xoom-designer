@@ -33,7 +33,7 @@ public class QueriesTemplateDataFactory {
     final String dataObjectName = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateProtocol.substring(1));
 
     final String dataObjectQualifiedName =
-        ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents);
+        ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents);
 
     return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, persistencePackage)
         .and(TemplateParameter.STATE_DATA_OBJECT_NAME, dataObjectName)

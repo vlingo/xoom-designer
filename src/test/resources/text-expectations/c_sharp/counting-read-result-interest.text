@@ -1,11 +1,12 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Vlingo.Xoom.Actors.TestKit;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store;
 using Vlingo.Xoom.Symbio.Store.State;
 
-namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 
 public class CountingReadResultInterest : IReadResultInterest
 {

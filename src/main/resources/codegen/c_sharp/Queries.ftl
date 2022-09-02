@@ -1,11 +1,13 @@
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>
+using System.Collections.ObjectModel;
+using Vlingo.Xoom.Common;
 
 namespace ${packageName};
 
 public interface ${queriesName}
 {
-  Completes<${dataName}> ${queryByIdMethodName}(string id);
-  Completes<Collection<${dataName}>> ${queryAllMethodName}();
+  ICompletes<${dataName}> ${queryByIdMethodName}(string id);
+  ICompletes<Collection<${dataName}>> ${queryAllMethodName}();
 }

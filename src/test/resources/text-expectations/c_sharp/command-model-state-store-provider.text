@@ -1,5 +1,4 @@
-using Io.Vlingo.Xoomapp.Model.Author.AuthorState;
-
+using Io.Vlingo.Xoomapp.Model.Author;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio;
@@ -34,9 +33,9 @@ public class CommandModelStateStoreProvider
 
     new EntryAdapterProvider(stage.World); // future use
 
-    StateTypeStateStoreMap.StateTypeToStoreName<AuthorState>(nameof(AuthorState));
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorState), typeof(AuthorState));
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Model("COMMAND"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher, StorageType.StateStore, Settings.Properties, true);
 
     return new CommandModelStateStoreProvider(stage, store);
   }
@@ -44,6 +43,6 @@ public class CommandModelStateStoreProvider
   private CommandModelStateStoreProvider(Stage stage, IStateStore store)
   {
     Store = store;
-    ComponentRegistry.Register(GetType(), this);
+    ComponentRegistry.Register<CommandModelStateStoreProvider>(this);
   }
 }

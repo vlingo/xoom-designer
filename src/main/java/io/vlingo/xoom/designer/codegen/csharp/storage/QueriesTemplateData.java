@@ -10,7 +10,7 @@ package io.vlingo.xoom.designer.codegen.csharp.storage;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
-import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
 
 public class QueriesTemplateData extends TemplateData {
@@ -18,12 +18,9 @@ public class QueriesTemplateData extends TemplateData {
   private final String aggregateProtocol;
   private final TemplateParameters parameters;
 
-  protected QueriesTemplateData(final String aggregateProtocol,
-                                final TemplateParameters parameters) {
+  protected QueriesTemplateData(final String aggregateProtocol, final TemplateParameters parameters) {
     this.aggregateProtocol = aggregateProtocol;
-    this.parameters =
-            parameters.and(TemplateParameter.QUERIES_NAME,
-                    JavaTemplateStandard.QUERIES.resolveClassname(aggregateProtocol));
+    this.parameters = parameters.and(TemplateParameter.QUERIES_NAME, CsharpTemplateStandard.QUERIES.resolveClassname(aggregateProtocol));
   }
 
   @Override
@@ -33,7 +30,7 @@ public class QueriesTemplateData extends TemplateData {
 
   @Override
   public TemplateStandard standard() {
-    return JavaTemplateStandard.QUERIES;
+    return CsharpTemplateStandard.QUERIES;
   }
 
   @Override

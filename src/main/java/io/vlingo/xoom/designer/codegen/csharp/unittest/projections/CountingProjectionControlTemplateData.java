@@ -10,9 +10,12 @@ public class CountingProjectionControlTemplateData extends TemplateData {
   private final TemplateParameters parameters;
 
   public CountingProjectionControlTemplateData(String basePackage) {
-    this.parameters =
-        TemplateParameters.with(TemplateParameter.PACKAGE_NAME, basePackage)
+    this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, resolvePackage(basePackage))
             .and(TemplateParameter.PRODUCTION_CODE, false).and(TemplateParameter.UNIT_TEST, true);
+  }
+
+  private static String resolvePackage(final String basePackage) {
+    return basePackage + ".Tests.Infrastructure.Persistence";
   }
 
   @Override

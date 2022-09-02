@@ -57,7 +57,7 @@ public enum StorageType {
 
   public Set<String> resolveAdaptersQualifiedName(final Model model, final List<Content> contents) {
     if (requireAdapters(model)) {
-      return ContentQuery.findFullyQualifiedClassNames(adapterSourceClassStandard, contents);
+      return Collections.singleton(ContentQuery.findPackage(adapterSourceClassStandard, contents));
     }
     return Collections.emptySet();
   }
@@ -66,6 +66,13 @@ public enum StorageType {
     if (model.isQueryModel() || isStateful()) {
       final TemplateStandard typeStandard = model.isQueryModel() ? CsharpTemplateStandard.DATA_OBJECT : CsharpTemplateStandard.AGGREGATE_STATE;
       return ContentQuery.findFullyQualifiedClassNames(typeStandard, contents);
+    }
+    return new HashSet<>();
+  }
+  public Set<String> findPersistentPackage(final Model model, final List<Content> contents) {
+    if (model.isQueryModel() || isStateful()) {
+      final TemplateStandard typeStandard = model.isQueryModel() ? CsharpTemplateStandard.DATA_OBJECT : CsharpTemplateStandard.AGGREGATE_STATE;
+      return Collections.singleton(ContentQuery.findPackage(typeStandard, contents));
     }
     return new HashSet<>();
   }

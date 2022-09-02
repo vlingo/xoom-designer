@@ -72,6 +72,10 @@ public enum TemplateParameter implements ParameterKey {
   VALUE_OBJECT_FIELDS("valueObjectFields"),
   EMPTY_OBJECT_ARGUMENTS("emptyObjectArguments"),
   PROJECTION_NAME("projectionName"),
+  PROJECTION_SOURCES("sources"),
+  PROJECTION_SOURCE_TYPES_NAME("projectionSourceTypesName"),
+  PROJECTION_SOURCE_TYPES_QUALIFIED_NAME("projectionSourceTypesQualifiedName"),
+  PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
   PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),;
 
   public final String key;

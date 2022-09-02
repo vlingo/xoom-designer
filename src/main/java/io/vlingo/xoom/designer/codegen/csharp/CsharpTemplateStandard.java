@@ -73,6 +73,13 @@ public enum CsharpTemplateStandard implements TemplateStandard {
       (name, parameters) -> name + DataObjectDetail.DATA_OBJECT_NAME_SUFFIX),
   PROJECTION(parameters -> CodeGenerationProperties.CSHARP_PROJECTION_TEMPLATES.get(parameters.find(PROJECTION_TYPE)),
       (name, parameters) -> name + "ProjectionActor"),
+  PROJECTION_DISPATCHER_PROVIDER(parameters -> Template.PROJECTION_DISPATCHER_PROVIDER.filename,
+      (name, parameters) -> "ProjectionDispatcherProvider"),
+  PROJECTION_SOURCE_TYPES(parameters -> Template.PROJECTION_SOURCE_TYPES.filename,
+      (name, parameters) -> {
+        final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
+        return projectionType.isEventBased() ? "Events" : "Operations";
+      }),
   PROJECTION_UNIT_TEST(parameters -> {
     final ProjectionType projectionType = parameters.find(PROJECTION_TYPE);
     if (!projectionType.isProjectionEnabled()) {

@@ -28,7 +28,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public ProjectionUnitTestTemplateData(final String packageName, final ProjectionType projectionType,
+  public ProjectionUnitTestTemplateData(final String basePackage, final ProjectionType projectionType,
                                         final CodeGenerationParameter aggregate, final List<Content> contents,
                                         final List<CodeGenerationParameter> valueObjects) {
 
@@ -43,7 +43,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
     final String dataObjectName = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
     final String aggregateState = CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
 
-    this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
+    this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, resolvePackage(basePackage))
         .and(TemplateParameter.PROJECTION_UNIT_TEST_NAME, standard().resolveClassname(projectionName.replace("Actor", "")))
         .and(TemplateParameter.PROJECTION_NAME, projectionName)
         .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, entityName)
@@ -62,16 +62,20 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.UNIT_TEST, true);
   }
 
-  public static List<TemplateData> from(final List<Content> contents, final String packageName,
+  public static List<TemplateData> from(final List<Content> contents, final String basePackage,
                                         final ProjectionType projectionType,
                                         final List<CodeGenerationParameter> aggregates,
                                         final List<CodeGenerationParameter> valueObjects) {
     final Function<CodeGenerationParameter, TemplateData> mapper = aggregate ->
-        new ProjectionUnitTestTemplateData(packageName, projectionType, aggregate, contents, valueObjects);
+        new ProjectionUnitTestTemplateData(basePackage, projectionType, aggregate, contents, valueObjects);
 
     return aggregates.stream()
         .map(mapper)
         .collect(Collectors.toList());
+  }
+
+  private static String resolvePackage(final String basePackage) {
+    return basePackage + ".Tests.Infrastructure.Persistence";
   }
 
   private String resolveImport(final String dataObjectName, final CsharpTemplateStandard dataObject, final List<Content> contents) {

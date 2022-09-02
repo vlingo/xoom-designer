@@ -18,12 +18,12 @@ public class ${dispatcherName} : IDispatcher
     this._access = AfterCompleting(0);
   }
 
-  public AccessSafely afterCompleting( int times)
+  public AccessSafely AfterCompleting(int times)
   {
     _access = AccessSafely.AfterCompleting(times)
-      .WritingWith<string>("stored", (string type) -> _states.Enqueue(type))
-      .ReadingWith("storedAt", (int index) -> _states.ElementAtOrDefault(index))
-      .ReadingWith("storeCount", () -> _states.Count);
+      .WritingWith<string>("stored", type => _states.Enqueue(type))
+      .ReadingWith<int>("storedAt", index => _states.ElementAtOrDefault(index))
+      .ReadingWith("storeCount", () => _states.Count);
 
     return _access;
   }

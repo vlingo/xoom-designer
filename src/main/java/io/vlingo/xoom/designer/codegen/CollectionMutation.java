@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.designer.codegen.csharp.FieldDetail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,14 +24,22 @@ public enum CollectionMutation {
 
   NONE("", (dialect, param) -> Collections.emptyList()),
   REPLACEMENT("*", (dialect, param) -> Collections.emptyList()),
-  ADDITION("+", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveAddMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
-  REMOVAL("-", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
-  MERGE("#", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveAllMemberFrom(dialect), param.value),
-      String.format("%s.%s(%s);", param.value, resolveAddAllMemberFrom(dialect), param.value)));
+  ADDITION("+", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveAddMemberFrom(dialect), resolveMemberParamFrom(dialect, param)))),
+  REMOVAL("-", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveMemberFrom(dialect), resolveMemberParamFrom(dialect, param)))),
+  MERGE("#", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveAllMemberFrom(dialect), resolveMemberParamFrom(dialect, param)),
+      String.format("%s.%s(%s);", param.value, resolveAddAllMemberFrom(dialect), resolveMemberParamFrom(dialect, param))));
 
-  private static String resolveMemberParamFrom(Dialect dialect, String param) {
-    return dialect.equals(Dialect.C_SHARP) ? toPascalCase(param) : param;
+  private static String resolveMemberParamFrom(final Dialect dialect, final String param) {
+    return dialect.isJava() ? param : toPascalCase(param);
   }
+
+  private static String resolveMemberParamFrom(final Dialect dialect, final CodeGenerationParameter param) {
+    final String result = param.hasAny(Label.ALIAS) ? param.retrieveRelatedValue(Label.ALIAS) : param.value;
+    if(FieldDetail.isValueObjectCollection(param) || !param.hasAny(Label.FIELD_TYPE))
+      return result;
+    return dialect.isJava() ? result : toPascalCase(result);
+  }
+
   private static String resolveAddMemberFrom(Dialect dialect) {
     return dialect.isJava() ? "add" : "Add";
   }
@@ -73,12 +82,25 @@ public enum CollectionMutation {
         .collect(Collectors.toList());
   }
 
+  public List<String> resolveStatements(final Dialect dialect, final String collectionOwner,
+                                        final CodeGenerationParameter methodParameter) {
+    return statementsResolver.apply(dialect, methodParameter).stream()
+        .map(statement -> collectionOwner + "." + statement)
+        .collect(Collectors.toList());
+  }
+
   public List<String> resolveStatements(final Dialect dialect, final CodeGenerationParameter methodParameter) {
     return new ArrayList<>(statementsResolver.apply(dialect, methodParameter));
   }
 
   public List<String> resolveStatements(final String collectionOwner, final String elementOwner, final CodeGenerationParameter methodParameter) {
     return resolveStatements(collectionOwner, methodParameter)
+        .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
+        .collect(Collectors.toList());
+  }
+  public List<String> resolveStatements(final Dialect dialect, final String collectionOwner, final String elementOwner,
+                                        final CodeGenerationParameter methodParameter) {
+    return resolveStatements(dialect, collectionOwner, methodParameter)
         .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
         .collect(Collectors.toList());
   }

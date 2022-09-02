@@ -34,6 +34,8 @@ public enum Template {
   JOURNAL_PROVIDER("JournalProvider"),
   QUERIES("Queries"),
   QUERIES_ACTOR("QueriesActor"),
+  PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
+  PROJECTION_SOURCE_TYPES("ProjectionSourceTypes"),
   OPERATION_BASED_PROJECTION("OperationBasedProjection"),
   EVENT_BASED_PROJECTION("EventBasedProjection"),
   NO_PROJECTION_UNIT_TEST("NoProjectionUnitTest"),

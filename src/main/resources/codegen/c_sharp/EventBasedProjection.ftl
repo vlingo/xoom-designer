@@ -11,12 +11,13 @@ namespace ${packageName};
 /**
  * See
  * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
- *   Implementing With the StateStoreProjectionActor
+ *   StateStoreProjectionActor
  * </a>
  */
 public class ${projectionName} : StateStoreProjectionActor<${dataName}>
 {
-  private string _becauseOf;
+
+  private const ${dataName} Empty = ${dataName}.Empty;
 
   public ${projectionName}() : this(ComponentRegistry.WithType<${storeProviderName}>().Store)
   {
@@ -28,30 +29,38 @@ public class ${projectionName} : StateStoreProjectionActor<${dataName}>
 
   protected ${dataName} CurrentDataFor(IProjectable projectable)
   {
-    _becauseOf = projectable.BecauseOf()[0];
-    var state = projectable.Object<${stateName}>();
-    return ${dataName}.From(state);
+    return Empty;
   }
 
   protected ${dataName} Merge(${dataName} previousData, int previousVersion, ${dataName} currentData, int currentVersion)
   {
+
     if (previousVersion == currentVersion) return currentData;
 
     var merged = previousData;
 
-    switch (Enum.Parse<${projectionSourceTypesName}>(_becauseOf))
-    {
-      <#list sources as source>
-      case ${projectionSourceTypesName}.${source.name}:
+    forEach (var event in sources()) {
+      switch (Enum.Parse<${projectionSourceTypesName}>(event.TypeName))
       {
-        merged = ${source.dataObjectName}.From(${source.mergeParameters});
-        break;
-      }
+      <#list sources as source>
+        case ${projectionSourceTypesName}.${source.name}:
+        {
+          var typedEvent = typed(event);
+          <#list source.dataObjectInitializers as initializer>
+          ${initializer}
+          </#list>
+          <#list source.collectionMutations as collectionMutation>
+          ${collectionMutation}
+          </#list>
+          merged = ${source.dataObjectName}.From(${source.mergeParameters});
+          break;
+        }
 
       </#list>
-      default:
-        Logger.Warn("Operation of type " + _becauseOf + " was not matched.");
-        break;
+        default:
+          Logger.Warn("Event of type " + event.TypeName + " was not matched.");
+          break;
+      }
     }
 
     return merged;

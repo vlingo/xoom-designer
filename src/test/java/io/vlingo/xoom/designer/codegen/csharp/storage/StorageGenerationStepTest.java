@@ -2,30 +2,22 @@ package io.vlingo.xoom.designer.codegen.csharp.storage;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
+import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
-public class StorageGenerationStepTest {
-
-  @BeforeEach
-  public void setUp() {
-    ComponentRegistry.register("cSharpCodeFormatter", CodeElementFormatter.with(Dialect.C_SHARP, ReservedWordsHandler.usingSuffix("_")));
-  }
+public class StorageGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testStateStoreGenerationWithoutProjections() {
@@ -69,6 +61,7 @@ public class StorageGenerationStepTest {
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
   }
+
   @Test
   public void testStateStoreGenerationWithOperationBasedProjections() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
@@ -93,6 +86,7 @@ public class StorageGenerationStepTest {
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
   }
+
   @Test
   public void testJournalStoreGenerationWithProjections() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
@@ -158,11 +152,12 @@ public class StorageGenerationStepTest {
         .relate(factoryMethod).relate(rankMethod).relate(hideMethod)
         .relate(authorRegisteredEvent).relate(authorRankedEvent);
   }
+
   private Content[] contents() {
     return new Content[]{
         Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "IAuthor").toString(), "IAuthor.cs"), null, null, AUTHOR_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.AGGREGATE_STATE, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorState").toString(), "AuthorState.cs"), null, null, AUTHOR_STATE_CONTENT_TEXT),
-        Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorData").toString(), "AuthorData.cs"), null, null, AUTHOR_DATA_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTION_PACKAGE_PATH, "AuthorData").toString(), "AuthorData.cs"), null, null, AUTHOR_DATA_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.DOMAIN_EVENT, new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "AuthorRegistered").toString(), "AuthorRegistered.cs"), null, null, AUTHOR_REGISTERED_CONTENT_TEXT)
     };
   }
@@ -174,6 +169,8 @@ public class StorageGenerationStepTest {
 
   private static final String MODEL_PACKAGE_PATH =
       Paths.get(PROJECT_PATH,  "Io.Vlingo.Xoomapp.Model").toString();
+  private static final String INFRASTRUCTION_PACKAGE_PATH =
+      Paths.get(PROJECT_PATH,  "Io.Vlingo.Xoomapp.Infrastructure").toString();
 
   private static final String AUTHOR_CONTENT_TEXT =
       "namespace Io.Vlingo.Xoomapp.Model.Author; \\n" +
@@ -186,7 +183,7 @@ public class StorageGenerationStepTest {
           "... \\n" +
           "}";
   private static final String AUTHOR_DATA_CONTENT_TEXT =
-      "namespace Io.Vlingo.Xoomapp.Model.Author; \\n" +
+      "namespace Io.Vlingo.Xoomapp.Infrastructure; \\n" +
           "public class AuthorData { \\n" +
           "... \\n" +
           "}";

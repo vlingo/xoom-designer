@@ -1,0 +1,55 @@
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
+public class BookProjectionActor : StateStoreProjectionActor<BookData>
+{
+  private string _becauseOf;
+
+  public BookProjectionActor() : this(ComponentRegistry.WithType<QueryModelStateStoreProvider>().Store)
+  {
+  }
+
+  public BookProjectionActor(IStateStore stateStore) : base(stateStore)
+  {
+  }
+
+  protected BookData CurrentDataFor(IProjectable projectable)
+  {
+    _becauseOf = projectable.BecauseOf()[0];
+    var state = projectable.Object<BookState>();
+    return BookData.From(state);
+  }
+
+  protected BookData Merge(BookData previousData, int previousVersion, BookData currentData, int currentVersion)
+  {
+    if (previousVersion == currentVersion) return currentData;
+
+    var merged = previousData;
+
+    switch (Enum.Parse<Operations>(_becauseOf))
+    {
+      case Operations.BookCataloged:
+      {
+        merged = BookData.From(currentData.Id, currentData.Title, currentData.Publisher);
+        break;
+      }
+
+      default:
+        Logger.Warn("Operation of type " + _becauseOf + " was not matched.");
+        break;
+    }
+
+    return merged;
+  }
+}

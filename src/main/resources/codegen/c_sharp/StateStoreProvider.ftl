@@ -3,7 +3,6 @@
 using ${import.qualifiedClassName};
   </#list>
 </#if>
-
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio;
@@ -47,10 +46,10 @@ public class ${storeProviderName}
     new EntryAdapterProvider(stage.World); // future use
 
 <#list persistentTypes as persistentType>
-    StateTypeStateStoreMap.StateTypeToStoreName<${persistentType}>(nameof(${persistentType}));
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(${persistentType}), typeof(${persistentType}));
 </#list>
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Model("${model}"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.StateStore, Settings.Properties, true);
 <#if requireAdapters>
 <#list adapters as stateAdapter>
     registry.Register(new Info(store, typeof(${stateAdapter.sourceClass}), nameof(${stateAdapter.sourceClass})));
@@ -66,6 +65,6 @@ public class ${storeProviderName}
     <#list queries as query>
     ${query.attributeName} = stage.ActorFor<${query.protocolName}>(typeof(${query.actorName}), store);
     </#list>
-    ComponentRegistry.Register(GetType(), this);
+    ComponentRegistry.Register<${storeProviderName}>(this);
   }
 }

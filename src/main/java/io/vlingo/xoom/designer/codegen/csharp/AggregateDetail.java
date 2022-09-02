@@ -136,4 +136,9 @@ public class AggregateDetail {
           return toPascalCase(field.value);
         }).collect(Collectors.joining(", "));
   }
+
+  public static boolean hasFactoryMethod(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+  }
 }

@@ -89,7 +89,7 @@ public class ${projectionUnitTestName}
     var dispatcher = new NoOpDispatcher();
     _valueToProjectionId = new ConcurrentHashMap<>();
     _stateStore = world.ActorFor<StateStore>(typeof(InMemoryStateStoreActor), dispatcher);
-    var statefulTypeRegistry = StatefulTypeRegistry.RegisterAll<${dataObjectName}>(_world, _stateStore);
+    var statefulTypeRegistry = StatefulTypeRegistry.RegisterAll(_world, _stateStore, typeof(${dataObjectName}));
     QueryModelStateStoreProvider.Using(_world.stage(), statefulTypeRegistry);
     _projection = world.ActorFor<IProjection>(typeof(${projectionName}), _stateStore);
   }

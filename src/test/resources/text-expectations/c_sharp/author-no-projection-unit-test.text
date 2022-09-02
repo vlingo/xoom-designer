@@ -13,7 +13,7 @@ using Io.Vlingo.Xoomapp.Model;
 using Io.Vlingo.Xoomapp;
 using Xunit;
 
-namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 
 
 public class AuthorProjectionTest: IDisposable

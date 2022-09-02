@@ -35,12 +35,12 @@ public class ${projectionUnitTestName}: IDisposable
   private readonly IProjection _projection;
   private readonly Dictionary<string, string> _valueToProjectionId;
 
-  public AuthorProjectionTest()
+  public ${projectionUnitTestName}()
   {
     _world = World.StartWithDefaults("test-state-store-projection");
     var store = _world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
     _projection = _world.ActorFor<IProjection>(typeof(${projectionName}), store);
-    StatefulTypeRegistry.RegisterAll<${dataObjectName}>(_world, store);
+    StatefulTypeRegistry.RegisterAll(_world, store, typeof(${dataObjectName}));
     _valueToProjectionId = new Dictionary<string, string>();
   }
 

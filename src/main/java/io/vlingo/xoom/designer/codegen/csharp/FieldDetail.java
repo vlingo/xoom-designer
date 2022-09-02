@@ -111,6 +111,10 @@ public class FieldDetail {
     return isValueObjectCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
+  public static boolean isAssignableToValueObject(final CodeGenerationParameter field) {
+    return isMethodParameterAssignableToValueObject(field, field);
+  }
+
   public static String resolveCollectionType(final CodeGenerationParameter field) {
     if (!field.hasAny(Label.COLLECTION_TYPE)) {
       throw new UnsupportedOperationException(field.value + " is not a Collection");

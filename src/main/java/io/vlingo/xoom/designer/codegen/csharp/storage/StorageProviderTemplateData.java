@@ -77,7 +77,7 @@ public class StorageProviderTemplateData extends TemplateData {
                                      final List<Queries> queries) {
     final Set<String> sourceClassQualifiedNames = storageType.resolveAdaptersQualifiedName(model, contents);
 
-    final Set<String> persistentTypes = storageType.findPersistentQualifiedTypes(model, contents);
+    final Set<String> persistentTypes = storageType.findPersistentPackage(model, contents);
 
     final Set<String> queriesQualifiedNames = queries.stream()
             .flatMap(param -> param.getQualifiedNames().stream())

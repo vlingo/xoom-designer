@@ -1,5 +1,4 @@
-using Io.Vlingo.Xoomapp.Model.Author.AuthorData;
-
+using Io.Vlingo.Xoomapp.Infrastructure;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio;
@@ -17,6 +16,7 @@ public class QueryModelStateStoreProvider
 {
 
   public IStateStore Store { get; }
+  public IAuthorQueries IAuthorQueries {get;}
 
   public static QueryModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
   {
@@ -32,9 +32,9 @@ public class QueryModelStateStoreProvider
 
     new EntryAdapterProvider(stage.World); // future use
 
-    StateTypeStateStoreMap.StateTypeToStoreName<AuthorData>(nameof(AuthorData));
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorData), typeof(AuthorData));
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Model("QUERY"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("QUERY"), dispatcher, StorageType.StateStore, Settings.Properties, true);
 
     return new QueryModelStateStoreProvider(stage, store);
   }
@@ -42,6 +42,7 @@ public class QueryModelStateStoreProvider
   private QueryModelStateStoreProvider(Stage stage, IStateStore store)
   {
     Store = store;
-    ComponentRegistry.Register(GetType(), this);
+    IAuthorQueries = stage.ActorFor<IAuthorQueries>(typeof(IAuthorQueriesActor), store);
+    ComponentRegistry.Register<QueryModelStateStoreProvider>(this);
   }
 }

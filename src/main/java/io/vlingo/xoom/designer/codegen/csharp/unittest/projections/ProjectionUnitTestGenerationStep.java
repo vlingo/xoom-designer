@@ -1,13 +1,11 @@
 package io.vlingo.xoom.designer.codegen.csharp.unittest.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
-import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
-import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 
 import java.util.ArrayList;
@@ -18,8 +16,8 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
 
   @Override
   protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
-    final String packageName =
-        ContentQuery.findPackage(CsharpTemplateStandard.PROJECTION, context.contents());
+    final String basePackage = context.parameterOf(Label.PACKAGE);
+
     final List<CodeGenerationParameter> aggregates =
         context.parametersOf(Label.AGGREGATE).collect(Collectors.toList());
 
@@ -28,10 +26,10 @@ public class ProjectionUnitTestGenerationStep extends TemplateProcessingStep {
     final List<CodeGenerationParameter> valueObjects =
         context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
     final List<TemplateData> templatesData = new ArrayList<>();
-    templatesData.add(new CountingProjectionControlTemplateData(packageName));
-    templatesData.add(new CountingReadResultInterestTemplateData(packageName));
+    templatesData.add(new CountingProjectionControlTemplateData(basePackage));
+    templatesData.add(new CountingReadResultInterestTemplateData(basePackage));
 
-    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), packageName, projectionType, aggregates, valueObjects));
+    templatesData.addAll(ProjectionUnitTestTemplateData.from(context.contents(), basePackage, projectionType, aggregates, valueObjects));
 
     return templatesData;
   }

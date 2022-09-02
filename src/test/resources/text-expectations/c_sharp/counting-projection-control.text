@@ -1,8 +1,9 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Vlingo.Xoom.Actors.TestKit;
 using Vlingo.Xoom.Lattice.Model.Projection;
 
-namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 
 public class CountingProjectionControl: IProjectionControl
 {

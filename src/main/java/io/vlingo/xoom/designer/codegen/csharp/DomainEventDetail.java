@@ -24,11 +24,29 @@ public class DomainEventDetail {
     return events.stream().filter(event -> event.value.equals(eventName)).findFirst().get();
   }
 
+  public static boolean hasField(final String eventName, final String fieldName, final List<CodeGenerationParameter> events) {
+    return fieldWithName(eventName, fieldName, events).isPresent();
+  }
+
   public static boolean hasField(final CodeGenerationParameter domainEvent, final String fieldName) {
     return fieldWithName(domainEvent, fieldName).isPresent();
   }
 
-  public static Optional<CodeGenerationParameter> fieldWithName(final CodeGenerationParameter domainEvent, final String fieldName) {
-    return domainEvent.retrieveAllRelated(Label.STATE_FIELD).filter(field -> field.value.equals(fieldName)).findFirst();
+  public static Optional<CodeGenerationParameter> fieldWithName(final CodeGenerationParameter domainEvent,
+                                                                final String fieldName) {
+    return domainEvent.retrieveAllRelated(Label.STATE_FIELD)
+        .filter(field -> field.value.equals(fieldName))
+        .findFirst();
+  }
+
+  public static Optional<CodeGenerationParameter> fieldWithName(final String eventName, final String fieldName,
+                                                                final List<CodeGenerationParameter> events) {
+    return fieldWithName(eventWithName(eventName, events), fieldName);
+  }
+
+  public static boolean isEmittedByFactoryMethod(final String eventName, final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .filter(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf))
+        .anyMatch(method -> method.retrieveRelatedValue(Label.DOMAIN_EVENT).equals(eventName));
   }
 }
