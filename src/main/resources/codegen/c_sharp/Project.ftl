@@ -11,6 +11,7 @@
 		<PackageReference Include="Vlingo.Xoom.Actors" Version="${xoomVersion}" />
 		<PackageReference Include="Vlingo.Xoom.Symbio" Version="${xoomVersion}" />
 		<PackageReference Include="Vlingo.Xoom.Lattice" Version="${xoomVersion}" />
+		<PackageReference Include="Vlingo.Xoom.Turbo" Version="${xoomVersion}" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="vlingo-actors.json">
