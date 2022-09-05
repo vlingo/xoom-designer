@@ -11,26 +11,18 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
  *   EntryAdapter and EntryAdapterProvider
  * </a>
  */
-public class AuthorRegisteredAdapter : EntryAdapter<AuthorRegistered, TextEntry>
+public class AuthorRegisteredAdapter : EntryAdapter
 {
+  public override ISource FromEntry(IEntry entry) => JsonSerialization.Deserialized<AuthorRegistered>(entry.EntryRawData);
 
-  public AuthorRegistered FromEntry(TextEntry entry) => JsonSerialization.Deserialized(entry.EntryData, entry.Typed);
+  public override IEntry ToEntry(ISource source, Metadata metadata) =>
+  new ObjectEntry<AuthorRegistered>(typeof(AuthorRegistered), 1, (AuthorRegistered) source, metadata);
 
-  public TextEntry ToEntry(AuthorRegistered source, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<AuthorRegistered>(1, serialization, metadata);
-  }
+  public override IEntry ToEntry(ISource source, int version, Metadata metadata)
+  => new ObjectEntry<AuthorRegistered>(typeof(AuthorRegistered), 1, (AuthorRegistered) source, version, metadata);
 
-  public TextEntry ToEntry(AuthorRegistered source, string id, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<AuthorRegistered>(id, 1, serialization, metadata);
-  }
+  public override IEntry ToEntry(ISource source, int version, string id, Metadata metadata)
+  => new ObjectEntry<AuthorRegistered>(id, typeof(AuthorRegistered), 1, (AuthorRegistered) source, version, metadata);
 
-  public TextEntry ToEntry(AuthorRegistered source, int version, string id, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<AuthorRegistered>(id, 1, serialization, version, metadata);
-  }
+  public override Type SourceType { get; }= typeof(AuthorRegistered);
 }

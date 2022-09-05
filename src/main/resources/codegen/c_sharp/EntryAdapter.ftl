@@ -13,26 +13,18 @@ namespace ${packageName};
  *   EntryAdapter and EntryAdapterProvider
  * </a>
  */
-public class ${adapterName} : EntryAdapter<${sourceName}, TextEntry>
+public class ${adapterName} : EntryAdapter
 {
+  public override ISource FromEntry(IEntry entry) => JsonSerialization.Deserialized<${sourceName}>(entry.EntryRawData);
 
-  public ${sourceName} FromEntry(TextEntry entry) => JsonSerialization.Deserialized(entry.EntryData, entry.Typed);
+  public override IEntry ToEntry(ISource source, Metadata metadata) =>
+  new ObjectEntry<${sourceName}>(typeof(${sourceName}), 1, (${sourceName}) source, metadata);
 
-  public TextEntry ToEntry(${sourceName} source, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<${sourceName}>(1, serialization, metadata);
-  }
+  public override IEntry ToEntry(ISource source, int version, Metadata metadata)
+  => new ObjectEntry<${sourceName}>(typeof(${sourceName}), 1, (${sourceName}) source, version, metadata);
 
-  public TextEntry ToEntry(${sourceName} source, string id, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<${sourceName}>(id, 1, serialization, metadata);
-  }
+  public override IEntry ToEntry(ISource source, int version, string id, Metadata metadata)
+  => new ObjectEntry<${sourceName}>(id, typeof(${sourceName}), 1, (${sourceName}) source, version, metadata);
 
-  public TextEntry ToEntry(${sourceName} source, int version, string id, Metadata metadata)
-  {
-    var serialization = JsonSerialization.Serialized(source);
-    return new TextEntry<${sourceName}>(id, 1, serialization, version, metadata);
-  }
+  public override Type SourceType { get; }= typeof(${sourceName});
 }
