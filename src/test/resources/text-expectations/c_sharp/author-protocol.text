@@ -5,6 +5,11 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 
 public interface IAuthor
 {
+  /// <summary>
+  /// Returns my current state.
+  /// </summary>
+  /// <returns>ICompletes<AuthorState></returns>
+  ICompletes<AuthorState> CurrentState();
 
   ICompletes<AuthorState> WithName(string name);
 

@@ -75,7 +75,9 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.ENTITY_NAME, entityName)
         .and(TemplateParameter.STATE_NAME, stateName)
         .and(TemplateParameter.ADAPTER_NAME, CsharpTemplateStandard.ADAPTER.resolveClassname(stateName))
+        .and(TemplateParameter.SOURCED_EVENTS, SourcedEvent.from(storageType, aggregate))
         .and(TemplateParameter.TEST_CASES, testCases)
+        .and(TemplateParameter.STORAGE_TYPE, storageType)
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true)
         .addImports(resolveImports(basePackage, aggregate, testCases, contents));

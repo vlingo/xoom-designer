@@ -143,6 +143,22 @@ public class CodeGenerationProperties {
           }}
       );
 
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> CSHARP_AGGREGATE_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATEFUL_ENTITY.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.JOURNAL, io.vlingo.xoom.designer.codegen.csharp.Template.EVENT_SOURCE_ENTITY.filename);
+          }}
+      );
+
+  public static final Map<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String> CSHARP_AGGREGATE_METHOD_TEMPLATES =
+      Collections.unmodifiableMap(
+          new HashMap<io.vlingo.xoom.designer.codegen.csharp.storage.StorageType, String>() {{
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.STATE_STORE, io.vlingo.xoom.designer.codegen.csharp.Template.STATEFUL_ENTITY_METHOD.filename);
+            put(io.vlingo.xoom.designer.codegen.csharp.storage.StorageType.JOURNAL, io.vlingo.xoom.designer.codegen.csharp.Template.EVENT_SOURCE_ENTITY_METHOD.filename);
+          }}
+      );
+
   public static Map<StorageType, String> storeProviderTemplatesFrom(final Model  model) {
     if (model.isQueryModel()) {
       return QUERY_MODEL_STORE_TEMPLATES;

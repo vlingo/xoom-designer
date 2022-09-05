@@ -35,9 +35,11 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   AGGREGATE_PROTOCOL(parameters -> Template.AGGREGATE_PROTOCOL.filename, (name, parameters) -> "I" + name),
   AGGREGATE_PROTOCOL_METHOD(parameters -> parameters.<MethodScope>find(METHOD_SCOPE).isStatic() ?
       AGGREGATE_PROTOCOL_STATIC_METHOD.filename : AGGREGATE_PROTOCOL_INSTANCE_METHOD.filename),
-  AGGREGATE(parameters -> Template.STATEFUL_ENTITY.filename, (name, parameters) -> name + "Entity"),
+  AGGREGATE(parameters -> CodeGenerationProperties.CSHARP_AGGREGATE_TEMPLATES
+      .getOrDefault(parameters.find(STORAGE_TYPE), Template.STATEFUL_ENTITY.filename), (name, parameters) -> name + "Entity"),
   AGGREGATE_STATE(parameters -> Template.AGGREGATE_STATE.filename, (name, parameters) -> name + "State"),
-  AGGREGATE_METHOD(parameters -> Template.STATEFUL_ENTITY_METHOD.filename),
+  AGGREGATE_METHOD(parameters -> CodeGenerationProperties.CSHARP_AGGREGATE_METHOD_TEMPLATES
+      .getOrDefault(parameters.find(STORAGE_TYPE), Template.STATEFUL_ENTITY_METHOD.filename)),
   AGGREGATE_STATE_METHOD(parameters -> Template.AGGREGATE_STATE_METHOD.filename),
   DOMAIN_EVENT(parameters -> Template.DOMAIN_EVENT.filename),
   ENTITY_UNIT_TEST(parameters -> {

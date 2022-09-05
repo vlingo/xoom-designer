@@ -117,6 +117,39 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(authorUnrelated.contains(TextExpectation.onCSharp().read("author-unrelated")));
   }
 
+  @Test
+  public void testThatSourcedSingleModelIsGenerated()  {
+    final CodeGenerationParameters parameters =
+        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
+            CodeGenerationParameter.of(Label.STORAGE_TYPE, StorageType.JOURNAL),
+            CodeGenerationParameter.of(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED),
+            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
+            CodeGenerationParameter.of(Label.CQRS, true),
+            authorAggregateWithValueObjects(), nameValueObject(), rankValueObject());
+
+    final CodeGenerationContext context =
+        CodeGenerationContext.with(parameters).contents(contents());
+
+    final ModelGenerationStep modelGenerationStep = new ModelGenerationStep();
+
+    Assertions.assertTrue(modelGenerationStep.shouldProcess(context));
+
+    modelGenerationStep.process(context);
+
+    final Content authorProtocol = context.findContent(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "IAuthor");
+    final Content authorEntity = context.findContent(CsharpTemplateStandard.AGGREGATE, "AuthorEntity");
+    final Content authorState = context.findContent(CsharpTemplateStandard.AGGREGATE_STATE, "AuthorState");
+    final Content authorRegistered = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
+    final Content authorRanked = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
+
+    Assertions.assertEquals(10, context.contents().size());
+    Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol-for-single-model-with-cqrs")));
+    Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("sourced-single-model-author-entity")));
+    Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("sourced-author-state")));
+    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
+    Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked-with-value-object")));
+  }
+
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter idField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "Id")

@@ -29,6 +29,7 @@ public class Formatters {
     Arguments VALUE_OBJECT_CONSTRUCTOR_INVOCATION = new ValueObjectConstructorInvocation();
     Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
     Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
+    Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
 
     default String format(final CodeGenerationParameter parameter) {
       return format(parameter, MethodScope.INSTANCE);

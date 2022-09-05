@@ -44,7 +44,9 @@ public enum Template {
   COUNTING_READ_RESULT("CountingReadResultInterest"),
   COUNTING_PROJECTION_CTL("CountingProjectionControl"),
   PERSISTENCE_SETUP("PersistenceSetup"),
-  ENTRY_ADAPTER("EntryAdapter");
+  ENTRY_ADAPTER("EntryAdapter"),
+  EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
+  EVENT_SOURCE_ENTITY("EventSourcedEntity"),;
 
   public final String filename;
 

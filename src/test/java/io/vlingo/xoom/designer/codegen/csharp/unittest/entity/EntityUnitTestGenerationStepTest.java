@@ -2,10 +2,8 @@ package io.vlingo.xoom.designer.codegen.csharp.unittest.entity;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.codegen.template.OutputFile;
@@ -14,23 +12,16 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 import io.vlingo.xoom.turbo.OperatingSystem;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
 public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
 
-  @BeforeEach
-  public void setUp() {
-    ComponentRegistry.register("cSharpCodeFormatter", CodeElementFormatter.with(Dialect.C_SHARP, ReservedWordsHandler.usingSuffix("_")));
-  }
-
   @Test
-  public void testThatSourcedEntitiesUnitTestsAreGenerated() {
+  public void testThatStatefulEntitiesUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
         .add(Label.DIALECT, Dialect.C_SHARP)
         .add(authorAggregate())
@@ -45,11 +36,11 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
-    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-test")));
+    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("stateful-author-entity-test")));
   }
 
   @Test
-  public void testThatSourcedEntitiesWithValueObjectCollectionUnitTestsAreGenerated() {
+  public void testThatStatefulEntitiesWithValueObjectCollectionUnitTestsAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
         .add(Label.DIALECT, Dialect.C_SHARP)
         .add(authorAggregateWithValueObjectCollection())
@@ -64,7 +55,7 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
 
     Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
-    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-with-vo-collection-test")));
+    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("stateful-author-entity-with-vo-collection-test")));
   }
 
   @Test
@@ -86,6 +77,28 @@ public class EntityUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertEquals(5, context.contents().size());
     Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("operation-based-mock-dispatcher")));
     Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("operation-based-stateful-author-entity-test")));
+  }
+
+  @Test
+  public void testThatSourcedEntitiesUnitTestsAreGenerated() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.STORAGE_TYPE, StorageType.JOURNAL)
+        .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED)
+        .add(Label.CQRS, true)
+        .add(authorAggregate())
+        .add(nameValueObject());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new EntityUnitTestGenerationStep().process(context);
+
+    final Content mockDispatcher = context.findContent(CsharpTemplateStandard.MOCK_DISPATCHER, "MockDispatcher");
+    final Content authorEntityTest = context.findContent(CsharpTemplateStandard.ENTITY_UNIT_TEST, "AuthorEntityTest");
+
+    Assertions.assertEquals(5, context.contents().size());
+    Assertions.assertTrue(mockDispatcher.contains(TextExpectation.onCSharp().read("event-based-mock-dispatcher")));
+    Assertions.assertTrue(authorEntityTest.contains(TextExpectation.onCSharp().read("sourced-author-entity-test")));
   }
 
   private CodeGenerationParameter authorAggregate() {

@@ -76,7 +76,10 @@ public enum TemplateParameter implements ParameterKey {
   PROJECTION_SOURCE_TYPES_NAME("projectionSourceTypesName"),
   PROJECTION_SOURCE_TYPES_QUALIFIED_NAME("projectionSourceTypesQualifiedName"),
   PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
-  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),;
+  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),
+  EVENT_SOURCED("eventSourced"),
+  EVENT_HANDLERS("eventHandlers"),
+  SOURCED_EVENTS("sourcedEvents"),;
 
   public final String key;
 

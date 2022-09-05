@@ -141,4 +141,12 @@ public class AggregateDetail {
     return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
         .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
   }
+
+  public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
+    if(eventName == null || eventName.isEmpty()) {
+      return CodeGenerationParameter.of(Label.DOMAIN_EVENT, "");
+    }
+    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
+        .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
+  }
 }

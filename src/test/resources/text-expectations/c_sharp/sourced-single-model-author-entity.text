@@ -1,0 +1,138 @@
+using System;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Lattice.Model;
+using Vlingo.Xoom.Lattice.Model.Sourcing;
+using Vlingo.Xoom.Turbo.Scooter.Model.Sourced;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
+public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
+{
+  private static AuthorState _state;
+
+  public AuthorEntity(string id)
+  {
+    _state = AuthorState.IdentifiedBy(id);
+  }
+
+  static AuthorEntity()
+  {
+    RegisterConsumer<AuthorEntity, AuthorRegistered>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorRegistered(source as AuthorRegistered);
+    });
+    RegisterConsumer<AuthorEntity, AuthorRanked>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorRanked(source as AuthorRanked);
+    });
+    RegisterConsumer<AuthorEntity, AuthorRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorRelated(source as AuthorRelated);
+    });
+    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorsRelated(source as AuthorsRelated);
+    });
+    RegisterConsumer<AuthorEntity, AuthorUnrelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorUnrelated(source as AuthorUnrelated);
+    });
+    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    {
+      ApplyAuthorsRelated(source as AuthorsRelated);
+    });
+  }
+
+  public ICompletes<AuthorState> WithName(Name name)
+  {
+    return Apply(_state.WithName(name), () => _state);
+  }
+
+  public ICompletes<AuthorState> ChangeRank(List<Rank> rank)
+  {
+    return Apply(_state.ChangeRank(rank), () => _state);
+  }
+
+  public ICompletes<AuthorState> Hide()
+  {
+    return Apply(_state.Hide(), () => _state);
+  }
+
+  public ICompletes<AuthorState> RelateAuthor(String relatedAuthor)
+  {
+    return Apply(_state.RelateAuthor(relatedAuthor), () => _state);
+  }
+
+  public ICompletes<AuthorState> RelateAuthors(ISet<String> relatedAuthors)
+  {
+    return Apply(_state.RelateAuthors(relatedAuthors), () => _state);
+  }
+
+  public ICompletes<AuthorState> UnrelateAuthor(String relatedAuthor)
+  {
+    return Apply(_state.UnrelateAuthor(relatedAuthor), () => _state);
+  }
+
+  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<String> relatedAuthors)
+  {
+    return Apply(_state.ReplaceAllRelatedAuthors(relatedAuthors), () => _state);
+  }
+
+  private static void ApplyAuthorRegistered(AuthorRegistered @event)
+  {
+    //TODO: Event is missing name; using null instead
+    _state = _state.WithName(null);
+  }
+
+  private static void ApplyAuthorRanked(AuthorRanked @event)
+  {
+    _state = _state.ChangeRank(@event.Rank);
+  }
+
+  private static void ApplyAuthorRelated(AuthorRelated @event)
+  {
+    _state = _state.RelateAuthor(@event.RelatedAuthor);
+  }
+
+  private static void ApplyAuthorsRelated(AuthorsRelated @event)
+  {
+    _state = _state.RelateAuthors(@event.RelatedAuthors);
+  }
+
+  private static void ApplyAuthorUnrelated(AuthorUnrelated @event)
+  {
+    _state = _state.UnrelateAuthor(@event.RelatedAuthor);
+  }
+
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code AuthorState} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  protected void RestoreSnapshot(AuthorState snapshot, int currentVersion)
+  {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code AuthorState} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return AuthorState
+   */
+  protected AuthorState Snapshot()
+  {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+    return null;
+  }
+
+  public override string Id() => StreamName();
+
+  protected override string StreamName() => null;
+}
