@@ -2,16 +2,13 @@ package io.vlingo.xoom.designer.codegen.csharp.model;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
-import io.vlingo.xoom.codegen.dialect.ReservedWordsHandler;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.CodeGenerationTest;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,13 +16,10 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatAggregateStatefulEntityModelIsGenerated() {
-    ComponentRegistry.register("cSharpCodeFormatter", CodeElementFormatter.with(Dialect.C_SHARP, ReservedWordsHandler.usingSuffix("_")));
-
-    final CodeGenerationParameters parameters =
-        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
-            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
-            CodeGenerationParameter.of(Label.CQRS, false),
-            authorAggregate());
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
+        CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
+        CodeGenerationParameter.of(Label.CQRS, false),
+        authorAggregate());
 
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(new Content[]{});
@@ -41,7 +35,7 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     final Content authorState = context.findContent(CsharpTemplateStandard.AGGREGATE_STATE, "AuthorState");
     final Content authorRegistered = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRegistered");
     final Content authorRanked = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorRanked");
-    final Content authorShortDescriptionChanged= context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorShortDescriptionChanged");
+    final Content authorShortDescriptionChanged = context.findContent(CsharpTemplateStandard.DOMAIN_EVENT, "AuthorShortDescriptionChanged");
 
     Assertions.assertEquals(6, context.contents().size());
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol")));
@@ -54,13 +48,10 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
   @Test
   public void testThatAggregateStatefulEntityModelWithCollectionMutationIsGenerated() {
-    ComponentRegistry.register("cSharpCodeFormatter", CodeElementFormatter.with(Dialect.C_SHARP, ReservedWordsHandler.usingSuffix("_")));
-
-    final CodeGenerationParameters parameters =
-        CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
-            CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
-            CodeGenerationParameter.of(Label.CQRS, false),
-            authorAggregateWithCollectionMutation());
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(CodeGenerationParameter.of(Label.PACKAGE, "Io.Vlingo.Xoomapp"),
+        CodeGenerationParameter.of(Label.DIALECT, Dialect.C_SHARP),
+        CodeGenerationParameter.of(Label.CQRS, false),
+        authorAggregateWithCollectionMutation());
 
     final CodeGenerationContext context =
         CodeGenerationContext.with(parameters).contents(new Content[]{});
