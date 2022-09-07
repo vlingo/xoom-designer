@@ -7,17 +7,14 @@
 
 package io.vlingo.xoom.designer.codegen.csharp;
 
-import java.beans.Introspector;
-
 public class QueriesDetail {
 
   public static String resolveQueryByIdMethodName(final String aggregateProtocol) {
-    return Introspector.decapitalize(aggregateProtocol) + "Of";
+    return aggregateProtocol + "Of";
   }
 
   public static String resolveQueryAllMethodName(final String aggregateProtocol) {
-    final String formatted = Introspector.decapitalize(aggregateProtocol);
-    return formatted.endsWith("s") ? formatted : formatted + "s";
+    return aggregateProtocol.endsWith("s") ? aggregateProtocol : aggregateProtocol + "s";
   }
 
 }

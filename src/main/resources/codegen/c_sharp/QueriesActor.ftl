@@ -25,6 +25,6 @@ public class ${queriesActorName}: StateStoreQueryActor<${dataName}>, ${queriesNa
 
   public ICompletes<Collection<${dataName}>> ${queryAllMethodName}()
   {
-    return StreamAllOf<${dataName}>(new List<${dataName}>());
+    return QueryAllOf<${dataName}>(new List<${dataName}>());
   }
 }

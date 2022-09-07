@@ -49,8 +49,8 @@ public class PersistenceSetupTemplateDataTest extends CodeGenerationTest {
     Assertions.assertEquals(EXPECTED_PACKAGE, queriesParameters.find(TemplateParameter.PACKAGE_NAME));
     Assertions.assertEquals("IBookQueries", queriesParameters.find(TemplateParameter.QUERIES_NAME));
     Assertions.assertEquals("BookData", queriesParameters.find(TemplateParameter.STATE_DATA_OBJECT_NAME));
-    Assertions.assertEquals("bookOf", queriesParameters.find(TemplateParameter.QUERY_BY_ID_METHOD_NAME));
-    Assertions.assertEquals("books", queriesParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
+    Assertions.assertEquals("BookOf", queriesParameters.find(TemplateParameter.QUERY_BY_ID_METHOD_NAME));
+    Assertions.assertEquals("Books", queriesParameters.find(TemplateParameter.QUERY_ALL_METHOD_NAME));
     Assertions.assertEquals(1, queriesParameters.<Set<ImportParameter>>find(TemplateParameter.IMPORTS).size());
     Assertions.assertTrue(queriesParameters.hasImport("Io.Vlingo.Xoomapp.Infrastructure"));
 

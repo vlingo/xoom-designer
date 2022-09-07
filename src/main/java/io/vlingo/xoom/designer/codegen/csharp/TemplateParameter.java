@@ -79,7 +79,8 @@ public enum TemplateParameter implements ParameterKey {
   PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),
   EVENT_SOURCED("eventSourced"),
   EVENT_HANDLERS("eventHandlers"),
-  SOURCED_EVENTS("sourcedEvents"),;
+  SOURCED_EVENTS("sourcedEvents"),
+  QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),;
 
   public final String key;
 
