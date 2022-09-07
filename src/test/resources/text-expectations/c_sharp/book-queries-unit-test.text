@@ -1,0 +1,82 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public class BookQueriesTest
+{
+
+  private readonly BookQueries _queries;
+
+  public void BookQueriesTest()
+  {
+    var world = World.startWithDefaults("test-state-store-query");
+    var stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
+    StatefulTypeRegistry.RegisterAll(world, stateStore, typeof(BookData));
+    _queries = world.ActorFor<BookQueries>(typeof(BookQueriesActor), stateStore);
+  }
+
+  private static BookData FIRST_QUERY_BY_ID_TEST_DATA = BookData.From("1", "first-data-title", "first-data-publisher");
+  private static BookData SECOND_QUERY_BY_ID_TEST_DATA = BookData.From("2", "second-data-title", "second-data-publisher");
+
+  [Fact]
+  public void QueryById()
+  {
+    _stateStore.Write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+
+    var firstData = _queries.BookOf("1").Await();
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-title", firstData.Title);
+    Assert.Equal("first-data-publisher", firstData.Publisher);
+
+    var secondData = _queries.BookOf("2").Await();
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-title", secondData.Title);
+    Assert.Equal("second-data-publisher", secondData.Publisher);
+  }
+
+  private static BookData FIRST_QUERY_ALL_TEST_DATA = BookData.From("1", "first-data-title", "first-data-publisher");
+  private static BookData SECOND_QUERY_ALL_TEST_DATA = BookData.From("2", "second-data-title", "second-data-publisher");
+
+  [Fact]
+  public void QueryAll()
+  {
+    _stateStore.Write("1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+
+    var results = _queries.Books().Await();
+    var firstData = results.FirstOrDefault(data => data.Id.Equals("1"));
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-title", firstData.Title);
+    Assert.Equal("first-data-publisher", firstData.Publisher);
+
+    var secondData = results.FirstOrDefault(data => data.Id.Equals("2"));
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-title", secondData.Title);
+    Assert.Equal("second-data-publisher", secondData.Publisher);
+  }
+
+  [Fact]
+  public void BookOfEmptyResult()
+  {
+    var result = _queries.BookOf("1").Await();
+    Assert.Equal("", result.Id);
+  }
+
+}

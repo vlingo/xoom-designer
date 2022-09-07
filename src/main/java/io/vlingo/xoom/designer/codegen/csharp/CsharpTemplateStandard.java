@@ -97,7 +97,9 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   COUNTING_PROJECTION_CTL(parameters -> Template.COUNTING_PROJECTION_CTL.filename,
       (name, parameters) -> "CountingProjectionControl"),
   PERSISTENCE_SETUP(parameters -> Template.PERSISTENCE_SETUP.filename,
-      (name, parameters) -> "PersistenceSetup"),;
+      (name, parameters) -> "PersistenceSetup"),
+  QUERIES_UNIT_TEST(parameters -> Template.QUERIES_UNIT_TEST.filename,
+      (name, parameters) -> name + "Test"),;
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

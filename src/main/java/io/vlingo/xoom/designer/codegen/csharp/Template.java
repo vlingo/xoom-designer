@@ -46,7 +46,8 @@ public enum Template {
   PERSISTENCE_SETUP("PersistenceSetup"),
   ENTRY_ADAPTER("EntryAdapter"),
   EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
-  EVENT_SOURCE_ENTITY("EventSourcedEntity"),;
+  EVENT_SOURCE_ENTITY("EventSourcedEntity"),
+  QUERIES_UNIT_TEST("QueriesUnitTest"),;
 
   public final String filename;
 

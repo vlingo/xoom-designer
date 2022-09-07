@@ -1,0 +1,94 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public class AuthorQueriesTest
+{
+
+  private readonly AuthorQueries _queries;
+
+  public void AuthorQueriesTest()
+  {
+    var world = World.startWithDefaults("test-state-store-query");
+    var stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
+    StatefulTypeRegistry.RegisterAll(world, stateStore, typeof(AuthorData));
+    _queries = world.ActorFor<AuthorQueries>(typeof(AuthorQueriesActor), stateStore);
+  }
+
+  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+
+  [Fact]
+  public void QueryById()
+  {
+    _stateStore.Write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+
+    var firstData = _queries.AuthorOf("1").Await();
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-name-first-name", firstData.Name.FirstName);
+    Assert.Equal("first-data-name-last-name", firstData.Name.LastName);
+    Assert.NotNull(firstData.Rank);
+    Assert.Equal(true, firstData.Status);
+    Assert.NotNull(firstData.AvailableOn);
+
+    var secondData = _queries.AuthorOf("2").Await();
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-name-first-name", secondData.Name.FirstName);
+    Assert.Equal("second-data-name-last-name", secondData.Name.LastName);
+    Assert.NotNull(secondData.Rank);
+    Assert.Equal(true, secondData.Status);
+    Assert.NotNull(secondData.AvailableOn);
+  }
+
+  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+
+  [Fact]
+  public void QueryAll()
+  {
+    _stateStore.Write("1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+
+    var results = _queries.Authors().Await();
+    var firstData = results.FirstOrDefault(data => data.Id.Equals("1"));
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-name-first-name", firstData.Name.FirstName);
+    Assert.Equal("first-data-name-last-name", firstData.Name.LastName);
+    Assert.NotNull(firstData.Rank);
+    Assert.Equal(true, firstData.Status);
+    Assert.NotNull(firstData.AvailableOn);
+
+    var secondData = results.FirstOrDefault(data => data.Id.Equals("2"));
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-name-first-name", secondData.Name.FirstName);
+    Assert.Equal("second-data-name-last-name", secondData.Name.LastName);
+    Assert.NotNull(secondData.Rank);
+    Assert.Equal(true, secondData.Status);
+    Assert.NotNull(secondData.AvailableOn);
+  }
+
+  [Fact]
+  public void AuthorOfEmptyResult()
+  {
+    var result = _queries.AuthorOf("1").Await();
+    Assert.Equal("", result.Id);
+  }
+
+}
