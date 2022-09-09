@@ -110,6 +110,35 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(commandModelJournalProvider.contains(TextExpectation.onCSharp().read("command-model-journal-provider")));
   }
 
+  @Test
+  public void testStateStoreGenerationWithQueries() {
+    final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
+        .add(Label.DIALECT, Dialect.C_SHARP)
+        .add(Label.STORAGE_TYPE, StorageType.STATE_STORE)
+        .add(Label.PROJECTION_TYPE, ProjectionType.OPERATION_BASED)
+        .add(Label.CQRS, true)
+        .add(Label.COMMAND_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(Label.QUERY_MODEL_DATABASE, DatabaseType.IN_MEMORY)
+        .add(authorAggregate());
+
+    final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
+
+    new StorageGenerationStep().process(context);
+
+    final Content authorStateAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorStateAdapter");
+    final Content authorQueries = context.findContent(CsharpTemplateStandard.QUERIES, "IAuthorQueries");
+    final Content authorQueriesActor = context.findContent(CsharpTemplateStandard.QUERIES_ACTOR, "AuthorQueriesActor");
+    final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
+    final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
+
+    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
+    Assertions.assertTrue(authorQueries.contains(TextExpectation.onCSharp().read("author-queries")));
+    Assertions.assertTrue(authorQueriesActor.contains(TextExpectation.onCSharp().read("author-queries-actor")));
+    Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
+    Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
+  }
+
   private CodeGenerationParameter authorAggregate() {
     final CodeGenerationParameter idField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "id")
