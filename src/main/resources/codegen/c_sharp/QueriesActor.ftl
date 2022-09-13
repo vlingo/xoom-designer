@@ -23,8 +23,8 @@ public class ${queriesActorName}: StateStoreQueryActor<${dataName}>, ${queriesNa
     return QueryStateFor<${dataName}>(id, ${dataName}.Empty, default, default);
   }
 
-  public ICompletes<Collection<${dataName}>> ${queryAllMethodName}()
+  public ICompletes<IEnumerable<${dataName}>> ${queryAllMethodName}()
   {
-    return QueryAllOf<${dataName}>(new List<${dataName}>());
+    return AllOf(new List<${dataName}>());
   }
 }

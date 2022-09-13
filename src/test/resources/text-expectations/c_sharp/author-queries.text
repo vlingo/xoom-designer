@@ -7,5 +7,5 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 public interface IAuthorQueries
 {
   ICompletes<AuthorData> AuthorOf(string id);
-  ICompletes<Collection<AuthorData>> Authors();
+  ICompletes<IEnumerable<AuthorData>> Authors();
 }
