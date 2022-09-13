@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Vlingo.Xoom.Actors;
-using Vlingo.Xoom.Lattice.Model.Projection;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
-using Vlingo.Xoom.Common.Serialization;
-using Vlingo.Xoom.Symbio;
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>

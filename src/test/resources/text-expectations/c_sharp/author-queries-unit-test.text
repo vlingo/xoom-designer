@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Vlingo.Xoom.Actors;
-using Vlingo.Xoom.Lattice.Model.Projection;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
-using Vlingo.Xoom.Common.Serialization;
-using Vlingo.Xoom.Symbio;
 using Io.Vlingo.Xoomapp.Infrastructure;
 using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
@@ -28,8 +26,8 @@ public class AuthorQueriesTest
     _queries = world.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
   }
 
-  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
-  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
 
   [Fact]
   public void QueryById()
@@ -56,8 +54,8 @@ public class AuthorQueriesTest
     Assert.NotNull(secondData.AvailableOn);
   }
 
-  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
-  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
 
   [Fact]
   public void QueryAll()
