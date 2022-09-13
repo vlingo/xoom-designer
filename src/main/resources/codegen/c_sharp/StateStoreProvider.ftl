@@ -49,7 +49,8 @@ public class ${storeProviderName}
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(${persistentType}), typeof(${persistentType}));
 </#list>
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher,
+      StorageType.StateStore, (IReadOnlyDictionary<string, string>) Settings.Properties(), true);
 <#if requireAdapters>
 <#list adapters as stateAdapter>
     registry.Register(new Info(store, typeof(${stateAdapter.sourceClass}), nameof(${stateAdapter.sourceClass})));

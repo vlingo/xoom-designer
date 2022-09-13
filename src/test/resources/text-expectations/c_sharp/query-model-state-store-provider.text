@@ -34,7 +34,8 @@ public class QueryModelStateStoreProvider
 
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorData), typeof(AuthorData));
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("QUERY"), dispatcher, StorageType.StateStore, Settings.Properties, true);
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("QUERY"), dispatcher,
+      StorageType.StateStore, (IReadOnlyDictionary<string, string>) Settings.Properties(), true);
 
     return new QueryModelStateStoreProvider(stage, store);
   }
