@@ -10,6 +10,7 @@ using Vlingo.Xoom.Symbio.Store.State.InMemory;
 using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Symbio;
 using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
@@ -17,14 +18,14 @@ namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 public class BookQueriesTest
 {
   private readonly IStateStore _stateStore;
-  private readonly BookQueries _queries;
+  private readonly IBookQueries _queries;
 
-  public void BookQueriesTest()
+  public BookQueriesTest()
   {
     var world = World.StartWithDefaults("test-state-store-query");
     _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
     StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(BookData));
-    _queries = world.ActorFor<BookQueries>(typeof(BookQueriesActor), _stateStore);
+    _queries = world.ActorFor<IBookQueries>(typeof(BookQueriesActor), _stateStore);
   }
 
   private static BookData FIRST_QUERY_BY_ID_TEST_DATA = BookData.From("1", "first-data-title", "first-data-publisher");

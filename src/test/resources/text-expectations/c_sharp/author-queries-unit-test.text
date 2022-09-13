@@ -10,6 +10,7 @@ using Vlingo.Xoom.Symbio.Store.State.InMemory;
 using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Symbio;
 using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
@@ -17,14 +18,14 @@ namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 public class AuthorQueriesTest
 {
   private readonly IStateStore _stateStore;
-  private readonly AuthorQueries _queries;
+  private readonly IAuthorQueries _queries;
 
-  public void AuthorQueriesTest()
+  public AuthorQueriesTest()
   {
     var world = World.StartWithDefaults("test-state-store-query");
     _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
     StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(AuthorData));
-    _queries = world.ActorFor<AuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
+    _queries = world.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
   }
 
   private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);

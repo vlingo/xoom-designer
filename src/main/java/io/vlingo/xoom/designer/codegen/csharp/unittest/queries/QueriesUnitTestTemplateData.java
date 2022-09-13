@@ -19,6 +19,7 @@ import io.vlingo.xoom.designer.codegen.csharp.QueriesDetail;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -37,18 +38,17 @@ public class QueriesUnitTestTemplateData extends TemplateData {
 
   public QueriesUnitTestTemplateData(final String basePackage, final CodeGenerationParameter aggregate,
                                      final List<Content> contents, final List<CodeGenerationParameter> valueObjects) {
-    String queriesProtocolName = CsharpTemplateStandard.QUERIES.resolveClassname(aggregate.value);
+    final String queriesProtocolName = CsharpTemplateStandard.QUERIES.resolveClassname(aggregate.value);
 
     final String dataObjectName = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, resolvePackage(basePackage))
         .and(TemplateParameter.QUERIES_UNIT_TEST_NAME, standard().resolveClassname(queriesProtocolName))
         .and(TemplateParameter.QUERIES_ACTOR_NAME, CsharpTemplateStandard.QUERIES_ACTOR.resolveClassname(aggregate.value))
-        .and(TemplateParameter.QUERIES_NAME, queriesProtocolName).and(TemplateParameter.DATA_OBJECT_NAME, dataObjectName)
+        .and(TemplateParameter.QUERIES_NAME, String.format("I%s", queriesProtocolName)).and(TemplateParameter.DATA_OBJECT_NAME, dataObjectName)
         .and(TemplateParameter.QUERY_BY_ID_METHOD_NAME, QueriesDetail.resolveQueryByIdMethodName(aggregate.value))
         .and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects))
-        .addImport(resolveImport(dataObjectName, contents))
-        .addImports(AggregateDetail.resolveImports(aggregate))
+        .addImports(resolveImport(dataObjectName, aggregate, contents))
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true);
   }
@@ -57,8 +57,13 @@ public class QueriesUnitTestTemplateData extends TemplateData {
     return basePackage + ".Tests.Infrastructure.Persistence";
   }
 
-  private String resolveImport(final String dataObjectName, final List<Content> contents) {
-    return ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents);
+  private Set<String> resolveImport(final String dataObjectName, final CodeGenerationParameter aggregate,
+                                    final List<Content> contents) {
+    final Set<String> imports = AggregateDetail.resolveImports(aggregate);
+
+    imports.add(ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents));
+    imports.add(ContentQuery.findPackage(CsharpTemplateStandard.QUERIES, contents));
+    return imports;
   }
 
   @Override

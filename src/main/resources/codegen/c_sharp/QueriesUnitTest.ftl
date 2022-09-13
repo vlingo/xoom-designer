@@ -21,7 +21,7 @@ public class ${queriesUnitTestName}
   private readonly IStateStore _stateStore;
   private readonly ${queriesName} _queries;
 
-  public void ${queriesUnitTestName}()
+  public ${queriesUnitTestName}()
   {
     var world = World.StartWithDefaults("test-state-store-query");
     _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
