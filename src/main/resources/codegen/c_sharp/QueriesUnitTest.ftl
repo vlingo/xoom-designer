@@ -7,6 +7,7 @@ using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Symbio;
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>
@@ -22,7 +23,7 @@ public class ${queriesUnitTestName}
   public ${queriesUnitTestName}()
   {
     var world = World.StartWithDefaults("test-state-store-query");
-    _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
+    _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
     StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(${dataObjectName}));
     _queries = world.ActorFor<${queriesName}>(typeof(${queriesActorName}), _stateStore);
   }
