@@ -113,10 +113,10 @@ jobs:
             VERSION=${GITHUB_REF#refs/tags/}
             TAGS="${DOCKER_IMAGE}:snapshot,${DOCKER_IMAGE}:latest,${DOCKER_IMAGE}:${VERSION}"
           fi
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-          echo ::set-output name=push::${{ (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && github.repository_owner == 'vlingo' }}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+          echo "push=${{ (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/master') && github.repository_owner == 'vlingo' }}" >> $GITHUB_OUTPUT
 
       - uses: actions/download-artifact@v3
         with:
