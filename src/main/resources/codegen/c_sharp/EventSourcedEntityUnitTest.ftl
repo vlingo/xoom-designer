@@ -33,7 +33,7 @@ public class ${entityUnitTestName}
 
     _journal = _world.ActorFor<IJournal<string>>(typeof(InMemoryJournalActor<string>), _dispatcher);
 
-    new SourcedTypeRegistry(_world).Register(new Info(_journal, typeof(${entityName})));
+    new SourcedTypeRegistry(_world).Register(Info.RegisterSourced(_journal, typeof(${entityName})));
 
     _${aggregateProtocolVariable} = _world.ActorFor<${aggregateProtocolName}>(typeof(${entityName}), "#1");
   }

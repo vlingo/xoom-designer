@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.csharp.unittest.queries;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.unittest.TestDataValueGenerator;
+import io.vlingo.xoom.designer.codegen.csharp.unittest.projections.InlineDataInstantiation;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class StaticDataDeclaration {
 
       final String dataObjectType = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregate.value);
 
-      final String dataInstantiation = InlineDataInstantiation.with(dataIndex, CsharpTemplateStandard.DATA_OBJECT, aggregate,
+      final String dataInstantiation = InlineDataInstantiation.with(dataIndex, "Data", CsharpTemplateStandard.DATA_OBJECT, aggregate,
                       valueObjects, testDataValues).generate();
 
       return String.format(TEST_DATA_DECLARATION_PATTERN, dataObjectType, testDataVariableName, dataInstantiation);

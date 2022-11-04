@@ -17,15 +17,15 @@ public class ProjectionDispatcherProvider
       return ComponentRegistry.WithType<ProjectionDispatcherProvider>();
     }
 
-    var descriptions = new List<ProjectToDescription>(
-                    ProjectToDescription.With<BookProjectionActor>(nameof(BookCataloged)),
-                    ProjectToDescription.With<AuthorProjectionActor>(nameof(AuthorRanked), nameof(AuthorRegistered))
-                    );
+    var descriptions = new List<ProjectToDescription>{
+                    ProjectToDescription<BookProjectionActor>.With(() => new BookProjectionActor(), nameof(BookCataloged)),
+                    ProjectToDescription<AuthorProjectionActor>.With(() => new AuthorProjectionActor(), nameof(AuthorRanked), nameof(AuthorRegistered))
+                    };
 
     var dispatcherProtocols = stage.ActorFor(new [] { typeof(IDispatcher), typeof(IProjectionDispatcher) },
                     Definition.Has<TextProjectionDispatcherActor>(Definition.Parameters(descriptions)));
 
-    var dispatchers = Protocols.Two(dispatcherProtocols);
+    var dispatchers = Protocols.Two<IDispatcher, IProjectionDispatcher>(dispatcherProtocols);
 
     return new ProjectionDispatcherProvider(dispatchers._1, dispatchers._2);
   }

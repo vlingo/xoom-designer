@@ -21,16 +21,16 @@ public class ProjectionDispatcherProvider
       return ComponentRegistry.WithType<ProjectionDispatcherProvider>();
     }
 
-    var descriptions = new List<ProjectToDescription>(
+    var descriptions = new List<ProjectToDescription>{
 <#list projectToDescriptions as projectToDescription>
                     ${projectToDescription.initializationCommand}
 </#list>
-                    );
+                    };
 
     var dispatcherProtocols = stage.ActorFor(new [] { typeof(IDispatcher), typeof(IProjectionDispatcher) },
                     Definition.Has<TextProjectionDispatcherActor>(Definition.Parameters(descriptions)));
 
-    var dispatchers = Protocols.Two(dispatcherProtocols);
+    var dispatchers = Protocols.Two<IDispatcher, IProjectionDispatcher>(dispatcherProtocols);
 
     return new ProjectionDispatcherProvider(dispatchers._1, dispatchers._2);
   }

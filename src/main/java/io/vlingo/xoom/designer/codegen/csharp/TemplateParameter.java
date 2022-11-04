@@ -13,6 +13,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameters.PRODUCTION_CODE
 
 public enum TemplateParameter implements ParameterKey {
 
+  BASE_PACKAGE("basePackage"),
   PACKAGE_NAME("packageName"),
   APPLICATION_NAME("appName"),
   SDK_VERSION("sdkVersion"),
@@ -81,6 +82,8 @@ public enum TemplateParameter implements ParameterKey {
   EVENT_HANDLERS("eventHandlers"),
   SOURCED_EVENTS("sourcedEvents"),
   QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+  DATA_OBJECTS("dataObjects"),
+  PROJECTIONS("projections"),
   REST_RESOURCE_NAME("resourceName"),
   MODEL_ACTOR("modelActor"),
   URI_ROOT("uriRoot"),

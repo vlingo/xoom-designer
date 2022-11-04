@@ -89,7 +89,7 @@ public class ${projectionUnitTestName}
     _world = World.StartWithDefaults("test-state-store-projection");
     var dispatcher = new NoOpDispatcher();
     _valueToProjectionId = new ConcurrentDictionary<string, string>();
-    _stateStore =_world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), dispatcher);
+    _stateStore =_world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), dispatcher);
     var statefulTypeRegistry = StatefulTypeRegistry.RegisterAll(_world, _stateStore, typeof(${dataObjectName}));
     QueryModelStateStoreProvider.Using(_world.Stage, statefulTypeRegistry);
     _projection = _world.ActorFor<IProjection>(typeof(${projectionName}), _stateStore);

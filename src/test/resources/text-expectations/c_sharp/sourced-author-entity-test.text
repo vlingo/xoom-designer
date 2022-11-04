@@ -35,7 +35,7 @@ public class AuthorEntityTest
 
     _journal = _world.ActorFor<IJournal<string>>(typeof(InMemoryJournalActor<string>), _dispatcher);
 
-    new SourcedTypeRegistry(_world).Register(new Info(_journal, typeof(AuthorEntity)));
+    new SourcedTypeRegistry(_world).Register(Info.RegisterSourced(_journal, typeof(AuthorEntity)));
 
     _author = _world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
   }

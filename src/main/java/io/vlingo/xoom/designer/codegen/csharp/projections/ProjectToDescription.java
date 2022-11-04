@@ -23,7 +23,7 @@ public class ProjectToDescription {
 
   private static final String FIRST_BECAUSE_OF_PLACEHOLDER = "\"%s name here\"";
   private static final String SECOND_BECAUSE_OF_PLACEHOLDER = "\"Another %s name here\"";
-  private static final String PROJECT_TO_DESCRIPTION_BUILD_PATTERN = "ProjectToDescription.With<%s>(%s)%s";
+  private static final String PROJECT_TO_DESCRIPTION_BUILD_PATTERN = "ProjectToDescription<%s>.With(() => new %s(), %s)%s";
   private static final String DEFAULT_SOURCE_NAME_INVOCATION = "nameof(%s)";
 
   private final String joinedTypes;
@@ -80,7 +80,7 @@ public class ProjectToDescription {
 
   public String getInitializationCommand() {
     final String separator = lastParameter ? "" : ",";
-    return String.format(PROJECT_TO_DESCRIPTION_BUILD_PATTERN, projectionClassName, joinedTypes, separator);
+    return String.format(PROJECT_TO_DESCRIPTION_BUILD_PATTERN, projectionClassName, projectionClassName, joinedTypes, separator);
   }
 
 }

@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class PreliminaryStatement {
 
-  private static final String STATE_STORE_LOAD_PATTERN = "_stateStore.Write(\"%s\", %s, 1, NOOP_WRITER);";
+  private static final String STATE_STORE_LOAD_PATTERN = "_stateStore.Write(\"%s\", %s, 1, default);";
 
   public static List<String> with(final String testMethodName) {
     return IntStream.range(1, TestCase.TEST_DATA_SET_SIZE + 1).mapToObj(dataIndex -> {

@@ -21,8 +21,8 @@ public class AuthorQueriesActor: StateStoreQueryActor<AuthorData>, IAuthorQuerie
     return QueryStateFor<AuthorData>(id, AuthorData.Empty, default, default);
   }
 
-  public ICompletes<Collection<AuthorData>> Authors()
+  public ICompletes<IEnumerable<AuthorData>> Authors()
   {
-    return QueryAllOf<AuthorData>(new List<AuthorData>());
+    return AllOf(new List<AuthorData>());
   }
 }

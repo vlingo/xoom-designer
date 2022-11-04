@@ -1,15 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Vlingo.Xoom.Actors;
-using Vlingo.Xoom.Lattice.Model.Projection;
 using Vlingo.Xoom.Lattice.Model.Stateful;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
-using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Symbio;
 using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
@@ -17,24 +17,24 @@ namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 public class AuthorQueriesTest
 {
   private readonly IStateStore _stateStore;
-  private readonly AuthorQueries _queries;
+  private readonly IAuthorQueries _queries;
 
-  public void AuthorQueriesTest()
+  public AuthorQueriesTest()
   {
     var world = World.StartWithDefaults("test-state-store-query");
-    _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<>), new NoOpDispatcher());
+    _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
     StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(AuthorData));
-    _queries = world.ActorFor<AuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
+    _queries = world.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
   }
 
-  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
-  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
 
   [Fact]
   public void QueryById()
   {
-    _stateStore.Write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
-    _stateStore.Write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, default);
+    _stateStore.Write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, default);
 
     var firstData = _queries.AuthorOf("1").Await();
 
@@ -55,14 +55,14 @@ public class AuthorQueriesTest
     Assert.NotNull(secondData.AvailableOn);
   }
 
-  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
-  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<Rank>(), true, DateTime.Now);
+  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
 
   [Fact]
   public void QueryAll()
   {
-    _stateStore.Write("1", FIRST_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
-    _stateStore.Write("2", SECOND_QUERY_ALL_TEST_DATA, 1, NOOP_WRITER);
+    _stateStore.Write("1", FIRST_QUERY_ALL_TEST_DATA, 1, default);
+    _stateStore.Write("2", SECOND_QUERY_ALL_TEST_DATA, 1, default);
 
     var results = _queries.Authors().Await();
     var firstData = results.FirstOrDefault(data => data.Id.Equals("1"));

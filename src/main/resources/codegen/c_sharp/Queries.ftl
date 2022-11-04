@@ -9,5 +9,5 @@ namespace ${packageName};
 public interface ${queriesName}
 {
   ICompletes<${dataName}> ${queryByIdMethodName}(string id);
-  ICompletes<Collection<${dataName}>> ${queryAllMethodName}();
+  ICompletes<IEnumerable<${dataName}>> ${queryAllMethodName}();
 }
