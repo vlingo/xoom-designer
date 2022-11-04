@@ -25,6 +25,10 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   private final ParametersOwner parametersOwner;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
+  public static AggregateMethodInvocation accessingParametersFromDataObject(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, AggregateMethodInvocation.ParametersOwner.DATA_OBJECT);
+  }
+
   public AggregateMethodInvocation(final String stageVariableName) {
     this(stageVariableName, ParametersOwner.NONE);
   }

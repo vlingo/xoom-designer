@@ -47,7 +47,11 @@ public enum Template {
   ENTRY_ADAPTER("EntryAdapter"),
   EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
   EVENT_SOURCE_ENTITY("EventSourcedEntity"),
-  QUERIES_UNIT_TEST("QueriesUnitTest"),;
+  QUERIES_UNIT_TEST("QueriesUnitTest"),
+  REST_RESOURCE("RestResource"),
+  REST_RESOURCE_CREATION_METHOD("RestResourceCreationMethod"),
+  REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
+  REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),;
 
   public final String filename;
 

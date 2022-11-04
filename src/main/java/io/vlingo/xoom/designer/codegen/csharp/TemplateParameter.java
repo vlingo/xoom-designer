@@ -80,7 +80,21 @@ public enum TemplateParameter implements ParameterKey {
   EVENT_SOURCED("eventSourced"),
   EVENT_HANDLERS("eventHandlers"),
   SOURCED_EVENTS("sourcedEvents"),
-  QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),;
+  QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+  REST_RESOURCE_NAME("resourceName"),
+  MODEL_ACTOR("modelActor"),
+  URI_ROOT("uriRoot"),
+  MODEL_PROTOCOL("modelProtocol"),
+  ROUTE_DECLARATIONS("routeDeclarations"),
+  ROUTE_SIGNATURE("routeSignature"),
+  ROUTE_METHOD("routeMethod"),
+  ROUTE_PATH("routePath"),
+  ROUTE_METHODS("routeMethods"),
+  MODEL_ATTRIBUTE("modelAttribute"),
+  REQUIRE_ENTITY_LOADING("requireEntityLoading"),
+  ADAPTER_HANDLER_INVOCATION("adapterHandlerInvocation"),
+  VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
+  ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),;
 
   public final String key;
 

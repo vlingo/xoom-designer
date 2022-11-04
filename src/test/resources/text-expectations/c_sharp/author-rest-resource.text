@@ -1,0 +1,190 @@
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Http;
+using Vlingo.Xoom.Http.Resource;
+using Vlingo.Xoom.Lattice.Grid;
+using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model.Author;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Resource;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
+public class AuthorResource: DynamicResourceHandler
+{
+  private readonly Grid _grid;
+
+  public AuthorResource(Grid grid): base(grid.World.Stage)
+  {
+      _grid = grid;
+  }
+
+  public ICompletes<Response> WithName(AuthorData data)
+  {
+    return Author.withName(_grid, data.name, data.availableOn)
+      .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Created, ResponseHeader.Headers(ResponseHeader.Of(Location, Location(state.id))), Serialized(AuthorData.From(state))))
+      .Otherwise(arg => Response.Of(NotFound))
+      .RecoverFrom(e => Response.Of(InternalServerError, e.Message)));
+  }
+
+  public ICompletes<Response> ChangeRank(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.changeRank(data.rank))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> RelateAuthor(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.relateAuthor(data.relatedAuthor))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> RelateAuthors(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.relateAuthors(data.relatedAuthors))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> ReplaceAllRelatedAuthors(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.replaceAllRelatedAuthors(data.relatedAuthors))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> UnrelateAuthor(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.unrelateAuthor(data.relatedAuthor))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> AddTag(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.addTag(data.tag))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> AddTags(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.addTags(data.tags))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> ReplaceTags(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.replaceTags(data.tags))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> RemoveTag(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.removeTag(data.tag))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> ChangeRank(string id, AuthorData data)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.changeRank(data.rank))
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public ICompletes<Response> MakeUnavailable(string id)
+  {
+    return Resolve(id)
+            .AndThenTo(author => author.makeUnavailable())
+            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+            .Otherwise(noGreeting => Response.Of(NotFound))
+            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
+  }
+
+  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; } =
+     ResourceBuilder.Resource("AuthorResource",
+        ResourceBuilder.Post("/authors")
+            .Body<AuthorData>()
+            .Handle(WithName),
+        ResourceBuilder.Patch("/authors/{id}/rank")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ChangeRank),
+        ResourceBuilder.Patch("/authors/{id}/related-author")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(RelateAuthor),
+        ResourceBuilder.Patch("/authors/{id}/related-authors")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(RelateAuthors),
+        ResourceBuilder.Put("/authors/{id}/related-authors")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ReplaceAllRelatedAuthors),
+        ResourceBuilder.Delete("/authors/{id}/related-author")
+            .Param<string>()
+            .Param<AuthorData>()
+            .Handle(UnrelateAuthor),
+        ResourceBuilder.Patch("/authors/{id}/tag")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(AddTag),
+        ResourceBuilder.Patch("/authors/{id}/tags")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(AddTags),
+        ResourceBuilder.Put("/authors/{id}/tags")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ReplaceTags),
+        ResourceBuilder.Delete("/authors/{id}/tags")
+            .Param<string>()
+            .Param<AuthorData>()
+            .Handle(RemoveTag),
+        ResourceBuilder.Patch("/authors/{id}/rank")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ChangeRank),
+        ResourceBuilder.Patch("/authors/{id}/status")
+            .Param<string>()
+            .Handle(MakeUnavailable)
+     );
+
+  protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
+
+  private string Location(string id) => "/authors/" + id;
+
+  private ICompletes<Author> Resolve(string id)
+  {
+    var address = _grid.AddressFactory.From(id);
+    return _grid.ActorOf<Author>(address, Definition.Has(typeof(AuthorEntity), Definition.Parameters(id)));
+  }
+
+}
