@@ -97,7 +97,10 @@ public enum TemplateParameter implements ParameterKey {
   REQUIRE_ENTITY_LOADING("requireEntityLoading"),
   ADAPTER_HANDLER_INVOCATION("adapterHandlerInvocation"),
   VALUE_OBJECT_INITIALIZERS("valueObjectInitializers"),
-  ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),;
+  ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),
+  PROVIDERS("providers"),
+  TYPE_REGISTRIES("registries"),
+  REST_RESOURCES("restResources");
 
   public final String key;
 

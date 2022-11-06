@@ -23,9 +23,24 @@ public class Bootstrap
   {
     World = World.Start("${appName}");
 
-    var accountResource = new AccountResource(World);
-    var frontend = new SinglePageApplicationResource("/frontend", "/app");
-    var resources = Resources.Are(accountResource.Routes, frontend.Routes());
+    <#list registries as registry>
+    var ${registry.objectName} = new ${registry.className}(World);
+    </#list>
+    <#list providers as provider>
+    ${provider.className}.Using(${provider.arguments});
+
+    </#list>
+    <#list restResources as restResource>
+    var ${restResource.objectName} = new ${restResource.className}(World);
+    </#list>
+    var resources = Resources.Are(
+      <#if restResources?size == 0>
+      //Include Rest Resources routes here
+      </#if>
+      <#list restResources as restResource>
+      ${restResource.objectName}.routes(),
+      </#list>
+    );
 
     Server = ServerFactory.StartWith(World.Stage, resources, Filters.None(), Configuration.Define().Port,
       Configuration.SizingConf.DefineWith(4, 10, 100, 10240), Configuration.TimingConf.DefineWith(3, 1, 100),
