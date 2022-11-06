@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model;
 using Io.Vlingo.Xoomapp.Model.Author;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure;

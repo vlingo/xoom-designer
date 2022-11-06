@@ -7,7 +7,6 @@
 
 package io.vlingo.xoom.designer.codegen.csharp.resource;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
@@ -21,7 +20,6 @@ import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Queries;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -77,15 +75,14 @@ public class RestResourceTemplateData extends TemplateData {
   private Set<String> resolveImports(final CodeGenerationParameter aggregate, final List<Content> contents,
                                      final Boolean useCQRS) {
     final Set<String> imports = new HashSet<>();
-    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
     final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
     if (RouteDetail.requireEntityLoad(aggregate)) {
       final String aggregateEntityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregateName);
       imports.add(findPackage(CsharpTemplateStandard.AGGREGATE, aggregateEntityName, contents));
-      imports.add(codeElementFormatter.packageOf(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
+      imports.add(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
     if (RouteDetail.requireModelFactory(aggregate)) {
-      imports.add(codeElementFormatter.packageOf(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents)));
+      imports.add(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
     if (useCQRS) {
       imports.add(findPackage(CsharpTemplateStandard.STORE_PROVIDER, resolveQueryStoreProviderName(), contents));

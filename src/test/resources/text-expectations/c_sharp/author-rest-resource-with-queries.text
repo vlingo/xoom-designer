@@ -4,8 +4,9 @@ using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
 using Vlingo.Xoom.Lattice.Grid;
-using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model;
 using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Infrastructure;
 using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Vlingo.Xoom.Turbo;
 using static Vlingo.Xoom.Http.ResponseStatus;
@@ -80,7 +81,7 @@ public class AuthorResource: DynamicResourceHandler
   }
 
   public ICompletes<Response> WithName(AuthorData data)
- => IAuthor.WithName(_grid, data.Name, data.AvailableOn)
+ => IAuthor.WithName(_world, data.Name, data.AvailableOn)
       .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(AuthorData.From(state)))))
       .Otherwise<Response>(arg => Response.Of(NotFound))
       .RecoverFrom(e => Response.Of(InternalServerError));

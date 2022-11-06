@@ -1,6 +1,6 @@
 using System;
 using java.time.LocalDate;
-using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Wire.Nodes;
 
