@@ -5,7 +5,7 @@ using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
 using Configuration = Vlingo.Xoom.Http.Resource.Configuration;
 
-namespace ${packageName};
+namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class Bootstrap
 {
@@ -21,7 +21,7 @@ public class Bootstrap
 
   private Bootstrap()
   {
-    World = World.Start("${appName}");
+    World = World.Start("Author");
 
     var accountResource = new AccountResource(World);
     var frontend = new SinglePageApplicationResource("/frontend", "/app")
@@ -41,7 +41,7 @@ public class Bootstrap
 
         Console.WriteLine("\n");
         Console.WriteLine("==============================");
-        Console.WriteLine("Stopping ${appName} Server...");
+        Console.WriteLine("Stopping Author Server...");
         Console.WriteLine("==============================");
       }
     };
