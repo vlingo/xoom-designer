@@ -1,5 +1,6 @@
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
 using Vlingo.Xoom.Lattice.Grid;
@@ -70,77 +71,77 @@ public class AuthorResource: DynamicResourceHandler
   }
 
   public ICompletes<Response> WithName(AuthorData data)
- => IAuthor.WithName(_grid, data.name, data.availableOn)
-      .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(AuthorData.From(state))))
+ => IAuthor.WithName(_grid, data.Name, data.AvailableOn)
+      .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(AuthorData.From(state)))))
       .Otherwise<Response>(arg => Response.Of(NotFound))
       .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.rank))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.Rank))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthor(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthor(data.relatedAuthor))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthor(data.RelatedAuthor))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthors(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthors(data.relatedAuthors))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthors(data.RelatedAuthors))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceAllRelatedAuthors(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceAllRelatedAuthors(data.relatedAuthors))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceAllRelatedAuthors(data.RelatedAuthors))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> UnrelateAuthor(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.UnrelateAuthor(data.relatedAuthor))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.UnrelateAuthor(data.RelatedAuthor))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTag(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTag(data.tag))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTag(data.Tag))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTags(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTags(data.tags))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTags(data.Tags))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceTags(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceTags(data.tags))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceTags(data.Tags))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RemoveTag(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.RemoveTag(data.tag))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RemoveTag(data.Tag))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.rank))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.Rank))
         .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
@@ -152,6 +153,7 @@ public class AuthorResource: DynamicResourceHandler
         .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
+  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; }
 
   protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
 

@@ -1,5 +1,6 @@
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Common.Serialization;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
 using Vlingo.Xoom.Lattice.Grid;
@@ -49,6 +50,7 @@ public class ${resourceName}: DynamicResourceHandler
   <#list routeMethods as routeMethod>
   ${routeMethod}
   </#list>
+  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; }
 
   protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
 
