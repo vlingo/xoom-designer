@@ -7,6 +7,9 @@ using Vlingo.Xoom.Lattice.Grid;
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>
+<#if useCQRS && queries?has_content>
+using Vlingo.Xoom.Turbo;
+</#if>
 using static Vlingo.Xoom.Http.ResponseStatus;
 
 namespace ${packageName};

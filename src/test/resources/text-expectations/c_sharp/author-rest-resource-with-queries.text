@@ -7,6 +7,7 @@ using Vlingo.Xoom.Lattice.Grid;
 using Io.Vlingo.Xoomapp;
 using Io.Vlingo.Xoomapp.Model.Author;
 using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Vlingo.Xoom.Turbo;
 using static Vlingo.Xoom.Http.ResponseStatus;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Resource;
