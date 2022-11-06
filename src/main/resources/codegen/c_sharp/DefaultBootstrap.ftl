@@ -24,8 +24,8 @@ public class Bootstrap
     World = World.Start("${appName}");
 
     var accountResource = new AccountResource(World);
-    var frontend = new SinglePageApplicationResource("/frontend", "/app")
-    var resources = Resources.Are(accountResource.Routes, frontend.Routes);
+    var frontend = new SinglePageApplicationResource("/frontend", "/app");
+    var resources = Resources.Are(accountResource.Routes, frontend.Routes());
 
     Server = ServerFactory.StartWith(World.Stage, resources, Filters.None(), Configuration.Define().Port,
       Configuration.SizingConf.DefineWith(4, 10, 100, 10240), Configuration.TimingConf.DefineWith(3, 1, 100),
