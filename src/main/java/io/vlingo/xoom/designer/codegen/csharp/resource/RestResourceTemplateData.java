@@ -76,6 +76,7 @@ public class RestResourceTemplateData extends TemplateData {
                                      final Boolean useCQRS) {
     final Set<String> imports = new HashSet<>();
     final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
+    imports.add(findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, contents));
     if (RouteDetail.requireEntityLoad(aggregate)) {
       final String aggregateEntityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregateName);
       imports.add(findPackage(CsharpTemplateStandard.AGGREGATE, aggregateEntityName, contents));

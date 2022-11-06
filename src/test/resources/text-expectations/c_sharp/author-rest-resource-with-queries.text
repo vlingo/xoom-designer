@@ -81,7 +81,7 @@ public class AuthorResource: DynamicResourceHandler
   }
 
   public ICompletes<Response> WithName(AuthorData data)
- => IAuthor.WithName(_world, data.Name, data.AvailableOn)
+ => IAuthor.WithName(_world.Stage, data.Name, data.AvailableOn)
       .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(AuthorData.From(state)))))
       .Otherwise<Response>(arg => Response.Of(NotFound))
       .RecoverFrom(e => Response.Of(InternalServerError));
