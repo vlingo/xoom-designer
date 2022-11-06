@@ -19,14 +19,14 @@ namespace ${packageName};
  */
 public class ${resourceName}: DynamicResourceHandler
 {
-  private readonly Grid _grid;
+  private readonly World _world;
   <#if useCQRS && queries?has_content>
   private readonly ${queries.protocolName} _queries;
   </#if>
 
-  public ${resourceName}(Grid grid): base(grid.World.Stage)
+  public ${resourceName}(World world): base(world.Stage)
   {
-      _grid = grid;
+      _world = world;
       <#if useCQRS && queries?has_content>
       _queries = ComponentRegistry.WithType<${storeProviderName}>().${queries.attributeName};
       </#if>
@@ -62,8 +62,8 @@ public class ${resourceName}: DynamicResourceHandler
   <#if modelProtocol?has_content>
   private ICompletes<${modelProtocol}> Resolve(string id)
   {
-    var address = _grid.AddressFactory.From(id);
-    return _grid.ActorOf<${modelProtocol}>(address, Definition.Has(typeof(${modelActor}), Definition.Parameters(id)));
+    var address = _world.Stage.AddressFactory.From(id);
+    return _world.Stage.ActorOf<${modelProtocol}>(address, Definition.Has(typeof(${modelActor}), Definition.Parameters(id)));
   }
   </#if>
 

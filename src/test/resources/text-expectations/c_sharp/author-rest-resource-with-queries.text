@@ -17,12 +17,12 @@ namespace Io.Vlingo.Xoomapp.Infrastructure.Resource;
  */
 public class AuthorResource: DynamicResourceHandler
 {
-  private readonly Grid _grid;
+  private readonly World _world;
   private readonly IAuthorQueries _queries;
 
-  public AuthorResource(Grid grid): base(grid.World.Stage)
+  public AuthorResource(World world): base(world.Stage)
   {
-      _grid = grid;
+      _world = world;
       _queries = ComponentRegistry.WithType<QueryModelStateStoreProvider>().IAuthorQueries;
       Routes = ResourceBuilder.Resource("AuthorResource",
             ResourceBuilder.Post("/authors")
@@ -180,8 +180,8 @@ public class AuthorResource: DynamicResourceHandler
 
   private ICompletes<IAuthor> Resolve(string id)
   {
-    var address = _grid.AddressFactory.From(id);
-    return _grid.ActorOf<IAuthor>(address, Definition.Has(typeof(AuthorEntity), Definition.Parameters(id)));
+    var address = _world.Stage.AddressFactory.From(id);
+    return _world.Stage.ActorOf<IAuthor>(address, Definition.Has(typeof(AuthorEntity), Definition.Parameters(id)));
   }
 
 }

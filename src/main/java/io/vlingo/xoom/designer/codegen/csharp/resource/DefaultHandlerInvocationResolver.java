@@ -46,7 +46,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
   private String resolveCommandMethodInvocation(final CodeGenerationParameter aggregateParameter,
                                                 final CodeGenerationParameter routeParameter) {
     final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
-    final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.accessingParametersFromDataObject("_grid");
+    final Formatters.Arguments argumentsFormat = AggregateMethodInvocation.accessingParametersFromDataObject("_world");
     final CodeGenerationParameter method = AggregateDetail.methodWithName(aggregateParameter, routeParameter.value);
     final boolean factoryMethod = method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf) || !AggregateDetail.hasFactoryMethod(aggregateParameter);
     final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
