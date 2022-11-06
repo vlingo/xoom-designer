@@ -6,6 +6,7 @@ using Vlingo.Xoom.Lattice.Grid;
 using Io.Vlingo.Xoomapp;
 using Io.Vlingo.Xoomapp.Model.Author;
 using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using static Vlingo.Xoom.Http.ResponseStatus;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Resource;
 
@@ -24,127 +25,97 @@ public class AuthorResource: DynamicResourceHandler
   }
 
   public ICompletes<Response> WithName(AuthorData data)
-  {
-    return Author.withName(_grid, data.name, data.availableOn)
-      .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Created, ResponseHeader.Headers(ResponseHeader.Of(Location, Location(state.id))), Serialized(AuthorData.From(state))))
+ => IAuthor.withName(_grid, data.name, data.availableOn)
+      .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Created, ResponseHeader.Headers(ResponseHeader.Of(Location, Location(state.Id))), Serialized(AuthorData.From(state))))
       .Otherwise(arg => Response.Of(NotFound))
-      .RecoverFrom(e => Response.Of(InternalServerError, e.Message)));
-  }
+      .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.changeRank(data.rank))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.changeRank(data.rank))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthor(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.relateAuthor(data.relatedAuthor))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.relateAuthor(data.relatedAuthor))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthors(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.relateAuthors(data.relatedAuthors))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.relateAuthors(data.relatedAuthors))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceAllRelatedAuthors(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.replaceAllRelatedAuthors(data.relatedAuthors))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.replaceAllRelatedAuthors(data.relatedAuthors))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> UnrelateAuthor(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.unrelateAuthor(data.relatedAuthor))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.unrelateAuthor(data.relatedAuthor))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTag(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.addTag(data.tag))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.addTag(data.tag))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTags(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.addTags(data.tags))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.addTags(data.tags))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceTags(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.replaceTags(data.tags))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.replaceTags(data.tags))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RemoveTag(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.removeTag(data.tag))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.removeTag(data.tag))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.changeRank(data.rank))
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.changeRank(data.rank))
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> MakeUnavailable(string id)
-  {
-    return Resolve(id)
-            .AndThenTo(author => author.makeUnavailable())
-            .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-            .Otherwise(noGreeting => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.getMessage()));
-  }
+ => Resolve(id)
+        .AndThenTo(author => author.makeUnavailable())
+        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
+        .Otherwise(noGreeting => Response.Of(NotFound))
+        .RecoverFrom(e => Response.Of(InternalServerError));
 
-  public ICompletes<Response> Authors()
-  {
-    return _queries.Authors()
-            .AndThenTo(data => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(data))))
-            .Otherwise(arg => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.Message));
-  }
+  public ICompletes<Response> Authors() => _queries.Authors()
+    .AndThenTo(data => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(data))))
+    .Otherwise(arg => Response.Of(NotFound))
+    .RecoverFrom(e => Response.Of(InternalServerError, e.Message));
 
-  public ICompletes<Response> AuthorOf(string id)
-  {
-    return _queries.AuthorOf(id)
-            .AndThenTo(data => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(data))))
-            .Otherwise(arg => Response.Of(NotFound))
-            .RecoverFrom(e => Response.Of(InternalServerError, e.Message));
-  }
+  public ICompletes<Response> AuthorOf(string id) => _queries.AuthorOf(id)
+    .AndThenTo(data => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(data))))
+    .Otherwise(arg => Response.Of(NotFound))
+    .RecoverFrom(e => Response.Of(InternalServerError, e.Message));
 
   public override Vlingo.Xoom.Http.Resource.Resource Routes { get; } =
      ResourceBuilder.Resource("AuthorResource",
@@ -205,10 +176,10 @@ public class AuthorResource: DynamicResourceHandler
 
   private string Location(string id) => "/authors/" + id;
 
-  private ICompletes<Author> Resolve(string id)
+  private ICompletes<IAuthor> Resolve(string id)
   {
     var address = _grid.AddressFactory.From(id);
-    return _grid.ActorOf<Author>(address, Definition.Has(typeof(AuthorEntity), Definition.Parameters(id)));
+    return _grid.ActorOf<IAuthor>(address, Definition.Has(typeof(AuthorEntity), Definition.Parameters(id)));
   }
 
 }
