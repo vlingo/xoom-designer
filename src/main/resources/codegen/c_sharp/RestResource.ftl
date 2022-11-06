@@ -26,32 +26,29 @@ public class ${resourceName}: DynamicResourceHandler
       <#if useCQRS && queries?has_content>
       _queries = ComponentRegistry.WithType<${storeProviderName}>().${queries.attributeName};
       </#if>
+      Routes =<#if routeDeclarations?has_content && routeDeclarations?size == 0> ResourceBuilder.Resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
+      <#else> ResourceBuilder.Resource("${resourceName}",
+          <#list routeDeclarations as declaration>
+              <#if declaration.path?has_content>
+            ${declaration.builderMethod}("${declaration.path}")
+              <#else>
+            ${declaration.builderMethod}("${uriRoot}")
+              </#if>
+              <#list declaration.parameterTypes as parameterType>
+            .Param<${parameterType}>()
+              </#list>
+              <#if declaration.bodyType?has_content>
+            .Body<${declaration.bodyType}>()
+              </#if>
+            .Handle(${declaration.handlerName})<#if declaration?has_next>,</#if>
+          </#list>
+        );
+      </#if>
   }
 
   <#list routeMethods as routeMethod>
   ${routeMethod}
   </#list>
-  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; } =
-  <#if routeDeclarations?has_content && routeDeclarations?size == 0>
-     ResourceBuilder.Resource("${resourceName}" /*Add Request Handlers here as a second parameter*/);
-  <#else>
-     ResourceBuilder.Resource("${resourceName}",
-     <#list routeDeclarations as declaration>
-        <#if declaration.path?has_content>
-        ${declaration.builderMethod}("${declaration.path}")
-        <#else>
-        ${declaration.builderMethod}("${uriRoot}")
-        </#if>
-         <#list declaration.parameterTypes as parameterType>
-            .Param<${parameterType}>()
-         </#list>
-         <#if declaration.bodyType?has_content>
-            .Body<${declaration.bodyType}>()
-         </#if>
-            .Handle(${declaration.handlerName})<#if declaration?has_next>,</#if>
-     </#list>
-     );
-  </#if>
 
   protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
 

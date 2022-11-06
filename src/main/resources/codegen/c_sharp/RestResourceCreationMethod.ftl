@@ -5,8 +5,8 @@ public ICompletes<Response> ${routeSignature}
           ${initializer}
       </#list>
     return <#else> =></#if> ${routeHandlerInvocation}
-      .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Created, ResponseHeader.Headers(ResponseHeader.Of(Location, Location(state.Id))), Serialized(${adapterHandlerInvocation})))
-      .Otherwise(arg => Response.Of(NotFound))
+      .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(${adapterHandlerInvocation})))
+      .Otherwise<Response>(arg => Response.Of(NotFound))
       .RecoverFrom(e => Response.Of(InternalServerError));
   <#if valueObjectInitializers?has_content>
   }

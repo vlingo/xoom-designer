@@ -71,6 +71,7 @@ public class RouteMethodTemplateData extends TemplateData {
         resolveValueObjectInitializers(dialect, routeSignatureParameter, mainParameter, valueObjects);
 
     this.parameters = TemplateParameters.with(ROUTE_SIGNATURE, RouteDetail.resolveMethodSignature(routeSignatureParameter))
+        .and(STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(mainParameter.value))
         .and(MODEL_ATTRIBUTE, resolveModelAttributeName(mainParameter))
         .and(ROUTE_METHOD, routeSignatureParameter.retrieveRelatedValue(Label.ROUTE_METHOD))
         .and(REQUIRE_ENTITY_LOADING, RouteDetail.resolveEntityLoading(routeSignatureParameter))

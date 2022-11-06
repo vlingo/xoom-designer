@@ -19,140 +19,139 @@ public class AuthorResource: DynamicResourceHandler
   public AuthorResource(Grid grid): base(grid.World.Stage)
   {
       _grid = grid;
+      Routes = ResourceBuilder.Resource("AuthorResource",
+            ResourceBuilder.Post("/authors")
+            .Body<AuthorData>()
+            .Handle(WithName),
+            ResourceBuilder.Patch("/authors/{id}/rank")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ChangeRank),
+            ResourceBuilder.Patch("/authors/{id}/related-author")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(RelateAuthor),
+            ResourceBuilder.Patch("/authors/{id}/related-authors")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(RelateAuthors),
+            ResourceBuilder.Put("/authors/{id}/related-authors")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ReplaceAllRelatedAuthors),
+            ResourceBuilder.Delete("/authors/{id}/related-author")
+            .Param<string>()
+            .Param<AuthorData>()
+            .Handle(UnrelateAuthor),
+            ResourceBuilder.Patch("/authors/{id}/tag")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(AddTag),
+            ResourceBuilder.Patch("/authors/{id}/tags")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(AddTags),
+            ResourceBuilder.Put("/authors/{id}/tags")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ReplaceTags),
+            ResourceBuilder.Delete("/authors/{id}/tags")
+            .Param<string>()
+            .Param<AuthorData>()
+            .Handle(RemoveTag),
+            ResourceBuilder.Patch("/authors/{id}/rank")
+            .Param<string>()
+            .Body<AuthorData>()
+            .Handle(ChangeRank),
+            ResourceBuilder.Patch("/authors/{id}/status")
+            .Param<string>()
+            .Handle(MakeUnavailable)
+        );
   }
 
   public ICompletes<Response> WithName(AuthorData data)
- => IAuthor.withName(_grid, data.name, data.availableOn)
-      .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Created, ResponseHeader.Headers(ResponseHeader.Of(Location, Location(state.Id))), Serialized(AuthorData.From(state))))
-      .Otherwise(arg => Response.Of(NotFound))
+ => IAuthor.WithName(_grid, data.name, data.availableOn)
+      .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(AuthorData.From(state))))
+      .Otherwise<Response>(arg => Response.Of(NotFound))
       .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.changeRank(data.rank))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.rank))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthor(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.relateAuthor(data.relatedAuthor))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthor(data.relatedAuthor))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RelateAuthors(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.relateAuthors(data.relatedAuthors))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RelateAuthors(data.relatedAuthors))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceAllRelatedAuthors(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.replaceAllRelatedAuthors(data.relatedAuthors))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceAllRelatedAuthors(data.relatedAuthors))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> UnrelateAuthor(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.unrelateAuthor(data.relatedAuthor))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.UnrelateAuthor(data.relatedAuthor))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTag(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.addTag(data.tag))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTag(data.tag))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> AddTags(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.addTags(data.tags))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.AddTags(data.tags))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ReplaceTags(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.replaceTags(data.tags))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ReplaceTags(data.tags))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> RemoveTag(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.removeTag(data.tag))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.RemoveTag(data.tag))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> ChangeRank(string id, AuthorData data)
  => Resolve(id)
-        .AndThenTo(author => author.changeRank(data.rank))
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.ChangeRank(data.rank))
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
   public ICompletes<Response> MakeUnavailable(string id)
  => Resolve(id)
-        .AndThenTo(author => author.makeUnavailable())
-        .AndThenTo(state => Completes().WithSuccess(EntityResponseOf(Ok, Serialized(AuthorData.From(state)))))
-        .Otherwise(noGreeting => Response.Of(NotFound))
+        .AndThenTo<ICompletes<AuthorState>>(author => author.MakeUnavailable())
+        .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Ok, JsonSerialization.Serialized(AuthorData.From(state)))))
+        .Otherwise<Response>(noGreeting => Response.Of(NotFound))
         .RecoverFrom(e => Response.Of(InternalServerError));
 
-  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; } =
-     ResourceBuilder.Resource("AuthorResource",
-        ResourceBuilder.Post("/authors")
-            .Body<AuthorData>()
-            .Handle(WithName),
-        ResourceBuilder.Patch("/authors/{id}/rank")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(ChangeRank),
-        ResourceBuilder.Patch("/authors/{id}/related-author")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(RelateAuthor),
-        ResourceBuilder.Patch("/authors/{id}/related-authors")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(RelateAuthors),
-        ResourceBuilder.Put("/authors/{id}/related-authors")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(ReplaceAllRelatedAuthors),
-        ResourceBuilder.Delete("/authors/{id}/related-author")
-            .Param<string>()
-            .Param<AuthorData>()
-            .Handle(UnrelateAuthor),
-        ResourceBuilder.Patch("/authors/{id}/tag")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(AddTag),
-        ResourceBuilder.Patch("/authors/{id}/tags")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(AddTags),
-        ResourceBuilder.Put("/authors/{id}/tags")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(ReplaceTags),
-        ResourceBuilder.Delete("/authors/{id}/tags")
-            .Param<string>()
-            .Param<AuthorData>()
-            .Handle(RemoveTag),
-        ResourceBuilder.Patch("/authors/{id}/rank")
-            .Param<string>()
-            .Body<AuthorData>()
-            .Handle(ChangeRank),
-        ResourceBuilder.Patch("/authors/{id}/status")
-            .Param<string>()
-            .Handle(MakeUnavailable)
-     );
 
   protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
 

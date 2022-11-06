@@ -21,6 +21,8 @@ import io.vlingo.xoom.turbo.ComponentRegistry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public class DefaultHandlerInvocationResolver implements HandlerInvocationResolver {
 
   private final static String COMMAND_PATTERN = "%s.%s(%s)";
@@ -50,7 +52,7 @@ public class DefaultHandlerInvocationResolver implements HandlerInvocationResolv
     final MethodScope scope = factoryMethod ? MethodScope.STATIC : MethodScope.INSTANCE;
     final String methodInvocationParameters = argumentsFormat.format(method, scope);
     final String invoker = factoryMethod ? "I"+aggregateParameter.value : codeElementFormatter.simpleNameToAttribute(aggregateParameter.value);
-    return String.format(COMMAND_PATTERN, invoker, method.value, methodInvocationParameters);
+    return String.format(COMMAND_PATTERN, invoker, toPascalCase(method.value), methodInvocationParameters);
   }
 
   private String resolveQueryMethodInvocation(final CodeGenerationParameter route) {
