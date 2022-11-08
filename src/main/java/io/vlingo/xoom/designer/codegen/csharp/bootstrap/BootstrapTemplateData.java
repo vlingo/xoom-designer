@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.csharp.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -18,7 +19,9 @@ import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class BootstrapTemplateData extends TemplateData {
@@ -56,13 +59,18 @@ public abstract class BootstrapTemplateData extends TemplateData {
 
     final List<TypeRegistry> typeRegistries = TypeRegistry.from(storageType, useCQRS);
     final List<StoreProvider> storeProviders = StoreProvider.from(storageType, useCQRS, projectionType.isProjectionEnabled());
+    final Set<String> qualifiedNames = Stream.of(CsharpTemplateStandard.STORE_PROVIDER,
+        CsharpTemplateStandard.PROJECTION_DISPATCHER_PROVIDER, CsharpTemplateStandard.REST_RESOURCE)
+        .map(standard -> ContentQuery.findPackage(standard, context.contents()))
+        .collect(Collectors.toSet());
 
     return this.parameters
         .and(TemplateParameter.PACKAGE_NAME, packageName)
         .and(TemplateParameter.APPLICATION_NAME, context.parameterOf(Label.APPLICATION_NAME))
         .and(TemplateParameter.PROVIDERS, storeProviders)
         .and(TemplateParameter.TYPE_REGISTRIES, typeRegistries)
-        .and(TemplateParameter.REST_RESOURCES, RestResource.from(context.contents()));
+        .and(TemplateParameter.REST_RESOURCES, RestResource.from(context.contents()))
+        .addImports(qualifiedNames);
   }
 
   protected abstract void enrichParameters(final CodeGenerationContext context);

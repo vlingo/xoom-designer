@@ -1,4 +1,3 @@
-using Com.UserManagement.Account.Infrastructure.Resource;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;
@@ -25,7 +24,7 @@ public class Bootstrap
 
     var authorResource = new AuthorResource(World);
     var resources = Resources.Are(
-      authorResource.routes(),
+      authorResource.Routes
     );
 
     Server = ServerFactory.StartWith(World.Stage, resources, Filters.None(), Configuration.Define().Port,

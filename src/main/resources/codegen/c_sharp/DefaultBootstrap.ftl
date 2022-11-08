@@ -1,8 +1,10 @@
-using Com.UserManagement.Account.Infrastructure.Resource;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
+<#list imports as import>
+using ${import.qualifiedClassName};
+</#list>
 using Configuration = Vlingo.Xoom.Http.Resource.Configuration;
 
 namespace ${packageName};
@@ -38,7 +40,7 @@ public class Bootstrap
       //Include Rest Resources routes here
       </#if>
       <#list restResources as restResource>
-      ${restResource.objectName}.routes(),
+      ${restResource.objectName}.Routes
       </#list>
     );
 
