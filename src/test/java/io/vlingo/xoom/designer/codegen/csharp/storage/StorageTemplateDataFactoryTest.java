@@ -21,9 +21,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,9 +30,9 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
   @Test
   public void testStorageTemplateDataOnSourcedSingleModel() {
     final List<TemplateData> allTemplatesData = StorageTemplateDataFactory.build("Io.Vlingo.Xoomapp", contents(),
-        StorageType.JOURNAL, ProjectionType.EVENT_BASED);
+        StorageType.JOURNAL, ProjectionType.EVENT_BASED, "Xoomapp", databaseTypes());
 
-    Assertions.assertEquals(3, allTemplatesData.size());
+    Assertions.assertEquals(4, allTemplatesData.size());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.ADAPTER)).count());
     Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.STORE_PROVIDER)).count());
 
@@ -74,9 +72,9 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
   @Test
   public void testStorageTemplateDataOnStatefulSingleModel() {
     final List<TemplateData> allTemplatesData = StorageTemplateDataFactory.build("Io.Vlingo.Xoomapp", contents(),
-        StorageType.STATE_STORE, ProjectionType.EVENT_BASED);
+        StorageType.STATE_STORE, ProjectionType.EVENT_BASED, "Xoomapp", databaseTypes());
 
-    Assertions.assertEquals(3, allTemplatesData.size());
+    Assertions.assertEquals(4, allTemplatesData.size());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.ADAPTER)).count());
     Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.STORE_PROVIDER)).count());
 
@@ -113,11 +111,11 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
   @Test
   public void testStorageTemplateDataOnStatefulCQRSModel() {
     final List<TemplateData> allTemplatesData = StorageTemplateDataFactory.buildWithCqrs("Io.Vlingo.Xoomapp", contents(),
-            StorageType.STATE_STORE, ProjectionType.NONE);
+            StorageType.STATE_STORE, ProjectionType.NONE, "Xoomapp", databaseTypes());
 
     //General Assert
 
-    Assertions.assertEquals(8, allTemplatesData.size());
+    Assertions.assertEquals(9, allTemplatesData.size());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.ADAPTER)).count());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.STORE_PROVIDER)).count());
 
@@ -175,6 +173,15 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
         Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "AuthorData.cs"), null, null, AUTHOR_DATA_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.cs"), null, null, BOOK_DATA_CONTENT_TEXT)
     );
+  }
+
+  private static final Map<Model, DatabaseType> databaseTypes() {
+    return new HashMap<Model, DatabaseType>() {
+      private static final long serialVersionUID = 1L;
+      {
+        put(Model.COMMAND, DatabaseType.IN_MEMORY);
+        put(Model.QUERY, DatabaseType.IN_MEMORY);
+      }};
   }
 
   private static final String EXPECTED_PACKAGE = "Io.Vlingo.Xoomapp.Infrastructure.Persistence";

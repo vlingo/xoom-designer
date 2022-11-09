@@ -83,7 +83,10 @@ public enum TemplateParameter implements ParameterKey {
   SOURCED_EVENTS("sourcedEvents"),
   QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
   DATA_OBJECTS("dataObjects"),
-  PROJECTIONS("projections"),;
+  PROJECTIONS("projections"),
+  DEFAULT_DATABASE_PARAMETER("databaseParameter"),
+  QUERY_DATABASE_PARAMETER("queryDatabaseParameter"),
+  RESOURCE_FILE("resourceFile");
 
   public final String key;
 

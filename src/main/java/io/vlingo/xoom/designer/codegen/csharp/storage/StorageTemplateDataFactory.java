@@ -14,23 +14,25 @@ import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class StorageTemplateDataFactory {
 
   public static List<TemplateData> build(final String basePackage, final List<Content> contents,
-                                         final StorageType storageType, final ProjectionType projectionType) {
+                                         final StorageType storageType, final ProjectionType projectionType, String appName, Map<Model, DatabaseType> databases) {
     final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
 
     final List<TemplateData> templatesData = new ArrayList<>();
     templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage, storageType, projectionType,
         templatesData, contents, Model.applicableToDomain()));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     return templatesData;
   }
 
   public static List<TemplateData> buildWithCqrs(final String basePackage, final List<Content> contents,
-                                                 final StorageType storageType, final ProjectionType projectionType) {
+                                                 final StorageType storageType, final ProjectionType projectionType, String appName, Map<Model, DatabaseType> databases) {
     final String persistencePackage = PersistenceDetail.resolvePackage(basePackage);
 
     final List<TemplateData> templatesData = new ArrayList<>();
@@ -38,6 +40,7 @@ public class StorageTemplateDataFactory {
     templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, contents));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage, storageType, projectionType,
         templatesData, contents, Model.applicableToQueryAndCommand()));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
     return templatesData;
   }
 
