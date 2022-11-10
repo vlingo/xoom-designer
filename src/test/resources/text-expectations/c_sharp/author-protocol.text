@@ -20,7 +20,7 @@ public interface IAuthor
     return author.WithName(name);
   }
 
-  ICompletes<AuthorState> ChangeRank(List<Double> rank);
+  ICompletes<AuthorState> ChangeRank(List<double> rank);
 
   ICompletes<AuthorState> Hide();
 

@@ -61,22 +61,22 @@ public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
     return Apply(_state.Hide(), () => _state);
   }
 
-  public ICompletes<AuthorState> RelateAuthor(String relatedAuthor)
+  public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
   {
     return Apply(_state.RelateAuthor(relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> RelateAuthors(ISet<String> relatedAuthors)
+  public ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors)
   {
     return Apply(_state.RelateAuthors(relatedAuthors), () => _state);
   }
 
-  public ICompletes<AuthorState> UnrelateAuthor(String relatedAuthor)
+  public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
   {
     return Apply(_state.UnrelateAuthor(relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<String> relatedAuthors)
+  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors)
   {
     return Apply(_state.ReplaceAllRelatedAuthors(relatedAuthors), () => _state);
   }

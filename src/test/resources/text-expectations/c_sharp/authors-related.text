@@ -13,9 +13,9 @@ public class AuthorsRelated : IdentifiedDomainEvent
 {
 
   public string Id {get;}
-  public ISet<String> RelatedAuthors {get;} = new HashSet<String>();
+  public ISet<string> RelatedAuthors {get;} = new HashSet<string>();
 
-  public AuthorsRelated(string id, ISet<String> relatedAuthors) : base(SemanticVersion.From("1.0.0").ToValue())
+  public AuthorsRelated(string id, ISet<string> relatedAuthors) : base(SemanticVersion.From("1.0.0").ToValue())
   {
     Id = id;
     RelatedAuthors.AddRange(relatedAuthors);

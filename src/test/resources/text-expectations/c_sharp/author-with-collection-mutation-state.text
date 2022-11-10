@@ -12,13 +12,13 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
 {
   public string Id {get;}
   public string Name {get;}
-  public List<Double> Rank {get;} = new List<Double>();
-  public List<String> RelatedAuthors {get;} = new List<String>();
+  public List<double> Rank {get;} = new List<double>();
+  public List<string> RelatedAuthors {get;} = new List<string>();
   public DateTime AvailableOn {get;}
 
-  public static AuthorState IdentifiedBy(string id) => new AuthorState(id, null, new List<Double>(), new List<String>(), DateTime.Now);
+  public static AuthorState IdentifiedBy(string id) => new AuthorState(id, null, new List<double>(), new List<string>(), DateTime.Now);
 
-  public AuthorState(string id, string name, List<Double> rank, List<String> relatedAuthors, DateTime availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  public AuthorState(string id, string name, List<double> rank, List<string> relatedAuthors, DateTime availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
   {
     Id = id;
     Name = name;
@@ -27,14 +27,14 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     AvailableOn = availableOn;
   }
 
-  public AuthorState WithName(string name, String relatedAuthor)
+  public AuthorState WithName(string name, string relatedAuthor)
   {
     //TODO: Implement command logic.
     RelatedAuthors.Add(relatedAuthor);
     return new AuthorState(Id, name, Rank, RelatedAuthors, AvailableOn);
   }
 
-  public AuthorState ChangeRank(List<Double> rank)
+  public AuthorState ChangeRank(List<double> rank)
   {
     //TODO: Implement command logic.
     return new AuthorState(Id, Name, rank, RelatedAuthors, AvailableOn);
@@ -46,14 +46,14 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
-  public AuthorState RelateAuthor(String relatedAuthor)
+  public AuthorState RelateAuthor(string relatedAuthor)
   {
     //TODO: Implement command logic.
     RelatedAuthors.Add(relatedAuthor);
     return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
-  public AuthorState RelateAuthors(List<String> relatedAuthors)
+  public AuthorState RelateAuthors(List<string> relatedAuthors)
   {
     //TODO: Implement command logic.
     RelatedAuthors.RemoveAll(relatedAuthors);
@@ -61,14 +61,14 @@ public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
     return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
-  public AuthorState UnrelateAuthor(String relatedAuthor)
+  public AuthorState UnrelateAuthor(string relatedAuthor)
   {
     //TODO: Implement command logic.
     RelatedAuthors.Remove(relatedAuthor);
     return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
   }
 
-  public AuthorState ReplaceAllRelatedAuthors(List<String> relatedAuthors)
+  public AuthorState ReplaceAllRelatedAuthors(List<string> relatedAuthors)
   {
     //TODO: Implement command logic.
     return new AuthorState(Id, Name, Rank, relatedAuthors, AvailableOn);

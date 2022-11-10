@@ -100,6 +100,8 @@ public class ProjectionSource {
         }
       }
       if (DomainEventDetail.isEmittedByFactoryMethod(event.value, aggregate)) {
+        if(FieldDetail.isValueObjectCollection(field))
+          return FieldDetail.resolveDefaultValue(aggregate, field.value).replace(">", "Data>");
         return FieldDetail.resolveDefaultValue(aggregate, field.value);
       }
       return sourceFieldsCarrierName + "." + toPascalCase(field.value);

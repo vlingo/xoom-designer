@@ -21,12 +21,12 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
     return Completes().With(_state);
   }
 
-  public ICompletes<AuthorState> WithName(string name, String relatedAuthor)
+  public ICompletes<AuthorState> WithName(string name, string relatedAuthor)
   {
     return Apply(_state.WithName(name, relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> ChangeRank(List<Double> rank)
+  public ICompletes<AuthorState> ChangeRank(List<double> rank)
   {
     return Apply(_state.ChangeRank(rank), () => _state);
   }
@@ -36,22 +36,22 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
     return Apply(_state.Hide(), () => _state);
   }
 
-  public ICompletes<AuthorState> RelateAuthor(String relatedAuthor)
+  public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
   {
     return Apply(_state.RelateAuthor(relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> RelateAuthors(List<String> relatedAuthors)
+  public ICompletes<AuthorState> RelateAuthors(List<string> relatedAuthors)
   {
     return Apply(_state.RelateAuthors(relatedAuthors), () => _state);
   }
 
-  public ICompletes<AuthorState> UnrelateAuthor(String relatedAuthor)
+  public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
   {
     return Apply(_state.UnrelateAuthor(relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(List<String> relatedAuthors)
+  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(List<string> relatedAuthors)
   {
     return Apply(_state.ReplaceAllRelatedAuthors(relatedAuthors), () => _state);
   }

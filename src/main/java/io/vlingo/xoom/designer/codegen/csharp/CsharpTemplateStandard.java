@@ -34,7 +34,7 @@ public enum CsharpTemplateStandard implements TemplateStandard {
       (name, parameters) -> "vlingo-actors.json"),
   TURBO_SETTINGS(templateParameters -> Template.TURBO_SETTINGS.filename,
       (name, parameters) -> "xoom-turbo.json"),
-  AGGREGATE_PROTOCOL(parameters -> Template.AGGREGATE_PROTOCOL.filename, (name, parameters) -> "I" + name),
+  AGGREGATE_PROTOCOL(parameters -> Template.AGGREGATE_PROTOCOL.filename, (name, parameters) -> name),
   AGGREGATE_PROTOCOL_METHOD(parameters -> parameters.<MethodScope>find(METHOD_SCOPE).isStatic() ?
       AGGREGATE_PROTOCOL_STATIC_METHOD.filename : AGGREGATE_PROTOCOL_INSTANCE_METHOD.filename),
   AGGREGATE(parameters -> CodeGenerationProperties.CSHARP_AGGREGATE_TEMPLATES

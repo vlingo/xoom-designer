@@ -15,7 +15,7 @@ public class AuthorUnrelated : IdentifiedDomainEvent
   public string Id {get;}
   public String RelatedAuthor {get;}
 
-  public AuthorUnrelated(string id, String relatedAuthor) : base(SemanticVersion.From("1.0.0").ToValue())
+  public AuthorUnrelated(string id, string relatedAuthor) : base(SemanticVersion.From("1.0.0").ToValue())
   {
     Id = id;
     RelatedAuthor = relatedAuthor;

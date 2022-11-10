@@ -13,9 +13,9 @@ public class AuthorRanked : IdentifiedDomainEvent
 {
 
   public string Id {get;}
-  public List<Double> Rank {get;} = new List<Double>();
+  public List<double> Rank {get;} = new List<double>();
 
-  public AuthorRanked(string id, List<Double> rank) : base(SemanticVersion.From("1.0.0").ToValue())
+  public AuthorRanked(string id, List<double> rank) : base(SemanticVersion.From("1.0.0").ToValue())
   {
     Id = id;
     Rank.AddRange(rank);
