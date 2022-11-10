@@ -10,7 +10,7 @@ using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Turbo;
 using Vlingo.Xoom.Turbo.Actors;
-using Vlingo.Xoom.Turbo.Annotation.Codegen.Storage;
+using Vlingo.Xoom.Turbo.Annotation.Persistence;
 using Vlingo.Xoom.Turbo.Storage;
 using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
@@ -50,7 +50,7 @@ public class ${storeProviderName}
 </#list>
 
     var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher,
-      StorageType.StateStore, (IReadOnlyDictionary<string, string>) Settings.Properties(), true);
+      StorageType.StateStore, Settings.Properties(), true);
 <#if requireAdapters>
 <#list adapters as stateAdapter>
     registry.Register(new Info(store, typeof(${stateAdapter.sourceClass}), nameof(${stateAdapter.sourceClass})));
