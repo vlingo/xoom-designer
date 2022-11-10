@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/vlingo/xoom-designer/workflows/Build/badge.svg)](https://github.com/vlingo/xoom-designer/actions?query=workflow%3ABuild)
 
-The VLINGO XOOM Designer to guide you in rapid delivery of low-code to full-code Reactive, Event-Driven Microservices and Applications using DOMA, DDD, and other approaches.
+The VLINGO XOOM Designer to guide you in rapid delivery of low-code to pro-code Reactive, Event-Driven Microservices and Applications using DDD and other approaches.
 
 Docs: https://docs.vlingo.io/xoom-designer
 
@@ -11,7 +11,7 @@ Docs: https://docs.vlingo.io/xoom-designer
 
 ## [Introduction](#intro)
 
-A common reality of unfamiliarity exists for many developers when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications and services, or to implement DOMA and DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar approaches, frameworks, and tools that have rarely worked out well in the long run.
+A common reality of unfamiliarity exists for many developers when they try to develop either [Reactive](https://docs.vlingo.io/overview/reactive-and-computing-health) applications and services, or to implement DDD properly, or both. Many give up on using concepts and paradigms that are proven to be a strong foundation for building modern applications and systems that are robust, modularized, scalable, and that use modern architectures. These developers tend to fall back to familiar approaches, frameworks, and tools that have rarely worked out well in the long run.
 
 The VLINGO XOOM platform SDK was created to help developers who face such challenges to confidently move forward and modernize their architectures, designs, and implementations. One platform component that greatly accelerates developer modernization efforts is the VLINGO XOOM Designer. It supports visual model definition, REST API, persistence, and container definitions, followed by project generation that is automatically built. Your applications and services can be running within minutes. With an instantly executable service experience, developers are in a position to quick implement custom business logic within the pre-generated model. This is a great way to learn Reactive architecture and coupled with DDD tactical modeling that are powered by an Actor-based ecosystem. 
 
