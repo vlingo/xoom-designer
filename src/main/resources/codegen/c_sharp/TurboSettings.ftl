@@ -1,0 +1,5 @@
+{
+	"database": {
+		"category": "InMemory"
+	}
+}

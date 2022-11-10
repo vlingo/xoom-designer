@@ -46,7 +46,6 @@ public class EventBasedDataObjectInitializer extends Formatters.Variables<List<S
 
     final String fieldReferencePath =
             String.format("%s.%s", carrierName, toPascalCase(fieldAlias));
-
     return String.format("var %s = %s.From(%s);", fieldAlias, dataObjectName, fieldReferencePath);
   }
 

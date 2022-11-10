@@ -12,6 +12,7 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 
@@ -32,10 +33,10 @@ public class AggregateProtocolTemplateData extends TemplateData {
                                        final CodeGenerationParameter aggregate,
                                        final List<Content> contents,
                                        final Boolean useCQRS) {
-    this.protocolName = aggregate.value;
+    this.protocolName = AggregateDetail.resolveProtocolNameFor(aggregate);
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
             .addImports(resolveImports(aggregate, contents))
-            .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, aggregate.value)
+            .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, protocolName)
             .and(TemplateParameter.STATE_NAME, AGGREGATE_STATE.resolveClassname(aggregate.value))
             .and(TemplateParameter.METHODS, new ArrayList<String>())
             .and(TemplateParameter.USE_CQRS, useCQRS);

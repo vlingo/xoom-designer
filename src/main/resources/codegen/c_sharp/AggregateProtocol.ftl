@@ -3,7 +3,7 @@ using Vlingo.Xoom.Common;
 
 namespace ${packageName};
 
-public interface I${aggregateProtocolName}
+public interface ${aggregateProtocolName}
 {
   <#if !useCQRS>
   /// <summary>

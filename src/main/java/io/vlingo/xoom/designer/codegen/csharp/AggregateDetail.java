@@ -22,6 +22,7 @@ import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 
 public class AggregateDetail {
   private final static String ID_VALUE = "id";
+  private static final String PROTOCOL_INITIAL = "I%s";
 
   public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
     return String.format("%s.%s.%s", basePackage, "Model", aggregateProtocolName);
@@ -148,5 +149,9 @@ public class AggregateDetail {
     }
     return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
         .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
+  }
+
+  public static String resolveProtocolNameFor(final CodeGenerationParameter aggregate) {
+    return String.format(PROTOCOL_INITIAL, aggregate.value);
   }
 }

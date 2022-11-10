@@ -93,11 +93,13 @@ public enum CollectionMutation {
     return new ArrayList<>(statementsResolver.apply(dialect, methodParameter));
   }
 
-  public List<String> resolveStatements(final String collectionOwner, final String elementOwner, final CodeGenerationParameter methodParameter) {
+  public List<String> resolveStatements(final String collectionOwner, final String elementOwner,
+                                        final CodeGenerationParameter methodParameter) {
     return resolveStatements(collectionOwner, methodParameter)
         .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
         .collect(Collectors.toList());
   }
+
   public List<String> resolveStatements(final Dialect dialect, final String collectionOwner, final String elementOwner,
                                         final CodeGenerationParameter methodParameter) {
     return resolveStatements(dialect, collectionOwner, methodParameter)

@@ -44,7 +44,7 @@ public class AuthorEntityTest
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
 
-  private static List<Double> RANK_FOR_CHANGE_RANK_TEST = new List<Double>();
+  private static List<double> RANK_FOR_CHANGE_RANK_TEST = new List<double>();
 
   [Fact]
   public void ChangeRank()

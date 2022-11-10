@@ -46,7 +46,7 @@ public class AuthorProjectionActor : StateStoreProjectionActor<AuthorData>
         {
           var typedEvent = Typed<AuthorRegistered>(@event);
           var name = NameData.From(typedEvent.Name);
-          merged = AuthorData.From(typedEvent.Id, name, new List<Rank>(), new HashSet<String>(), typedEvent.AvailableOn);
+          merged = AuthorData.From(typedEvent.Id, name, new List<RankData>(), new HashSet<string>(), typedEvent.AvailableOn);
           break;
         }
 

@@ -70,8 +70,9 @@ public class ProjectionUnitTestGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(countingReadResultInterest.contains(TextExpectation.onCSharp().read("counting-read-result-interest")));
     Assertions.assertTrue(authorProjectionTest.contains(TextExpectation.onCSharp().read("author-operation-based-projection-unit-test")));
   }
+
   @Test
-  public void testThatEntityStateEventBasedPjectionsUnitTestAreGenerated() {
+  public void testThatEntityStateEventBasedProjectionsUnitTestAreGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
         .add(Label.DIALECT, Dialect.C_SHARP)
         .add(Label.PROJECTION_TYPE, ProjectionType.EVENT_BASED)

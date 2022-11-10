@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.turbo.ComponentRegistry;
@@ -35,6 +36,7 @@ public class ProjectionTemplateData extends TemplateData {
   private static final String PERSISTENCE_PACKAGE_NAME = "Persistence";
 
   private final String protocolName;
+  private final String aggregateName;
   private final TemplateParameters parameters;
 
   public static List<TemplateData> from(final String basePackage, final Stream<CodeGenerationParameter> aggregates,
@@ -48,15 +50,16 @@ public class ProjectionTemplateData extends TemplateData {
   private ProjectionTemplateData(final String basePackage, final CodeGenerationParameter aggregate,
                                  final List<CodeGenerationParameter> valueObjects,
                                  final ProjectionType projectionType, final List<Content> contents) {
-    this.protocolName = aggregate.value;
+    this.protocolName = AggregateDetail.resolveProtocolNameFor(aggregate);
+    this.aggregateName = aggregate.value;
     this.parameters = loadParameters(basePackage, aggregate, valueObjects, projectionType, contents);
   }
 
   private TemplateParameters loadParameters(final String basePackage, final CodeGenerationParameter aggregate,
                                             final List<CodeGenerationParameter> valueObjects,
                                             final ProjectionType projectionType, final List<Content> contents) {
-    final String projectionName = CsharpTemplateStandard.PROJECTION.resolveClassname(protocolName);
-    final String dataObjectName = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(protocolName);
+    final String projectionName = CsharpTemplateStandard.PROJECTION.resolveClassname(aggregateName);
+    final String dataObjectName = CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName);
 
     final List<CodeGenerationParameter> events =
         aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).collect(Collectors.toList());
@@ -66,7 +69,7 @@ public class ProjectionTemplateData extends TemplateData {
 
     return TemplateParameters.with(TemplateParameter.PACKAGE_NAME, resolvePackage(basePackage)).and(TemplateParameter.MODEL, QUERY)
         .and(TemplateParameter.PROJECTION_NAME, projectionName).and(TemplateParameter.PROJECTION_TYPE, projectionType)
-        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
+        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregateName))
         .and(TemplateParameter.STORAGE_TYPE, STATE_STORE).and(TemplateParameter.STATE_DATA_OBJECT_NAME, dataObjectName)
         .and(TemplateParameter.PROJECTION_TYPE, projectionType).and(TemplateParameter.PROJECTION_SOURCES, projectionSources)
         .andResolve(TemplateParameter.PROJECTION_SOURCE_TYPES_NAME, CsharpTemplateStandard.PROJECTION_SOURCE_TYPES::resolveClassname)
@@ -77,9 +80,9 @@ public class ProjectionTemplateData extends TemplateData {
   private Set<String> resolveImports(final String dataObjectName, final List<ProjectionSource> projectionSources,
                                      final List<Content> contents) {
     final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
-    String packageof = codeElementFormatter.packageOf(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "I"+protocolName, contents));
+    final String packageOf = codeElementFormatter.packageOf(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.AGGREGATE_PROTOCOL, protocolName, contents));
     final Stream<String> defaultImports =
-        Stream.of(packageof, ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents));
+        Stream.of(packageOf, ContentQuery.findPackage(CsharpTemplateStandard.DATA_OBJECT, dataObjectName, contents));
 
     final Stream<String> specialTypesImports = projectionSources.stream()
         .map(projectionSource -> projectionSource.mergeParameters)
@@ -106,6 +109,6 @@ public class ProjectionTemplateData extends TemplateData {
 
   @Override
   public String filename() {
-    return standard().resolveFilename(protocolName, parameters);
+    return standard().resolveFilename(aggregateName, parameters);
   }
 }

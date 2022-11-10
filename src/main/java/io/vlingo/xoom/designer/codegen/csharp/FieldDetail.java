@@ -121,7 +121,7 @@ public class FieldDetail {
     }
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     final String collectionType = field.retrieveRelatedValue(Label.COLLECTION_TYPE);
-    final String genericsType = resolveWrapperType(fieldType);
+    final String genericsType = FieldDetail.isValueObjectCollection(field) ? resolveWrapperType(fieldType) : toCamelCase(fieldType);
     if (collectionType.contains("Set"))
       return String.format("I%s<%s>", collectionType, genericsType);
     else
@@ -182,7 +182,7 @@ public class FieldDetail {
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
     final String key = field.retrieveRelatedValue(Label.FIELD_TYPE);
-    return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
+    return CodeGenerationProperties.CSHARP_SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
   }
 
   public static boolean isDateTime(final CodeGenerationParameter field) {

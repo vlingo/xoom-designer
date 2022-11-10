@@ -3,6 +3,7 @@ package io.vlingo.xoom.designer.codegen.csharp.storage;
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.TextExpectation;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.content.TextBasedContent;
 import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
@@ -32,9 +33,11 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     new StorageGenerationStep().process(context);
 
     final Content authorStateAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorStateAdapter");
+    final Content turboSetting = context.findContent(CsharpTemplateStandard.TURBO_SETTINGS, "xoom-turbo");
 
-    Assertions.assertEquals(6, context.contents().size());
+    Assertions.assertEquals(7, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
+    Assertions.assertEquals(((TextBasedContent)turboSetting).text, (TextExpectation.onCSharp().read("xoom-turbo")));
   }
 
   @Test
@@ -56,7 +59,7 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
     final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
@@ -81,7 +84,7 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
     final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
     Assertions.assertTrue(commandModelStateStoreProvider.contains(TextExpectation.onCSharp().read("command-model-state-store-provider")));
     Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
@@ -105,7 +108,7 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     final Content authorRegisteredAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorRegisteredAdapter");
     final Content commandModelJournalProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelJournalProvider");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorRegisteredAdapter.contains(TextExpectation.onCSharp().read("author-registered-adapter")));
     Assertions.assertTrue(commandModelJournalProvider.contains(TextExpectation.onCSharp().read("command-model-journal-provider")));
   }
@@ -131,7 +134,7 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
     final Content commandModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelStateStoreProvider");
     final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
 
-    Assertions.assertEquals(9, context.contents().size());
+    Assertions.assertEquals(10, context.contents().size());
     Assertions.assertTrue(authorStateAdapter.contains(TextExpectation.onCSharp().read("author-state-adapter")));
     Assertions.assertTrue(authorQueries.contains(TextExpectation.onCSharp().read("author-queries")));
     Assertions.assertTrue(authorQueriesActor.contains(TextExpectation.onCSharp().read("author-queries-actor")));

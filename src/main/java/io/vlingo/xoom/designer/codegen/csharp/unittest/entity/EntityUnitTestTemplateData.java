@@ -53,7 +53,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
     final String stateName = CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregate.value);
 
     final String packageName = ContentQuery
-        .findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, "I" + aggregate.value, contents)
+        .findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, AggregateDetail.resolveProtocolNameFor(aggregate), contents)
         .replace(basePackage, basePackage + ".Tests");
 
     final TestDataValueGenerator.TestDataValues initialTestDataValues = TestDataValueGenerator.with(aggregate, valueObjects).generate();
@@ -71,7 +71,7 @@ public class EntityUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.ENTITY_CREATION_METHOD, AuxiliaryEntityCreation.METHOD_NAME)
         .and(TemplateParameter.AGGREGATE_PROTOCOL_VARIABLE, formatter.simpleNameToAttribute(aggregate.value))
         .and(TemplateParameter.ENTITY_UNIT_TEST_NAME, CsharpTemplateStandard.ENTITY_UNIT_TEST.resolveClassname(entityName))
-        .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, "I" + aggregate.value)
+        .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, AggregateDetail.resolveProtocolNameFor(aggregate))
         .and(TemplateParameter.ENTITY_NAME, entityName)
         .and(TemplateParameter.STATE_NAME, stateName)
         .and(TemplateParameter.ADAPTER_NAME, CsharpTemplateStandard.ADAPTER.resolveClassname(stateName))

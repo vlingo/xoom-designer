@@ -21,23 +21,22 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PersistenceSetupTemplateDataTest extends CodeGenerationTest {
 
   @Test
   public void testWithAdaptersAndProjections() {
     final List<TemplateData> allTemplatesData = StorageTemplateDataFactory.buildWithCqrs("Io.Vlingo.Xoomapp",
-        contents(), StorageType.STATE_STORE, ProjectionType.EVENT_BASED);
+        contents(), StorageType.STATE_STORE, ProjectionType.EVENT_BASED, "Xoomapp", databaseTypes());
 
     //General Assert
-    Assertions.assertEquals(8, allTemplatesData.size());
+    Assertions.assertEquals(9, allTemplatesData.size());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.QUERIES)).count());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.QUERIES_ACTOR)).count());
     Assertions.assertEquals(0, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.PERSISTENCE_SETUP)).count());
     Assertions.assertEquals(2, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.STORE_PROVIDER)).count());
+    Assertions.assertEquals(1, allTemplatesData.stream().filter(templateData -> templateData.hasStandard(CsharpTemplateStandard.TURBO_SETTINGS)).count());
 
     //Assert for Queries
     final TemplateData queriesTemplateData = allTemplatesData.stream()
@@ -87,7 +86,16 @@ public class PersistenceSetupTemplateDataTest extends CodeGenerationTest {
         Content.with(CsharpTemplateStandard.DATA_OBJECT, new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.cs"), null, null, BOOK_DATA_CONTENT_TEXT)
     );
   }
-  
+
+  private static final Map<Model, DatabaseType> databaseTypes() {
+    return new HashMap<Model, DatabaseType>() {
+      private static final long serialVersionUID = 1L;
+      {
+        put(Model.COMMAND, DatabaseType.IN_MEMORY);
+        put(Model.QUERY, DatabaseType.IN_MEMORY);
+      }};
+  }
+
   private static final String EXPECTED_PACKAGE = "Io.Vlingo.Xoomapp.Infrastructure.Persistence";
 
   private static final String PROJECT_PATH =

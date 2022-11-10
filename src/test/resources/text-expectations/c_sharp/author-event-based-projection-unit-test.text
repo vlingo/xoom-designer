@@ -47,8 +47,8 @@ public class AuthorProjectionTest
   [Fact]
   public void WithName()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
 
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(2);
@@ -82,8 +82,8 @@ public class AuthorProjectionTest
   [Fact]
   public void ChangeRank()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -106,8 +106,8 @@ public class AuthorProjectionTest
   [Fact]
   public void AddTag()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -130,8 +130,8 @@ public class AuthorProjectionTest
   [Fact]
   public void AddTags()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -154,8 +154,8 @@ public class AuthorProjectionTest
   [Fact]
   public void ReplaceTags()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -178,8 +178,8 @@ public class AuthorProjectionTest
   [Fact]
   public void RemoveTag()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -202,8 +202,8 @@ public class AuthorProjectionTest
   [Fact]
   public void RelateAuthor()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -226,8 +226,8 @@ public class AuthorProjectionTest
   [Fact]
   public void RelateAuthors()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -250,8 +250,8 @@ public class AuthorProjectionTest
   [Fact]
   public void UnrelateAuthor()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();
@@ -274,8 +274,8 @@ public class AuthorProjectionTest
   [Fact]
   public void ReplaceAllRelatedAuthors()
   {
-    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
-    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<String>());
+    var firstData = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
+    var secondData = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), DateTime.Now, new List<TagData>(), new HashSet<string>());
     RegisterExampleAuthor(firstData.ToAuthorState(), secondData.ToAuthorState());
 
     var control = new CountingProjectionControl();

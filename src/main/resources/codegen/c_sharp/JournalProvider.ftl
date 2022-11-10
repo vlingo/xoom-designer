@@ -10,7 +10,7 @@ using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.Journal;
 using Vlingo.Xoom.Turbo;
 using Vlingo.Xoom.Turbo.Actors;
-using Vlingo.Xoom.Turbo.Annotation.Codegen.Storage;
+using Vlingo.Xoom.Turbo.Annotation.Persistence;
 using Vlingo.Xoom.Turbo.Storage;
 using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
@@ -39,7 +39,7 @@ public class ${storeProviderName}
     entryAdapterProvider.RegisterAdapter(new ${entryAdapter.adapterClass}());
 </#list>
 
-    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.Journal, Settings.Properties, true);
+    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.Journal, Settings.Properties(), true);
 
 <#list aggregates as aggregate>
     registry.Register(new Info(journal, typeof(${aggregate}), nameof(${aggregate})));

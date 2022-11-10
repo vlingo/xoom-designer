@@ -19,12 +19,12 @@ public interface IAuthor
 
   ICompletes<AuthorState> Hide();
 
-  ICompletes<AuthorState> RelateAuthor(String relatedAuthor);
+  ICompletes<AuthorState> RelateAuthor(string relatedAuthor);
 
-  ICompletes<AuthorState> RelateAuthors(ISet<String> relatedAuthors);
+  ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors);
 
-  ICompletes<AuthorState> UnrelateAuthor(String relatedAuthor);
+  ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor);
 
-  ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<String> relatedAuthors);
+  ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors);
 
 }

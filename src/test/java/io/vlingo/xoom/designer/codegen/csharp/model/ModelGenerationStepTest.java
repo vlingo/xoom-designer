@@ -330,7 +330,7 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter availableOnField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "availableOn")
-            .relate(Label.FIELD_TYPE, "LocalDate");
+            .relate(Label.FIELD_TYPE, "DateTime");
 
     final CodeGenerationParameter relatedAuthors =
         CodeGenerationParameter.of(Label.STATE_FIELD, "relatedAuthors")
