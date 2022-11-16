@@ -2,6 +2,7 @@ using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
+using Vlingo.Xoom.Lattice.Model.Stateful;
 using Configuration = Vlingo.Xoom.Http.Resource.Configuration;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure;

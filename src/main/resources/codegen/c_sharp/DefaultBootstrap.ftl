@@ -2,6 +2,7 @@ using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
+using Vlingo.Xoom.Lattice.Model.Stateful;
 <#list imports as import>
 using ${import.qualifiedClassName};
 </#list>
