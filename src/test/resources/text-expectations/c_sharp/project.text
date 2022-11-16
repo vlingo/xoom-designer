@@ -19,8 +19,8 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="xoom-turbo.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="xoom-turbo.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>
