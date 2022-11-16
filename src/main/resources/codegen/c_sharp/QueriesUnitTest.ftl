@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store;
 using Vlingo.Xoom.Symbio.Store.Dispatch;
 using Vlingo.Xoom.Symbio.Store.State;
 using Vlingo.Xoom.Symbio.Store.State.InMemory;
@@ -19,10 +21,12 @@ public class ${queriesUnitTestName}
 {
   private readonly IStateStore _stateStore;
   private readonly ${queriesName} _queries;
+  private readonly IWriteResultInterest _interest;
 
   public ${queriesUnitTestName}()
   {
     var world = World.StartWithDefaults("test-state-store-query");
+    _interest = new NoOpWriterInterest();
     _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
     StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(${dataObjectName}));
     _queries = world.ActorFor<${queriesName}>(typeof(${queriesActorName}), _stateStore);
@@ -59,4 +63,12 @@ public class ${queriesUnitTestName}
     Assert.Equal("", result.Id);
   }
 
+}
+
+public class NoOpWriterInterest : IWriteResultInterest
+{
+  public void WriteResultedIn<TState, TSource>(IOutcome<StorageException, Result> outcome, string id, TState state, int stateVersion, IEnumerable<TSource> sources,
+    object? @object)
+  {
+  }
 }

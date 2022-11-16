@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<String>> {
 
   private static final String LIST_ADD_ASSIGNMENT = "%s.AddRange(%s);";
+  private static final String SET_ADD_ASSIGNMENT = "%s = new HashSet<%s>(%s);";
   private static final String MEMBER_ASSIGMENT = "%s = %s;";
 
   @Override
@@ -29,6 +30,10 @@ public class DefaultConstructorMembersAssignment extends Formatters.Fields<List<
       final CollectionMutation collectionMutation = field.retrieveRelatedValue(Label.COLLECTION_MUTATION, CollectionMutation::withName);
 
       if(FieldDetail.isCollection(field) && !collectionMutation.isSingleParameterBased()) {
+        if (FieldDetail.isSetTypedCollection(field)) {
+          final String fieldType = FieldDetail.isScalarTypedCollection(field) ? toCamelCase(field.retrieveRelatedValue(Label.FIELD_TYPE)) : field.retrieveRelatedValue(Label.FIELD_TYPE);
+          return String.format(SET_ADD_ASSIGNMENT, toPascalCase(field.value), fieldType, toCamelCase(field.value));
+        }
         return String.format(LIST_ADD_ASSIGNMENT, toPascalCase(field.value), toCamelCase(field.value));
       }
 

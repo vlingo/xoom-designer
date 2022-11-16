@@ -27,7 +27,7 @@ public class StorageTemplateDataFactory {
     templatesData.addAll(AdapterTemplateData.from(persistencePackage, storageType, contents));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage, storageType, projectionType,
         templatesData, contents, Model.applicableToDomain()));
-    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases, basePackage));
     return templatesData;
   }
 
@@ -40,7 +40,7 @@ public class StorageTemplateDataFactory {
     templatesData.addAll(QueriesTemplateDataFactory.from(persistencePackage, contents));
     templatesData.addAll(buildStoreProvidersTemplateData(persistencePackage, storageType, projectionType,
         templatesData, contents, Model.applicableToQueryAndCommand()));
-    templatesData.add(new DatabasePropertiesTemplateData(appName, databases));
+    templatesData.add(new DatabasePropertiesTemplateData(appName, databases, basePackage));
     return templatesData;
   }
 

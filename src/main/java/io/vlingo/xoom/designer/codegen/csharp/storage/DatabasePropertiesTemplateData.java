@@ -19,13 +19,12 @@ public class DatabasePropertiesTemplateData extends TemplateData {
 
   private final TemplateParameters templateParameters;
 
-  public DatabasePropertiesTemplateData(final String appName, final Map<Model, DatabaseType> databases) {
-    this.templateParameters = loadParameters(appName, databases);
+  public DatabasePropertiesTemplateData(final String appName, final Map<Model, DatabaseType> databases, final String packageName) {
+    this.templateParameters = loadParameters(appName, databases, packageName);
   }
 
-  private TemplateParameters loadParameters(final String appName, final Map<Model, DatabaseType> databases) {
-    final TemplateParameters parameters = TemplateParameters.with(TemplateParameter.RESOURCE_FILE, true)
-        .and(TemplateParameter.PRODUCTION_CODE, false);
+  private TemplateParameters loadParameters(final String appName, final Map<Model, DatabaseType> databases, final String packageName) {
+    final TemplateParameters parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName);
 
     databases.forEach((key, value) -> {
       final TemplateParameter parameter = key.isQueryModel() ? TemplateParameter.QUERY_DATABASE_PARAMETER : TemplateParameter.DEFAULT_DATABASE_PARAMETER;

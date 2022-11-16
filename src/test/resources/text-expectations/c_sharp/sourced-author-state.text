@@ -20,7 +20,7 @@ public sealed class AuthorState
     Id = id;
     Name = name;
     Rank.AddRange(rank);
-    RelatedAuthors.AddRange(relatedAuthors);
+    RelatedAuthors = new HashSet<string>(relatedAuthors);
     AvailableOn = availableOn;
   }
 

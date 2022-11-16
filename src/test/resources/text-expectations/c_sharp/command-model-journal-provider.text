@@ -33,7 +33,7 @@ public class CommandModelJournalProvider
 
     entryAdapterProvider.RegisterAdapter(new AuthorRegisteredAdapter());
 
-    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher, StorageType.Journal, Settings.Properties(), true);
+    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher, StorageType.Journal, Settings.Properties, true);
 
 
     return new CommandModelJournalProvider(journal);

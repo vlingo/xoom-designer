@@ -50,7 +50,7 @@ public class ${storeProviderName}
 </#list>
 
     var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher,
-      StorageType.StateStore, Settings.Properties(), true);
+      StorageType.StateStore, Settings.Properties, true);
 <#if requireAdapters>
 <#list adapters as stateAdapter>
     registry.Register(new Info(store, typeof(${stateAdapter.sourceClass}), nameof(${stateAdapter.sourceClass})));
