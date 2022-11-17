@@ -2,7 +2,13 @@
 	"plugin": {
 		"name": {
 			"queueMailbox": true,
-			"consoleLogger": true
+			"consoleLogger": true,
+			"pooledCompletes": true
+		},
+		"pooledCompletes": {
+			"classname" : "Vlingo.Xoom.Actors.Plugin.Completes.PooledCompletesPlugin",
+			"pool" : 10,
+			"mailbox" : "queueMailbox"
 		},
 		"queueMailbox": {
 			"classname": "Vlingo.Xoom.Actors.Plugin.Mailbox.ConcurrentQueue.ConcurrentQueueMailboxPlugin",
