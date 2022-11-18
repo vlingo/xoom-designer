@@ -11,12 +11,14 @@ namespace ${packageName};
 
 public class ${dataValueObjectName} : IEquatable<${dataValueObjectName}>
 {
-
   <#list members as member>
   ${member}
   </#list>
 
-  <#list staticFactoryMethods as factoryMethod>
+  public ${dataValueObjectName}()
+  {}
+
+<#list staticFactoryMethods as factoryMethod>
   public static ${factoryMethod.dataObjectName} From(${factoryMethod.parameters})
   {
     <#if factoryMethod.singleArgumentName?has_content>

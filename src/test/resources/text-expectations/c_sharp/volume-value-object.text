@@ -4,7 +4,6 @@ namespace Io.Vlingo.Xoomapp.Model;
 
 public class Volume : IEquatable<Volume>
 {
-
   public int Number {get;}
   public DateTime PublicationDate {get;}
 

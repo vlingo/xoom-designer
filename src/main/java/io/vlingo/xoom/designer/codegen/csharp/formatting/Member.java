@@ -28,8 +28,8 @@ import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 
 public class Member extends Formatters.Fields<List<String>> {
 
-  private static final String FIELD_MEMBER_INSTANTIATION = "%s {get;} = %s;";
-  private static final String FIELD_MEMBER_DECLARATION = "%s {get;}";
+  protected String FIELD_MEMBER_INSTANTIATION = "%s {get;} = %s;";
+  protected String FIELD_MEMBER_DECLARATION = "%s {get;}";
   private final BiFunction<String, String, String> declarationResolver;
   private final String valueObjectTypeSuffix;
 

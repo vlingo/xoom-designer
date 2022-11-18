@@ -8,13 +8,16 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class AuthorData : IEquatable<AuthorData>
 {
-  public string Id {get;}
-  public NameData Name {get;}
-  public RankData Rank {get;}
-  public PricingData Pricing {get;}
-  public boolean Status {get;}
-  public List<BookIdData> BookIds {get;} = new List<BookIdData>();
-  public DateTime UpdatedOn {get;}
+  public string Id {get; set;}
+  public NameData Name {get; set;}
+  public RankData Rank {get; set;}
+  public PricingData Pricing {get; set;}
+  public boolean Status {get; set;}
+  public List<BookIdData> BookIds {get; set;} = new List<BookIdData>();
+  public DateTime UpdatedOn {get; set;}
+
+  public AuthorData()
+  {}
 
   public static AuthorData From(AuthorState authorState)
   {
