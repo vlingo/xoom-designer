@@ -89,7 +89,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter statusField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "status")
-            .relate(Label.FIELD_TYPE, "boolean");
+            .relate(Label.FIELD_TYPE, "bool");
 
     final CodeGenerationParameter bookIds =
         CodeGenerationParameter.of(Label.STATE_FIELD, "bookIds")
@@ -124,7 +124,7 @@ public class DataObjectGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter statusField =
         CodeGenerationParameter.of(Label.STATE_FIELD, "status")
-            .relate(Label.FIELD_TYPE, "boolean");
+            .relate(Label.FIELD_TYPE, "bool");
 
     final CodeGenerationParameter bookIds =
         CodeGenerationParameter.of(Label.STATE_FIELD, "bookIds")

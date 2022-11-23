@@ -11,7 +11,7 @@ public class AuthorData : IEquatable<AuthorData>
   public string Id {get; set;}
   public NameData Name {get; set;}
   public RankData Rank {get; set;}
-  public boolean Status {get; set;}
+  public bool Status {get; set;}
   public List<int> BookIds {get; set;} = new List<int>();
   public DateTime UpdatedOn {get; set;}
 
@@ -26,7 +26,7 @@ public class AuthorData : IEquatable<AuthorData>
     return From(authorState.Id, name, rank, authorState.Status, bookIds, authorState.UpdatedOn);
   }
 
-  public static AuthorData From(string id, NameData name, RankData rank, boolean status, List<int> bookIds, DateTime updatedOn)
+  public static AuthorData From(string id, NameData name, RankData rank, bool status, List<int> bookIds, DateTime updatedOn)
   {
     return new AuthorData(id, name, rank, status, bookIds, updatedOn);
   }
@@ -35,7 +35,7 @@ public class AuthorData : IEquatable<AuthorData>
 
   public static AuthorData Empty => From(AuthorState.IdentifiedBy(""));
 
-  private AuthorData(string id, NameData name, RankData rank, boolean status, List<int> bookIds, DateTime updatedOn)
+  private AuthorData(string id, NameData name, RankData rank, bool status, List<int> bookIds, DateTime updatedOn)
   {
     Id = id;
     Name = name;

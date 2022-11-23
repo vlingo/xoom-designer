@@ -203,7 +203,7 @@ public class FieldDetail {
   }
 
   public static boolean isBoolean(final String fieldType) {
-    return fieldType.equalsIgnoreCase(Boolean.class.getSimpleName());
+    return fieldType.equalsIgnoreCase(Boolean.class.getSimpleName()) || fieldType.equalsIgnoreCase("bool");
   }
 
   public static boolean isString(final String fieldType) {
