@@ -130,10 +130,12 @@ public class StorageGenerationStepTest extends CodeGenerationTest {
 
     final Content authorRegisteredAdapter = context.findContent(CsharpTemplateStandard.ADAPTER, "AuthorRegisteredAdapter");
     final Content commandModelJournalProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "CommandModelJournalProvider");
+    final Content queryModelStateStoreProvider = context.findContent(CsharpTemplateStandard.STORE_PROVIDER, "QueryModelStateStoreProvider");
 
     Assertions.assertEquals(15, context.contents().size());
     Assertions.assertTrue(authorRegisteredAdapter.contains(TextExpectation.onCSharp().read("author-registered-adapter")));
     Assertions.assertTrue(commandModelJournalProvider.contains(TextExpectation.onCSharp().read("command-model-journal-provider")));
+    Assertions.assertTrue(queryModelStateStoreProvider.contains(TextExpectation.onCSharp().read("query-model-state-store-provider")));
   }
 
   @Test
