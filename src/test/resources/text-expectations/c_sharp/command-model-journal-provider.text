@@ -35,6 +35,8 @@ public class CommandModelJournalProvider
 
     var journal = StoreActorBuilder.From<IJournal<string>>(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"),
       dispatcher, StorageType.Journal, Settings.Properties, true);
+    registry.Register(Info.RegisterSourced<BookEntity>(journal));
+    registry.Register(Info.RegisterSourced<AuthorEntity>(journal));
 
     return new CommandModelJournalProvider(journal);
   }

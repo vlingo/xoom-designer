@@ -57,7 +57,7 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
     Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(TemplateParameter.PACKAGE_NAME));
     Assertions.assertEquals(Model.DOMAIN, storeProviderParameters.find(TemplateParameter.MODEL));
     Assertions.assertEquals("JournalProvider", storeProviderParameters.find(TemplateParameter.STORE_PROVIDER_NAME));
-    Assertions.assertEquals(3, storeProviderParameters.<Set<ImportParameter>>find(TemplateParameter.IMPORTS).size());
+    Assertions.assertEquals(1, storeProviderParameters.<Set<ImportParameter>>find(TemplateParameter.IMPORTS).size());
     Assertions.assertTrue(storeProviderParameters.hasImport("Io.vlingo.Xoomapp.Model.Book"));
     Assertions.assertEquals("BookRented", storeProviderParameters.<List<Adapter>>find(TemplateParameter.ADAPTERS).get(0).getSourceClass());
     Assertions.assertEquals("BookRentedAdapter", storeProviderParameters.<List<Adapter>>find(TemplateParameter.ADAPTERS).get(0).getAdapterClass());
