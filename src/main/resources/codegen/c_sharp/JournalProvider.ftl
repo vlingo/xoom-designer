@@ -39,8 +39,8 @@ public class ${storeProviderName}
     entryAdapterProvider.RegisterAdapter(new ${entryAdapter.adapterClass}());
 </#list>
 
-    var journal = StoreActorBuilder.From(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"), dispatcher, StorageType.Journal, Settings.Properties, true);
-
+    var journal = StoreActorBuilder.From<IJournal<string>>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"),
+      dispatcher, StorageType.Journal, Settings.Properties, true);
 <#list aggregates as aggregate>
     registry.Register(new Info(journal, typeof(${aggregate}), nameof(${aggregate})));
 </#list>

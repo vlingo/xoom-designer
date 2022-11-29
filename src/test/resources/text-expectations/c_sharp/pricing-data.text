@@ -7,9 +7,11 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class PricingData : IEquatable<PricingData>
 {
+  public RetailPriceData RetailPrice {get; set;}
+  public WholesalePriceData WholesalePrice {get; set;}
 
-  public RetailPriceData RetailPrice {get;}
-  public WholesalePriceData WholesalePrice {get;}
+  public PricingData()
+  {}
 
   public static PricingData From(Pricing pricing)
   {

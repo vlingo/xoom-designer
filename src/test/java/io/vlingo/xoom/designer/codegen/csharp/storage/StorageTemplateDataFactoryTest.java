@@ -99,7 +99,7 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
     Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(TemplateParameter.PACKAGE_NAME));
     Assertions.assertEquals(Model.DOMAIN, storeProviderParameters.find(TemplateParameter.MODEL));
     Assertions.assertEquals("StateStoreProvider", storeProviderParameters.find(TemplateParameter.STORE_PROVIDER_NAME));
-    Assertions.assertEquals(1, storeProviderParameters.<Set<ImportParameter>>find(TemplateParameter.IMPORTS).size());
+    Assertions.assertEquals(2, storeProviderParameters.<Set<ImportParameter>>find(TemplateParameter.IMPORTS).size());
     Assertions.assertTrue(storeProviderParameters.hasImport("Io.Vlingo.Xoomapp.Model.Author"));
     Assertions.assertEquals("BookState", storeProviderParameters.<List<Adapter>>find(TemplateParameter.ADAPTERS).get(0).getSourceClass());
     Assertions.assertEquals("BookStateAdapter", storeProviderParameters.<List<Adapter>>find(TemplateParameter.ADAPTERS).get(0).getAdapterClass());
@@ -145,7 +145,7 @@ public class StorageTemplateDataFactoryTest extends CodeGenerationTest {
       final TemplateData storeProviderTemplateData = storeProviders.get(modelClassificationIndex);
       final Model model = modelClassificationIndex == 0 ? Model.COMMAND : Model.QUERY;
       final TemplateParameters storeProviderParameters = storeProviderTemplateData.parameters();
-      final int expectedImports = modelClassificationIndex == 0 ? 1 : 0;
+      final int expectedImports = modelClassificationIndex == 0 ? 2 : 1;
       Assertions.assertEquals(EXPECTED_PACKAGE, storeProviderParameters.find(TemplateParameter.PACKAGE_NAME));
       Assertions.assertEquals(model, storeProviderParameters.find(TemplateParameter.MODEL));
       Assertions.assertEquals(model.title + "StateStoreProvider", storeProviderParameters.find(TemplateParameter.STORE_PROVIDER_NAME));

@@ -15,6 +15,9 @@ public class ${dataName} : IEquatable<${dataName}>
   ${member}
   </#list>
 
+  public ${dataName}()
+  {}
+
   <#list staticFactoryMethods as factoryMethod>
   public static ${factoryMethod.dataObjectName} From(${factoryMethod.parameters})
   {

@@ -16,6 +16,7 @@ public class QueryModelStateStoreProvider
 {
 
   public IStateStore Store { get; }
+  public IBookQueries IBookQueries {get;}
   public IAuthorQueries IAuthorQueries {get;}
 
   public static QueryModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
@@ -33,6 +34,7 @@ public class QueryModelStateStoreProvider
     new EntryAdapterProvider(stage.World); // future use
 
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorData), typeof(AuthorData));
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(BookData), typeof(BookData));
 
     var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("QUERY"), dispatcher,
       StorageType.StateStore, Settings.Properties, true);
@@ -43,6 +45,7 @@ public class QueryModelStateStoreProvider
   private QueryModelStateStoreProvider(Stage stage, IStateStore store)
   {
     Store = store;
+    IBookQueries = stage.ActorFor<IBookQueries>(typeof(BookQueriesActor), store);
     IAuthorQueries = stage.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), store);
     ComponentRegistry.Register<QueryModelStateStoreProvider>(this);
   }

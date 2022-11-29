@@ -6,7 +6,6 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.csharp.dataobject;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.dialect.Dialect;
@@ -19,7 +18,6 @@ import io.vlingo.xoom.designer.codegen.csharp.StaticFactoryMethod;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.function.Function;
@@ -42,7 +40,6 @@ public class ValueDataObjectTemplateData extends TemplateData {
 
   private ValueDataObjectTemplateData(final String packageName, final Dialect dialect, final CodeGenerationParameter valueObject,
                                       final List<CodeGenerationParameter> valueObjects, final List<Content> contents) {
-    final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
     final String emptyObjectArguments = ValueObjectDetail.resolveEmptyObjectArguments(valueObject);
     final List<String> valueObjectTranslations = Formatters.Variables
         .format(Formatters.Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, dialect, valueObject, valueObjects.stream());

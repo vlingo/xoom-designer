@@ -7,10 +7,13 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class BookData : IEquatable<BookData>
 {
-  public string Id {get;}
-  public string Title {get;}
-  public string Publisher {get;}
-  public DateTime PublicationDate {get;}
+  public string Id {get; set;}
+  public string Title {get; set;}
+  public string Publisher {get; set;}
+  public DateTime PublicationDate {get; set;}
+
+  public BookData()
+  {}
 
   public static BookData From(BookState bookState)
   {

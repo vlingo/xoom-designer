@@ -7,8 +7,10 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class ClassifierData : IEquatable<ClassifierData>
 {
+  public string Name {get; set;}
 
-  public string Name {get;}
+  public ClassifierData()
+  {}
 
   public static ClassifierData From(Classifier classifier)
   {

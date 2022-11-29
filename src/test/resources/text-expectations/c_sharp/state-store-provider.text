@@ -13,21 +13,21 @@ using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
 namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 
-public class CommandModelStateStoreProvider
+public class StateStoreProvider
 {
 
   public IStateStore Store { get; }
 
-  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
+  public static StateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
   {
     return Using(stage, registry, new NoOpDispatcher());
   }
 
-  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher dispatcher)
+  public static StateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher dispatcher)
   {
-    if (ComponentRegistry.Has<CommandModelStateStoreProvider>())
+    if (ComponentRegistry.Has<StateStoreProvider>())
     {
-      return ComponentRegistry.WithType<CommandModelStateStoreProvider>();
+      return ComponentRegistry.WithType<StateStoreProvider>();
     }
 
     var stateAdapterProvider = new StateAdapterProvider(stage.World);
@@ -39,17 +39,17 @@ public class CommandModelStateStoreProvider
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(BookState), typeof(BookState));
     StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorState), typeof(AuthorState));
 
-    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher,
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("DOMAIN"), dispatcher,
       StorageType.StateStore, Settings.Properties, true);
     registry.Register(new Info(store, typeof(BookState), nameof(BookState)));
     registry.Register(new Info(store, typeof(AuthorState), nameof(AuthorState)));
 
-    return new CommandModelStateStoreProvider(stage, store);
+    return new StateStoreProvider(stage, store);
   }
 
-  private CommandModelStateStoreProvider(Stage stage, IStateStore store)
+  private StateStoreProvider(Stage stage, IStateStore store)
   {
     Store = store;
-    ComponentRegistry.Register<CommandModelStateStoreProvider>(this);
+    ComponentRegistry.Register<StateStoreProvider>(this);
   }
 }

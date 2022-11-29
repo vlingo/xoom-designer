@@ -7,9 +7,11 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class RankData : IEquatable<RankData>
 {
+  public int Points {get; set;}
+  public ClassificationData Classification {get; set;}
 
-  public int Points {get;}
-  public ClassificationData Classification {get;}
+  public RankData()
+  {}
 
   public static RankData From(Rank rank)
   {

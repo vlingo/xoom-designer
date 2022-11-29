@@ -100,7 +100,7 @@ public class Formatters {
         new HashMap<Style, Function<Dialect, Fields<?>>>() {{
           put(Style.ASSIGNMENT, lang -> new DefaultConstructorMembersAssignment());
           put(Style.MEMBER_DECLARATION, Member::new);
-          put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new Member(lang, DATA_OBJECT_NAME_SUFFIX));
+          put(Style.DATA_OBJECT_MEMBER_DECLARATION, lang -> new DataMember(lang, DATA_OBJECT_NAME_SUFFIX));
           put(Style.DATA_VALUE_OBJECT_ASSIGNMENT, lang -> new DataObjectConstructorAssignment());
           put(Style.SELF_ALTERNATE_REFERENCE, lang -> AlternateReference.handlingSelfReferencedFields());
           put(Style.ALTERNATE_REFERENCE_WITH_DEFAULT_VALUE, lang -> AlternateReference.handlingDefaultFieldsValue());

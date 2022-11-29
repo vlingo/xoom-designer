@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum StorageType {
@@ -60,7 +61,8 @@ public enum StorageType {
 
   public Set<String> resolveAdaptersQualifiedName(final Model model, final List<Content> contents) {
     if (requireAdapters(model)) {
-      return Collections.singleton(ContentQuery.findPackage(adapterSourceClassStandard, contents));
+      return ContentQuery.findClassNames(adapterSourceClassStandard, contents)
+          .stream().map(className-> ContentQuery.findPackage(adapterSourceClassStandard, className, contents)).collect(Collectors.toSet());
     }
     return Collections.emptySet();
   }

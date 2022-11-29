@@ -7,9 +7,11 @@ namespace Io.Vlingo.Xoomapp.Infrastructure;
 
 public class ClassificationData : IEquatable<ClassificationData>
 {
+  public string Label {get; set;}
+  public ISet<ClassifierData> Classifier {get; set;} = new HashSet<ClassifierData>();
 
-  public string Label {get;}
-  public ISet<ClassifierData> Classifier {get;} = new HashSet<ClassifierData>();
+  public ClassificationData()
+  {}
 
   public static ClassificationData From(Classification classification)
   {
