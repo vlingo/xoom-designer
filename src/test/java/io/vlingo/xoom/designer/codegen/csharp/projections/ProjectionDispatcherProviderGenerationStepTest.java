@@ -485,11 +485,6 @@ public class ProjectionDispatcherProviderGenerationStepTest extends CodeGenerati
             .relate(Label.FIELD_TYPE, "String"));
   }
 
-  private CodeGenerationParameters codeGenerationParameters() {
-    return aggregates().add(nameValueObject()).add(rankValueObject())
-        .add(classificationValueObject()).add(classifierValueObject());
-  }
-
   private static final String HOME_DIRECTORY = OperatingSystem.detect().isWindows() ? "D:\\projects" : "/home";
   private static final String PROJECT_PATH = Paths.get(HOME_DIRECTORY, "xoom-app").toString();
   private static final String MODEL_PACKAGE_PATH =
