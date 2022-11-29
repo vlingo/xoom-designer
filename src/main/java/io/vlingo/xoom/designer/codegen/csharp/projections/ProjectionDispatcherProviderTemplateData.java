@@ -6,15 +6,12 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen.csharp.projections;
 
-import io.vlingo.xoom.codegen.content.CodeElementFormatter;
 import io.vlingo.xoom.codegen.content.Content;
 import io.vlingo.xoom.codegen.content.ContentQuery;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
-import io.vlingo.xoom.designer.codegen.csharp.ProjectionSourceTypesDetail;
-import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -57,23 +54,9 @@ public class ProjectionDispatcherProviderTemplateData extends TemplateData {
 
   private Set<String> resolveImports(final String basePackage, final ProjectionType projectionType,
                                      final List<Content> contents) {
-    final Set<String> domainEventsPackages = ContentQuery.findClassNames(CsharpTemplateStandard.DOMAIN_EVENT, contents)
+    return ContentQuery.findClassNames(CsharpTemplateStandard.DOMAIN_EVENT, contents)
         .stream().map(className -> ContentQuery.findPackage(CsharpTemplateStandard.DOMAIN_EVENT, className, contents))
         .collect(Collectors.toSet());
-
-    if (projectionType.isOperationBased()) {
-      final CodeElementFormatter codeElementFormatter = ComponentRegistry.withName("cSharpCodeFormatter");
-
-      final String projectionSourceTypesQualifiedName =
-          ProjectionSourceTypesDetail.resolveQualifiedName(basePackage, projectionType);
-
-      final String allSourceTypes =
-          codeElementFormatter.packageOf(projectionSourceTypesQualifiedName);
-      System.err.println(allSourceTypes);
-      return domainEventsPackages;
-    }
-
-    return domainEventsPackages;
   }
 
   @Override
