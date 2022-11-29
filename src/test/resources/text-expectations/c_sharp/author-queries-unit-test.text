@@ -95,12 +95,11 @@ public class AuthorQueriesTest
     Assert.Equal("", result.Id);
   }
 
-}
-
-public class NoOpWriterInterest : IWriteResultInterest
-{
-  public void WriteResultedIn<TState, TSource>(IOutcome<StorageException, Result> outcome, string id, TState state, int stateVersion, IEnumerable<TSource> sources,
-    object? @object)
+  private class NoOpWriterInterest : IWriteResultInterest
   {
+    public void WriteResultedIn<TState, TSource>(IOutcome<StorageException, Result> outcome, string id, TState state, int stateVersion, IEnumerable<TSource> sources,
+      object? @object)
+    {
+    }
   }
 }
