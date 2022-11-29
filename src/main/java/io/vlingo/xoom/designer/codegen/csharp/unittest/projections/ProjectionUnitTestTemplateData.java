@@ -55,7 +55,7 @@ public class ProjectionUnitTestTemplateData extends TemplateData {
         .and(TemplateParameter.TEST_CASES, TestCase.from(aggregate, valueObjects, projectionType))
         .and(TemplateParameter.PROJECTION_TYPE, projectionType)
         .addImport(resolveImport(CsharpTemplateStandard.DATA_OBJECT, contents))
-        .addImport(resolveImport(CsharpTemplateStandard.AGGREGATE_STATE, contents))
+        .addImport(ContentQuery.findPackage(CsharpTemplateStandard.AGGREGATE_STATE, aggregateState, contents))
         .addImport(resolveImport(CsharpTemplateStandard.PROJECTION, contents))
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true);
