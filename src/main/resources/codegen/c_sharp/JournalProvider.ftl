@@ -42,7 +42,7 @@ public class ${storeProviderName}
     var journal = StoreActorBuilder.From<IJournal<string>>(stage, new Vlingo.Xoom.Turbo.Storage.Model("${model}"),
       dispatcher, StorageType.Journal, Settings.Properties, true);
 <#list aggregates as aggregate>
-    registry.Register(new Info(journal, typeof(${aggregate}), nameof(${aggregate})));
+    registry.Register(Info.RegisterSourced<${aggregate}>(journal));
 </#list>
 
     return new ${storeProviderName}(journal);
