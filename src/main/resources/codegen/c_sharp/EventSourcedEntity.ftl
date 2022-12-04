@@ -2,33 +2,29 @@ using System;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model;
 using Vlingo.Xoom.Lattice.Model.Sourcing;
-using Vlingo.Xoom.Turbo.Scooter.Model.Sourced;
 
 namespace ${packageName};
 
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
  */
-public sealed class ${entityName} : SourcedEntity<DomainEvent>, I${aggregateProtocolName}
+public sealed class ${entityName} : EventSourced, ${aggregateProtocolName}
 {
   private static ${stateName} _state;
 
-  public ${entityName}(${idType} id)
+  public ${entityName}(${idType} id) : base(id)
   {
     _state = ${stateName}.IdentifiedBy(id);
-  }
 
   <#if sourcedEvents?has_content>
-  static ${entityName}()
-  {
-    <#list sourcedEvents as sourcedEvent>
-    RegisterConsumer<${entityName}, ${sourcedEvent}>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+  <#list sourcedEvents as sourcedEvent>
+    RegisterConsumer(delegate(${sourcedEvent} source)
     {
-      Apply${sourcedEvent}(source as ${sourcedEvent});
+      Apply${sourcedEvent}(source);
     });
-    </#list>
-  }
+  </#list>
   </#if>
+  }
   <#if !useCQRS>
 
   /*
@@ -81,8 +77,4 @@ public sealed class ${entityName} : SourcedEntity<DomainEvent>, I${aggregateProt
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
     return null;
   }
-
-  public override string Id() => StreamName();
-
-  protected override string StreamName() => null;
 }

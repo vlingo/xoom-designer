@@ -2,47 +2,43 @@ using System;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model;
 using Vlingo.Xoom.Lattice.Model.Sourcing;
-using Vlingo.Xoom.Turbo.Scooter.Model.Sourced;
 
 namespace Io.Vlingo.Xoomapp.Model.Author;
 
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
  */
-public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
+public sealed class AuthorEntity : EventSourced, IAuthor
 {
   private static AuthorState _state;
 
-  public AuthorEntity(string id)
+  public AuthorEntity(string id) : base(id)
   {
     _state = AuthorState.IdentifiedBy(id);
-  }
 
-  static AuthorEntity()
-  {
-    RegisterConsumer<AuthorEntity, AuthorRegistered>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRegistered source)
     {
-      ApplyAuthorRegistered(source as AuthorRegistered);
+      ApplyAuthorRegistered(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorRanked>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRanked source)
     {
-      ApplyAuthorRanked(source as AuthorRanked);
+      ApplyAuthorRanked(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRelated source)
     {
-      ApplyAuthorRelated(source as AuthorRelated);
+      ApplyAuthorRelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorsRelated source)
     {
-      ApplyAuthorsRelated(source as AuthorsRelated);
+      ApplyAuthorsRelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorUnrelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorUnrelated source)
     {
-      ApplyAuthorUnrelated(source as AuthorUnrelated);
+      ApplyAuthorUnrelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorsRelated source)
     {
-      ApplyAuthorsRelated(source as AuthorsRelated);
+      ApplyAuthorsRelated(source);
     });
   }
 
@@ -151,8 +147,4 @@ public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
     return null;
   }
-
-  public override string Id() => StreamName();
-
-  protected override string StreamName() => null;
 }

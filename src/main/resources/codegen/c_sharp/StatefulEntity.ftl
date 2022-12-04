@@ -7,7 +7,7 @@ namespace ${packageName};
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateful">StatefulEntity</a>
  */
-public sealed class ${entityName} : StatefulEntity<${stateName}>, I${aggregateProtocolName}
+public sealed class ${entityName} : StatefulEntity<${stateName}>, ${aggregateProtocolName}
 {
   private ${stateName} _state;
 
