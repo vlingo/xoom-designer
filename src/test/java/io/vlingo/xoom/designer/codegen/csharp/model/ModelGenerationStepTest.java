@@ -110,7 +110,7 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol-for-single-model")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("operation-based-stateful-single-model-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("stateful-author-state")));
-    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
+    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered-with-value-object")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked-with-value-object")));
     Assertions.assertTrue(authorRelated.contains(TextExpectation.onCSharp().read("author-related")));
     Assertions.assertTrue(authorsRelated.contains(TextExpectation.onCSharp().read("authors-related")));
@@ -146,7 +146,7 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
     Assertions.assertTrue(authorProtocol.contains(TextExpectation.onCSharp().read("author-protocol-for-single-model-with-cqrs")));
     Assertions.assertTrue(authorEntity.contains(TextExpectation.onCSharp().read("sourced-single-model-author-entity")));
     Assertions.assertTrue(authorState.contains(TextExpectation.onCSharp().read("sourced-author-state")));
-    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered")));
+    Assertions.assertTrue(authorRegistered.contains(TextExpectation.onCSharp().read("author-registered-with-value-object")));
     Assertions.assertTrue(authorRanked.contains(TextExpectation.onCSharp().read("author-ranked-with-value-object")));
   }
 
@@ -170,7 +170,8 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter authorRegisteredEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "Id"));
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "Id"))
+            .relate(nameField);
 
     final CodeGenerationParameter authorRankedEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")
@@ -339,7 +340,8 @@ public class ModelGenerationStepTest extends CodeGenerationTest {
 
     final CodeGenerationParameter authorRegisteredEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRegistered")
-            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"));
+            .relate(CodeGenerationParameter.of(Label.STATE_FIELD, "id"))
+            .relate(nameField);
 
     final CodeGenerationParameter authorRankedEvent =
         CodeGenerationParameter.of(Label.DOMAIN_EVENT, "AuthorRanked")

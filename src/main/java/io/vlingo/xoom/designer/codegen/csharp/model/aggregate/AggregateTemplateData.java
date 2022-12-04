@@ -45,7 +45,7 @@ public class AggregateTemplateData extends TemplateData {
         .and(TemplateParameter.STORAGE_TYPE, storageType)
         .and(TemplateParameter.USE_CQRS, useCQRS);
 
-    this.dependOn(AggregateMethodTemplateData.from(parameters, aggregate));
+    this.dependOn(AggregateMethodTemplateData.from(parameters, aggregate, storageType));
   }
 
   private Set<String>  resolveImports(final CodeGenerationParameter aggregate, final String basePackage,
