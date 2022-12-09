@@ -54,7 +54,7 @@ public class AuthorProjectionTest
     var access = control.AfterCompleting(2);
     _projection.ProjectWith(CreateAuthorRegistered(firstData.ToAuthorState()), control);
     _projection.ProjectWith(CreateAuthorRegistered(secondData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(2, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -89,7 +89,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorRanked(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -113,7 +113,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorTagged(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -137,7 +137,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorBulkTagged(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -161,7 +161,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorTagsReplacedEvent(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -185,7 +185,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorUntagged(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -209,7 +209,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorRelated(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -233,7 +233,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorsRelated(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -257,7 +257,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateAuthorUnrelated(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -281,7 +281,7 @@ public class AuthorProjectionTest
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(CreateRelatedAuthorsReplacedEvent(firstData.ToAuthorState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -295,8 +295,8 @@ public class AuthorProjectionTest
     Assert.NotNull(item.RelatedAuthors);
   }
 
-  private int ValueOfProjectionIdFor(string valueText, Dictionary<string, int> confirmations) =>
-      confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
+  private int ValueOfProjectionIdFor(string valueText, IDictionary<string, int> confirmations) =>
+      ((ConcurrentDictionary<string, int>) confirmations).GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
 
   private IProjectable CreateAuthorRegistered(AuthorState data)
   {

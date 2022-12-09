@@ -54,7 +54,7 @@ public class BookProjectionTest
     var access = control.AfterCompleting(2);
     _projection.ProjectWith(CreateBookCreated(firstData.ToBookState()), control);
     _projection.ProjectWith(CreateBookCreated(secondData.ToBookState()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(2, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
@@ -79,8 +79,8 @@ public class BookProjectionTest
     Assert.Equal("second-data-publisher", item.Publisher);
   }
 
-  private int ValueOfProjectionIdFor(string valueText, Dictionary<string, int> confirmations) =>
-      confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
+  private int ValueOfProjectionIdFor(string valueText, IDictionary<string, int> confirmations) =>
+      ((ConcurrentDictionary<string, int>) confirmations).GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
 
   private IProjectable CreateBookCreated(BookState data)
   {
