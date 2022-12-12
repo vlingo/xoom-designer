@@ -43,7 +43,7 @@ namespace ${packageName};
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
     Assert.Equal(1, ValueOfProjectionIdFor(secondData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<${dataObjectName}>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);
@@ -51,7 +51,7 @@ namespace ${packageName};
 
 <#macro factoryMethodTestAssertion>
 
-    interest = new CountingReadResultInterest();
+    interest = new CountingReadResultInterest<${dataObjectName}>();
     interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(secondData.Id, interest);
     item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", secondData.Id);
@@ -71,7 +71,7 @@ namespace ${packageName};
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<${dataObjectName}>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);

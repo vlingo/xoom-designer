@@ -60,7 +60,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
     Assert.Equal(1, ValueOfProjectionIdFor(secondData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -69,7 +69,7 @@ public class AuthorProjectionTest
     Assert.Equal("first-data-name-first-name", item.Name.FirstName);
     Assert.Equal("first-data-name-last-name", item.Name.LastName);
 
-    interest = new CountingReadResultInterest();
+    interest = new CountingReadResultInterest<AuthorData>();
     interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(secondData.Id, interest);
     item = interestAccess.ReadFrom<string, AuthorData>("item", secondData.Id);
@@ -94,7 +94,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -118,7 +118,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -142,7 +142,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -166,7 +166,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -190,7 +190,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -214,7 +214,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -238,7 +238,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -262,7 +262,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);
@@ -286,7 +286,7 @@ public class AuthorProjectionTest
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<AuthorData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<AuthorData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, AuthorData>("item", firstData.Id);

@@ -60,7 +60,7 @@ public class BookProjectionTest
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
     Assert.Equal(1, ValueOfProjectionIdFor(secondData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<BookData>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<BookData>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, BookData>("item", firstData.Id);
@@ -69,7 +69,7 @@ public class BookProjectionTest
     Assert.Equal("first-data-title", item.Title);
     Assert.Equal("first-data-publisher", item.Publisher);
 
-    interest = new CountingReadResultInterest();
+    interest = new CountingReadResultInterest<BookData>();
     interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<BookData>(secondData.Id, interest);
     item = interestAccess.ReadFrom<string, BookData>("item", secondData.Id);
