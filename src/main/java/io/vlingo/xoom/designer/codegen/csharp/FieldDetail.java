@@ -11,7 +11,6 @@ import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.CollectionMutation;
 import io.vlingo.xoom.designer.codegen.Label;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
@@ -112,13 +111,17 @@ public class FieldDetail {
     return isValueObjectCollection(field) && collectionMutation.isSingleParameterBased();
   }
 
+  public static boolean isAssignableToValueObject(final CodeGenerationParameter field) {
+    return isMethodParameterAssignableToValueObject(field, field);
+  }
+
   public static String resolveCollectionType(final CodeGenerationParameter field) {
     if (!field.hasAny(Label.COLLECTION_TYPE)) {
       throw new UnsupportedOperationException(field.value + " is not a Collection");
     }
     final String fieldType = field.retrieveRelatedValue(Label.FIELD_TYPE);
     final String collectionType = field.retrieveRelatedValue(Label.COLLECTION_TYPE);
-    final String genericsType = StringUtils.capitalize(resolveWrapperType(fieldType));
+    final String genericsType = FieldDetail.isValueObjectCollection(field) ? resolveWrapperType(fieldType) : toCamelCase(fieldType);
     if (collectionType.contains("Set"))
       return String.format("I%s<%s>", collectionType, genericsType);
     else
@@ -160,6 +163,10 @@ public class FieldDetail {
     return isCollection(field) && !isValueObjectCollection(field);
   }
 
+  public static boolean isSetTypedCollection(final CodeGenerationParameter field) {
+    return isCollection(field) && field.retrieveRelatedValue(Label.COLLECTION_TYPE).equalsIgnoreCase("Set");
+  }
+
   public static boolean isCollection(final String fieldType) {
     return isList(fieldType) || isSet(fieldType);
   }
@@ -175,7 +182,7 @@ public class FieldDetail {
 
   public static String resolveImportForType(final CodeGenerationParameter field) {
     final String key = field.retrieveRelatedValue(Label.FIELD_TYPE);
-    return CodeGenerationProperties.SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
+    return CodeGenerationProperties.CSHARP_SPECIAL_TYPES_IMPORTS.getOrDefault(key, "");
   }
 
   public static boolean isDateTime(final CodeGenerationParameter field) {
@@ -196,7 +203,7 @@ public class FieldDetail {
   }
 
   public static boolean isBoolean(final String fieldType) {
-    return fieldType.equalsIgnoreCase(Boolean.class.getSimpleName());
+    return fieldType.equalsIgnoreCase(Boolean.class.getSimpleName()) || fieldType.equalsIgnoreCase("bool");
   }
 
   public static boolean isString(final String fieldType) {
@@ -247,7 +254,7 @@ public class FieldDetail {
     return sb.toString();
   }
 
-  private static String resolveStateFieldType(CodeGenerationParameter stateField) {
+  private static String resolveStateFieldType(final CodeGenerationParameter stateField) {
     final String fieldType = stateField.retrieveRelatedValue(Label.FIELD_TYPE);
     if (isCollection(stateField)) return resolveCollectionType(stateField);
     if (ValueObjectDetail.isValueObject(stateField) || isDateTime(stateField)) return fieldType;

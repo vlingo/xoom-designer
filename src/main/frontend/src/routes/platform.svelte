@@ -1,7 +1,7 @@
 <script>
-  import { Switch, Radio } from "svelte-materialify/src";
+  import {Radio, Switch} from "svelte-materialify/src";
   import CardForm from "../components/CardForm.svelte";
-  import { settings } from "../stores";
+  import {settings} from "../stores";
 
   const platforms = [
     {
@@ -39,8 +39,8 @@
           ],
           xoomVersions: [
             {
-              name: "1.9.3 (Stable)",
-              value: "1.9.3",
+              name: "1.9.4 (Stable)",
+              value: "1.9.4",
             },
           ],
         },

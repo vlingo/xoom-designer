@@ -11,14 +11,16 @@ import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 
 public class MockDispatcherTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public MockDispatcherTemplateData(final String basePackage) {
+  public MockDispatcherTemplateData(final String basePackage, final ProjectionType projectionType) {
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, MockDispatcherDetail.resolvePackage(basePackage))
         .and(TemplateParameter.DISPATCHER_NAME, CsharpTemplateStandard.MOCK_DISPATCHER.resolveClassname())
+        .and(TemplateParameter.PROJECTION_TYPE, projectionType)
         .and(TemplateParameter.PRODUCTION_CODE, false)
         .and(TemplateParameter.UNIT_TEST, true);
   }

@@ -1,0 +1,68 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class PricingData : IEquatable<PricingData>
+{
+  public RetailPriceData RetailPrice {get; set;}
+  public WholesalePriceData WholesalePrice {get; set;}
+
+  public PricingData()
+  {}
+
+  public static PricingData From(Pricing pricing)
+  {
+    if (pricing == null)
+      return PricingData.Empty;
+    else
+    {
+      var retailPrice = pricing.RetailPrice != null ? RetailPriceData.From(pricing.RetailPrice) : null;
+      var wholesalePrice = pricing.WholesalePrice != null ? WholesalePriceData.From(pricing.WholesalePrice) : null;
+      return From(retailPrice, wholesalePrice);
+    }
+  }
+
+  public static PricingData From(RetailPriceData retailPrice, WholesalePriceData wholesalePrice)
+  {
+    return new PricingData(retailPrice, wholesalePrice);
+  }
+
+  public static ISet<PricingData> FromAll(ISet<Pricing> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<PricingData>() : correspondingObjects.Select(From).ToHashSet();
+  }
+
+  public static List<PricingData> FromAll(List<Pricing> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<PricingData>() : correspondingObjects.Select(From).ToList();
+  }
+
+  private PricingData(RetailPriceData retailPrice, WholesalePriceData wholesalePrice)
+  {
+    RetailPrice = retailPrice;
+    WholesalePrice = wholesalePrice;
+  }
+
+  public Pricing ToPricing()
+  {
+    var retailPrice = RetailPrice.From(Money.From(this.RetailPrice.Price.Amount));
+    var wholesalePrice = WholesalePrice.From(Money.From(this.WholesalePrice.Price.Amount));
+    return Pricing.From(retailPrice, wholesalePrice);
+  }
+
+  public static PricingData Empty => new PricingData(null, null);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (PricingData) obj;
+    return RetailPrice == otherData.RetailPrice && WholesalePrice == otherData.WholesalePrice;
+  }
+
+  public bool Equals(PricingData other) => RetailPrice == other.RetailPrice && WholesalePrice == other.WholesalePrice;
+  public override int GetHashCode() => HashCode.Combine(RetailPrice, WholesalePrice);
+}

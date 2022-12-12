@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+using Io.Vlingo.Xoomapp.Model.Book;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
+
+public class BookProjectionTest
+{
+
+  private readonly World _world;
+  private readonly IStateStore _stateStore;
+  private readonly IProjection _projection;
+  private readonly ConcurrentDictionary<string, string> _valueToProjectionId;
+
+  public BookProjectionTest()
+  {
+    _world = World.StartWithDefaults("test-state-store-projection");
+    var dispatcher = new NoOpDispatcher();
+    _valueToProjectionId = new ConcurrentDictionary<string, string>();
+    _stateStore =_world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), dispatcher);
+    var statefulTypeRegistry = StatefulTypeRegistry.RegisterAll(_world, _stateStore, typeof(BookData));
+    QueryModelStateStoreProvider.Using(_world.Stage, statefulTypeRegistry);
+    _projection = _world.ActorFor<IProjection>(typeof(BookProjectionActor), _stateStore);
+  }
+
+  private void RegisterExampleBook(BookState firstData, BookState secondData)
+  {
+    var control = new CountingProjectionControl();
+    var access = control.AfterCompleting(2);
+    _projection.ProjectWith(CreateBookCreated(firstData), control);
+    _projection.ProjectWith(CreateBookCreated(secondData), control);
+  }
+
+  [Fact]
+  public void WithName()
+  {
+    var firstData = BookData.From("1", "first-data-title", "first-data-publisher");
+    var secondData = BookData.From("2", "second-data-title", "second-data-publisher");
+
+    var control = new CountingProjectionControl();
+    var access = control.AfterCompleting(2);
+    _projection.ProjectWith(CreateBookCreated(firstData.ToBookState()), control);
+    _projection.ProjectWith(CreateBookCreated(secondData.ToBookState()), control);
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
+
+    Assert.Equal(2, confirmations.Count);
+    Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
+    Assert.Equal(1, ValueOfProjectionIdFor(secondData.Id, confirmations));
+
+    var interest = new CountingReadResultInterest<BookData>();
+    var interestAccess = interest.AfterCompleting(1);
+    _stateStore.Read<BookData>(firstData.Id, interest);
+    var item = interestAccess.ReadFrom<string, BookData>("item", firstData.Id);
+
+    Assert.Equal("1", item.Id);
+    Assert.Equal("first-data-title", item.Title);
+    Assert.Equal("first-data-publisher", item.Publisher);
+
+    interest = new CountingReadResultInterest<BookData>();
+    interestAccess = interest.AfterCompleting(1);
+    _stateStore.Read<BookData>(secondData.Id, interest);
+    item = interestAccess.ReadFrom<string, BookData>("item", secondData.Id);
+    Assert.Equal(secondData.Id, item.Id);
+    Assert.Equal("2", item.Id);
+    Assert.Equal("second-data-title", item.Title);
+    Assert.Equal("second-data-publisher", item.Publisher);
+  }
+
+  private int ValueOfProjectionIdFor(string valueText, IDictionary<string, int> confirmations) =>
+      ((ConcurrentDictionary<string, int>) confirmations).GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
+
+  private IProjectable CreateBookCreated(BookState data)
+  {
+    var eventData = new BookCreated(data.Id, data.Title, data.Publisher);
+
+    var textEntry = new TextEntry(typeof(BookCreated), 1, JsonSerialization.Serialized(eventData), 1, Metadata.WithObject(eventData));
+
+    var projectionId = Guid.NewGuid().ToString();
+    _valueToProjectionId.TryAdd(data.Id, projectionId);
+
+    return new TextProjectable(null, new[] { textEntry }, projectionId);
+  }
+
+}

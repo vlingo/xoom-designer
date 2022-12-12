@@ -25,7 +25,7 @@ public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
     return Apply(_state.WithName(name), () => _state);
   }
 
-  public ICompletes<AuthorState> ChangeRank(List<Double> rank)
+  public ICompletes<AuthorState> ChangeRank(List<double> rank)
   {
     return Apply(_state.ChangeRank(rank), () => _state);
   }

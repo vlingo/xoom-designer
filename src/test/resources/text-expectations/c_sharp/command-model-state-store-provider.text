@@ -1,0 +1,55 @@
+using Io.Vlingo.Xoomapp.Model.Book;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+using Vlingo.Xoom.Turbo.Actors;
+using Vlingo.Xoom.Turbo.Annotation.Persistence;
+using Vlingo.Xoom.Turbo.Storage;
+using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public class CommandModelStateStoreProvider
+{
+
+  public IStateStore Store { get; }
+
+  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry)
+  {
+    return Using(stage, registry, new NoOpDispatcher());
+  }
+
+  public static CommandModelStateStoreProvider Using(Stage stage, StatefulTypeRegistry registry, IDispatcher dispatcher)
+  {
+    if (ComponentRegistry.Has<CommandModelStateStoreProvider>())
+    {
+      return ComponentRegistry.WithType<CommandModelStateStoreProvider>();
+    }
+
+    var stateAdapterProvider = new StateAdapterProvider(stage.World);
+    stateAdapterProvider.RegisterAdapter(new BookStateAdapter());
+    stateAdapterProvider.RegisterAdapter(new AuthorStateAdapter());
+
+    new EntryAdapterProvider(stage.World); // future use
+
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(BookState), typeof(BookState));
+    StateTypeStateStoreMap.StateTypeToStoreName(nameof(AuthorState), typeof(AuthorState));
+
+    var store = StoreActorBuilder.From<IStateStore>(stage, new Vlingo.Xoom.Turbo.Storage.Model("COMMAND"), dispatcher,
+      StorageType.StateStore, Settings.Properties, true);
+    registry.Register(new Info(store, typeof(BookState), nameof(BookState)));
+    registry.Register(new Info(store, typeof(AuthorState), nameof(AuthorState)));
+
+    return new CommandModelStateStoreProvider(stage, store);
+  }
+
+  private CommandModelStateStoreProvider(Stage stage, IStateStore store)
+  {
+    Store = store;
+    ComponentRegistry.Register<CommandModelStateStoreProvider>(this);
+  }
+}

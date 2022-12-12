@@ -22,6 +22,7 @@ import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 
 public class AggregateDetail {
   private final static String ID_VALUE = "id";
+  private static final String PROTOCOL_INITIAL = "I%s";
 
   public static String resolvePackage(final String basePackage, final String aggregateProtocolName) {
     return String.format("%s.%s.%s", basePackage, "Model", aggregateProtocolName);
@@ -36,28 +37,20 @@ public class AggregateDetail {
     return findMethod(aggregate, methodName).orElseThrow(() -> new IllegalArgumentException("Method " + methodName + " not found"));
   }
 
-  public static List<String> resolveFieldsPaths(final String variableName,
-                                                final Stream<CodeGenerationParameter> aggregateFields,
+  public static List<String> resolveFieldsPaths(final String variableName, final Stream<CodeGenerationParameter> aggregateFields,
                                                 final List<CodeGenerationParameter> valueObjects) {
     final List<String> paths = new ArrayList<>();
     aggregateFields.forEach(field -> resolveFieldPath(variableName, field, valueObjects, paths));
     return paths;
   }
 
-  public static String stateFieldType(final CodeGenerationParameter aggregate, final String fieldPath) {
-    return stateFieldAtPath(1, aggregate, fieldPath.split("\\."));
-  }
-
-  public static String stateFieldType(final CodeGenerationParameter aggregate,
-                                      final String fieldPath,
+  public static String stateFieldType(final CodeGenerationParameter aggregate, final String fieldPath,
                                       final List<CodeGenerationParameter> valueObjects) {
     return stateFieldAtPath(1, aggregate, fieldPath.split("\\."), valueObjects);
   }
 
-  private static String stateFieldAtPath(final int pathIndex,
-                                         final CodeGenerationParameter parent,
-                                         final String[] fieldPathParts,
-                                         final List<CodeGenerationParameter> valueObjects) {
+  private static String stateFieldAtPath(final int pathIndex, final CodeGenerationParameter parent,
+                                         final String[] fieldPathParts, final List<CodeGenerationParameter> valueObjects) {
     final String fieldName = fieldPathParts[pathIndex];
     final CodeGenerationParameter field = parent.isLabeled(Label.AGGREGATE) ? stateFieldWithName(parent, fieldName) :
             ValueObjectDetail.valueObjectFieldWithName(parent, fieldName);
@@ -74,13 +67,6 @@ public class AggregateDetail {
     return stateFieldAtPath(pathIndex + 1, valueObject, fieldPathParts, valueObjects);
   }
 
-  private static String stateFieldAtPath(final int pathIndex, final CodeGenerationParameter parent, final String[] fieldPathParts) {
-    final String fieldName = fieldPathParts[pathIndex];
-    final CodeGenerationParameter field = stateFieldWithName(parent, fieldName);
-
-    return field.hasAny(Label.COLLECTION_TYPE) ? FieldDetail.typeOf(parent, field.value) : field.retrieveRelatedValue(Label.FIELD_TYPE);
-  }
-
   public static Set<String> resolveImports(final CodeGenerationParameter aggregate) {
     return resolveImports(aggregate.retrieveAllRelated(Label.STATE_FIELD));
   }
@@ -89,10 +75,8 @@ public class AggregateDetail {
     return stateFields.map(FieldDetail::resolveImportForType).collect(Collectors.toSet());
   }
 
-  private static void resolveFieldPath(final String relativePath,
-                                       final CodeGenerationParameter field,
-                                       final List<CodeGenerationParameter> valueObjects,
-                                       final List<String> paths) {
+  private static void resolveFieldPath(final String relativePath, final CodeGenerationParameter field,
+                                       final List<CodeGenerationParameter> valueObjects, final List<String> paths) {
     final String currentRelativePath =
         relativePath.isEmpty() ? field.value : relativePath + "." + field.value;
 
@@ -141,5 +125,33 @@ public class AggregateDetail {
 
   public static String methodNameFrom(CodeGenerationParameter method) {
     return toPascalCase(method.value);
+  }
+
+  public static  String joinStateFields(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.STATE_FIELD)
+        .map(field -> {
+          if (FieldDetail.isValueObjectCollection(field))
+            return ValueObjectDetail.translateDataObjectCollection(field.value, field);
+          if(ValueObjectDetail.isValueObject(field))
+            return field.value;
+          return toPascalCase(field.value);
+        }).collect(Collectors.joining(", "));
+  }
+
+  public static boolean hasFactoryMethod(final CodeGenerationParameter aggregate) {
+    return aggregate.retrieveAllRelated(Label.AGGREGATE_METHOD)
+        .anyMatch(method -> method.retrieveRelatedValue(Label.FACTORY_METHOD, Boolean::valueOf));
+  }
+
+  public static CodeGenerationParameter eventWithName(final CodeGenerationParameter aggregate, final String eventName) {
+    if(eventName == null || eventName.isEmpty()) {
+      return CodeGenerationParameter.of(Label.DOMAIN_EVENT, "");
+    }
+    return aggregate.retrieveAllRelated(Label.DOMAIN_EVENT).filter(event -> event.value.equals(eventName))
+        .findFirst().orElseThrow(() -> new IllegalArgumentException("Event " + eventName + " not found"));
+  }
+
+  public static String resolveProtocolNameFor(final CodeGenerationParameter aggregate) {
+    return String.format(PROTOCOL_INITIAL, aggregate.value);
   }
 }

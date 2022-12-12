@@ -18,6 +18,8 @@ import io.vlingo.xoom.designer.codegen.csharp.model.aggregate.AggregateProtocolT
 import io.vlingo.xoom.designer.codegen.csharp.model.aggregate.AggregateStateTemplateData;
 import io.vlingo.xoom.designer.codegen.csharp.model.aggregate.AggregateTemplateData;
 import io.vlingo.xoom.designer.codegen.csharp.model.domainevent.DomainEventTemplateData;
+import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +33,21 @@ public class ModelTemplateDataFactory {
     final String basePackage = context.parameterOf(Label.PACKAGE);
     final Boolean useCQRS = context.parameterOf(Label.CQRS, Boolean::valueOf);
     final Dialect dialect = context.parameterOf(Label.DIALECT, Dialect::valueOf);
+    final StorageType storageType = context.parameterOf(Label.STORAGE_TYPE, StorageType::of);
+    final ProjectionType projectionType = context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::of);
     return context.parametersOf(Label.AGGREGATE).flatMap(aggregate -> {
       final String packageName = AggregateDetail.resolvePackage(basePackage, aggregate.value);
-      return loadTemplates(packageName, aggregate,dialect, contents, useCQRS);
+      return loadTemplates(packageName, aggregate, storageType, projectionType, dialect, contents, useCQRS);
     }).collect(Collectors.toList());
   }
 
   private static Stream<TemplateData> loadTemplates(final String packageName, final CodeGenerationParameter aggregateParameter,
+                                                    final StorageType storageType, final ProjectionType projectionType,
                                                     final Dialect dialect, final List<Content> contents, final Boolean useCQRS) {
     final List<TemplateData> templatesData = new ArrayList<>();
     templatesData.add(new AggregateProtocolTemplateData(packageName, aggregateParameter, contents, useCQRS));
-    templatesData.add(new AggregateTemplateData(packageName, aggregateParameter, useCQRS));
-    templatesData.add(new AggregateStateTemplateData(packageName, dialect, aggregateParameter, contents));
+    templatesData.add(new AggregateTemplateData(packageName, aggregateParameter, storageType, projectionType, useCQRS));
+    templatesData.add(new AggregateStateTemplateData(packageName, dialect, aggregateParameter, storageType, contents));
     templatesData.addAll(DomainEventTemplateData.from(packageName, dialect, aggregateParameter));
     return templatesData.stream();
   }

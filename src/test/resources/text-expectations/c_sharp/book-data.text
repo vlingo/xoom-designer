@@ -1,0 +1,56 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp.Model.Book;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class BookData : IEquatable<BookData>
+{
+  public string Id {get; set;}
+  public string Title {get; set;}
+  public string Publisher {get; set;}
+  public DateTime PublicationDate {get; set;}
+
+  public BookData()
+  {}
+
+  public static BookData From(BookState bookState)
+  {
+    return From(bookState.Id, bookState.Title, bookState.Publisher, bookState.PublicationDate);
+  }
+
+  public static BookData From(string id, string title, string publisher, DateTime publicationDate)
+  {
+    return new BookData(id, title, publisher, publicationDate);
+  }
+
+  public static List<BookData> FromAll(List<BookState> states) => states.Select(BookData.From).ToList();
+
+  public static BookData Empty => From(BookState.IdentifiedBy(""));
+
+  private BookData(string id, string title, string publisher, DateTime publicationDate)
+  {
+    Id = id;
+    Title = title;
+    Publisher = publisher;
+    PublicationDate = publicationDate;
+  }
+
+  public BookState ToBookState()
+  {
+    return new BookState(Id, Title, Publisher, PublicationDate);
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (BookData) obj;
+    return Id == otherData.Id && Title == otherData.Title && Publisher == otherData.Publisher && PublicationDate == otherData.PublicationDate;
+  }
+
+  public bool Equals(BookData other) => Id == other.Id && Title == other.Title && Publisher == other.Publisher && PublicationDate == other.PublicationDate;
+  public override int GetHashCode() => HashCode.Combine(Id, Title, Publisher, PublicationDate);
+
+}

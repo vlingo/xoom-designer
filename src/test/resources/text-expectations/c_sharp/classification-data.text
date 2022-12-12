@@ -1,0 +1,65 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp.Model;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class ClassificationData : IEquatable<ClassificationData>
+{
+  public string Label {get; set;}
+  public ISet<ClassifierData> Classifier {get; set;} = new HashSet<ClassifierData>();
+
+  public ClassificationData()
+  {}
+
+  public static ClassificationData From(Classification classification)
+  {
+    if (classification == null)
+      return ClassificationData.Empty;
+    else
+    {
+      var classifier = classification.Classifier != null ? classification.Classifier.Select(ClassifierData.From).ToHashSet() : new HashSet<ClassifierData>();
+      return From(classification.Label, classifier);
+    }
+  }
+
+  public static ClassificationData From(string label, ISet<ClassifierData> classifier)
+  {
+    return new ClassificationData(label, classifier);
+  }
+
+  public static ISet<ClassificationData> FromAll(ISet<Classification> correspondingObjects)
+  {
+    return correspondingObjects == null ? new HashSet<ClassificationData>() : correspondingObjects.Select(From).ToHashSet();
+  }
+
+  public static List<ClassificationData> FromAll(List<Classification> correspondingObjects)
+  {
+    return correspondingObjects == null ? new List<ClassificationData>() : correspondingObjects.Select(From).ToList();
+  }
+
+  private ClassificationData(string label, ISet<ClassifierData> classifier)
+  {
+    Label = label;
+    Classifier.AddRange(classifier);
+  }
+
+  public Classification ToClassification()
+  {
+    return Classification.From(Label, Classifier.Select(x => x.ToClassifier()).ToHashSet());
+  }
+
+  public static ClassificationData Empty => new ClassificationData(null, new HashSet<Classifier>());
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (ClassificationData) obj;
+    return Label == otherData.Label && Classifier == otherData.Classifier;
+  }
+
+  public bool Equals(ClassificationData other) => Label == other.Label && Classifier == other.Classifier;
+  public override int GetHashCode() => HashCode.Combine(Label, Classifier);
+}

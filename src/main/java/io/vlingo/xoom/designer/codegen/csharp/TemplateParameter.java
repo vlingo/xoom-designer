@@ -13,6 +13,7 @@ import static io.vlingo.xoom.codegen.template.TemplateParameters.PRODUCTION_CODE
 
 public enum TemplateParameter implements ParameterKey {
 
+  BASE_PACKAGE("basePackage"),
   PACKAGE_NAME("packageName"),
   APPLICATION_NAME("appName"),
   SDK_VERSION("sdkVersion"),
@@ -51,7 +52,41 @@ public enum TemplateParameter implements ParameterKey {
   AUXILIARY_ENTITY_CREATION("auxiliaryEntityCreation"),
   DATA_OBJECT_NAME("dataObjectName"),
   VALUE_OBJECT_NAME("valueObjectName"),
-  DATA_VALUE_OBJECT_NAME("dataValueObjectName");
+  DATA_VALUE_OBJECT_NAME("dataValueObjectName"),
+  MODEL("model"),
+  QUERY_BY_ID_METHOD_NAME("queryByIdMethodName"),
+  QUERY_ALL_METHOD_NAME("queryAllMethodName"),
+  REQUIRE_ADAPTERS("requireAdapters"),
+  USE_PROJECTIONS("useProjections"),
+  USE_ANNOTATIONS("useAnnotations"),
+  PROJECTION_TYPE("projectionType"),
+  ADAPTERS("adapters"),
+  PERSISTENT_TYPES("persistentTypes"),
+  STORE_PROVIDER_NAME("storeProviderName"),
+  QUERIES("queries"),
+  QUERIES_NAME("queriesName"),
+  QUERIES_ACTOR_NAME("queriesActorName"),
+  DATA_OBJECT_QUALIFIED_NAME("dataQualifiedName"),
+  VALUE_OBJECT_TRANSLATIONS("valueObjectTranslations"),
+  STATIC_FACTORY_METHODS("staticFactoryMethods"),
+  STATE_FIELDS("stateFields"),
+  VALUE_OBJECT_FIELDS("valueObjectFields"),
+  EMPTY_OBJECT_ARGUMENTS("emptyObjectArguments"),
+  PROJECTION_NAME("projectionName"),
+  PROJECTION_SOURCES("sources"),
+  PROJECTION_SOURCE_TYPES_NAME("projectionSourceTypesName"),
+  PROJECTION_SOURCE_TYPES_QUALIFIED_NAME("projectionSourceTypesQualifiedName"),
+  PROJECTION_TO_DESCRIPTION("projectToDescriptions"),
+  PROJECTION_UNIT_TEST_NAME("projectionUnitTestName"),
+  EVENT_SOURCED("eventSourced"),
+  EVENT_HANDLERS("eventHandlers"),
+  SOURCED_EVENTS("sourcedEvents"),
+  QUERIES_UNIT_TEST_NAME("queriesUnitTestName"),
+  DATA_OBJECTS("dataObjects"),
+  PROJECTIONS("projections"),
+  DEFAULT_DATABASE_PARAMETER("databaseParameter"),
+  QUERY_DATABASE_PARAMETER("queryDatabaseParameter"),
+  RESOURCE_FILE("resourceFile");
 
   public final String key;
 

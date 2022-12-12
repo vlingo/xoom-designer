@@ -9,8 +9,8 @@ package io.vlingo.xoom.designer.codegen.csharp.storage;
 
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
-import io.vlingo.xoom.designer.codegen.java.JavaTemplateStandard;
-import io.vlingo.xoom.designer.codegen.java.TemplateParameter;
+import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
+import io.vlingo.xoom.designer.codegen.csharp.TemplateParameter;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -34,17 +34,13 @@ public class Adapter {
   }
 
   public static List<Adapter> from(final List<TemplateData> templatesData) {
-    final Predicate<TemplateData> filter =
-            templateData -> templateData.hasStandard(JavaTemplateStandard.ADAPTER);
+    final Predicate<TemplateData> filter = templateData -> templateData.hasStandard(CsharpTemplateStandard.ADAPTER);
 
-    final List<TemplateData> adapterTemplates =
-            templatesData.stream().filter(filter).collect(Collectors.toList());
+    final List<TemplateData> adapterTemplates = templatesData.stream().filter(filter).collect(Collectors.toList());
 
-    return IntStream.range(0, adapterTemplates.size()).mapToObj(index -> {
-      final TemplateData templateData = adapterTemplates.get(index);
-      return new Adapter(index, adapterTemplates.size(),
-              templateData.parameters());
-    }).collect(Collectors.toList());
+    return IntStream.range(0, adapterTemplates.size())
+        .mapToObj(index -> new Adapter(index, adapterTemplates.size(), adapterTemplates.get(index).parameters()))
+        .collect(Collectors.toList());
   }
 
   public String getSourceClass() {

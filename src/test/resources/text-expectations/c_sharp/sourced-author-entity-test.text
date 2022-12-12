@@ -5,33 +5,45 @@ using Io.Vlingo.Xoomapp.Model.Author;
 using Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Vlingo.Xoom.Actors;
-using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Lattice.Model.Sourcing;
 using Vlingo.Xoom.Symbio;
-using Vlingo.Xoom.Symbio.Store.State.InMemory;
-using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store.Journal;
+using Vlingo.Xoom.Symbio.Store.Journal.InMemory;
 using Xunit;
 
 namespace Io.Vlingo.Xoomapp.Tests.Model.Author;
 
 public class AuthorEntityTest
 {
-  private readonly MockDispatcher _dispatcher;
-  private readonly IAuthor _author;
+
+  private readonly World _world;
+  private readonly IJournal<string> _journal;
+  private MockDispatcher _dispatcher;
+  private IAuthor _author;
 
   public AuthorEntityTest()
   {
+    _world = World.StartWithDefaults("test-es");
+
     _dispatcher = new MockDispatcher();
-    var world = World.StartWithDefaults("test-stateful");
-    new StateAdapterProvider(world).RegisterAdapter(new AuthorStateAdapter());
-    var store = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), _dispatcher);
-    new StatefulTypeRegistry(world).Register(new Info(store, typeof(AuthorState), typeof(AuthorState).FullName!));
-    _author = world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
+
+    EntryAdapterProvider entryAdapterProvider = EntryAdapterProvider.Instance(_world);
+
+    entryAdapterProvider.RegisterAdapter(new AuthorRegisteredAdapter());
+    entryAdapterProvider.RegisterAdapter(new AuthorRankedAdapter());
+    entryAdapterProvider.RegisterAdapter(new AuthorShortDescriptionChangedAdapter());
+
+    _journal = _world.ActorFor<IJournal<string>>(typeof(InMemoryJournalActor<string>), _dispatcher);
+
+    new SourcedTypeRegistry(_world).Register(Info.RegisterSourced(_journal, typeof(AuthorEntity)));
+
+    _author = _world.ActorFor<IAuthor>(typeof(AuthorEntity), "#1");
   }
 
   private static Name NAME_FOR_WITH_NAME_TEST = Name.From("author-name-first-name", "author-name-last-name");
   private static string SHORT_DESCRIPTION_FOR_WITH_NAME_TEST = "author-short-description";
 
-  [Fact]
+  [Fact()]
   public void WithName()
   {
     var dispatcherAccess = _dispatcher.AfterCompleting(1);
@@ -44,9 +56,9 @@ public class AuthorEntityTest
     Assert.Equal(state.GetType(), dispatcherAccess.ReadFrom<int, IState>("appendedStateAt", 0).Typed);
   }
 
-  private static List<Double> RANK_FOR_CHANGE_RANK_TEST = new List<Double>();
+  private static List<double> RANK_FOR_CHANGE_RANK_TEST = new List<double>();
 
-  [Fact]
+  [Fact()]
   public void ChangeRank()
   {
     _createEntity();
@@ -62,11 +74,12 @@ public class AuthorEntityTest
   }
 
 
-  [Fact]
+  [Fact(Skip)]
   public void Hide()
   {
-    _author.Hide().Await();
-
+    /**
+     * TODO: Unable to generate tests for method Hide. See {@link AuthorEntity#Hide()}
+     */
   }
 
   private static Name NAME_FOR_ENTITY_CREATION = Name.From("author-name-first-name", "author-name-last-name");

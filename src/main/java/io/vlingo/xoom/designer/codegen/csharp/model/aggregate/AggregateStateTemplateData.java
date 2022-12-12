@@ -15,6 +15,7 @@ import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.*;
 import io.vlingo.xoom.designer.codegen.csharp.formatting.Formatters;
+import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,11 @@ public class AggregateStateTemplateData extends TemplateData {
 
   @SuppressWarnings("unchecked")
   public AggregateStateTemplateData(final String packageName, final Dialect dialect,
-                                    final CodeGenerationParameter aggregate, final List<Content> contents) {
+                                    final CodeGenerationParameter aggregate, final StorageType storageType,
+                                    final List<Content> contents) {
     this.protocolName = aggregate.value;
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
+        .and(TemplateParameter.EVENT_SOURCED, storageType.isSourced())
         .and(TemplateParameter.MEMBERS, Formatters.Fields.format(Formatters.Fields.Style.MEMBER_DECLARATION, dialect, aggregate))
         .and(TemplateParameter.MEMBERS_ASSIGNMENT, Formatters.Fields.format(Formatters.Fields.Style.ASSIGNMENT, dialect, aggregate))
         .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, AggregateDetail.findIdField(aggregate).value))
@@ -40,7 +43,8 @@ public class AggregateStateTemplateData extends TemplateData {
         .and(TemplateParameter.MEMBER_NAMES, AggregateDetail.resolveStateFieldsNames(aggregate))
         .and(TemplateParameter.CONSTRUCTOR_PARAMETERS, Formatters.Arguments.SIGNATURE_DECLARATION.format(aggregate))
         .and(TemplateParameter.METHOD_INVOCATION_PARAMETERS, resolveIdBasedConstructorParameters(dialect, aggregate))
-        .and(TemplateParameter.METHODS, new ArrayList<String>());
+        .and(TemplateParameter.METHODS, new ArrayList<String>())
+        .and(TemplateParameter.STORAGE_TYPE, storageType);
 
     this.dependOn(AggregateStateMethodTemplateData.from(dialect, aggregate));
   }

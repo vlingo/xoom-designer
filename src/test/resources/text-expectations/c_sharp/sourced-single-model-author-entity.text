@@ -1,0 +1,150 @@
+using System;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Lattice.Model;
+using Vlingo.Xoom.Lattice.Model.Sourcing;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
+ */
+public sealed class AuthorEntity : EventSourced, IAuthor
+{
+  private static AuthorState _state;
+
+  public AuthorEntity(string id) : base(id)
+  {
+    _state = AuthorState.IdentifiedBy(id);
+
+    RegisterConsumer(delegate(AuthorRegistered source)
+    {
+      ApplyAuthorRegistered(source);
+    });
+    RegisterConsumer(delegate(AuthorRanked source)
+    {
+      ApplyAuthorRanked(source);
+    });
+    RegisterConsumer(delegate(AuthorRelated source)
+    {
+      ApplyAuthorRelated(source);
+    });
+    RegisterConsumer(delegate(AuthorsRelated source)
+    {
+      ApplyAuthorsRelated(source);
+    });
+    RegisterConsumer(delegate(AuthorUnrelated source)
+    {
+      ApplyAuthorUnrelated(source);
+    });
+    RegisterConsumer(delegate(AuthorsRelated source)
+    {
+      ApplyAuthorsRelated(source);
+    });
+  }
+
+    public ICompletes<AuthorState> WithName(Name name)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#WithName()}
+     */
+    return Apply(new AuthorRegistered(_state.Id, name), () => _state);
+  }
+
+    public ICompletes<AuthorState> ChangeRank(List<Rank> rank)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#ChangeRank()}
+     */
+    return Apply(new AuthorRanked(_state.Id, rank), () => _state);
+  }
+
+    public ICompletes<AuthorState> Hide()
+  {
+    /**
+     * TODO: Unable to generate method body because there is no associated Domain Event.
+     */
+    return Completes().WithFailure();
+  }
+
+    public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#RelateAuthor()}
+     */
+    return Apply(new AuthorRelated(_state.Id, relatedAuthor), () => _state);
+  }
+
+    public ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#RelateAuthors()}
+     */
+    return Apply(new AuthorsRelated(_state.Id, relatedAuthors), () => _state);
+  }
+
+    public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#UnrelateAuthor()}
+     */
+    return Apply(new AuthorUnrelated(_state.Id, relatedAuthor), () => _state);
+  }
+
+    public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors)
+  {
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#ReplaceAllRelatedAuthors()}
+     */
+    return Apply(new AuthorsRelated(_state.Id, relatedAuthors), () => _state);
+  }
+
+  private static void ApplyAuthorRegistered(AuthorRegistered @event)
+  {
+    _state = _state.WithName(@event.Name);
+  }
+
+  private static void ApplyAuthorRanked(AuthorRanked @event)
+  {
+    _state = _state.ChangeRank(@event.Rank);
+  }
+
+  private static void ApplyAuthorRelated(AuthorRelated @event)
+  {
+    _state = _state.RelateAuthor(@event.RelatedAuthor);
+  }
+
+  private static void ApplyAuthorsRelated(AuthorsRelated @event)
+  {
+    _state = _state.RelateAuthors(@event.RelatedAuthors);
+  }
+
+  private static void ApplyAuthorUnrelated(AuthorUnrelated @event)
+  {
+    _state = _state.UnrelateAuthor(@event.RelatedAuthor);
+  }
+
+  /*
+   * Restores my initial state by means of {@code state}.
+   *
+   * @param snapshot the {@code AuthorState} holding my state
+   * @param currentVersion the int value of my current version; may be helpful in determining if snapshot is needed
+   */
+  protected void RestoreSnapshot(AuthorState snapshot, int currentVersion)
+  {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+  }
+
+  /*
+   * Answer the valid {@code AuthorState} instance if a snapshot should
+   * be taken and persisted along with applied {@code Source<T>} instance(s).
+   *
+   * @return AuthorState
+   */
+  protected AuthorState Snapshot()
+  {
+    // OVERRIDE FOR SNAPSHOT SUPPORT
+    // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
+    return null;
+  }
+}

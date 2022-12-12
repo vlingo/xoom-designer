@@ -134,8 +134,12 @@ public class Configuration {
         new DesignerModelGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.model.ValueObjectGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.model.ModelGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.dataobject.DataObjectGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.storage.StorageGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.unittest.entity.EntityUnitTestGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.unittest.queries.QueriesUnitTestGenerationStep(),
+        new io.vlingo.xoom.designer.codegen.csharp.unittest.projections.ProjectionUnitTestGenerationStep(),
         new io.vlingo.xoom.designer.codegen.csharp.bootstrap.BootstrapGenerationStep(),
         // Concluding
         new ContentCreationStep(),

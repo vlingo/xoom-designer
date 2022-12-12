@@ -1,0 +1,28 @@
+using Io.Vlingo.Xoomapp.Infrastructure;
+using System.Collections.ObjectModel;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Lattice.Query;
+using Vlingo.Xoom.Symbio.Store.State;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#querying-a-statestore">Querying a StateStore</a>
+ */
+public class AuthorQueriesActor: StateStoreQueryActor<AuthorData>, IAuthorQueries
+{
+
+  public AuthorQueriesActor(IStateStore store) : base(store)
+  {
+  }
+
+  public ICompletes<AuthorData> AuthorOf(string id)
+  {
+    return QueryStateFor<AuthorData>(id, AuthorData.Empty, default, default);
+  }
+
+  public ICompletes<IEnumerable<AuthorData>> Authors()
+  {
+    return AllOf(new List<AuthorData>());
+  }
+}

@@ -13,10 +13,12 @@ public class AuthorRegistered : IdentifiedDomainEvent
 {
 
   public string Id {get;}
+  public string Name {get;}
 
-  public AuthorRegistered(string id) : base(SemanticVersion.From("1.0.0").ToValue())
+  public AuthorRegistered(string id, string name) : base(SemanticVersion.From("1.0.0").ToValue())
   {
     Id = id;
+    Name = name;
   }
 
   public override string Identity => Id;

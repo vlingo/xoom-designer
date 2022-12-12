@@ -1,0 +1,11 @@
+using Io.Vlingo.Xoomapp.Infrastructure;
+using System.Collections.ObjectModel;
+using Vlingo.Xoom.Common;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+public interface IAuthorQueries
+{
+  ICompletes<AuthorData> AuthorOf(string id);
+  ICompletes<IEnumerable<AuthorData>> Authors();
+}

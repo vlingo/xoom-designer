@@ -1,0 +1,28 @@
+using System;
+using Io.Vlingo.Xoomapp.Model.Author;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Symbio;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#entryadapter-and-entryadapterprovider">
+ *   EntryAdapter and EntryAdapterProvider
+ * </a>
+ */
+public class AuthorRegisteredAdapter : EntryAdapter
+{
+  public override ISource FromEntry(IEntry entry) => JsonSerialization.Deserialized<AuthorRegistered>(entry.EntryRawData);
+
+  public override IEntry ToEntry(ISource source, Metadata metadata) =>
+  new ObjectEntry<AuthorRegistered>(typeof(AuthorRegistered), 1, (AuthorRegistered) source, metadata);
+
+  public override IEntry ToEntry(ISource source, int version, Metadata metadata)
+  => new ObjectEntry<AuthorRegistered>(typeof(AuthorRegistered), 1, (AuthorRegistered) source, version, metadata);
+
+  public override IEntry ToEntry(ISource source, int version, string id, Metadata metadata)
+  => new ObjectEntry<AuthorRegistered>(id, typeof(AuthorRegistered), 1, (AuthorRegistered) source, version, metadata);
+
+  public override Type SourceType { get; }= typeof(AuthorRegistered);
+}

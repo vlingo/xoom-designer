@@ -2,7 +2,6 @@ namespace Io.Vlingo.Xoomapp.Model;
 
 public class Rank : IEquatable<Rank>
 {
-
   public int Points {get;}
   public string Classification {get;}
 

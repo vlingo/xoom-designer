@@ -1,0 +1,101 @@
+using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor : StateStoreProjectionActor<AuthorData>
+{
+
+  private static readonly AuthorData Empty = AuthorData.Empty;
+
+  public AuthorProjectionActor() : this(ComponentRegistry.WithType<QueryModelStateStoreProvider>().Store)
+  {
+  }
+
+  public AuthorProjectionActor(IStateStore stateStore) : base(stateStore)
+  {
+  }
+
+  protected AuthorData CurrentDataFor(IProjectable projectable)
+  {
+    return Empty;
+  }
+
+  protected AuthorData Merge(AuthorData previousData, int previousVersion, AuthorData currentData, int currentVersion)
+  {
+
+    if (previousVersion == currentVersion) return currentData;
+
+    var merged = previousData;
+
+    foreach (var @event in Sources) {
+      switch (Enum.Parse<Events>(nameof(@event)))
+      {
+        case Events.AuthorRegistered:
+        {
+          var typedEvent = Typed<AuthorRegistered>(@event);
+          var name = NameData.From(typedEvent.Name);
+          var rank = RankData.From(typedEvent.Rank);
+          currentData.Ranks.Add(rank);
+          merged = AuthorData.From(typedEvent.Id, name, currentData.Ranks, currentData.RelatedAuthors, typedEvent.AvailableOn);
+          break;
+        }
+
+        case Events.AuthorRanked:
+        {
+          var typedEvent = Typed<AuthorRanked>(@event);
+          var rank = RankData.From(typedEvent.Rank);
+          currentData.Ranks.Add(rank);
+          merged = AuthorData.From(typedEvent.Id, currentData.Name, currentData.Ranks, currentData.RelatedAuthors, currentData.AvailableOn);
+          break;
+        }
+
+        case Events.AuthorBulkRanked:
+        {
+          var typedEvent = Typed<AuthorBulkRanked>(@event);
+          merged = AuthorData.From(typedEvent.Id, currentData.Name, RankData.FromAll(typedEvent.Ranks), currentData.RelatedAuthors, currentData.AvailableOn);
+          break;
+        }
+
+        case Events.AuthorRelated:
+        {
+          var typedEvent = Typed<AuthorRelated>(@event);
+          currentData.RelatedAuthors.Add(typedEvent.RelatedAuthor);
+          merged = AuthorData.From(typedEvent.Id, currentData.Name, currentData.Ranks, currentData.RelatedAuthors, currentData.AvailableOn);
+          break;
+        }
+
+        case Events.AuthorsRelated:
+        {
+          var typedEvent = Typed<AuthorsRelated>(@event);
+          merged = AuthorData.From(typedEvent.Id, currentData.Name, currentData.Ranks, typedEvent.RelatedAuthors, currentData.AvailableOn);
+          break;
+        }
+
+        case Events.AuthorUnrelated:
+        {
+          var typedEvent = Typed<AuthorUnrelated>(@event);
+          currentData.RelatedAuthors.Remove(typedEvent.RelatedAuthor);
+          merged = AuthorData.From(typedEvent.Id, currentData.Name, currentData.Ranks, currentData.RelatedAuthors, currentData.AvailableOn);
+          break;
+        }
+
+        default:
+          Logger.Warn($"Event of type {nameof(@event)} was not matched.");
+          break;
+      }
+    }
+
+    return merged;
+  }
+}

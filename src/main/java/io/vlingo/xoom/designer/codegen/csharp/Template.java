@@ -28,7 +28,27 @@ public enum Template {
   STATE_ADAPTER("StateAdapter"),
   DEFAULT_BOOTSTRAP("DefaultBootstrap"),
   VALUE_OBJECT("ValueObject"),
-  STATE_DATA_OBJECT("StateDataObject");
+  STATE_DATA_OBJECT("StateDataObject"),
+  VALUE_DATA_OBJECT("ValueDataObject"),
+  STATE_STORE_PROVIDER("StateStoreProvider"),
+  JOURNAL_PROVIDER("JournalProvider"),
+  QUERIES("Queries"),
+  QUERIES_ACTOR("QueriesActor"),
+  PROJECTION_DISPATCHER_PROVIDER("ProjectionDispatcherProvider"),
+  PROJECTION_SOURCE_TYPES("ProjectionSourceTypes"),
+  OPERATION_BASED_PROJECTION("OperationBasedProjection"),
+  EVENT_BASED_PROJECTION("EventBasedProjection"),
+  NO_PROJECTION_UNIT_TEST("NoProjectionUnitTest"),
+  OPERATION_BASED_PROJECTION_UNIT_TEST("OperationBasedProjectionUnitTest"),
+  EVENT_BASED_PROJECTION_UNIT_TEST("EventBasedProjectionUnitTest"),
+  COUNTING_READ_RESULT("CountingReadResultInterest"),
+  COUNTING_PROJECTION_CTL("CountingProjectionControl"),
+  PERSISTENCE_SETUP("PersistenceSetup"),
+  ENTRY_ADAPTER("EntryAdapter"),
+  EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
+  EVENT_SOURCE_ENTITY("EventSourcedEntity"),
+  QUERIES_UNIT_TEST("QueriesUnitTest"),
+  TURBO_SETTINGS("TurboSettings"),;
 
   public final String filename;
 

@@ -5,26 +5,31 @@ namespace Io.Vlingo.Xoomapp.Model.Author;
 
 public interface IAuthor
 {
+  /// <summary>
+  /// Returns my current state.
+  /// </summary>
+  /// <returns>ICompletes<AuthorState></returns>
+  ICompletes<AuthorState> CurrentState();
 
-  ICompletes<AuthorState> WithName(string name, String relatedAuthor);
+  ICompletes<AuthorState> WithName(string name, string relatedAuthor);
 
-  static ICompletes<AuthorState> WithName(Stage stage, string name, String relatedAuthor)
+  static ICompletes<AuthorState> WithName(Stage stage, string name, string relatedAuthor)
   {
     var address = stage.AddressFactory.UniquePrefixedWith("g-");
     var author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(address.IdString)), address);
     return author.WithName(name, relatedAuthor);
   }
 
-  ICompletes<AuthorState> ChangeRank(List<Double> rank);
+  ICompletes<AuthorState> ChangeRank(List<double> rank);
 
   ICompletes<AuthorState> Hide();
 
-  ICompletes<AuthorState> RelateAuthor(String relatedAuthor);
+  ICompletes<AuthorState> RelateAuthor(string relatedAuthor);
 
-  ICompletes<AuthorState> RelateAuthors(List<String> relatedAuthors);
+  ICompletes<AuthorState> RelateAuthors(List<string> relatedAuthors);
 
-  ICompletes<AuthorState> UnrelateAuthor(String relatedAuthor);
+  ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor);
 
-  ICompletes<AuthorState> ReplaceAllRelatedAuthors(List<String> relatedAuthors);
+  ICompletes<AuthorState> ReplaceAllRelatedAuthors(List<string> relatedAuthors);
 
 }

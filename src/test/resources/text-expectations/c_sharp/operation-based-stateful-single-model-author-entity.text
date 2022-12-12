@@ -1,0 +1,65 @@
+using System;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#stateful">StatefulEntity</a>
+ */
+public sealed class AuthorEntity : StatefulEntity<AuthorState>, IAuthor
+{
+  private AuthorState _state;
+
+  public AuthorEntity(string id) : base(id)
+  {
+    _state = AuthorState.IdentifiedBy(id);
+  }
+
+  public ICompletes<AuthorState> CurrentState()
+  {
+    return Completes().With(_state);
+  }
+
+  public ICompletes<AuthorState> WithName(Name name)
+  {
+    return Apply(_state.WithName(name), () => _state);
+  }
+
+  public ICompletes<AuthorState> ChangeRank(List<Rank> rank)
+  {
+    return Apply(_state.ChangeRank(rank), () => _state);
+  }
+
+  public ICompletes<AuthorState> Hide()
+  {
+    return Apply(_state.Hide(), () => _state);
+  }
+
+  public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
+  {
+    return Apply(_state.RelateAuthor(relatedAuthor), () => _state);
+  }
+
+  public ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors)
+  {
+    return Apply(_state.RelateAuthors(relatedAuthors), () => _state);
+  }
+
+  public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
+  {
+    return Apply(_state.UnrelateAuthor(relatedAuthor), () => _state);
+  }
+
+  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors)
+  {
+    return Apply(_state.ReplaceAllRelatedAuthors(relatedAuthors), () => _state);
+  }
+
+  protected override void State(AuthorState state)
+  {
+    _state = state;
+  }
+
+  protected Type StateType() => typeof(AuthorState);
+}

@@ -1,0 +1,47 @@
+// Copyright © 2012-2022 VLINGO LABS. All rights reserved.
+//
+// This Source Code Form is subject to the terms of the
+// Mozilla Public License, v. 2.0. If a copy of the MPL
+// was not distributed with this file, You can obtain
+// one at https://mozilla.org/MPL/2.0/.
+package io.vlingo.xoom.designer.codegen.csharp.unittest.queries;
+
+import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
+import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
+import io.vlingo.xoom.codegen.template.TemplateData;
+import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.designer.codegen.Label;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class QueriesUnitTestGenerationStep extends TemplateProcessingStep {
+
+  @Override
+  protected List<TemplateData> buildTemplatesData(final CodeGenerationContext context) {
+    final String basePackage = context.parameterOf(Label.PACKAGE);
+    final List<CodeGenerationParameter> aggregates =
+            context.parametersOf(Label.AGGREGATE).collect(Collectors.toList());
+
+    final List<CodeGenerationParameter> valueObjects =
+            context.parametersOf(Label.VALUE_OBJECT).collect(Collectors.toList());
+
+    return QueriesUnitTestTemplateData.from(basePackage, context.contents(), aggregates, valueObjects);
+  }
+
+  @Override
+  public boolean shouldProcess(final CodeGenerationContext context) {
+    final Dialect dialect = resolveDialect(context);
+    return dialect.equals(Dialect.C_SHARP) && context.parameterOf(Label.CQRS, Boolean::valueOf);
+  }
+  @Override
+  protected Dialect resolveDialect(CodeGenerationContext context) {
+    final String dialectName = dialectNameFrom(context);
+    return dialectName.isEmpty() ? super.resolveDialect(context) : Dialect.withName(dialectName);
+  }
+
+  private String dialectNameFrom(CodeGenerationContext context) {
+    return context.parameterOf(Label.DIALECT);
+  }
+}

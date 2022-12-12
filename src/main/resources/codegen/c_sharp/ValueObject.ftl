@@ -1,8 +1,9 @@
+using System;
+
 namespace ${packageName};
 
 public class ${valueObjectName} : IEquatable<${valueObjectName}>
 {
-
   <#list members as member>
   ${member}
   </#list>

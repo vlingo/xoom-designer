@@ -1,0 +1,105 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Vlingo.Xoom.Symbio.Store;
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Symbio.Store.State.InMemory;
+using Vlingo.Xoom.Symbio;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Xunit;
+
+namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
+
+public class AuthorQueriesTest
+{
+  private readonly IStateStore _stateStore;
+  private readonly IAuthorQueries _queries;
+  private readonly IWriteResultInterest _interest;
+
+  public AuthorQueriesTest()
+  {
+    var world = World.StartWithDefaults("test-state-store-query");
+    _interest = new NoOpWriterInterest();
+    _stateStore = world.ActorFor<IStateStore>(typeof(InMemoryStateStoreActor<TextState>), new NoOpDispatcher());
+    StatefulTypeRegistry.RegisterAll(world, _stateStore, typeof(AuthorData));
+    _queries = world.ActorFor<IAuthorQueries>(typeof(AuthorQueriesActor), _stateStore);
+  }
+
+  private static AuthorData FIRST_QUERY_BY_ID_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_BY_ID_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+
+  [Fact]
+  public void QueryById()
+  {
+    _stateStore.Write("1", FIRST_QUERY_BY_ID_TEST_DATA, 1, _interest);
+    _stateStore.Write("2", SECOND_QUERY_BY_ID_TEST_DATA, 1, _interest);
+
+    var firstData = _queries.AuthorOf("1").Await();
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-name-first-name", firstData.Name.FirstName);
+    Assert.Equal("first-data-name-last-name", firstData.Name.LastName);
+    Assert.NotNull(firstData.Rank);
+    Assert.Equal(true, firstData.Status);
+    Assert.NotNull(firstData.AvailableOn);
+
+    var secondData = _queries.AuthorOf("2").Await();
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-name-first-name", secondData.Name.FirstName);
+    Assert.Equal("second-data-name-last-name", secondData.Name.LastName);
+    Assert.NotNull(secondData.Rank);
+    Assert.Equal(true, secondData.Status);
+    Assert.NotNull(secondData.AvailableOn);
+  }
+
+  private static AuthorData FIRST_QUERY_ALL_TEST_DATA = AuthorData.From("1", NameData.From("first-data-name-first-name", "first-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+  private static AuthorData SECOND_QUERY_ALL_TEST_DATA = AuthorData.From("2", NameData.From("second-data-name-first-name", "second-data-name-last-name"), new List<RankData>(), true, DateTime.Now);
+
+  [Fact]
+  public void QueryAll()
+  {
+    _stateStore.Write("1", FIRST_QUERY_ALL_TEST_DATA, 1, _interest);
+    _stateStore.Write("2", SECOND_QUERY_ALL_TEST_DATA, 1, _interest);
+
+    var results = _queries.Authors().Await();
+    var firstData = results.FirstOrDefault(data => data.Id.Equals("1"));
+
+    Assert.Equal("1", firstData.Id);
+    Assert.Equal("first-data-name-first-name", firstData.Name.FirstName);
+    Assert.Equal("first-data-name-last-name", firstData.Name.LastName);
+    Assert.NotNull(firstData.Rank);
+    Assert.Equal(true, firstData.Status);
+    Assert.NotNull(firstData.AvailableOn);
+
+    var secondData = results.FirstOrDefault(data => data.Id.Equals("2"));
+
+    Assert.Equal("2", secondData.Id);
+    Assert.Equal("second-data-name-first-name", secondData.Name.FirstName);
+    Assert.Equal("second-data-name-last-name", secondData.Name.LastName);
+    Assert.NotNull(secondData.Rank);
+    Assert.Equal(true, secondData.Status);
+    Assert.NotNull(secondData.AvailableOn);
+  }
+
+  [Fact]
+  public void AuthorOfEmptyResult()
+  {
+    var result = _queries.AuthorOf("1").Await();
+    Assert.Equal("", result.Id);
+  }
+
+  private class NoOpWriterInterest : IWriteResultInterest
+  {
+    public void WriteResultedIn<TState, TSource>(IOutcome<StorageException, Result> outcome, string id, TState state, int stateVersion, IEnumerable<TSource> sources,
+      object? @object)
+    {
+    }
+  }
+}

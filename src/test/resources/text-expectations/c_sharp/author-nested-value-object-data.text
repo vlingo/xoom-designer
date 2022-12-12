@@ -1,0 +1,72 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model.Author;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class AuthorData : IEquatable<AuthorData>
+{
+  public string Id {get; set;}
+  public NameData Name {get; set;}
+  public RankData Rank {get; set;}
+  public PricingData Pricing {get; set;}
+  public bool Status {get; set;}
+  public List<BookIdData> BookIds {get; set;} = new List<BookIdData>();
+  public DateTime UpdatedOn {get; set;}
+
+  public AuthorData()
+  {}
+
+  public static AuthorData From(AuthorState authorState)
+  {
+    var name = authorState.Name != null ? NameData.From(authorState.Name) : null;
+    var rank = authorState.Rank != null ? RankData.From(authorState.Rank) : null;
+    var pricing = authorState.Pricing != null ? PricingData.From(authorState.Pricing) : null;
+    var bookIds = authorState.BookIds != null ? authorState.BookIds.Select(BookIdData.From).ToList() : new List<BookIdData>();
+    return From(authorState.Id, name, rank, pricing, authorState.Status, bookIds, authorState.UpdatedOn);
+  }
+
+  public static AuthorData From(string id, NameData name, RankData rank, PricingData pricing, bool status, List<BookIdData> bookIds, DateTime updatedOn)
+  {
+    return new AuthorData(id, name, rank, pricing, status, bookIds, updatedOn);
+  }
+
+  public static List<AuthorData> FromAll(List<AuthorState> states) => states.Select(AuthorData.From).ToList();
+
+  public static AuthorData Empty => From(AuthorState.IdentifiedBy(""));
+
+  private AuthorData(string id, NameData name, RankData rank, PricingData pricing, bool status, List<BookIdData> bookIds, DateTime updatedOn)
+  {
+    Id = id;
+    Name = name;
+    Rank = rank;
+    Pricing = pricing;
+    Status = status;
+    BookIds.AddRange(bookIds);
+    UpdatedOn = updatedOn;
+  }
+
+  public AuthorState ToAuthorState()
+  {
+    var name = Name.From(this.Name.FirstName, this.Name.LastName);
+    var rank = Rank.From(this.Rank.Points, Classification.From(this.Rank.Label, this.Rank.Classifier));
+    var retailPrice = RetailPrice.From(Money.From(this.Pricing.RetailPrice.Price.Amount));
+    var wholesalePrice = WholesalePrice.From(Money.From(this.Pricing.WholesalePrice.Price.Amount));
+    var pricing = Pricing.From(retailPrice, wholesalePrice);
+    return new AuthorState(Id, name, rank, pricing, Status, BookIds.Select(x => x.ToBookId()).ToList(), UpdatedOn);
+  }
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherData = (AuthorData) obj;
+    return Id == otherData.Id && Name == otherData.Name && Rank == otherData.Rank && Pricing == otherData.Pricing && Status == otherData.Status && BookIds == otherData.BookIds && UpdatedOn == otherData.UpdatedOn;
+  }
+
+  public bool Equals(AuthorData other) => Id == other.Id && Name == other.Name && Rank == other.Rank && Pricing == other.Pricing && Status == other.Status && BookIds == other.BookIds && UpdatedOn == other.UpdatedOn;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, Pricing, Status, BookIds, UpdatedOn);
+
+}

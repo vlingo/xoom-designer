@@ -1,0 +1,86 @@
+using Io.Vlingo.Xoomapp.Model.Author;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Lattice.Model.Projection;
+using Vlingo.Xoom.Symbio.Store.State;
+using Vlingo.Xoom.Turbo;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/projections#implementing-with-the-statestoreprojectionactor">
+ *   Implementing With the StateStoreProjectionActor
+ * </a>
+ */
+public class AuthorProjectionActor : StateStoreProjectionActor<AuthorData>
+{
+  private string _becauseOf;
+
+  public AuthorProjectionActor() : this(ComponentRegistry.WithType<QueryModelStateStoreProvider>().Store)
+  {
+  }
+
+  public AuthorProjectionActor(IStateStore stateStore) : base(stateStore)
+  {
+  }
+
+  protected AuthorData CurrentDataFor(IProjectable projectable)
+  {
+    _becauseOf = projectable.BecauseOf()[0];
+    var state = projectable.Object<AuthorState>();
+    return AuthorData.From(state);
+  }
+
+  protected AuthorData Merge(AuthorData previousData, int previousVersion, AuthorData currentData, int currentVersion)
+  {
+    if (previousVersion == currentVersion) return currentData;
+
+    var merged = previousData;
+
+    switch (Enum.Parse<Operations>(_becauseOf))
+    {
+      case Operations.AuthorRegistered:
+      {
+        merged = AuthorData.From(currentData.Id, currentData.Name, currentData.Ranks, currentData.RelatedAuthors, currentData.AvailableOn);
+        break;
+      }
+
+      case Operations.AuthorRanked:
+      {
+        merged = AuthorData.From(currentData.Id, previousData.Name, currentData.Ranks, previousData.RelatedAuthors, previousData.AvailableOn);
+        break;
+      }
+
+      case Operations.AuthorBulkRanked:
+      {
+        merged = AuthorData.From(currentData.Id, previousData.Name, currentData.Ranks, previousData.RelatedAuthors, previousData.AvailableOn);
+        break;
+      }
+
+      case Operations.AuthorRelated:
+      {
+        merged = AuthorData.From(currentData.Id, previousData.Name, previousData.Ranks, currentData.RelatedAuthors, previousData.AvailableOn);
+        break;
+      }
+
+      case Operations.AuthorsRelated:
+      {
+        merged = AuthorData.From(currentData.Id, previousData.Name, previousData.Ranks, currentData.RelatedAuthors, previousData.AvailableOn);
+        break;
+      }
+
+      case Operations.AuthorUnrelated:
+      {
+        merged = AuthorData.From(currentData.Id, previousData.Name, previousData.Ranks, currentData.RelatedAuthors, previousData.AvailableOn);
+        break;
+      }
+
+      default:
+        Logger.Warn("Operation of type " + _becauseOf + " was not matched.");
+        break;
+    }
+
+    return merged;
+  }
+}
