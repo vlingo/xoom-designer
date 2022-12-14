@@ -14,6 +14,7 @@ import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.Label;
+import io.vlingo.xoom.designer.codegen.csharp.AggregateDetail;
 import io.vlingo.xoom.designer.codegen.csharp.CsharpTemplateStandard;
 import io.vlingo.xoom.designer.codegen.csharp.RouteDetail;
 import io.vlingo.xoom.designer.codegen.csharp.ValueObjectDetail;
@@ -34,6 +35,7 @@ import static io.vlingo.xoom.designer.codegen.csharp.TemplateParameter.*;
 public class RestResourceTemplateData extends TemplateData {
 
   private final String packageName;
+  private final String protocolName;
   private final String aggregateName;
   private final TemplateParameters parameters;
 
@@ -42,6 +44,7 @@ public class RestResourceTemplateData extends TemplateData {
                                   final CodeGenerationParameter aggregateParameter,
                                   final List<CodeGenerationParameter> valueObjects,
                                   final List<Content> contents, final Boolean useCQRS) {
+    this.protocolName = AggregateDetail.resolveProtocolNameFor(aggregateParameter);
     this.aggregateName = aggregateParameter.value;
     this.packageName = resolvePackage(basePackage);
     this.parameters = loadParameters(aggregateParameter, contents, useCQRS);
@@ -55,7 +58,7 @@ public class RestResourceTemplateData extends TemplateData {
     final Queries queries = useCQRS ? Queries.from(aggregateParameter, contents) : Queries.empty();
 
     final Function<TemplateParameters, Object> modelProtocolResolver =
-        params -> requireModelTypes(aggregateParameter) ? "I" + aggregateName : "";
+        params -> requireModelTypes(aggregateParameter) ? protocolName : "";
 
     if (useCQRS) {
       aggregateParameter.relate(RouteDetail.defaultQueryRoutes(aggregateParameter));
@@ -76,13 +79,9 @@ public class RestResourceTemplateData extends TemplateData {
                                      final Boolean useCQRS) {
     final Set<String> imports = new HashSet<>();
     final Stream<CodeGenerationParameter> involvedStateFields = RouteDetail.findInvolvedStateFieldTypes(aggregate);
-    imports.add(findPackage(CsharpTemplateStandard.AGGREGATE_PROTOCOL, contents));
-    if (RouteDetail.requireEntityLoad(aggregate)) {
-      final String aggregateEntityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregateName);
-      imports.add(findPackage(CsharpTemplateStandard.AGGREGATE, aggregateEntityName, contents));
-      imports.add(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents));
-    }
-    if (RouteDetail.requireModelFactory(aggregate)) {
+    final String aggregateEntityName = CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregateName);
+    imports.add(findPackage(CsharpTemplateStandard.AGGREGATE, aggregateEntityName, contents));
+    if (RouteDetail.requireEntityLoad(aggregate) || RouteDetail.requireModelFactory(aggregate)) {
       imports.add(findPackage(CsharpTemplateStandard.DATA_OBJECT, CsharpTemplateStandard.DATA_OBJECT.resolveClassname(aggregateName), contents));
     }
     if (useCQRS) {

@@ -33,17 +33,20 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
   public void testThatRestResourceIsGenerated() {
     final CodeGenerationParameters parameters = CodeGenerationParameters.from(Label.PACKAGE, "Io.Vlingo.Xoomapp")
         .add(Label.DIALECT, Dialect.C_SHARP)
-        .add(authorAggregate());
+        .add(authorAggregate()).add(nameValueObject()).add(rankValueObject())
+        .add(classifierValueObject()).add(classificationValueObject())
+        .add(bookAggregate());
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
 
     new RestResourceGenerationStep().process(context);
 
     final Content authorResource = context.findContent(CsharpTemplateStandard.REST_RESOURCE, "AuthorResource");
+    final Content bookResource = context.findContent(CsharpTemplateStandard.REST_RESOURCE, "BookResource");
 
-    Assertions.assertEquals(11, context.contents().size());
+    Assertions.assertEquals(16, context.contents().size());
     Assertions.assertEquals(((TextBasedContent)authorResource).text, (TextExpectation.onCSharp().read("author-rest-resource")));
-    Assertions.assertTrue(authorResource.contains(TextExpectation.onCSharp().read("author-rest-resource")));
+    Assertions.assertEquals(((TextBasedContent)bookResource).text, (TextExpectation.onCSharp().read("book-rest-resource")));
   }
 
   @Test
@@ -55,7 +58,8 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
         .add(Label.CQRS, true)
         .add(Label.COMMAND_MODEL_DATABASE, DatabaseType.IN_MEMORY)
         .add(Label.QUERY_MODEL_DATABASE, DatabaseType.IN_MEMORY)
-        .add(authorAggregate());
+        .add(authorAggregate()).add(nameValueObject()).add(rankValueObject())
+        .add(classifierValueObject()).add(classificationValueObject());
 
     final CodeGenerationContext context = CodeGenerationContext.with(parameters).contents(contents());
 
@@ -63,8 +67,7 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
 
     final Content authorResource = context.findContent(CsharpTemplateStandard.REST_RESOURCE, "AuthorResource");
 
-    Assertions.assertEquals(11, context.contents().size());
-    Assertions.assertEquals(((TextBasedContent)authorResource).text, (TextExpectation.onCSharp().read("author-rest-resource-with-queries")));
+    Assertions.assertEquals(15, context.contents().size());
     Assertions.assertTrue(authorResource.contains(TextExpectation.onCSharp().read("author-rest-resource-with-queries")));
   }
 
@@ -251,7 +254,6 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
         .relate(relatedAuthorsReplacementMethod).relate(authorRegisteredEvent).relate(authorRankedEvent)
         .relate(authorTaggedEvent).relate(authorUntaggedEvent);
   }
-
   private CodeGenerationParameter nameValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Name")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "firstName")
@@ -259,7 +261,6 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "lastName")
             .relate(Label.FIELD_TYPE, "String"));
   }
-
   private CodeGenerationParameter rankValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Rank")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "points")
@@ -267,20 +268,53 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classification")
             .relate(Label.FIELD_TYPE, "Classification"));
   }
-
-  private CodeGenerationParameter classificationValueObject() {
+  private CodeGenerationParameter classifierValueObject() {
+    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
+        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
+            .relate(Label.FIELD_TYPE, "String"));}
+    private CodeGenerationParameter classificationValueObject() {
     return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classification")
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "label")
             .relate(Label.FIELD_TYPE, "String"))
         .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "classifiers")
             .relate(Label.FIELD_TYPE, "Classifier").relate(Label.COLLECTION_TYPE, "Set"));
   }
+  private CodeGenerationParameter bookAggregate() {
+    final CodeGenerationParameter idField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "id")
+            .relate(Label.FIELD_TYPE, "String");
 
-  private CodeGenerationParameter classifierValueObject() {
-    return CodeGenerationParameter.of(Label.VALUE_OBJECT, "Classifier")
-        .relate(CodeGenerationParameter.of(Label.VALUE_OBJECT_FIELD, "name")
-            .relate(Label.FIELD_TYPE, "String"));
+    final CodeGenerationParameter titleField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "title")
+            .relate(Label.FIELD_TYPE, "String");
 
+    final CodeGenerationParameter publisherField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "publisher")
+            .relate(Label.FIELD_TYPE, "String");
+
+    final CodeGenerationParameter publicationDateField =
+        CodeGenerationParameter.of(Label.STATE_FIELD, "publicationDate")
+            .relate(Label.FIELD_TYPE, "DateTime");
+
+    final CodeGenerationParameter bookCreatedEvent = CodeGenerationParameter
+        .of(Label.DOMAIN_EVENT, "BookCreated")
+        .relate(idField).relate(titleField).relate(publisherField).relate(publicationDateField);
+
+    final CodeGenerationParameter factoryMethod = CodeGenerationParameter.of(Label.AGGREGATE_METHOD, "create")
+        .relate(Label.METHOD_PARAMETER, "title")
+        .relate(Label.METHOD_PARAMETER, "publisher")
+        .relate(Label.METHOD_PARAMETER, "publicationDate")
+        .relate(Label.FACTORY_METHOD, "true")
+        .relate(bookCreatedEvent);
+
+    final CodeGenerationParameter createRoute = CodeGenerationParameter.of(Label.ROUTE_SIGNATURE, "create")
+        .relate(Label.ROUTE_METHOD, "POST")
+        .relate(Label.ROUTE_PATH, "/books/")
+        .relate(Label.REQUIRE_ENTITY_LOADING, "false");
+
+    return CodeGenerationParameter.of(Label.AGGREGATE, "Book")
+        .relate(idField).relate(titleField).relate(publisherField).relate(publicationDateField)
+        .relate(factoryMethod).relate(bookCreatedEvent).relate(createRoute);
   }
 
   private Content[] contents() {
@@ -314,7 +348,19 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
             AUTHOR_QUERIES_ACTOR_CONTENT_TEXT),
         Content.with(CsharpTemplateStandard.STORE_PROVIDER,
             new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "QueryModelStateStoreProvider.cs"), null,
-            null, QUERY_MODEL_STORE_PROVIDER_CONTENT)
+            null, QUERY_MODEL_STORE_PROVIDER_CONTENT),
+        Content.with(CsharpTemplateStandard.AGGREGATE_PROTOCOL,
+            new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "IBook.cs"), null, null,
+            BOOK_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.AGGREGATE,
+            new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookEntity.cs"), null, null,
+            BOOK_AGGREGATE_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.AGGREGATE_STATE,
+            new OutputFile(Paths.get(MODEL_PACKAGE_PATH, "book").toString(), "BookState.cs"), null, null,
+            BOOK_STATE_CONTENT_TEXT),
+        Content.with(CsharpTemplateStandard.DATA_OBJECT,
+            new OutputFile(Paths.get(INFRASTRUCTURE_PACKAGE_PATH).toString(), "BookData.cs"), null, null,
+            BOOK_DATA_CONTENT_TEXT),
     };
   }
 
@@ -386,6 +432,30 @@ public class RestResourceGenerationStepTest extends CodeGenerationTest {
   private static final String QUERY_MODEL_STORE_PROVIDER_CONTENT =
       "namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence; \\n" +
           "public class QueryModelStateStoreProvider { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String BOOK_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model.Book; \\n" +
+          "public interface IBook { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String BOOK_STATE_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model.Book; \\n" +
+          "public class BookState { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String BOOK_AGGREGATE_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Model.Book; \\n" +
+          "public class BookEntity { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String BOOK_DATA_CONTENT_TEXT =
+      "namespace Io.Vlingo.Xoomapp.Infrastructure; \\n" +
+          "public class BookData { \\n" +
           "... \\n" +
           "}";
 
