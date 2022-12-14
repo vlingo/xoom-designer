@@ -37,13 +37,13 @@ namespace ${packageName};
     var access = control.AfterCompleting(2);
     _projection.ProjectWith(Create${domainEventName}(firstData.To${dataName}()), control);
     _projection.ProjectWith(Create${domainEventName}(secondData.To${dataName}()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(2, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
     Assert.Equal(1, ValueOfProjectionIdFor(secondData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<${dataObjectName}>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);
@@ -51,7 +51,7 @@ namespace ${packageName};
 
 <#macro factoryMethodTestAssertion>
 
-    interest = new CountingReadResultInterest();
+    interest = new CountingReadResultInterest<${dataObjectName}>();
     interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(secondData.Id, interest);
     item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", secondData.Id);
@@ -66,12 +66,12 @@ namespace ${packageName};
     var control = new CountingProjectionControl();
     var access = control.AfterCompleting(1);
     _projection.ProjectWith(Create${domainEventName}(firstData.To${dataName}()), control);
-    var confirmations = access.ReadFrom<Dictionary<string, int>>("confirmations");
+    var confirmations = access.ReadFrom<IDictionary<string, int>>("confirmations");
 
     Assert.Equal(1, confirmations.Count);
     Assert.Equal(1, ValueOfProjectionIdFor(firstData.Id, confirmations));
 
-    var interest = new CountingReadResultInterest();
+    var interest = new CountingReadResultInterest<${dataObjectName}>();
     var interestAccess = interest.AfterCompleting(1);
     _stateStore.Read<${dataObjectName}>(firstData.Id, interest);
     var item = interestAccess.ReadFrom<string, ${dataObjectName}>("item", firstData.Id);
@@ -132,8 +132,8 @@ public class ${projectionUnitTestName}
   }
 
   </#list>
-  private int ValueOfProjectionIdFor(string valueText, Dictionary<string, int> confirmations) =>
-      confirmations.GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
+  private int ValueOfProjectionIdFor(string valueText, IDictionary<string, int> confirmations) =>
+      ((ConcurrentDictionary<string, int>) confirmations).GetValueOrDefault(_valueToProjectionId.GetValueOrDefault(valueText));
 
 <#list testCases as testCase>
 <#if testCase.factoryMethod>

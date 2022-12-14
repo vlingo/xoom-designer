@@ -2,89 +2,105 @@ using System;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Lattice.Model;
 using Vlingo.Xoom.Lattice.Model.Sourcing;
-using Vlingo.Xoom.Turbo.Scooter.Model.Sourced;
 
 namespace Io.Vlingo.Xoomapp.Model.Author;
 
 /**
  * See <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#sourced">EventSourced</a>
  */
-public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
+public sealed class AuthorEntity : EventSourced, IAuthor
 {
   private static AuthorState _state;
 
-  public AuthorEntity(string id)
+  public AuthorEntity(string id) : base(id)
   {
     _state = AuthorState.IdentifiedBy(id);
-  }
 
-  static AuthorEntity()
-  {
-    RegisterConsumer<AuthorEntity, AuthorRegistered>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRegistered source)
     {
-      ApplyAuthorRegistered(source as AuthorRegistered);
+      ApplyAuthorRegistered(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorRanked>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRanked source)
     {
-      ApplyAuthorRanked(source as AuthorRanked);
+      ApplyAuthorRanked(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorRelated source)
     {
-      ApplyAuthorRelated(source as AuthorRelated);
+      ApplyAuthorRelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorsRelated source)
     {
-      ApplyAuthorsRelated(source as AuthorsRelated);
+      ApplyAuthorsRelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorUnrelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorUnrelated source)
     {
-      ApplyAuthorUnrelated(source as AuthorUnrelated);
+      ApplyAuthorUnrelated(source);
     });
-    RegisterConsumer<AuthorEntity, AuthorsRelated>(delegate(Vlingo.Xoom.Symbio.Source<DomainEvent> source)
+    RegisterConsumer(delegate(AuthorsRelated source)
     {
-      ApplyAuthorsRelated(source as AuthorsRelated);
+      ApplyAuthorsRelated(source);
     });
   }
 
-  public ICompletes<AuthorState> WithName(Name name)
+    public ICompletes<AuthorState> WithName(Name name)
   {
-    return Apply(_state.WithName(name), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#WithName()}
+     */
+    return Apply(new AuthorRegistered(_state.Id, name), () => _state);
   }
 
-  public ICompletes<AuthorState> ChangeRank(List<Rank> rank)
+    public ICompletes<AuthorState> ChangeRank(List<Rank> rank)
   {
-    return Apply(_state.ChangeRank(rank), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#ChangeRank()}
+     */
+    return Apply(new AuthorRanked(_state.Id, rank), () => _state);
   }
 
-  public ICompletes<AuthorState> Hide()
+    public ICompletes<AuthorState> Hide()
   {
-    return Apply(_state.Hide(), () => _state);
+    /**
+     * TODO: Unable to generate method body because there is no associated Domain Event.
+     */
+    return Completes().WithFailure();
   }
 
-  public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
+    public ICompletes<AuthorState> RelateAuthor(string relatedAuthor)
   {
-    return Apply(_state.RelateAuthor(relatedAuthor), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#RelateAuthor()}
+     */
+    return Apply(new AuthorRelated(_state.Id, relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors)
+    public ICompletes<AuthorState> RelateAuthors(ISet<string> relatedAuthors)
   {
-    return Apply(_state.RelateAuthors(relatedAuthors), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#RelateAuthors()}
+     */
+    return Apply(new AuthorsRelated(_state.Id, relatedAuthors), () => _state);
   }
 
-  public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
+    public ICompletes<AuthorState> UnrelateAuthor(string relatedAuthor)
   {
-    return Apply(_state.UnrelateAuthor(relatedAuthor), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#UnrelateAuthor()}
+     */
+    return Apply(new AuthorUnrelated(_state.Id, relatedAuthor), () => _state);
   }
 
-  public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors)
+    public ICompletes<AuthorState> ReplaceAllRelatedAuthors(ISet<string> relatedAuthors)
   {
-    return Apply(_state.ReplaceAllRelatedAuthors(relatedAuthors), () => _state);
+    /**
+     * TODO: Implement command logic. See {@link AuthorState#ReplaceAllRelatedAuthors()}
+     */
+    return Apply(new AuthorsRelated(_state.Id, relatedAuthors), () => _state);
   }
 
   private static void ApplyAuthorRegistered(AuthorRegistered @event)
   {
-    //TODO: Event is missing name; using null instead
-    _state = _state.WithName(null);
+    _state = _state.WithName(@event.Name);
   }
 
   private static void ApplyAuthorRanked(AuthorRanked @event)
@@ -131,8 +147,4 @@ public sealed class AuthorEntity : SourcedEntity<DomainEvent>, IAuthor
     // See: https://docs.vlingo.io/xoom-lattice/entity-cqrs#eventsourced
     return null;
   }
-
-  public override string Id() => StreamName();
-
-  protected override string StreamName() => null;
 }

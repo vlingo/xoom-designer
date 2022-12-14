@@ -84,7 +84,9 @@ public class StorageProviderTemplateData extends TemplateData {
             .collect(toSet());
 
     final Set<String> aggregateActorQualifiedNames = storageType.isSourced() ?
-            ContentQuery.findFullyQualifiedClassNames(CsharpTemplateStandard.AGGREGATE, contents) : new HashSet<>();
+            ContentQuery.findFullyQualifiedClassNames(CsharpTemplateStandard.AGGREGATE, contents)
+                .stream().map(qualifiedName -> ContentQuery.findPackage(CsharpTemplateStandard.AGGREGATE, qualifiedName, contents))
+                .collect(toSet()): new HashSet<>();
 
     return Stream.of(sourceClassQualifiedNames, queriesQualifiedNames, aggregateActorQualifiedNames, persistentTypes)
         .flatMap(Collection::stream)

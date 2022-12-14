@@ -1,3 +1,4 @@
+using Io.Vlingo.Xoomapp.Model.Book;
 using Io.Vlingo.Xoomapp.Model.Author;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Projection;

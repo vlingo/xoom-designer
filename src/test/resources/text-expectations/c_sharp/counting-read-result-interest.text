@@ -8,10 +8,10 @@ using Vlingo.Xoom.Symbio.Store.State;
 
 namespace Io.Vlingo.Xoomapp.Tests.Infrastructure.Persistence;
 
-public class CountingReadResultInterest : IReadResultInterest
+public class CountingReadResultInterest<T> : IReadResultInterest
 {
   private AccessSafely _access;
-  private readonly ConcurrentDictionary<string, object> _items = new ConcurrentDictionary<string, object>();
+  private readonly ConcurrentDictionary<string, T> _items = new ConcurrentDictionary<string, T>();
 
   public void ReadResultedIn<TState>(IOutcome<StorageException, Result> outcome, string? id, TState state,
   int stateVersion, Metadata? metadata, object? @object)
@@ -26,7 +26,7 @@ public class CountingReadResultInterest : IReadResultInterest
   public AccessSafely AfterCompleting(int times)
   {
     _access = AccessSafely.AfterCompleting(times);
-    _access.WritingWith<string, object>("item", (key, item) => _items.TryAdd(key, item));
+    _access.WritingWith<string, T>("item", (key, item) => _items.TryAdd(key, item));
     _access.ReadingWith<string>("item", key => _items.GetValueOrDefault(key));
     return _access;
   }

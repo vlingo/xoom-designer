@@ -31,6 +31,7 @@ public class Formatters {
     Arguments DATA_OBJECT_CONSTRUCTOR = new DataObjectConstructor();
     Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
     Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
+    Arguments DOMAIN_EVENT_CONSTRUCTOR_INVOCATION = new DomainEventConstructorInvocation("_state");
     Arguments QUERIES_METHOD_INVOCATION = new QueriesMethodInvocation();
 
     default String format(final CodeGenerationParameter parameter) {

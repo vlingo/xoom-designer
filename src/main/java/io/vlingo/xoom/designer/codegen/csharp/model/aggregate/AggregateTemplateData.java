@@ -26,17 +26,19 @@ import java.util.stream.Collectors;
 public class AggregateTemplateData extends TemplateData {
 
   private final String protocolName;
+  private final String aggregateName;
   private final TemplateParameters parameters;
 
   @SuppressWarnings("unchecked")
   public AggregateTemplateData(final String packageName, final CodeGenerationParameter aggregate,
                                final StorageType storageType, final ProjectionType projectionType,
                                final Boolean useCQRS) {
-    this.protocolName = aggregate.value;
+    this.protocolName = AggregateDetail.resolveProtocolNameFor(aggregate);
+    this.aggregateName = aggregate.value;
     this.parameters = TemplateParameters.with(TemplateParameter.PACKAGE_NAME, packageName)
         .and(TemplateParameter.AGGREGATE_PROTOCOL_NAME, protocolName)
-        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(protocolName))
-        .and(TemplateParameter.ENTITY_NAME, CsharpTemplateStandard.AGGREGATE.resolveClassname(protocolName))
+        .and(TemplateParameter.STATE_NAME, CsharpTemplateStandard.AGGREGATE_STATE.resolveClassname(aggregateName))
+        .and(TemplateParameter.ENTITY_NAME, CsharpTemplateStandard.AGGREGATE.resolveClassname(aggregateName))
         .and(TemplateParameter.ID_TYPE, FieldDetail.typeOf(aggregate, AggregateDetail.findIdField(aggregate).value))
         .and(TemplateParameter.EVENT_HANDLERS, EventHandler.from(aggregate))
         .and(TemplateParameter.SOURCED_EVENTS, resolveEventNames(aggregate))
@@ -45,10 +47,10 @@ public class AggregateTemplateData extends TemplateData {
         .and(TemplateParameter.STORAGE_TYPE, storageType)
         .and(TemplateParameter.USE_CQRS, useCQRS);
 
-    this.dependOn(AggregateMethodTemplateData.from(parameters, aggregate));
+    this.dependOn(AggregateMethodTemplateData.from(parameters, aggregate, storageType));
   }
 
-  private Set<String>  resolveImports(final CodeGenerationParameter aggregate, final String basePackage,
+  private Set<String> resolveImports(final CodeGenerationParameter aggregate, final String basePackage,
                                       final ProjectionType projectionType) {
     final Set<String> imports = new HashSet<>();
 
@@ -76,7 +78,7 @@ public class AggregateTemplateData extends TemplateData {
 
   @Override
   public String filename() {
-    return standard().resolveFilename(protocolName, parameters);
+    return standard().resolveFilename(aggregateName, parameters);
   }
 
   @Override
