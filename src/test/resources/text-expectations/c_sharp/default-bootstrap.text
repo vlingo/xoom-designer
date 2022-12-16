@@ -1,3 +1,5 @@
+using Io.Vlingo.Xoomapp.Infrastructure.Resource;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;

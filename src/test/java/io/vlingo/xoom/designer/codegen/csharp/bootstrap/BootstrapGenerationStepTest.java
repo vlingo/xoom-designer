@@ -37,15 +37,18 @@ public class BootstrapGenerationStepTest extends CodeGenerationTest {
 
     final Content bootstrap = context.findContent(CsharpTemplateStandard.BOOTSTRAP, "Bootstrap");
 
-    Assertions.assertEquals(2, context.contents().size());
+    Assertions.assertEquals(3, context.contents().size());
     Assertions.assertEquals(((TextBasedContent)bootstrap).text, (TextExpectation.onCSharp().read("default-bootstrap")));
   }
 
   private Content[] contents() {
     return new Content[]{
         Content.with(CsharpTemplateStandard.REST_RESOURCE,
-            new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH, "author").toString(), "AuthorResource.cs"), null, null,
+            new OutputFile(Paths.get(RESOURCE_PACKAGE_PATH).toString(), "AuthorResource.cs"), null, null,
             AUTHOR_RESOURCE_CONTENT),
+        Content.with(CsharpTemplateStandard.PROJECTION_DISPATCHER_PROVIDER,
+            new OutputFile(Paths.get(PERSISTENCE_PACKAGE_PATH).toString(), "ProjectionDispatcherProvider.cs"), null, null,
+            PROJECTION_DISPATCHER_PROVIDER_CONTENT),
     };
   }
 
@@ -57,10 +60,18 @@ public class BootstrapGenerationStepTest extends CodeGenerationTest {
 
   private static final String RESOURCE_PACKAGE_PATH = Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Resource")
       .toString();
+  private static final String PERSISTENCE_PACKAGE_PATH = Paths.get(INFRASTRUCTURE_PACKAGE_PATH, "Persistence")
+      .toString();
 
   private static final String AUTHOR_RESOURCE_CONTENT =
       "namespace Io.Vlingo.Xoomapp.Infrastructure.Resource; \\n" +
           "public class AuthorResource { \\n" +
+          "... \\n" +
+          "}";
+
+  private static final String PROJECTION_DISPATCHER_PROVIDER_CONTENT =
+      "namespace Io.Vlingo.Xoomapp.Infrastructure.Persistence; \\n" +
+          "public class ProjectionDispatcherProvider { \\n" +
           "... \\n" +
           "}";
 }

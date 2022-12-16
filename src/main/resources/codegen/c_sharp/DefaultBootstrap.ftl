@@ -1,11 +1,11 @@
+<#list imports as import>
+using ${import.qualifiedClassName?substring(0, import.qualifiedClassName?last_index_of("."))};
+</#list>
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Common;
 using Vlingo.Xoom.Http;
 using Vlingo.Xoom.Http.Resource;
 using Vlingo.Xoom.Lattice.Model.Stateful;
-<#list imports as import>
-using ${import.qualifiedClassName};
-</#list>
 using Configuration = Vlingo.Xoom.Http.Resource.Configuration;
 
 namespace ${packageName};

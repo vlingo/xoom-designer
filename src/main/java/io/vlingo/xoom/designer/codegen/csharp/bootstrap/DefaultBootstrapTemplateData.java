@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.csharp.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.designer.codegen.Label;
 
 public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
@@ -17,7 +18,7 @@ public class DefaultBootstrapTemplateData extends BootstrapTemplateData {
 
   @Override
   protected boolean support(final CodeGenerationContext context) {
-    return true;
+    return !context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
   }
 
 }

@@ -29,7 +29,7 @@ public class BootstrapGenerationStep extends TemplateProcessingStep {
     return dialectName.isEmpty() ? super.resolveDialect(context) : Dialect.withName(dialectName);
   }
 
-  private String dialectNameFrom(CodeGenerationContext context) {
+  private String dialectNameFrom(final CodeGenerationContext context) {
     return context.parameterOf(Label.DIALECT);
   }
 }
