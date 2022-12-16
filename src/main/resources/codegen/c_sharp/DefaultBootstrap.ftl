@@ -41,7 +41,7 @@ public class Bootstrap
       //Include Rest Resources routes here
       </#if>
       <#list restResources as restResource>
-      ${restResource.objectName}.Routes
+      ${restResource.objectName}.Routes<#if restResource?has_next>,</#if>
       </#list>
     );
 
