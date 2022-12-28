@@ -144,4 +144,14 @@ public class RouteDetail {
   public static boolean hasBody(final CodeGenerationParameter route) {
     return !resolveBodyName(route).isEmpty();
   }
+  public static String resolveHandlerTypeFrom(String compositeId) {
+    final List<String> elements = Arrays.stream(compositeId.split(",")).filter(id -> !id.isEmpty()).collect(Collectors.toList());
+
+    if(elements.isEmpty() || elements.size() == 1)
+      return "Three";
+    else if(elements.size() == 2)
+      return "Four";
+    else
+      return "Five";
+  }
 }

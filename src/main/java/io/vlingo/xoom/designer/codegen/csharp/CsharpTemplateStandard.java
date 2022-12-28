@@ -119,6 +119,16 @@ public enum CsharpTemplateStandard implements TemplateStandard {
 
     return Template.REST_RESOURCE_CREATION_METHOD.filename;
   }, (name, parameters) -> name),
+  AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
+      (name, parameters) -> name + "Handler"),
+  AUTO_DISPATCH_RESOURCE_UI_HANDLER(parameters -> Template.REST_UI_RESOURCE.filename,
+      (name, parameters) -> name + "Handler"),
+  AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
+      (name, parameters) -> name + "Resource"),
+  AUTO_DISPATCH_HANDLER_ENTRY(parameters -> Template.AUTO_DISPATCH_HANDLER_ENTRY.filename),
+  AUTO_DISPATCH_HANDLERS_MAPPING(parameters -> Template.AUTO_DISPATCH_HANDLERS_MAPPING.filename,
+      (name, parameters) -> name + "ResourceHandlers"),
+  AUTO_DISPATCH_ROUTE(parameters -> Template.AUTO_DISPATCH_ROUTE.filename),
   ;
 
   private final Function<TemplateParameters, String> templateFileRetriever;

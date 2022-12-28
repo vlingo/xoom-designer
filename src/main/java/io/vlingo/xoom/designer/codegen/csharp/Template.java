@@ -52,7 +52,12 @@ public enum Template {
   REST_RESOURCE("RestResource"),
   REST_RESOURCE_CREATION_METHOD("RestResourceCreationMethod"),
   REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
-  REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),;
+  REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),
+  REST_UI_RESOURCE("UiResource"),
+  AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
+  AUTO_DISPATCH_ROUTE("AutoDispatchRoute"),
+  AUTO_DISPATCH_HANDLERS_MAPPING("AutoDispatchHandlersMapping"),
+  AUTO_DISPATCH_HANDLER_ENTRY("AutoDispatchHandlerEntry"),;
 
   public final String filename;
 

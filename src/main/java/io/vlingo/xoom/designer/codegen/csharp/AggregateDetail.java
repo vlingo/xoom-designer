@@ -154,4 +154,8 @@ public class AggregateDetail {
   public static String resolveProtocolNameFor(final CodeGenerationParameter aggregate) {
     return String.format(PROTOCOL_INITIAL, aggregate.value);
   }
+
+  public static String resolveCompositeIdFieldsNames(final CodeGenerationParameter aggregate) {
+    return null;
+  }
 }

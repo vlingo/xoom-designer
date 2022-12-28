@@ -103,7 +103,17 @@ public enum TemplateParameter implements ParameterKey {
   ROUTE_HANDLER_INVOCATION("routeHandlerInvocation"),
   PROVIDERS("providers"),
   TYPE_REGISTRIES("registries"),
-  REST_RESOURCES("restResources");
+  REST_RESOURCES("restResources"),
+  RETRIEVAL_ROUTE("retrievalRoute"),
+  ROUTE_MAPPING_VALUE("routeMappingValue"),
+  AUTO_DISPATCH_MAPPING_NAME("autoDispatchMappingName"),
+  AUTO_DISPATCH_HANDLERS_MAPPING_NAME("autoDispatchHandlersMappingName"),
+  QUERY_ALL_INDEX_NAME("queryAllIndexName"),
+  QUERY_BY_ID_INDEX_NAME("queryByIdIndexName"),
+  HANDLER_INDEXES("handlerIndexes"),
+  HANDLER_ENTRIES("handlerEntries"),
+  FACTORY_METHOD("factoryMethod"),
+  INDEX_NAME("indexName"),  ;
 
   public final String key;
 
