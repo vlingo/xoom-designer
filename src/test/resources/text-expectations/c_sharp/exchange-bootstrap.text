@@ -1,0 +1,76 @@
+using Vlingo.Xoom.Symbio.Store.Dispatch;
+
+using io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
+using io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+using io.vlingo.xoom.otherapp.event.OtherAggregateUpdated;
+using io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+public class ExchangeBootstrap : ExchangeInitializer
+{
+
+  private IDispatcher _dispatcher;
+
+  public void Init(Grid stage)
+  {
+    var exchangeSettings = ExchangeSettings.LoadOne(Settings.Properties);
+
+    var bookStoreExchangeSettings = exchangeSettings.MapToConnection();
+
+    var bookStoreExchange = ExchangeFactory.FanOutInstanceQuietly(bookStoreExchangeSettings, exchangeSettings.ExchangeName, true);
+
+    try
+    {
+      bookStoreExchange.register(Covey.Of(
+          new MessageSender(bookStoreExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateDefinedReceiver(stage),
+          new OtherAggregateDefinedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateDefined:0.0.1"),
+          typeof(OtherAggregateDefined),
+          typeof(String),
+          typeof(Message)));
+
+      bookStoreExchange.register(Covey.Of(
+          new MessageSender(bookStoreExchange.connection()),
+          received => {},
+          new AuthorProducerAdapter(),
+          typeof(IdentifiedDomainEvent),
+          typeof(IdentifiedDomainEvent),
+          typeof(Message)));
+
+      bookStoreExchange.register(Covey.Of(
+          new MessageSender(bookStoreExchange.connection()),
+          received => {},
+          new BookProducerAdapter(),
+          typeof(IdentifiedDomainEvent),
+          typeof(IdentifiedDomainEvent),
+          typeof(Message)));
+
+      bookStoreExchange.register(Covey.Of(
+          new MessageSender(bookStoreExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateUpdatedReceiver(stage),
+          new OtherAggregateUpdatedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateUpdated:0.0.2"),
+          typeof(OtherAggregateUpdated),
+          typeof(String),
+          typeof(Message)));
+
+      bookStoreExchange.register(Covey.Of(
+          new MessageSender(bookStoreExchange.connection()),
+          new AuthorExchangeReceivers.OtherAggregateRemovedReceiver(stage),
+          new OtherAggregateRemovedAdapter("vlingo:xoom:io.vlingo.xoom.otherapp:OtherAggregateRemoved:0.0.3"),
+          typeof(OtherAggregateRemoved),
+          typeof(String),
+          typeof(Message)));
+
+    } catch (InactiveBrokerExchangeException exception)
+    {
+      Stage.World.DefaultLogger.Error("Unable to register covey(s) for exchange");
+      Stage.World.DefaultLogger.Warn(exception.Message);
+    }
+
+    _dispatcher = new ExchangeDispatcher(bookStoreExchange);
+  }
+
+  public IDispatcher Dispatcher => _dispatcher;
+
+}

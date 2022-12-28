@@ -1,0 +1,21 @@
+using io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
+using Vlingo.Xoom.Common.Serialization;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
+public class OtherAggregateDefinedMapper : IExchangeMapper<OtherAggregateDefined, string>
+{
+
+  public string LocalToExternal(OtherAggregateDefined local)
+  {
+    return JsonSerialization.Serialized(local);
+  }
+
+  public OtherAggregateDefined ExternalToLocal(string external)
+  {
+    return JsonSerialization.Deserialized<OtherAggregateDefined>(external);
+  }
+}
