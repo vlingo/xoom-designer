@@ -1,0 +1,43 @@
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Common.Serialization;
+using Vlingo.Xoom.Http;
+using Vlingo.Xoom.Http.Resource;
+using Vlingo.Xoom.Lattice.Grid;
+using Io.Vlingo.Xoomapp.Model.Book;
+using Io.Vlingo.Xoomapp.Infrastructure;
+using static Vlingo.Xoom.Http.ResponseStatus;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Resource;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-turbo/xoom-annotations#resourcehandlers">@ResourceHandlers</a>
+ */
+public class BookResource: DynamicResourceHandler
+{
+  private readonly World _world;
+
+  public BookResource(World world): base(world.Stage)
+  {
+      _world = world;
+      Routes = ResourceBuilder.Resource("BookResource",
+            ResourceBuilder.Post("/books")
+            .Body<BookData>()
+            .Handle(Create)
+        );
+  }
+
+  public ICompletes<Response> Create(BookData data)
+ => IBook.Create(_world.Stage, data.Title, data.Publisher, data.PublicationDate)
+      .AndThenTo<ICompletes<Response>>(state => Vlingo.Xoom.Common.Completes.WithSuccess(EntityResponseOf(Created, Headers.Of(ResponseHeader.Of(ResponseHeader.Location, Location(state.Id))), JsonSerialization.Serialized(BookData.From(state)))))
+      .Otherwise<Response>(arg => Response.Of(NotFound))
+      .RecoverFrom(e => Response.Of(InternalServerError));
+
+  public override Vlingo.Xoom.Http.Resource.Resource Routes { get; }
+
+  protected ContentType ContentType => Vlingo.Xoom.Http.ContentType.Of("application/json", "charset=UTF-8");
+
+  private string Location(string id) => "//" + id;
+
+
+}

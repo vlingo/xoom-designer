@@ -13,6 +13,7 @@ import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
+import io.vlingo.xoom.http.Method;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -101,7 +102,34 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   PERSISTENCE_SETUP(parameters -> Template.PERSISTENCE_SETUP.filename,
       (name, parameters) -> "PersistenceSetup"),
   QUERIES_UNIT_TEST(parameters -> Template.QUERIES_UNIT_TEST.filename,
-      (name, parameters) -> name + "Test"),;
+      (name, parameters) -> name + "Test"),
+  REST_RESOURCE(parameters -> Template.REST_RESOURCE.filename,
+      (name, parameters) -> name + "Resource"),
+  ROUTE_METHOD(parameters -> {
+    final String httpMethod =
+        parameters.find(TemplateParameter.ROUTE_METHOD);
+
+    if (Method.from(httpMethod).isGET()) {
+      return Template.REST_RESOURCE_RETRIEVE_METHOD.filename;
+    }
+
+    if (parameters.find(REQUIRE_ENTITY_LOADING, false)) {
+      return Template.REST_RESOURCE_UPDATE_METHOD.filename;
+    }
+
+    return Template.REST_RESOURCE_CREATION_METHOD.filename;
+  }, (name, parameters) -> name),
+  AUTO_DISPATCH_RESOURCE_HANDLER(parameters -> Template.REST_RESOURCE.filename,
+      (name, parameters) -> name + "Handler"),
+  AUTO_DISPATCH_RESOURCE_UI_HANDLER(parameters -> Template.REST_UI_RESOURCE.filename,
+      (name, parameters) -> name + "Handler"),
+  AUTO_DISPATCH_MAPPING(parameters -> Template.AUTO_DISPATCH_MAPPING.filename,
+      (name, parameters) -> name + "Resource"),
+  AUTO_DISPATCH_HANDLER_ENTRY(parameters -> Template.AUTO_DISPATCH_HANDLER_ENTRY.filename),
+  AUTO_DISPATCH_HANDLERS_MAPPING(parameters -> Template.AUTO_DISPATCH_HANDLERS_MAPPING.filename,
+      (name, parameters) -> name + "ResourceHandlers"),
+  AUTO_DISPATCH_ROUTE(parameters -> Template.AUTO_DISPATCH_ROUTE.filename),
+  ;
 
   private final Function<TemplateParameters, String> templateFileRetriever;
   private final BiFunction<String, TemplateParameters, String> nameResolver;

@@ -12,6 +12,7 @@ import io.vlingo.xoom.designer.codegen.Label;
 import io.vlingo.xoom.designer.codegen.csharp.MethodScope;
 import io.vlingo.xoom.designer.codegen.csharp.dataobject.EventBasedDataObjectInitializer;
 import io.vlingo.xoom.designer.codegen.csharp.model.valueobject.ValueObjectInitializer;
+import io.vlingo.xoom.designer.codegen.java.formatting.DataObjectDetail;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class Formatters {
     Arguments DATA_OBJECT_CONSTRUCTOR_INVOCATION = new DataObjectConstructorInvocation();
     Arguments SOURCED_STATED_METHOD_INVOCATION = new SourcedStateMethodInvocation();
     Arguments DOMAIN_EVENT_CONSTRUCTOR_INVOCATION = new DomainEventConstructorInvocation("_state");
+    Arguments QUERIES_METHOD_INVOCATION = new QueriesMethodInvocation();
 
     default String format(final CodeGenerationParameter parameter) {
       return format(parameter, MethodScope.INSTANCE);
@@ -60,7 +62,7 @@ public class Formatters {
     protected abstract T format(final CodeGenerationParameter parameter, final Stream<CodeGenerationParameter> fields);
 
     public enum Style {
-      DATA_TO_VALUE_OBJECT_TRANSLATION, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, EVENT_BASED_DATA_OBJECT_INITIALIZER
+      DATA_TO_VALUE_OBJECT_TRANSLATION, DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, EVENT_BASED_DATA_OBJECT_INITIALIZER, VALUE_OBJECT_INITIALIZER
     }
 
     private static final Map<Style, Function<Dialect, Variables<?>>> INSTANTIATORS = Collections.unmodifiableMap(
@@ -68,6 +70,7 @@ public class Formatters {
           put(Variables.Style.DATA_TO_VALUE_OBJECT_TRANSLATION, lang -> new ValueObjectInitializer("this"));
           put(Variables.Style.DATA_OBJECT_STATIC_FACTORY_METHOD_ASSIGNMENT, dialect -> new DataObjectStaticFactoryMethodAssignment());
           put(Variables.Style.EVENT_BASED_DATA_OBJECT_INITIALIZER, lang -> new EventBasedDataObjectInitializer("typedEvent"));
+          put(Variables.Style.VALUE_OBJECT_INITIALIZER, lang -> new ValueObjectInitializer(DataObjectDetail.DATA_OBJECT_NAME_SUFFIX.toLowerCase()));
         }});
   }
 

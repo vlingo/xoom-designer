@@ -48,7 +48,16 @@ public enum Template {
   EVENT_SOURCE_ENTITY_METHOD("EventSourcedEntityMethod"),
   EVENT_SOURCE_ENTITY("EventSourcedEntity"),
   QUERIES_UNIT_TEST("QueriesUnitTest"),
-  TURBO_SETTINGS("TurboSettings"),;
+  TURBO_SETTINGS("TurboSettings"),
+  REST_RESOURCE("RestResource"),
+  REST_RESOURCE_CREATION_METHOD("RestResourceCreationMethod"),
+  REST_RESOURCE_RETRIEVE_METHOD("RestResourceRetrieveMethod"),
+  REST_RESOURCE_UPDATE_METHOD("RestResourceUpdateMethod"),
+  REST_UI_RESOURCE("UiResource"),
+  AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
+  AUTO_DISPATCH_ROUTE("AutoDispatchRoute"),
+  AUTO_DISPATCH_HANDLERS_MAPPING("AutoDispatchHandlersMapping"),
+  AUTO_DISPATCH_HANDLER_ENTRY("AutoDispatchHandlerEntry"),;
 
   public final String filename;
 

@@ -1,0 +1,85 @@
+using Io.Vlingo.Xoomapp.Model.Author.AuthorState;
+using Io.Vlingo.Xoomapp.Model;
+using Io.Vlingo.Xoomapp.Infrastructure.*;
+
+namespace io.vlingo.xoomapp.infrastructure.resource;
+
+public class AuthorResourceHandlers
+{
+
+    public static int WITH_NAME = 0;
+    public static int RELATE_AUTHOR = 1;
+    public static int RELATE_AUTHORS = 2;
+    public static int REPLACE_ALL_RELATED_AUTHORS = 3;
+    public static int UNRELATE_AUTHOR = 4;
+    public static int ADD_TAG = 5;
+    public static int ADD_TAGS = 6;
+    public static int REPLACE_TAGS = 7;
+    public static int REMOVE_TAG = 8;
+    public static int CHANGE_RANK = 9;
+    public static int AUTHORS = 10;
+    public static int AUTHOR_OF = 11;
+    public static int ADAPT_STATE = 12;
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Stage, AuthorData>> WITH_NAME_HANDLER =
+          HandlerEntry.of(WITH_NAME, ($stage, data) => {
+              var name = Name.From(data.Name.FirstName, data.Name.LastName);
+              return Author.withName($stage, data.Name);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> RELATE_AUTHOR_HANDLER =
+          HandlerEntry.of(RELATE_AUTHOR, (author, data) => {
+              return author.relateAuthor(data.RelatedAuthor);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> RELATE_AUTHORS_HANDLER =
+          HandlerEntry.of(RELATE_AUTHORS, (author, data) => {
+              return author.relateAuthors(data.RelatedAuthors);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> REPLACE_ALL_RELATED_AUTHORS_HANDLER =
+          HandlerEntry.of(REPLACE_ALL_RELATED_AUTHORS, (author, data) => {
+              return author.replaceAllRelatedAuthors(data.RelatedAuthors);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> UNRELATE_AUTHOR_HANDLER =
+          HandlerEntry.of(UNRELATE_AUTHOR, (author, data) => {
+              return author.unrelateAuthor(data.RelatedAuthor);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> ADD_TAG_HANDLER =
+          HandlerEntry.of(ADD_TAG, (author, data) => {
+              return author.addTag(data.Tag);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> ADD_TAGS_HANDLER =
+          HandlerEntry.of(ADD_TAGS, (author, data) => {
+              return author.addTags(data.Tags);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> REPLACE_TAGS_HANDLER =
+          HandlerEntry.of(REPLACE_TAGS, (author, data) => {
+              return author.replaceTags(data.Tags);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> REMOVE_TAG_HANDLER =
+          HandlerEntry.of(REMOVE_TAG, (author, data) => {
+              return author.removeTag(data.Tag);
+          });
+
+    public static HandlerEntry<Three<ICompletes<AuthorState>, Author, AuthorData>> CHANGE_RANK_HANDLER =
+          HandlerEntry.of(CHANGE_RANK, (author, data) => {
+              var rank = Rank.From(data.Rank.Points, data.Rank.Classification);
+              return author.changeRank(data.Rank);
+          });
+
+  public static HandlerEntry<Two<AuthorData, AuthorState>> ADAPT_STATE_HANDLER =
+    HandlerEntry.Of(ADAPT_STATE, AuthorData.From);
+
+  public static HandlerEntry<Two<ICompletes<ICollection<AuthorData>>, AuthorQueries>> QUERY_ALL_HANDLER =
+    HandlerEntry.Of(AUTHORS, AuthorQueries.Authors);
+
+  public static HandlerEntry<Three<ICompletes<AuthorData>, AuthorQueries, String>> QUERY_BY_ID_HANDLER =
+    HandlerEntry.Of(AUTHOR_OF, ($queries, id) => $queries.AuthorOf(id));
+
+}

@@ -6,6 +6,7 @@ using ${import.qualifiedClassName};
 using Vlingo.Xoom.Actors;
 using Vlingo.Xoom.Lattice.Model.Projection;
 using Vlingo.Xoom.Turbo;
+using IDispatcher = Vlingo.Xoom.Symbio.Store.Dispatch.IDispatcher;
 
 namespace ${packageName};
 

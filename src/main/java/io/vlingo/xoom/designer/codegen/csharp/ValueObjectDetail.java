@@ -45,7 +45,7 @@ public class ValueObjectDetail {
 
     if (anyQualifiedName.isPresent()) {
       final String packageName = codeElementFormatter.packageOf(anyQualifiedName.get());
-      return Stream.of(codeElementFormatter.packageOf(packageName)).collect(Collectors.toSet());
+      return Stream.of(packageName).collect(Collectors.toSet());
     }
 
     return Collections.emptySet();

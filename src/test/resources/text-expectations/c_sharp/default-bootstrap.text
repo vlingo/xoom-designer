@@ -1,0 +1,52 @@
+using Io.Vlingo.Xoomapp.Infrastructure.Resource;
+using Io.Vlingo.Xoomapp.Infrastructure.Persistence;
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
+using Vlingo.Xoom.Http;
+using Vlingo.Xoom.Http.Resource;
+using Vlingo.Xoom.Lattice.Model.Stateful;
+using Configuration = Vlingo.Xoom.Http.Resource.Configuration;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure;
+
+public class Bootstrap
+{
+  public static Bootstrap Instance { get; private set; }
+
+  public World World { get; }
+  public IServer Server { get; }
+
+  public static void Main(string[] args)
+  {
+    Instance = new Bootstrap();
+  }
+
+  private Bootstrap()
+  {
+    World = World.Start("Author");
+
+    var authorResource = new AuthorResource(World);
+    var resources = Resources.Are(
+      authorResource.Routes
+    );
+
+    Server = ServerFactory.StartWith(World.Stage, resources, Filters.None(), Configuration.Define().Port,
+      Configuration.SizingConf.DefineWith(4, 10, 100, 10240), Configuration.TimingConf.DefineWith(3, 1, 100),
+      "arrayQueueMailbox", "arrayQueueMailbox");
+
+    Console.ReadKey();
+
+    AppDomain.CurrentDomain.ProcessExit += (s, e) =>
+    {
+      if (Instance != null)
+      {
+        Instance.Server.Stop();
+
+        Console.WriteLine("\n");
+        Console.WriteLine("==============================");
+        Console.WriteLine("Stopping Author Server...");
+        Console.WriteLine("==============================");
+      }
+    };
+  }
+}

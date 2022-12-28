@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toCamelCase;
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
 import static java.util.stream.Collectors.toList;
 
 public class AggregateMethodInvocation implements Formatters.Arguments {
@@ -24,6 +25,10 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
   private final String stageVariableName;
   private final ParametersOwner parametersOwner;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
+
+  public static AggregateMethodInvocation accessingParametersFromDataObject(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, AggregateMethodInvocation.ParametersOwner.DATA_OBJECT);
+  }
 
   public AggregateMethodInvocation(final String stageVariableName) {
     this(stageVariableName, ParametersOwner.NONE);
@@ -49,7 +54,7 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private String resolveFieldAccess(final CodeGenerationParameter methodParameter) {
     final String parameterName = methodParameter.hasAny(Label.ALIAS) ? methodParameter.retrieveRelatedValue(Label.ALIAS) : methodParameter.value;
-    return parametersOwner.isNone() ? toCamelCase(parameterName) : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, toCamelCase(parameterName));
+    return parametersOwner.isNone() ? toCamelCase(parameterName) : String.format(FIELD_ACCESS_PATTERN, parametersOwner.ownerName, toPascalCase(parameterName));
   }
 
   private enum ParametersOwner {

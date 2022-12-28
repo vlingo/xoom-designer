@@ -66,7 +66,7 @@ public class Queries {
   }
 
   public static Queries from(final CodeGenerationParameter aggregateParameter, final List<Content> contents) {
-    final String queriesProtocol = CsharpTemplateStandard.QUERIES.resolveClassname(aggregateParameter.value);
+    final String queriesProtocol = "I"+CsharpTemplateStandard.QUERIES.resolveClassname(aggregateParameter.value);
     final String queriesActor = CsharpTemplateStandard.QUERIES_ACTOR.resolveClassname(aggregateParameter.value);
     return new Queries(ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.QUERIES, queriesProtocol, contents),
         ContentQuery.findFullyQualifiedClassName(CsharpTemplateStandard.QUERIES_ACTOR, queriesActor, contents));

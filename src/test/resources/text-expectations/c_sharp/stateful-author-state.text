@@ -1,5 +1,5 @@
 using System;
-using Io.Vlingo.Xoomapp;
+using Io.Vlingo.Xoomapp.Model;
 using Vlingo.Xoom.Symbio;
 using Vlingo.Xoom.Symbio.Store.Object;
 using Vlingo.Xoom.Wire.Nodes;
