@@ -1,0 +1,61 @@
+using System;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Object;
+using Vlingo.Xoom.Wire.Nodes;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
+ */
+public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
+{
+  public string Id {get;}
+  public string Name {get;}
+  public List<Double> Rank {get;} = new List<Double>();
+  public string ShortDescription {get;}
+
+  public static AuthorState IdentifiedBy(string id)
+  {
+    return new AuthorState(id, null, new List<Double>(), null);
+  }
+
+  private AuthorState(string id, string name, List<Double> rank, string shortDescription) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  {
+    Id = id;
+    Name = name;
+    Rank.AddRange(rank);
+    ShortDescription = shortDescription;
+  }
+
+  public AuthorState WithName(string name)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, name, Rank, ShortDescription);
+  }
+
+  public AuthorState ChangeRank(List<Double> rank)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, Name, rank, ShortDescription);
+  }
+
+  public AuthorState Hide()
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, Name, Rank, ShortDescription);
+  }
+
+  public override IEntry WithId(string id) => IdentifiedBy(id);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherState = (AuthorState) obj;
+    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank && ShortDescription == otherState.ShortDescription;
+  }
+
+  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank && ShortDescription == other.ShortDescription;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, ShortDescription);
+}

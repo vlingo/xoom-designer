@@ -1,0 +1,92 @@
+using System;
+using Vlingo.Xoom.Symbio;
+using Vlingo.Xoom.Symbio.Store.Object;
+using Vlingo.Xoom.Wire.Nodes;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-symbio/object-storage">Object Storage</a>
+ */
+public sealed class AuthorState : BaseEntry<string>, IEquatable<AuthorState>
+{
+  public string Id {get;}
+  public string Name {get;}
+  public List<Double> Rank {get;} = new List<Double>();
+  public List<String> RelatedAuthors {get;} = new List<String>();
+  public DateTime AvailableOn {get;}
+
+  public static AuthorState IdentifiedBy(string id)
+  {
+    return new AuthorState(id, null, new List<Double>(), new List<String>(), DateTime.Now);
+  }
+
+  private AuthorState(string id, string name, List<Double> rank, List<String> relatedAuthors, DateTime availableOn) : base(id, typeof(string), 1, EmptyObjectData ?? "")
+  {
+    Id = id;
+    Name = name;
+    Rank.AddRange(rank);
+    RelatedAuthors.AddRange(relatedAuthors);
+    AvailableOn = availableOn;
+  }
+
+  public AuthorState WithName(string name, String relatedAuthor)
+  {
+    //TODO: Implement command logic.
+    RelatedAuthors.Add(relatedAuthor);
+    return new AuthorState(Id, name, Rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState ChangeRank(List<Double> rank)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, Name, rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState Hide()
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState RelateAuthor(String relatedAuthor)
+  {
+    //TODO: Implement command logic.
+    RelatedAuthors.Add(relatedAuthor);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState RelateAuthors(List<String> relatedAuthors)
+  {
+    //TODO: Implement command logic.
+    RelatedAuthors.RemoveAll(relatedAuthors);
+    relatedAuthors.AddRange(relatedAuthors);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState UnrelateAuthor(String relatedAuthor)
+  {
+    //TODO: Implement command logic.
+    RelatedAuthors.Remove(relatedAuthor);
+    return new AuthorState(Id, Name, Rank, RelatedAuthors, AvailableOn);
+  }
+
+  public AuthorState ReplaceAllRelatedAuthors(List<String> relatedAuthors)
+  {
+    //TODO: Implement command logic.
+    return new AuthorState(Id, Name, Rank, relatedAuthors, AvailableOn);
+  }
+
+  public override IEntry WithId(string id) => IdentifiedBy(id);
+
+  public override bool Equals(object obj)
+  {
+    if (obj == null || obj.GetType() != GetType()) return false;
+
+    var otherState = (AuthorState) obj;
+    return Id == otherState.Id && Name == otherState.Name && Rank == otherState.Rank && RelatedAuthors == otherState.RelatedAuthors && AvailableOn == otherState.AvailableOn;
+  }
+
+  public bool Equals(AuthorState other) => Id == other.Id && Name == other.Name && Rank == other.Rank && RelatedAuthors == other.RelatedAuthors && AvailableOn == other.AvailableOn;
+  public override int GetHashCode() => HashCode.Combine(Id, Name, Rank, RelatedAuthors, AvailableOn);
+}

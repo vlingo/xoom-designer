@@ -6,29 +6,51 @@
 // one at https://mozilla.org/MPL/2.0/.
 package io.vlingo.xoom.designer.codegen;
 
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vlingo.xoom.designer.codegen.csharp.FieldDetail.toPascalCase;
+
 public enum CollectionMutation {
 
-  NONE("", param -> Collections.emptyList()),
-  REPLACEMENT("*", param -> Collections.emptyList()),
-  ADDITION("+", param -> Arrays.asList(String.format("%s.add(%s);", param.value, param.retrieveRelatedValue(Label.ALIAS)))),
-  REMOVAL("-", param -> Arrays.asList(String.format("%s.remove(%s);", param.value, param.retrieveRelatedValue(Label.ALIAS)))),
-  MERGE("#", param -> Arrays.asList(String.format("%s.removeAll(%s);", param.value, param.value),
-          String.format("%s.addAll(%s);", param.value, param.value)));
+  NONE("", (dialect, param) -> Collections.emptyList()),
+  REPLACEMENT("*", (dialect, param) -> Collections.emptyList()),
+  ADDITION("+", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveAddMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
+  REMOVAL("-", (dialect, param) -> Collections.singletonList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveMemberFrom(dialect), param.retrieveRelatedValue(Label.ALIAS)))),
+  MERGE("#", (dialect, param) -> Arrays.asList(String.format("%s.%s(%s);", resolveMemberParamFrom(dialect, param.value), resolveRemoveAllMemberFrom(dialect), param.value),
+      String.format("%s.%s(%s);", param.value, resolveAddAllMemberFrom(dialect), param.value)));
+
+  private static String resolveMemberParamFrom(Dialect dialect, String param) {
+    return dialect.equals(Dialect.C_SHARP) ? toPascalCase(param) : param;
+  }
+  private static String resolveAddMemberFrom(Dialect dialect) {
+    return dialect.isJava() ? "add" : "Add";
+  }
+
+  private static String resolveAddAllMemberFrom(Dialect dialect) {
+    return dialect.isJava() ? "addAll" : "AddRange";
+  }
+
+  private static String resolveRemoveMemberFrom(Dialect dialect) {
+    return dialect.isJava() ? "remove" : "Remove";
+  }
+
+  private static String resolveRemoveAllMemberFrom(Dialect dialect) {
+    return dialect.isJava() ? "removeAll" : "RemoveAll";
+  }
 
   private final String symbol;
-  private final Function<CodeGenerationParameter, List<String>> statementsResolver;
+  private final BiFunction<Dialect, CodeGenerationParameter, List<String>> statementsResolver;
 
-  CollectionMutation(final String symbol,
-                     final Function<CodeGenerationParameter, List<String>> statementsResolver) {
+  CollectionMutation(final String symbol, final BiFunction<Dialect, CodeGenerationParameter, List<String>> statementsResolver) {
     this.symbol = symbol;
     this.statementsResolver = statementsResolver;
   }
@@ -46,13 +68,19 @@ public enum CollectionMutation {
   }
 
   public List<String> resolveStatements(final String collectionOwner, final CodeGenerationParameter methodParameter) {
-    return statementsResolver.apply(methodParameter).stream().map(statement -> collectionOwner + "." + statement).collect(Collectors.toList());
+    return statementsResolver.apply(Dialect.findDefault(), methodParameter).stream()
+        .map(statement -> collectionOwner + "." + statement)
+        .collect(Collectors.toList());
+  }
+
+  public List<String> resolveStatements(final Dialect dialect, final CodeGenerationParameter methodParameter) {
+    return new ArrayList<>(statementsResolver.apply(dialect, methodParameter));
   }
 
   public List<String> resolveStatements(final String collectionOwner, final String elementOwner, final CodeGenerationParameter methodParameter) {
     return resolveStatements(collectionOwner, methodParameter)
-            .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
-            .collect(Collectors.toList());
+        .stream().map(statement -> statement.replace("(", "(" + elementOwner + "."))
+        .collect(Collectors.toList());
   }
 
   public boolean shouldReplaceWithMethodParameter() {

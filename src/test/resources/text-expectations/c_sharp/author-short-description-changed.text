@@ -1,0 +1,25 @@
+using Vlingo.Xoom.Common.Version;
+using Vlingo.Xoom.Lattice.Model;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+/**
+ * See
+ * <a href="https://docs.vlingo.io/xoom-lattice/entity-cqrs#commands-domain-events-and-identified-domain-events">
+ *   Commands, Domain Events, and Identified Domain Events
+ * </a>
+ */
+public class AuthorShortDescriptionChanged : IdentifiedDomainEvent
+{
+
+  public string Id {get;}
+  public string ShortDescription {get;}
+
+  public AuthorShortDescriptionChanged(string id, string shortDescription) : base(SemanticVersion.From("1.0.0").ToValue())
+  {
+    Id = id;
+    ShortDescription = shortDescription;
+  }
+
+  public override string Identity => Id;
+}

@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.infrastructure.restapi;
 
 import io.vlingo.xoom.actors.Logger;
 import io.vlingo.xoom.actors.Stage;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.common.Completes;
 import io.vlingo.xoom.designer.ModelProcessingInformation;
 import io.vlingo.xoom.designer.ModelProcessingManager;
@@ -26,6 +27,8 @@ import io.vlingo.xoom.http.resource.Resource;
 import io.vlingo.xoom.turbo.ComponentRegistry;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.vlingo.xoom.common.serialization.JsonSerialization.serialized;
 import static io.vlingo.xoom.http.Response.Status.*;
@@ -36,7 +39,7 @@ public class ModelProcessingResource extends DynamicResourceHandler {
 
   private final Logger logger;
   private final GenerationTarget generationTarget;
-  private final ModelProcessingManager modelProcessingManager;
+  private final Map<Dialect, ModelProcessingManager> modelProcessingManagers = new HashMap<>();
   private final ModelProcessingInformation modelProcessingInformation;
   public static final String REFUSE_REQUEST_URI = "/api/model-processing/request-refusal";
 
@@ -45,19 +48,23 @@ public class ModelProcessingResource extends DynamicResourceHandler {
     this.logger = stage().world().defaultLogger();
     this.generationTarget = ComponentRegistry.withType(GenerationTarget.class);
     this.modelProcessingInformation = ModelProcessingInformation.from(generationTarget);
-    this.modelProcessingManager = new ModelProcessingManager(ComponentRegistry.withName("codeGenerationSteps"));
+    this.modelProcessingManagers.put(Dialect.JAVA, new ModelProcessingManager(ComponentRegistry.withName("codeGenerationSteps")));
+    this.modelProcessingManagers.put(Dialect.C_SHARP, new ModelProcessingManager(ComponentRegistry.withName("cSharpCodeGenerationSteps")));
   }
 
   public Completes<Response> startGeneration(final DesignerModel model) {
-    return modelProcessingManager.generate(model, modelProcessingInformation, logger).andThenTo(scene -> {
+    final Dialect dialect = model.platformSettings == null ? Dialect.findDefault() : Dialect.withName(model.platformSettings.lang);
+
+    return modelProcessingManagers.get(dialect).generate(model, modelProcessingInformation, logger).andThenTo(scene -> {
               final Response.Status responseStatus = scene.isFailed() ? InternalServerError : Ok;
               return Completes.withSuccess(Response.of(responseStatus, serialized(scene.report)));
             });
   }
 
   public Completes<Response> makeGenerationPath(final GenerationPath path) {
+
     try {
-      modelProcessingManager.createGenerationPath(new File(path.path));
+      modelProcessingManagers.get(Dialect.findDefault()).createGenerationPath(new File(path.path));
       return Completes.withSuccess(Response.of(Created, headers(of(Location, path.path)), path.serialized()));
     } catch (final GenerationPathAlreadyExistsException e) {
       return Completes.withSuccess(Response.of(Conflict, path.serialized()));

@@ -12,7 +12,23 @@ public enum Template {
   PROJECT_SETTINGS("Project"),
   README("Readme"),
   UNIT_TEST_PROJECT_SETTINGS("UnitTestProject"),
-  ACTOR_SETTINGS("ActorSettings");
+  ACTOR_SETTINGS("ActorSettings"),
+  AGGREGATE_PROTOCOL("AggregateProtocol"),
+  AGGREGATE_PROTOCOL_INSTANCE_METHOD("AggregateProtocolInstanceMethod"),
+  AGGREGATE_PROTOCOL_STATIC_METHOD("AggregateProtocolStaticMethod"),
+  AGGREGATE_STATE("AggregateState"),
+  AGGREGATE_STATE_METHOD("AggregateStateMethod"),
+  STATEFUL_ENTITY("StatefulEntity"),
+  STATEFUL_ENTITY_METHOD("StatefulEntityMethod"),
+  DOMAIN_EVENT("DomainEvent"),
+  EVENT_SOURCED_ENTITY_UNIT_TEST("EventSourcedEntityUnitTest"),
+  STATEFUL_ENTITY_UNIT_TEST("StatefulEntityUnitTest"),
+  OPERATION_BASED_MOCK_DISPATCHER("OperationBasedMockDispatcher"),
+  EVENT_BASED_MOCK_DISPATCHER("EventBasedMockDispatcher"),
+  STATE_ADAPTER("StateAdapter"),
+  DEFAULT_BOOTSTRAP("DefaultBootstrap"),
+  VALUE_OBJECT("ValueObject"),
+  STATE_DATA_OBJECT("StateDataObject");
 
   public final String filename;
 

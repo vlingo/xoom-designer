@@ -1,0 +1,22 @@
+using Vlingo.Xoom.Actors;
+using Vlingo.Xoom.Common;
+
+namespace Io.Vlingo.Xoomapp.Model.Author;
+
+public interface IAuthor
+{
+
+  ICompletes<AuthorState> WithName(string name);
+
+  static ICompletes<AuthorState> WithName(Stage stage, string name)
+  {
+    var address = stage.AddressFactory.UniquePrefixedWith("g-");
+    var author = stage.ActorFor<IAuthor>(Definition.Has(typeof(AuthorEntity), Definition.Parameters(address.IdString)), address);
+    return author.WithName(name);
+  }
+
+  ICompletes<AuthorState> ChangeRank(List<Double> rank);
+
+  ICompletes<AuthorState> Hide();
+
+}
