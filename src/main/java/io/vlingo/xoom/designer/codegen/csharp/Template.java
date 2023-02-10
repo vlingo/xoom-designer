@@ -57,7 +57,14 @@ public enum Template {
   AUTO_DISPATCH_MAPPING("AutoDispatchMapping"),
   AUTO_DISPATCH_ROUTE("AutoDispatchRoute"),
   AUTO_DISPATCH_HANDLERS_MAPPING("AutoDispatchHandlersMapping"),
-  AUTO_DISPATCH_HANDLER_ENTRY("AutoDispatchHandlerEntry"),;
+  AUTO_DISPATCH_HANDLER_ENTRY("AutoDispatchHandlerEntry"),
+  EXCHANGE_RECEIVER_HOLDER("ExchangeReceiverHolder"),
+  EXCHANGE_BOOTSTRAP("ExchangeBootstrap"),
+  CONSUMER_EXCHANGE_MAPPER("ConsumerExchangeMapper"),
+  PRODUCER_EXCHANGE_MAPPER("ProducerExchangeMapper"),
+  CONSUMER_EXCHANGE_ADAPTER("ConsumerExchangeAdapter"),
+  PRODUCER_EXCHANGE_ADAPTER("ProducerExchangeAdapter"),
+  EXCHANGE_DISPATCHER("ExchangeDispatcher"),;
 
   public final String filename;
 

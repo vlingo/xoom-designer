@@ -113,7 +113,17 @@ public enum TemplateParameter implements ParameterKey {
   HANDLER_INDEXES("handlerIndexes"),
   HANDLER_ENTRIES("handlerEntries"),
   FACTORY_METHOD("factoryMethod"),
-  INDEX_NAME("indexName"),  ;
+  INDEX_NAME("indexName"),
+  EXCHANGE_ROLE("exchangeRole"),
+  LOCAL_TYPE_NAME("localTypeName"),
+  SCHEMA_GROUP_NAME("schemaGroupName"),
+  EXCHANGE_MAPPER_NAME("exchangeMapperName"),
+  EXCHANGE_ADAPTER_NAME("exchangeAdapterName"),
+  EXCHANGE_RECEIVERS("exchangeReceivers"),
+  EXCHANGE_RECEIVER_HOLDER_NAME("exchangeReceiverHolderName"),
+  PRODUCER_EXCHANGES("producerExchanges"),
+  EXCHANGES("exchanges"),
+  INLINE_EXCHANGE_NAMES("inlineExchangeNames"),;
 
   public final String key;
 

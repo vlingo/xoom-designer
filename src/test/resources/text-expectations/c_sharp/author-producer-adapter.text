@@ -1,0 +1,38 @@
+using io.vlingo.xoom.lattice.model.IdentifiedDomainEvent;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
+public class AuthorProducerAdapter : IExchangeAdapter<IdentifiedDomainEvent, IdentifiedDomainEvent, Message>
+{
+
+  private static String SCHEMA_PREFIX = "vlingo:xoom:io.vlingo.xoomapp";
+
+  private DomainEventMapper _mapper = new DomainEventMapper();
+
+  public IdentifiedDomainEvent FromExchange(Message exchangeMessage)
+  {
+    return _mapper.ExternalToLocal(exchangeMessage);
+  }
+
+  public Message ToExchange(IdentifiedDomainEvent event)
+  {
+    var message = _mapper.LocalToExternal(event);
+    message.MessageParameters.TypeName(ResolveFullSchemaReference(event));
+    return message;
+  }
+
+  public bool Supports(Object exchangeMessage)
+  {
+    return false;
+  }
+
+  private string ResolveFullSchemaReference(IdentifiedDomainEvent event)
+  {
+    var semanticVersion = SemanticVersion.ToString(event.SourceTypeVersion);
+    return $"{SCHEMA_PREFIX}{typeof(event)}{semanticVersion}";
+  }
+
+}

@@ -270,4 +270,8 @@ public class FieldDetail {
     }
     throw new IllegalArgumentException("Unable to resolve field type of " + parent.label);
   }
+
+  public static String genericTypeOf(final CodeGenerationParameter parent, final String fieldName) {
+    return genericTypeOf(typeOf(parent, fieldName));
+  }
 }

@@ -10,6 +10,7 @@ package io.vlingo.xoom.designer.codegen.csharp;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
 import io.vlingo.xoom.designer.codegen.CodeGenerationProperties;
+import io.vlingo.xoom.designer.codegen.csharp.exchange.ExchangeRole;
 import io.vlingo.xoom.designer.codegen.csharp.projections.ProjectionType;
 import io.vlingo.xoom.designer.codegen.csharp.storage.Model;
 import io.vlingo.xoom.designer.codegen.csharp.storage.StorageType;
@@ -129,6 +130,30 @@ public enum CsharpTemplateStandard implements TemplateStandard {
   AUTO_DISPATCH_HANDLERS_MAPPING(parameters -> Template.AUTO_DISPATCH_HANDLERS_MAPPING.filename,
       (name, parameters) -> name + "ResourceHandlers"),
   AUTO_DISPATCH_ROUTE(parameters -> Template.AUTO_DISPATCH_ROUTE.filename),
+
+  EXCHANGE_BOOTSTRAP(parameters -> Template.EXCHANGE_BOOTSTRAP.filename,
+      (name, parameters) -> "ExchangeBootstrap"),
+
+  EXCHANGE_MAPPER(parameters -> parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
+      CONSUMER_EXCHANGE_MAPPER.filename : PRODUCER_EXCHANGE_MAPPER.filename,
+      (name, parameters) -> parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
+          parameters.find(LOCAL_TYPE_NAME) + "Mapper" : "DomainEventMapper"),
+
+  EXCHANGE_ADAPTER(parameters ->
+      parameters.<ExchangeRole>find(EXCHANGE_ROLE).isConsumer() ?
+          CONSUMER_EXCHANGE_ADAPTER.filename : PRODUCER_EXCHANGE_ADAPTER.filename,
+      (name, parameters) -> {
+        final ExchangeRole exchangeRole = parameters.find(EXCHANGE_ROLE);
+        if(exchangeRole.isConsumer()) {
+          return parameters.<String>find(LOCAL_TYPE_NAME) + "Adapter";
+        }
+        return parameters.<String>find(AGGREGATE_PROTOCOL_NAME) + exchangeRole.formatName() + "Adapter";
+      }),
+  EXCHANGE_RECEIVER_HOLDER(parameters -> Template.EXCHANGE_RECEIVER_HOLDER.filename,
+      (name, parameters) -> parameters.<String>find(AGGREGATE_PROTOCOL_NAME) +
+          "ExchangeReceivers"),
+  EXCHANGE_DISPATCHER(parameters -> Template.EXCHANGE_DISPATCHER.filename,
+      (name, parameters) -> "ExchangeDispatcher"),
   ;
 
   private final Function<TemplateParameters, String> templateFileRetriever;

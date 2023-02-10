@@ -1,0 +1,21 @@
+using io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+using Vlingo.Xoom.Common.Serialization;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangemapper">ExchangeMapper</a>
+ */
+public class OtherAggregateRemovedMapper : IExchangeMapper<OtherAggregateRemoved, string>
+{
+
+  public string LocalToExternal(OtherAggregateRemoved local)
+  {
+    return JsonSerialization.Serialized(local);
+  }
+
+  public OtherAggregateRemoved ExternalToLocal(string external)
+  {
+    return JsonSerialization.Deserialized<OtherAggregateRemoved>(external);
+  }
+}

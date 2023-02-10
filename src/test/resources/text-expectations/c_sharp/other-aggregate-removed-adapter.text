@@ -1,0 +1,39 @@
+using io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
+public class OtherAggregateRemovedAdapter : IExchangeAdapter<OtherAggregateRemoved, string, Message>
+{
+
+  private string _supportedSchemaName;
+
+  public OtherAggregateRemovedAdapter(string supportedSchemaName)
+  {
+    _supportedSchemaName = supportedSchemaName;
+  }
+
+  public OtherAggregateRemoved FromExchange(Message exchangeMessage)
+  {
+    return new OtherAggregateRemovedMapper().ExternalToLocal(exchangeMessage.PayloadAsText());
+  }
+
+  public Message ToExchange(OtherAggregateRemoved local)
+  {
+    var messagePayload = new OtherAggregateRemovedMapper().LocalToExternal(local);
+    return new Message(messagePayload, MessageParameters.Bare().DeliveryMode(DeliveryMode.Durable));
+  }
+
+  public bool supports(Object exchangeMessage)
+  {
+    if(typeof(exchangeMessage) != typeof(Message))
+    {
+      return false;
+    }
+    var schemaName = ((Message) exchangeMessage).MessageParameters.TypeName();
+    return _supportedSchemaName.EqualsIgnoreCase(schemaName);
+  }
+
+}

@@ -24,10 +24,17 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
 
   private final String stageVariableName;
   private final ParametersOwner parametersOwner;
+  private CodeGenerationParameter valueObject;
   private static final String FIELD_ACCESS_PATTERN = "%s.%s";
 
   public static AggregateMethodInvocation accessingParametersFromDataObject(final String stageVariableName) {
     return new AggregateMethodInvocation(stageVariableName, AggregateMethodInvocation.ParametersOwner.DATA_OBJECT);
+  }
+
+  public AggregateMethodInvocation(String stageVariableName, AggregateMethodInvocation.ParametersOwner consumedEvent,
+                                   CodeGenerationParameter valueObject) {
+    this(stageVariableName, consumedEvent);
+    this.valueObject = valueObject;
   }
 
   public AggregateMethodInvocation(final String stageVariableName) {
@@ -46,6 +53,14 @@ public class AggregateMethodInvocation implements Formatters.Arguments {
     return Stream.of(args, formatMethodParameters(method))
         .flatMap(Collection::stream)
         .collect(Collectors.joining(", "));
+  }
+  public static AggregateMethodInvocation accessingParametersFromConsumedEvent(final String stageVariableName) {
+    return new AggregateMethodInvocation(stageVariableName, AggregateMethodInvocation.ParametersOwner.CONSUMED_EVENT);
+  }
+
+  public static AggregateMethodInvocation accessingValueObjectParametersFromConsumedEvent(final String stageVariableName,
+                                                                                          final CodeGenerationParameter valueObject) {
+    return new AggregateMethodInvocation(stageVariableName, AggregateMethodInvocation.ParametersOwner.CONSUMED_EVENT, valueObject);
   }
 
   private List<String> formatMethodParameters(final CodeGenerationParameter method) {

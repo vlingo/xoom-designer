@@ -1,0 +1,73 @@
+using io.vlingo.xoom.actors.Definition;
+using Io.Vlingo.Xoomapp.Model.Classification;
+using Io.Vlingo.Xoomapp.Model.Rank;
+using io.vlingo.xoom.otherapp.event.OtherAggregateRemoved;
+using io.vlingo.xoom.otherapp.event.OtherAggregateUpdated;
+using io.vlingo.xoom.otherapp.event.OtherAggregateDefined;
+using Io.Vlingo.Xoomapp.Model.Name;
+using Io.Vlingo.Xoomapp.Model.Author.AuthorEntity;
+using Io.Vlingo.Xoomapp.Model.Author.IAuthor;
+using Io.Vlingo.Xoomapp.Model.Classifier;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+public class AuthorExchangeReceivers
+{
+
+  /**
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   */
+  static class OtherAggregateDefinedReceiver : IExchangeReceiver<OtherAggregateDefined> {
+
+    private Grid _stage;
+
+    public OtherAggregateDefinedReceiver(Grid stage)
+    {
+      _stage = stage;
+    }
+
+    public void Receive(OtherAggregateDefined event)
+    {
+      Author.withName(stage, event.Name);
+    }
+  }
+
+  /**
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   */
+  static class OtherAggregateUpdatedReceiver : IExchangeReceiver<OtherAggregateUpdated> {
+
+    private Grid _stage;
+
+    public OtherAggregateUpdatedReceiver(Grid stage)
+    {
+      _stage = stage;
+    }
+
+    public void Receive(OtherAggregateUpdated event)
+    {
+        _stage.ActorOf<Author>(_stage.AddressFactory().From(event.Id), Definition.Has(typeof(AuthorEntity), Definition.Parameters(event.Id)))
+              .AndFinallyConsume(author => author.changeRank(event.Rank));
+    }
+  }
+
+  /**
+   * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangereceiver">ExchangeReceiver</a>
+   */
+  static class OtherAggregateRemovedReceiver : IExchangeReceiver<OtherAggregateRemoved> {
+
+    private Grid _stage;
+
+    public OtherAggregateRemovedReceiver(Grid stage)
+    {
+      _stage = stage;
+    }
+
+    public void Receive(OtherAggregateRemoved event)
+    {
+        _stage.ActorOf<Author>(_stage.AddressFactory().From(event.Id), Definition.Has(typeof(AuthorEntity), Definition.Parameters(event.Id)))
+              .AndFinallyConsume(author => author.block(event.Name));
+    }
+  }
+
+}

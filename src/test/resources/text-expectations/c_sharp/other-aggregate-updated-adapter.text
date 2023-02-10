@@ -1,0 +1,39 @@
+using io.vlingo.xoom.otherapp.event.OtherAggregateUpdated;
+
+namespace Io.Vlingo.Xoomapp.Infrastructure.Exchange;
+
+/**
+ * See <a href="https://docs.vlingo.io/xoom-lattice/exchange#exchangeadapter">ExchangeAdapter</a>
+ */
+public class OtherAggregateUpdatedAdapter : IExchangeAdapter<OtherAggregateUpdated, string, Message>
+{
+
+  private string _supportedSchemaName;
+
+  public OtherAggregateUpdatedAdapter(string supportedSchemaName)
+  {
+    _supportedSchemaName = supportedSchemaName;
+  }
+
+  public OtherAggregateUpdated FromExchange(Message exchangeMessage)
+  {
+    return new OtherAggregateUpdatedMapper().ExternalToLocal(exchangeMessage.PayloadAsText());
+  }
+
+  public Message ToExchange(OtherAggregateUpdated local)
+  {
+    var messagePayload = new OtherAggregateUpdatedMapper().LocalToExternal(local);
+    return new Message(messagePayload, MessageParameters.Bare().DeliveryMode(DeliveryMode.Durable));
+  }
+
+  public bool supports(Object exchangeMessage)
+  {
+    if(typeof(exchangeMessage) != typeof(Message))
+    {
+      return false;
+    }
+    var schemaName = ((Message) exchangeMessage).MessageParameters.TypeName();
+    return _supportedSchemaName.EqualsIgnoreCase(schemaName);
+  }
+
+}
