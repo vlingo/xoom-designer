@@ -116,14 +116,14 @@ After making changes, from the root project directory build and run the designer
 ```
 $ mvn clean package -P frontend
 ...
-$ java -jar target/xoom-designer-1.11.1-SNAPSHOT.jar
+$ java -jar target/xoom-designer-1.11.2-SNAPSHOT.jar
 ```
 On Windows, do this:
 
 ```
 C:\[git-clone-path]> mvn clean package -P frontend
 ...
-C:\[git-clone-path]> java -jar target\xoom-designer-1.11.1-SNAPSHOT.jar
+C:\[git-clone-path]> java -jar target\xoom-designer-1.11.2-SNAPSHOT.jar
 ```
 
 We look forward to your VLINGO XOOM contribution!
