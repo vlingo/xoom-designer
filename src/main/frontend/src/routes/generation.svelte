@@ -173,7 +173,10 @@
   function buildProjectDirectory() {
     let context = $settings.context;
     if(context) {
-      return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${context.groupId}${$settingsInfo.pathSeparator}${context.artifactId}${Number($projectGenerationIndex)}`;
+      if(!$settings.platformSettings || $settings.platformSettings.platform === 'JVM')
+        return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${context.groupId}${$settingsInfo.pathSeparator}${context.artifactId}${Number($projectGenerationIndex)}`;
+      else
+        return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}${context.solutionName}${$settingsInfo.pathSeparator}${context.projectName}${Number($projectGenerationIndex)}`;
     }
     return `${$settingsInfo.userHomePath}${$settingsInfo.pathSeparator}VLINGO-XOOM${$settingsInfo.pathSeparator}`;
   }

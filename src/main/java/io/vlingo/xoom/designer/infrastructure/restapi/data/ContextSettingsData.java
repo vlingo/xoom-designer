@@ -16,6 +16,10 @@ public class ContextSettingsData {
   public final String artifactVersion;
   public final String packageName;
 
+  public final String solutionName;
+  public final String projectName;
+  public final String projectVersion;
+  public final String namespace;
   public ContextSettingsData(final String groupId,
                              final String artifactId,
                              final String artifactVersion,
@@ -24,6 +28,11 @@ public class ContextSettingsData {
     this.artifactId = artifactId;
     this.artifactVersion = artifactVersion;
     this.packageName = packageName;
+
+    this.solutionName = groupId;
+    this.projectName = artifactId;
+    this.projectVersion = artifactVersion;
+    this.namespace = packageName;
   }
 
   public List<String> validate(List<String> errorStrings) {

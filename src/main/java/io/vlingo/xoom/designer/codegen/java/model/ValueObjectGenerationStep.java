@@ -29,7 +29,8 @@ public class ValueObjectGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.hasParameter(Label.VALUE_OBJECT);
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() && context.hasParameter(Label.VALUE_OBJECT);
   }
 
 }

@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.unittest.resource;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -23,6 +24,7 @@ public class RestResourceAbstractUnitTestGenerationStep extends TemplateProcessi
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() && context.parameterOf(Label.USE_ANNOTATIONS, Boolean::valueOf);
   }
 }

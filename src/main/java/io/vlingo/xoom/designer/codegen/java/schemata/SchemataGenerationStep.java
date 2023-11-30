@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.schemata;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -61,6 +62,7 @@ public class SchemataGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.parametersOf(Label.AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE)).count() > 0;
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() && context.parametersOf(Label.AGGREGATE).flatMap(aggregate -> aggregate.retrieveAllRelated(Label.EXCHANGE)).count() > 0;
   }
 }

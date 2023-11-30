@@ -6,11 +6,15 @@
     "packageName": "io.vlingo.xoom-app"
   },
   "deployment": {
-    "clusterNodes": 3,
     "type": "NONE",
     "dockerImage": "xoom-app",
     "kubernetesImage": "vlingo/xoom-app",
-    "kubernetesPod": "xoom-app"
+    "kubernetesPod": "xoom-app",
+    "clusterTotalNodes": 0,
+    "clusterPort": 0,
+    "producerExchangePort": 0,
+    "httpServerPort": 0,
+    "pullSchemas": false
   },
   "projectDirectory": "/projects/",
   "useAnnotations": false,

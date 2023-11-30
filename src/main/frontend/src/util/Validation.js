@@ -1,4 +1,4 @@
-import { artifactRule, packageRule, requireRule, versionRule } from '../validators';
+import {artifactRule, namespaceRule, packageRule, projectNameRule, versionRule} from '../validators';
 
 export default {
     validateContext(settings) {
@@ -15,6 +15,7 @@ export default {
         return aggregates && aggregates.length > 0;
     },
     validatePlatformWithContext(settings, context) {
-        return !!settings.platformSettings && ((settings.platformSettings.platform === 'JVM' && !packageRule(context.groupId) && !artifactRule(context.artifactId) && !versionRule(context.artifactVersion) && !packageRule(context.packageName)) || (settings.platformSettings.platform === '.NET' && context.projectName && !!context.outputDirectory && !!context.solutionFile && !!context.projectPath && !!context.framework && !!context.sdk && !projectNameRule(context.solutionFile) && !projectNameRule(context.projectName) && !frameworkRule(context.framework)))
+        return settings && settings.context && !projectNameRule(context.solutionName) && !projectNameRule(context.projectName)
+          && !versionRule(settings.context.projectVersion) && !namespaceRule(settings.context.namespace);
     }
 }

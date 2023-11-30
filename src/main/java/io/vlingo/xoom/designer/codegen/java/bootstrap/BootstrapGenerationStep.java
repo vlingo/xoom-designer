@@ -8,8 +8,10 @@
 package io.vlingo.xoom.designer.codegen.java.bootstrap;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
+import io.vlingo.xoom.designer.codegen.Label;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,4 +23,9 @@ public class BootstrapGenerationStep extends TemplateProcessingStep {
     return Arrays.asList(BootstrapTemplateData.from(context));
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }

@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.java.autodispatch;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -23,7 +24,8 @@ public class AutoDispatchMappingGenerationStep extends TemplateProcessingStep {
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return context.hasParameter(Label.USE_AUTO_DISPATCH) &&
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&  context.hasParameter(Label.USE_AUTO_DISPATCH) &&
             context.parameterOf(Label.USE_AUTO_DISPATCH, Boolean::valueOf);
   }
 

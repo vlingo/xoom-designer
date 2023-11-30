@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.codegen;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.CodeGenerationStep;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameters;
 import io.vlingo.xoom.designer.codegen.java.DeploymentSettings;
 import io.vlingo.xoom.designer.codegen.java.projections.ProjectionType;
@@ -23,6 +24,7 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
   //complete: PACKAGE_PATTERN, ARTIFACT_PATTERN, VERSION_PATTERN, IDENTIFIER_PATTERN
   //some of the others are maybe not complete
   private static final String PACKAGE_PATTERN = "^[a-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
+  private static final String NAMESPACE_PATTERN = "^[A-Za-z]+(.[a-zA-Z_]([a-zA-Z_$#\\d])*)+$";
   private static final String ARTIFACT_PATTERN = "^[a-z-]+$";
   private static final String VERSION_PATTERN = "^\\d+.\\d+.\\d+$";
   private static final String CLASSNAME_PATTERN = "^[A-Z]+[A-Za-z]*$";
@@ -34,11 +36,18 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
   public void process(final CodeGenerationContext context) {
     List<String> errorStrings = new ArrayList<>();
     final CodeGenerationParameters parameters = context.parameters();
-
-    if(!retrieve(parameters, Label.GROUP_ID).matches(PACKAGE_PATTERN)) errorStrings.add("GroupID must follow package pattern");
-    if(!retrieve(parameters, Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
-    if(!retrieve(parameters, Label.ARTIFACT_VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
-    if(!retrieve(parameters, Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
+    
+    if(Dialect.withName(context.parameters().retrieveValue(Label.DIALECT)).isJava()) {
+      if(!retrieve(parameters, Label.GROUP_ID).matches(PACKAGE_PATTERN)) errorStrings.add("GroupID must follow package pattern");
+      if(!retrieve(parameters, Label.ARTIFACT_ID).matches(ARTIFACT_PATTERN)) errorStrings.add("ArtifactID must consist of lowercase letters and hyphens");
+      if(!retrieve(parameters, Label.ARTIFACT_VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
+      if(!retrieve(parameters, Label.PACKAGE).matches(PACKAGE_PATTERN)) errorStrings.add("Package must follow package pattern");
+    } else {
+      if(!retrieve(parameters, Label.GROUP_ID).matches(NAMESPACE_PATTERN)) errorStrings.add("SolutionName must follow solution pattern");
+      if(!retrieve(parameters, Label.ARTIFACT_ID).matches(NAMESPACE_PATTERN)) errorStrings.add("ProjectName must consist of Upper and lowercase letters and hyphens");
+      if(!retrieve(parameters, Label.ARTIFACT_VERSION).matches(VERSION_PATTERN)) errorStrings.add("Version must be a semantic version");
+      if(!retrieve(parameters, Label.PACKAGE).matches(NAMESPACE_PATTERN)) errorStrings.add("Package must follow namespace pattern");
+    }
 
     if(!areValueObjectNamesValid(parameters)) errorStrings.add("Value Object names must follow classname pattern");
     if(!areValueObjectFieldsValid(parameters)) errorStrings.add("Value Object fields must follow fieldname pattern");
@@ -142,6 +151,8 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
   private boolean isDeploymentValid(final CodeGenerationParameters parameters) {
     final DeploymentSettings deploymentSettings = retrieveObject(parameters, Label.DEPLOYMENT_SETTINGS);
     boolean validImage = true;
+    if(deploymentSettings == null)
+      return validImage;
     //no break, fall through
     switch(deploymentSettings.type) {
       case KUBERNETES: validImage = validImage &&
@@ -157,7 +168,6 @@ public class CodeGenerationParameterValidationStep implements CodeGenerationStep
 
   private boolean isTargetFolderValid(String targetFolder) {
     //TODO: ping the filesystem and only return true if the folder is available/usable
-    if(targetFolder.length()<2) return false;
-    return true;
+    return targetFolder.length() >= 2;
   }
 }

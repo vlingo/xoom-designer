@@ -14,6 +14,7 @@ import java.util.List;
 
 public class DesignerModel {
 
+  public final PlatformSettingsData platformSettings;
   public final ContextSettingsData context;
   public final ModelSettingsData model;
   public final DeploymentSettingsData deployment;
@@ -25,7 +26,7 @@ public class DesignerModel {
   public final String generateUIWith;
   public final Boolean generateUI;
 
-  public DesignerModel(final ContextSettingsData context,
+  public DesignerModel(PlatformSettingsData platformSettings, final ContextSettingsData context,
                        final ModelSettingsData model,
                        final DeploymentSettingsData deployment,
                        final SchemataSettingsData schemata,
@@ -34,6 +35,7 @@ public class DesignerModel {
                        final Boolean useAutoDispatch,
                        final Boolean generateUI,
                        final String generateUIWith) {
+    this.platformSettings = platformSettings;
     this.context = context;
     this.model = model;
     this.schemata = schemata;

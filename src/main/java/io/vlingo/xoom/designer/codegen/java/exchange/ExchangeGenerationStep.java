@@ -8,6 +8,7 @@
 package io.vlingo.xoom.designer.codegen.java.exchange;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -39,7 +40,10 @@ public class ExchangeGenerationStep extends TemplateProcessingStep {
     if (!context.hasParameter(Label.AGGREGATE)) {
       return false;
     }
-    return context.parametersOf(Label.AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(Label.EXCHANGE));
+
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&
+        context.parametersOf(Label.AGGREGATE).anyMatch(aggregate -> aggregate.hasAny(Label.EXCHANGE));
   }
 
 }
