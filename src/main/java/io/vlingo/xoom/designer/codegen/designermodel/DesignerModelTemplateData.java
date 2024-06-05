@@ -4,8 +4,9 @@
 // Mozilla Public License, v. 2.0. If a copy of the MPL
 // was not distributed with this file, You can obtain
 // one at https://mozilla.org/MPL/2.0/.
-package io.vlingo.xoom.designer.codegen.java.designermodel;
+package io.vlingo.xoom.designer.codegen.designermodel;
 
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
 import io.vlingo.xoom.codegen.template.TemplateStandard;
@@ -16,11 +17,11 @@ public class DesignerModelTemplateData extends TemplateData {
 
   private final TemplateParameters parameters;
 
-  public DesignerModelTemplateData(final String appName,
+  public DesignerModelTemplateData(final Dialect dialect, final String appName,
                                    final String designerModel) {
     this.parameters =
             TemplateParameters.with(TemplateParameter.DESIGNER_MODEL, true)
-                    .and(TemplateParameter.DESIGNER_MODEL_JSON, DesignerModelFormatter.format(designerModel))
+                    .and(TemplateParameter.DESIGNER_MODEL_JSON, DesignerModelFormatter.format(dialect, designerModel))
                     .and(TemplateParameter.APPLICATION_NAME, appName);
   }
 

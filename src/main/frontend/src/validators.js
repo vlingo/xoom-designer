@@ -2,7 +2,8 @@ const errors = Object.freeze({
 	EMPTY: "may not be empty",
 	VERSION: "Must be a semantic version number (major.minor.patch, e.g. 1.6.12)",
 	CLASSNAME: "must be initial cap (e.g. SomethingDefined)",
-	NAMESPACE: "Must be namespace syntax (e.g. com.example.demo)",
+	PACKAGE: "Must be package syntax (e.g. com.example.demo)",
+	NAMESPACE: "Must be namespace syntax (e.g. Com.Example.Demo)",
 	ARTIFACT: "Must consist of lowercase letters and hyphens",
 	FIELDNAME: "must follow java identifier pattern",
 	ROUTEPATH: "Must follow route path pattern",
@@ -55,7 +56,8 @@ const frameworks = [
 export const requireRule = (value) => !!value ? undefined : errors.EMPTY;
 
 export const versionRule = (value) => /^\d+\.\d+\.\d+$/.test(value) ? undefined : errors.VERSION;
-export const packageRule = (value) => /^[a-z]+(\.[a-zA-Z_]([a-zA-Z_$#\d])*)+$/.test(value) ? undefined : errors.NAMESPACE;
+export const packageRule = (value) => /^[a-z]+(\.[a-zA-Z_]([a-zA-Z_$#\d])*)+$/.test(value) ? undefined : errors.PACKAGE;
+export const namespaceRule = (value) => /^[A-Za-z]+(\.[a-zA-Z_]([a-zA-Z_$#\d])*)+$/.test(value) ? undefined : errors.NAMESPACE;
 export const artifactRule = (value) => /^[a-z-]+$/.test(value) ? undefined : errors.ARTIFACT;
 export const classNameRule = (value) => /^[A-Z]+[A-Za-z]*$/.test(value) ? undefined : errors.CLASSNAME;
 export const identifierRule = (value) => /^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(value) ? undefined : errors.FIELDNAME;
