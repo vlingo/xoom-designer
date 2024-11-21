@@ -35,7 +35,8 @@ public class KubernetesManifestFileGenerationStep extends TemplateProcessingStep
 
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
-    return ((DeploymentSettings) context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS)).useKubernetes;
+    final DeploymentSettings kubernetes = context.parameterObjectOf(Label.DEPLOYMENT_SETTINGS);
+    return kubernetes != null && kubernetes.useKubernetes;
   }
 
 }

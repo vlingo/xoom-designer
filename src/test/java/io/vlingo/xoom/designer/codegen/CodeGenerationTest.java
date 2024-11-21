@@ -18,6 +18,7 @@ public class CodeGenerationTest {
   @BeforeEach
   public void setUp() {
     ComponentRegistry.register("defaultCodeFormatter", CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_")));
+    ComponentRegistry.register("cSharpCodeFormatter", CodeElementFormatter.with(Dialect.C_SHARP, ReservedWordsHandler.usingSuffix("_")));
   }
 
   @AfterEach

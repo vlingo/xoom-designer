@@ -7,6 +7,7 @@
 package io.vlingo.xoom.designer.codegen.java.clustersettings;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.BasicTemplateData;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateParameters;
@@ -36,4 +37,9 @@ public class ClusterSettingsGenerationStep extends TemplateProcessingStep {
     return Arrays.asList(clusterSettingsTemplateData);
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }

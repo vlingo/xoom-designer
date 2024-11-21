@@ -29,7 +29,7 @@ public class DesignerServerConfiguration {
   private DesignerServerConfiguration(final Integer serverPort) {
     try {
       this.port = serverPort > 0 ? serverPort : DEFAULT_PORT;
-      this.userInterfaceURL = new URL(String.format("http://%s:%s/%s", DEFAULT_HOST, port, "context"));
+      this.userInterfaceURL = new URL(String.format("http://%s:%s/%s", DEFAULT_HOST, port, "platform"));
     } catch (final MalformedURLException e) {
       throw new IllegalStateException(e);
     }

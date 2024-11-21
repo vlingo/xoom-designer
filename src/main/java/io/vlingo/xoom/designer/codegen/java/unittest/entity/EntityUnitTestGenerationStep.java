@@ -8,6 +8,7 @@ package io.vlingo.xoom.designer.codegen.java.unittest.entity;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.Content;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.parameter.CodeGenerationParameter;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
@@ -46,4 +47,9 @@ public class EntityUnitTestGenerationStep extends TemplateProcessingStep {
     return templatesData;
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }

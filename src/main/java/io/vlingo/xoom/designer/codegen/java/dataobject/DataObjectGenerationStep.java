@@ -41,4 +41,9 @@ public class DataObjectGenerationStep extends TemplateProcessingStep {
             .flatMap(List::stream).collect(toList());
   }
 
+  @Override
+  public boolean shouldProcess(CodeGenerationContext context) {
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava();
+  }
 }

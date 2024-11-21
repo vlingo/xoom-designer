@@ -9,6 +9,7 @@ package io.vlingo.xoom.designer.codegen.java.projections;
 
 import io.vlingo.xoom.codegen.CodeGenerationContext;
 import io.vlingo.xoom.codegen.content.ContentQuery;
+import io.vlingo.xoom.codegen.dialect.Dialect;
 import io.vlingo.xoom.codegen.template.TemplateData;
 import io.vlingo.xoom.codegen.template.TemplateProcessingStep;
 import io.vlingo.xoom.designer.codegen.Label;
@@ -26,7 +27,9 @@ public class ProjectionGenerationStep extends TemplateProcessingStep {
   @Override
   public boolean shouldProcess(final CodeGenerationContext context) {
     final ProjectionType projectionType = context.parameterOf(Label.PROJECTION_TYPE, ProjectionType::valueOf);
-    return ContentQuery.exists(JavaTemplateStandard.AGGREGATE_PROTOCOL, context.contents()) && projectionType.isProjectionEnabled();
+    final String dialectName = context.parameters().retrieveValue(Label.DIALECT);
+    return !dialectName.isEmpty() && Dialect.withName(dialectName).isJava() &&
+        ContentQuery.exists(JavaTemplateStandard.AGGREGATE_PROTOCOL, context.contents()) && projectionType.isProjectionEnabled();
   }
 
 }

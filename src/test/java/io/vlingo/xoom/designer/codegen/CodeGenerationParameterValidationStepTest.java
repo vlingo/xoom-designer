@@ -17,20 +17,40 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class CodeGenerationParameterValidationStepTest {
 
-  @Test
-  public void testThatParametersAreValidated() {
+  @Test()
+  public void testThatJavaParametersAreValidated() {
+    final PlatformSettingsData platform = new PlatformSettingsData("JVM", "Java", "1.8", "1.0.0");
     final CodeElementFormatter codeElementFormatter =
-            CodeElementFormatter.with(Dialect.findDefault(), ReservedWordsHandler.usingSuffix("_"));
+            CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
 
     ComponentRegistry.register("defaultCodeFormatter", codeElementFormatter);
 
     final DesignerModel data =
-            new DesignerModel(contextSettingsData(), modelSettingsData(),
+            new DesignerModel(platform, contextSettingsData(), modelSettingsData(),
                     deploymentSettingsData(), schemataSettingsData(),
                     "/home/projects", true, false, false, "");
 
     final CodeGenerationContext context =
             CodeGenerationContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
+
+    assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
+  }
+
+  @Test()
+  public void testThatCsharpParametersAreValidated() {
+    final PlatformSettingsData platform = new PlatformSettingsData(".NET", "C_SHARP", "net6.0", "1.0.0");
+    final CodeElementFormatter codeElementFormatter =
+        CodeElementFormatter.with(Dialect.withName(platform.lang.toUpperCase()), ReservedWordsHandler.usingSuffix("_"));
+
+    ComponentRegistry.register("cSharpCodeFormatter", codeElementFormatter);
+
+    final DesignerModel data =
+        new DesignerModel(platform, contextSettingsData(), modelSettingsData(),
+            deploymentSettingsData(), schemataSettingsData(),
+            "/home/projects", true, false, false, "");
+
+    final CodeGenerationContext context =
+        CodeGenerationContextMapper.map(data, GenerationTarget.FILESYSTEM, Logger.noOpLogger());
 
     assertDoesNotThrow(() -> new CodeGenerationParameterValidationStep().process(context));
   }
